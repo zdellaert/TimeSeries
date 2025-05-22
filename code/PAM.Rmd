@@ -1,0 +1,36 @@
+---
+title: "PAM"
+author: "Zoe Dellaert"
+date: "2025-05-21"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(janitor)
+PAM <- read.csv("../data/PAM.csv") %>% clean_names() %>% filter(date != "20250519")
+PAM <- PAM %>% mutate(date = as.factor(date))
+
+PAM %>% group_by(date,tank_id) %>% summarise(mean_FvFm = mean(fv_fm_y_1000))
+
+ggplot(PAM,aes(x = date, y = fv_fm_y_1000, color = tank_id)) + 
+    geom_boxplot(aes(color = tank_id))
+
+
+PAM_summary <- PAM %>%
+  group_by(date,tank_id) %>%
+  dplyr::summarize(
+    FvFm_Mean = mean(fv_fm_y_1000, na.rm = TRUE),
+    FvFm_SE = sd(fv_fm_y_1000, na.rm = TRUE) / sqrt(dplyr::n()))
+
+
+print(PAM_summary)
+
+model <- aov(fv_fm_y_1000 ~ date*tank_id, data = PAM)
+summary(model)
+```
+
