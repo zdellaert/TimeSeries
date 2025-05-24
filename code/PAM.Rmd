@@ -12,14 +12,21 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 library(tidyverse)
 library(janitor)
+library(ggpubr)
+
+custom_colors <- c("Control" = "lightblue4", "Heat" = "#D55E00")
+
 PAM <- read.csv("../data/PAM.csv") %>% clean_names() %>% filter(date != "20250519")
-PAM <- PAM %>% mutate(date = as.factor(date))
+PAM <- PAM %>% mutate(date = as.factor(date)) %>% 
+                mutate(timepoint = factor(timepoint,levels = c("0","1","3","6","12","24"), ordered = TRUE)) %>% 
+                mutate(plug = as.factor(plug)) %>%
+                mutate(treatment = factor(treatment,levels = c("Control","Heat", ordered=TRUE)))
+
+ggplot(PAM,aes(x = date, y = fv_fm_y_1000)) + 
+    geom_boxplot(aes(fill = tank_id)) + labs(x = "Date", y = "Fv/Fm", title = "Fv/Fm by Date and Tank") +
+  theme_minimal()
 
 PAM %>% group_by(date,tank_id) %>% summarise(mean_FvFm = mean(fv_fm_y_1000))
-
-ggplot(PAM,aes(x = date, y = fv_fm_y_1000, color = tank_id)) + 
-    geom_boxplot(aes(color = tank_id))
-
 
 PAM_summary <- PAM %>%
   group_by(date,tank_id) %>%
@@ -32,5 +39,75 @@ print(PAM_summary)
 
 model <- aov(fv_fm_y_1000 ~ date*tank_id, data = PAM)
 summary(model)
+```
+
+```{r}
+PAM_exp <- PAM %>% filter(date!="20250521" & date!="20250520")
+  
+ggplot(PAM_exp,aes(x = timepoint, y = fv_fm_y_1000)) + 
+    geom_boxplot(aes(fill = tank_id)) + theme_minimal() +facet_wrap(~ treatment, scales = "free_x") 
+
+ggplot(PAM_exp,aes(x = timepoint, y = fv_fm_y_1000)) + 
+    geom_boxplot(aes(fill = treatment)) +theme_minimal() +scale_fill_manual(values = custom_colors) 
+
+ggplot(PAM_exp,aes(x = timepoint, y = fv_fm_y_1000, group = plug)) + 
+    geom_path(aes(color=plug)) + theme_minimal() +facet_wrap(tank_id~treatment) 
+
+ggplot(PAM_exp, aes(x = timepoint, y = fv_fm_y_1000, group = plug, color = tank_id)) +
+  geom_line(alpha = 0.6) +
+  facet_wrap(~treatment) +
+  theme_minimal() + stat_summary(aes(group = treatment, color = treatment), fun = mean, geom = "line", size = 1.2)
+
+```
+
+
+```{r}
+PAM_means_treatment <- PAM_exp %>%
+  group_by(date, timepoint, treatment) %>%
+  summarise(
+    FvFm_mean = mean(fv_fm_y_1000, na.rm = TRUE),
+    FvFm_SE = sd(fv_fm_y_1000, na.rm = TRUE) / sqrt(n()),
+    .groups = 'drop'
+  )
+
+ggplot(PAM_means_treatment, aes(x = timepoint, y = FvFm_mean, color = treatment,group = treatment)) +
+  geom_point(size = 2.5) +
+  geom_errorbar(aes(ymin = FvFm_mean - FvFm_SE, ymax = FvFm_mean + FvFm_SE),
+                width = 0.2) +
+  geom_line(stat = "summary", fun = mean, size = 1.2, aes(group = treatment)) +
+  labs(x = "Timepoint",y = "Mean Fv/Fm") +
+  theme_minimal() +scale_color_manual(values = custom_colors)
+
+PAM_means <- PAM_exp %>%
+  group_by(date, timepoint, treatment, tank_id) %>%
+  summarise(
+    FvFm_mean = mean(fv_fm_y_1000, na.rm = TRUE),
+    FvFm_SE = sd(fv_fm_y_1000, na.rm = TRUE) / sqrt(n()),
+    .groups = 'drop'
+  )
+
+ggplot(PAM_means, aes(x = timepoint, y = FvFm_mean, color = treatment, shape = tank_id)) +
+  geom_point(position = position_dodge(width = 0.5), size = 2.5) +
+  geom_errorbar(aes(ymin = FvFm_mean - FvFm_SE, ymax = FvFm_mean + FvFm_SE),
+                width = 0.2, position = position_dodge(width = 0.5)) +
+  #geom_line(stat = "summary", fun = mean, size = 1.2, aes(group = treatment)) +
+  labs(x = "Timepoint",y = "Mean Fv/Fm") +
+  theme_minimal() +scale_color_manual(values = custom_colors) +
+  stat_compare_means(aes(group = treatment),method = "anova",label = "p.format",size = 3)
+
+ggplot(PAM_means, aes(x = timepoint, y = FvFm_mean, color = treatment, group = tank_id,shape = tank_id)) +
+  geom_line(size = 0.8, alpha = 0.7) +
+  #geom_point(size = 2.5) + 
+  #geom_errorbar(aes(ymin = FvFm_mean - FvFm_SE, ymax = FvFm_mean + FvFm_SE),width = 0.2) +
+  labs(x = "Timepoint",y = "Mean Fv/Fm") +
+  theme_minimal() + scale_color_manual(values = custom_colors) +
+  stat_compare_means(aes(group = treatment),method = "anova",label = "p.format",size = 3)
+```
+
+```{r}
+ggplot(PAM_exp, aes(x = timepoint, y = fv_fm_y_1000, color = treatment)) +
+  geom_boxplot(outlier.colour = "red", outlier.shape = 8) 
+
+
 ```
 
