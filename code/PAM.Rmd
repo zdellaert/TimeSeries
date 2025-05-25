@@ -18,7 +18,7 @@ custom_colors <- c("Control" = "lightblue4", "Heat" = "#D55E00")
 
 PAM <- read.csv("../data/PAM.csv") %>% clean_names() %>% filter(date != "20250519")
 PAM <- PAM %>% mutate(date = as.factor(date)) %>% 
-                mutate(timepoint = factor(timepoint,levels = c("0","1","3","6","12","24"), ordered = TRUE)) %>% 
+                mutate(timepoint = factor(timepoint,levels = c("0","1","3","6","12","24","36","48"), ordered = TRUE)) %>% 
                 mutate(plug = as.factor(plug)) %>%
                 mutate(treatment = factor(treatment,levels = c("Control","Heat", ordered=TRUE)))
 
@@ -43,6 +43,7 @@ summary(model)
 
 ```{r}
 PAM_exp <- PAM %>% filter(date!="20250521" & date!="20250520")
+table(PAM_exp$plug)
   
 ggplot(PAM_exp,aes(x = timepoint, y = fv_fm_y_1000)) + 
     geom_boxplot(aes(fill = tank_id)) + theme_minimal() +facet_wrap(~ treatment, scales = "free_x") 
@@ -87,10 +88,19 @@ PAM_means <- PAM_exp %>%
   )
 
 ggplot(PAM_means, aes(x = timepoint, y = FvFm_mean, color = treatment, shape = tank_id)) +
-  geom_point(position = position_dodge(width = 0.5), size = 2.5) +
+  geom_point(stat = "summary", fun = mean, aes(group = treatment), size=2.5) +
+  geom_point(position = position_dodge(width = 0.5), size = 2.5, alpha=0.5) +
   geom_errorbar(aes(ymin = FvFm_mean - FvFm_SE, ymax = FvFm_mean + FvFm_SE),
-                width = 0.2, position = position_dodge(width = 0.5)) +
-  #geom_line(stat = "summary", fun = mean, size = 1.2, aes(group = treatment)) +
+                width = 0.2, position = position_dodge(width = 0.5), alpha=0.5) +
+  geom_line(stat = "summary", fun = mean, size = 1.2, aes(group = treatment)) +
+  labs(x = "Timepoint",y = "Mean Fv/Fm") +
+  theme_minimal() +scale_color_manual(values = custom_colors) +
+  stat_compare_means(aes(group = treatment),method = "anova",label = "p.format",size = 3)
+
+ggplot(PAM_exp, aes(x = timepoint, y = fv_fm_y_1000, color = treatment, shape = tank_id)) +
+  geom_point(stat = "summary", fun = mean, aes(group = treatment), size=2.5) +
+  geom_point(position = position_dodge(width = 0.5), size = 2.5, alpha=0.5) +
+  geom_line(stat = "summary", fun = mean, size = 1.2, aes(group = treatment)) +
   labs(x = "Timepoint",y = "Mean Fv/Fm") +
   theme_minimal() +scale_color_manual(values = custom_colors) +
   stat_compare_means(aes(group = treatment),method = "anova",label = "p.format",size = 3)
@@ -102,6 +112,8 @@ ggplot(PAM_means, aes(x = timepoint, y = FvFm_mean, color = treatment, group = t
   labs(x = "Timepoint",y = "Mean Fv/Fm") +
   theme_minimal() + scale_color_manual(values = custom_colors) +
   stat_compare_means(aes(group = treatment),method = "anova",label = "p.format",size = 3)
+
+
 ```
 
 ```{r}
