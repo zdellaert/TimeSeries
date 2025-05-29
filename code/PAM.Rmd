@@ -18,7 +18,7 @@ custom_colors <- c("Control" = "lightblue4", "Heat" = "#D55E00")
 
 PAM <- read.csv("../data/PAM.csv") %>% clean_names() %>% filter(date != "20250519")
 PAM <- PAM %>% mutate(date = as.factor(date)) %>% 
-                mutate(timepoint = factor(timepoint,levels = c("0","1","3","6","12","24","36","48"), ordered = TRUE)) %>% 
+                mutate(timepoint = factor(timepoint,levels = c("0","1","3","6","12","24","36","48","72","120"), ordered = TRUE)) %>% 
                 mutate(plug = as.factor(plug)) %>%
                 mutate(treatment = factor(treatment,levels = c("Control","Heat", ordered=TRUE)))
 

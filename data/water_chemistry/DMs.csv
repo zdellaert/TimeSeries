@@ -1,0 +1,133 @@
+Date,Treatment,Tank_ID,Time,AMPM,Initials,Temperature_C,pH_mv,Salinity_psu,Salinity_ATC_Mode,Conductivity_mScm,Calcium_ppm,TA_dKH,tris.date,Probe.Set,notes
+20250519,AcclimationRecovery,1,13:30,Mid,ZD;JA,32.17,-51.4,41.4,MAN,NA,NA,NA,20250513,Probe1,No animals in tanks. Heated to 32C for test overnight
+20250519,AcclimationRecovery,2,13:30,Mid,ZD;JA,25.02,-53.6,35.54,MAN,NA,NA,NA,20250513,Probe1,No animals in tanks. 
+20250519,AcclimationRecovery,3,13:30,Mid,ZD;JA,25.02,-53.4,35.64,MAN,NA,NA,NA,20250513,Probe1,No animals in tanks. 
+20250519,AcclimationRecovery,4,13:30,Mid,ZD;JA,32.04,-52.6,41.91,MAN,NA,NA,NA,20250513,Probe1,No animals in tanks. Heated to 32C for test overnight
+20250519,AcclimationRecovery,5,13:30,Mid,ZD;JA,25.05,-54,35.85,MAN,NA,NA,NA,20250513,Probe1,No animals in tanks. 
+20250519,AcclimationRecovery,6,13:30,Mid,ZD;JA,25.02,-53.7,36,MAN,NA,NA,NA,20250513,Probe1,No animals in tanks. 
+20250519,AcclimationRecovery,1,18:20,PM,ZD,26.34,-52.4,36.5,MAN,NA,NA,NA,20250513,Probe1,"3 hours post-water change. No animals in tanks. Heated to 32C for test overnight, cooling to 25C"
+20250519,AcclimationRecovery,2,18:20,PM,ZD,25.04,-57,35.44,MAN,NA,NA,NA,20250513,Probe1,"3 hours post-water change. Corals in tanks 2,3,5,6"
+20250519,AcclimationRecovery,3,18:20,PM,ZD,25.14,-56.6,35.47,MAN,NA,NA,NA,20250513,Probe1,"3 hours post-water change. Corals in tanks 2,3,5,6"
+20250519,AcclimationRecovery,4,18:20,PM,ZD,25.83,-56.5,36.39,MAN,NA,NA,NA,20250513,Probe1,"3 hours post-water change. No animals in tanks. Heated to 32C for test overnight, cooling to 25C"
+20250519,AcclimationRecovery,5,18:20,PM,ZD,25.04,-56,35.69,MAN,NA,NA,NA,20250513,Probe1,"3 hours post-water change. Corals in tanks 2,3,5,6"
+20250519,AcclimationRecovery,6,18:20,PM,ZD,25.04,-56,35.77,MAN,NA,NA,NA,20250513,Probe1,"3 hours post-water change. Corals in tanks 2,3,5,6"
+20250520,AcclimationRecovery,1,10:00,AM,ZD;JA,25.22,-52.3,35.49,MAN,NA,NA,NA,20250513,Probe1,Corals moved into tanks 1&5 post-DMs. 30 corals per tank
+20250520,AcclimationRecovery,2,10:00,AM,ZD;JA,25.04,-51.8,35.44,MAN,NA,NA,NA,20250513,Probe1,Corals moved into tanks 1&5 post-DMs. 30 corals per tank
+20250520,AcclimationRecovery,3,10:00,AM,ZD;JA,25.05,-53.6,35.35,MAN,NA,NA,NA,20250513,Probe1,Corals moved into tanks 1&5 post-DMs. 30 corals per tank
+20250520,AcclimationRecovery,4,10:00,AM,ZD;JA,24.99,-55.6,35.65,MAN,NA,NA,NA,20250513,Probe1,Corals moved into tanks 1&5 post-DMs. 30 corals per tank
+20250520,AcclimationRecovery,5,10:00,AM,ZD;JA,25.02,-51.7,35.71,MAN,NA,NA,NA,20250513,Probe1,Corals moved into tanks 1&5 post-DMs. 30 corals per tank
+20250520,AcclimationRecovery,6,10:00,AM,ZD;JA,25.04,-53,35.82,MAN,NA,NA,NA,20250513,Probe1,Corals moved into tanks 1&5 post-DMs. 30 corals per tank
+20250520,AcclimationRecovery,1,16:40,PM,ZD,25.33,-55.4,34.96,MAN,NA,NA,NA,20250513,Probe1,Added 750 mL DI to all tanks 20 minutes before DMs
+20250520,AcclimationRecovery,2,16:40,PM,ZD,25.21,-56.4,35.06,MAN,NA,NA,NA,20250513,Probe1,Added 750 mL DI to all tanks 20 minutes before DMs
+20250520,AcclimationRecovery,3,16:40,PM,ZD,25.15,-60.8,35.13,MAN,NA,NA,NA,20250513,Probe1,Added 750 mL DI to all tanks 20 minutes before DMs
+20250520,AcclimationRecovery,4,16:40,PM,ZD,24.97,-55.7,35.14,MAN,NA,NA,NA,20250513,Probe1,Added 750 mL DI to all tanks 20 minutes before DMs
+20250520,AcclimationRecovery,5,16:40,PM,ZD,25.18,-53.2,35.25,MAN,NA,NA,NA,20250513,Probe1,Added 750 mL DI to all tanks 20 minutes before DMs
+20250520,AcclimationRecovery,6,16:40,PM,ZD,25.03,-58.3,35.3,MAN,NA,NA,NA,20250513,Probe1,Added 750 mL DI to all tanks 20 minutes before DMs
+20250521,AcclimationRecovery,1,10:04,AM,NB;TH,25.21,-51.1,35,MAN,NA,323.6,NA,20250513,Probe1,
+20250521,AcclimationRecovery,2,10:04,AM,NB;TH,25.03,-52.6,34.99,MAN,NA,NA,NA,20250513,Probe1,
+20250521,AcclimationRecovery,3,10:04,AM,NB;TH,25.07,-56.1,35.07,MAN,NA,NA,NA,20250513,Probe1,
+20250521,AcclimationRecovery,4,10:04,AM,NB;TH,24.94,-52.9,35.28,MAN,NA,NA,NA,20250513,Probe1,
+20250521,AcclimationRecovery,5,10:04,AM,NB;TH,25.07,-51.2,35.46,MAN,NA,NA,NA,20250513,Probe1,
+20250521,AcclimationRecovery,6,10:04,AM,NB;TH,25.13,-54.5,35.52,MAN,NA,NA,NA,20250513,Probe1,
+20250521,AcclimationRecovery,1,19:35,PM,ZD,25.3,-51.4,35,MAN,NA,NA,NA,20250513,Probe1,Added 250-750 mL DI to tanks depending on salinity at 19:30 prior to DMS
+20250521,AcclimationRecovery,2,19:34,PM,ZD,25.08,-53.3,34.93,MAN,NA,NA,NA,20250513,Probe1,Added 250-750 mL DI to tanks depending on salinity at 19:30 prior to DMS
+20250521,AcclimationRecovery,3,19:33,PM,ZD,25.16,-56,35.16,MAN,NA,NA,NA,20250513,Probe1,Added 250-750 mL DI to tanks depending on salinity at 19:30 prior to DMS
+20250521,AcclimationRecovery,4,19:29,PM,ZD,25.16,-52.1,35.14,MAN,NA,NA,NA,20250513,Probe1,Added 250-750 mL DI to tanks depending on salinity at 19:30 prior to DMS
+20250521,AcclimationRecovery,5,19:31,PM,ZD,25.13,-52,35.16,MAN,NA,NA,NA,20250513,Probe1,Added 250-750 mL DI to tanks depending on salinity at 19:30 prior to DMS
+20250521,AcclimationRecovery,6,19:32,PM,ZD,24.98,-54.4,35.18,MAN,NA,NA,NA,20250513,Probe1,Added 250-750 mL DI to tanks depending on salinity at 19:30 prior to DMS
+20250522,Ramp,1,09:30,AM,NB;TH,27.35,-46.1,36.77,MAN,NA,NA,NA,20250513,Probe1,Heat ramp from 25 to 31C began at 9:11
+20250522,Ramp,2,09:30,AM,NB;TH,27.82,-47.9,37.13,MAN,NA,NA,NA,20250513,Probe1,Heat ramp from 25 to 31C began at 9:11
+20250522,Ramp,3,09:30,AM,NB;TH,27.6,-51.1,37.16,MAN,NA,NA,NA,20250513,Probe1,Heat ramp from 25 to 31C began at 9:11
+20250522,Control,4,09:30,AM,NB;TH,25.19,-50.4,35.36,MAN,NA,NA,NA,20250513,Probe1,
+20250522,Control,5,09:30,AM,NB;TH,24.41,-50,35.02,MAN,NA,NA,NA,20250513,Probe1,
+20250522,Control,6,09:30,AM,NB;TH,24.15,-51.8,35.13,MAN,NA,NA,NA,20250513,Probe1,
+20250522,Heat,1,10:07,AM,ZD,,,35.8,MAN,NA,NA,NA,20250513,Probe1,Added 3L DI to tanks 1-3 prior to this measurement
+20250522,Heat,2,10:09,AM,ZD,,,35.9,MAN,NA,NA,NA,20250513,Probe1,Added 3L DI to tanks 1-3 prior to this measurement
+20250522,Heat,3,10:10,AM,ZD,,,35.17,MAN,NA,NA,NA,20250513,Probe1,Added 3L DI to tanks 1-3 prior to this measurement
+20250522,Control,4,10:14,AM,ZD,,,35.3,MAN,NA,NA,NA,20250513,Probe1,3L saltwater water change tanks 4-6 prior to measurement
+20250522,Control,5,10:16,AM,ZD,,,35,MAN,NA,NA,NA,20250513,Probe1,3L saltwater water change tanks 4-6 prior to measurement
+20250522,Control,6,10:19,AM,ZD,,,35.4,MAN,NA,NA,NA,20250513,Probe1,3L saltwater water change tanks 4-6 prior to measurement
+20250522,Heat,1,12:11,Mid,ZD,,,35.97,MAN,NA,NA,NA,20250513,Probe1,2L DI added then 8L saltwater water change tanks 1-3 prior to measurement
+20250522,Heat,2,12:12,Mid,ZD,,,36.1,MAN,NA,NA,NA,20250513,Probe1,2L DI added then 8L saltwater water change tanks 1-3 prior to measurement
+20250522,Heat,3,12:12,Mid,ZD,,,35.35,MAN,NA,NA,NA,20250513,Probe1,2L DI added then 8L saltwater water change tanks 1-3 prior to measurement
+20250522,Control,4,12:13,Mid,ZD,,,34.36,MAN,NA,NA,NA,20250513,Probe1,
+20250522,Control,5,12:13,Mid,ZD,,,34.81,MAN,NA,NA,NA,20250513,Probe1,
+20250522,Control,6,12:13,Mid,ZD,,,35.03,MAN,NA,NA,NA,20250513,Probe1,
+20250522,Heat,1,15:04,PM,ZD,30.99,,31.01,ATC,NA,NA,NA,20250513,Probe1,
+20250522,Heat,2,15:04,PM,ZD,30.89,,30.94,ATC,NA,NA,NA,20250513,Probe1,
+20250522,Heat,3,15:04,PM,ZD,30.79,,30.64,ATC,NA,NA,NA,20250513,Probe1,
+20250522,Control,4,15:04,PM,ZD,24.9,,34.89,ATC,NA,NA,NA,20250513,Probe1,
+20250522,Control,5,15:04,PM,ZD,25.25,,34.86,ATC,NA,NA,NA,20250513,Probe1,
+20250522,Control,6,15:04,PM,ZD,25.13,,35.06,ATC,NA,NA,NA,20250513,Probe1,
+20250522,Heat,1,15:50,PM,ZD,31.07,,31.06,ATC,NA,NA,NA,20250513,Probe1,Calibrated salinity probe before measurements
+20250522,Heat,2,15:50,PM,ZD,30.91,,31,ATC,NA,NA,NA,20250513,Probe1,Calibrated salinity probe before measurements
+20250522,Heat,3,15:50,PM,ZD,31.1,,30.69,ATC,NA,NA,NA,20250513,Probe1,Calibrated salinity probe before measurements
+20250522,Control,4,15:50,PM,ZD,24.81,,34.94,ATC,NA,NA,NA,20250513,Probe1,Calibrated salinity probe before measurements
+20250522,Control,5,15:50,PM,ZD,25.18,,34.91,ATC,NA,NA,NA,20250513,Probe1,Calibrated salinity probe before measurements
+20250522,Control,6,15:50,PM,ZD,25.09,,35.11,ATC,NA,NA,NA,20250513,Probe1,Calibrated salinity probe before measurements
+20250522,Heat,1,16:20,PM,ZD,,,31.82,ATC,NA,NA,NA,20250513,Probe1,5L saltwater water change all tanks prior to measurement
+20250522,Heat,2,16:20,PM,ZD,,,31.6,ATC,NA,NA,NA,20250513,Probe1,5L saltwater water change all tanks prior to measurement
+20250522,Heat,3,16:20,PM,ZD,,,31.19,ATC,NA,NA,NA,20250513,Probe1,5L saltwater water change all tanks prior to measurement
+20250522,Control,4,16:20,PM,ZD,,,34.41,ATC,NA,NA,NA,20250513,Probe1,5L saltwater water change all tanks prior to measurement
+20250522,Control,5,16:20,PM,ZD,,,34.78,ATC,NA,NA,NA,20250513,Probe1,5L saltwater water change all tanks prior to measurement
+20250522,Control,6,16:20,PM,ZD,,,34.99,ATC,NA,NA,NA,20250513,Probe1,5L saltwater water change all tanks prior to measurement
+20250522,Heat,1,20:15,PM,ZD,31.06,-48.4,36.31,MAN,NA,NA,NA,20250513,Probe1,Added 1L DI to tanks 1-3 after measurement
+20250522,Heat,2,20:15,PM,ZD,30.87,-50.1,35.96,MAN,NA,NA,NA,20250513,Probe1,Added 1L DI to tanks 1-3 after measurement
+20250522,Heat,3,20:15,PM,ZD,31.12,-52,35.72,MAN,NA,NA,NA,20250513,Probe1,Added 1L DI to tanks 1-3 after measurement
+20250522,Control,4,20:15,PM,ZD,25.19,-51.8,35.44,MAN,NA,NA,NA,20250513,Probe1,Added 200mL DI to tanks 4-6 after measurement
+20250522,Control,5,20:15,PM,ZD,25.03,-49.7,35.19,MAN,NA,NA,NA,20250513,Probe1,Added 200mL DI to tanks 4-6 after measurement
+20250522,Control,6,20:15,PM,ZD,24.83,-49.3,35.16,MAN,NA,NA,NA,20250513,Probe1,Added 200mL DI to tanks 4-6 after measurement
+20250523,Heat,1,09:05,AM,ZD,,,35.5,MAN,NA,NA,NA,20250513,Probe1,
+20250523,Heat,2,09:05,AM,ZD,,,35.34,MAN,NA,NA,NA,20250513,Probe1,
+20250523,Heat,3,09:05,AM,ZD,,,34.93,MAN,NA,NA,NA,20250513,Probe1,
+20250523,Control,4,09:05,AM,ZD,,,35.3,MAN,NA,NA,NA,20250513,Probe1,
+20250523,Control,5,09:05,AM,ZD,,,35.16,MAN,NA,NA,NA,20250513,Probe1,
+20250523,Control,6,09:05,AM,ZD,,,35.11,MAN,NA,NA,NA,20250513,Probe1,
+20250523,Heat,1,12:17,Mid,ZD,31.11,-48.1,35.57,MAN,NA,NA,NA,20250513,Probe1,
+20250523,Heat,2,12:17,Mid,ZD,31.17,-49.8,35.46,MAN,NA,NA,NA,20250513,Probe1,
+20250523,Heat,3,12:17,Mid,ZD,31.17,-50.9,35.09,MAN,NA,NA,NA,20250513,Probe1,
+20250523,Control,4,12:17,Mid,ZD,25.07,-49.2,35.31,MAN,NA,NA,NA,20250513,Probe1,
+20250523,Control,5,12:17,Mid,ZD,25.06,-49.4,35.14,MAN,NA,NA,NA,20250513,Probe1,
+20250523,Control,6,12:17,Mid,ZD,25.11,-50.9,35.27,MAN,NA,NA,NA,20250513,Probe1,
+20250523,Heat,1,20:40,PM,ZD,31.03,-48.3,32.28,ATC,NA,NA,NA,20250513,Probe1,
+20250523,Heat,2,20:40,PM,ZD,31.08,-51.2,31.92,ATC,NA,NA,NA,20250513,Probe1,
+20250523,Heat,3,20:40,PM,ZD,31.13,-52,31.56,ATC,NA,NA,NA,20250513,Probe1,
+20250523,Control,4,20:40,PM,ZD,25.12,-50.7,35.45,ATC,NA,NA,NA,20250513,Probe1,
+20250523,Control,5,20:40,PM,ZD,25.16,-51,35.15,ATC,NA,NA,NA,20250513,Probe1,
+20250523,Control,6,20:40,PM,ZD,25.18,-52.3,35.13,ATC,NA,NA,NA,20250513,Probe1,
+20250524,Heat,1,08:30,AM,ZD,,,36.11,MAN,NA,NA,NA,20250513,Probe1,
+20250524,Heat,2,08:30,AM,ZD,,,35.87,MAN,NA,NA,NA,20250513,Probe1,
+20250524,Heat,3,08:30,AM,ZD,,,35.54,MAN,NA,NA,NA,20250513,Probe1,
+20250524,Control,4,08:30,AM,ZD,,,35.27,MAN,NA,NA,NA,20250513,Probe1,
+20250524,Control,5,08:30,AM,ZD,,,35.14,MAN,NA,NA,NA,20250513,Probe1,
+20250524,Control,6,08:30,AM,ZD,,,34.97,MAN,NA,NA,NA,20250513,Probe1,
+20250524,Heat,1,11:24,AM,ZD,30.9,-48.1,36.08,MAN,54.37,NA,NA,20250513,Probe1,
+20250524,Heat,2,11:24,AM,ZD,31.05,-50.4,36.09,MAN,54.36,NA,NA,20250513,Probe1,
+20250524,Heat,3,11:24,AM,ZD,31.03,-50.8,35.61,MAN,53.66,NA,NA,20250513,Probe1,
+20250524,Control,4,11:24,AM,ZD,25.14,-50,35.32,MAN,53.47,NA,NA,20250513,Probe1,
+20250524,Control,5,11:24,AM,ZD,25,-50.7,35.06,MAN,53.18,NA,NA,20250513,Probe1,
+20250524,Control,6,11:24,AM,ZD,25.16,-51.6,35.12,MAN,53.1,NA,NA,20250513,Probe1,
+20250525,Heat,1,09:45,AM,ZD;JA,30.83,-47.4,35.74,MAN,54.22,NA,NA,20250513,Probe1,
+20250525,Heat,2,09:45,AM,ZD;JA,30.96,-50.5,35.66,MAN,53.79,NA,NA,20250513,Probe1,
+20250525,Heat,3,09:45,AM,ZD;JA,30.86,-51.3,35.25,MAN,53.25,NA,NA,20250513,Probe1,
+20250525,Control,4,09:45,AM,ZD;JA,25.03,-51.1,35.32,MAN,53.39,NA,NA,20250513,Probe1,
+20250525,Control,5,09:45,AM,ZD;JA,24.92,-51.6,35.05,MAN,53.04,NA,NA,20250513,Probe1,
+20250525,Control,6,09:45,AM,ZD;JA,25.14,-52.1,35.05,MAN,53.03,NA,NA,20250513,Probe1,
+20250526,Heat,1,09:00,AM,ZD,30.91,-50.4,36.03,MAN,54.59,NA,NA,20250513,Probe1,
+20250526,Heat,2,09:00,AM,ZD,31.09,-51.7,35.92,MAN,54.1,NA,NA,20250513,Probe1,
+20250526,Heat,3,09:00,AM,ZD,31.01,-52.3,35.59,MAN,53.88,NA,NA,20250513,Probe1,
+20250526,Control,4,09:00,AM,ZD,25.09,-51.5,35.6,MAN,53.77,NA,NA,20250513,Probe1,
+20250526,Control,5,09:00,AM,ZD,25.2,-52,35.56,MAN,53.73,NA,NA,20250513,Probe1,
+20250526,Control,6,09:00,AM,ZD,25.12,-52.6,35.16,MAN,53.2,NA,NA,20250513,Probe1,
+20250527,Heat,1,,AM,NB,31.03,-50.6,35.79,MAN,NA,NA,NA,20250513,Probe1,
+20250527,Heat,2,,AM,NB,30.96,-52.1,35.63,MAN,NA,NA,NA,20250513,Probe1,
+20250527,Heat,3,,AM,NB,31.07,-51.9,35.51,MAN,NA,NA,NA,20250513,Probe1,
+20250527,Control,4,,AM,NB,25.06,-51.9,35.45,MAN,NA,NA,NA,20250513,Probe1,
+20250527,Control,5,,AM,NB,24.94,-52.5,35.29,MAN,NA,NA,NA,20250513,Probe1,
+20250527,Control,6,,AM,NB,25.05,-52.8,35.13,MAN,NA,NA,NA,20250513,Probe1,
+20250527,Heat,1,,PM,ZD,30.94,-49.6,32.02,ATC,54.12,NA,NA,20250513,Probe1,
+20250527,Heat,2,,PM,ZD,31.02,-52.7,31.84,ATC,54.04,NA,NA,20250513,Probe1,
+20250527,Heat,3,,PM,ZD,31.14,-52.4,31.71,ATC,53.92,NA,NA,20250513,Probe1,
+20250527,Control,4,,PM,ZD,25.03,-52.5,35.8,ATC,53.65,NA,NA,20250513,Probe1,
+20250527,Control,5,,PM,ZD,25.02,-53.4,35.65,ATC,53.41,NA,NA,20250513,Probe1,
+20250527,Control,6,,PM,ZD,25.11,-53.4,35.47,ATC,53.25,NA,NA,20250513,Probe1,

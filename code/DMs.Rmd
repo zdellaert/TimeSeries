@@ -1,0 +1,168 @@
+---
+title: "Daily measurement plotting"
+author: "Zoe Dellaert "
+date: "5/25/2025"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+This script plots daily measurements from the experiment, and is based on the Putnam Lab script available here: https://github.com/Putnam-Lab/CBLS_Wetlab/tree/main
+
+## Load packages 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(lubridate) # used for converting 8 digit date into datetime format for R
+library(RColorBrewer)
+library(rmarkdown)
+library(tinytex)
+
+## If seacarb needs to be downloaded:
+#packageurl <- "https://cran.r-project.org/src/contrib/Archive/seacarb/seacarb_3.2.tar.gz"
+#install.packages(packageurl, repos = NULL, type = "source")
+#install.packages("seacarb")
+library(seacarb) 
+```
+
+## Load data 
+```{r}
+## Read in data
+daily <- read.csv("../data/water_chemistry/DMs.csv")
+head(daily)
+tail(daily) # check to make sure data from today is there
+
+daily$Date <- as.Date(as.character(daily$Date), format = "%Y%m%d")
+daily$tris.date <- as.character(daily$tris.date)
+daily$Tank_ID <- as.character(daily$Tank_ID)
+
+daily$DateTime <- as.POSIXct(paste(daily$Date, daily$Time), format="%Y-%m-%d %H:%M")
+
+```
+
+```{r}
+daily.probe1 <- daily %>% filter(Probe.Set == "Probe1")  %>% filter(Salinity_ATC_Mode=="MAN")
+
+range(na.omit(daily.probe1$Temperature_C))
+range(na.omit(daily.probe1$pH_mv))
+range(na.omit(daily.probe1$Salinity_psu))
+```
+
+## Calculate total pH from Probe Set 1 
+
+Calculate the calibration curve from the Tris calibration and calculate pH on the total scale from pH.mV. 
+```{r}
+pHcalib <- read_csv("../data/water_chemistry/Tris_Calibration.csv")
+pHcalib$tris.date<-as.character(pHcalib$tris.date)
+
+pHSlope <- pHcalib %>%
+  group_by(tris.date) %>%
+  nest() %>%
+  mutate(fitpH = map(data, ~ lm(mVTris ~ TTris, data = .x))) %>%
+  mutate(tidy_fit = map(fitpH, broom::tidy)) %>%
+  unnest(tidy_fit) %>%
+  select(tris.date, term, estimate) %>%
+  pivot_wider(names_from = term, values_from = estimate) %>%
+  left_join(daily.probe1, ., by = "tris.date") %>%
+  mutate(mVTris = Temperature_C * TTris + `(Intercept)`)
+
+pHSlope <- pHSlope %>%
+  mutate(pH.total = seacarb::pH(Ex = pH_mv, Etris = mVTris, S=Salinity_psu, T=Temperature_C))
+```
+
+Convert date to ymd for plotting 
+
+```{r}
+pHSlope$Date <- ymd(pHSlope$Date) # convert 8 digit date into datetime format
+
+pHSlope <- pHSlope %>% relocate("pH.total", .after = Salinity_psu) %>%
+  relocate(pH_mv, .after = Probe.Set)  %>%
+  relocate(Salinity_ATC_Mode, .after = Probe.Set)
+```
+
+## Change to long format
+
+Change data format to long format 
+```{r}
+pHSlope.long <-pHSlope %>% pivot_longer(cols=Temperature_C:TA_dKH,
+  names_to = "metric",
+  values_to = "value")
+```
+
+## Plot
+
+Make a list of dataframes, each containing a horizontal line that will correspond to the upper and lower threshold of each parameter (temperature, salinity, pH total)
+```{r}
+hlines_data <- list(
+  data.frame(yintercept = 25.0, metric = "Temperature_C"), # lower threshold for temperature in C°
+  data.frame(yintercept = 31, metric = "Temperature_C"), # upper threshold for temperature in C°
+  data.frame(yintercept = 34.5, metric = "Salinity_psu"), # lower threshold for salinity in psu
+  data.frame(yintercept = 35.5, metric = "Salinity_psu"), # upper threshold for salinity in psu
+  data.frame(yintercept = 8.05, metric = "pH.total"), # lower threshold for total pH
+  data.frame(yintercept = 8.2, metric = "pH.total") # upper threshold for total pH
+    )
+```
+
+```{r}
+facet_labels <- c(unique(pHSlope.long$metric), unique(pHSlope.long$Treatment))
+names(facet_labels) = facet_labels
+facet_labels <- replace(facet_labels, which(facet_labels == "TA_dKH"), "TA (dKH)")
+facet_labels <- replace(facet_labels, which(facet_labels == "Calcium_ppm"), "Calcium (ppm)")
+facet_labels <- replace(facet_labels, which(facet_labels == "pH.total"), "pH")
+facet_labels <- replace(facet_labels, which(facet_labels == "Salinity_psu"), "Salinity (psu)")
+facet_labels <- replace(facet_labels, which(facet_labels == "Conductivity_mScm"), "Conductivity (mS/cm)")
+facet_labels <- replace(facet_labels, which(facet_labels == "Temperature_C"), "Temperature (ºC)")
+
+daily_tank<-pHSlope.long %>% filter(Treatment !=  "Ramp") %>%
+  ggplot(aes(x=DateTime, y=value, colour=Tank_ID))+
+  geom_point(size=2)+
+  xlab("Date")+
+  facet_grid(factor(metric,c("pH.total","Salinity_psu","Conductivity_mScm","Temperature_C")) ~ Treatment, scales = "free", labeller = as_labeller(facet_labels))+
+  geom_hline(data = hlines_data[[1]], aes(yintercept = yintercept), linetype = "dashed") +    
+  geom_hline(data = hlines_data[[2]], aes(yintercept = yintercept), linetype = "dashed") +
+  geom_hline(data = hlines_data[[3]], aes(yintercept = yintercept), linetype = "dashed") +
+  geom_hline(data = hlines_data[[4]], aes(yintercept = yintercept), linetype = "dashed") +
+  geom_hline(data = hlines_data[[5]], aes(yintercept = yintercept), linetype = "dashed") +
+  geom_hline(data = hlines_data[[6]], aes(yintercept = yintercept), linetype = "dashed") +
+  theme_bw() +
+  theme(text = element_text(size = 14)); daily_tank
+
+
+# Save plot 
+ggsave("../output/Daily_Measurements.pdf", daily_tank, width = 10, height = 10, units = c("in"))
+```
+
+```{r}
+daily_tank<-pHSlope.long %>% filter(Treatment !=  "AcclimationRecovery" & Treatment !=  "Ramp") %>%
+  ggplot(aes(x=DateTime, y=value, colour=Tank_ID))+
+  geom_point(size=2)+
+  xlab("Date")+
+  facet_grid(factor(metric,c("pH.total","Salinity_psu","Conductivity_mScm","Temperature_C")) ~ Treatment, scales = "free", labeller = as_labeller(facet_labels))+
+  geom_hline(data = hlines_data[[1]], aes(yintercept = yintercept), linetype = "dashed") +    
+  geom_hline(data = hlines_data[[2]], aes(yintercept = yintercept), linetype = "dashed") +
+  geom_hline(data = hlines_data[[3]], aes(yintercept = yintercept), linetype = "dashed") +
+  geom_hline(data = hlines_data[[4]], aes(yintercept = yintercept), linetype = "dashed") +
+  geom_hline(data = hlines_data[[5]], aes(yintercept = yintercept), linetype = "dashed") +
+  geom_hline(data = hlines_data[[6]], aes(yintercept = yintercept), linetype = "dashed") +
+  theme_bw() +
+  theme(text = element_text(size = 14)); daily_tank
+
+# Save plot 
+ggsave("../output/Daily_Measurements_Exp.pdf", daily_tank, width = 10, height = 10, units = c("in"))
+```
+
+
+
+Summarize daily measurements during the heat stress experiment
+```{r}
+daily_exp <- pHSlope %>% 
+  filter(Treatment != "AcclimationRecovery" & Treatment !=  "Ramp")
+
+summary <- daily_exp%>%
+  group_by(Tank_ID)%>%
+  select(Temperature_C:TA_dKH) %>%
+  summarise(across(everything(), list(mean = mean, sd = sd), na.rm = TRUE)); summary
+```
+
