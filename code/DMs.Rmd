@@ -168,23 +168,11 @@ summary <- daily_exp%>%
 
 ## HOBO Temps, based on [Jill's Script](https://github.com/JillAshey/Astrangia_repo/blob/0041652d5b2a01145c1c049f10dbc53a8513cb86/scripts/Hobo_Temps.Rmd#L27)
 
-```{r setup, include=FALSE}
-#Install and Load necessary libraries
-if("lubridate" %in% rownames(installed.packages()) == 'FALSE') install.packages('lubridate') 
-if("tidyverse" %in% rownames(installed.packages()) == 'FALSE') install.packages('tidyverse') 
-if("emmeans" %in% rownames(installed.packages()) == 'FALSE') install.packages('emmeans') 
-if("gridExtra" %in% rownames(installed.packages()) == 'FALSE') install.packages('gridExtra') 
-
+```{r}
 library(lubridate)
 library(tidyverse)
 library(emmeans)
 library(gridExtra)
-```
-
-```{r }
-##### CONTINUOUS TEMPERATURE DATA FROM HOBO LOGGERS #####
-
-##### QC Hobo Files #####
 
 # Read in temp data 
 Tank1 <- read.csv("../data/LoggerData/Tank1_9893752.csv", sep=",", skip=c(1), header=TRUE, na.strings = "NA")[ ,2:4]
@@ -194,7 +182,7 @@ Tank4 <- read.csv("../data/LoggerData/Tank4_10655129.csv", sep=",", skip=c(1), h
 Tank5 <- read.csv("../data/LoggerData/Tank5_10655120.csv", sep=",", skip=c(1), header=TRUE, na.strings = "NA")[ ,2:4]
 Tank6 <- read.csv("../data/LoggerData/Tank6_10655122.csv", sep=",", skip=c(1), header=TRUE, na.strings = "NA")[ ,2:4]
 
-col_names <- c("DateTimeGMT10","TempC","IntensityLux")
+col_names <- c("DateTimeGMTmin10","TempC","IntensityLux")
 
 # combine all dataframes into list
 Tanks <- list(Tank1 = Tank1,
@@ -236,27 +224,54 @@ Tank6$Treatment <- "Control"
 
 tank_df <- rbind(Tank1, Tank2, Tank3, Tank4, Tank5, Tank6)
 
-tank_df$DateTimeGMT10 <- parse_date_time(tank_df$DateTimeGMT10, "%m/%d/%y %I:%M:%S %p", tz = "Etc/GMT-10")
+tank_df$DateTimeGMTmin10 <- parse_date_time(tank_df$DateTimeGMTmin10, "%m/%d/%y %I:%M:%S %p")
 
-#this time feels incorrect
+# Assign raw timezone as GMT-10 (Hawaii)
+tank_df$DateTimeGMTmin10 <- force_tz(tank_df$DateTimeGMTmin10, tzone = "Etc/GMT+10")
+
+# Convert to Eastern Time
+tank_df$DateTimeEST <- with_tz(tank_df$DateTimeGMTmin10, tzone = "America/New_York")
 
 write.csv(tank_df,file="../output/All_Tank_HoboTempLight_data.csv")
 
-Temps <- tank_df %>% ggplot(aes(x=DateTimeGMT10, y=TempC)) +
-  geom_line(aes(color = Treatment), size = 1)+
-  #ylim(5,15)+
-  ylab("Temperature °C")
+Temps <- tank_df %>% ggplot(aes(x=DateTimeEST, y=TempC)) +
+  geom_line(aes(color = Tank), size = 0.5) +
+  facet_grid(~Treatment)+
+  ylab("Temperature (°C)") +theme_minimal()
 Temps
 ggsave("../output/All_Tank_HoboTemp.pdf", plot = last_plot(), width = 8, height = 4)
 
 #remove commas from light data and make numeric
 tank_df$IntensityLux <- as.numeric(gsub(",", "", tank_df$IntensityLux))
 
-Light <- tank_df %>% ggplot(aes(x=DateTimeGMT10, y=IntensityLux)) +
-  geom_line(aes(color = Treatment), size = 1)+
-  #ylim(5,15)+
-  ylab("Light lux")
+Light <- tank_df %>% ggplot(aes(x=DateTimeEST, y=IntensityLux)) +
+  geom_line(aes(color = Tank), size = 0.5) +
+  facet_grid(~Treatment)+
+  ylab("Light (Lux)") +theme_minimal()
 
 Light
 ggsave("../output/All_Tank_HoboLight.pdf", plot = last_plot(), width = 8, height = 4)
+```
+
+```{r}
+# filter for our experimental dates 
+tank_df_Exp <- tank_df %>% filter(DateTimeEST >= "2025-05-22 00:00:00" & DateTimeEST <= "2025-05-29 12:00:00")
+
+write.csv(tank_df_Exp,file="../output/Experimental_Tank_HoboTempLight_data.csv")
+
+Temps <- tank_df_Exp %>% ggplot(aes(x=DateTimeEST, y=TempC)) +
+  geom_line(aes(color = Tank), size = 0.5) +
+  facet_grid(~Treatment)+
+  ylab("Temperature (°C)") +theme_minimal()
+Temps
+ggsave("../output/Experimental_Tank_HoboTemp.pdf", plot = last_plot(), width = 8, height = 4)
+
+Light <- tank_df_Exp %>% ggplot(aes(x=DateTimeEST, y=IntensityLux)) +
+  geom_line(aes(color = Tank), size = 0.5) +
+  facet_grid(~Treatment)+
+  ylab("Light (Lux)") +theme_minimal()
+
+Light
+ggsave("../output/Experimental_Tank_HoboLight.pdf", plot = last_plot(), width = 8, height = 4)
+
 ```
