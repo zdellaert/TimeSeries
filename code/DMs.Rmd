@@ -166,3 +166,97 @@ summary <- daily_exp%>%
   summarise(across(everything(), list(mean = mean, sd = sd), na.rm = TRUE)); summary
 ```
 
+## HOBO Temps, based on [Jill's Script](https://github.com/JillAshey/Astrangia_repo/blob/0041652d5b2a01145c1c049f10dbc53a8513cb86/scripts/Hobo_Temps.Rmd#L27)
+
+```{r setup, include=FALSE}
+#Install and Load necessary libraries
+if("lubridate" %in% rownames(installed.packages()) == 'FALSE') install.packages('lubridate') 
+if("tidyverse" %in% rownames(installed.packages()) == 'FALSE') install.packages('tidyverse') 
+if("emmeans" %in% rownames(installed.packages()) == 'FALSE') install.packages('emmeans') 
+if("gridExtra" %in% rownames(installed.packages()) == 'FALSE') install.packages('gridExtra') 
+
+library(lubridate)
+library(tidyverse)
+library(emmeans)
+library(gridExtra)
+```
+
+```{r }
+##### CONTINUOUS TEMPERATURE DATA FROM HOBO LOGGERS #####
+
+##### QC Hobo Files #####
+
+# Read in temp data 
+Tank1 <- read.csv("../data/LoggerData/Tank1_9893752.csv", sep=",", skip=c(1), header=TRUE, na.strings = "NA")[ ,2:4]
+Tank2 <- read.csv("../data/LoggerData/Tank2_10655123.csv", sep=",", skip=c(1), header=TRUE, na.strings = "NA")[ ,2:4]
+Tank3 <- read.csv("../data/LoggerData/Tank3_10655130.csv", sep=",", skip=c(1), header=TRUE, na.strings = "NA")[ ,2:4]
+Tank4 <- read.csv("../data/LoggerData/Tank4_10655129.csv", sep=",", skip=c(1), header=TRUE, na.strings = "NA")[ ,2:4]
+Tank5 <- read.csv("../data/LoggerData/Tank5_10655120.csv", sep=",", skip=c(1), header=TRUE, na.strings = "NA")[ ,2:4]
+Tank6 <- read.csv("../data/LoggerData/Tank6_10655122.csv", sep=",", skip=c(1), header=TRUE, na.strings = "NA")[ ,2:4]
+
+col_names <- c("DateTimeGMT10","TempC","IntensityLux")
+
+# combine all dataframes into list
+Tanks <- list(Tank1 = Tank1,
+              Tank2 = Tank2,
+              Tank3 = Tank3,
+              Tank4 = Tank4,
+              Tank5 = Tank5,
+              Tank6 = Tank6)
+
+# find dataframe with the fewest number of rows
+min_rows <- min(sapply(Tanks, nrow))
+
+# trim them all to be this length
+Tanks <- lapply(Tanks, function(df) {df[1:min_rows, ]
+                                    colnames(df) <- col_names
+                                    return(df)
+})
+
+Tank1 <- Tanks$Tank1
+Tank2 <- Tanks$Tank2
+Tank3 <- Tanks$Tank3
+Tank4 <- Tanks$Tank4
+Tank5 <- Tanks$Tank5
+Tank6 <- Tanks$Tank6
+
+Tank1$Tank <- "Tank1"
+Tank2$Tank <- "Tank2"
+Tank3$Tank <- "Tank3"
+Tank4$Tank <- "Tank4"
+Tank5$Tank <- "Tank5"
+Tank6$Tank <- "Tank6"
+
+Tank1$Treatment <- "Heated"
+Tank2$Treatment <- "Heated"
+Tank3$Treatment <- "Heated"
+Tank4$Treatment <- "Control"
+Tank5$Treatment <- "Control"
+Tank6$Treatment <- "Control"
+
+tank_df <- rbind(Tank1, Tank2, Tank3, Tank4, Tank5, Tank6)
+
+tank_df$DateTimeGMT10 <- parse_date_time(tank_df$DateTimeGMT10, "%m/%d/%y %I:%M:%S %p", tz = "Etc/GMT-10")
+
+#this time feels incorrect
+
+write.csv(tank_df,file="../output/All_Tank_HoboTempLight_data.csv")
+
+Temps <- tank_df %>% ggplot(aes(x=DateTimeGMT10, y=TempC)) +
+  geom_line(aes(color = Treatment), size = 1)+
+  #ylim(5,15)+
+  ylab("Temperature °C")
+Temps
+ggsave("../output/All_Tank_HoboTemp.pdf", plot = last_plot(), width = 8, height = 4)
+
+#remove commas from light data and make numeric
+tank_df$IntensityLux <- as.numeric(gsub(",", "", tank_df$IntensityLux))
+
+Light <- tank_df %>% ggplot(aes(x=DateTimeGMT10, y=IntensityLux)) +
+  geom_line(aes(color = Treatment), size = 1)+
+  #ylim(5,15)+
+  ylab("Light lux")
+
+Light
+ggsave("../output/All_Tank_HoboLight.pdf", plot = last_plot(), width = 8, height = 4)
+```
