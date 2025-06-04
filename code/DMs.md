@@ -226,7 +226,7 @@ daily_tank<-pHSlope.long %>% filter(Treatment !=  "AcclimationRecovery" & Treatm
 
 ``` r
 # Save plot 
-ggsave("../output/Daily_Measurements_Exp.pdf", daily_tank, width = 10, height = 10, units = c("in"))
+ggsave("../output/pdf_figs/Daily_Measurements_Exp.pdf", daily_tank, width = 10, height = 10, units = c("in"))
 ```
 
     ## Warning: Removed 225 rows containing missing values or values outside the scale range
@@ -417,7 +417,7 @@ Temps
 ![](DMs_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
 
 ``` r
-ggsave("../output/Experimental_Tank_HoboTemp.pdf", plot = last_plot(), width = 8, height = 4)
+ggsave("../output/pdf_figs/Experimental_Tank_HoboTemp.pdf", plot = last_plot(), width = 8, height = 4)
 ggsave("../output/Experimental_Tank_HoboTemp.png", plot = last_plot(), width = 8, height = 4)
 
 Light <- tank_df_Exp %>% ggplot(aes(x=DateTimeEST, y=IntensityLux)) +
@@ -431,6 +431,6 @@ Light
 ![](DMs_files/figure-gfm/unnamed-chunk-11-2.png)<!-- -->
 
 ``` r
-ggsave("../output/Experimental_Tank_HoboLight.pdf", plot = last_plot(), width = 8, height = 4)
+ggsave("../output/pdf_figs/Experimental_Tank_HoboLight.pdf", plot = last_plot(), width = 8, height = 4)
 ggsave("../output/Experimental_Tank_HoboLight.png", plot = last_plot(), width = 8, height = 4)
 ```

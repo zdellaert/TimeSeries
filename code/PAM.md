@@ -263,7 +263,7 @@ pairs(emm)
 summary_table <- as.data.frame(pairs(emm)) %>%
   transmute(
     Timepoint = as.numeric(as.character(timepoint)),
-    `Estimate (Control - Heat)` = round(estimate, 4),
+    `Estimate (Control-Heat)` = round(estimate, 4),
     `SE` = round(SE, 4),
     `t-ratio` = round(t.ratio, 2),
     `p-value` = signif(p.value, 3),
@@ -279,18 +279,18 @@ summary_table <- as.data.frame(pairs(emm)) %>%
 print(summary_table)
 ```
 
-    ##    Timepoint Estimate (Control - Heat)     SE t-ratio  p-value Significant?
-    ## 1          0                    0.0104 0.0088    1.19 0.242000             
-    ## 2          1                    0.0157 0.0088    1.78 0.082500            .
-    ## 3          3                    0.0118 0.0088    1.34 0.188000             
-    ## 4          6                   -0.0100 0.0088   -1.14 0.263000             
-    ## 5         12                    0.0219 0.0088    2.49 0.017000            *
-    ## 6         24                    0.0358 0.0088    4.06 0.000206          ***
-    ## 7         36                    0.0211 0.0090    2.34 0.023900            *
-    ## 8         48                    0.0279 0.0088    3.17 0.002860           **
-    ## 9         72                    0.0280 0.0088    3.18 0.002760           **
-    ## 10       120                    0.0246 0.0088    2.79 0.007910           **
-    ## 11       170                    0.0363 0.0088    4.13 0.000170          ***
+    ##    Timepoint Estimate (Control-Heat)     SE t-ratio  p-value Significant?
+    ## 1          0                  0.0104 0.0088    1.19 0.242000             
+    ## 2          1                  0.0157 0.0088    1.78 0.082500            .
+    ## 3          3                  0.0118 0.0088    1.34 0.188000             
+    ## 4          6                 -0.0100 0.0088   -1.14 0.263000             
+    ## 5         12                  0.0219 0.0088    2.49 0.017000            *
+    ## 6         24                  0.0358 0.0088    4.06 0.000206          ***
+    ## 7         36                  0.0211 0.0090    2.34 0.023900            *
+    ## 8         48                  0.0279 0.0088    3.17 0.002860           **
+    ## 9         72                  0.0280 0.0088    3.18 0.002760           **
+    ## 10       120                  0.0246 0.0088    2.79 0.007910           **
+    ## 11       170                  0.0363 0.0088    4.13 0.000170          ***
 
 ``` r
 write.csv(summary_table, "../output/FvFm_treatment_effect_summary.csv", row.names = FALSE)
@@ -316,7 +316,7 @@ ggplot(contrast_table, aes(x = timepoint, y = estimate)) +
   geom_text(aes(label = signif), vjust = -2.5, size = 5, fontface = "bold", color = "black") +
   scale_color_manual(values = c("TRUE" = "#D55E00", "FALSE" = "grey60"), name = "p < 0.05") +
   labs(
-    title = "Estimated Treatment Effect (Control – Heat) on Fv/Fm",
+    title = "Estimated Treatment Effect (Control-Heat) on Fv/Fm",
     x = "Timepoint (h)",
     y = "Estimated Difference in Fv/Fm") +
   theme_minimal() +
@@ -333,6 +333,7 @@ ggplot(contrast_table, aes(x = timepoint, y = estimate)) +
 
 ``` r
 ggsave("../output/FvFm_line_treatment_tank_modelestimates.png", plot = last_plot(), width = 8, height = 4)
+ggsave("../output/pdf_figs/FvFm_line_treatment_tank_modelestimates.pdf", plot = last_plot(), width = 8, height = 4)
 ```
 
 ``` r
@@ -379,6 +380,7 @@ ggplot(PAM_means, aes(x = timepoint, y = FvFm_mean, color = treatment, shape = t
 
 ``` r
 ggsave("../output/FvFm_line_treatment_tank_means.png", plot = last_plot(), width = 8, height = 4)
+ggsave("../output/pdf_figs/FvFm_line_treatment_tank_means.pdf", plot = last_plot(), width = 8, height = 4)
 
 ggplot(PAM_exp, aes(x = timepoint, y = fv_fm_y_1000, color = treatment, shape = tank_id)) +
   geom_point(stat = "summary", fun = mean, aes(group = treatment), size=2.5) +

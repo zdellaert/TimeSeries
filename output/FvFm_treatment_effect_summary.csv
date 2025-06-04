@@ -1,4 +1,4 @@
-"Timepoint","Estimate (Control - Heat)","SE","t-ratio","p-value","Significant?"
+"Timepoint","Estimate (Control-Heat)","SE","t-ratio","p-value","Significant?"
 0,0.0104,0.0088,1.19,0.242,""
 1,0.0157,0.0088,1.78,0.0825,"."
 3,0.0118,0.0088,1.34,0.188,""

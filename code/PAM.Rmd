@@ -61,7 +61,7 @@ pairs(emm)
 summary_table <- as.data.frame(pairs(emm)) %>%
   transmute(
     Timepoint = as.numeric(as.character(timepoint)),
-    `Estimate (Control - Heat)` = round(estimate, 4),
+    `Estimate (Control-Heat)` = round(estimate, 4),
     `SE` = round(SE, 4),
     `t-ratio` = round(t.ratio, 2),
     `p-value` = signif(p.value, 3),
@@ -98,14 +98,14 @@ ggplot(contrast_table, aes(x = timepoint, y = estimate)) +
   geom_text(aes(label = signif), vjust = -2.5, size = 5, fontface = "bold", color = "black") +
   scale_color_manual(values = c("TRUE" = "#D55E00", "FALSE" = "grey60"), name = "p < 0.05") +
   labs(
-    title = "Estimated Treatment Effect (Control – Heat) on Fv/Fm",
+    title = "Estimated Treatment Effect (Control-Heat) on Fv/Fm",
     x = "Timepoint (h)",
     y = "Estimated Difference in Fv/Fm") +
   theme_minimal() +
   theme(panel.grid.minor = element_blank(),panel.grid.major.x = element_blank())
 
 ggsave("../output/FvFm_line_treatment_tank_modelestimates.png", plot = last_plot(), width = 8, height = 4)
-
+ggsave("../output/pdf_figs/FvFm_line_treatment_tank_modelestimates.pdf", plot = last_plot(), width = 8, height = 4)
 ```
 
 
@@ -148,6 +148,7 @@ ggplot(PAM_means, aes(x = timepoint, y = FvFm_mean, color = treatment, shape = t
   stat_compare_means(aes(group = treatment),method = "anova",label = "p.format",size = 2.5)
 
 ggsave("../output/FvFm_line_treatment_tank_means.png", plot = last_plot(), width = 8, height = 4)
+ggsave("../output/pdf_figs/FvFm_line_treatment_tank_means.pdf", plot = last_plot(), width = 8, height = 4)
 
 ggplot(PAM_exp, aes(x = timepoint, y = fv_fm_y_1000, color = treatment, shape = tank_id)) +
   geom_point(stat = "summary", fun = mean, aes(group = treatment), size=2.5) +
