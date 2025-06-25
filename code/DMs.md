@@ -11,6 +11,7 @@ Zoe Dellaert
 - [0.5 Plot](#05-plot)
 - [0.6 HOBO Temps, based on Jill’s
   Script](#06-hobo-temps-based-on-jills-script)
+- [0.7 Load data](#07-load-data)
 
 This script plots daily measurements from the experiment, and is based
 on the Putnam Lab script available here:
@@ -155,7 +156,7 @@ pHSlope.long <-pHSlope %>% pivot_longer(cols=Temperature_C:Conductivity_mScm,
   names_to = "metric",
   values_to = "value")
 
-pHSlope.long <- pHSlope.long %>% filter(!(metric=="Salinity_psu" & Salinity_ATC_Mode=="ATC"))
+pHSlope.long <- pHSlope.long %>% filter(!(metric=="Salinity_psu" & Salinity_ATC_Mode=="MAN"))
 ```
 
 ## 0.5 Plot
@@ -198,7 +199,7 @@ daily_tank<-pHSlope.long %>% filter(Treatment !=  "Ramp") %>%
   theme(text = element_text(size = 14)); daily_tank
 ```
 
-    ## Warning: Removed 261 rows containing missing values or values outside the scale range
+    ## Warning: Removed 249 rows containing missing values or values outside the scale range
     ## (`geom_point()`).
 
 ![](DMs_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
@@ -219,7 +220,7 @@ daily_tank<-pHSlope.long %>% filter(Treatment !=  "AcclimationRecovery" & Treatm
   theme(text = element_text(size = 14)); daily_tank
 ```
 
-    ## Warning: Removed 225 rows containing missing values or values outside the scale range
+    ## Warning: Removed 213 rows containing missing values or values outside the scale range
     ## (`geom_point()`).
 
 ![](DMs_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
@@ -229,14 +230,14 @@ daily_tank<-pHSlope.long %>% filter(Treatment !=  "AcclimationRecovery" & Treatm
 ggsave("../output/pdf_figs/Daily_Measurements_Exp.pdf", daily_tank, width = 10, height = 10, units = c("in"))
 ```
 
-    ## Warning: Removed 225 rows containing missing values or values outside the scale range
+    ## Warning: Removed 213 rows containing missing values or values outside the scale range
     ## (`geom_point()`).
 
 ``` r
 ggsave("../output/Daily_Measurements_Exp.png", daily_tank, width = 10, height = 10, units = c("in"))
 ```
 
-    ## Warning: Removed 225 rows containing missing values or values outside the scale range
+    ## Warning: Removed 213 rows containing missing values or values outside the scale range
     ## (`geom_point()`).
 
 Summarize daily measurements during the heat stress experiment
@@ -434,3 +435,39 @@ Light
 ggsave("../output/pdf_figs/Experimental_Tank_HoboLight.pdf", plot = last_plot(), width = 8, height = 4)
 ggsave("../output/Experimental_Tank_HoboLight.png", plot = last_plot(), width = 8, height = 4)
 ```
+
+## 0.7 Load data
+
+``` r
+library(ggpmisc)
+```
+
+    ## Warning: package 'ggpmisc' was built under R version 4.3.3
+
+    ## Loading required package: ggpp
+
+    ## Warning: package 'ggpp' was built under R version 4.3.3
+
+    ## Registered S3 methods overwritten by 'ggpp':
+    ##   method                  from   
+    ##   heightDetails.titleGrob ggplot2
+    ##   widthDetails.titleGrob  ggplot2
+
+    ## 
+    ## Attaching package: 'ggpp'
+
+    ## The following object is masked from 'package:ggplot2':
+    ## 
+    ##     annotate
+
+``` r
+salt_test <- read.csv("../data/water_chemistry/salt_test.csv")
+
+salt_test  %>% ggplot(aes(x=temp, y=salinity,color=mode))  + geom_point() + geom_smooth(method="lm") + theme_minimal() +stat_poly_eq(use_label("eq", "R2")) 
+```
+
+    ## `geom_smooth()` using formula = 'y ~ x'
+
+    ## Warning in summary.lm(fm): essentially perfect fit: summary may be unreliable
+
+![](DMs_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->

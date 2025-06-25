@@ -91,7 +91,7 @@ pHSlope.long <-pHSlope %>% pivot_longer(cols=Temperature_C:Conductivity_mScm,
   names_to = "metric",
   values_to = "value")
 
-pHSlope.long <- pHSlope.long %>% filter(!(metric=="Salinity_psu" & Salinity_ATC_Mode=="ATC"))
+pHSlope.long <- pHSlope.long %>% filter(!(metric=="Salinity_psu" & Salinity_ATC_Mode=="MAN"))
 ```
 
 ## Plot
@@ -269,5 +269,17 @@ Light <- tank_df_Exp %>% ggplot(aes(x=DateTimeEST, y=IntensityLux)) +
 Light
 ggsave("../output/pdf_figs/Experimental_Tank_HoboLight.pdf", plot = last_plot(), width = 8, height = 4)
 ggsave("../output/Experimental_Tank_HoboLight.png", plot = last_plot(), width = 8, height = 4)
+
+```
+
+
+## Load data 
+
+```{r}
+library(ggpmisc)
+salt_test <- read.csv("../data/water_chemistry/salt_test.csv")
+
+salt_test  %>% ggplot(aes(x=temp, y=salinity,color=mode))  + geom_point() + geom_smooth(method="lm") + theme_minimal() +stat_poly_eq(use_label("eq", "R2")) 
+
 
 ```
