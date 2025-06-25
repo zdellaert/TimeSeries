@@ -2,16 +2,19 @@
 
 ## Supplies Needed
 
-1. Dewar containing LN2 and mesh bag
-2. 5 mL tube rack
-3. 1.5 mL tube rack
-4. Clippers
-5. Forceps
-6. 70% ethanol and DI bottles for cleaning tools
-7. Kimwipes/paper towels
-8. Lab coats
-9. Secondary containment bin for tube rack containing fixative tubes
-10. Clipboards, pens, sharpies for data recording
+1. Gloves
+2. LN2-handling cryogloves
+3. Dewar containing LN2 and mesh bag
+4. 5 mL tube rack
+5. 1.5 mL tube rack
+6. Clippers
+7. Forceps
+8. 70% ethanol and DI bottles for cleaning tools
+9. Kimwipes/paper towels
+10. Waste container for plugs
+11. Lab coats
+12. Secondary containment bin for tube rack containing fixative tubes
+13. Clipboards, pens, sharpies for data recording
 
 ## Sampling workflow:
 
