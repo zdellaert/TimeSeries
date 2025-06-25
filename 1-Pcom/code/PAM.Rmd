@@ -46,13 +46,13 @@ ggsave("../output/FvFm_recovery_acclimation.png", plot = last_plot(), width = 8,
 ```
 
 ```{r}
-PAM_exp <- PAM #%>% filter(timepoint!="Acclimation" & timepoint!="Recovery")
+PAM_exp <- PAM %>% filter(treatment!="Acclimation" & treatment!="Recovery")
 table(PAM_exp$plug)
 
-ggplot(PAM_exp,aes(x = date, y = fv_fm_y_1000)) + 
+ggplot(PAM_exp,aes(x = timepoint, y = fv_fm_y_1000)) + 
     geom_boxplot(aes(fill = treatment)) +theme_minimal() +scale_fill_manual(values = custom_colors) 
 
-ggplot(PAM_exp,aes(x = date, y = fv_fm_y_1000, group = plug)) + 
+ggplot(PAM_exp,aes(x = timepoint, y = fv_fm_y_1000, group = plug)) + 
     geom_path(aes(color=plug)) + theme_minimal() #+facet_wrap(tank_id~treatment)
 ```
 

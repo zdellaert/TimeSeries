@@ -41,6 +41,8 @@ PAM <- PAM %>% filter(!(date %in%outlier_dates))
 ggplot(PAM,aes(x = date, y = fv_fm_y_1000)) + 
     geom_boxplot(aes(fill = treatment)) + labs(x = "Date", y = "Fv/Fm", title = "Fv/Fm by Date and Tank") +
   theme_minimal()
+
+ggsave("../output/FvFm_recovery_acclimation.png", plot = last_plot(), width = 8, height = 4)
 ```
 
 ```{r}
