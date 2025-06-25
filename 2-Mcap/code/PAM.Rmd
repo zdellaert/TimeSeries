@@ -34,7 +34,7 @@ ggplot(PAM,aes(x = date, y = fv_fm_y_1000)) +
     geom_boxplot(aes(fill = tank_id)) + labs(x = "Date", y = "Fv/Fm", title = "Fv/Fm by Date and Tank") +
   theme_minimal()
 
-outlier_dates <- c("20250609","20250610","20250620")
+outlier_dates <- c("20250620")
   
 PAM <- PAM %>% filter(!(date %in%outlier_dates))
 
