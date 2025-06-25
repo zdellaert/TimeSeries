@@ -8,79 +8,13 @@ Zoe Dellaert
 
 ``` r
 library(tidyverse)
-```
-
-    ## Warning: package 'ggplot2' was built under R version 4.3.3
-
-    ## Warning: package 'purrr' was built under R version 4.3.3
-
-    ## Warning: package 'lubridate' was built under R version 4.3.3
-
-    ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-    ## ✔ dplyr     1.1.4     ✔ readr     2.1.5
-    ## ✔ forcats   1.0.0     ✔ stringr   1.5.1
-    ## ✔ ggplot2   3.5.2     ✔ tibble    3.2.1
-    ## ✔ lubridate 1.9.4     ✔ tidyr     1.3.1
-    ## ✔ purrr     1.0.4     
-    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-    ## ✖ dplyr::filter() masks stats::filter()
-    ## ✖ dplyr::lag()    masks stats::lag()
-    ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
-
-``` r
 library(janitor)
-```
-
-    ## Warning: package 'janitor' was built under R version 4.3.3
-
-    ## 
-    ## Attaching package: 'janitor'
-    ## 
-    ## The following objects are masked from 'package:stats':
-    ## 
-    ##     chisq.test, fisher.test
-
-``` r
 library(ggpubr)
 library(lme4)
-```
-
-    ## Warning: package 'lme4' was built under R version 4.3.3
-
-    ## Loading required package: Matrix
-    ## 
-    ## Attaching package: 'Matrix'
-    ## 
-    ## The following objects are masked from 'package:tidyr':
-    ## 
-    ##     expand, pack, unpack
-
-``` r
 library(lmerTest)
-```
-
-    ## 
-    ## Attaching package: 'lmerTest'
-    ## 
-    ## The following object is masked from 'package:lme4':
-    ## 
-    ##     lmer
-    ## 
-    ## The following object is masked from 'package:stats':
-    ## 
-    ##     step
-
-``` r
 library(emmeans)
-```
 
-    ## Warning: package 'emmeans' was built under R version 4.3.3
 
-    ## Welcome to emmeans.
-    ## Caution: You lose important information if you filter this package's results.
-    ## See '? untidy'
-
-``` r
 custom_colors <- c("Control" = "lightblue4", "Heat" = "#D55E00")
 
 PAM <- read.csv("../data/PAM.csv") %>% clean_names() %>% filter(date != "20250519")
@@ -95,7 +29,7 @@ ggplot(PAM,aes(x = date, y = fv_fm_y_1000)) +
   theme_minimal()
 ```
 
-![](PAM_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
+<img src="PAM_files/figure-gfm/unnamed-chunk-1-1.png" style="display: block; margin: auto;" />
 
 ``` r
 outlier_dates <- c("20250609","20250610","20250620")
@@ -107,7 +41,7 @@ ggplot(PAM,aes(x = date, y = fv_fm_y_1000)) +
   theme_minimal()
 ```
 
-![](PAM_files/figure-gfm/unnamed-chunk-1-2.png)<!-- -->
+<img src="PAM_files/figure-gfm/unnamed-chunk-1-2.png" style="display: block; margin: auto;" />
 
 ``` r
 ggsave("../output/FvFm_recovery_acclimation.png", plot = last_plot(), width = 8, height = 4)
@@ -129,14 +63,14 @@ ggplot(PAM_exp,aes(x = timepoint, y = fv_fm_y_1000)) +
     geom_boxplot(aes(fill = treatment)) +theme_minimal() +scale_fill_manual(values = custom_colors) 
 ```
 
-![](PAM_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+<img src="PAM_files/figure-gfm/unnamed-chunk-2-1.png" style="display: block; margin: auto;" />
 
 ``` r
 ggplot(PAM_exp,aes(x = timepoint, y = fv_fm_y_1000, group = plug)) + 
     geom_path(aes(color=plug)) + theme_minimal() #+facet_wrap(tank_id~treatment)
 ```
 
-![](PAM_files/figure-gfm/unnamed-chunk-2-2.png)<!-- -->
+<img src="PAM_files/figure-gfm/unnamed-chunk-2-2.png" style="display: block; margin: auto;" />
 
 ## 0.1 Statistical Mixed Model by treatment, timepoint, and tank_id
 
@@ -258,13 +192,7 @@ ggplot(contrast_table, aes(x = timepoint, y = estimate)) +
   theme(panel.grid.minor = element_blank(),panel.grid.major.x = element_blank())
 ```
 
-    ## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
-    ## ℹ Please use `linewidth` instead.
-    ## This warning is displayed once every 8 hours.
-    ## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
-    ## generated.
-
-![](PAM_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+<img src="PAM_files/figure-gfm/unnamed-chunk-5-1.png" style="display: block; margin: auto;" />
 
 ``` r
 ggsave("../output/FvFm_line_treatment_tank_modelestimates.png", plot = last_plot(), width = 8, height = 4)
@@ -289,7 +217,7 @@ ggplot(PAM_means_treatment, aes(x = timepoint, y = FvFm_mean, color = treatment,
   theme_minimal() +scale_color_manual(values = custom_colors)
 ```
 
-![](PAM_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+<img src="PAM_files/figure-gfm/unnamed-chunk-6-1.png" style="display: block; margin: auto;" />
 
 ``` r
 PAM_means <- PAM_exp %>%
@@ -311,7 +239,7 @@ ggplot(PAM_means, aes(x = timepoint, y = FvFm_mean, color = treatment, shape = t
   stat_compare_means(aes(group = treatment),method = "anova",label = "p.format",size = 2.5)
 ```
 
-![](PAM_files/figure-gfm/unnamed-chunk-6-2.png)<!-- -->
+<img src="PAM_files/figure-gfm/unnamed-chunk-6-2.png" style="display: block; margin: auto;" />
 
 ``` r
 ggsave("../output/FvFm_line_treatment_tank_means.png", plot = last_plot(), width = 8, height = 4)
@@ -326,7 +254,7 @@ ggplot(PAM_exp, aes(x = timepoint, y = fv_fm_y_1000, color = treatment, shape = 
   stat_compare_means(aes(group = treatment),method = "anova",label = "p.format",size = 3)
 ```
 
-![](PAM_files/figure-gfm/unnamed-chunk-6-3.png)<!-- -->
+<img src="PAM_files/figure-gfm/unnamed-chunk-6-3.png" style="display: block; margin: auto;" />
 
 ``` r
 ggplot(PAM_means, aes(x = timepoint, y = FvFm_mean, color = tank_id, group = tank_id)) +
@@ -335,11 +263,11 @@ ggplot(PAM_means, aes(x = timepoint, y = FvFm_mean, color = tank_id, group = tan
   theme_minimal() + facet_wrap(~treatment)
 ```
 
-![](PAM_files/figure-gfm/unnamed-chunk-6-4.png)<!-- -->
+<img src="PAM_files/figure-gfm/unnamed-chunk-6-4.png" style="display: block; margin: auto;" />
 
 ``` r
 ggplot(PAM_exp, aes(x = timepoint, y = fv_fm_y_1000, color = treatment)) +
   geom_boxplot(outlier.colour = "red", outlier.shape = 8) 
 ```
 
-![](PAM_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+<img src="PAM_files/figure-gfm/unnamed-chunk-7-1.png" style="display: block; margin: auto;" />

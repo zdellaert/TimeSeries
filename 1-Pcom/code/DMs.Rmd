@@ -13,8 +13,18 @@ This script plots daily measurements from the experiment, and is based on the Pu
 ## Load packages 
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  fig.width = 8,
+  fig.height = 4,
+  fig.align = 'center',
+  dpi = 300
+)
+```
 
+```{r packages}
 library(tidyverse)
 library(lubridate) # used for converting 8 digit date into datetime format for R
 library(RColorBrewer)

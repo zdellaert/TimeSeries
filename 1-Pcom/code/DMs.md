@@ -18,6 +18,20 @@ on the Putnam Lab script available here:
 
 ## 0.1 Load packages
 
+``` r
+library(tidyverse)
+library(lubridate) # used for converting 8 digit date into datetime format for R
+library(RColorBrewer)
+library(rmarkdown)
+library(tinytex)
+
+## If seacarb needs to be downloaded:
+#packageurl <- "https://cran.r-project.org/src/contrib/Archive/seacarb/seacarb_3.2.tar.gz"
+#install.packages(packageurl, repos = NULL, type = "source")
+#install.packages("seacarb")
+library(seacarb) 
+```
+
 ## 0.2 Load data
 
 ``` r
@@ -95,17 +109,6 @@ pH on the total scale from pH.mV.
 
 ``` r
 pHcalib <- read_csv("../data/water_chemistry/Tris_Calibration.csv")
-```
-
-    ## Rows: 14 Columns: 3
-    ## ── Column specification ────────────────────────────────────────────────────────
-    ## Delimiter: ","
-    ## dbl (3): tris.date, mVTris, TTris
-    ## 
-    ## ℹ Use `spec()` to retrieve the full column specification for this data.
-    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-
-``` r
 pHcalib$tris.date<-as.character(pHcalib$tris.date)
 
 pHSlope <- pHcalib %>%
@@ -181,7 +184,7 @@ daily_tank<-pHSlope.long %>% filter(Treatment !=  "Ramp") %>%
   theme(text = element_text(size = 14)); daily_tank
 ```
 
-![](DMs_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+<img src="DMs_files/figure-gfm/unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
 
 ``` r
 daily_tank<-pHSlope.long %>% filter(Treatment !=  "AcclimationRecovery" & Treatment !=  "Ramp") %>%
@@ -199,7 +202,7 @@ daily_tank<-pHSlope.long %>% filter(Treatment !=  "AcclimationRecovery" & Treatm
   theme(text = element_text(size = 14)); daily_tank
 ```
 
-![](DMs_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+<img src="DMs_files/figure-gfm/unnamed-chunk-8-1.png" style="display: block; margin: auto;" />
 
 ``` r
 # Save plot 
@@ -218,22 +221,6 @@ summary <- daily_exp%>%
   select(Temperature_C:pH_mv) %>%
   summarise(across(everything(), list(mean = mean, sd = sd), na.rm = TRUE)); summary
 ```
-
-    ## Adding missing grouping variables: `Tank_ID`
-
-    ## Warning: There was 1 warning in `summarise()`.
-    ## ℹ In argument: `across(everything(), list(mean = mean, sd = sd), na.rm =
-    ##   TRUE)`.
-    ## ℹ In group 1: `Tank_ID = "1"`.
-    ## Caused by warning:
-    ## ! The `...` argument of `across()` is deprecated as of dplyr 1.1.0.
-    ## Supply arguments directly to `.fns` through an anonymous function instead.
-    ## 
-    ##   # Previously
-    ##   across(a:b, mean, na.rm = TRUE)
-    ## 
-    ##   # Now
-    ##   across(a:b, \(x) mean(x, na.rm = TRUE))
 
     ## # A tibble: 6 × 9
     ##   Tank_ID Temperature_C_mean Temperature_C_sd Salinity_psu_mean Salinity_psu_sd
