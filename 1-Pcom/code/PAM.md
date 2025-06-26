@@ -54,9 +54,9 @@ table(PAM_exp$plug)
 
     ## 
     ## 1043 1065 1102 1122 1130 1133 1209 1244 1281 1337 1473 1555 1575 1615 1626 1761 
-    ##    3    3    3    3    3    3    3    3    3    3    3    3    3    3    3    3 
+    ##    5    5    5    5    5    5    5    5    5    5    5    5    5    5    5    5 
     ## 1771 2730 
-    ##    3    3
+    ##    5    5
 
 ``` r
 ggplot(PAM_exp,aes(x = timepoint, y = fv_fm_y_1000)) + 
@@ -85,36 +85,44 @@ summary(model)
     ## Formula: fv_fm_y_1000 ~ treatment * timepoint + (1 | treatment:tank_id)
     ##    Data: PAM_exp
     ## 
-    ## REML criterion at convergence: -111.8
+    ## REML criterion at convergence: -189.2
     ## 
     ## Scaled residuals: 
-    ##     Min      1Q  Median      3Q     Max 
-    ## -2.2119 -0.3526  0.1977  0.5974  1.6280 
+    ##      Min       1Q   Median       3Q      Max 
+    ## -2.21639 -0.40337  0.01968  0.63168  1.85437 
     ## 
     ## Random effects:
     ##  Groups            Name        Variance  Std.Dev.
-    ##  treatment:tank_id (Intercept) 0.0006556 0.02560 
-    ##  Residual                      0.0040205 0.06341 
-    ## Number of obs: 54, groups:  treatment:tank_id, 6
+    ##  treatment:tank_id (Intercept) 0.0006687 0.02586 
+    ##  Residual                      0.0039206 0.06261 
+    ## Number of obs: 90, groups:  treatment:tank_id, 6
     ## 
     ## Fixed effects:
-    ##                           Estimate Std. Error        df t value Pr(>|t|)    
-    ## (Intercept)               0.621000   0.025792 12.373063  24.077 9.08e-12 ***
-    ## treatmentHeat             0.008222   0.036476 12.373063   0.225    0.825    
-    ## timepoint1                0.029333   0.029890 44.000000   0.981    0.332    
-    ## timepoint3                0.031333   0.029890 44.000000   1.048    0.300    
-    ## treatmentHeat:timepoint1 -0.023222   0.042272 44.000000  -0.549    0.586    
-    ## treatmentHeat:timepoint3 -0.048111   0.042272 44.000000  -1.138    0.261    
+    ##                            Estimate Std. Error        df t value Pr(>|t|)    
+    ## (Intercept)                0.621000   0.025661 16.922477  24.200 1.44e-14 ***
+    ## treatmentHeat              0.008222   0.036291 16.922477   0.227    0.823    
+    ## timepoint1                 0.029333   0.029517 76.000000   0.994    0.323    
+    ## timepoint3                 0.031333   0.029517 76.000000   1.062    0.292    
+    ## timepoint12                0.017889   0.029517 76.000000   0.606    0.546    
+    ## timepoint24                0.002000   0.029517 76.000000   0.068    0.946    
+    ## treatmentHeat:timepoint1  -0.023222   0.041743 76.000000  -0.556    0.580    
+    ## treatmentHeat:timepoint3  -0.048111   0.041743 76.000000  -1.153    0.253    
+    ## treatmentHeat:timepoint12 -0.048667   0.041743 76.000000  -1.166    0.247    
+    ## treatmentHeat:timepoint24 -0.044778   0.041743 76.000000  -1.073    0.287    
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
     ## Correlation of Fixed Effects:
-    ##             (Intr) trtmnH tmpnt1 tmpnt3 trtH:1
-    ## treatmentHt -0.707                            
-    ## timepoint1  -0.579  0.410                     
-    ## timepoint3  -0.579  0.410  0.500              
-    ## trtmntHt:t1  0.410 -0.579 -0.707 -0.354       
-    ## trtmntHt:t3  0.410 -0.579 -0.354 -0.707  0.500
+    ##             (Intr) trtmnH tmpnt1 tmpnt3 tmpn12 tmpn24 trtH:1 trtH:3 trH:12
+    ## treatmentHt -0.707                                                        
+    ## timepoint1  -0.575  0.407                                                 
+    ## timepoint3  -0.575  0.407  0.500                                          
+    ## timepoint12 -0.575  0.407  0.500  0.500                                   
+    ## timepoint24 -0.575  0.407  0.500  0.500  0.500                            
+    ## trtmntHt:t1  0.407 -0.575 -0.707 -0.354 -0.354 -0.354                     
+    ## trtmntHt:t3  0.407 -0.575 -0.354 -0.707 -0.354 -0.354  0.500              
+    ## trtmntHt:12  0.407 -0.575 -0.354 -0.354 -0.707 -0.354  0.500  0.500       
+    ## trtmntHt:24  0.407 -0.575 -0.354 -0.354 -0.354 -0.707  0.500  0.500  0.500
 
 ``` r
 # Estimated marginal means (adjusted for random effects and model structure)
@@ -124,15 +132,23 @@ pairs(emm)
 
     ## timepoint = 0:
     ##  contrast       estimate     SE   df t.ratio p.value
-    ##  Control - Heat -0.00822 0.0365 12.4  -0.225  0.8253
+    ##  Control - Heat -0.00822 0.0363 16.9  -0.227  0.8235
     ## 
     ## timepoint = 1:
     ##  contrast       estimate     SE   df t.ratio p.value
-    ##  Control - Heat  0.01500 0.0365 12.4   0.411  0.6879
+    ##  Control - Heat  0.01500 0.0363 16.9   0.413  0.6846
     ## 
     ## timepoint = 3:
     ##  contrast       estimate     SE   df t.ratio p.value
-    ##  Control - Heat  0.03989 0.0365 12.4   1.094  0.2950
+    ##  Control - Heat  0.03989 0.0363 16.9   1.099  0.2871
+    ## 
+    ## timepoint = 12:
+    ##  contrast       estimate     SE   df t.ratio p.value
+    ##  Control - Heat  0.04044 0.0363 16.9   1.114  0.2807
+    ## 
+    ## timepoint = 24:
+    ##  contrast       estimate     SE   df t.ratio p.value
+    ##  Control - Heat  0.03656 0.0363 16.9   1.007  0.3280
     ## 
     ## Degrees-of-freedom method: kenward-roger
 
@@ -157,9 +173,11 @@ print(summary_table)
 ```
 
     ##   Timepoint Estimate (Control-Heat)     SE t-ratio p-value Significant?
-    ## 1         0                 -0.0082 0.0365   -0.23   0.825             
-    ## 2         1                  0.0150 0.0365    0.41   0.688             
-    ## 3         3                  0.0399 0.0365    1.09   0.295
+    ## 1         0                 -0.0082 0.0363   -0.23   0.823             
+    ## 2         1                  0.0150 0.0363    0.41   0.685             
+    ## 3         3                  0.0399 0.0363    1.10   0.287             
+    ## 4        12                  0.0404 0.0363    1.11   0.281             
+    ## 5        24                  0.0366 0.0363    1.01   0.328
 
 ``` r
 write.csv(summary_table, "../output/FvFm_treatment_effect_summary.csv", row.names = FALSE)
