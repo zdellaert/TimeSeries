@@ -54,9 +54,9 @@ table(PAM_exp$plug)
 
     ## 
     ## 1043 1065 1102 1122 1130 1133 1209 1244 1281 1337 1473 1555 1575 1615 1626 1761 
-    ##    5    5    5    5    5    5    5    5    5    5    5    5    5    5    5    5 
+    ##    6    6    6    6    6    6    6    6    6    6    6    6    6    6    6    6 
     ## 1771 2730 
-    ##    5    5
+    ##    6    6
 
 ``` r
 ggplot(PAM_exp,aes(x = timepoint, y = fv_fm_y_1000)) + 
@@ -85,44 +85,60 @@ summary(model)
     ## Formula: fv_fm_y_1000 ~ treatment * timepoint + (1 | treatment:tank_id)
     ##    Data: PAM_exp
     ## 
-    ## REML criterion at convergence: -189.2
+    ## REML criterion at convergence: -228.7
     ## 
     ## Scaled residuals: 
     ##      Min       1Q   Median       3Q      Max 
-    ## -2.21639 -0.40337  0.01968  0.63168  1.85437 
+    ## -2.66941 -0.42432  0.01894  0.69836  1.92815 
     ## 
     ## Random effects:
     ##  Groups            Name        Variance  Std.Dev.
-    ##  treatment:tank_id (Intercept) 0.0006687 0.02586 
-    ##  Residual                      0.0039206 0.06261 
-    ## Number of obs: 90, groups:  treatment:tank_id, 6
+    ##  treatment:tank_id (Intercept) 0.0007548 0.02747 
+    ##  Residual                      0.0038577 0.06211 
+    ## Number of obs: 108, groups:  treatment:tank_id, 6
     ## 
     ## Fixed effects:
     ##                            Estimate Std. Error        df t value Pr(>|t|)    
-    ## (Intercept)                0.621000   0.025661 16.922477  24.200 1.44e-14 ***
-    ## treatmentHeat              0.008222   0.036291 16.922477   0.227    0.823    
-    ## timepoint1                 0.029333   0.029517 76.000000   0.994    0.323    
-    ## timepoint3                 0.031333   0.029517 76.000000   1.062    0.292    
-    ## timepoint12                0.017889   0.029517 76.000000   0.606    0.546    
-    ## timepoint24                0.002000   0.029517 76.000000   0.068    0.946    
-    ## treatmentHeat:timepoint1  -0.023222   0.041743 76.000000  -0.556    0.580    
-    ## treatmentHeat:timepoint3  -0.048111   0.041743 76.000000  -1.153    0.253    
-    ## treatmentHeat:timepoint12 -0.048667   0.041743 76.000000  -1.166    0.247    
-    ## treatmentHeat:timepoint24 -0.044778   0.041743 76.000000  -1.073    0.287    
+    ## (Intercept)                0.621000   0.026081 16.840571  23.810  2.1e-14 ***
+    ## treatmentHeat              0.008222   0.036885 16.840571   0.223   0.8263    
+    ## timepoint1                 0.029333   0.029279 92.000000   1.002   0.3190    
+    ## timepoint3                 0.031333   0.029279 92.000000   1.070   0.2873    
+    ## timepoint12                0.017889   0.029279 92.000000   0.611   0.5427    
+    ## timepoint24                0.002000   0.029279 92.000000   0.068   0.9457    
+    ## timepoint36                0.029111   0.029279 92.000000   0.994   0.3227    
+    ## treatmentHeat:timepoint1  -0.023222   0.041407 92.000000  -0.561   0.5763    
+    ## treatmentHeat:timepoint3  -0.048111   0.041407 92.000000  -1.162   0.2483    
+    ## treatmentHeat:timepoint12 -0.048667   0.041407 92.000000  -1.175   0.2429    
+    ## treatmentHeat:timepoint24 -0.044778   0.041407 92.000000  -1.081   0.2823    
+    ## treatmentHeat:timepoint36 -0.075333   0.041407 92.000000  -1.819   0.0721 .  
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
     ## Correlation of Fixed Effects:
-    ##             (Intr) trtmnH tmpnt1 tmpnt3 tmpn12 tmpn24 trtH:1 trtH:3 trH:12
+    ##             (Intr) trtmnH tmpnt1 tmpnt3 tmpn12 tmpn24 tmpn36 trtH:1 trtH:3
     ## treatmentHt -0.707                                                        
-    ## timepoint1  -0.575  0.407                                                 
-    ## timepoint3  -0.575  0.407  0.500                                          
-    ## timepoint12 -0.575  0.407  0.500  0.500                                   
-    ## timepoint24 -0.575  0.407  0.500  0.500  0.500                            
-    ## trtmntHt:t1  0.407 -0.575 -0.707 -0.354 -0.354 -0.354                     
-    ## trtmntHt:t3  0.407 -0.575 -0.354 -0.707 -0.354 -0.354  0.500              
-    ## trtmntHt:12  0.407 -0.575 -0.354 -0.354 -0.707 -0.354  0.500  0.500       
-    ## trtmntHt:24  0.407 -0.575 -0.354 -0.354 -0.354 -0.707  0.500  0.500  0.500
+    ## timepoint1  -0.561  0.397                                                 
+    ## timepoint3  -0.561  0.397  0.500                                          
+    ## timepoint12 -0.561  0.397  0.500  0.500                                   
+    ## timepoint24 -0.561  0.397  0.500  0.500  0.500                            
+    ## timepoint36 -0.561  0.397  0.500  0.500  0.500  0.500                     
+    ## trtmntHt:t1  0.397 -0.561 -0.707 -0.354 -0.354 -0.354 -0.354              
+    ## trtmntHt:t3  0.397 -0.561 -0.354 -0.707 -0.354 -0.354 -0.354  0.500       
+    ## trtmntHt:12  0.397 -0.561 -0.354 -0.354 -0.707 -0.354 -0.354  0.500  0.500
+    ## trtmntHt:24  0.397 -0.561 -0.354 -0.354 -0.354 -0.707 -0.354  0.500  0.500
+    ## trtmntHt:36  0.397 -0.561 -0.354 -0.354 -0.354 -0.354 -0.707  0.500  0.500
+    ##             trH:12 trH:24
+    ## treatmentHt              
+    ## timepoint1               
+    ## timepoint3               
+    ## timepoint12              
+    ## timepoint24              
+    ## timepoint36              
+    ## trtmntHt:t1              
+    ## trtmntHt:t3              
+    ## trtmntHt:12              
+    ## trtmntHt:24  0.500       
+    ## trtmntHt:36  0.500  0.500
 
 ``` r
 # Estimated marginal means (adjusted for random effects and model structure)
@@ -132,23 +148,27 @@ pairs(emm)
 
     ## timepoint = 0:
     ##  contrast       estimate     SE   df t.ratio p.value
-    ##  Control - Heat -0.00822 0.0363 16.9  -0.227  0.8235
+    ##  Control - Heat -0.00822 0.0369 16.8  -0.223  0.8263
     ## 
     ## timepoint = 1:
     ##  contrast       estimate     SE   df t.ratio p.value
-    ##  Control - Heat  0.01500 0.0363 16.9   0.413  0.6846
+    ##  Control - Heat  0.01500 0.0369 16.8   0.407  0.6894
     ## 
     ## timepoint = 3:
     ##  contrast       estimate     SE   df t.ratio p.value
-    ##  Control - Heat  0.03989 0.0363 16.9   1.099  0.2871
+    ##  Control - Heat  0.03989 0.0369 16.8   1.081  0.2947
     ## 
     ## timepoint = 12:
     ##  contrast       estimate     SE   df t.ratio p.value
-    ##  Control - Heat  0.04044 0.0363 16.9   1.114  0.2807
+    ##  Control - Heat  0.04044 0.0369 16.8   1.097  0.2883
     ## 
     ## timepoint = 24:
     ##  contrast       estimate     SE   df t.ratio p.value
-    ##  Control - Heat  0.03656 0.0363 16.9   1.007  0.3280
+    ##  Control - Heat  0.03656 0.0369 16.8   0.991  0.3357
+    ## 
+    ## timepoint = 36:
+    ##  contrast       estimate     SE   df t.ratio p.value
+    ##  Control - Heat  0.06711 0.0369 16.8   1.819  0.0867
     ## 
     ## Degrees-of-freedom method: kenward-roger
 
@@ -173,11 +193,12 @@ print(summary_table)
 ```
 
     ##   Timepoint Estimate (Control-Heat)     SE t-ratio p-value Significant?
-    ## 1         0                 -0.0082 0.0363   -0.23   0.823             
-    ## 2         1                  0.0150 0.0363    0.41   0.685             
-    ## 3         3                  0.0399 0.0363    1.10   0.287             
-    ## 4        12                  0.0404 0.0363    1.11   0.281             
-    ## 5        24                  0.0366 0.0363    1.01   0.328
+    ## 1         0                 -0.0082 0.0369   -0.22  0.8260             
+    ## 2         1                  0.0150 0.0369    0.41  0.6890             
+    ## 3         3                  0.0399 0.0369    1.08  0.2950             
+    ## 4        12                  0.0404 0.0369    1.10  0.2880             
+    ## 5        24                  0.0366 0.0369    0.99  0.3360             
+    ## 6        36                  0.0671 0.0369    1.82  0.0867            .
 
 ``` r
 write.csv(summary_table, "../output/FvFm_treatment_effect_summary.csv", row.names = FALSE)
@@ -289,3 +310,20 @@ ggplot(PAM_exp, aes(x = timepoint, y = fv_fm_y_1000, color = treatment)) +
 ```
 
 <img src="PAM_files/figure-gfm/unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
+
+``` r
+PAM_exp %>% filter(dark_adapt_mins != "overnight") %>% ggplot(aes(x = dark_adapt_mins, y = fv_fm_y_1000)) + 
+    geom_point(aes(color=treatment)) +
+  geom_smooth(aes(group = treatment, color = treatment), method = "lm", se = FALSE) +  # or method = "loess"
+  theme_minimal() + scale_color_manual(values = custom_colors) 
+```
+
+<img src="PAM_files/figure-gfm/unnamed-chunk-8-1.png" style="display: block; margin: auto;" />
+
+``` r
+PAM_exp %>% filter(date=="20250626") %>% ggplot(aes(x = notes, y = fv_fm_y_1000)) + 
+    geom_point(aes(color=treatment)) +
+  theme_minimal(base_size = 6) + scale_color_manual(values = custom_colors) 
+```
+
+<img src="PAM_files/figure-gfm/unnamed-chunk-8-2.png" style="display: block; margin: auto;" />

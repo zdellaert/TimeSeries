@@ -190,3 +190,17 @@ ggplot(PAM_exp, aes(x = timepoint, y = fv_fm_y_1000, color = treatment)) +
 
 ```
 
+
+```{r}
+
+
+PAM_exp %>% filter(dark_adapt_mins != "overnight") %>% ggplot(aes(x = dark_adapt_mins, y = fv_fm_y_1000)) + 
+    geom_point(aes(color=treatment)) +
+  geom_smooth(aes(group = treatment, color = treatment), method = "lm", se = FALSE) +  # or method = "loess"
+  theme_minimal() + scale_color_manual(values = custom_colors) 
+
+PAM_exp %>% filter(date=="20250626") %>% ggplot(aes(x = notes, y = fv_fm_y_1000)) + 
+    geom_point(aes(color=treatment)) +
+  theme_minimal(base_size = 6) + scale_color_manual(values = custom_colors) 
+```
+

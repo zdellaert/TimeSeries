@@ -60,19 +60,19 @@ tail(daily) # check to make sure data from today is there
 ```
 
     ##        Date Treatment Tank_ID  Time Initials Temperature_C pH_mv Salinity_psu
-    ## 31 20250625   Control       1 14:30       JH         25.13 -59.8        34.84
-    ## 32 20250625      Heat       2 14:30       JH         31.95 -59.2        34.75
-    ## 33 20250625      Heat       3 14:30       JH         32.18 -58.8        34.72
-    ## 34 20250625   Control       4 14:30       JH         24.99 -60.3        34.21
-    ## 35 20250625      Heat       5 14:30       JH         32.09 -60.2        35.07
-    ## 36 20250625   Control       6 14:30       JH         25.07 -61.2        34.50
+    ## 55 20250626   Control       1 16:40       ZD         25.07 -57.2        34.94
+    ## 56 20250626      Heat       2 16:40       ZD         31.83 -61.7        35.00
+    ## 57 20250626      Heat       3 16:40       ZD         32.31 -61.0        35.14
+    ## 58 20250626   Control       4 16:40       ZD         24.83 -60.7        34.73
+    ## 59 20250626      Heat       5 16:40       ZD         32.29 -63.1        35.19
+    ## 60 20250626   Control       6 16:40       ZD         25.04 -60.2        34.86
     ##    tris.date Probe.Set notes
-    ## 31  20250618    Probe1      
-    ## 32  20250618    Probe1      
-    ## 33  20250618    Probe1      
-    ## 34  20250618    Probe1      
-    ## 35  20250618    Probe1      
-    ## 36  20250618    Probe1
+    ## 55  20250618    Probe1      
+    ## 56  20250618    Probe1      
+    ## 57  20250618    Probe1      
+    ## 58  20250618    Probe1      
+    ## 59  20250618    Probe1      
+    ## 60  20250618    Probe1
 
 ``` r
 daily$Date <- as.Date(as.character(daily$Date), format = "%Y%m%d")
@@ -88,19 +88,19 @@ daily.probe1 <- daily %>% filter(Probe.Set == "Probe1")
 range(na.omit(daily.probe1$Temperature_C))
 ```
 
-    ## [1] 24.42 32.18
+    ## [1] 24.14 32.34
 
 ``` r
 range(na.omit(daily.probe1$pH_mv))
 ```
 
-    ## [1] -64.3 -58.6
+    ## [1] -64.3 -57.2
 
 ``` r
 range(na.omit(daily.probe1$Salinity_psu))
 ```
 
-    ## [1] 33.54 35.07
+    ## [1] 33.54 35.23
 
 ## 0.3 Calculate total pH from Probe Set 1
 
@@ -187,7 +187,7 @@ daily_tank<-pHSlope.long %>% filter(Treatment !=  "Ramp") %>%
 <img src="DMs_files/figure-gfm/unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
 
 ``` r
-daily_tank<-pHSlope.long %>% filter(Treatment !=  "AcclimationRecovery" & Treatment !=  "Ramp") %>%
+daily_tank<-pHSlope.long %>% filter(Treatment !=  "Acclimation") %>%
   ggplot(aes(x=DateTime, y=value, colour=Tank_ID))+
   geom_point(size=2)+
   xlab("Date")+
@@ -225,12 +225,12 @@ summary <- daily_exp%>%
     ## # A tibble: 6 × 9
     ##   Tank_ID Temperature_C_mean Temperature_C_sd Salinity_psu_mean Salinity_psu_sd
     ##   <chr>                <dbl>            <dbl>             <dbl>           <dbl>
-    ## 1 1                     25.2           0.0993              34.8          0.0717
-    ## 2 2                     27.6           3.41                34.6          0.111 
-    ## 3 3                     27.6           3.57                34.5          0.184 
-    ## 4 4                     24.9           0.124               34.0          0.282 
-    ## 5 5                     27.6           3.50                34.8          0.265 
-    ## 6 6                     25.0           0.190               34.3          0.253 
+    ## 1 1                     25.1           0.0980              34.8          0.0829
+    ## 2 2                     29.4           3.43                34.7          0.180 
+    ## 3 3                     29.4           3.54                34.7          0.291 
+    ## 4 4                     24.9           0.304               34.3          0.370 
+    ## 5 5                     29.5           3.55                34.9          0.275 
+    ## 6 6                     25.0           0.165               34.5          0.309 
     ## # ℹ 4 more variables: pH.total_mean <dbl>, pH.total_sd <dbl>, pH_mv_mean <dbl>,
     ## #   pH_mv_sd <dbl>
 

@@ -138,7 +138,7 @@ daily_tank<-pHSlope.long %>% filter(Treatment !=  "Ramp") %>%
 ```
 
 ```{r}
-daily_tank<-pHSlope.long %>% filter(Treatment !=  "AcclimationRecovery" & Treatment !=  "Ramp") %>%
+daily_tank<-pHSlope.long %>% filter(Treatment !=  "Acclimation") %>%
   ggplot(aes(x=DateTime, y=value, colour=Tank_ID))+
   geom_point(size=2)+
   xlab("Date")+
