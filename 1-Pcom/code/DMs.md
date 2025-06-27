@@ -60,19 +60,19 @@ tail(daily) # check to make sure data from today is there
 ```
 
     ##        Date Treatment Tank_ID  Time Initials Temperature_C pH_mv Salinity_psu
-    ## 55 20250626   Control       1 16:40       ZD         25.07 -57.2        34.94
-    ## 56 20250626      Heat       2 16:40       ZD         31.83 -61.7        35.00
-    ## 57 20250626      Heat       3 16:40       ZD         32.31 -61.0        35.14
-    ## 58 20250626   Control       4 16:40       ZD         24.83 -60.7        34.73
-    ## 59 20250626      Heat       5 16:40       ZD         32.29 -63.1        35.19
-    ## 60 20250626   Control       6 16:40       ZD         25.04 -60.2        34.86
+    ## 73 20250627   Control       1 15:11       ZD         25.08 -61.3        34.83
+    ## 74 20250627      Heat       2 15:11       ZD         32.03 -63.1        34.83
+    ## 75 20250627      Heat       3 15:11       ZD         32.26 -62.6        34.82
+    ## 76 20250627   Control       4 15:11       ZD         25.08 -63.3        34.83
+    ## 77 20250627      Heat       5 15:11       ZD         31.96 -63.2        34.80
+    ## 78 20250627   Control       6 15:11       ZD         25.18 -62.8        34.86
     ##    tris.date Probe.Set notes
-    ## 55  20250618    Probe1      
-    ## 56  20250618    Probe1      
-    ## 57  20250618    Probe1      
-    ## 58  20250618    Probe1      
-    ## 59  20250618    Probe1      
-    ## 60  20250618    Probe1
+    ## 73  20250618    Probe1      
+    ## 74  20250618    Probe1      
+    ## 75  20250618    Probe1      
+    ## 76  20250618    Probe1      
+    ## 77  20250618    Probe1      
+    ## 78  20250618    Probe1
 
 ``` r
 daily$Date <- as.Date(as.character(daily$Date), format = "%Y%m%d")
@@ -100,7 +100,7 @@ range(na.omit(daily.probe1$pH_mv))
 range(na.omit(daily.probe1$Salinity_psu))
 ```
 
-    ## [1] 33.54 35.23
+    ## [1] 33.54 35.33
 
 ## 0.3 Calculate total pH from Probe Set 1
 
@@ -225,12 +225,12 @@ summary <- daily_exp%>%
     ## # A tibble: 6 × 9
     ##   Tank_ID Temperature_C_mean Temperature_C_sd Salinity_psu_mean Salinity_psu_sd
     ##   <chr>                <dbl>            <dbl>             <dbl>           <dbl>
-    ## 1 1                     25.1           0.0980              34.8          0.0829
-    ## 2 2                     29.4           3.43                34.7          0.180 
-    ## 3 3                     29.4           3.54                34.7          0.291 
-    ## 4 4                     24.9           0.304               34.3          0.370 
-    ## 5 5                     29.5           3.55                34.9          0.275 
-    ## 6 6                     25.0           0.165               34.5          0.309 
+    ## 1 1                     25.1           0.0976              34.8          0.0927
+    ## 2 2                     30.0           3.20                34.8          0.224 
+    ## 3 3                     30.0           3.29                34.8          0.302 
+    ## 4 4                     24.9           0.290               34.4          0.432 
+    ## 5 5                     30.1           3.27                35.0          0.269 
+    ## 6 6                     25.1           0.160               34.6          0.345 
     ## # ℹ 4 more variables: pH.total_mean <dbl>, pH.total_sd <dbl>, pH_mv_mean <dbl>,
     ## #   pH_mv_sd <dbl>
 
