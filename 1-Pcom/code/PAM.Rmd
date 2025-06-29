@@ -166,7 +166,7 @@ ggplot(PAM_means, aes(x = timepoint, y = FvFm_mean, color = treatment, shape = t
   theme_minimal() +scale_color_manual(values = custom_colors) +
   stat_compare_means(aes(group = treatment),method = "anova",label = "p.format",size = 2.5)
 
-ggsave("../output/FvFm_line_treatment_tank_means.png", plot = last_plot(), width = 8, height = 4)
+ggsave("../output/FvFm_line_treatment_tank_means.png", plot = last_plot(), width = 8, height = 4, bg = "white")
 ggsave("../output/pdf_figs/FvFm_line_treatment_tank_means.pdf", plot = last_plot(), width = 8, height = 4)
 
 ggplot(PAM_exp, aes(x = timepoint, y = fv_fm_y_1000, color = treatment, shape = tank_id)) +
@@ -176,6 +176,9 @@ ggplot(PAM_exp, aes(x = timepoint, y = fv_fm_y_1000, color = treatment, shape = 
   labs(x = "Timepoint",y = "Mean Fv/Fm") +
   theme_minimal() +scale_color_manual(values = custom_colors) +
   stat_compare_means(aes(group = treatment),method = "anova",label = "p.format",size = 3)
+
+ggsave("../output/FvFm_line_treatment_all_points.png", plot = last_plot(), width = 8, height = 4, bg = "white")
+ggsave("../output/pdf_figs/FvFm_line_treatment_all_points.pdf", plot = last_plot(), width = 8, height = 4)
 
 ggplot(PAM_means, aes(x = timepoint, y = FvFm_mean, color = tank_id, group = tank_id)) +
   geom_line(size = 0.8, alpha = 0.7) +
