@@ -216,3 +216,33 @@ Date,Treatment,Timepoint,Tank_ID,Time,Initials,Dark Adapt Mins,Plug #,Mem,Fluore
 20250629,Heat,96,3,10:30,ZD,45,1065,,,,449,0.449,
 20250629,Heat,96,3,10:30,ZD,45,1761,,,,426,0.426,
 20250629,Heat,96,3,10:30,ZD,45,1555,2954,,,451,0.451,
+20250630,Control,120,1,,ZD,overnight,1771,2956,,,620,0.62,
+20250630,Control,120,1,,ZD,overnight,1281,,,,590,0.59,
+20250630,Control,120,1,,ZD,overnight,1626,,,,560,0.56,
+20250630,Control,120,1,,ZD,overnight,1177,,,,634,,not one with a ziptie
+20250630,Control,120,1,,ZD,overnight,1322,,,,522,,not one with a ziptie
+20250630,Heat,120,5,,ZD,overnight,1615,,,,419,0.419,
+20250630,Heat,120,5,,ZD,overnight,1575,,,,442,0.442,
+20250630,Heat,120,5,,ZD,overnight,1209,,,,340,0.34,
+20250630,Heat,120,5,,ZD,overnight,1614,,,,476,,not one with a ziptie
+20250630,Heat,120,5,,ZD,overnight,1474,,,,451,,not one with a ziptie
+20250630,Heat,120,3,,ZD,overnight,1555,,,,407,0.407,
+20250630,Heat,120,3,,ZD,overnight,1065,,,,408,0.408,
+20250630,Heat,120,3,,ZD,overnight,1761,,,,334,0.334,
+20250630,Heat,120,3,,ZD,overnight,1336,,,,368,,not one with a ziptie
+20250630,Heat,120,3,,ZD,overnight,1533,,,,355,,not one with a ziptie
+20250630,Control,120,6,,ZD,overnight,1133,,,,456,0.456,
+20250630,Control,120,6,,ZD,overnight,1043,,,,548,0.548,
+20250630,Control,120,6,,ZD,overnight,1337,,,,552,0.552,
+20250630,Control,120,6,,ZD,overnight,1557,,,,587,,not one with a ziptie
+20250630,Control,120,6,,ZD,overnight,1067,,,,624,,not one with a ziptie
+20250630,Heat,120,2,,ZD,overnight,1122,,,,184,0.184,
+20250630,Heat,120,2,,ZD,overnight,2730,,,,345,0.345,
+20250630,Heat,120,2,,ZD,overnight,1244,,,,428,0.428,
+20250630,Heat,120,2,,ZD,overnight,1189,,,,326,,not one with a ziptie
+20250630,Heat,120,2,,ZD,overnight,1478,,,,517,,not one with a ziptie
+20250630,Control,120,4,,ZD,overnight,1130,,,,632,0.632,
+20250630,Control,120,4,,ZD,overnight,1473,,,,501,0.501,
+20250630,Control,120,4,,ZD,overnight,1102,,,,521,0.521,
+20250630,Control,120,4,,ZD,overnight,1537,,,,555,,not one with a ziptie
+20250630,Control,120,4,,ZD,overnight,1316,2986,,,642,,not one with a ziptie
