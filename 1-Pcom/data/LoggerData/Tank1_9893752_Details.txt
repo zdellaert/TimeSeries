@@ -1,0 +1,153 @@
+﻿Details
+Series: Temp, °C
+	Devices
+		Device Info
+			• Product: HOBO UA-002-08 Pendant Temp/Light
+			• Serial Number: 9893752
+			• Version Number: 1.08
+			• Manufacturer: Onset Computer Corp.
+			• Device Memory: 8192
+			• Header Created: 02/24/11 04:29:34 PM GMT-04:00
+	Deployment Info
+		• Full Series Name: Temperature, °C
+		• Launch Name: 9893752
+		• Deployment Number: 46
+		• Launch Time: 06/24/25 02:49:40 PM GMT-04:00
+		• Logging Interval: 00 Hr 05 Min 00 Sec
+		• Launch GMT Offset: -4 Hr 0 Min
+		• Battery at Launch: 2.87 Volts
+		• Launching Program: HOBOware Pro-3.7.17_0628_0951_Windows
+	Series Statistics
+		• Samples: 1,716
+		• Max: 25.708
+		• Min: 20.329
+		• Avg: 25.246
+		• Std Dev (σ): 0.828
+		• First Sample Time: 06/24/25 02:49:41 PM GMT-04:00
+		• Last Sample Time: 06/30/25 01:44:41 PM GMT-04:00
+Series: Intensity, Lux
+	Devices
+		Device Info
+			• Product: HOBO UA-002-08 Pendant Temp/Light
+			• Serial Number: 9893752
+			• Version Number: 1.08
+			• Manufacturer: Onset Computer Corp.
+			• Device Memory: 8192
+			• Header Created: 02/24/11 04:29:34 PM GMT-04:00
+	Deployment Info
+		• Full Series Name: Light Intensity, Lux
+		• Launch Name: 9893752
+		• Deployment Number: 46
+		• Launch Time: 06/24/25 02:49:40 PM GMT-04:00
+		• Logging Interval: 00 Hr 05 Min 00 Sec
+		• Launch GMT Offset: -4 Hr 0 Min
+		• Battery at Launch: 2.87 Volts
+		• Launching Program: HOBOware Pro-3.7.17_0628_0951_Windows
+	Series Statistics
+		• Samples: 1,716
+		• Max: 1,302.4
+		• Min: 0.0
+		• Avg: 254.2
+		• Std Dev (σ): 383.6
+		• First Sample Time: 06/24/25 02:49:41 PM GMT-04:00
+		• Last Sample Time: 06/30/25 01:44:41 PM GMT-04:00
+Event Type: Coupler Detached
+	Devices
+		Device Info
+			• Product: HOBO UA-002-08 Pendant Temp/Light
+			• Serial Number: 9893752
+			• Version Number: 1.08
+			• Manufacturer: Onset Computer Corp.
+			• Device Memory: 8192
+			• Header Created: 02/24/11 04:29:34 PM GMT-04:00
+	Deployment Info
+		• Full Series Name: Coupler Detached
+		• Launch Name: 9893752
+		• Deployment Number: 46
+		• Launch Time: 06/24/25 02:49:40 PM GMT-04:00
+		• Launch GMT Offset: -4 Hr 0 Min
+		• Battery at Launch: 2.87 Volts
+	Series Statistics
+		• Samples: 2
+		• First Sample Time: 06/24/25 02:50:00 PM GMT-04:00
+		• Last Sample Time: 06/30/25 01:46:19 PM GMT-04:00
+Event Type: Coupler Attached
+	Devices
+		Device Info
+			• Product: HOBO UA-002-08 Pendant Temp/Light
+			• Serial Number: 9893752
+			• Version Number: 1.08
+			• Manufacturer: Onset Computer Corp.
+			• Device Memory: 8192
+			• Header Created: 02/24/11 04:29:34 PM GMT-04:00
+	Deployment Info
+		• Full Series Name: Coupler Attached
+		• Launch Name: 9893752
+		• Deployment Number: 46
+		• Launch Time: 06/24/25 02:49:40 PM GMT-04:00
+		• Launch GMT Offset: -4 Hr 0 Min
+		• Battery at Launch: 2.87 Volts
+	Series Statistics
+		• Samples: 2
+		• First Sample Time: 06/30/25 01:46:05 PM GMT-04:00
+		• Last Sample Time: 06/30/25 01:46:21 PM GMT-04:00
+Event Type: Host Connected
+	Devices
+		Device Info
+			• Product: HOBO UA-002-08 Pendant Temp/Light
+			• Serial Number: 9893752
+			• Version Number: 1.08
+			• Manufacturer: Onset Computer Corp.
+			• Device Memory: 8192
+			• Header Created: 02/24/11 04:29:34 PM GMT-04:00
+	Deployment Info
+		• Full Series Name: Host Connected
+		• Launch Name: 9893752
+		• Deployment Number: 46
+		• Launch Time: 06/24/25 02:49:40 PM GMT-04:00
+		• Launch GMT Offset: -4 Hr 0 Min
+		• Battery at Launch: 2.87 Volts
+	Series Statistics
+		• Samples: 2
+		• First Sample Time: 06/30/25 01:46:05 PM GMT-04:00
+		• Last Sample Time: 06/30/25 01:46:21 PM GMT-04:00
+Event Type: Stopped
+	Devices
+		Device Info
+			• Product: HOBO UA-002-08 Pendant Temp/Light
+			• Serial Number: 9893752
+			• Version Number: 1.08
+			• Manufacturer: Onset Computer Corp.
+			• Device Memory: 8192
+			• Header Created: 02/24/11 04:29:34 PM GMT-04:00
+	Deployment Info
+		• Full Series Name: Stopped
+		• Launch Name: 9893752
+		• Deployment Number: 46
+		• Launch Time: 06/24/25 02:49:40 PM GMT-04:00
+		• Launch GMT Offset: -4 Hr 0 Min
+		• Battery at Launch: 2.87 Volts
+	Series Statistics
+		• Samples: 1
+		• First Sample Time: 06/30/25 01:46:31 PM GMT-04:00
+		• Last Sample Time: 06/30/25 01:46:31 PM GMT-04:00
+Event Type: End Of File
+	Devices
+		Device Info
+			• Product: HOBO UA-002-08 Pendant Temp/Light
+			• Serial Number: 9893752
+			• Version Number: 1.08
+			• Manufacturer: Onset Computer Corp.
+			• Device Memory: 8192
+			• Header Created: 02/24/11 04:29:34 PM GMT-04:00
+	Deployment Info
+		• Full Series Name: End Of File
+		• Launch Name: 9893752
+		• Deployment Number: 46
+		• Launch Time: 06/24/25 02:49:40 PM GMT-04:00
+		• Launch GMT Offset: -4 Hr 0 Min
+		• Battery at Launch: 2.87 Volts
+	Series Statistics
+		• Samples: 1
+		• First Sample Time: 06/30/25 01:46:31 PM GMT-04:00
+		• Last Sample Time: 06/30/25 01:46:31 PM GMT-04:00

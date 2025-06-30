@@ -1,0 +1,153 @@
+﻿Details
+Series: Temp, °C
+	Devices
+		Device Info
+			• Product: HOBO UA-002-64 Pendant Temp/Light
+			• Serial Number: 10655130
+			• Version Number: 1.09
+			• Manufacturer: Onset Computer Corp.
+			• Device Memory: 65536
+			• Header Created: 09/26/13 03:17:28 PM GMT-04:00
+	Deployment Info
+		• Full Series Name: Temperature, °C
+		• Launch Name: 10655130
+		• Deployment Number: 14
+		• Launch Time: 06/24/25 02:50:57 PM GMT-04:00
+		• Logging Interval: 00 Hr 05 Min 00 Sec
+		• Launch GMT Offset: -4 Hr 0 Min
+		• Battery at Launch: 2.87 Volts
+		• Launching Program: HOBOware Pro-3.7.17_0628_0951_Windows
+	Series Statistics
+		• Samples: 1,716
+		• Max: 32.704
+		• Min: 19.758
+		• Avg: 31.201
+		• Std Dev (σ): 2.914
+		• First Sample Time: 06/24/25 02:50:58 PM GMT-04:00
+		• Last Sample Time: 06/30/25 01:45:58 PM GMT-04:00
+Series: Intensity, Lux
+	Devices
+		Device Info
+			• Product: HOBO UA-002-64 Pendant Temp/Light
+			• Serial Number: 10655130
+			• Version Number: 1.09
+			• Manufacturer: Onset Computer Corp.
+			• Device Memory: 65536
+			• Header Created: 09/26/13 03:17:28 PM GMT-04:00
+	Deployment Info
+		• Full Series Name: Light Intensity, Lux
+		• Launch Name: 10655130
+		• Deployment Number: 14
+		• Launch Time: 06/24/25 02:50:57 PM GMT-04:00
+		• Logging Interval: 00 Hr 05 Min 00 Sec
+		• Launch GMT Offset: -4 Hr 0 Min
+		• Battery at Launch: 2.87 Volts
+		• Launching Program: HOBOware Pro-3.7.17_0628_0951_Windows
+	Series Statistics
+		• Samples: 1,716
+		• Max: 1,076.4
+		• Min: 0.0
+		• Avg: 193.2
+		• Std Dev (σ): 297.1
+		• First Sample Time: 06/24/25 02:50:58 PM GMT-04:00
+		• Last Sample Time: 06/30/25 01:45:58 PM GMT-04:00
+Event Type: Coupler Detached
+	Devices
+		Device Info
+			• Product: HOBO UA-002-64 Pendant Temp/Light
+			• Serial Number: 10655130
+			• Version Number: 1.09
+			• Manufacturer: Onset Computer Corp.
+			• Device Memory: 65536
+			• Header Created: 09/26/13 03:17:28 PM GMT-04:00
+	Deployment Info
+		• Full Series Name: Coupler Detached
+		• Launch Name: 10655130
+		• Deployment Number: 14
+		• Launch Time: 06/24/25 02:50:57 PM GMT-04:00
+		• Launch GMT Offset: -4 Hr 0 Min
+		• Battery at Launch: 2.87 Volts
+	Series Statistics
+		• Samples: 1
+		• First Sample Time: 06/24/25 02:51:04 PM GMT-04:00
+		• Last Sample Time: 06/24/25 02:51:04 PM GMT-04:00
+Event Type: Host Connected
+	Devices
+		Device Info
+			• Product: HOBO UA-002-64 Pendant Temp/Light
+			• Serial Number: 10655130
+			• Version Number: 1.09
+			• Manufacturer: Onset Computer Corp.
+			• Device Memory: 65536
+			• Header Created: 09/26/13 03:17:28 PM GMT-04:00
+	Deployment Info
+		• Full Series Name: Host Connected
+		• Launch Name: 10655130
+		• Deployment Number: 14
+		• Launch Time: 06/24/25 02:50:57 PM GMT-04:00
+		• Launch GMT Offset: -4 Hr 0 Min
+		• Battery at Launch: 2.87 Volts
+	Series Statistics
+		• Samples: 1
+		• First Sample Time: 06/30/25 01:49:09 PM GMT-04:00
+		• Last Sample Time: 06/30/25 01:49:09 PM GMT-04:00
+Event Type: Coupler Attached
+	Devices
+		Device Info
+			• Product: HOBO UA-002-64 Pendant Temp/Light
+			• Serial Number: 10655130
+			• Version Number: 1.09
+			• Manufacturer: Onset Computer Corp.
+			• Device Memory: 65536
+			• Header Created: 09/26/13 03:17:28 PM GMT-04:00
+	Deployment Info
+		• Full Series Name: Coupler Attached
+		• Launch Name: 10655130
+		• Deployment Number: 14
+		• Launch Time: 06/24/25 02:50:57 PM GMT-04:00
+		• Launch GMT Offset: -4 Hr 0 Min
+		• Battery at Launch: 2.87 Volts
+	Series Statistics
+		• Samples: 1
+		• First Sample Time: 06/30/25 01:49:10 PM GMT-04:00
+		• Last Sample Time: 06/30/25 01:49:10 PM GMT-04:00
+Event Type: Stopped
+	Devices
+		Device Info
+			• Product: HOBO UA-002-64 Pendant Temp/Light
+			• Serial Number: 10655130
+			• Version Number: 1.09
+			• Manufacturer: Onset Computer Corp.
+			• Device Memory: 65536
+			• Header Created: 09/26/13 03:17:28 PM GMT-04:00
+	Deployment Info
+		• Full Series Name: Stopped
+		• Launch Name: 10655130
+		• Deployment Number: 14
+		• Launch Time: 06/24/25 02:50:57 PM GMT-04:00
+		• Launch GMT Offset: -4 Hr 0 Min
+		• Battery at Launch: 2.87 Volts
+	Series Statistics
+		• Samples: 1
+		• First Sample Time: 06/30/25 01:49:26 PM GMT-04:00
+		• Last Sample Time: 06/30/25 01:49:26 PM GMT-04:00
+Event Type: End Of File
+	Devices
+		Device Info
+			• Product: HOBO UA-002-64 Pendant Temp/Light
+			• Serial Number: 10655130
+			• Version Number: 1.09
+			• Manufacturer: Onset Computer Corp.
+			• Device Memory: 65536
+			• Header Created: 09/26/13 03:17:28 PM GMT-04:00
+	Deployment Info
+		• Full Series Name: End Of File
+		• Launch Name: 10655130
+		• Deployment Number: 14
+		• Launch Time: 06/24/25 02:50:57 PM GMT-04:00
+		• Launch GMT Offset: -4 Hr 0 Min
+		• Battery at Launch: 2.87 Volts
+	Series Statistics
+		• Samples: 1
+		• First Sample Time: 06/30/25 01:49:26 PM GMT-04:00
+		• Last Sample Time: 06/30/25 01:49:26 PM GMT-04:00
