@@ -1,4 +1,4 @@
-PAM
+PAM Pcomp
 ================
 Zoe Dellaert
 2025-06-24
@@ -17,7 +17,7 @@ library(emmeans)
 
 custom_colors <- c("Control" = "lightblue4", "Heat" = "#D55E00")
 
-PAM <- read.csv("../data/PAM.csv") %>% clean_names() %>% filter(date != "20250519")
+PAM <- read.csv("../data/PAM.csv") %>% clean_names()
 PAM <- PAM %>% mutate(date = as.factor(date)) %>% 
                 mutate(timepoint = factor(timepoint)) %>%#,levels = c("0","1","3","6","12",
                                                     #           "24","36","48","72","120","170"), ordered = TRUE)) %>% 
@@ -46,7 +46,7 @@ ggplot(PAM,aes(x = date, y = fv_fm_y_1000)) +
 <img src="PAM_files/figure-gfm/unnamed-chunk-1-2.png" style="display: block; margin: auto;" />
 
 ``` r
-ggsave("../output/FvFm_recovery_acclimation.png", plot = last_plot(), width = 8, height = 4)
+ggsave("../output/FvFm_recovery_acclimation.png", plot = last_plot(), width = 8, height = 4, bg = "white")
 ```
 
 ``` r
@@ -250,7 +250,7 @@ ggplot(contrast_table, aes(x = timepoint, y = estimate)) +
 <img src="PAM_files/figure-gfm/unnamed-chunk-5-1.png" style="display: block; margin: auto;" />
 
 ``` r
-ggsave("../output/FvFm_line_treatment_tank_modelestimates.png", plot = last_plot(), width = 8, height = 4)
+ggsave("../output/FvFm_line_treatment_tank_modelestimates.png", plot = last_plot(), width = 8, height = 4, bg = "white")
 ggsave("../output/pdf_figs/FvFm_line_treatment_tank_modelestimates.pdf", plot = last_plot(), width = 8, height = 4)
 ```
 
