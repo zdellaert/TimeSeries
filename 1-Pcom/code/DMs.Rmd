@@ -10,8 +10,6 @@ output:
 
 This script plots daily measurements from the experiment, and is based on the Putnam Lab script available here: https://github.com/Putnam-Lab/CBLS_Wetlab/tree/main
 
-## Load packages 
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
   echo = TRUE,
@@ -36,6 +34,8 @@ library(tinytex)
 #install.packages(packageurl, repos = NULL, type = "source")
 #install.packages("seacarb")
 library(seacarb) 
+
+custom_colors <- c("Control" = "lightblue4", "Heat" = "#D55E00")
 ```
 
 ## Load data 
@@ -157,12 +157,30 @@ ggsave("../output/pdf_figs/Daily_Measurements_Exp.pdf", daily_tank, width = 10, 
 ggsave("../output/Daily_Measurements_Exp.png", daily_tank, width = 10, height = 10, units = c("in"))
 ```
 
+```{r}
+daily_tank<-pHSlope.long %>% filter(Treatment !=  "Acclimation") %>%
+  ggplot(aes(x=DateTime, y=value, colour=Treatment))+
+  geom_point(size=2)+
+  xlab("Date")+
+  facet_grid(factor(metric,c("pH.total","Salinity_psu","Conductivity_mScm","Temperature_C")) ~ ., scales = "free", labeller = as_labeller(facet_labels))+
+  geom_hline(data = hlines_data[[1]], aes(yintercept = yintercept), linetype = "dashed") +    
+  geom_hline(data = hlines_data[[2]], aes(yintercept = yintercept), linetype = "dashed") +
+  geom_hline(data = hlines_data[[3]], aes(yintercept = yintercept), linetype = "dashed") +
+  geom_hline(data = hlines_data[[4]], aes(yintercept = yintercept), linetype = "dashed") +
+  geom_hline(data = hlines_data[[5]], aes(yintercept = yintercept), linetype = "dashed") +
+  geom_hline(data = hlines_data[[6]], aes(yintercept = yintercept), linetype = "dashed") +
+  theme_bw() + scale_color_manual(values = custom_colors) +
+  theme(text = element_text(size = 14)); daily_tank
 
+# Save plot 
+ggsave("../output/pdf_figs/Daily_Measurements_Exp_byTreatment.pdf", daily_tank, width = 10, height = 10, units = c("in"))
+ggsave("../output/Daily_Measurements_Exp_byTreatment.png", daily_tank, width = 10, height = 10, units = c("in"))
+```
 
 Summarize daily measurements during the heat stress experiment
 ```{r}
 daily_exp <- pHSlope %>% 
-  filter(Treatment != "AcclimationRecovery" & Treatment !=  "Ramp")
+  filter(Treatment != "Acclimation")
 
 summary <- daily_exp%>%
   group_by(Tank_ID)%>%

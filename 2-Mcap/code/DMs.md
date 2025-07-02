@@ -3,22 +3,35 @@ Daily measurement plotting
 Zoe Dellaert
 6/24/2025
 
-- [0.1 Load packages](#01-load-packages)
-- [0.2 Load data](#02-load-data)
-- [0.3 Calculate total pH from Probe Set
-  1](#03-calculate-total-ph-from-probe-set-1)
-- [0.4 Change to long format](#04-change-to-long-format)
-- [0.5 Plot](#05-plot)
-- [0.6 HOBO Temps, based on Jill’s
-  Script](#06-hobo-temps-based-on-jills-script)
+- [0.1 Load data](#01-load-data)
+- [0.2 Calculate total pH from Probe Set
+  1](#02-calculate-total-ph-from-probe-set-1)
+- [0.3 Change to long format](#03-change-to-long-format)
+- [0.4 Plot](#04-plot)
+- [0.5 HOBO Temps, based on Jill’s
+  Script](#05-hobo-temps-based-on-jills-script)
 
 This script plots daily measurements from the experiment, and is based
 on the Putnam Lab script available here:
 <https://github.com/Putnam-Lab/CBLS_Wetlab/tree/main>
 
-## 0.1 Load packages
+``` r
+library(tidyverse)
+library(lubridate) # used for converting 8 digit date into datetime format for R
+library(RColorBrewer)
+library(rmarkdown)
+library(tinytex)
 
-## 0.2 Load data
+## If seacarb needs to be downloaded:
+#packageurl <- "https://cran.r-project.org/src/contrib/Archive/seacarb/seacarb_3.2.tar.gz"
+#install.packages(packageurl, repos = NULL, type = "source")
+#install.packages("seacarb")
+library(seacarb) 
+
+custom_colors <- c("Control" = "lightblue4", "Heat" = "#D55E00")
+```
+
+## 0.1 Load data
 
 ``` r
 ## Read in data
@@ -27,38 +40,38 @@ head(daily)
 ```
 
     ##       Date   Treatment Tank_ID  Time Initials Temperature_C pH_mv Salinity_psu
-    ## 1 20250624 Acclimation       1 10:00       NB         25.04 -63.1        34.66
-    ## 2 20250624 Acclimation       2 10:00       NB         25.12 -64.0        34.49
-    ## 3 20250624 Acclimation       3 10:00       NB         24.42 -63.0        34.24
-    ## 4 20250624 Acclimation       4 10:00       NB         24.73 -62.5        33.54
-    ## 5 20250624 Acclimation       5 10:00       NB         24.81 -63.4        34.45
-    ## 6 20250624 Acclimation       6 10:00       NB         24.77 -63.7        33.92
-    ##   tris.date Probe.Set                                              notes
-    ## 1  20250618    Probe1 Immediately after water change, no corals in tanks
-    ## 2  20250618    Probe1 Immediately after water change, no corals in tanks
-    ## 3  20250618    Probe1 Immediately after water change, no corals in tanks
-    ## 4  20250618    Probe1 Immediately after water change, no corals in tanks
-    ## 5  20250618    Probe1 Immediately after water change, no corals in tanks
-    ## 6  20250618    Probe1 Immediately after water change, no corals in tanks
+    ## 1 20250701 Acclimation       1 16:30    PP;ZD         25.06 -61.7        34.64
+    ## 2 20250701 Acclimation       2 16:30    PP;ZD         25.08 -63.0        34.67
+    ## 3 20250701 Acclimation       3 16:30    PP;ZD         25.44 -63.4        34.67
+    ## 4 20250701 Acclimation       4 16:30    PP;ZD         25.12 -64.3        34.63
+    ## 5 20250701 Acclimation       5 16:30    PP;ZD         25.32 -63.4        34.65
+    ## 6 20250701 Acclimation       6 16:30    PP;ZD         25.02 -63.5        34.65
+    ##   tris.date Probe.Set           notes
+    ## 1  20250618    Probe1                
+    ## 2  20250618    Probe1                
+    ## 3  20250618    Probe1 temp a bit high
+    ## 4  20250618    Probe1                
+    ## 5  20250618    Probe1                
+    ## 6  20250618    Probe1
 
 ``` r
 tail(daily) # check to make sure data from today is there
 ```
 
-    ##        Date   Treatment Tank_ID  Time Initials Temperature_C pH_mv Salinity_psu
-    ## 7  20250624 Acclimation       1 17:50       ZD         25.28 -61.6        34.83
-    ## 8  20250624 Acclimation       2 17:50       ZD         25.12 -63.6        34.54
-    ## 9  20250624 Acclimation       3 17:50       ZD         24.98 -63.1        34.35
-    ## 10 20250624 Acclimation       4 17:50       ZD         24.87 -62.6        33.82
-    ## 11 20250624 Acclimation       5 17:50       ZD         24.74 -64.3        34.49
-    ## 12 20250624 Acclimation       6 17:50       ZD         24.75 -63.6        34.03
+    ##    Date Treatment Tank_ID Time Initials Temperature_C pH_mv Salinity_psu
+    ## 26   NA                NA                          NA    NA           NA
+    ## 27   NA                NA                          NA    NA           NA
+    ## 28   NA                NA                          NA    NA           NA
+    ## 29   NA                NA                          NA    NA           NA
+    ## 30   NA                NA                          NA    NA           NA
+    ## 31   NA                NA                          NA    NA           NA
     ##    tris.date Probe.Set notes
-    ## 7   20250618    Probe1      
-    ## 8   20250618    Probe1      
-    ## 9   20250618    Probe1      
-    ## 10  20250618    Probe1      
-    ## 11  20250618    Probe1      
-    ## 12  20250618    Probe1
+    ## 26        NA                
+    ## 27        NA                
+    ## 28        NA                
+    ## 29        NA                
+    ## 30        NA                
+    ## 31        NA
 
 ``` r
 daily$Date <- as.Date(as.character(daily$Date), format = "%Y%m%d")
@@ -74,38 +87,27 @@ daily.probe1 <- daily %>% filter(Probe.Set == "Probe1")
 range(na.omit(daily.probe1$Temperature_C))
 ```
 
-    ## [1] 24.42 25.28
+    ## [1] 24.89 32.33
 
 ``` r
 range(na.omit(daily.probe1$pH_mv))
 ```
 
-    ## [1] -64.3 -61.6
+    ## [1] -65 -61
 
 ``` r
 range(na.omit(daily.probe1$Salinity_psu))
 ```
 
-    ## [1] 33.54 34.83
+    ## [1] 34.63 35.15
 
-## 0.3 Calculate total pH from Probe Set 1
+## 0.2 Calculate total pH from Probe Set 1
 
 Calculate the calibration curve from the Tris calibration and calculate
 pH on the total scale from pH.mV.
 
 ``` r
 pHcalib <- read_csv("../data/water_chemistry/Tris_Calibration.csv")
-```
-
-    ## Rows: 14 Columns: 3
-    ## ── Column specification ────────────────────────────────────────────────────────
-    ## Delimiter: ","
-    ## dbl (3): tris.date, mVTris, TTris
-    ## 
-    ## ℹ Use `spec()` to retrieve the full column specification for this data.
-    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-
-``` r
 pHcalib$tris.date<-as.character(pHcalib$tris.date)
 
 pHSlope <- pHcalib %>%
@@ -132,7 +134,7 @@ pHSlope <- pHSlope%>% relocate("pH.total", .after = Salinity_psu) %>%
   relocate(pH_mv, .after = pH.total)
 ```
 
-## 0.4 Change to long format
+## 0.3 Change to long format
 
 Change data format to long format
 
@@ -142,7 +144,7 @@ pHSlope.long <-pHSlope %>% pivot_longer(cols=Temperature_C:pH.total,
   values_to = "value")
 ```
 
-## 0.5 Plot
+## 0.4 Plot
 
 Make a list of dataframes, each containing a horizontal line that will
 correspond to the upper and lower threshold of each parameter
@@ -181,10 +183,10 @@ daily_tank<-pHSlope.long %>% filter(Treatment !=  "Ramp") %>%
   theme(text = element_text(size = 14)); daily_tank
 ```
 
-![](DMs_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+<img src="DMs_files/figure-gfm/unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
 
 ``` r
-daily_tank<-pHSlope.long %>% filter(Treatment !=  "AcclimationRecovery" & Treatment !=  "Ramp") %>%
+daily_tank<-pHSlope.long %>% filter(Treatment !=  "Acclimation") %>%
   ggplot(aes(x=DateTime, y=value, colour=Tank_ID))+
   geom_point(size=2)+
   xlab("Date")+
@@ -199,7 +201,7 @@ daily_tank<-pHSlope.long %>% filter(Treatment !=  "AcclimationRecovery" & Treatm
   theme(text = element_text(size = 14)); daily_tank
 ```
 
-![](DMs_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+<img src="DMs_files/figure-gfm/unnamed-chunk-8-1.png" style="display: block; margin: auto;" />
 
 ``` r
 # Save plot 
@@ -207,11 +209,35 @@ ggsave("../output/pdf_figs/Daily_Measurements_Exp.pdf", daily_tank, width = 10, 
 ggsave("../output/Daily_Measurements_Exp.png", daily_tank, width = 10, height = 10, units = c("in"))
 ```
 
+``` r
+daily_tank<-pHSlope.long %>% filter(Treatment !=  "Acclimation") %>%
+  ggplot(aes(x=DateTime, y=value, colour=Treatment))+
+  geom_point(size=2)+
+  xlab("Date")+
+  facet_grid(factor(metric,c("pH.total","Salinity_psu","Conductivity_mScm","Temperature_C")) ~ ., scales = "free", labeller = as_labeller(facet_labels))+
+  geom_hline(data = hlines_data[[1]], aes(yintercept = yintercept), linetype = "dashed") +    
+  geom_hline(data = hlines_data[[2]], aes(yintercept = yintercept), linetype = "dashed") +
+  geom_hline(data = hlines_data[[3]], aes(yintercept = yintercept), linetype = "dashed") +
+  geom_hline(data = hlines_data[[4]], aes(yintercept = yintercept), linetype = "dashed") +
+  geom_hline(data = hlines_data[[5]], aes(yintercept = yintercept), linetype = "dashed") +
+  geom_hline(data = hlines_data[[6]], aes(yintercept = yintercept), linetype = "dashed") +
+  theme_bw() + scale_color_manual(values = custom_colors) +
+  theme(text = element_text(size = 14)); daily_tank
+```
+
+<img src="DMs_files/figure-gfm/unnamed-chunk-9-1.png" style="display: block; margin: auto;" />
+
+``` r
+# Save plot 
+ggsave("../output/pdf_figs/Daily_Measurements_Exp_byTreatment.pdf", daily_tank, width = 10, height = 10, units = c("in"))
+ggsave("../output/Daily_Measurements_Exp_byTreatment.png", daily_tank, width = 10, height = 10, units = c("in"))
+```
+
 Summarize daily measurements during the heat stress experiment
 
 ``` r
 daily_exp <- pHSlope %>% 
-  filter(Treatment != "AcclimationRecovery" & Treatment !=  "Ramp")
+  filter(Treatment != "Acclimation")
 
 summary <- daily_exp%>%
   group_by(Tank_ID)%>%
@@ -219,35 +245,19 @@ summary <- daily_exp%>%
   summarise(across(everything(), list(mean = mean, sd = sd), na.rm = TRUE)); summary
 ```
 
-    ## Adding missing grouping variables: `Tank_ID`
-
-    ## Warning: There was 1 warning in `summarise()`.
-    ## ℹ In argument: `across(everything(), list(mean = mean, sd = sd), na.rm =
-    ##   TRUE)`.
-    ## ℹ In group 1: `Tank_ID = "1"`.
-    ## Caused by warning:
-    ## ! The `...` argument of `across()` is deprecated as of dplyr 1.1.0.
-    ## Supply arguments directly to `.fns` through an anonymous function instead.
-    ## 
-    ##   # Previously
-    ##   across(a:b, mean, na.rm = TRUE)
-    ## 
-    ##   # Now
-    ##   across(a:b, \(x) mean(x, na.rm = TRUE))
-
     ## # A tibble: 6 × 9
     ##   Tank_ID Temperature_C_mean Temperature_C_sd Salinity_psu_mean Salinity_psu_sd
     ##   <chr>                <dbl>            <dbl>             <dbl>           <dbl>
-    ## 1 1                     25.2           0.170               34.7          0.120 
-    ## 2 2                     25.1           0                   34.5          0.0354
-    ## 3 3                     24.7           0.396               34.3          0.0778
-    ## 4 4                     24.8           0.0990              33.7          0.198 
-    ## 5 5                     24.8           0.0495              34.5          0.0283
-    ## 6 6                     24.8           0.0141              34.0          0.0778
+    ## 1 1                     25.0           0.110               34.9          0.0950
+    ## 2 2                     29.8           4.05                35.0          0.125 
+    ## 3 3                     29.7           4.00                35.0          0.150 
+    ## 4 4                     25.1           0.148               35.0          0.107 
+    ## 5 5                     29.8           4.11                34.9          0.100 
+    ## 6 6                     25.1           0.0666              35.0          0.0737
     ## # ℹ 4 more variables: pH.total_mean <dbl>, pH.total_sd <dbl>, pH_mv_mean <dbl>,
     ## #   pH_mv_sd <dbl>
 
-## 0.6 HOBO Temps, based on [Jill’s Script](https://github.com/JillAshey/Astrangia_repo/blob/0041652d5b2a01145c1c049f10dbc53a8513cb86/scripts/Hobo_Temps.Rmd#L27)
+## 0.5 HOBO Temps, based on [Jill’s Script](https://github.com/JillAshey/Astrangia_repo/blob/0041652d5b2a01145c1c049f10dbc53a8513cb86/scripts/Hobo_Temps.Rmd#L27)
 
 ``` r
 library(lubridate)

@@ -3,20 +3,17 @@ Daily measurement plotting
 Zoe Dellaert
 6/24/2025
 
-- [0.1 Load packages](#01-load-packages)
-- [0.2 Load data](#02-load-data)
-- [0.3 Calculate total pH from Probe Set
-  1](#03-calculate-total-ph-from-probe-set-1)
-- [0.4 Change to long format](#04-change-to-long-format)
-- [0.5 Plot](#05-plot)
-- [0.6 HOBO Temps, based on Jill’s
-  Script](#06-hobo-temps-based-on-jills-script)
+- [0.1 Load data](#01-load-data)
+- [0.2 Calculate total pH from Probe Set
+  1](#02-calculate-total-ph-from-probe-set-1)
+- [0.3 Change to long format](#03-change-to-long-format)
+- [0.4 Plot](#04-plot)
+- [0.5 HOBO Temps, based on Jill’s
+  Script](#05-hobo-temps-based-on-jills-script)
 
 This script plots daily measurements from the experiment, and is based
 on the Putnam Lab script available here:
 <https://github.com/Putnam-Lab/CBLS_Wetlab/tree/main>
-
-## 0.1 Load packages
 
 ``` r
 library(tidyverse)
@@ -30,9 +27,11 @@ library(tinytex)
 #install.packages(packageurl, repos = NULL, type = "source")
 #install.packages("seacarb")
 library(seacarb) 
+
+custom_colors <- c("Control" = "lightblue4", "Heat" = "#D55E00")
 ```
 
-## 0.2 Load data
+## 0.1 Load data
 
 ``` r
 ## Read in data
@@ -102,7 +101,7 @@ range(na.omit(daily.probe1$Salinity_psu))
 
     ## [1] 33.54 35.33
 
-## 0.3 Calculate total pH from Probe Set 1
+## 0.2 Calculate total pH from Probe Set 1
 
 Calculate the calibration curve from the Tris calibration and calculate
 pH on the total scale from pH.mV.
@@ -135,7 +134,7 @@ pHSlope <- pHSlope%>% relocate("pH.total", .after = Salinity_psu) %>%
   relocate(pH_mv, .after = pH.total)
 ```
 
-## 0.4 Change to long format
+## 0.3 Change to long format
 
 Change data format to long format
 
@@ -145,7 +144,7 @@ pHSlope.long <-pHSlope %>% pivot_longer(cols=Temperature_C:pH.total,
   values_to = "value")
 ```
 
-## 0.5 Plot
+## 0.4 Plot
 
 Make a list of dataframes, each containing a horizontal line that will
 correspond to the upper and lower threshold of each parameter
@@ -210,11 +209,35 @@ ggsave("../output/pdf_figs/Daily_Measurements_Exp.pdf", daily_tank, width = 10, 
 ggsave("../output/Daily_Measurements_Exp.png", daily_tank, width = 10, height = 10, units = c("in"))
 ```
 
+``` r
+daily_tank<-pHSlope.long %>% filter(Treatment !=  "Acclimation") %>%
+  ggplot(aes(x=DateTime, y=value, colour=Treatment))+
+  geom_point(size=2)+
+  xlab("Date")+
+  facet_grid(factor(metric,c("pH.total","Salinity_psu","Conductivity_mScm","Temperature_C")) ~ ., scales = "free", labeller = as_labeller(facet_labels))+
+  geom_hline(data = hlines_data[[1]], aes(yintercept = yintercept), linetype = "dashed") +    
+  geom_hline(data = hlines_data[[2]], aes(yintercept = yintercept), linetype = "dashed") +
+  geom_hline(data = hlines_data[[3]], aes(yintercept = yintercept), linetype = "dashed") +
+  geom_hline(data = hlines_data[[4]], aes(yintercept = yintercept), linetype = "dashed") +
+  geom_hline(data = hlines_data[[5]], aes(yintercept = yintercept), linetype = "dashed") +
+  geom_hline(data = hlines_data[[6]], aes(yintercept = yintercept), linetype = "dashed") +
+  theme_bw() + scale_color_manual(values = custom_colors) +
+  theme(text = element_text(size = 14)); daily_tank
+```
+
+<img src="DMs_files/figure-gfm/unnamed-chunk-9-1.png" style="display: block; margin: auto;" />
+
+``` r
+# Save plot 
+ggsave("../output/pdf_figs/Daily_Measurements_Exp_byTreatment.pdf", daily_tank, width = 10, height = 10, units = c("in"))
+ggsave("../output/Daily_Measurements_Exp_byTreatment.png", daily_tank, width = 10, height = 10, units = c("in"))
+```
+
 Summarize daily measurements during the heat stress experiment
 
 ``` r
 daily_exp <- pHSlope %>% 
-  filter(Treatment != "AcclimationRecovery" & Treatment !=  "Ramp")
+  filter(Treatment != "Acclimation")
 
 summary <- daily_exp%>%
   group_by(Tank_ID)%>%
@@ -225,16 +248,16 @@ summary <- daily_exp%>%
     ## # A tibble: 6 × 9
     ##   Tank_ID Temperature_C_mean Temperature_C_sd Salinity_psu_mean Salinity_psu_sd
     ##   <chr>                <dbl>            <dbl>             <dbl>           <dbl>
-    ## 1 1                     25.1           0.0976              34.8          0.0927
-    ## 2 2                     30.0           3.20                34.8          0.224 
-    ## 3 3                     30.0           3.29                34.8          0.302 
-    ## 4 4                     24.9           0.290               34.4          0.432 
-    ## 5 5                     30.1           3.27                35.0          0.269 
-    ## 6 6                     25.1           0.160               34.6          0.345 
+    ## 1 1                     25.1           0.0895              34.9          0.0833
+    ## 2 2                     30.9           2.55                34.9          0.197 
+    ## 3 3                     31.0           2.51                34.9          0.234 
+    ## 4 4                     25.0           0.308               34.5          0.311 
+    ## 5 5                     31.0           2.50                35.1          0.161 
+    ## 6 6                     25.1           0.0772              34.7          0.230 
     ## # ℹ 4 more variables: pH.total_mean <dbl>, pH.total_sd <dbl>, pH_mv_mean <dbl>,
     ## #   pH_mv_sd <dbl>
 
-## 0.6 HOBO Temps, based on [Jill’s Script](https://github.com/JillAshey/Astrangia_repo/blob/0041652d5b2a01145c1c049f10dbc53a8513cb86/scripts/Hobo_Temps.Rmd#L27)
+## 0.5 HOBO Temps, based on [Jill’s Script](https://github.com/JillAshey/Astrangia_repo/blob/0041652d5b2a01145c1c049f10dbc53a8513cb86/scripts/Hobo_Temps.Rmd#L27)
 
 ``` r
 library(lubridate)
