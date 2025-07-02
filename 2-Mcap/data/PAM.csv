@@ -55,59 +55,59 @@ Date,Treatment,Timepoint,Tank_ID,Time,Initials,Dark Adapt Mins,Plug #,Mem,Fluore
 20250626,Recovery,20250626,BT1/2,13:20,JH,30,1538,2878,546,1929,716,0.716,
 20250626,Recovery,20250626,BT1/2,13:20,JH,30,1339,2879,434,1552,720,0.72,
 20250626,Recovery,20250626,BT1/2,13:20,JH,30,1548,2880,458,1255,635,0.635,
-20250630,Recovery,20250630,BT1/2,15:05,JH,30,1549,,,,652,0.652,Fo seemed very high for all samples
-20250630,Recovery,20250630,BT1/2,15:05,JH,30,1211,,,,670,0.67,Fo seemed very high for all samples
-20250630,Recovery,20250630,BT1/2,15:05,JH,30,1108,,,,660,0.66,Fo seemed very high for all samples
-20250630,Recovery,20250630,BT1/2,15:05,JH,30,1538,,,,627,0.627,Fo seemed very high for all samples
-20250630,Recovery,20250630,BT1/2,15:05,JH,30,1339,,,,645,0.645,Fo seemed very high for all samples
-20250630,Recovery,20250630,BT1/2,15:05,JH,30,2852,,,,651,0.651,Fo seemed very high for all samples
-20250630,Recovery,20250630,BT1/2,15:05,JH,30,1548,,,,558,0.558,Fo seemed very high for all samples
-20250630,Recovery,20250630,BT1/2,15:05,JH,30,1145,,,,637,0.637,Fo seemed very high for all samples
-20250701,Acclimation,20250701,1,20:48,JA;ZD,48,1252,,,,667,0.667,Decreased measuring light to 9 from 11 due to high Fo
-20250701,Acclimation,20250701,1,20:48,JA;ZD,48,1250,,,,658,0.658,Decreased measuring light to 9 from 11 due to high Fo
-20250701,Acclimation,20250701,1,20:48,JA;ZD,48,1739,,,,618,0.618,Decreased measuring light to 9 from 11 due to high Fo
-20250701,Acclimation,20250701,1,20:48,JA;ZD,48,1108,,,,666,0.666,Decreased measuring light to 9 from 11 due to high Fo
-20250701,Acclimation,20250701,4,20:48,JA;ZD,48,1056,,,,640,0.64,Decreased measuring light to 9 from 11 due to high Fo
-20250701,Acclimation,20250701,4,20:48,JA;ZD,48,1461,,,,635,0.635,Decreased measuring light to 9 from 11 due to high Fo
-20250701,Acclimation,20250701,4,20:48,JA;ZD,48,2852,,,,653,0.653,Decreased measuring light to 9 from 11 due to high Fo
-20250701,Acclimation,20250701,4,20:48,JA;ZD,48,2360,,,,572,0.572,Decreased measuring light to 9 from 11 due to high Fo
-20250701,Acclimation,20250701,5,20:48,JA;ZD,48,1560,,,,625,0.625,Decreased measuring light to 9 from 11 due to high Fo
-20250701,Acclimation,20250701,5,20:48,JA;ZD,48,1549,,,,653,0.653,Decreased measuring light to 9 from 11 due to high Fo
-20250701,Acclimation,20250701,5,20:48,JA;ZD,48,1441,,,,646,0.646,Decreased measuring light to 9 from 11 due to high Fo
-20250701,Acclimation,20250701,5,20:48,JA;ZD,48,1086,,,,627,0.627,Decreased measuring light to 9 from 11 due to high Fo
-20250701,Acclimation,20250701,2,20:48,JA;ZD,48,1211,,,,673,0.673,Decreased measuring light to 9 from 11 due to high Fo
-20250701,Acclimation,20250701,2,20:48,JA;ZD,48,1248,,,,606,0.606,Decreased measuring light to 9 from 11 due to high Fo
-20250701,Acclimation,20250701,2,20:48,JA;ZD,48,1494,,,,660,0.66,Decreased measuring light to 9 from 11 due to high Fo
-20250701,Acclimation,20250701,2,20:48,JA;ZD,48,2084,,,,568,0.568,Decreased measuring light to 9 from 11 due to high Fo
-20250701,Acclimation,20250701,6,20:48,JA;ZD,48,1041,,,,655,0.655,Decreased measuring light to 9 from 11 due to high Fo
-20250701,Acclimation,20250701,6,20:48,JA;ZD,48,1472,,,,659,0.659,Decreased measuring light to 9 from 11 due to high Fo
-20250701,Acclimation,20250701,6,20:48,JA;ZD,48,1563,,,,640,0.64,Decreased measuring light to 9 from 11 due to high Fo
-20250701,Acclimation,20250701,6,20:48,JA;ZD,48,1631,,,,618,0.618,Decreased measuring light to 9 from 11 due to high Fo
-20250701,Acclimation,20250701,3,20:48,JA;ZD,48,1339,,,,644,0.644,Decreased measuring light to 9 from 11 due to high Fo
-20250701,Acclimation,20250701,3,20:48,JA;ZD,48,1113,,,,570,0.57,Decreased measuring light to 9 from 11 due to high Fo
-20250701,Acclimation,20250701,3,20:48,JA;ZD,48,1458,,,,600,0.6,Decreased measuring light to 9 from 11 due to high Fo
-20250701,Acclimation,20250701,3,20:48,JA;ZD,48,1597,,,,665,0.665,Decreased measuring light to 9 from 11 due to high Fo
-20250702,Acclimation,20250702,2,,ZD,overnight,1248,,,,617,0.617,
-20250702,Acclimation,20250702,2,,ZD,overnight,2084,,,,547,0.547,
-20250702,Acclimation,20250702,2,,ZD,overnight,1211,,,,660,0.66,
-20250702,Acclimation,20250702,2,,ZD,overnight,1494,,,,655,0.655,
-20250702,Acclimation,20250702,1,,ZD,overnight,1739,,,,585,0.585,
-20250702,Acclimation,20250702,1,,ZD,overnight,1252,,,,659,0.659,
-20250702,Acclimation,20250702,1,,ZD,overnight,1250,,,,611,0.611,
-20250702,Acclimation,20250702,1,,ZD,overnight,1108,,,,653,0.653,
-20250702,Acclimation,20250702,3,,ZD,overnight,1458,,,,587,0.587,
-20250702,Acclimation,20250702,3,,ZD,overnight,1113,,,,528,0.528,
-20250702,Acclimation,20250702,3,,ZD,overnight,1597,,,,656,0.656,
-20250702,Acclimation,20250702,3,,ZD,overnight,1339,,,,643,0.643,
-20250702,Acclimation,20250702,6,,ZD,overnight,1472,,,,647,0.647,
-20250702,Acclimation,20250702,6,,ZD,overnight,1631,,,,597,0.597,
-20250702,Acclimation,20250702,6,,ZD,overnight,1041,,,,647,0.647,
-20250702,Acclimation,20250702,6,,ZD,overnight,1563,,,,628,0.628,
-20250702,Acclimation,20250702,5,,ZD,overnight,1441,,,,616,0.616,
-20250702,Acclimation,20250702,5,,ZD,overnight,1549,,,,648,0.648,
-20250702,Acclimation,20250702,5,,ZD,overnight,1560,,,,597,0.597,
-20250702,Acclimation,20250702,5,,ZD,overnight,1086,,,,607,0.607,
-20250702,Acclimation,20250702,4,,ZD,overnight,2852,,,,656,0.656,
-20250702,Acclimation,20250702,4,,ZD,overnight,2360,,,,546,0.546,
-20250702,Acclimation,20250702,4,,ZD,overnight,1461,,,,613,0.613,
-20250702,Acclimation,20250702,4,,ZD,overnight,1056,,,,625,0.625,
+20250630,Recovery,20250630,BT1/2,15:05,JH,30,1549,2989,625,1797,652,0.652,Fo seemed very high for all samples
+20250630,Recovery,20250630,BT1/2,15:05,JH,30,1211,2990,558,1692,670,0.67,Fo seemed very high for all samples
+20250630,Recovery,20250630,BT1/2,15:05,JH,30,1108,2991,586,1726,660,0.66,Fo seemed very high for all samples
+20250630,Recovery,20250630,BT1/2,15:05,JH,30,1538,2992,576,1548,627,0.627,Fo seemed very high for all samples
+20250630,Recovery,20250630,BT1/2,15:05,JH,30,1339,2993,527,1487,645,0.645,Fo seemed very high for all samples
+20250630,Recovery,20250630,BT1/2,15:05,JH,30,2852,2994,572,1643,651,0.651,Fo seemed very high for all samples
+20250630,Recovery,20250630,BT1/2,15:05,JH,30,1548,2995,567,1283,558,0.558,Fo seemed very high for all samples
+20250630,Recovery,20250630,BT1/2,15:05,JH,30,1145,2996,551,1518,637,0.637,Fo seemed very high for all samples
+20250701,Acclimation,20250701,1,20:48,JA;ZD,48,1252,3004,344,1036,667,0.667,Decreased measuring light to 9 from 11 due to high Fo
+20250701,Acclimation,20250701,1,20:48,JA;ZD,48,1250,3005,391,1145,658,0.658,Decreased measuring light to 9 from 11 due to high Fo
+20250701,Acclimation,20250701,1,20:48,JA;ZD,48,1739,3006,614,1609,618,0.618,Decreased measuring light to 9 from 11 due to high Fo
+20250701,Acclimation,20250701,1,20:48,JA;ZD,48,1108,3007,505,1516,666,0.666,Decreased measuring light to 9 from 11 due to high Fo
+20250701,Acclimation,20250701,4,20:48,JA;ZD,48,1056,3008,577,1603,640,0.64,Decreased measuring light to 9 from 11 due to high Fo
+20250701,Acclimation,20250701,4,20:48,JA;ZD,48,1461,3009,559,1533,635,0.635,Decreased measuring light to 9 from 11 due to high Fo
+20250701,Acclimation,20250701,4,20:48,JA;ZD,48,2852,3011,375,1082,653,0.653,Decreased measuring light to 9 from 11 due to high Fo
+20250701,Acclimation,20250701,4,20:48,JA;ZD,48,2360,3012,542,1267,572,0.572,Decreased measuring light to 9 from 11 due to high Fo
+20250701,Acclimation,20250701,5,20:48,JA;ZD,48,1560,3013,730,1948,625,0.625,Decreased measuring light to 9 from 11 due to high Fo
+20250701,Acclimation,20250701,5,20:48,JA;ZD,48,1549,3014,383,1106,653,0.653,Decreased measuring light to 9 from 11 due to high Fo
+20250701,Acclimation,20250701,5,20:48,JA;ZD,48,1441,3015,495,1399,646,0.646,Decreased measuring light to 9 from 11 due to high Fo
+20250701,Acclimation,20250701,5,20:48,JA;ZD,48,1086,3016,421,1130,627,0.627,Decreased measuring light to 9 from 11 due to high Fo
+20250701,Acclimation,20250701,2,20:48,JA;ZD,48,1211,3017,394,1205,673,0.673,Decreased measuring light to 9 from 11 due to high Fo
+20250701,Acclimation,20250701,2,20:48,JA;ZD,48,1248,3020,379,964,606,0.606,Decreased measuring light to 9 from 11 due to high Fo
+20250701,Acclimation,20250701,2,20:48,JA;ZD,48,1494,3021,481,1415,660,0.66,Decreased measuring light to 9 from 11 due to high Fo
+20250701,Acclimation,20250701,2,20:48,JA;ZD,48,2084,3018,640,1482,568,0.568,Decreased measuring light to 9 from 11 due to high Fo
+20250701,Acclimation,20250701,6,20:48,JA;ZD,48,1041,3023,356,1032,655,0.655,Decreased measuring light to 9 from 11 due to high Fo
+20250701,Acclimation,20250701,6,20:48,JA;ZD,48,1472,3024,423,1244,659,0.659,Decreased measuring light to 9 from 11 due to high Fo
+20250701,Acclimation,20250701,6,20:48,JA;ZD,48,1563,3026,446,1240,640,0.64,Decreased measuring light to 9 from 11 due to high Fo
+20250701,Acclimation,20250701,6,20:48,JA;ZD,48,1631,3025,490,1283,618,0.618,Decreased measuring light to 9 from 11 due to high Fo
+20250701,Acclimation,20250701,3,20:48,JA;ZD,48,1339,3028,403,1134,644,0.644,Decreased measuring light to 9 from 11 due to high Fo
+20250701,Acclimation,20250701,3,20:48,JA;ZD,48,1113,3029,657,1530,570,0.57,Decreased measuring light to 9 from 11 due to high Fo
+20250701,Acclimation,20250701,3,20:48,JA;ZD,48,1458,3030,466,1166,600,0.6,Decreased measuring light to 9 from 11 due to high Fo
+20250701,Acclimation,20250701,3,20:48,JA;ZD,48,1597,3031,370,1105,665,0.665,Decreased measuring light to 9 from 11 due to high Fo
+20250702,Acclimation,20250702,2,,ZD,overnight,1248,3044,556,1454,617,0.617,
+20250702,Acclimation,20250702,2,,ZD,overnight,2084,3045,622,1374,547,0.547,
+20250702,Acclimation,20250702,2,,ZD,overnight,1211,3046,466,1372,660,0.66,
+20250702,Acclimation,20250702,2,,ZD,overnight,1494,3047,559,1622,655,0.655,
+20250702,Acclimation,20250702,1,,ZD,overnight,1739,3048,561,1352,585,0.585,
+20250702,Acclimation,20250702,1,,ZD,overnight,1252,3049,536,1574,659,0.659,
+20250702,Acclimation,20250702,1,,ZD,overnight,1250,3051,310,798,611,0.611,
+20250702,Acclimation,20250702,1,,ZD,overnight,1108,3052,416,1201,653,0.653,
+20250702,Acclimation,20250702,3,,ZD,overnight,1458,3053,541,1311,587,0.587,
+20250702,Acclimation,20250702,3,,ZD,overnight,1113,3054,583,1236,528,0.528,
+20250702,Acclimation,20250702,3,,ZD,overnight,1597,3055,382,1111,656,0.656,
+20250702,Acclimation,20250702,3,,ZD,overnight,1339,3056,417,1170,643,0.643,
+20250702,Acclimation,20250702,6,,ZD,overnight,1472,3058,313,889,647,0.647,
+20250702,Acclimation,20250702,6,,ZD,overnight,1631,3059,702,1744,597,0.597,
+20250702,Acclimation,20250702,6,,ZD,overnight,1041,3060,502,1425,647,0.647,
+20250702,Acclimation,20250702,6,,ZD,overnight,1563,3061,339,912,628,0.628,
+20250702,Acclimation,20250702,5,,ZD,overnight,1441,3062,388,1013,616,0.616,
+20250702,Acclimation,20250702,5,,ZD,overnight,1549,3063,409,1163,648,0.648,
+20250702,Acclimation,20250702,5,,ZD,overnight,1560,3064,777,1929,597,0.597,
+20250702,Acclimation,20250702,5,,ZD,overnight,1086,3065,333,848,607,0.607,
+20250702,Acclimation,20250702,4,,ZD,overnight,2852,3066,428,1247,656,0.656,
+20250702,Acclimation,20250702,4,,ZD,overnight,2360,3067,555,1223,546,0.546,
+20250702,Acclimation,20250702,4,,ZD,overnight,1461,3068,456,1181,613,0.613,
+20250702,Acclimation,20250702,4,,ZD,overnight,1056,3069,359,958,625,0.625,
