@@ -58,20 +58,20 @@ head(daily)
 tail(daily) # check to make sure data from today is there
 ```
 
-    ##    Date Treatment Tank_ID Time Initials Temperature_C pH_mv Salinity_psu
-    ## 26   NA                NA                          NA    NA           NA
-    ## 27   NA                NA                          NA    NA           NA
-    ## 28   NA                NA                          NA    NA           NA
-    ## 29   NA                NA                          NA    NA           NA
-    ## 30   NA                NA                          NA    NA           NA
-    ## 31   NA                NA                          NA    NA           NA
+    ##        Date Treatment Tank_ID  Time Initials Temperature_C pH_mv Salinity_psu
+    ## 37 20250703   Control       1 15:16       ZD         25.08 -64.3        34.78
+    ## 38 20250703      Heat       2 15:16       ZD         31.87 -65.1        34.74
+    ## 39 20250703      Heat       3 15:16       ZD         32.19 -65.0        34.86
+    ## 40 20250703   Control       4 15:16       ZD         25.03 -65.7        34.82
+    ## 41 20250703      Heat       5 15:16       ZD         32.07 -63.8        34.82
+    ## 42 20250703   Control       6 15:16       ZD         25.14 -65.7        34.79
     ##    tris.date Probe.Set notes
-    ## 26        NA                
-    ## 27        NA                
-    ## 28        NA                
-    ## 29        NA                
-    ## 30        NA                
-    ## 31        NA
+    ## 37  20250618    Probe1      
+    ## 38  20250618    Probe1      
+    ## 39  20250618    Probe1      
+    ## 40  20250618    Probe1      
+    ## 41  20250618    Probe1      
+    ## 42  20250618    Probe1
 
 ``` r
 daily$Date <- as.Date(as.character(daily$Date), format = "%Y%m%d")
@@ -87,19 +87,19 @@ daily.probe1 <- daily %>% filter(Probe.Set == "Probe1")
 range(na.omit(daily.probe1$Temperature_C))
 ```
 
-    ## [1] 24.89 32.33
+    ## [1] 24.87 32.33
 
 ``` r
 range(na.omit(daily.probe1$pH_mv))
 ```
 
-    ## [1] -65 -61
+    ## [1] -65.7 -61.0
 
 ``` r
 range(na.omit(daily.probe1$Salinity_psu))
 ```
 
-    ## [1] 34.63 35.15
+    ## [1] 34.63 35.24
 
 ## 0.2 Calculate total pH from Probe Set 1
 
@@ -248,12 +248,12 @@ summary <- daily_exp%>%
     ## # A tibble: 6 × 9
     ##   Tank_ID Temperature_C_mean Temperature_C_sd Salinity_psu_mean Salinity_psu_sd
     ##   <chr>                <dbl>            <dbl>             <dbl>           <dbl>
-    ## 1 1                     25.0           0.110               34.9          0.0950
-    ## 2 2                     29.8           4.05                35.0          0.125 
-    ## 3 3                     29.7           4.00                35.0          0.150 
-    ## 4 4                     25.1           0.148               35.0          0.107 
-    ## 5 5                     29.8           4.11                34.9          0.100 
-    ## 6 6                     25.1           0.0666              35.0          0.0737
+    ## 1 1                     25.0           0.0841              34.9          0.0794
+    ## 2 2                     31.0           2.85                35.0          0.186 
+    ## 3 3                     30.9           2.84                35.0          0.124 
+    ## 4 4                     25.0           0.125               35.0          0.112 
+    ## 5 5                     30.9           2.89                35.0          0.107 
+    ## 6 6                     25.0           0.102               34.9          0.101 
     ## # ℹ 4 more variables: pH.total_mean <dbl>, pH.total_sd <dbl>, pH_mv_mean <dbl>,
     ## #   pH_mv_sd <dbl>
 
