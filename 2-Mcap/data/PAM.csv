@@ -231,3 +231,27 @@ Date,Treatment,Timepoint,Tank_ID,Time,Initials,Dark Adapt Mins,Plug #,Mem,Fluore
 20250703,Heat,36,3,21:05,ZD,65,1113,3221,,,525,0.525,
 20250703,Heat,36,3,21:05,ZD,65,1597,3224,,,584,0.584,
 20250703,Heat,36,3,21:05,ZD,65,1339,3222,,,601,0.601,
+20250705,Control,72,1,08:25,ZD,overnight,1739,3227,,,606,0.606,
+20250705,Control,72,1,08:25,ZD,overnight,1252,3228,,,641,0.641,
+20250705,Control,72,1,08:25,ZD,overnight,1108,3229,,,681,0.681,
+20250705,Control,72,1,08:25,ZD,overnight,1250,3230,,,659,0.659,
+20250705,Heat,72,3,08:27,ZD,overnight,1597,3231,,,573,0.573,
+20250705,Heat,72,3,08:27,ZD,overnight,1113,3232,,,498,0.498,
+20250705,Heat,72,3,08:27,ZD,overnight,1458,3233,,,536,0.536,
+20250705,Heat,72,3,08:27,ZD,overnight,1339,3234,,,550,0.55,
+20250705,Control,72,4,08:32,ZD,overnight,2852,3235,,,653,0.653,
+20250705,Control,72,4,08:32,ZD,overnight,1056,3236,,,659,0.659,
+20250705,Control,72,4,08:32,ZD,overnight,1461,3237,,,633,0.633,
+20250705,Control,72,4,08:32,ZD,overnight,2360,3238,,,563,0.563,
+20250705,Heat,72,2,08:36,ZD,overnight,1211,3239,,,559,0.559,
+20250705,Heat,72,2,08:36,ZD,overnight,1248,3240,,,553,0.553,
+20250705,Heat,72,2,08:36,ZD,overnight,2084,3241,,,522,0.522,
+20250705,Heat,72,2,08:36,ZD,overnight,1494,3242,,,281,0.281,tissue sloughing off; looks dead or dying
+20250705,Heat,72,5,08:42,ZD,overnight,1549,3243,,,545,0.545,
+20250705,Heat,72,5,08:42,ZD,overnight,1086,3244,,,545,0.545,
+20250705,Heat,72,5,08:42,ZD,overnight,1560,3246,,,580,0.58,
+20250705,Heat,72,5,08:42,ZD,overnight,1441,3245,,,35,0.035,looks very dead
+20250705,Control,72,6,08:49,ZD,overnight,1563,3249,,,627,0.627,
+20250705,Control,72,6,08:49,ZD,overnight,1472,3252,,,639,0.639,
+20250705,Control,72,6,08:49,ZD,overnight,1041,3254,,,635,0.635,redone because of bubble
+20250705,Control,72,6,08:49,ZD,overnight,1631,3255,,,619,0.619,redone because of bubble
