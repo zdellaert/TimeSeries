@@ -246,11 +246,11 @@ Date,Treatment,Timepoint,Tank_ID,Time,Initials,Dark Adapt Mins,Plug #,Mem,Fluore
 20250705,Heat,72,2,08:36,ZD,overnight,1211,3239,,,559,0.559,
 20250705,Heat,72,2,08:36,ZD,overnight,1248,3240,,,553,0.553,
 20250705,Heat,72,2,08:36,ZD,overnight,2084,3241,,,522,0.522,
-20250705,Heat,72,2,08:36,ZD,overnight,1494,3242,,,281,0.281,tissue sloughing off; looks dead or dying
+20250705,Heat,72,2,08:36,ZD,overnight,1494,3242,,,281,,tissue sloughing off; looks dead or dying
 20250705,Heat,72,5,08:42,ZD,overnight,1549,3243,,,545,0.545,
 20250705,Heat,72,5,08:42,ZD,overnight,1086,3244,,,545,0.545,
 20250705,Heat,72,5,08:42,ZD,overnight,1560,3246,,,580,0.58,
-20250705,Heat,72,5,08:42,ZD,overnight,1441,3245,,,35,0.035,looks very dead
+20250705,Heat,72,5,08:42,ZD,overnight,1441,3245,,,35,,looks very dead
 20250705,Control,72,6,08:49,ZD,overnight,1563,3249,,,627,0.627,
 20250705,Control,72,6,08:49,ZD,overnight,1472,3252,,,639,0.639,
 20250705,Control,72,6,08:49,ZD,overnight,1041,3254,,,635,0.635,redone because of bubble
