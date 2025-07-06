@@ -19,7 +19,7 @@ custom_colors <- c("Control" = "lightblue4", "Heat" = "#D55E00")
 
 PAM <- read.csv("../data/PAM.csv") %>% clean_names()
 PAM <- PAM %>% mutate(date = as.factor(date)) %>% 
-                mutate(timepoint = factor(timepoint)) %>%#,levels = c("0","1","3","6","12",
+                #mutate(timepoint = factor(timepoint)) %>%#,levels = c("0","1","3","6","12",
                                                     #           "24","36","48","72","120","170"), ordered = TRUE)) %>% 
                 mutate(plug = as.factor(plug)) %>%
                 mutate(treatment = factor(treatment,levels = c("Acclimation","Recovery","Control","Heat", ordered=TRUE)))
@@ -54,9 +54,9 @@ table(PAM_exp$plug)
 
     ## 
     ## 1041 1056 1086 1108 1113 1145 1211 1248 1250 1252 1339 1441 1458 1461 1472 1494 
-    ##    7    7    7    6    7    0    7    7    7    7    7    7    7    7    6    7 
+    ##    8    8    8    7    8    0    8    8    8    8    8    8    8    8    7    8 
     ## 1538 1548 1549 1560 1563 1597 1631 1739 2084 2360 2852 
-    ##    0    0    7    7    7    7    7    7    7    7    7
+    ##    0    0    8    8    8    8    8    8    8    8    8
 
 ``` r
 ggplot(PAM_exp,aes(x = timepoint, y = fv_fm_y_1000)) + 
@@ -91,24 +91,19 @@ summary(model)
     ## 
     ## Residuals:
     ##       Min        1Q    Median        3Q       Max 
-    ## -0.107333 -0.033467  0.008534  0.037292  0.086636 
+    ## -0.108833 -0.037252  0.005676  0.038095  0.094518 
     ## 
     ## Coefficients:
     ##               Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)  0.6178333  0.0089155  69.299   <2e-16 ***
-    ## timepoint1   0.0008623  0.0127447   0.068   0.9461    
-    ## timepoint3   0.0135000  0.0126084   1.071   0.2859    
-    ## timepoint12  0.0025580  0.0127447   0.201   0.8412    
-    ## timepoint24 -0.0082917  0.0126084  -0.658   0.5117    
-    ## timepoint36 -0.0115833  0.0126084  -0.919   0.3597    
-    ## timepoint72 -0.0234697  0.0128918  -1.821   0.0706 .  
+    ## (Intercept)  0.6211211  0.0046337 134.043  < 2e-16 ***
+    ## timepoint   -0.0002879  0.0001046  -2.753  0.00649 ** 
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
-    ## Residual standard error: 0.04368 on 157 degrees of freedom
-    ##   (4 observations deleted due to missingness)
-    ## Multiple R-squared:  0.06084,    Adjusted R-squared:  0.02495 
-    ## F-statistic: 1.695 on 6 and 157 DF,  p-value: 0.1255
+    ## Residual standard error: 0.04702 on 184 degrees of freedom
+    ##   (6 observations deleted due to missingness)
+    ## Multiple R-squared:  0.03957,    Adjusted R-squared:  0.03435 
+    ## F-statistic: 7.582 on 1 and 184 DF,  p-value: 0.006488
 
 ``` r
 # Estimated marginal means (adjusted for random effects and model structure)
@@ -116,30 +111,8 @@ emm <- emmeans(model, ~ timepoint)
 pairs(emm)
 ```
 
-    ##  contrast                   estimate     SE  df t.ratio p.value
-    ##  timepoint0 - timepoint1   -0.000862 0.0127 157  -0.068  1.0000
-    ##  timepoint0 - timepoint3   -0.013500 0.0126 157  -1.071  0.9357
-    ##  timepoint0 - timepoint12  -0.002558 0.0127 157  -0.201  1.0000
-    ##  timepoint0 - timepoint24   0.008292 0.0126 157   0.658  0.9946
-    ##  timepoint0 - timepoint36   0.011583 0.0126 157   0.919  0.9691
-    ##  timepoint0 - timepoint72   0.023470 0.0129 157   1.821  0.5363
-    ##  timepoint1 - timepoint3   -0.012638 0.0127 157  -0.992  0.9552
-    ##  timepoint1 - timepoint12  -0.001696 0.0129 157  -0.132  1.0000
-    ##  timepoint1 - timepoint24   0.009154 0.0127 157   0.718  0.9913
-    ##  timepoint1 - timepoint36   0.012446 0.0127 157   0.977  0.9584
-    ##  timepoint1 - timepoint72   0.024332 0.0130 157   1.868  0.5045
-    ##  timepoint3 - timepoint12   0.010942 0.0127 157   0.859  0.9780
-    ##  timepoint3 - timepoint24   0.021792 0.0126 157   1.728  0.5982
-    ##  timepoint3 - timepoint36   0.025083 0.0126 157   1.989  0.4255
-    ##  timepoint3 - timepoint72   0.036970 0.0129 157   2.868  0.0689
-    ##  timepoint12 - timepoint24  0.010850 0.0127 157   0.851  0.9789
-    ##  timepoint12 - timepoint36  0.014141 0.0127 157   1.110  0.9244
-    ##  timepoint12 - timepoint72  0.026028 0.0130 157   1.998  0.4199
-    ##  timepoint24 - timepoint36  0.003292 0.0126 157   0.261  1.0000
-    ##  timepoint24 - timepoint72  0.015178 0.0129 157   1.177  0.9017
-    ##  timepoint36 - timepoint72  0.011886 0.0129 157   0.922  0.9685
-    ## 
-    ## P value adjustment: tukey method for comparing a family of 7 estimates
+    ##  contrast  estimate SE df z.ratio p.value
+    ##  (nothing)   nonEst NA NA      NA      NA
 
 ## 0.1 Statistical Mixed Model by treatment, timepoint, and tank_id
 
@@ -154,36 +127,32 @@ summary(model)
     ## Formula: fv_fm_y_1000 ~ treatment * timepoint + (1 | treatment:tank_id)
     ##    Data: PAM_exp
     ## 
-    ## REML criterion at convergence: -548.6
+    ## REML criterion at convergence: -686.6
     ## 
     ## Scaled residuals: 
     ##     Min      1Q  Median      3Q     Max 
-    ## -2.3964 -0.5466  0.1729  0.7423  1.6579 
+    ## -2.6624 -0.5863  0.2049  0.7549  1.6994 
     ## 
     ## Random effects:
     ##  Groups            Name        Variance  Std.Dev.
-    ##  treatment:tank_id (Intercept) 4.033e-05 0.00635 
-    ##  Residual                      1.180e-03 0.03435 
-    ## Number of obs: 164, groups:  treatment:tank_id, 6
+    ##  treatment:tank_id (Intercept) 3.996e-05 0.006322
+    ##  Residual                      1.110e-03 0.033317
+    ## Number of obs: 186, groups:  treatment:tank_id, 6
     ## 
     ## Fixed effects:
-    ##                             Estimate Std. Error         df t value Pr(>|t|)    
-    ## (Intercept)                 0.622250   0.010572  51.924859  58.857  < 2e-16 ***
-    ## treatmentHeat              -0.008833   0.014951  51.924859  -0.591 0.557216    
-    ## timepoint1                  0.018045   0.014343 146.212944   1.258 0.210355    
-    ## timepoint3                  0.030417   0.014024 146.040197   2.169 0.031704 *  
-    ## timepoint12                 0.025164   0.014343 146.212944   1.754 0.081450 .  
-    ## timepoint24                 0.015583   0.014024 146.040197   1.111 0.268300    
-    ## timepoint36                 0.012833   0.014024 146.040197   0.915 0.361636    
-    ## timepoint72                 0.012333   0.014024 146.040197   0.879 0.380592    
-    ## treatmentHeat:timepoint1   -0.032212   0.020059 146.128957  -1.606 0.110474    
-    ## treatmentHeat:timepoint3   -0.033833   0.019832 146.040197  -1.706 0.090141 .  
-    ## treatmentHeat:timepoint12  -0.042914   0.020059 146.128957  -2.139 0.034070 *  
-    ## treatmentHeat:timepoint24  -0.047750   0.019832 146.040197  -2.408 0.017302 *  
-    ## treatmentHeat:timepoint36  -0.048833   0.019832 146.040197  -2.462 0.014968 *  
-    ## treatmentHeat:timepoint72  -0.079157   0.020326 146.142843  -3.894 0.000149 ***
+    ##                           Estimate Std. Error         df t value Pr(>|t|)    
+    ## (Intercept)              6.375e-01  5.929e-03  7.808e+00 107.526 1.16e-13 ***
+    ## treatmentHeat           -3.089e-02  8.354e-03  7.696e+00  -3.698  0.00649 ** 
+    ## timepoint                1.104e-04  1.021e-04  1.781e+02   1.081  0.28107    
+    ## treatmentHeat:timepoint -9.195e-04  1.486e-04  1.783e+02  -6.187 4.08e-09 ***
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## Correlation of Fixed Effects:
+    ##             (Intr) trtmnH timpnt
+    ## treatmentHt -0.710              
+    ## timepoint   -0.534  0.379       
+    ## trtmntHt:tm  0.367 -0.525 -0.687
 
 ``` r
 # Estimated marginal means (adjusted for random effects and model structure)
@@ -191,33 +160,9 @@ emm <- emmeans(model, ~ treatment | timepoint)
 pairs(emm)
 ```
 
-    ## timepoint = 0:
-    ##  contrast       estimate     SE   df t.ratio p.value
-    ##  Control - Heat  0.00883 0.0150 51.6   0.591  0.5572
-    ## 
-    ## timepoint = 1:
-    ##  contrast       estimate     SE   df t.ratio p.value
-    ##  Control - Heat  0.04104 0.0153 54.5   2.691  0.0095
-    ## 
-    ## timepoint = 3:
-    ##  contrast       estimate     SE   df t.ratio p.value
-    ##  Control - Heat  0.04267 0.0150 51.6   2.854  0.0062
-    ## 
-    ## timepoint = 12:
-    ##  contrast       estimate     SE   df t.ratio p.value
-    ##  Control - Heat  0.05175 0.0153 54.5   3.392  0.0013
-    ## 
-    ## timepoint = 24:
-    ##  contrast       estimate     SE   df t.ratio p.value
-    ##  Control - Heat  0.05658 0.0150 51.6   3.784  0.0004
-    ## 
-    ## timepoint = 36:
-    ##  contrast       estimate     SE   df t.ratio p.value
-    ##  Control - Heat  0.05767 0.0150 51.6   3.857  0.0003
-    ## 
-    ## timepoint = 72:
-    ##  contrast       estimate     SE   df t.ratio p.value
-    ##  Control - Heat  0.08799 0.0156 58.0   5.639  <.0001
+    ## timepoint = 29.6:
+    ##  contrast       estimate      SE df t.ratio p.value
+    ##  Control - Heat   0.0581 0.00711  4   8.171  0.0012
     ## 
     ## Degrees-of-freedom method: kenward-roger
 
@@ -241,14 +186,8 @@ summary_table <- as.data.frame(pairs(emm)) %>%
 print(summary_table)
 ```
 
-    ##   Timepoint Estimate (Control-Heat)     SE t-ratio  p-value Significant?
-    ## 1         0                  0.0088 0.0150    0.59 5.57e-01             
-    ## 2         1                  0.0410 0.0153    2.69 9.45e-03           **
-    ## 3         3                  0.0427 0.0150    2.85 6.21e-03           **
-    ## 4        12                  0.0517 0.0153    3.39 1.30e-03           **
-    ## 5        24                  0.0566 0.0150    3.78 4.03e-04          ***
-    ## 6        36                  0.0577 0.0150    3.86 3.20e-04          ***
-    ## 7        72                  0.0880 0.0156    5.64 5.33e-07          ***
+    ##   Timepoint Estimate (Control-Heat)     SE t-ratio p-value Significant?
+    ## 1  29.60753                  0.0581 0.0071    8.17 0.00122           **
 
 ``` r
 write.csv(summary_table, "../output/FvFm_treatment_effect_summary.csv", row.names = FALSE)
