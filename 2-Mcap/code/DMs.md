@@ -59,26 +59,19 @@ tail(daily) # check to make sure data from today is there
 ```
 
     ##        Date Treatment Tank_ID  Time Initials Temperature_C pH_mv Salinity_psu
-    ## 73 20250706   Control       1 12:30       ZD         24.94 -66.2        34.80
-    ## 74 20250706      Heat       2 12:30       ZD         32.25 -67.1        34.77
-    ## 75 20250706      Heat       3 12:30       ZD         32.33 -68.0        34.86
-    ## 76 20250706   Control       4 12:30       ZD         25.18 -67.2        34.81
-    ## 77 20250706      Heat       5 12:30       ZD         32.25 -66.9        34.82
-    ## 78 20250706   Control       6 12:30       ZD         25.05 -67.1        34.80
-    ##    tris.date Probe.Set
-    ## 73  20250618    Probe1
-    ## 74  20250618    Probe1
-    ## 75  20250618    Probe1
-    ## 76  20250618    Probe1
-    ## 77  20250618    Probe1
-    ## 78  20250618    Probe1
-    ##                                                                         notes
-    ## 73                                                                           
-    ## 74 incorrectly written down as 35.25, but it read 32.25 (confirmed with apex)
-    ## 75                                                                           
-    ## 76                                                                           
-    ## 77                                                                           
-    ## 78
+    ## 91 20250707   Control       1 10:35       ZD         24.98 -66.2        34.89
+    ## 92 20250707      Heat       2 10:35       ZD         32.21 -67.5        34.99
+    ## 93 20250707      Heat       3 10:35       ZD         31.82 -69.4        34.91
+    ## 94 20250707   Control       4 10:35       ZD         24.91 -67.2        34.95
+    ## 95 20250707      Heat       5 10:35       ZD         32.22 -67.8        34.95
+    ## 96 20250707   Control       6 10:35       ZD         25.06 -67.2        34.90
+    ##    tris.date Probe.Set notes
+    ## 91  20250618    Probe1      
+    ## 92  20250618    Probe1      
+    ## 93  20250618    Probe1      
+    ## 94  20250618    Probe1      
+    ## 95  20250618    Probe1      
+    ## 96  20250618    Probe1
 
 ``` r
 daily$Date <- as.Date(as.character(daily$Date), format = "%Y%m%d")
@@ -100,7 +93,7 @@ range(na.omit(daily.probe1$Temperature_C))
 range(na.omit(daily.probe1$pH_mv))
 ```
 
-    ## [1] -68 -61
+    ## [1] -69.6 -61.0
 
 ``` r
 range(na.omit(daily.probe1$Salinity_psu))
@@ -255,12 +248,12 @@ summary <- daily_exp%>%
     ## # A tibble: 6 × 9
     ##   Tank_ID Temperature_C_mean Temperature_C_sd Salinity_psu_mean Salinity_psu_sd
     ##   <chr>                <dbl>            <dbl>             <dbl>           <dbl>
-    ## 1 1                     25.0           0.0727              34.9          0.0958
-    ## 2 2                     31.5           2.01                34.9          0.160 
-    ## 3 3                     31.5           2.02                35.0          0.140 
-    ## 4 4                     25.0           0.117               35.0          0.121 
-    ## 5 5                     31.5           2.05                35.0          0.140 
-    ## 6 6                     25.1           0.108               34.9          0.111 
+    ## 1 1                     25.0           0.0662              34.9          0.0871
+    ## 2 2                     31.6           1.80                34.9          0.145 
+    ## 3 3                     31.6           1.81                35.0          0.125 
+    ## 4 4                     25.0           0.114               35.0          0.108 
+    ## 5 5                     31.6           1.83                34.9          0.127 
+    ## 6 6                     25.1           0.0999              34.9          0.0983
     ## # ℹ 4 more variables: pH.total_mean <dbl>, pH.total_sd <dbl>, pH_mv_mean <dbl>,
     ## #   pH_mv_sd <dbl>
 
