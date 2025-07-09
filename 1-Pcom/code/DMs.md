@@ -1,4 +1,4 @@
-Daily measurement plotting
+Daily measurement plotting, Pcomp
 ================
 Zoe Dellaert
 6/24/2025
@@ -206,7 +206,7 @@ daily_tank<-pHSlope.long %>% filter(Treatment !=  "Acclimation") %>%
 ``` r
 # Save plot 
 ggsave("../output/pdf_figs/Daily_Measurements_Exp.pdf", daily_tank, width = 10, height = 10, units = c("in"))
-ggsave("../output/Daily_Measurements_Exp.png", daily_tank, width = 10, height = 10, units = c("in"))
+ggsave("../output/Daily_Measurements_Exp.png", daily_tank, width = 10, height = 10, units = c("in"), bg = "white")
 ```
 
 ``` r
@@ -230,7 +230,7 @@ daily_tank<-pHSlope.long %>% filter(Treatment !=  "Acclimation") %>%
 ``` r
 # Save plot 
 ggsave("../output/pdf_figs/Daily_Measurements_Exp_byTreatment.pdf", daily_tank, width = 10, height = 10, units = c("in"))
-ggsave("../output/Daily_Measurements_Exp_byTreatment.png", daily_tank, width = 10, height = 10, units = c("in"))
+ggsave("../output/Daily_Measurements_Exp_byTreatment.png", daily_tank, width = 10, height = 10, units = c("in"), bg = "white")
 ```
 
 Summarize daily measurements during the heat stress experiment
@@ -271,9 +271,9 @@ Tank2 <- read.csv("../data/LoggerData/Tank2_10655123.csv", sep=",", skip=c(1), h
 Tank3 <- read.csv("../data/LoggerData/Tank3_10655130.csv", sep=",", skip=c(1), header=TRUE, na.strings = "NA")[ ,2:4]
 Tank4 <- read.csv("../data/LoggerData/Tank4_10655129.csv", sep=",", skip=c(1), header=TRUE, na.strings = "NA")[ ,2:4]
 Tank5 <- read.csv("../data/LoggerData/Tank5_10655120.csv", sep=",", skip=c(1), header=TRUE, na.strings = "NA")[ ,2:4]
-Tank6 <- read.csv("../data/LoggerData/Tank6_10655122.csv", sep=",", skip=c(1), header=TRUE, na.strings = "NA")[ ,2:4]
+Tank6 <- read.csv("../data/LoggerData/Tank6_10800713.csv", sep=",", skip=c(1), header=TRUE, na.strings = "NA")[ ,2:4]
 
-col_names <- c("DateTimeGMTmin10","TempC","IntensityLux")
+col_names <- c("DateTimeEST","TempC","IntensityLux")
 
 # combine all dataframes into list
 Tanks <- list(Tank1 = Tank1,
@@ -306,29 +306,30 @@ Tank4$Tank <- "Tank4"
 Tank5$Tank <- "Tank5"
 Tank6$Tank <- "Tank6"
 
-Tank1$Treatment <- "Heated"
+Tank1$Treatment <- "Control"
 Tank2$Treatment <- "Heated"
 Tank3$Treatment <- "Heated"
 Tank4$Treatment <- "Control"
-Tank5$Treatment <- "Control"
+Tank5$Treatment <- "Heated"
 Tank6$Treatment <- "Control"
 
 tank_df <- rbind(Tank1, Tank2, Tank3, Tank4, Tank5, Tank6)
 
-tank_df$DateTimeGMTmin10 <- parse_date_time(tank_df$DateTimeGMTmin10, "%m/%d/%y %I:%M:%S %p")
+tank_df$DateTimeEST <- parse_date_time(tank_df$DateTimeEST, "%m/%d/%y %I:%M:%S %p")
 
-# Assign raw timezone as GMT-10 (Hawaii)
-tank_df$DateTimeGMTmin10 <- force_tz(tank_df$DateTimeGMTmin10, tzone = "Etc/GMT+10")
-
-# Convert to Eastern Time
-tank_df$DateTimeEST <- with_tz(tank_df$DateTimeGMTmin10, tzone = "America/New_York")
+# Assign raw timezone as EST
+tank_df$DateTimeEST <- force_tz(tank_df$DateTimeEST, tzone = "Etc/GMT+10")
 
 Temps <- tank_df %>% ggplot(aes(x=DateTimeEST, y=TempC)) +
   geom_line(aes(color = Tank), size = 0.5) +
   facet_grid(~Treatment)+
   ylab("Temperature (°C)") +theme_minimal()
 Temps
+```
 
+<img src="DMs_files/figure-gfm/unnamed-chunk-11-1.png" style="display: block; margin: auto;" />
+
+``` r
 #remove commas from light data and make numeric
 tank_df$IntensityLux <- as.numeric(gsub(",", "", tank_df$IntensityLux))
 
@@ -340,9 +341,11 @@ Light <- tank_df %>% ggplot(aes(x=DateTimeEST, y=IntensityLux)) +
 Light
 ```
 
+<img src="DMs_files/figure-gfm/unnamed-chunk-11-2.png" style="display: block; margin: auto;" />
+
 ``` r
-# filter for our experimental dates 
-tank_df_Exp <- tank_df %>% filter(DateTimeEST >= "2025-05-22 00:00:00" & DateTimeEST <= "2025-05-29 12:00:00")
+# filter for our experimental dates (use GMT for the time, so +6)
+tank_df_Exp <- tank_df %>% filter(DateTimeEST >= "2025-06-25 14:00:00" & DateTimeEST <= "2025-06-30 14:00:00")
 
 write.csv(tank_df_Exp,file="../output/Experimental_Tank_HoboTempLight_data.csv")
 
@@ -351,8 +354,13 @@ Temps <- tank_df_Exp %>% ggplot(aes(x=DateTimeEST, y=TempC)) +
   facet_grid(~Treatment)+
   ylab("Temperature (°C)") +theme_minimal()
 Temps
+```
+
+<img src="DMs_files/figure-gfm/unnamed-chunk-12-1.png" style="display: block; margin: auto;" />
+
+``` r
 ggsave("../output/pdf_figs/Experimental_Tank_HoboTemp.pdf", plot = last_plot(), width = 8, height = 4)
-ggsave("../output/Experimental_Tank_HoboTemp.png", plot = last_plot(), width = 8, height = 4)
+ggsave("../output/Experimental_Tank_HoboTemp.png", plot = last_plot(), width = 8, height = 4, bg = "white")
 
 Light <- tank_df_Exp %>% ggplot(aes(x=DateTimeEST, y=IntensityLux)) +
   geom_line(aes(color = Tank), size = 0.5) +
@@ -360,6 +368,11 @@ Light <- tank_df_Exp %>% ggplot(aes(x=DateTimeEST, y=IntensityLux)) +
   ylab("Light (Lux)") +theme_minimal()
 
 Light
+```
+
+<img src="DMs_files/figure-gfm/unnamed-chunk-12-2.png" style="display: block; margin: auto;" />
+
+``` r
 ggsave("../output/pdf_figs/Experimental_Tank_HoboLight.pdf", plot = last_plot(), width = 8, height = 4)
-ggsave("../output/Experimental_Tank_HoboLight.png", plot = last_plot(), width = 8, height = 4)
+ggsave("../output/Experimental_Tank_HoboLight.png", plot = last_plot(), width = 8, height = 4, bg = "white")
 ```
