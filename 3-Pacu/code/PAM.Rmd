@@ -46,7 +46,7 @@ ggsave("../output/FvFm_recovery_acclimation.png", plot = last_plot(), width = 8,
 ```
 
 ```{r}
-PAM_exp <- PAM #%>% filter(treatment!="Acclimation" & treatment!="Recovery")
+PAM_exp <- PAM %>% filter(treatment!="Acclimation" & treatment!="Recovery" & treatment!="Parent")
 table(PAM_exp$plug)
 
 ggplot(PAM_exp,aes(x = timepoint, y = fv_fm_y_1000)) + 
