@@ -10,6 +10,7 @@ Zoe Dellaert
 - [0.4 Plot](#04-plot)
 - [0.5 HOBO Temps, based on Jill’s
   Script](#05-hobo-temps-based-on-jills-script)
+- [0.6 Apex Log from csv](#06-apex-log-from-csv)
 
 This script plots daily measurements from the experiment, and is based
 on the Putnam Lab script available here:
@@ -21,6 +22,7 @@ library(lubridate) # used for converting 8 digit date into datetime format for R
 library(RColorBrewer)
 library(rmarkdown)
 library(tinytex)
+library(xml2)
 
 ## If seacarb needs to be downloaded:
 #packageurl <- "https://cran.r-project.org/src/contrib/Archive/seacarb/seacarb_3.2.tar.gz"
@@ -372,3 +374,50 @@ Light
 ggsave("../output/pdf_figs/Experimental_Tank_HoboLight.pdf", plot = last_plot(), width = 8, height = 4)
 ggsave("../output/Experimental_Tank_HoboLight.png", plot = last_plot(), width = 8, height = 4, bg = "white")
 ```
+
+## 0.6 Apex Log from csv
+
+1.  Open xml file with microsoft excel (this can take a while)
+2.  Save as \> csv
+3.  import csv into R
+
+``` r
+apex <- read.csv("../data/LoggerData/Apex_log.csv", sep=",", skip=c(1), header=TRUE, na.strings = "NA")[6:9]
+
+colnames(apex) <-  c("DateTime","ProbeName","ProbeType","Value")
+
+head(apex)
+```
+
+    ##              DateTime ProbeName ProbeType Value
+    ## 1 06/24/2025 00:00:00     Btemp      Temp  25.1
+    ## 2 06/24/2025 00:00:00      Salt      Cond  29.6
+    ## 3 06/24/2025 00:00:00    Temp_1      Temp  25.0
+    ## 4 06/24/2025 00:00:00    Temp_4      Temp  25.0
+    ## 5 06/24/2025 00:00:00    Temp_2      Temp  25.0
+    ## 6 06/24/2025 00:00:00    Temp_3      Temp  25.1
+
+``` r
+apex$DateTimeHST <- parse_date_time(apex$DateTime, "%m/%d/%y %H:%M:%S", tz = "Pacific/Honolulu")
+apex$DateTimeEST <- with_tz(apex$DateTimeHST, tzone = "America/New_York")
+head(apex)
+```
+
+    ##              DateTime ProbeName ProbeType Value DateTimeHST         DateTimeEST
+    ## 1 06/24/2025 00:00:00     Btemp      Temp  25.1  2025-06-24 2025-06-24 06:00:00
+    ## 2 06/24/2025 00:00:00      Salt      Cond  29.6  2025-06-24 2025-06-24 06:00:00
+    ## 3 06/24/2025 00:00:00    Temp_1      Temp  25.0  2025-06-24 2025-06-24 06:00:00
+    ## 4 06/24/2025 00:00:00    Temp_4      Temp  25.0  2025-06-24 2025-06-24 06:00:00
+    ## 5 06/24/2025 00:00:00    Temp_2      Temp  25.0  2025-06-24 2025-06-24 06:00:00
+    ## 6 06/24/2025 00:00:00    Temp_3      Temp  25.1  2025-06-24 2025-06-24 06:00:00
+
+``` r
+apex_temps <- apex %>% filter(ProbeType == "Temp" & ProbeName != "Btemp")
+
+apex_temps %>% ggplot(aes(x=DateTimeEST, y=Value)) +
+  geom_line(aes(color = ProbeName), size = 0.5) +
+  facet_grid(~ProbeType)+
+  ylab("Temperature (°C)") +theme_minimal()
+```
+
+<img src="DMs_files/figure-gfm/unnamed-chunk-13-1.png" style="display: block; margin: auto;" />
