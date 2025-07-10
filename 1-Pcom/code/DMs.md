@@ -239,6 +239,8 @@ Summarize daily measurements during the heat stress experiment
 daily_exp <- pHSlope %>% 
   filter(Treatment != "Acclimation")
 
+write.csv(daily_exp,file="../output/DMs_Processed.csv")
+
 summary <- daily_exp%>%
   group_by(Tank_ID)%>%
   select(Temperature_C:pH_mv) %>%
@@ -260,12 +262,6 @@ summary <- daily_exp%>%
 ## 0.5 HOBO Temps, based on [Jill’s Script](https://github.com/JillAshey/Astrangia_repo/blob/0041652d5b2a01145c1c049f10dbc53a8513cb86/scripts/Hobo_Temps.Rmd#L27)
 
 ``` r
-library(lubridate)
-library(tidyverse)
-library(emmeans)
-library(gridExtra)
-
-# Read in temp data 
 Tank1 <- read.csv("../data/LoggerData/Tank1_9893752.csv", sep=",", skip=c(1), header=TRUE, na.strings = "NA")[ ,2:4]
 Tank2 <- read.csv("../data/LoggerData/Tank2_10655123.csv", sep=",", skip=c(1), header=TRUE, na.strings = "NA")[ ,2:4]
 Tank3 <- read.csv("../data/LoggerData/Tank3_10655130.csv", sep=",", skip=c(1), header=TRUE, na.strings = "NA")[ ,2:4]
@@ -307,10 +303,10 @@ Tank5$Tank <- "Tank5"
 Tank6$Tank <- "Tank6"
 
 Tank1$Treatment <- "Control"
-Tank2$Treatment <- "Heated"
-Tank3$Treatment <- "Heated"
+Tank2$Treatment <- "Heat"
+Tank3$Treatment <- "Heat"
 Tank4$Treatment <- "Control"
-Tank5$Treatment <- "Heated"
+Tank5$Treatment <- "Heat"
 Tank6$Treatment <- "Control"
 
 tank_df <- rbind(Tank1, Tank2, Tank3, Tank4, Tank5, Tank6)
