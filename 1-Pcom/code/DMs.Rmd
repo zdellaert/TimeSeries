@@ -28,6 +28,7 @@ library(lubridate) # used for converting 8 digit date into datetime format for R
 library(RColorBrewer)
 library(rmarkdown)
 library(tinytex)
+library(xml2)
 
 ## If seacarb needs to be downloaded:
 #packageurl <- "https://cran.r-project.org/src/contrib/Archive/seacarb/seacarb_3.2.tar.gz"
@@ -288,3 +289,70 @@ ggsave("../output/pdf_figs/Experimental_Tank_HoboLight.pdf", plot = last_plot(),
 ggsave("../output/Experimental_Tank_HoboLight.png", plot = last_plot(), width = 8, height = 4, bg = "white")
 
 ```
+
+## Apex Log from csv
+
+1. Open xml file with microsoft excel (this can take a while)
+2. Save as > csv
+3. import csv into R
+
+```{r}
+apex <- read.csv("../data/LoggerData/Apex_log.csv", sep=",", skip=c(1), header=TRUE, na.strings = "NA")[6:9]
+
+colnames(apex) <-  c("DateTime","ProbeName","ProbeType","Value")
+
+head(apex)
+
+apex$DateTimeHST <- parse_date_time(apex$DateTime, "%m/%d/%y %H:%M:%S", tz = "Pacific/Honolulu")
+apex$DateTimeEST <- with_tz(apex$DateTimeHST, tzone = "America/New_York")
+head(apex)
+
+apex_temps <- apex %>% filter(ProbeType == "Temp" & ProbeName != "Btemp")
+
+apex_temps %>% ggplot(aes(x=DateTimeEST, y=Value)) +
+  geom_line(aes(color = ProbeName), size = 0.5) +
+  facet_grid(~ProbeType)+
+  ylab("Temperature (°C)") +theme_minimal()
+```
+
+
+
+## Apex Log from XML
+
+```{r}
+apex <- read_xml("../data/LoggerData/Apex_log.xml")
+```
+
+
+```{r}
+# Extract global metadata once
+meta <- list(
+  hostname = xml_text(xml_find_first(apex, ".//hostname")),
+  serial = xml_text(xml_find_first(apex, ".//serial")),
+  timezone = xml_text(xml_find_first(apex, ".//timezone")),
+  software = xml_attr(apex, "software"),
+  hardware = xml_attr(apex, "hardware")
+)
+
+# Get all <record> nodes
+records <- xml_find_all(apex, ".//record")
+
+# Parse each <record> and its <probe> children
+all_data <- map_df(records, function(rec) {
+  date <- xml_text(xml_find_first(rec, "date"))
+  probes <- xml_find_all(rec, "probe")
+
+  map_df(probes, function(probe) {
+    tibble(
+      date = date,
+      name = xml_text(xml_find_first(probe, "name")),
+      type = xml_text(xml_find_first(probe, "type")),
+      value = as.numeric(xml_text(xml_find_first(probe, "value")))
+    )
+  })
+})
+
+# Add metadata (broadcasted across all rows)
+final_df <- bind_cols(all_data, as_tibble(meta))
+```
+
