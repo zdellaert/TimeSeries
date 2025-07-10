@@ -1,26 +1,12 @@
----
-title: "PAM Pacuta"
-author: "Zoe Dellaert"
-date: "2025-07-05"
-output: 
-  github_document:
-    toc: true
-    number_sections: true
----
+PAM Pacuta
+================
+Zoe Dellaert
+2025-07-05
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(
-  echo = TRUE,
-  message = FALSE,
-  warning = FALSE,
-  fig.width = 5,
-  fig.height = 3.5,
-  fig.align = 'center',
-  dpi = 300
-)
-```
+- [0.1 Statistical Mixed Model by treatment, timepoint, and
+  tank_id](#01-statistical-mixed-model-by-treatment-timepoint-and-tank_id)
 
-```{r}
+``` r
 library(tidyverse)
 library(janitor)
 library(ggpubr)
@@ -41,47 +27,164 @@ PAM <- PAM %>% mutate(date = as.factor(date)) %>%
 ggplot(PAM,aes(x = date, y = fv_fm_y_1000)) + 
     geom_boxplot(aes(fill = treatment)) + labs(x = "Date", y = "Fv/Fm", title = "Fv/Fm by Date and Tank") +
   theme_minimal()
+```
 
+<img src="PAM_files/figure-gfm/unnamed-chunk-1-1.png" style="display: block; margin: auto;" />
+
+``` r
 ggsave("../output/FvFm_recovery_acclimation.png", plot = last_plot(), width = 8, height = 4, bg = "white")
 ```
 
-```{r}
+``` r
 PAM_exp <- PAM %>% filter(treatment!="Acclimation" & treatment!="Recovery" & treatment!="Parent")
 table(PAM_exp$plug)
+```
 
+    ## 
+    ##   1038   1043   1059   1100   1122   1159   1175   1223   1281   1450   1471 
+    ##      4      4      4      4      4      4      4      4      4      4      4 
+    ##   1473   1474   1614   1626   1691   1753   1761   2195   2370   2565   2666 
+    ##      4      4      4      4      4      4      4      4      4      4      4 
+    ##   2730   2986 Parent 
+    ##      4      4      0
+
+``` r
 ggplot(PAM_exp,aes(x = timepoint, y = fv_fm_y_1000)) + 
     geom_boxplot(aes(fill = treatment)) +theme_minimal() +scale_fill_manual(values = custom_colors) 
+```
 
+<img src="PAM_files/figure-gfm/unnamed-chunk-2-1.png" style="display: block; margin: auto;" />
+
+``` r
 ggplot(PAM_exp,aes(x = timepoint, y = fv_fm_y_1000, group = plug)) + 
     geom_path(aes(color=plug)) + theme_minimal() #+facet_wrap(tank_id~treatment)
+```
 
+<img src="PAM_files/figure-gfm/unnamed-chunk-2-2.png" style="display: block; margin: auto;" />
+
+``` r
 ggplot(PAM_exp,aes(x = timepoint, y = fv_fm_y_1000, group = plug)) + 
     geom_path(aes(color=tank_id)) + theme_minimal() #+facet_wrap(tank_id~treatment)
 ```
 
-```{r}
+<img src="PAM_files/figure-gfm/unnamed-chunk-2-3.png" style="display: block; margin: auto;" />
+
+``` r
 # mixed model
 model <- lm(fv_fm_y_1000 ~ timepoint, data = PAM_exp)
 summary(model)
+```
 
+    ## 
+    ## Call:
+    ## lm(formula = fv_fm_y_1000 ~ timepoint, data = PAM_exp)
+    ## 
+    ## Residuals:
+    ##       Min        1Q    Median        3Q       Max 
+    ## -0.051250 -0.013750 -0.001625  0.017531  0.051750 
+    ## 
+    ## Coefficients:
+    ##              Estimate Std. Error t value Pr(>|t|)    
+    ## (Intercept)  0.661250   0.004101 161.243  < 2e-16 ***
+    ## timepoint1  -0.023708   0.005800  -4.088 9.30e-05 ***
+    ## timepoint6  -0.031000   0.005800  -5.345 6.53e-07 ***
+    ## timepoint12 -0.028125   0.005800  -4.849 5.02e-06 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## Residual standard error: 0.02009 on 92 degrees of freedom
+    ## Multiple R-squared:  0.279,  Adjusted R-squared:  0.2555 
+    ## F-statistic: 11.87 on 3 and 92 DF,  p-value: 1.22e-06
+
+``` r
 # Estimated marginal means (adjusted for random effects and model structure)
 emm <- emmeans(model, ~ timepoint)
 pairs(emm)
 ```
 
-## Statistical Mixed Model by treatment, timepoint, and tank_id
+    ##  contrast                 estimate     SE df t.ratio p.value
+    ##  timepoint0 - timepoint1   0.02371 0.0058 92   4.088  0.0005
+    ##  timepoint0 - timepoint6   0.03100 0.0058 92   5.345  <.0001
+    ##  timepoint0 - timepoint12  0.02813 0.0058 92   4.849  <.0001
+    ##  timepoint1 - timepoint6   0.00729 0.0058 92   1.257  0.5923
+    ##  timepoint1 - timepoint12  0.00442 0.0058 92   0.762  0.8715
+    ##  timepoint6 - timepoint12 -0.00287 0.0058 92  -0.496  0.9599
+    ## 
+    ## P value adjustment: tukey method for comparing a family of 4 estimates
 
-```{r}
+## 0.1 Statistical Mixed Model by treatment, timepoint, and tank_id
+
+``` r
 # mixed model
 model <- lmer(fv_fm_y_1000 ~ treatment * timepoint + (1 | treatment:tank_id), data = PAM_exp)
 summary(model)
+```
 
+    ## Linear mixed model fit by REML. t-tests use Satterthwaite's method [
+    ## lmerModLmerTest]
+    ## Formula: fv_fm_y_1000 ~ treatment * timepoint + (1 | treatment:tank_id)
+    ##    Data: PAM_exp
+    ## 
+    ## REML criterion at convergence: -453.5
+    ## 
+    ## Scaled residuals: 
+    ##      Min       1Q   Median       3Q      Max 
+    ## -2.30302 -0.68085  0.09127  0.61565  2.96539 
+    ## 
+    ## Random effects:
+    ##  Groups            Name        Variance  Std.Dev.
+    ##  treatment:tank_id (Intercept) 2.339e-05 0.004837
+    ##  Residual                      2.591e-04 0.016098
+    ## Number of obs: 96, groups:  treatment:tank_id, 6
+    ## 
+    ## Fixed effects:
+    ##                            Estimate Std. Error        df t value Pr(>|t|)    
+    ## (Intercept)                0.662333   0.005422 18.516188 122.167  < 2e-16 ***
+    ## treatmentHeat             -0.002167   0.007667 18.516188  -0.283  0.78063    
+    ## timepoint1                -0.012917   0.006572 84.000000  -1.965  0.05267 .  
+    ## timepoint6                -0.016417   0.006572 84.000000  -2.498  0.01444 *  
+    ## timepoint12               -0.017083   0.006572 84.000000  -2.599  0.01103 *  
+    ## treatmentHeat:timepoint1  -0.021583   0.009294 84.000000  -2.322  0.02264 *  
+    ## treatmentHeat:timepoint6  -0.029167   0.009294 84.000000  -3.138  0.00235 ** 
+    ## treatmentHeat:timepoint12 -0.022083   0.009294 84.000000  -2.376  0.01977 *  
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## Correlation of Fixed Effects:
+    ##             (Intr) trtmnH tmpnt1 tmpnt6 tmpn12 trtH:1 trtH:6
+    ## treatmentHt -0.707                                          
+    ## timepoint1  -0.606  0.429                                   
+    ## timepoint6  -0.606  0.429  0.500                            
+    ## timepoint12 -0.606  0.429  0.500  0.500                     
+    ## trtmntHt:t1  0.429 -0.606 -0.707 -0.354 -0.354              
+    ## trtmntHt:t6  0.429 -0.606 -0.354 -0.707 -0.354  0.500       
+    ## trtmntHt:12  0.429 -0.606 -0.354 -0.354 -0.707  0.500  0.500
+
+``` r
 # Estimated marginal means (adjusted for random effects and model structure)
 emm <- emmeans(model, ~ treatment | timepoint)
 pairs(emm)
 ```
 
-```{r}
+    ## timepoint = 0:
+    ##  contrast       estimate      SE   df t.ratio p.value
+    ##  Control - Heat  0.00217 0.00767 18.5   0.283  0.7806
+    ## 
+    ## timepoint = 1:
+    ##  contrast       estimate      SE   df t.ratio p.value
+    ##  Control - Heat  0.02375 0.00767 18.5   3.098  0.0061
+    ## 
+    ## timepoint = 6:
+    ##  contrast       estimate      SE   df t.ratio p.value
+    ##  Control - Heat  0.03133 0.00767 18.5   4.087  0.0007
+    ## 
+    ## timepoint = 12:
+    ##  contrast       estimate      SE   df t.ratio p.value
+    ##  Control - Heat  0.02425 0.00767 18.5   3.163  0.0052
+    ## 
+    ## Degrees-of-freedom method: kenward-roger
+
+``` r
 summary_table <- as.data.frame(pairs(emm)) %>%
   transmute(
     Timepoint = as.numeric(as.character(timepoint)),
@@ -99,10 +202,19 @@ summary_table <- as.data.frame(pairs(emm)) %>%
   )
 
 print(summary_table)
+```
+
+    ##   Timepoint Estimate (Control-Heat)     SE t-ratio  p-value Significant?
+    ## 1         0                  0.0022 0.0077    0.28 0.781000             
+    ## 2         1                  0.0237 0.0077    3.10 0.006060           **
+    ## 3         6                  0.0313 0.0077    4.09 0.000658          ***
+    ## 4        12                  0.0242 0.0077    3.16 0.005250           **
+
+``` r
 write.csv(summary_table, "../output/FvFm_treatment_effect_summary.csv", row.names = FALSE)
 ```
 
-```{r}
+``` r
 contrast_table <- as.data.frame(pairs(emm)) %>%
   mutate(
     timepoint = as.numeric(as.character(timepoint)),
@@ -127,16 +239,16 @@ ggplot(contrast_table, aes(x = timepoint, y = estimate)) +
     y = "Estimated Difference in Fv/Fm") +
   theme_minimal() +
   theme(panel.grid.minor = element_blank(),panel.grid.major.x = element_blank())
+```
 
+<img src="PAM_files/figure-gfm/unnamed-chunk-6-1.png" style="display: block; margin: auto;" />
+
+``` r
 ggsave("../output/FvFm_line_treatment_tank_modelestimates.png", plot = last_plot(), width = 8, height = 4, bg = "white")
 ggsave("../output/pdf_figs/FvFm_line_treatment_tank_modelestimates.pdf", plot = last_plot(), width = 8, height = 4)
 ```
 
-
-
-
-
-```{r}
+``` r
 PAM_means_treatment <- PAM_exp %>%
   group_by(date, timepoint, treatment) %>%
   summarise(
@@ -152,7 +264,11 @@ ggplot(PAM_means_treatment, aes(x = timepoint, y = FvFm_mean, color = treatment,
   geom_line(stat = "summary", fun = mean, size = 1.2, aes(group = treatment)) +
   labs(x = "Timepoint",y = "Mean Fv/Fm") +
   theme_minimal() +scale_color_manual(values = custom_colors)
+```
 
+<img src="PAM_files/figure-gfm/unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
+
+``` r
 PAM_means <- PAM_exp %>%
   group_by(date, timepoint, treatment, tank_id) %>%
   summarise(
@@ -170,7 +286,11 @@ ggplot(PAM_means, aes(x = timepoint, y = FvFm_mean, color = treatment, shape = t
   labs(x = "Timepoint",y = "Mean Fv/Fm") +
   theme_minimal() +scale_color_manual(values = custom_colors) +
   stat_compare_means(aes(group = treatment),method = "anova",label = "p.format",size = 2.5)
+```
 
+<img src="PAM_files/figure-gfm/unnamed-chunk-7-2.png" style="display: block; margin: auto;" />
+
+``` r
 ggsave("../output/FvFm_line_treatment_tank_means.png", plot = last_plot(), width = 8, height = 4, bg = "white")
 ggsave("../output/pdf_figs/FvFm_line_treatment_tank_means.pdf", plot = last_plot(), width = 8, height = 4)
 
@@ -181,7 +301,11 @@ ggplot(PAM_exp, aes(x = timepoint, y = fv_fm_y_1000, color = treatment, shape = 
   labs(x = "Timepoint",y = "Mean Fv/Fm") +
   theme_minimal() +scale_color_manual(values = custom_colors) +
   stat_compare_means(aes(group = treatment),method = "anova",label = "p.format",size = 3)
+```
 
+<img src="PAM_files/figure-gfm/unnamed-chunk-7-3.png" style="display: block; margin: auto;" />
+
+``` r
 ggsave("../output/FvFm_line_treatment_all_points.png", plot = last_plot(), width = 8, height = 4, bg = "white")
 ggsave("../output/pdf_figs/FvFm_line_treatment_all_points.pdf", plot = last_plot(), width = 8, height = 4)
 
@@ -191,18 +315,20 @@ ggplot(PAM_means, aes(x = timepoint, y = FvFm_mean, color = tank_id, group = tan
   theme_minimal() + facet_wrap(~treatment)
 ```
 
-```{r}
+<img src="PAM_files/figure-gfm/unnamed-chunk-7-4.png" style="display: block; margin: auto;" />
+
+``` r
 ggplot(PAM_exp, aes(x = timepoint, y = fv_fm_y_1000, color = treatment)) +
   geom_boxplot(outlier.colour = "red", outlier.shape = 8) 
-
-
 ```
 
+<img src="PAM_files/figure-gfm/unnamed-chunk-8-1.png" style="display: block; margin: auto;" />
 
-```{r}
+``` r
 PAM_exp %>% filter(dark_adapt_mins != "overnight") %>% ggplot(aes(x = dark_adapt_mins, y = fv_fm_y_1000)) + 
     geom_point(aes(color=treatment)) +
   geom_smooth(aes(group = treatment, color = treatment), method = "lm", se = FALSE) +  # or method = "loess"
   theme_minimal() + scale_color_manual(values = custom_colors)
 ```
 
+<img src="PAM_files/figure-gfm/unnamed-chunk-9-1.png" style="display: block; margin: auto;" />
