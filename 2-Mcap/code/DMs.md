@@ -10,6 +10,7 @@ Zoe Dellaert
 - [0.4 Plot](#04-plot)
 - [0.5 HOBO Temps, based on Jill’s
   Script](#05-hobo-temps-based-on-jills-script)
+- [0.6 Apex Log from csv](#06-apex-log-from-csv)
 
 This script plots daily measurements from the experiment, and is based
 on the Putnam Lab script available here:
@@ -183,7 +184,7 @@ daily_tank<-pHSlope.long %>% filter(Treatment !=  "Ramp") %>%
   theme(text = element_text(size = 14)); daily_tank
 ```
 
-<img src="DMs_files/figure-gfm/unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
+<img src="DMs_files/figure-gfm/unnamed-chunk-8-1.png" style="display: block; margin: auto;" />
 
 ``` r
 daily_tank<-pHSlope.long %>% filter(Treatment !=  "Acclimation") %>%
@@ -201,7 +202,7 @@ daily_tank<-pHSlope.long %>% filter(Treatment !=  "Acclimation") %>%
   theme(text = element_text(size = 14)); daily_tank
 ```
 
-<img src="DMs_files/figure-gfm/unnamed-chunk-8-1.png" style="display: block; margin: auto;" />
+<img src="DMs_files/figure-gfm/unnamed-chunk-9-1.png" style="display: block; margin: auto;" />
 
 ``` r
 # Save plot 
@@ -225,7 +226,7 @@ daily_tank<-pHSlope.long %>% filter(Treatment !=  "Acclimation") %>%
   theme(text = element_text(size = 14)); daily_tank
 ```
 
-<img src="DMs_files/figure-gfm/unnamed-chunk-9-1.png" style="display: block; margin: auto;" />
+<img src="DMs_files/figure-gfm/unnamed-chunk-10-1.png" style="display: block; margin: auto;" />
 
 ``` r
 # Save plot 
@@ -323,7 +324,7 @@ Temps <- tank_df %>% ggplot(aes(x=DateTimeEST, y=TempC)) +
 Temps
 ```
 
-<img src="DMs_files/figure-gfm/unnamed-chunk-11-1.png" style="display: block; margin: auto;" />
+<img src="DMs_files/figure-gfm/unnamed-chunk-12-1.png" style="display: block; margin: auto;" />
 
 ``` r
 #remove commas from light data and make numeric
@@ -337,7 +338,7 @@ Light <- tank_df %>% ggplot(aes(x=DateTimeEST, y=IntensityLux)) +
 Light
 ```
 
-<img src="DMs_files/figure-gfm/unnamed-chunk-11-2.png" style="display: block; margin: auto;" />
+<img src="DMs_files/figure-gfm/unnamed-chunk-12-2.png" style="display: block; margin: auto;" />
 
 ``` r
 # filter for our experimental dates (use GMT for the time, so +6)
@@ -359,7 +360,7 @@ Temps <- tank_df_Exp %>% ggplot(aes(x=DateTimeEST, y=TempC)) +
 Temps
 ```
 
-<img src="DMs_files/figure-gfm/unnamed-chunk-12-1.png" style="display: block; margin: auto;" />
+<img src="DMs_files/figure-gfm/unnamed-chunk-13-1.png" style="display: block; margin: auto;" />
 
 ``` r
 ggsave("../output/pdf_figs/Experimental_Tank_HoboTemp.pdf", plot = last_plot(), width = 8, height = 4)
@@ -373,9 +374,66 @@ Light <- tank_df_Exp %>% ggplot(aes(x=DateTimeEST, y=IntensityLux)) +
 Light
 ```
 
-<img src="DMs_files/figure-gfm/unnamed-chunk-12-2.png" style="display: block; margin: auto;" />
+<img src="DMs_files/figure-gfm/unnamed-chunk-13-2.png" style="display: block; margin: auto;" />
 
 ``` r
 ggsave("../output/pdf_figs/Experimental_Tank_HoboLight.pdf", plot = last_plot(), width = 8, height = 4)
 ggsave("../output/Experimental_Tank_HoboLight.png", plot = last_plot(), width = 8, height = 4, bg = "white")
 ```
+
+## 0.6 Apex Log from csv
+
+1.  Open xml file with microsoft excel (this can take a while)
+2.  Save as \> csv
+3.  import csv into R
+
+``` r
+apex <- read.csv("../data/LoggerData/Apex_log.csv", sep=",", skip=c(1), header=TRUE, na.strings = "NA")[6:9]
+
+colnames(apex) <-  c("DateTime","ProbeName","ProbeType","Value")
+
+head(apex)
+```
+
+    ##              DateTime ProbeName ProbeType Value
+    ## 1 07/01/2025 04:41:00     Btemp      Temp  20.7
+    ## 2 07/01/2025 04:41:00      Salt      Cond  39.3
+    ## 3 07/01/2025 04:41:00    Temp_1      Temp  21.0
+    ## 4 07/01/2025 04:41:00    Temp_4      Temp  21.0
+    ## 5 07/01/2025 04:41:00    Temp_2      Temp  20.8
+    ## 6 07/01/2025 04:41:00    Temp_3      Temp  20.9
+
+``` r
+apex$DateTimeHST <- parse_date_time(apex$DateTime, "%m/%d/%y %H:%M:%S", tz = "Pacific/Honolulu")
+apex$DateTimeEST <- with_tz(apex$DateTimeHST, tzone = "America/New_York")
+head(apex)
+```
+
+    ##              DateTime ProbeName ProbeType Value         DateTimeHST
+    ## 1 07/01/2025 04:41:00     Btemp      Temp  20.7 2025-07-01 04:41:00
+    ## 2 07/01/2025 04:41:00      Salt      Cond  39.3 2025-07-01 04:41:00
+    ## 3 07/01/2025 04:41:00    Temp_1      Temp  21.0 2025-07-01 04:41:00
+    ## 4 07/01/2025 04:41:00    Temp_4      Temp  21.0 2025-07-01 04:41:00
+    ## 5 07/01/2025 04:41:00    Temp_2      Temp  20.8 2025-07-01 04:41:00
+    ## 6 07/01/2025 04:41:00    Temp_3      Temp  20.9 2025-07-01 04:41:00
+    ##           DateTimeEST
+    ## 1 2025-07-01 10:41:00
+    ## 2 2025-07-01 10:41:00
+    ## 3 2025-07-01 10:41:00
+    ## 4 2025-07-01 10:41:00
+    ## 5 2025-07-01 10:41:00
+    ## 6 2025-07-01 10:41:00
+
+``` r
+# filter for our experimental dates (use GMT for the time, so +6)
+apex_Exp <- apex %>% filter(DateTimeEST >= "2025-07-01 17:00:00" & DateTimeEST <= "2025-07-07 18:00:00")
+
+apex_temps <- apex_Exp %>% filter(ProbeType == "Temp" & ProbeName != "Btemp")
+
+apex_temps %>% ggplot(aes(x=DateTimeEST, y=Value)) +
+  geom_line(aes(color = ProbeName), size = 0.5) +
+  facet_grid(~ProbeType)+
+  ylab("Temperature (°C)") +theme_minimal()
+```
+
+<img src="DMs_files/figure-gfm/unnamed-chunk-14-1.png" style="display: block; margin: auto;" />
