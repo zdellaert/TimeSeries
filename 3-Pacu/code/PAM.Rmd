@@ -204,5 +204,10 @@ PAM_exp %>% filter(dark_adapt_mins != "overnight") %>% ggplot(aes(x = dark_adapt
     geom_point(aes(color=treatment)) +
   geom_smooth(aes(group = treatment, color = treatment), method = "lm", se = FALSE) +  # or method = "loess"
   theme_minimal() + scale_color_manual(values = custom_colors)
+
+PAM_exp  %>% ggplot(aes(x = dark_adapt_mins, y = fv_fm_y_1000)) + 
+    geom_point(aes(color=treatment)) +
+  geom_smooth(aes(group = treatment, color = treatment), method = "lm", se = FALSE) +  # or method = "loess"
+  theme_minimal() + scale_color_manual(values = custom_colors)
 ```
 
