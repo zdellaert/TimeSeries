@@ -252,12 +252,12 @@ summary <- daily_exp%>%
     ## # A tibble: 6 × 9
     ##   Tank_ID Temperature_C_mean Temperature_C_sd Salinity_psu_mean Salinity_psu_sd
     ##   <chr>                <dbl>            <dbl>             <dbl>           <dbl>
-    ## 1 1                     25.1           0.0823              34.9          0.0934
-    ## 2 2                     31.3           2.23                34.9          0.242 
-    ## 3 3                     31.3           2.19                34.9          0.261 
-    ## 4 4                     25.0           0.267               34.6          0.340 
-    ## 5 5                     31.3           2.18                35.1          0.214 
-    ## 6 6                     25.1           0.0919              34.8          0.275 
+    ## 1 1                     25.1           0.0679              34.9          0.0914
+    ## 2 2                     32.1           0.133               35.0          0.219 
+    ## 3 3                     32.1           0.181               35.0          0.231 
+    ## 4 4                     25.0           0.285               34.7          0.300 
+    ## 5 5                     32.1           0.131               35.1          0.216 
+    ## 6 6                     25.1           0.0949              34.9          0.245 
     ## # ℹ 4 more variables: pH.total_mean <dbl>, pH.total_sd <dbl>, pH_mv_mean <dbl>,
     ## #   pH_mv_sd <dbl>
 

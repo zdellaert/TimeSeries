@@ -10,6 +10,7 @@ Zoe Dellaert
 - [0.4 Plot](#04-plot)
 - [0.5 HOBO Temps, based on Jill’s
   Script](#05-hobo-temps-based-on-jills-script)
+- [0.6 Apex Log from csv](#06-apex-log-from-csv)
 
 This script plots daily measurements from the experiment, and is based
 on the Putnam Lab script available here:
@@ -59,19 +60,19 @@ tail(daily) # check to make sure data from today is there
 ```
 
     ##        Date Treatment Tank_ID  Time Initials Temperature_C pH_mv Salinity_psu
-    ## 55 20250710   Control       1 09:53    JH;PP         25.09 -63.8        34.79
-    ## 56 20250710      Heat       2 09:53    JH;PP         32.24 -63.9        35.00
-    ## 57 20250710      Heat       3 09:53    JH;PP         31.99 -65.3        35.03
-    ## 58 20250710   Control       4 09:53    JH;PP         25.07 -64.1        34.87
-    ## 59 20250710      Heat       5 09:53    JH;PP         32.40 -65.1        35.02
-    ## 60 20250710   Control       6 09:53    JH;PP         25.10 -64.5        34.81
+    ## 91 20250711   Control       1 14:05       JH         24.97 -64.6        34.94
+    ## 92 20250711      Heat       2 14:05       JH         31.95 -66.5        34.96
+    ## 93 20250711      Heat       3 14:05       JH         32.25 -66.8        34.98
+    ## 94 20250711   Control       4 14:05       JH         25.20 -65.3        34.98
+    ## 95 20250711      Heat       5 14:05       JH         32.08 -67.2        34.82
+    ## 96 20250711   Control       6 14:05       JH         25.28 -65.7        34.96
     ##    tris.date Probe.Set notes
-    ## 55  20250708    Probe1      
-    ## 56  20250708    Probe1      
-    ## 57  20250708    Probe1      
-    ## 58  20250708    Probe1      
-    ## 59  20250708    Probe1      
-    ## 60  20250708    Probe1
+    ## 91  20250708    Probe1      
+    ## 92  20250708    Probe1      
+    ## 93  20250708    Probe1      
+    ## 94  20250708    Probe1      
+    ## 95  20250708    Probe1      
+    ## 96  20250708    Probe1
 
 ``` r
 daily$Date <- as.Date(as.character(daily$Date), format = "%Y%m%d")
@@ -87,13 +88,13 @@ daily.probe1 <- daily %>% filter(Probe.Set == "Probe1")
 range(na.omit(daily.probe1$Temperature_C))
 ```
 
-    ## [1] 25.0 32.4
+    ## [1] 24.94 32.40
 
 ``` r
 range(na.omit(daily.probe1$pH_mv))
 ```
 
-    ## [1] -65.8 -62.7
+    ## [1] -67.5 -62.7
 
 ``` r
 range(na.omit(daily.probe1$Salinity_psu))
@@ -183,7 +184,7 @@ daily_tank<-pHSlope.long %>% filter(Treatment !=  "Ramp") %>%
   theme(text = element_text(size = 14)); daily_tank
 ```
 
-<img src="DMs_files/figure-gfm/unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
+<img src="DMs_files/figure-gfm/unnamed-chunk-8-1.png" style="display: block; margin: auto;" />
 
 ``` r
 daily_tank<-pHSlope.long %>% filter(Treatment !=  "Acclimation") %>%
@@ -201,7 +202,7 @@ daily_tank<-pHSlope.long %>% filter(Treatment !=  "Acclimation") %>%
   theme(text = element_text(size = 14)); daily_tank
 ```
 
-<img src="DMs_files/figure-gfm/unnamed-chunk-8-1.png" style="display: block; margin: auto;" />
+<img src="DMs_files/figure-gfm/unnamed-chunk-9-1.png" style="display: block; margin: auto;" />
 
 ``` r
 # Save plot 
@@ -225,7 +226,7 @@ daily_tank<-pHSlope.long %>% filter(Treatment !=  "Acclimation") %>%
   theme(text = element_text(size = 14)); daily_tank
 ```
 
-<img src="DMs_files/figure-gfm/unnamed-chunk-9-1.png" style="display: block; margin: auto;" />
+<img src="DMs_files/figure-gfm/unnamed-chunk-10-1.png" style="display: block; margin: auto;" />
 
 ``` r
 # Save plot 
@@ -239,6 +240,8 @@ Summarize daily measurements during the heat stress experiment
 daily_exp <- pHSlope %>% 
   filter(Treatment != "Acclimation")
 
+write.csv(daily_exp,file="../output/DMs_Processed.csv")
+
 summary <- daily_exp%>%
   group_by(Tank_ID)%>%
   select(Temperature_C:pH_mv) %>%
@@ -248,12 +251,12 @@ summary <- daily_exp%>%
     ## # A tibble: 6 × 9
     ##   Tank_ID Temperature_C_mean Temperature_C_sd Salinity_psu_mean Salinity_psu_sd
     ##   <chr>                <dbl>            <dbl>             <dbl>           <dbl>
-    ## 1 1                     25.1           0.101               34.9          0.151 
-    ## 2 2                     32.1           0.180               35.0          0.115 
-    ## 3 3                     32.1           0.153               35.0          0.0979
-    ## 4 4                     25.1           0.0732              35.0          0.163 
-    ## 5 5                     32.0           0.219               35.0          0.149 
-    ## 6 6                     25.1           0.0549              34.9          0.138 
+    ## 1 1                     25.1           0.0963              34.9          0.121 
+    ## 2 2                     32.1           0.201               35.0          0.0980
+    ## 3 3                     32.1           0.141               35.0          0.0947
+    ## 4 4                     25.1           0.147               35.0          0.124 
+    ## 5 5                     32.1           0.201               35.0          0.135 
+    ## 6 6                     25.1           0.156               34.9          0.112 
     ## # ℹ 4 more variables: pH.total_mean <dbl>, pH.total_sd <dbl>, pH_mv_mean <dbl>,
     ## #   pH_mv_sd <dbl>
 
@@ -353,4 +356,32 @@ Light <- tank_df_Exp %>% ggplot(aes(x=DateTimeEST, y=IntensityLux)) +
 Light
 ggsave("../output/pdf_figs/Experimental_Tank_HoboLight.pdf", plot = last_plot(), width = 8, height = 4)
 ggsave("../output/Experimental_Tank_HoboLight.png", plot = last_plot(), width = 8, height = 4, bg = "white")
+```
+
+## 0.6 Apex Log from csv
+
+1.  Open xml file with microsoft excel (this can take a while)
+2.  Save as \> csv
+3.  import csv into R
+
+``` r
+apex <- read.csv("../data/LoggerData/Apex_log.csv", sep=",", skip=c(1), header=TRUE, na.strings = "NA")[6:9]
+
+colnames(apex) <-  c("DateTime","ProbeName","ProbeType","Value")
+
+head(apex)
+
+apex$DateTimeHST <- parse_date_time(apex$DateTime, "%m/%d/%y %H:%M:%S", tz = "Pacific/Honolulu")
+apex$DateTimeEST <- with_tz(apex$DateTimeHST, tzone = "America/New_York")
+head(apex)
+
+# filter for our experimental dates (use GMT for the time, so +6)
+apex_Exp <- apex %>% filter(DateTimeEST >= "2025-07-01 17:00:00" & DateTimeEST <= "2025-07-07 18:00:00")
+
+apex_temps <- apex_Exp %>% filter(ProbeType == "Temp" & ProbeName != "Btemp")
+
+apex_temps %>% ggplot(aes(x=DateTimeEST, y=Value)) +
+  geom_line(aes(color = ProbeName), size = 0.5) +
+  facet_grid(~ProbeType)+
+  ylab("Temperature (°C)") +theme_minimal()
 ```

@@ -30,13 +30,15 @@ custom_colors <- c("Control" = "lightblue4", "Heat" = "#D55E00")
 
 ``` r
 Pcomp <- read.csv("../../1-Pcom/output/DMs_Processed.csv")
-Mcap <- read.csv("../../2-Mcap//output/DMs_Processed.csv")
+Mcap <- read.csv("../../2-Mcap/output/DMs_Processed.csv")
+Pacu <- read.csv("../../3-Pacu/output/DMs_Processed.csv")
 
 Pcomp$species <- "Porites compressa"
 Mcap$species <- "Montipora capitata"
+Pacu$species <- "Pocillopora acuta"
 
 #combine dataframes
-pHSlope <- rbind(Pcomp,Mcap)
+pHSlope <- rbind(Pcomp,Mcap,Pacu)
 pHSlope$Tank_ID <- as.character(pHSlope$Tank_ID)
 
 ## Change data format to long format 
