@@ -134,12 +134,15 @@ ggsave("../output/Daily_Measurements_Exp_byTreatment.png", daily_tank, width = 1
 ``` r
 Pcomp <- read.csv("../../1-Pcom/output/Experimental_Tank_HoboTempLight_data.csv")
 Mcap <- read.csv("../../2-Mcap/output/Experimental_Tank_HoboTempLight_data.csv")
+Pacu <- read.csv("../../3-Pacu/output/Experimental_Tank_HoboTempLight_data.csv")
 
 Pcomp$species <- "Porites compressa"
 Mcap$species <- "Montipora capitata"
+Pacu$species <- "Pocillopora acuta"
+
 
 #combine dataframes
-tank_df_Exp <- rbind(Pcomp,Mcap)
+tank_df_Exp <- rbind(Pcomp,Mcap,Pacu)
 
 tank_df_Exp$DateTimeEST <- parse_date_time(tank_df_Exp$DateTimeEST,"ymd HMS")
 

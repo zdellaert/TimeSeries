@@ -11,7 +11,6 @@ Zoe Dellaert
 - [0.5 HOBO Temps, based on Jill’s
   Script](#05-hobo-temps-based-on-jills-script)
 - [0.6 Apex Log from csv](#06-apex-log-from-csv)
-- [0.7 Apex Log from csv](#07-apex-log-from-csv)
 
 This script plots daily measurements from the experiment, and is based
 on the Putnam Lab script available here:
@@ -323,7 +322,11 @@ Temps <- tank_df %>% ggplot(aes(x=DateTimeEST, y=TempC)) +
   facet_grid(~Treatment)+
   ylab("Temperature (°C)") +theme_minimal()
 Temps
+```
 
+<img src="DMs_files/figure-gfm/unnamed-chunk-12-1.png" style="display: block; margin: auto;" />
+
+``` r
 #remove commas from light data and make numeric
 tank_df$IntensityLux <- as.numeric(gsub(",", "", tank_df$IntensityLux))
 
@@ -335,9 +338,11 @@ Light <- tank_df %>% ggplot(aes(x=DateTimeEST, y=IntensityLux)) +
 Light
 ```
 
+<img src="DMs_files/figure-gfm/unnamed-chunk-12-2.png" style="display: block; margin: auto;" />
+
 ``` r
 # filter for our experimental dates (use GMT for the time, so +6)
-tank_df_Exp <- tank_df %>% filter(DateTimeEST >= "2025-06-25 14:00:00" & DateTimeEST <= "2025-06-30 14:00:00")
+tank_df_Exp <- tank_df %>% filter(DateTimeEST >= "2025-07-09 14:00:00" & DateTimeEST <= "2025-07-14 16:00:00")
 
 write.csv(tank_df_Exp,file="../output/Experimental_Tank_HoboTempLight_data.csv")
 
@@ -346,6 +351,11 @@ Temps <- tank_df_Exp %>% ggplot(aes(x=DateTimeEST, y=TempC)) +
   facet_grid(~Treatment)+
   ylab("Temperature (°C)") +theme_minimal()
 Temps
+```
+
+<img src="DMs_files/figure-gfm/unnamed-chunk-13-1.png" style="display: block; margin: auto;" />
+
+``` r
 ggsave("../output/pdf_figs/Experimental_Tank_HoboTemp.pdf", plot = last_plot(), width = 8, height = 4)
 ggsave("../output/Experimental_Tank_HoboTemp.png", plot = last_plot(), width = 8, height = 4, bg = "white")
 
@@ -355,39 +365,16 @@ Light <- tank_df_Exp %>% ggplot(aes(x=DateTimeEST, y=IntensityLux)) +
   ylab("Light (Lux)") +theme_minimal()
 
 Light
+```
+
+<img src="DMs_files/figure-gfm/unnamed-chunk-13-2.png" style="display: block; margin: auto;" />
+
+``` r
 ggsave("../output/pdf_figs/Experimental_Tank_HoboLight.pdf", plot = last_plot(), width = 8, height = 4)
 ggsave("../output/Experimental_Tank_HoboLight.png", plot = last_plot(), width = 8, height = 4, bg = "white")
 ```
 
 ## 0.6 Apex Log from csv
-
-1.  Open xml file with microsoft excel (this can take a while)
-2.  Save as \> csv
-3.  import csv into R
-
-``` r
-apex <- read.csv("../data/LoggerData/Apex_log.csv", sep=",", skip=c(1), header=TRUE, na.strings = "NA")[6:9]
-
-colnames(apex) <-  c("DateTime","ProbeName","ProbeType","Value")
-
-head(apex)
-
-apex$DateTimeHST <- parse_date_time(apex$DateTime, "%m/%d/%y %H:%M:%S", tz = "Pacific/Honolulu")
-apex$DateTimeEST <- with_tz(apex$DateTimeHST, tzone = "America/New_York")
-head(apex)
-
-# filter for our experimental dates (use GMT for the time, so +6)
-apex_Exp <- apex %>% filter(DateTimeEST >= "2025-07-01 17:00:00" & DateTimeEST <= "2025-07-07 18:00:00")
-
-apex_temps <- apex_Exp %>% filter(ProbeType == "Temp" & ProbeName != "Btemp")
-
-apex_temps %>% ggplot(aes(x=DateTimeEST, y=Value)) +
-  geom_line(aes(color = ProbeName), size = 0.5) +
-  facet_grid(~ProbeType)+
-  ylab("Temperature (°C)") +theme_minimal()
-```
-
-## 0.7 Apex Log from csv
 
 1.  Open xml file with microsoft excel (this can take a while)
 2.  Save as \> csv
@@ -424,7 +411,10 @@ head(apex)
     ## 6 07/08/2025 00:00:00    Temp_6      Temp  21.3  2025-07-08 2025-07-08 06:00:00
 
 ``` r
-apex_temps <- apex %>% filter(ProbeType == "Temp" & ProbeName != "Btemp")
+# filter for our experimental dates (use GMT for the time, so +6)
+apex_Exp <- apex %>% filter(DateTimeEST >= "2025-07-08 17:00:00" & DateTimeEST <= "2025-07-14 18:00:00")
+
+apex_temps <- apex_Exp %>% filter(ProbeType == "Temp" & ProbeName != "Btemp")
 
 apex_temps %>% ggplot(aes(x=DateTimeEST, y=Value)) +
   geom_line(aes(color = ProbeName), size = 0.5) +
@@ -432,4 +422,4 @@ apex_temps %>% ggplot(aes(x=DateTimeEST, y=Value)) +
   ylab("Temperature (°C)") +theme_minimal()
 ```
 
-<img src="DMs_files/figure-gfm/unnamed-chunk-15-1.png" style="display: block; margin: auto;" />
+<img src="DMs_files/figure-gfm/unnamed-chunk-14-1.png" style="display: block; margin: auto;" />
