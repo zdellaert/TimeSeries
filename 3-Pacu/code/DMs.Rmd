@@ -316,3 +316,28 @@ apex_temps %>% ggplot(aes(x=DateTimeEST, y=Value)) +
   facet_grid(~ProbeType)+
   ylab("Temperature (°C)") +theme_minimal()
 ```
+
+## Apex Log from csv
+
+1. Open xml file with microsoft excel (this can take a while)
+2. Save as > csv
+3. import csv into R
+
+```{r}
+apex <- read.csv("../data/LoggerData/Apex_log.csv", sep=",", skip=c(1), header=TRUE, na.strings = "NA")[6:9]
+
+colnames(apex) <-  c("DateTime","ProbeName","ProbeType","Value")
+
+head(apex)
+
+apex$DateTimeHST <- parse_date_time(apex$DateTime, "%m/%d/%y %H:%M:%S", tz = "Pacific/Honolulu")
+apex$DateTimeEST <- with_tz(apex$DateTimeHST, tzone = "America/New_York")
+head(apex)
+
+apex_temps <- apex %>% filter(ProbeType == "Temp" & ProbeName != "Btemp")
+
+apex_temps %>% ggplot(aes(x=DateTimeEST, y=Value)) +
+  geom_line(aes(color = ProbeName), size = 0.5) +
+  facet_grid(~ProbeType)+
+  ylab("Temperature (°C)") +theme_minimal()
+```

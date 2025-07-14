@@ -11,6 +11,7 @@ Zoe Dellaert
 - [0.5 HOBO Temps, based on Jill’s
   Script](#05-hobo-temps-based-on-jills-script)
 - [0.6 Apex Log from csv](#06-apex-log-from-csv)
+- [0.7 Apex Log from csv](#07-apex-log-from-csv)
 
 This script plots daily measurements from the experiment, and is based
 on the Putnam Lab script available here:
@@ -385,3 +386,50 @@ apex_temps %>% ggplot(aes(x=DateTimeEST, y=Value)) +
   facet_grid(~ProbeType)+
   ylab("Temperature (°C)") +theme_minimal()
 ```
+
+## 0.7 Apex Log from csv
+
+1.  Open xml file with microsoft excel (this can take a while)
+2.  Save as \> csv
+3.  import csv into R
+
+``` r
+apex <- read.csv("../data/LoggerData/Apex_log.csv", sep=",", skip=c(1), header=TRUE, na.strings = "NA")[6:9]
+
+colnames(apex) <-  c("DateTime","ProbeName","ProbeType","Value")
+
+head(apex)
+```
+
+    ##              DateTime ProbeName ProbeType Value
+    ## 1 07/08/2025 00:00:00    Temp_1      Temp  21.6
+    ## 2 07/08/2025 00:00:00    Temp_4      Temp  21.3
+    ## 3 07/08/2025 00:00:00    Temp_2      Temp  21.2
+    ## 4 07/08/2025 00:00:00    Temp_3      Temp  21.6
+    ## 5 07/08/2025 00:00:00    Temp_5      Temp  21.5
+    ## 6 07/08/2025 00:00:00    Temp_6      Temp  21.3
+
+``` r
+apex$DateTimeHST <- parse_date_time(apex$DateTime, "%m/%d/%y %H:%M:%S", tz = "Pacific/Honolulu")
+apex$DateTimeEST <- with_tz(apex$DateTimeHST, tzone = "America/New_York")
+head(apex)
+```
+
+    ##              DateTime ProbeName ProbeType Value DateTimeHST         DateTimeEST
+    ## 1 07/08/2025 00:00:00    Temp_1      Temp  21.6  2025-07-08 2025-07-08 06:00:00
+    ## 2 07/08/2025 00:00:00    Temp_4      Temp  21.3  2025-07-08 2025-07-08 06:00:00
+    ## 3 07/08/2025 00:00:00    Temp_2      Temp  21.2  2025-07-08 2025-07-08 06:00:00
+    ## 4 07/08/2025 00:00:00    Temp_3      Temp  21.6  2025-07-08 2025-07-08 06:00:00
+    ## 5 07/08/2025 00:00:00    Temp_5      Temp  21.5  2025-07-08 2025-07-08 06:00:00
+    ## 6 07/08/2025 00:00:00    Temp_6      Temp  21.3  2025-07-08 2025-07-08 06:00:00
+
+``` r
+apex_temps <- apex %>% filter(ProbeType == "Temp" & ProbeName != "Btemp")
+
+apex_temps %>% ggplot(aes(x=DateTimeEST, y=Value)) +
+  geom_line(aes(color = ProbeName), size = 0.5) +
+  facet_grid(~ProbeType)+
+  ylab("Temperature (°C)") +theme_minimal()
+```
+
+<img src="DMs_files/figure-gfm/unnamed-chunk-15-1.png" style="display: block; margin: auto;" />
