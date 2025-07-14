@@ -42,11 +42,11 @@ table(PAM_exp$plug)
 
     ## 
     ##   1038   1043   1059   1100   1122   1159   1175   1223   1281   1450   1471 
-    ##      9      9      9      9      9      9      9      9      9      9      9 
+    ##     10     10     10     10     10     10     10     10     10     10     10 
     ##   1473   1474   1614   1626   1691   1753   1761   2195   2370   2565   2666 
-    ##      9      9      9      9      9      9      9      9      9      9      9 
+    ##     10     10     10     10     10     10     10     10     10     10     10 
     ##   2730   2986 Parent 
-    ##      9      9      0
+    ##     10     10      0
 
 ``` r
 ggplot(PAM_exp,aes(x = timepoint, y = fv_fm_y_1000)) + 
@@ -81,25 +81,26 @@ summary(model)
     ## 
     ## Residuals:
     ##      Min       1Q   Median       3Q      Max 
-    ## -0.06908 -0.01434  0.00125  0.01840  0.05175 
+    ## -0.09783 -0.01526  0.00125  0.01875  0.05175 
     ## 
     ## Coefficients:
     ##               Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)   0.661250   0.004641 142.478  < 2e-16 ***
-    ## timepoint1   -0.023708   0.006563  -3.612 0.000381 ***
-    ## timepoint6   -0.031000   0.006563  -4.723 4.28e-06 ***
-    ## timepoint12  -0.028125   0.006563  -4.285 2.80e-05 ***
-    ## timepoint24  -0.031958   0.006563  -4.869 2.22e-06 ***
-    ## timepoint36  -0.013167   0.006563  -2.006 0.046152 *  
-    ## timepoint48  -0.028625   0.006563  -4.361 2.04e-05 ***
-    ## timepoint72  -0.012208   0.006563  -1.860 0.064298 .  
-    ## timepoint100 -0.011625   0.006563  -1.771 0.078004 .  
+    ## (Intercept)   0.661250   0.004859 136.093  < 2e-16 ***
+    ## timepoint1   -0.023708   0.006871  -3.450 0.000666 ***
+    ## timepoint6   -0.031000   0.006871  -4.511 1.03e-05 ***
+    ## timepoint12  -0.028125   0.006871  -4.093 5.89e-05 ***
+    ## timepoint24  -0.031958   0.006871  -4.651 5.57e-06 ***
+    ## timepoint36  -0.013167   0.006871  -1.916 0.056584 .  
+    ## timepoint48  -0.028625   0.006871  -4.166 4.39e-05 ***
+    ## timepoint72  -0.012208   0.006871  -1.777 0.076941 .  
+    ## timepoint100 -0.011625   0.006871  -1.692 0.092039 .  
+    ## timepoint120 -0.029417   0.006871  -4.281 2.73e-05 ***
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
-    ## Residual standard error: 0.02274 on 207 degrees of freedom
-    ## Multiple R-squared:  0.1825, Adjusted R-squared:  0.151 
-    ## F-statistic: 5.778 on 8 and 207 DF,  p-value: 1.181e-06
+    ## Residual standard error: 0.0238 on 230 degrees of freedom
+    ## Multiple R-squared:  0.1652, Adjusted R-squared:  0.1326 
+    ## F-statistic: 5.058 on 9 and 230 DF,  p-value: 3.077e-06
 
 ``` r
 # Estimated marginal means (adjusted for random effects and model structure)
@@ -107,45 +108,54 @@ emm <- emmeans(model, ~ timepoint)
 pairs(emm)
 ```
 
-    ##  contrast                    estimate      SE  df t.ratio p.value
-    ##  timepoint0 - timepoint1     0.023708 0.00656 207   3.612  0.0112
-    ##  timepoint0 - timepoint6     0.031000 0.00656 207   4.723  0.0001
-    ##  timepoint0 - timepoint12    0.028125 0.00656 207   4.285  0.0009
-    ##  timepoint0 - timepoint24    0.031958 0.00656 207   4.869  0.0001
-    ##  timepoint0 - timepoint36    0.013167 0.00656 207   2.006  0.5410
-    ##  timepoint0 - timepoint48    0.028625 0.00656 207   4.361  0.0007
-    ##  timepoint0 - timepoint72    0.012208 0.00656 207   1.860  0.6419
-    ##  timepoint0 - timepoint100   0.011625 0.00656 207   1.771  0.7011
-    ##  timepoint1 - timepoint6     0.007292 0.00656 207   1.111  0.9721
-    ##  timepoint1 - timepoint12    0.004417 0.00656 207   0.673  0.9991
-    ##  timepoint1 - timepoint24    0.008250 0.00656 207   1.257  0.9423
-    ##  timepoint1 - timepoint36   -0.010542 0.00656 207  -1.606  0.8006
-    ##  timepoint1 - timepoint48    0.004917 0.00656 207   0.749  0.9980
-    ##  timepoint1 - timepoint72   -0.011500 0.00656 207  -1.752  0.7133
-    ##  timepoint1 - timepoint100  -0.012083 0.00656 207  -1.841  0.6548
-    ##  timepoint6 - timepoint12   -0.002875 0.00656 207  -0.438  1.0000
-    ##  timepoint6 - timepoint24    0.000958 0.00656 207   0.146  1.0000
-    ##  timepoint6 - timepoint36   -0.017833 0.00656 207  -2.717  0.1483
-    ##  timepoint6 - timepoint48   -0.002375 0.00656 207  -0.362  1.0000
-    ##  timepoint6 - timepoint72   -0.018792 0.00656 207  -2.863  0.1040
-    ##  timepoint6 - timepoint100  -0.019375 0.00656 207  -2.952  0.0827
-    ##  timepoint12 - timepoint24   0.003833 0.00656 207   0.584  0.9997
-    ##  timepoint12 - timepoint36  -0.014958 0.00656 207  -2.279  0.3597
-    ##  timepoint12 - timepoint48   0.000500 0.00656 207   0.076  1.0000
-    ##  timepoint12 - timepoint72  -0.015917 0.00656 207  -2.425  0.2761
-    ##  timepoint12 - timepoint100 -0.016500 0.00656 207  -2.514  0.2314
-    ##  timepoint24 - timepoint36  -0.018792 0.00656 207  -2.863  0.1040
-    ##  timepoint24 - timepoint48  -0.003333 0.00656 207  -0.508  0.9999
-    ##  timepoint24 - timepoint72  -0.019750 0.00656 207  -3.009  0.0710
-    ##  timepoint24 - timepoint100 -0.020333 0.00656 207  -3.098  0.0555
-    ##  timepoint36 - timepoint48   0.015458 0.00656 207   2.355  0.3146
-    ##  timepoint36 - timepoint72  -0.000958 0.00656 207  -0.146  1.0000
-    ##  timepoint36 - timepoint100 -0.001542 0.00656 207  -0.235  1.0000
-    ##  timepoint48 - timepoint72  -0.016417 0.00656 207  -2.501  0.2375
-    ##  timepoint48 - timepoint100 -0.017000 0.00656 207  -2.590  0.1972
-    ##  timepoint72 - timepoint100 -0.000583 0.00656 207  -0.089  1.0000
+    ##  contrast                     estimate      SE  df t.ratio p.value
+    ##  timepoint0 - timepoint1      0.023708 0.00687 230   3.450  0.0229
+    ##  timepoint0 - timepoint6      0.031000 0.00687 230   4.511  0.0004
+    ##  timepoint0 - timepoint12     0.028125 0.00687 230   4.093  0.0023
+    ##  timepoint0 - timepoint24     0.031958 0.00687 230   4.651  0.0002
+    ##  timepoint0 - timepoint36     0.013167 0.00687 230   1.916  0.6581
+    ##  timepoint0 - timepoint48     0.028625 0.00687 230   4.166  0.0018
+    ##  timepoint0 - timepoint72     0.012208 0.00687 230   1.777  0.7492
+    ##  timepoint0 - timepoint100    0.011625 0.00687 230   1.692  0.7991
+    ##  timepoint0 - timepoint120    0.029417 0.00687 230   4.281  0.0011
+    ##  timepoint1 - timepoint6      0.007292 0.00687 230   1.061  0.9878
+    ##  timepoint1 - timepoint12     0.004417 0.00687 230   0.643  0.9997
+    ##  timepoint1 - timepoint24     0.008250 0.00687 230   1.201  0.9717
+    ##  timepoint1 - timepoint36    -0.010542 0.00687 230  -1.534  0.8771
+    ##  timepoint1 - timepoint48     0.004917 0.00687 230   0.716  0.9994
+    ##  timepoint1 - timepoint72    -0.011500 0.00687 230  -1.674  0.8092
+    ##  timepoint1 - timepoint100   -0.012083 0.00687 230  -1.759  0.7603
+    ##  timepoint1 - timepoint120    0.005708 0.00687 230   0.831  0.9980
+    ##  timepoint6 - timepoint12    -0.002875 0.00687 230  -0.418  1.0000
+    ##  timepoint6 - timepoint24     0.000958 0.00687 230   0.139  1.0000
+    ##  timepoint6 - timepoint36    -0.017833 0.00687 230  -2.595  0.2259
+    ##  timepoint6 - timepoint48    -0.002375 0.00687 230  -0.346  1.0000
+    ##  timepoint6 - timepoint72    -0.018792 0.00687 230  -2.735  0.1662
+    ##  timepoint6 - timepoint100   -0.019375 0.00687 230  -2.820  0.1361
+    ##  timepoint6 - timepoint120   -0.001583 0.00687 230  -0.230  1.0000
+    ##  timepoint12 - timepoint24    0.003833 0.00687 230   0.558  0.9999
+    ##  timepoint12 - timepoint36   -0.014958 0.00687 230  -2.177  0.4757
+    ##  timepoint12 - timepoint48    0.000500 0.00687 230   0.073  1.0000
+    ##  timepoint12 - timepoint72   -0.015917 0.00687 230  -2.316  0.3825
+    ##  timepoint12 - timepoint100  -0.016500 0.00687 230  -2.401  0.3300
+    ##  timepoint12 - timepoint120   0.001292 0.00687 230   0.188  1.0000
+    ##  timepoint24 - timepoint36   -0.018792 0.00687 230  -2.735  0.1662
+    ##  timepoint24 - timepoint48   -0.003333 0.00687 230  -0.485  1.0000
+    ##  timepoint24 - timepoint72   -0.019750 0.00687 230  -2.874  0.1190
+    ##  timepoint24 - timepoint100  -0.020333 0.00687 230  -2.959  0.0958
+    ##  timepoint24 - timepoint120  -0.002542 0.00687 230  -0.370  1.0000
+    ##  timepoint36 - timepoint48    0.015458 0.00687 230   2.250  0.4262
+    ##  timepoint36 - timepoint72   -0.000958 0.00687 230  -0.139  1.0000
+    ##  timepoint36 - timepoint100  -0.001542 0.00687 230  -0.224  1.0000
+    ##  timepoint36 - timepoint120   0.016250 0.00687 230   2.365  0.3520
+    ##  timepoint48 - timepoint72   -0.016417 0.00687 230  -2.389  0.3373
+    ##  timepoint48 - timepoint100  -0.017000 0.00687 230  -2.474  0.2882
+    ##  timepoint48 - timepoint120   0.000792 0.00687 230   0.115  1.0000
+    ##  timepoint72 - timepoint100  -0.000583 0.00687 230  -0.085  1.0000
+    ##  timepoint72 - timepoint120   0.017208 0.00687 230   2.504  0.2717
+    ##  timepoint100 - timepoint120  0.017792 0.00687 230   2.589  0.2288
     ## 
-    ## P value adjustment: tukey method for comparing a family of 9 estimates
+    ## P value adjustment: tukey method for comparing a family of 10 estimates
 
 ## 0.1 Statistical Mixed Model by treatment, timepoint, and tank_id
 
@@ -160,49 +170,52 @@ summary(model)
     ## Formula: fv_fm_y_1000 ~ treatment * timepoint + (1 | treatment:tank_id)
     ##    Data: PAM_exp
     ## 
-    ## REML criterion at convergence: -1043.2
+    ## REML criterion at convergence: -1123
     ## 
     ## Scaled residuals: 
     ##     Min      1Q  Median      3Q     Max 
-    ## -3.3064 -0.5360  0.0850  0.5716  3.2167 
+    ## -4.3433 -0.4726  0.0937  0.5478  3.9740 
     ## 
     ## Random effects:
     ##  Groups            Name        Variance  Std.Dev.
-    ##  treatment:tank_id (Intercept) 3.134e-05 0.005598
-    ##  Residual                      2.322e-04 0.015238
-    ## Number of obs: 216, groups:  treatment:tank_id, 6
+    ##  treatment:tank_id (Intercept) 2.759e-05 0.005252
+    ##  Residual                      2.753e-04 0.016592
+    ## Number of obs: 240, groups:  treatment:tank_id, 6
     ## 
     ## Fixed effects:
     ##                              Estimate Std. Error         df t value Pr(>|t|)
-    ## (Intercept)                  0.662333   0.005459  21.550844 121.338  < 2e-16
-    ## treatmentHeat               -0.002167   0.007720  21.550844  -0.281  0.78164
-    ## timepoint1                  -0.012917   0.006221 194.000000  -2.076  0.03918
-    ## timepoint6                  -0.016417   0.006221 194.000000  -2.639  0.00899
-    ## timepoint12                 -0.017083   0.006221 194.000000  -2.746  0.00660
-    ## timepoint24                 -0.007250   0.006221 194.000000  -1.165  0.24527
-    ## timepoint36                 -0.002583   0.006221 194.000000  -0.415  0.67840
-    ## timepoint48                 -0.006833   0.006221 194.000000  -1.098  0.27336
-    ## timepoint72                  0.007833   0.006221 194.000000   1.259  0.20946
-    ## timepoint100                -0.005667   0.006221 194.000000  -0.911  0.36347
-    ## treatmentHeat:timepoint1    -0.021583   0.008798 194.000000  -2.453  0.01504
-    ## treatmentHeat:timepoint6    -0.029167   0.008798 194.000000  -3.315  0.00109
-    ## treatmentHeat:timepoint12   -0.022083   0.008798 194.000000  -2.510  0.01288
-    ## treatmentHeat:timepoint24   -0.049417   0.008798 194.000000  -5.617 6.66e-08
-    ## treatmentHeat:timepoint36   -0.021167   0.008798 194.000000  -2.406  0.01707
-    ## treatmentHeat:timepoint48   -0.043583   0.008798 194.000000  -4.954 1.58e-06
-    ## treatmentHeat:timepoint72   -0.040083   0.008798 194.000000  -4.556 9.20e-06
-    ## treatmentHeat:timepoint100  -0.011917   0.008798 194.000000  -1.355  0.17714
+    ## (Intercept)                  0.662333   0.005669  29.526651 116.837  < 2e-16
+    ## treatmentHeat               -0.002167   0.008017  29.526651  -0.270 0.788841
+    ## timepoint1                  -0.012917   0.006774 216.000001  -1.907 0.057858
+    ## timepoint6                  -0.016417   0.006774 216.000001  -2.424 0.016189
+    ## timepoint12                 -0.017083   0.006774 216.000001  -2.522 0.012388
+    ## timepoint24                 -0.007250   0.006774 216.000001  -1.070 0.285663
+    ## timepoint36                 -0.002583   0.006774 216.000001  -0.381 0.703293
+    ## timepoint48                 -0.006833   0.006774 216.000001  -1.009 0.314188
+    ## timepoint72                  0.007833   0.006774 216.000001   1.156 0.248772
+    ## timepoint100                -0.005667   0.006774 216.000001  -0.837 0.403751
+    ## timepoint120                -0.011333   0.006774 216.000001  -1.673 0.095742
+    ## treatmentHeat:timepoint1    -0.021583   0.009579 216.000001  -2.253 0.025256
+    ## treatmentHeat:timepoint6    -0.029167   0.009579 216.000001  -3.045 0.002618
+    ## treatmentHeat:timepoint12   -0.022083   0.009579 216.000001  -2.305 0.022098
+    ## treatmentHeat:timepoint24   -0.049417   0.009579 216.000001  -5.159 5.62e-07
+    ## treatmentHeat:timepoint36   -0.021167   0.009579 216.000001  -2.210 0.028181
+    ## treatmentHeat:timepoint48   -0.043583   0.009579 216.000001  -4.550 8.96e-06
+    ## treatmentHeat:timepoint72   -0.040083   0.009579 216.000001  -4.184 4.16e-05
+    ## treatmentHeat:timepoint100  -0.011917   0.009579 216.000001  -1.244 0.214846
+    ## treatmentHeat:timepoint120  -0.036167   0.009579 216.000001  -3.776 0.000206
     ##                               
     ## (Intercept)                ***
     ## treatmentHeat                 
-    ## timepoint1                 *  
-    ## timepoint6                 ** 
-    ## timepoint12                ** 
+    ## timepoint1                 .  
+    ## timepoint6                 *  
+    ## timepoint12                *  
     ## timepoint24                   
     ## timepoint36                   
     ## timepoint48                   
     ## timepoint72                   
     ## timepoint100                  
+    ## timepoint120               .  
     ## treatmentHeat:timepoint1   *  
     ## treatmentHeat:timepoint6   ** 
     ## treatmentHeat:timepoint12  *  
@@ -211,6 +224,7 @@ summary(model)
     ## treatmentHeat:timepoint48  ***
     ## treatmentHeat:timepoint72  ***
     ## treatmentHeat:timepoint100    
+    ## treatmentHeat:timepoint120 ***
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -222,39 +236,43 @@ pairs(emm)
 
     ## timepoint = 0:
     ##  contrast       estimate      SE   df t.ratio p.value
-    ##  Control - Heat  0.00217 0.00772 21.6   0.281  0.7816
+    ##  Control - Heat  0.00217 0.00802 29.5   0.270  0.7888
     ## 
     ## timepoint = 1:
     ##  contrast       estimate      SE   df t.ratio p.value
-    ##  Control - Heat  0.02375 0.00772 21.6   3.077  0.0056
+    ##  Control - Heat  0.02375 0.00802 29.5   2.962  0.0060
     ## 
     ## timepoint = 6:
     ##  contrast       estimate      SE   df t.ratio p.value
-    ##  Control - Heat  0.03133 0.00772 21.6   4.059  0.0005
+    ##  Control - Heat  0.03133 0.00802 29.5   3.908  0.0005
     ## 
     ## timepoint = 12:
     ##  contrast       estimate      SE   df t.ratio p.value
-    ##  Control - Heat  0.02425 0.00772 21.6   3.141  0.0048
+    ##  Control - Heat  0.02425 0.00802 29.5   3.025  0.0051
     ## 
     ## timepoint = 24:
     ##  contrast       estimate      SE   df t.ratio p.value
-    ##  Control - Heat  0.05158 0.00772 21.6   6.682  <.0001
+    ##  Control - Heat  0.05158 0.00802 29.5   6.434  <.0001
     ## 
     ## timepoint = 36:
     ##  contrast       estimate      SE   df t.ratio p.value
-    ##  Control - Heat  0.02333 0.00772 21.6   3.023  0.0064
+    ##  Control - Heat  0.02333 0.00802 29.5   2.910  0.0068
     ## 
     ## timepoint = 48:
     ##  contrast       estimate      SE   df t.ratio p.value
-    ##  Control - Heat  0.04575 0.00772 21.6   5.926  <.0001
+    ##  Control - Heat  0.04575 0.00802 29.5   5.707  <.0001
     ## 
     ## timepoint = 72:
     ##  contrast       estimate      SE   df t.ratio p.value
-    ##  Control - Heat  0.04225 0.00772 21.6   5.473  <.0001
+    ##  Control - Heat  0.04225 0.00802 29.5   5.270  <.0001
     ## 
     ## timepoint = 100:
     ##  contrast       estimate      SE   df t.ratio p.value
-    ##  Control - Heat  0.01408 0.00772 21.6   1.824  0.0820
+    ##  Control - Heat  0.01408 0.00802 29.5   1.757  0.0893
+    ## 
+    ## timepoint = 120:
+    ##  contrast       estimate      SE   df t.ratio p.value
+    ##  Control - Heat  0.03833 0.00802 29.5   4.782  <.0001
     ## 
     ## Degrees-of-freedom method: kenward-roger
 
@@ -278,16 +296,17 @@ summary_table <- as.data.frame(pairs(emm)) %>%
 print(summary_table)
 ```
 
-    ##   Timepoint Estimate (Control-Heat)     SE t-ratio  p-value Significant?
-    ## 1         0                  0.0022 0.0077    0.28 7.82e-01             
-    ## 2         1                  0.0238 0.0077    3.08 5.61e-03           **
-    ## 3         6                  0.0313 0.0077    4.06 5.41e-04          ***
-    ## 4        12                  0.0243 0.0077    3.14 4.82e-03           **
-    ## 5        24                  0.0516 0.0077    6.68 1.14e-06          ***
-    ## 6        36                  0.0233 0.0077    3.02 6.35e-03           **
-    ## 7        48                  0.0458 0.0077    5.93 6.29e-06          ***
-    ## 8        72                  0.0423 0.0077    5.47 1.81e-05          ***
-    ## 9       100                  0.0141 0.0077    1.82 8.20e-02            .
+    ##    Timepoint Estimate (Control-Heat)    SE t-ratio  p-value Significant?
+    ## 1          0                  0.0022 0.008    0.27 7.89e-01             
+    ## 2          1                  0.0237 0.008    2.96 5.98e-03           **
+    ## 3          6                  0.0313 0.008    3.91 5.01e-04          ***
+    ## 4         12                  0.0242 0.008    3.02 5.11e-03           **
+    ## 5         24                  0.0516 0.008    6.43 4.49e-07          ***
+    ## 6         36                  0.0233 0.008    2.91 6.80e-03           **
+    ## 7         48                  0.0457 0.008    5.71 3.35e-06          ***
+    ## 8         72                  0.0422 0.008    5.27 1.14e-05          ***
+    ## 9        100                  0.0141 0.008    1.76 8.93e-02            .
+    ## 10       120                  0.0383 0.008    4.78 4.47e-05          ***
 
 ``` r
 write.csv(summary_table, "../output/FvFm_treatment_effect_summary.csv", row.names = FALSE)
