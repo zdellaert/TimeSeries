@@ -6,3 +6,4 @@ Data and methods for Chapter Four of my dissertation, a stort-term heat stress p
 
 - [Sampling protocol for each timepoint](https://github.com/zdellaert/TimeSeries/blob/main/protocols/Sampling.md)    
 - [Example sampling schedule](https://github.com/zdellaert/TimeSeries/blob/main/protocols/Example_Sampling_Schedule.pdf)
+- [Bulk RNA extraction protocol](https://github.com/zdellaert/TimeSeries/blob/main/protocols/Bulk_DNA_RNA_Extractions_Zymo_Quick_Miniprep.md)
