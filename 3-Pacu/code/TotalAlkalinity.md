@@ -6,6 +6,7 @@ Jill Ashey, modified by Zoe Dellaert
 - [0.1 This script will calculate TA from the Summer 2025 CBLS Time
   Series
   Samples.](#01-this-script-will-calculate-ta-from-the-summer-2025-cbls-time-series-samples)
+  - [0.1.1 Samples run:](#011-samples-run)
 - [0.2 The code here was written by Jill Ashey based on the
   `Total_Alkalinity_wParsing/R` scripts in the Putnam lab titrator
   github
@@ -14,9 +15,18 @@ Jill Ashey, modified by Zoe Dellaert
   directory](#03-load-libraries--set-working-directory)
 - [0.4 Files needed](#04-files-needed)
 - [0.5 20250714 CRM](#05-20250714-crm)
+  - [0.5.1 CRM Accuracy info:](#051-crm-accuracy-info)
 - [0.6 20250714](#06-20250714)
 
 ## 0.1 This script will calculate TA from the Summer 2025 CBLS Time Series Samples.
+
+### 0.1.1 Samples run:
+
+1.  Ran 3 CRM samples
+2.  Ran 3 samples from the seawater mixing tank (source water for all 3
+    time series experiments)
+3.  Ran 6 samples from the *Pocillopora acuta* experimental tanks, 1
+    from each tank
 
 ## 0.2 The code here was written by [Jill Ashey](https://github.com/fscucchia/Pacu_Warm_OA_Hawaii/blob/main/scripts/TotalAlkalinity.R) based on the `Total_Alkalinity_wParsing/R` [scripts](https://github.com/Putnam-Lab/Titrator/tree/main/Scripts) in the Putnam lab titrator github [repo](https://github.com/Putnam-Lab/Titrator/tree/main).
 
@@ -246,9 +256,27 @@ TA[,2:3]<-sapply(TA[,2:3], as.numeric)
 TA$Date <- date
 TA <- TA %>% select(Date, everything())
 
+TA
+```
+
+    ##       Date SampleID         TA   Mass Salinity
+    ## 1 20250714    JUNK1 1514.40056 59.724   35.000
+    ## 2 20250714     CRM1 2216.09449 60.443   33.623
+    ## 3 20250714     CRM2 2216.94916 60.378   33.623
+    ## 4 20250714     CRM3 2220.39322 60.220   33.623
+
+``` r
 #exports your data as a CSV file
 write.table(TA,paste0(path,"/","TA_Output_",titrationfile),sep=",", row.names=FALSE)
 ```
+
+### 0.5.1 CRM Accuracy info:
+
+| Date     | CRM value   | Batch value | % off    | Batch \# | Notes                    |
+|:---------|:------------|-------------|:---------|:---------|:-------------------------|
+| 20250714 | 2216.094492 | 2224.47     | -0.37652 | 180      | CRM180_opened20250714_PP |
+| 20250714 | 2216.949158 | 2224.47     | -0.3381  | 180      | CRM180_opened20250714_PP |
+| 20250714 | 2220.393224 | 2224.47     | -0.18327 | 180      | CRM180_opened20250714_PP |
 
 ## 0.6 20250714
 
@@ -430,6 +458,21 @@ TA[,2:3]<-sapply(TA[,2:3], as.numeric)
 TA$Date <- date
 TA <- TA %>% select(Date, everything())
 
+TA
+```
+
+    ##       Date SampleID         TA   Mass Salinity
+    ## 1 20250714     MT 1 2437.39428 59.621    35.86
+    ## 2 20250714      MT2 2420.81684 60.321    35.86
+    ## 3 20250714      MT3 2485.06800 60.030    35.86
+    ## 4 20250714       T1 2342.13581 59.980    35.00
+    ## 5 20250714       T2 2338.99977 60.338    35.11
+    ## 6 20250714       T3 2311.70512 59.881    35.08
+    ## 7 20250714       T4 2330.22564 59.451    35.03
+    ## 8 20250714       T5 2360.78937 59.812    35.11
+    ## 9 20250714       T6 2327.48060 59.799    35.04
+
+``` r
 #exports your data as a CSV file
 write.table(TA,paste0(path,"/","TA_Output_",titrationfile),sep=",", row.names=FALSE)
 ```

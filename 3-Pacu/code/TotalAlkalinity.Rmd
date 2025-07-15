@@ -22,6 +22,12 @@ knitr::opts_chunk$set(
 
 ## This script will calculate TA from the Summer 2025 CBLS Time Series Samples.
 
+### Samples run:
+
+1. Ran 3 CRM samples
+2. Ran 3 samples from the seawater mixing tank (source water for all 3 time series experiments)
+3. Ran 6 samples from the *Pocillopora acuta* experimental tanks, 1 from each tank
+
 ## The code here was written by [Jill Ashey](https://github.com/fscucchia/Pacu_Warm_OA_Hawaii/blob/main/scripts/TotalAlkalinity.R) based on the `Total_Alkalinity_wParsing/R` [scripts](https://github.com/Putnam-Lab/Titrator/tree/main/Scripts) in the Putnam lab titrator github [repo](https://github.com/Putnam-Lab/Titrator/tree/main). 
 
 Notes: 
@@ -221,9 +227,19 @@ TA[,2:3]<-sapply(TA[,2:3], as.numeric)
 TA$Date <- date
 TA <- TA %>% select(Date, everything())
 
+TA
+
 #exports your data as a CSV file
 write.table(TA,paste0(path,"/","TA_Output_",titrationfile),sep=",", row.names=FALSE)
 ```
+
+### CRM Accuracy info:
+
+| Date     | CRM value   | Batch value | % off    | Batch # | Notes                    |
+|----------|-------------|-------------|----------|---------|--------------------------|
+| 20250714 | 2216.094492 | 2224.47     | -0.37652 | 180     | CRM180_opened20250714_PP |
+| 20250714 | 2216.949158 | 2224.47     | -0.3381  | 180     | CRM180_opened20250714_PP |
+| 20250714 | 2220.393224 | 2224.47     | -0.18327 | 180     | CRM180_opened20250714_PP |
 
 ## 20250714
 
@@ -385,6 +401,8 @@ TA[,2:3]<-sapply(TA[,2:3], as.numeric)
 # Add date column 
 TA$Date <- date
 TA <- TA %>% select(Date, everything())
+
+TA
 
 #exports your data as a CSV file
 write.table(TA,paste0(path,"/","TA_Output_",titrationfile),sep=",", row.names=FALSE)
