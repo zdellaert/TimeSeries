@@ -20,6 +20,6 @@ Data and methods for Chapter Four of my dissertation, a stort-term heat stress p
 
 - [Notebook 66](https://drive.google.com/drive/folders/1gG0gzYWPyWYgEgFP1cWNjod15tXFpT9E?usp=drive_link)
 
-### RAW TIFF Images for Color Score: 
+### Full-size images for color score measurements: 
 
 - [RAW_TIFF_ColorScore](https://drive.google.com/drive/folders/1VJvZi2nuNFpBn-t-O4A9bNAgSROkeTPa?usp=sharing)
