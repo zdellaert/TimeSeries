@@ -7,3 +7,9 @@ Data and methods for Chapter Four of my dissertation, a stort-term heat stress p
 - [Sampling protocol for each timepoint](https://github.com/zdellaert/TimeSeries/blob/main/protocols/Sampling.md)    
 - [Example sampling schedule](https://github.com/zdellaert/TimeSeries/blob/main/protocols/Example_Sampling_Schedule.pdf)
 - [Bulk RNA extraction protocol](https://github.com/zdellaert/TimeSeries/blob/main/protocols/Bulk_DNA_RNA_Extractions_Zymo_Quick_Miniprep.md)
+
+## Extraction Tracking Google Sheets:
+
+- [Porites](https://docs.google.com/spreadsheets/d/1YSbTec3CTiB_jzlPmmnUCw8G7EHQEp4lCAPvE5Y3PbQ/edit?usp=sharing)
+- [Montipora](https://docs.google.com/spreadsheets/d/1N5znQ5vAMwiakrH98vXy5NZ-cQHXqJ8H3JobaCf9FuY/edit?usp=sharing)
+- [Pocillopora](https://docs.google.com/spreadsheets/d/17fJv9rguI5UyHwK8QH_VLOt18IPXVOByG2DgnAi0dJQ/edit?usp=sharing)
