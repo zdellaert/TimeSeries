@@ -16,7 +16,7 @@ Data and methods for Chapter Four of my dissertation, a stort-term heat stress p
 - [Montipora](https://docs.google.com/spreadsheets/d/1N5znQ5vAMwiakrH98vXy5NZ-cQHXqJ8H3JobaCf9FuY/edit?usp=sharing)
 - [Pocillopora](https://docs.google.com/spreadsheets/d/17fJv9rguI5UyHwK8QH_VLOt18IPXVOByG2DgnAi0dJQ/edit?usp=sharing)
 
-### Folder with all notebook pages and datasheets:
+### Images of all lab notebook pages and datasheets:
 
 - [Notebook 66](https://drive.google.com/drive/folders/1gG0gzYWPyWYgEgFP1cWNjod15tXFpT9E?usp=drive_link)
 
