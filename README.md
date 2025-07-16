@@ -23,3 +23,10 @@ Data and methods for Chapter Four of my dissertation, a stort-term heat stress p
 ### Full-size images for color score measurements: 
 
 - [RAW_TIFF_ColorScore](https://drive.google.com/drive/folders/1VJvZi2nuNFpBn-t-O4A9bNAgSROkeTPa?usp=sharing)
+
+## Pictures
+
+| *Porites compressa* | *Montipora capitata* | *Pocillopora acuta* |
+|---------|---------|---------|
+| ![](./protocols/Images/Pcomp_example.jpeg) | ![](protocols/Images/Mcap_example.jpeg) | ![](protocols/Images/Pacuta_example.jpeg) |
+| ![](./1-Pcom/output/FvFm_line_treatment_all_trajectories.png) | ![](./2-Mcap/output/FvFm_line_treatment_all_trajectories.png) | ![](./3-Pacu/output/FvFm_line_treatment_all_trajectories.png) |
