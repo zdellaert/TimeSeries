@@ -206,7 +206,7 @@ Date,Treatment,Timepoint,Tank_ID,Time,Initials,Dark Adapt Mins,Plug #,Mem,Fluore
 20250629,Control,96,1,10:30,ZD,45,1771,2942,491,1392,647,0.647,
 20250629,Control,96,1,10:30,ZD,45,1626,2943,408,943,567,0.567,
 20250629,Control,96,1,10:30,ZD,45,1281,2944,726,1735,581,0.581,
-20250629,Heat,96,5,10:30,ZD,45,1474,2945,206,275,250,,not one with a ziptie
+20250629,Heat,96,5,10:30,ZD,45,1474,2945,206,275,250,0.25,not designated PAM fragment
 20250629,Heat,96,5,10:30,ZD,45,1575,2946,498,939,469,0.469,
 20250629,Heat,96,5,10:30,ZD,45,1209,2947,273,479,430,0.43,
 20250629,Heat,96,5,10:30,ZD,45,1615,2948,605,1112,455,0.455,
@@ -219,30 +219,30 @@ Date,Treatment,Timepoint,Tank_ID,Time,Initials,Dark Adapt Mins,Plug #,Mem,Fluore
 20250630,Control,120,1,,ZD,overnight,1771,2956,559,1472,620,0.62,
 20250630,Control,120,1,,ZD,overnight,1281,2957,785,1916,590,0.59,
 20250630,Control,120,1,,ZD,overnight,1626,2958,609,1385,560,0.56,
-20250630,Control,120,1,,ZD,overnight,1177,2959,458,1254,634,,not one with a ziptie
-20250630,Control,120,1,,ZD,overnight,1322,2960,492,1031,522,,not one with a ziptie
+20250630,Control,120,1,,ZD,overnight,1177,2959,458,1254,634,0.634,not designated PAM fragment
+20250630,Control,120,1,,ZD,overnight,1322,2960,492,1031,522,0.522,not designated PAM fragment
 20250630,Heat,120,5,,ZD,overnight,1615,2961,608,1047,419,0.419,
 20250630,Heat,120,5,,ZD,overnight,1575,2962,448,803,442,0.442,
 20250630,Heat,120,5,,ZD,overnight,1209,2963,373,566,340,0.34,
-20250630,Heat,120,5,,ZD,overnight,1614,2965,737,1408,476,,not one with a ziptie
-20250630,Heat,120,5,,ZD,overnight,1474,2966,158,288,451,,not one with a ziptie
+20250630,Heat,120,5,,ZD,overnight,1614,2965,737,1408,476,0.476,not designated PAM fragment
+20250630,Heat,120,5,,ZD,overnight,1474,2966,158,288,451,0.451,not designated PAM fragment
 20250630,Heat,120,3,,ZD,overnight,1555,2967,334,564,407,0.407,
 20250630,Heat,120,3,,ZD,overnight,1065,2968,1182,1999,408,0.408,
 20250630,Heat,120,3,,ZD,overnight,1761,2969,340,511,334,0.334,
-20250630,Heat,120,3,,ZD,overnight,1336,2970,590,934,368,,not one with a ziptie
-20250630,Heat,120,3,,ZD,overnight,1533,2971,462,717,355,,not one with a ziptie
+20250630,Heat,120,3,,ZD,overnight,1336,2970,590,934,368,0.368,not designated PAM fragment
+20250630,Heat,120,3,,ZD,overnight,1533,2971,462,717,355,0.355,not designated PAM fragment
 20250630,Control,120,6,,ZD,overnight,1133,2972,542,998,456,0.456,
 20250630,Control,120,6,,ZD,overnight,1043,2973,573,1269,548,0.548,
 20250630,Control,120,6,,ZD,overnight,1337,2974,933,2083,552,0.552,
-20250630,Control,120,6,,ZD,overnight,1557,2975,396,961,587,,not one with a ziptie
-20250630,Control,120,6,,ZD,overnight,1067,2976,512,1363,624,,not one with a ziptie
+20250630,Control,120,6,,ZD,overnight,1557,2975,396,961,587,0.587,not designated PAM fragment
+20250630,Control,120,6,,ZD,overnight,1067,2976,512,1363,624,0.624,not designated PAM fragment
 20250630,Heat,120,2,,ZD,overnight,1122,2977,221,271,184,0.184,
 20250630,Heat,120,2,,ZD,overnight,2730,2978,347,530,345,0.345,
 20250630,Heat,120,2,,ZD,overnight,1244,2979,1150,2012,428,0.428,
-20250630,Heat,120,2,,ZD,overnight,1189,2980,217,322,326,,not one with a ziptie
-20250630,Heat,120,2,,ZD,overnight,1478,2981,396,821,517,,not one with a ziptie
+20250630,Heat,120,2,,ZD,overnight,1189,2980,217,322,326,0.326,not designated PAM fragment
+20250630,Heat,120,2,,ZD,overnight,1478,2981,396,821,517,0.517,not designated PAM fragment
 20250630,Control,120,4,,ZD,overnight,1130,2982,503,1370,632,0.632,
 20250630,Control,120,4,,ZD,overnight,1473,2983,627,1259,501,0.501,
 20250630,Control,120,4,,ZD,overnight,1102,2984,937,1957,521,0.521,
-20250630,Control,120,4,,ZD,overnight,1537,2985,878,1977,555,,not one with a ziptie
-20250630,Control,120,4,,ZD,overnight,1316,2986,492,1200,642,,not one with a ziptie
+20250630,Control,120,4,,ZD,overnight,1537,2985,878,1977,555,0.555,not designated PAM fragment
+20250630,Control,120,4,,ZD,overnight,1316,2986,492,1200,642,0.642,not designated PAM fragment

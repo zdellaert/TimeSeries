@@ -111,10 +111,9 @@ Date,Treatment,Timepoint,Tank_ID,Time,Initials,Dark Adapt Mins,Plug #,Mem,Fluore
 20250702,Control,0,4,08:10,ZD,overnight,2360,3067,555,1223,546,0.546,
 20250702,Control,0,4,08:10,ZD,overnight,1461,3068,456,1181,613,0.613,
 20250702,Control,0,4,08:15,ZD,overnight,1056,3069,359,958,625,0.625,
-20250702,Control,1,1,11:55,JH/ZD,30,1250,3073,374,1180,683,0.683,
-20250702,Control,1,1,11:55,JH/ZD,30,1739,3074,390,1003,611,0.611,
-20250702,Control,1,1,11:55,JH/ZD,30,1252,3075,301,880,657,0.657,
-20250702,Control,1,1,11:55,JH/ZD,30,,3076,413,1213,659,,Accidentally PAM'd 1250 instead of 1108
+20250702,Control,1,1,11:55,JH/ZD,30,1250,3073,374,1180,683,0.683,Accidentally PAM'd 1250 twice instead of 1108
+20250702,Control,1,1,11:55,JH/ZD,30,1739,3074,390,1003,611,0.611,Accidentally PAM'd 1250 twice instead of 1108
+20250702,Control,1,1,11:55,JH/ZD,30,1252,3075,301,880,657,0.657,Accidentally PAM'd 1250 twice instead of 1108
 20250702,Heat,1,3,12:04,JH/ZD,40,1597,3077,350,977,641,0.641,
 20250702,Heat,1,3,12:04,JH/ZD,40,1339,3078,496,1339,629,0.629,
 20250702,Heat,1,3,12:04,JH/ZD,40,1458,3079,353,885,601,0.601,
@@ -179,8 +178,7 @@ Date,Treatment,Timepoint,Tank_ID,Time,Initials,Dark Adapt Mins,Plug #,Mem,Fluore
 20250702,Heat,12,5,21:00,ZD;JA,60,1086,3147,421,1005,581,0.581,
 20250702,Heat,12,5,21:00,ZD;JA,60,1560,3149,729,1873,610,0.61,
 20250702,Heat,12,5,21:00,ZD;JA,60,1441,3150,360,913,605,0.605,
-20250702,Control,12,6,21:03,ZD;JA,63,1041,3151,544,1587,657,0.657,
-20250702,Control,12,6,21:03,ZD;JA,63,,3152,457,1238,630,,Accidentally PAM'd something instead of 1472? Wrote down 1061 but this plug number doesn't exist
+20250702,Control,12,6,21:03,ZD;JA,63,1041,3151,544,1587,657,0.657,Accidentally PAM'd 1041 twice instead of 1472 we believe
 20250702,Control,12,6,21:03,ZD;JA,63,1631,3153,787,2125,629,0.629,
 20250702,Control,12,6,21:03,ZD;JA,63,1563,3154,390,1053,629,0.629,
 20250703,Control,24,6,07:50,ZD,overnight,1472,3156,356,1067,666,0.666,
@@ -246,23 +244,23 @@ Date,Treatment,Timepoint,Tank_ID,Time,Initials,Dark Adapt Mins,Plug #,Mem,Fluore
 20250705,Heat,72,2,08:36,ZD,overnight,1211,3239,471,1070,559,0.559,
 20250705,Heat,72,2,08:36,ZD,overnight,1248,3240,573,1284,553,0.553,
 20250705,Heat,72,2,08:36,ZD,overnight,2084,3241,719,1506,522,0.522,
-20250705,Heat,72,2,08:36,ZD,overnight,1494,3242,619,861,281,,tissue sloughing off; looks dead or dying
+20250705,Heat,72,2,08:36,ZD,overnight,1494,3242,619,861,281,0.281,tissue sloughing off; looks dead or dying
 20250705,Heat,72,5,08:42,ZD,overnight,1549,3243,454,998,545,0.545,
 20250705,Heat,72,5,08:42,ZD,overnight,1086,3244,394,867,545,0.545,
 20250705,Heat,72,5,08:42,ZD,overnight,1560,3246,950,2265,580,0.58,
-20250705,Heat,72,5,08:42,ZD,overnight,1441,3245,189,196,35,,looks very dead
+20250705,Heat,72,5,08:42,ZD,overnight,1441,3245,189,196,35,0.035,looks very dead
 20250705,Control,72,6,08:49,ZD,overnight,1563,3249,461,1239,627,0.627,
 20250705,Control,72,6,08:49,ZD,overnight,1472,3252,330,916,639,0.639,
 20250705,Control,72,6,08:49,ZD,overnight,1041,3254,511,1412,635,0.635,redone because of bubble
 20250705,Control,72,6,08:49,ZD,overnight,1631,3255,563,1546,619,0.619,redone because of bubble
 20250706,Heat,96,5,10:37,ZD,50,1086,3272,363,740,509,0.509,
-20250706,Heat,96,5,10:37,ZD,50,1441,3273,537,548,20,,
+20250706,Heat,96,5,10:37,ZD,50,1441,3273,537,548,20,0.02,
 20250706,Heat,96,5,10:37,ZD,50,1560,3274,983,2207,554,0.554,
 20250706,Heat,96,5,10:37,ZD,50,1549,3275,392,839,532,0.532,
 20250706,Heat,96,2,10:40,ZD,55,1248,3277,595,1399,574,0.574,
 20250706,Heat,96,2,10:40,ZD,55,2084,3278,778,1626,521,0.521,
 20250706,Heat,96,2,10:40,ZD,55,1211,3279,342,714,521,0.521,
-20250706,Heat,96,2,10:40,ZD,55,1494,3282,276,506,454,,
+20250706,Heat,96,2,10:40,ZD,55,1494,3282,276,506,454,0.454,
 20250706,Control,96,6,10:47,ZD,62,1631,3284,860,2448,648,0.648,
 20250706,Control,96,6,10:47,ZD,62,1563,3285,373,1099,660,0.66,
 20250706,Control,96,6,10:47,ZD,62,1472,3286,358,1131,683,0.683,
@@ -284,7 +282,7 @@ Date,Treatment,Timepoint,Tank_ID,Time,Initials,Dark Adapt Mins,Plug #,Mem,Fluore
 20250707,Control,120,4,07:50,ZD,overnight,1461,3316,585,1614,637,0.637,
 20250707,Control,120,4,07:50,ZD,overnight,2360,3317,784,1811,567,0.567,
 20250707,Heat,120,2,07:50,ZD,overnight,2084,3318,724,1383,476,0.476,
-20250707,Heat,120,2,07:50,ZD,overnight,1494,3319,258,327,211,,
+20250707,Heat,120,2,07:50,ZD,overnight,1494,3319,258,327,211,0.211,
 20250707,Heat,120,2,07:50,ZD,overnight,1211,3320,241,406,406,0.406,
 20250707,Heat,120,2,07:50,ZD,overnight,1248,3321,496,1057,530,0.53,
 20250707,Control,120,6,07:50,ZD,overnight,1563,3322,410,1072,617,0.617,
@@ -296,8 +294,8 @@ Date,Treatment,Timepoint,Tank_ID,Time,Initials,Dark Adapt Mins,Plug #,Mem,Fluore
 20250707,Heat,120,3,07:50,ZD,overnight,1113,3329,592,1070,446,0.446,
 20250707,Heat,120,3,07:50,ZD,overnight,1339,3330,251,417,398,0.398,
 20250707,Heat,120,5,07:50,ZD,overnight,1549,3331,304,529,425,0.425,
-20250707,Heat,120,5,07:50,ZD,overnight,1560,3336,425,617,311,,"When originally measured, had super high Fo values, possibly due to reading over a skeleton area where tissue was gone and high concentration of endoliths (very green skeleton). This reading was on the tissue itself"
-20250707,Heat,120,5,07:50,ZD,overnight,1441,3333,510,505,0,,
+20250707,Heat,120,5,07:50,ZD,overnight,1560,3336,425,617,311,0.311,"When originally measured, had super high Fo values, possibly due to reading over a skeleton area where tissue was gone and high concentration of endoliths (very green skeleton). This reading was on the tissue itself"
+20250707,Heat,120,5,07:50,ZD,overnight,1441,3333,510,505,0,0,
 20250707,Heat,120,5,07:50,ZD,overnight,1086,3334,272,532,488,0.488,
 20250707,Control,120,1,07:50,ZD,overnight,1252,3337,447,1296,655,0.655,
 20250707,Control,120,1,07:50,ZD,overnight,1739,3341,669,1645,593,0.593,
