@@ -24,9 +24,10 @@ Data and methods for Chapter Four of my dissertation, a stort-term heat stress p
 
 - [RAW_TIFF_ColorScore](https://drive.google.com/drive/folders/1VJvZi2nuNFpBn-t-O4A9bNAgSROkeTPa?usp=sharing)
 
-## Pictures
+## Quick summary of currently available data
 
-| *Porites compressa* | *Montipora capitata* | *Pocillopora acuta* |
-|---------|---------|---------|
-| ![](./protocols/Images/Pcomp_example.jpeg) | ![](protocols/Images/Mcap_example.jpeg) | ![](protocols/Images/Pacuta_example.jpeg) |
-| ![](./1-Pcom/output/FvFm_line_treatment_all_trajectories.png) | ![](./2-Mcap/output/FvFm_line_treatment_all_trajectories.png) | ![](./3-Pacu/output/FvFm_line_treatment_all_trajectories.png) |
+| Species | *Porites compressa* | *Montipora capitata* | *Pocillopora acuta* |
+|---------|---------|---------|---------|
+| Species | <img src="./protocols/Images/IMG_5833.jpg" width="3000"> | <img src="./protocols/Images/IMG_2957.jpeg" width="3000"> | <img src="./protocols/Images/IMG_3220.jpeg" width="3000"> |
+| Temperature | <img src="./1-Pcom/output/Experimental_Tank_HoboTemp.png" width="3000"> | <img src="./2-Mcap/output/Experimental_Tank_HoboTemp.png" width="3000"> | <img src="./3-Pacu/output/Experimental_Tank_HoboTemp.png" width="3000"> |
+| Fv/Fm trajectories | <img src="./1-Pcom/output/FvFm_line_treatment_all_trajectories.png" width="3000"> | <img src="./2-Mcap/output/FvFm_line_treatment_all_trajectories.png" width="3000"> | <img src="./3-Pacu/output/FvFm_line_treatment_all_trajectories.png" width="3000"> |

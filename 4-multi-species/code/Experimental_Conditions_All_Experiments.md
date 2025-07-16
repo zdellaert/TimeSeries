@@ -24,6 +24,7 @@ library(rmarkdown)
 library(tinytex)
 
 custom_colors <- c("Control" = "lightblue4", "Heat" = "#D55E00")
+species_order <- c("Porites compressa","Montipora capitata","Pocillopora acuta")
 ```
 
 ## 0.1 Load data
@@ -40,6 +41,7 @@ Pacu$species <- "Pocillopora acuta"
 #combine dataframes
 pHSlope <- rbind(Pcomp,Mcap,Pacu)
 pHSlope$Tank_ID <- as.character(pHSlope$Tank_ID)
+pHSlope$species <- factor(pHSlope$species,levels = species_order)
 
 ## Change data format to long format 
 
@@ -74,7 +76,7 @@ hlines_data <- list(
 ```
 
 ``` r
-facet_labels <- c(unique(pHSlope.long$metric), unique(pHSlope.long$Treatment),unique(pHSlope.long$species))
+facet_labels <- c(unique(pHSlope.long$metric), unique(pHSlope.long$Treatment),unique(as.character(pHSlope.long$species)))
 names(facet_labels) = facet_labels
 facet_labels <- replace(facet_labels, which(facet_labels == "pH.total"), "pH")
 facet_labels <- replace(facet_labels, which(facet_labels == "Salinity_psu"), "Salinity (psu)")
@@ -143,6 +145,7 @@ Pacu$species <- "Pocillopora acuta"
 
 #combine dataframes
 tank_df_Exp <- rbind(Pcomp,Mcap,Pacu)
+tank_df_Exp$species <- factor(tank_df_Exp$species,levels = species_order)
 
 tank_df_Exp$DateTimeEST <- parse_date_time(tank_df_Exp$DateTimeEST,"ymd HMS")
 
