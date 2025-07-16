@@ -337,11 +337,6 @@ ggplot(contrast_table, aes(x = timepoint, y = estimate)) +
 <img src="PAM_files/figure-gfm/unnamed-chunk-6-1.png" style="display: block; margin: auto;" />
 
 ``` r
-ggsave("../output/FvFm_line_treatment_tank_modelestimates.png", plot = last_plot(), width = 8, height = 4, bg = "white")
-ggsave("../output/pdf_figs/FvFm_line_treatment_tank_modelestimates.pdf", plot = last_plot(), width = 8, height = 4)
-```
-
-``` r
 PAM_means_treatment <- PAM_exp %>%
   group_by(date, timepoint, treatment) %>%
   summarise(
@@ -384,9 +379,6 @@ ggplot(PAM_means, aes(x = timepoint, y = FvFm_mean, color = treatment, shape = t
 <img src="PAM_files/figure-gfm/unnamed-chunk-7-2.png" style="display: block; margin: auto;" />
 
 ``` r
-ggsave("../output/FvFm_line_treatment_tank_means.png", plot = last_plot(), width = 8, height = 4, bg = "white")
-ggsave("../output/pdf_figs/FvFm_line_treatment_tank_means.pdf", plot = last_plot(), width = 8, height = 4)
-
 ggplot(PAM_exp, aes(x = timepoint, y = fv_fm_y_1000, color = treatment, shape = tank_id)) +
   geom_point(stat = "summary", fun = mean, aes(group = treatment), size=2.5) +
   geom_point(position = position_dodge(width = 0.5), size = 2.5, alpha=0.5) +
@@ -399,9 +391,6 @@ ggplot(PAM_exp, aes(x = timepoint, y = fv_fm_y_1000, color = treatment, shape = 
 <img src="PAM_files/figure-gfm/unnamed-chunk-7-3.png" style="display: block; margin: auto;" />
 
 ``` r
-ggsave("../output/FvFm_line_treatment_all_points.png", plot = last_plot(), width = 8, height = 4, bg = "white")
-ggsave("../output/pdf_figs/FvFm_line_treatment_all_points.pdf", plot = last_plot(), width = 8, height = 4)
-
 ggplot(PAM_means, aes(x = timepoint, y = FvFm_mean, color = tank_id, group = tank_id)) +
   geom_line(size = 0.8, alpha = 0.7) +
   labs(x = "Timepoint",y = "Mean Fv/Fm") +
@@ -786,43 +775,27 @@ ggsave("../output/pdf_figs/FvFm_line_treatment_tank_modelestimates.pdf", plot = 
 ```
 
 ``` r
-PAM_means_treatment <- PAM_exp_filtered_IQR %>%
-  group_by(date, timepoint, treatment) %>%
-  summarise(
-    FvFm_mean = mean(fv_fm_y_1000, na.rm = TRUE),
-    FvFm_SE = sd(fv_fm_y_1000, na.rm = TRUE) / sqrt(n()),
-    .groups = 'drop'
-  )
-
-ggplot(PAM_means_treatment, aes(x = timepoint, y = FvFm_mean, color = treatment,group = treatment)) +
-  geom_point(size = 2.5) +
-  geom_errorbar(aes(ymin = FvFm_mean - FvFm_SE, ymax = FvFm_mean + FvFm_SE),
-                width = 0.2) +
-  geom_line(stat = "summary", fun = mean, size = 1.2, aes(group = treatment)) +
-  labs(x = "Timepoint",y = "Mean Fv/Fm") +
-  theme_minimal() +scale_color_manual(values = custom_colors)
+ggplot(PAM_exp_filtered_IQR, aes(x = timepoint, y = fv_fm_y_1000, color = treatment, group = treatment)) +
+  stat_summary(fun = mean, geom = "point", size = 2.5) +
+  stat_summary(fun.data = mean_se, geom = "errorbar", width = 0.2) +
+  stat_summary(fun = mean, geom = "line", size = 1.2) +
+  labs(x = "Timepoint", y = "Mean Fv/Fm") +
+  theme_minimal() +
+  scale_color_manual(values = custom_colors)
 ```
 
 <img src="PAM_files/figure-gfm/unnamed-chunk-16-1.png" style="display: block; margin: auto;" />
 
 ``` r
-PAM_means <- PAM_exp_filtered_IQR %>%
-  group_by(date, timepoint, treatment, tank_id) %>%
-  summarise(
-    FvFm_mean = mean(fv_fm_y_1000, na.rm = TRUE),
-    FvFm_SE = sd(fv_fm_y_1000, na.rm = TRUE) / sqrt(n()),
-    .groups = 'drop'
-  )
-
-ggplot(PAM_means, aes(x = timepoint, y = FvFm_mean, color = treatment, shape = tank_id)) +
-  geom_point(stat = "summary", fun = mean, aes(group = treatment), size=2.5) +
-  geom_point(position = position_dodge(width = 0.5), size = 2.5, alpha=0.5) +
-  geom_errorbar(aes(ymin = FvFm_mean - FvFm_SE, ymax = FvFm_mean + FvFm_SE),
-                width = 0.2, position = position_dodge(width = 0.5), alpha=0.5) +
-  geom_line(stat = "summary", fun = mean, size = 1.2, aes(group = treatment)) +
-  labs(x = "Timepoint",y = "Mean Fv/Fm") +
-  theme_minimal() +scale_color_manual(values = custom_colors) +
-  stat_compare_means(aes(group = treatment),method = "anova",label = "p.format",size = 2.5)
+ggplot(PAM_exp_filtered_IQR, aes(x = timepoint, y = fv_fm_y_1000, color = treatment, shape = tank_id)) +
+  stat_summary(fun = mean, geom = "point", aes(group = treatment), size = 2.5) +
+  stat_summary(fun.data = mean_se, geom = "point", position = position_dodge(width = 0.5), alpha = 0.5,size=2.5) +
+  stat_summary(fun.data = mean_se, geom = "errorbar", position = position_dodge(width = 0.5), width = 0.2, alpha = 0.5) +
+  stat_summary(fun = mean, geom = "line", aes(group = treatment), size = 1.2) +
+  labs(x = "Timepoint", y = "Mean Fv/Fm") +
+  theme_minimal() +
+  scale_color_manual(values = custom_colors) +
+  stat_compare_means(aes(group = treatment), method = "anova", label = "p.format", size = 2.5)
 ```
 
 <img src="PAM_files/figure-gfm/unnamed-chunk-16-2.png" style="display: block; margin: auto;" />
@@ -859,6 +832,7 @@ ggplot(PAM_exp_filtered_IQR, aes(x = timepoint, y = fv_fm_y_1000, color = treatm
   geom_point(stat = "summary", fun = mean, aes(group = treatment), size=2.5) +
   geom_line(position = position_dodge(width = 0.25), size = 0.5, alpha=0.25, aes(group = plug)) +
   geom_line(stat = "summary", fun = mean, size = 1.2, aes(group = treatment)) +
+  stat_summary(fun.data = mean_se, geom = "errorbar", width = 0.2, aes(group = treatment)) +
   labs(x = "Timepoint",y = "Mean Fv/Fm") +
   theme_minimal() +scale_color_manual(values = custom_colors) +
   stat_compare_means(aes(group = treatment),method = "anova",label = "p.format",size = 3)
