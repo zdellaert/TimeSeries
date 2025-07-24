@@ -15,4 +15,4 @@ Every tank was below two Aquaillumination Prime 16HD lights.
 
 Every day, water chemistry measurements were taken using an Orion Star A325 Conductivity and pH meter and a digital thermometer (4000EA, Traceable® Products for *Porites* and *Montipora* experiments and Fisherbrand™ Traceable™M Hi-Accuracy Thermometer for *Pocillopora* experiment).
 
-1.  PAR meter
+Light measurements were taken at the peak of the light cycle on day 1 of each experiment using a ITC Reefculture PARwise PAR Monitor.
