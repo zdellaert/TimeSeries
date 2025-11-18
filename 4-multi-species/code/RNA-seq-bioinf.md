@@ -74,6 +74,74 @@ cd /project/pi_hputnam_uri_edu/raw_sequencing_data/20251117_Timeseries_3sp/
 aws s3 sync s3://genohub####### . --no-progress
 ```
 
+## Check integrity of data transfer
 
 raw data is located in `/project/pi_hputnam_uri_edu/raw_sequencing_data/20251117_Timeseries_3sp`
 
+```
+cd /project/pi_hputnam_uri_edu/raw_sequencing_data/20251117_Timeseries_3sp/
+
+md5sum *.fastq.gz > 20251117_URI.md5
+cat *.md5 > genohub.md5
+
+#use diff command to see if there is a differnece between the checksums
+# using -w to ignore spaces (the URI file is formatted slightly differently) 
+
+diff -w genohub.md5 20251117_URI.md5 
+
+```
+
+
+## Symlink raw data files into data_RNA
+
+```
+ln -s /project/pi_hputnam_uri_edu/raw_sequencing_data/20251117_Timeseries_3sp/*.fastq.gz /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/data_RNA
+```
+
+## QC raw files
+
+```
+cd /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/scripts
+nano 02_raw_qc.sh
+
+#enter text in next code chunk
+```
+
+```
+#!/usr/bin/env bash
+#SBATCH --export=NONE
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=20
+#SBATCH --signal=2
+#SBATCH --no-requeue
+#SBATCH --mem=200GB
+#SBATCH -t 12:00:00
+#SBATCH --mail-type=BEGIN,END,FAIL #email you when job starts, stops and/or fails
+#SBATCH --error=../scripts/outs_errs/%x_error.%j #if your job fails, the error report will be put in this file
+#SBATCH --output=../scripts/outs_errs/%x_output.%j #once your job is completed, any final job report comments will be put in this file
+
+# load modules needed
+module load parallel/20240822
+module load fastqc/0.12.1
+module load uri/main
+module load MultiQC/1.12-foss-2021b
+
+#go into directory with raw data (symlinks)
+cd /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/data_RNA
+
+#make raw_qc output folder
+mkdir -p ../output_RNA/raw_qc/
+
+# Create an list of fastq files to process
+files=( *.fastq.gz ) 
+
+# Run fastqc in parallel
+echo "Starting fastqc..." $(date)
+parallel -j 20 "fastqc {} -o ../output_RNA/raw_qc/ && echo 'Processed {}'" ::: "${files[@]}"
+echo "fastQC done." $(date)
+
+#Compile MultiQC report from FastQC files
+multiqc -o ../output_RNA/raw_qc/ ../output_RNA/raw_qc/
+
+echo "Initial QC of RNA-seq data complete." $(date)
+```
