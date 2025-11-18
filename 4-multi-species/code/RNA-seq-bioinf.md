@@ -3,6 +3,13 @@
 Script Written By: Zoe Dellaert
 Last Updated: 11/17/2024
 
+## Quick directory references
+
+- raw data is located in `/project/pi_hputnam_uri_edu/raw_sequencing_data/20251117_Timeseries_3sp`
+- all other project files are located in `/project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species`
+
+## Project info
+
 - Sample prep: https://github.com/zdellaert/TimeSeries/blob/main/protocols/Sampling.md
 - RNA extraction protocol: https://github.com/zdellaert/TimeSeries/blob/main/protocols/Bulk_DNA_RNA_Extractions_Zymo_Quick_Miniprep.md
 - RNA plate sent: https://zdellaert.github.io/ZD_Putnam_Lab_Notebook/TimeSeries-Plate-Prep/
@@ -26,11 +33,12 @@ Last Updated: 11/17/2024
 #Make directory for raw data
 mkdir /project/pi_hputnam_uri_edu/raw_sequencing_data/20251117_Timeseries_3sp
 
-#Make directory for processed data, scripts, outputs, and symlinked raw data
-mkdir /project/pi_hputnam_uri_edu/zdellaert/TimeSeries
+#Make directory for processed data, scripts, outputs, and symlinked raw data - clone repo
+cd /project/pi_hputnam_uri_edu/zdellaert/
+git clone https://github.com/zdellaert/TimeSeries.git
 
 #Enter project directory
-cd /project/pi_hputnam_uri_edu/zdellaert/TimeSeries
+cd /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species
 
 #Make folder for scripts, script outputs, raw data, and output
 mkdir scripts
@@ -50,7 +58,7 @@ mkdir output_RNA
    2. `aws s3 ls s3://genohub####### --recursive`
 
 ```
-cd /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/scripts
+cd /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/scripts
 nano 01_data_download.sh
 
 #enter text in next code chunk
@@ -70,8 +78,14 @@ nano 01_data_download.sh
 #load AWS module
 module load awscli-v2/2.15.53
 
+#enter raw data directory
 cd /project/pi_hputnam_uri_edu/raw_sequencing_data/20251117_Timeseries_3sp/
+
+# sync data from aws bucket
 aws s3 sync s3://genohub####### . --no-progress
+
+#compute md5sum after sync is complete
+md5sum *.fastq.gz > 20251118_URI.md5
 ```
 
 ## Check integrity of data transfer
@@ -81,27 +95,33 @@ raw data is located in `/project/pi_hputnam_uri_edu/raw_sequencing_data/20251117
 ```
 cd /project/pi_hputnam_uri_edu/raw_sequencing_data/20251117_Timeseries_3sp/
 
-md5sum *.fastq.gz > 20251117_URI.md5
-cat *.md5 > genohub.md5
+#concatenate genohub-provided md5s
+cat *gz.md5 > genohub.md5
 
 #use diff command to see if there is a differnece between the checksums
 # using -w to ignore spaces (the URI file is formatted slightly differently) 
 
-diff -w genohub.md5 20251117_URI.md5 
+diff -w genohub.md5 20251118_URI.md5 
 
+# no output, so no difference between the md5s. verified by inspecting manually.
+
+# copy both md5s to data directory
+cp genohub.md5 /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/data_RNA
+cp 20251118_URI.md5  /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/data_RNA
 ```
 
+Data appears to have been transferred successfully from genohub.
 
 ## Symlink raw data files into data_RNA
 
 ```
-ln -s /project/pi_hputnam_uri_edu/raw_sequencing_data/20251117_Timeseries_3sp/*.fastq.gz /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/data_RNA
+ln -s /project/pi_hputnam_uri_edu/raw_sequencing_data/20251117_Timeseries_3sp/*.fastq.gz /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/data_RNA
 ```
 
 ## QC raw files
 
 ```
-cd /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/scripts
+cd /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/scripts
 nano 02_raw_qc.sh
 
 #enter text in next code chunk
@@ -127,13 +147,13 @@ module load uri/main
 module load MultiQC/1.12-foss-2021b
 
 #go into directory with raw data (symlinks)
-cd /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/data_RNA
+cd /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/data_RNA
 
 #make raw_qc output folder
 mkdir -p ../output_RNA/raw_qc/
 
 # Create an list of fastq files to process
-files=( *.fastq.gz ) 
+files=( *.fastq.gz )
 
 # Run fastqc in parallel
 echo "Starting fastqc..." $(date)
@@ -141,7 +161,8 @@ parallel -j 20 "fastqc {} -o ../output_RNA/raw_qc/ && echo 'Processed {}'" ::: "
 echo "fastQC done." $(date)
 
 #Compile MultiQC report from FastQC files
-multiqc -o ../output_RNA/raw_qc/ ../output_RNA/raw_qc/
+cd ../output_RNA/raw_qc/
+multiqc --interactive .
 
 echo "Initial QC of RNA-seq data complete." $(date)
 ```
