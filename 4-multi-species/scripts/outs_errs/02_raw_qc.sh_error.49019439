@@ -1,0 +1,13 @@
+Loading uri version main
+NOTE: The modules under this branch will not run on the login node. Use
+--constraint=avx512 for sbatch or srun sessions. 
+
+  /// MultiQC 🔍 | v1.12
+
+|           multiqc | MultiQC Version v1.32 now available!
+|           multiqc | Search path : /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/output_RNA/raw_qc
+|            fastqc | Found 360 reports
+|           multiqc | Compressing plot data
+|           multiqc | Report      : multiqc_report.html
+|           multiqc | Data        : multiqc_data
+|           multiqc | MultiQC complete
