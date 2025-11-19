@@ -1,0 +1,38 @@
+---
+title: "RNA-seq-QC"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+```
+
+
+```{r}
+# load in multiqc data
+QC_raw_full <- read.delim("../output_RNA/raw_qc/multiqc_data/multiqc_fastqc.txt", header = TRUE)
+QC_raw <- read.delim("../output_RNA/raw_qc/multiqc_data/multiqc_general_stats.txt", header = TRUE)
+
+colnames(QC_raw) <- str_replace(colnames(QC_raw) , "FastQC_mqc.generalstats.fastqc.", "") 
+```
+
+```{r}
+QC_raw <- QC_raw %>%
+  mutate(sample_id = str_replace(Sample, "run-2-", "")) %>%
+  mutate(sample_id = str_replace(sample_id, "_S[0-9]+", ""))
+
+QC_raw_summarized <- QC_raw %>%
+  group_by(sample_id) %>%
+  summarise(
+    total_seq = sum(total_sequences),
+    n_fastqs = n(),
+    .groups = "drop"
+  ) %>%
+  mutate(total_Mseq = total_seq/1000000)
+
+QC_raw_summarized %>% arrange(total_Mseq) %>% filter(total_Mseq < 15) 
+paste(nrow(QC_raw_summarized %>% arrange(total_Mseq) %>% filter(total_Mseq < 15))/2, "samples have fewer than 15M reads in each direction")
+
+
+```
+
