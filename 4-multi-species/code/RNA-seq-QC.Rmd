@@ -32,7 +32,29 @@ QC_raw_summarized <- QC_raw %>%
 
 QC_raw_summarized %>% arrange(total_Mseq) %>% filter(total_Mseq < 15) 
 paste(nrow(QC_raw_summarized %>% arrange(total_Mseq) %>% filter(total_Mseq < 15))/2, "samples have fewer than 15M reads in each direction")
-
-
 ```
 
+
+```{r}
+# load in multiqc data
+QC_trim <- read.delim("../output_RNA/trimmed_qc/multiqc_data/multiqc_fastqc.txt", header = TRUE)
+#QC_trim <- read.delim("../output_RNA/trimmed_qc/multiqc_data/multiqc_general_stats.txt", header = TRUE)
+```
+
+```{r}
+QC_trim <- QC_trim %>%
+  mutate(sample_id = str_replace(Sample, "run-2-", "")) %>%
+  mutate(sample_id = str_replace(sample_id, "_S[0-9]+", ""))
+
+QC_trim_summarized <- QC_trim %>%
+  group_by(sample_id) %>%
+  summarise(
+    total_seq = sum(Total.Sequences),
+    n_fastqs = n(),
+    .groups = "drop"
+  ) %>%
+  mutate(total_Mseq = total_seq/1000000)
+
+QC_trim_summarized %>% arrange(total_Mseq) %>% filter(total_Mseq < 15) 
+paste(nrow(QC_trim_summarized %>% arrange(total_Mseq) %>% filter(total_Mseq < 15))/2, "samples have fewer than 15M reads in each direction")
+```
