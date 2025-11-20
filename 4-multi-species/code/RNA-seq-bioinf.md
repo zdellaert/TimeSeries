@@ -32,6 +32,7 @@ Last Updated: 11/17/2024
 ## Workflow <!-- omit from toc -->
 
 - [Download genomes](#download-genomes)
+  - [Convert gff3 files into gtf files](#convert-gff3-files-into-gtf-files)
 - [Make directory structure on Unity](#make-directory-structure-on-unity)
 - [Transfer data from genohub using AWS](#transfer-data-from-genohub-using-aws)
   - [Script: 01\_data\_download.sh](#script-01_data_downloadsh)
@@ -48,9 +49,14 @@ Last Updated: 11/17/2024
   - [First, write a general alignment script](#first-write-a-general-alignment-script)
     - [Script: 05\_STAR.sh](#script-05_starsh)
   - [MON Genome Version 3 (*Montipora capitata*)](#mon-genome-version-3-montipora-capitata)
-    - [Alt Script: MON\_STAR.sh](#alt-script-mon_starsh)
   - [POC Genome Version 2 (*Pocillopora acuta*)](#poc-genome-version-2-pocillopora-acuta)
   - [POR Genome (*Porites compressa*)](#por-genome-porites-compressa)
+- [Assess Mapping Quality](#assess-mapping-quality)
+  - [Script: 06\_qualimap.sh](#script-06_qualimapsh)
+  - [Run script on the alignments performed above](#run-script-on-the-alignments-performed-above)
+- [Assembly with Stringtie](#assembly-with-stringtie)
+  - [Script: 07\_stringtie.sh](#script-07_stringtiesh)
+  - [Run script on the alignments performed above](#run-script-on-the-alignments-performed-above-1)
 
 ## Download genomes
 
@@ -65,6 +71,39 @@ All three genomes I am using can be downloaded from the following links. I am us
 - POR Genome ([*Porites compressa*](http://cyanophora.rutgers.edu/porites_compressa/))
   - `wget http://cyanophora.rutgers.edu/porites_compressa/Porites_compressa_HIv1.assembly.fasta.gz`
   - Unity location: `/work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.assembly.fasta`
+
+### Convert gff3 files into gtf files
+
+Do this for all three species. I've already done this for my genomes, example code is below.
+
+The gff3 files provided with the Stephens et al. 2022 [genomes](https://academic.oup.com/gigascience/article/doi/10.1093/gigascience/giac098/6815755) are missing some features that are necessary for this pipeline (Stringtie specifically). I can correct the gff3 file and add those fields, but it is easier to convert the gff3 to a gtf file and automatically add those fields in the process. In order to do this, I am going to use the program [gffread](https://github.com/gpertea/gffread). Information and documentation about this package can be found on [the github examples page](https://github.com/gpertea/gffread/tree/master/examples).
+
+```
+cd /work/pi_hputnam_uri_edu/HI_Genomes/PacutaV2/
+
+# load modules needed
+module load gffread/0.12.7
+
+# "Clean" GFF file if necessary, then convert cleaned file into a GTF
+# -E : remove any "non-transcript features and optional attributes"
+
+gffread -E Pocillopora_acuta_HIv2.genes.gff3 -T -o Pocillopora_acuta_HIv2.gtf 
+
+echo "Check how many fields are in each row of the file; currently there are rows with two different lenghts: 10 and 12"
+awk '{print NF}' Pocillopora_acuta_HIv2.gtf | sort -u
+
+# Use awk to add "gene_id = TRANSCRIPT_ID" to each of the rows that only have a transcript id listed (the non-transcript lines)
+awk 'BEGIN {FS=OFS="\t"} {if ($9 ~ /transcript_id/ && $9 !~ /gene_id/) {match($9, /transcript_id "([^"]+)";/, a); $9 = $9 " gene_id \"" a[1] "\";"}; print}' Pocillopora_acuta_HIv2.gtf > Pocillopora_acuta_HIv2_modified.gtf
+
+echo "Check how many fields are in each row of the file; Now all the rows should be the same length and only one value should be printed, 12"
+awk '{print NF}' Pocillopora_acuta_HIv2_modified.gtf | sort -u
+
+# remove the non-modified file
+rm Pocillopora_acuta_HIv2.gtf
+
+# rename the modified file
+mv Pocillopora_acuta_HIv2_modified.gtf Pocillopora_acuta_HIv2.gtf
+```
 
 ## Make directory structure on Unity
 
@@ -486,10 +525,15 @@ for R1_file in "${trimmed[@]}"; do
        --outFileNamePrefix "${out_dir}/${sample_name}_" \
        --quantMode GeneCounts
 done
-```
 
-```
-chmod +x 05_STAR.sh
+# load modules needed for multiqc
+module purge
+module load uri/main
+module load MultiQC/1.12-foss-2021b
+
+cd "${out_dir}"
+
+multiqc .
 ```
 
 Then run as follows:
@@ -510,31 +554,6 @@ sbatch 05_STAR.sh MON MCapV3 \
      "/work/pi_hputnam_uri_edu/HI_Genomes/MCapV3/Montipora_capitata_HIv3.assembly.fasta" \
      "/work/pi_hputnam_uri_edu/HI_Genomes/MCapV3/Montipora_capitata_HIv3.genes.gff3" \
      T
-```
-
-#### Alt Script: MON_STAR.sh
-
-Alternatively I can have the STAR script not have the sbatch parameters in it and then run like this
-
-```
-#!/usr/bin/env bash
-#SBATCH --export=ALL
-#SBATCH --ntasks=1 --cpus-per-task=48
-#SBATCH --signal=2
-#SBATCH --no-requeue
-#SBATCH --mem=500GB
-#SBATCH --time 24:00:00
-#SBATCH --error=scripts/outs_errs/"%x_error.%j"
-#SBATCH --output=scripts/outs_errs/"%x_output.%j"
-#SBATCH --mail-type=END,FAIL,TIME_LIMIT_80
-
-species="MON"
-genome="MCapV3"
-genome_path="/work/pi_hputnam_uri_edu/HI_Genomes/MCapV3/Montipora_capitata_HIv3.assembly.fasta"
-gff_path="/work/pi_hputnam_uri_edu/HI_Genomes/MCapV3/Montipora_capitata_HIv3.genes.gff3"
-
-# run STAR standard script
-./05_STAR.sh "$species" "$genome" "$genome_path" "$gff_path" "T"
 ```
 
 ### POC Genome Version 2 ([*Pocillopora acuta*](http://cyanophora.rutgers.edu/Pocillopora_acuta/))
@@ -561,4 +580,174 @@ sbatch 05_STAR.sh POR Pcomp \
      "/work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.assembly.fasta" \
      "/work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.genes.gff3" \
      T
+```
+
+## Assess Mapping Quality
+
+```
+cd /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/scripts
+nano 06_qualimap.sh
+
+#enter text in next code chunk
+```
+
+### Script: 06_qualimap.sh
+
+```
+#!/usr/bin/env bash
+#SBATCH --export=NONE
+#SBATCH --ntasks=1 --cpus-per-task=20
+#SBATCH --mem=100GB
+#SBATCH --time=24:00:00
+#SBATCH --error=../scripts/outs_errs/%x_error.%j #if your job fails, the error report will be put in this file
+#SBATCH --output=../scripts/outs_errs/%x_output.%j #once your job is completed, any final job report comments will be put in this file
+#SBATCH --mail-type=END,FAIL,TIME_LIMIT_80
+#SBATCH --no-requeue
+
+species=$1
+genome=$2
+gtf_path=$3
+
+# load modules needed
+module load qualimap/2.2.1
+
+# list and make required directories
+scratch_dir="/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries"
+alignments_dir="${scratch_dir}/aligned/${species}_${genome}"
+
+qc_dir="/project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/alignment_qc/${species}_${genome}"
+
+# make the output directory if it does not exist (-p checks for this)
+mkdir -p "${qc_dir}"
+
+cd "${alignments_dir}"
+
+for f in *Aligned.sortedByCoord.out.bam; do
+	sample_name=$(echo "$f" | sed -E 's/_Aligned.*//')
+
+  echo "Running Qualimap on ${sample_name}..."
+
+	qualimap rnaseq \
+    --java-mem-size=8G \
+    -gtf "${gtf_path}" \
+    -pe \
+    --sequencing-protocol strand-specific-reverse \
+    -bam "${f}"  \
+    -outdir "${qc_dir}"/"${sample_name}" 
+done
+
+# load modules needed for multiqc
+module purge
+module load uri/main
+module load MultiQC/1.12-foss-2021b
+
+cd "${qc_dir}"
+
+multiqc .
+
+echo "MultiQC report generated in "${qc_dir}"/multiqc_report"
+```
+
+Then run as follows:
+
+```
+# run Qualimap standard script
+sbatch 06_qualimap.sh "$species" "$genome" "$gtf_path"
+```
+
+### Run script on the alignments performed above
+
+```
+cd /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/scripts
+
+sbatch 06_qualimap.sh MON MCapV3 "/work/pi_hputnam_uri_edu/HI_Genomes/MCapV3/Montipora_capitata_HIv3.gtf"
+sbatch 06_qualimap.sh POC PacutaV2 "/work/pi_hputnam_uri_edu/HI_Genomes/PacutaV2/Pocillopora_acuta_HIv2.gtf"
+sbatch 06_qualimap.sh POR Pcomp "/work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf"
+```
+
+## Assembly with Stringtie
+
+I will use [Stringtie](https://ccb.jhu.edu/software/stringtie/index.shtml?t=manual) to perform reference-guided assembly of the RNA-seq data. For initial analysis, I am running stringtie in estimation mode, with the -e flag. It will only assemble known transcripts from the gff/gtf file and not novel transcripts.
+
+> StringTie will not attempt to assemble the input read alignments but instead it will only estimate the expression levels of the "reference" transcripts provided in the -G file. With this option, no "novel" transcript assemblies (isoforms) will be produced, and read alignments not overlapping any of the given reference transcripts will be ignored.
+
+
+```
+cd /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/scripts
+nano 07_stringtie.sh
+
+#enter text in next code chunk
+```
+
+### Script: 07_stringtie.sh
+
+```
+#!/usr/bin/env bash
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=16
+#SBATCH --no-requeue
+#SBATCH --mem=16GB
+#SBATCH -t 03:59:00 --qos=short
+#SBATCH --mail-type=END,FAIL,TIME_LIMIT_80
+#SBATCH --error=../scripts/outs_errs/%x_error.%j #if your job fails, the error report will be put in this file
+#SBATCH --output=../scripts/outs_errs/%x_output.%j #once your job is completed, any final job report comments will be put in this file
+
+species=$1
+genome=$2
+gtf_path=$3
+
+# load required modules
+module load uri/main StringTie/2.2.1-GCC-11.2.0
+
+# list and make required directories
+scratch_dir="/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries"
+alignments_dir="${scratch_dir}/aligned/${species}_${genome}"
+
+out_dir="${scratch_dir}/stringtie/${species}_${genome}"
+
+# make the output directory if it does not exist (-p checks for this)
+mkdir -p "${out_dir}"
+
+cd "${alignments_dir}"
+
+# call the STAR bam files into an array
+bams=(*Aligned.sortedByCoord.out.bam)
+
+for f in "${bams[@]}"; do 
+    sample_name=$(echo "$f" | sed -E 's/_Aligned.*//')
+
+    # -p 16 : use 16 cores
+    # -e : exclude novel genes
+    # -B : create Ballgown input files for downstream analysis
+    # -v : enable verbose mode
+    # -G : gtf annotation file
+    # -A : output name for gene abundance estimate files
+    # -o : output name for gtf file
+
+    stringtie -p 16 -e -B -v \
+        -G "${gtf_path}" \
+        -A "${out_dir}"/"${sample_name}".gene_abund.tab \
+        -o "${out_dir}"/"${sample_name}".gtf \
+        "$f" #input bam file
+
+    echo "StringTie assembly for seq file ${f}" $(date)
+done
+```
+
+Then run as follows:
+
+```
+# run stringtie standard script
+sbatch 07_stringtie.sh "$species" "$genome" "$gtf_path"
+```
+
+### Run script on the alignments performed above
+
+```
+cd /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/scripts
+
+sbatch 07_stringtie.sh MON MCapV3 "/work/pi_hputnam_uri_edu/HI_Genomes/MCapV3/Montipora_capitata_HIv3.gtf"
+sbatch 07_stringtie.sh POC PacutaV2 "/work/pi_hputnam_uri_edu/HI_Genomes/PacutaV2/Pocillopora_acuta_HIv2.gtf"
+sbatch 07_stringtie.sh POR Pcomp "/work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf"
 ```
