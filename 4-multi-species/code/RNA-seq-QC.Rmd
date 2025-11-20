@@ -32,6 +32,8 @@ QC_raw_summarized <- QC_raw %>%
 
 QC_raw_summarized %>% arrange(total_Mseq) %>% filter(total_Mseq < 15) 
 paste(nrow(QC_raw_summarized %>% arrange(total_Mseq) %>% filter(total_Mseq < 15))/2, "samples have fewer than 15M reads in each direction")
+
+write.csv(QC_raw_summarized %>% arrange(total_Mseq), "../output_RNA/raw_qc/multiqc_data/concatenated_runs_nreads.csv")
 ```
 
 
@@ -57,4 +59,6 @@ QC_trim_summarized <- QC_trim %>%
 
 QC_trim_summarized %>% arrange(total_Mseq) %>% filter(total_Mseq < 15) 
 paste(nrow(QC_trim_summarized %>% arrange(total_Mseq) %>% filter(total_Mseq < 15))/2, "samples have fewer than 15M reads in each direction")
+
+write.csv(QC_trim_summarized %>% arrange(total_Mseq) , "../output_RNA/trimmed_qc/multiqc_data/concatenated_runs_nreads_post_trim.csv")
 ```

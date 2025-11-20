@@ -57,6 +57,15 @@ Last Updated: 11/17/2024
 - [Assembly with Stringtie](#assembly-with-stringtie)
   - [Script: 07\_stringtie.sh](#script-07_stringtiesh)
   - [Run script on the alignments performed above](#run-script-on-the-alignments-performed-above-1)
+- [Generate gene count matrix](#generate-gene-count-matrix)
+  - [Run script on the alignments performed above](#run-script-on-the-alignments-performed-above-2)
+- [Contamination screen for poorly mapped samples](#contamination-screen-for-poorly-mapped-samples)
+  - [Contamination screen results](#contamination-screen-results)
+    - [MON\_R72\_H1](#mon_r72_h1)
+    - [MON\_R72\_H2](#mon_r72_h2)
+    - [run-2-MON\_R72\_H2](#run-2-mon_r72_h2)
+  - [GOOD sample example: MON\_R72\_H3](#good-sample-example-mon_r72_h3)
+  - [GOOD sample example: run-2-MON\_R72\_H3](#good-sample-example-run-2-mon_r72_h3)
 
 ## Download genomes
 
@@ -525,15 +534,6 @@ for R1_file in "${trimmed[@]}"; do
        --outFileNamePrefix "${out_dir}/${sample_name}_" \
        --quantMode GeneCounts
 done
-
-# load modules needed for multiqc
-module purge
-module load uri/main
-module load MultiQC/1.12-foss-2021b
-
-cd "${out_dir}"
-
-multiqc .
 ```
 
 Then run as follows:
@@ -643,9 +643,9 @@ module load MultiQC/1.12-foss-2021b
 
 cd "${qc_dir}"
 
-multiqc .
+multiqc . "${alignments_dir}"
 
-echo "MultiQC report generated in "${qc_dir}"/multiqc_report"
+echo "MultiQC report of STAR and qualimap outputs generated in "${qc_dir}"/multiqc_report"
 ```
 
 Then run as follows:
@@ -670,7 +670,6 @@ sbatch 06_qualimap.sh POR Pcomp "/work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/
 I will use [Stringtie](https://ccb.jhu.edu/software/stringtie/index.shtml?t=manual) to perform reference-guided assembly of the RNA-seq data. For initial analysis, I am running stringtie in estimation mode, with the -e flag. It will only assemble known transcripts from the gff/gtf file and not novel transcripts.
 
 > StringTie will not attempt to assemble the input read alignments but instead it will only estimate the expression levels of the "reference" transcripts provided in the -G file. With this option, no "novel" transcript assemblies (isoforms) will be produced, and read alignments not overlapping any of the given reference transcripts will be ignored.
-
 
 ```
 cd /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/scripts
@@ -718,6 +717,7 @@ for f in "${bams[@]}"; do
     sample_name=$(echo "$f" | sed -E 's/_Aligned.*//')
 
     # -p 16 : use 16 cores
+    # --rf : library is reverse-forward stranded
     # -e : exclude novel genes
     # -B : create Ballgown input files for downstream analysis
     # -v : enable verbose mode
@@ -725,7 +725,7 @@ for f in "${bams[@]}"; do
     # -A : output name for gene abundance estimate files
     # -o : output name for gtf file
 
-    stringtie -p 16 -e -B -v \
+    stringtie -p 16 --rf -e -B -v \
         -G "${gtf_path}" \
         -A "${out_dir}"/"${sample_name}".gene_abund.tab \
         -o "${out_dir}"/"${sample_name}".gtf \
@@ -751,3 +751,176 @@ sbatch 07_stringtie.sh MON MCapV3 "/work/pi_hputnam_uri_edu/HI_Genomes/MCapV3/Mo
 sbatch 07_stringtie.sh POC PacutaV2 "/work/pi_hputnam_uri_edu/HI_Genomes/PacutaV2/Pocillopora_acuta_HIv2.gtf"
 sbatch 07_stringtie.sh POR Pcomp "/work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf"
 ```
+
+## Generate gene count matrix
+
+We will be using the [prepDE.py script from Stringtie](https://ccb.jhu.edu/software/stringtie/index.shtml?t=manual).
+
+Download script from [stringtie website](https://ccb.jhu.edu/software/stringtie/dl/prepDE.py3) or [github repository](https://github.com/gpertea/stringtie/blob/master/prepDE.py3). I am using the python3 version, but this and the original version (prepDE.py) are very similar and should give the exact same result. I am using [this input file format](https://ccb.jhu.edu/software/stringtie/dl/sample_lst.txt).
+
+
+```
+cd /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/scripts
+wget https://ccb.jhu.edu/software/stringtie/dl/prepDE.py3
+nano 08_prepDE.sh
+
+#enter text in next code chunk
+```
+
+```
+#!/usr/bin/env bash
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=16
+#SBATCH --no-requeue
+#SBATCH --mem=16GB
+#SBATCH -t 03:59:00 --qos=short
+#SBATCH --mail-type=END,FAIL,TIME_LIMIT_80
+#SBATCH --error=../scripts/outs_errs/%x_error.%j #if your job fails, the error report will be put in this file
+#SBATCH --output=../scripts/outs_errs/%x_output.%j #once your job is completed, any final job report comments will be put in this file
+
+species=$1
+genome=$2
+
+# load required modules
+module load uri/main StringTie/2.2.1-GCC-11.2.0
+
+# list and make required directories
+scratch_dir="/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries"
+stringtie_dir="${scratch_dir}/stringtie/${species}_${genome}"
+out_dir="/project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/count_matrices"
+script_dir="/project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/scripts"
+
+# make the output directory if it does not exist (-p checks for this)
+mkdir -p "${out_dir}"
+
+# move into stringtie directory
+cd "${stringtie_dir}"
+
+# make input file
+for filename in *.gtf; do
+    sample_name=$(basename "$filename" .gtf)
+
+    echo $sample_name $PWD/$filename
+done > listGTF.txt
+
+#Compile the gene count matrix
+python "${script_dir}"/prepDE.py3 -g "${out_dir}"/"${species}"_"${genome}"_gene_count_matrix.csv -i listGTF.txt
+
+echo "Gene count matrix compiled." $(date)
+```
+cd 
+Then run as follows:
+
+```
+# run stringtie standard script
+sbatch 08_prepDE.sh "$species" "$genome"
+```
+
+
+### Run script on the alignments performed above
+
+```
+cd /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/scripts
+
+sbatch 08_prepDE.sh MON MCapV3
+sbatch 08_prepDE.sh POC PacutaV2
+sbatch 08_prepDE.sh POR Pcomp
+```
+
+Woohoo! [Gene count matrices complete.](https://github.com/zdellaert/TimeSeries/tree/main/4-multi-species/output_RNA/count_matrices).
+
+## Contamination screen for poorly mapped samples
+
+```
+cd /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/scripts
+nnn
+
+#enter text in next code chunk
+```
+
+
+```
+#!/usr/bin/env bash
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=16
+#SBATCH --no-requeue
+#SBATCH --mem=200GB
+#SBATCH -t 03:59:00 --qos=short
+#SBATCH --mail-type=END,FAIL,TIME_LIMIT_80
+#SBATCH --error=../scripts/outs_errs/%x_error.%j #if your job fails, the error report will be put in this file
+#SBATCH --output=../scripts/outs_errs/%x_output.%j #once your job is completed, any final job report comments will be put in this file
+
+# load modules required
+module load kraken2/2.1.2
+
+# make and enter output directory
+data_dir="/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed"
+out_dir="/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/kraken"
+
+mkdir -p "${out_dir}"
+
+samples=(
+  "MON_R72_H1_S3"
+  "MON_R72_H2_S4"
+  "run-2-MON_R72_H2_S14"
+  "MON_R72_H3_S44"
+  "run-2-MON_R72_H3_S28"
+)
+
+for s in "${samples[@]}"; do
+    R1="${data_dir}/${s}_R1_trim.fastq.gz"
+    R2="${data_dir}/${s}_R2_trim.fastq.gz"
+
+    kraken2 \
+      --db /datasets/bio/kraken2/kraken2-db/ \
+      --threads 16 \
+      --paired "$R1" "$R2" \
+      --use-names \
+      --report "${out_dir}/${s}.report.txt" \
+      --output "${out_dir}/${s}.kraken" 
+done
+```
+
+### Contamination screen results
+
+Coral reads will show up as unclassified, because they are not in the kraken database. Samples H1 and H2 showed 10-30% bacterial contamination, which is extremely high compared to the 2% seen in a sample that mapped well.
+
+#### MON_R72_H1
+
+- **89.0% unclassified**  
+- **10.6% bacterial**  
+  - 4.9% Pseudomonadota  
+  - 3.9% Gammaproteobacteria  
+  - 1.1% Alteromonadales
+
+#### MON_R72_H2
+
+- **67.5% unclassified**  
+- **32.0% bacterial**  
+  - 20.8% Pseudomonadota  
+  - 17.9% Gammaproteobacteria  
+  - 10.9% Alteromonadales
+
+#### run-2-MON_R72_H2
+
+- **64.7% unclassified**  
+- **34.8% bacterial**  
+  - 22.8% Pseudomonadota  
+  - 19.8% Gammaproteobacteria  
+  - 11.6% Alteromonadales
+
+### GOOD sample example: MON_R72_H3
+
+- **97.8% unclassified**  
+- **1.99% bacterial**  
+  - 0.67% Terrabacteria  
+  - 0.33% Bacillota
+
+### GOOD sample example: run-2-MON_R72_H3
+
+- **97.5% unclassified**  
+- **2.3% bacterial**  
+  - 0.74% Terrabacteria  
+  - 0.40% Bacillota
