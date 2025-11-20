@@ -1,0 +1,19 @@
+Loading perl version 5.38.2
+Loading rsync version 3.2.7
+Loading libiconv version 1.18
+Loading zlib-ng version 2.1.6
+Loading openssl version 3.4.0
+Loading wget version 1.24.5
+Loading kraken2 version 2.1.2
+Loading database information... done.
+15327535 sequences (4252.89 Mbp) processed in 52.173s (17626.8 Kseq/m, 4890.87 Mbp/m).
+  1683567 sequences classified (10.98%)
+  13643968 sequences unclassified (89.02%)
+Loading database information... done.
+14065791 sequences (3856.82 Mbp) processed in 46.842s (18016.8 Kseq/m, 4940.17 Mbp/m).
+  4573757 sequences classified (32.52%)
+  9492034 sequences unclassified (67.48%)
+Loading database information... done.
+6792912 sequences (1805.18 Mbp) processed in 22.360s (18228.0 Kseq/m, 4843.98 Mbp/m).
+  2398922 sequences classified (35.32%)
+  4393990 sequences unclassified (64.68%)

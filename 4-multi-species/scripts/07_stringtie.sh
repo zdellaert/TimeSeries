@@ -4,7 +4,7 @@
 #SBATCH --cpus-per-task=16
 #SBATCH --no-requeue
 #SBATCH --mem=16GB
-#SBATCH -t 03:59:00 --qos=short
+#SBATCH -t 03:59:00
 #SBATCH --mail-type=END,FAIL,TIME_LIMIT_80
 #SBATCH --error=../scripts/outs_errs/%x_error.%j #if your job fails, the error report will be put in this file
 #SBATCH --output=../scripts/outs_errs/%x_output.%j #once your job is completed, any final job report comments will be put in this file
@@ -34,6 +34,7 @@ for f in "${bams[@]}"; do
     sample_name=$(echo "$f" | sed -E 's/_Aligned.*//')
 
     # -p 16 : use 16 cores
+    # --rf : library is reverse-forward stranded
     # -e : exclude novel genes
     # -B : create Ballgown input files for downstream analysis
     # -v : enable verbose mode
@@ -41,7 +42,7 @@ for f in "${bams[@]}"; do
     # -A : output name for gene abundance estimate files
     # -o : output name for gtf file
 
-    stringtie -p 16 -e -B -v \
+    stringtie -p 16 --rf -e -B -v \
         -G "${gtf_path}" \
         -A "${out_dir}"/"${sample_name}".gene_abund.tab \
         -o "${out_dir}"/"${sample_name}".gtf \
