@@ -4,7 +4,7 @@
 #SBATCH --cpus-per-task=16
 #SBATCH --no-requeue
 #SBATCH --mem=16GB
-#SBATCH -t 03:59:00 --qos=short
+#SBATCH -t 00:59:00
 #SBATCH --mail-type=END,FAIL,TIME_LIMIT_80
 #SBATCH --error=../scripts/outs_errs/%x_error.%j #if your job fails, the error report will be put in this file
 #SBATCH --output=../scripts/outs_errs/%x_output.%j #once your job is completed, any final job report comments will be put in this file
