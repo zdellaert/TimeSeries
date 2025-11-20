@@ -58,14 +58,16 @@ Last Updated: 11/17/2024
   - [Script: 07\_stringtie.sh](#script-07_stringtiesh)
   - [Run script on the alignments performed above](#run-script-on-the-alignments-performed-above-1)
 - [Generate gene count matrix](#generate-gene-count-matrix)
+  - [Script: 08\_prepDE.sh](#script-08_prepdesh)
   - [Run script on the alignments performed above](#run-script-on-the-alignments-performed-above-2)
 - [Contamination screen for poorly mapped samples](#contamination-screen-for-poorly-mapped-samples)
+  - [Script: 09\_kraken.sh](#script-09_krakensh)
   - [Contamination screen results](#contamination-screen-results)
     - [MON\_R72\_H1](#mon_r72_h1)
     - [MON\_R72\_H2](#mon_r72_h2)
     - [run-2-MON\_R72\_H2](#run-2-mon_r72_h2)
-  - [GOOD sample example: MON\_R72\_H3](#good-sample-example-mon_r72_h3)
-  - [GOOD sample example: run-2-MON\_R72\_H3](#good-sample-example-run-2-mon_r72_h3)
+    - [GOOD sample example: MON\_R72\_H3](#good-sample-example-mon_r72_h3)
+    - [GOOD sample example: run-2-MON\_R72\_H3](#good-sample-example-run-2-mon_r72_h3)
 
 ## Download genomes
 
@@ -767,6 +769,8 @@ nano 08_prepDE.sh
 #enter text in next code chunk
 ```
 
+### Script: 08_prepDE.sh
+
 ```
 #!/usr/bin/env bash
 #SBATCH --nodes=1
@@ -834,11 +838,12 @@ Woohoo! [Gene count matrices complete.](https://github.com/zdellaert/TimeSeries/
 
 ```
 cd /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/scripts
-nnn
+nano 09_kraken.sh
 
 #enter text in next code chunk
 ```
 
+### Script: 09_kraken.sh
 
 ```
 #!/usr/bin/env bash
@@ -887,6 +892,8 @@ done
 
 Coral reads will show up as unclassified, because they are not in the kraken database. Samples H1 and H2 showed 10-30% bacterial contamination, which is extremely high compared to the 2% seen in a sample that mapped well.
 
+I am running these samples in particular because they showed 0.5% mapping, while all the other MON samples had > 70% mapping rates.
+
 #### MON_R72_H1
 
 - **89.0% unclassified**  
@@ -911,14 +918,14 @@ Coral reads will show up as unclassified, because they are not in the kraken dat
   - 19.8% Gammaproteobacteria  
   - 11.6% Alteromonadales
 
-### GOOD sample example: MON_R72_H3
+#### GOOD sample example: MON_R72_H3
 
 - **97.8% unclassified**  
 - **1.99% bacterial**  
   - 0.67% Terrabacteria  
   - 0.33% Bacillota
 
-### GOOD sample example: run-2-MON_R72_H3
+#### GOOD sample example: run-2-MON_R72_H3
 
 - **97.5% unclassified**  
 - **2.3% bacterial**  
