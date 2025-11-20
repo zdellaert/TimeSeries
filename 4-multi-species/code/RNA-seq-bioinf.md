@@ -42,11 +42,13 @@ Last Updated: 11/17/2024
 - [Trimming Reads](#trimming-reads)
   - [Script: 03\_trimming.sh](#script-03_trimmingsh)
   - [Interpretation of Post-Trim QC data](#interpretation-of-post-trim-qc-data)
+- [Combining samples across runs](#combining-samples-across-runs)
+  - [Script: 04\_combine\_files.sh](#script-04_combine_filessh)
 - [Alignment with STAR](#alignment-with-star)
   - [First, write a general alignment script](#first-write-a-general-alignment-script)
-    - [Script: 04\_STAR.sh](#script-04_starsh)
+    - [Script: 05\_STAR.sh](#script-05_starsh)
   - [MON Genome Version 3 (*Montipora capitata*)](#mon-genome-version-3-montipora-capitata)
-    - [Alt Script: 05\_MON\_STAR.sh](#alt-script-05_mon_starsh)
+    - [Alt Script: MON\_STAR.sh](#alt-script-mon_starsh)
   - [POC Genome Version 2 (*Pocillopora acuta*)](#poc-genome-version-2-pocillopora-acuta)
   - [POR Genome (*Porites compressa*)](#por-genome-porites-compressa)
 
@@ -339,6 +341,71 @@ echo "QC of trimmed RNA-seq data complete." $(date)
 
 [View results here](https://github.com/zdellaert/TimeSeries/tree/main/4-multi-species/output_RNA/trimmed_qc), [MultiQC report](https://github.com/zdellaert/TimeSeries/blob/main/4-multi-species/output_RNA/trimmed_qc/multiqc_report.html)
 
+All adapter content is gone!
+
+Important notes:
+- Now 14 samples have fewer than 15M reads in each direction
+- MANY of the Porites samples still have extremely high duplication rates
+
+## Combining samples across runs
+
+- sed command breakdown:
+  - `s/^run-2-//` removes `run-2-` from any file names that have it
+  - `s/_S.*//` removes the `_S##` number and everything after (incl `_R1_trim.fastq.gz`) from all the file names
+
+```
+cd /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/scripts
+nano 04_combine_files.sh
+
+#enter text in next code chunk
+```
+
+### Script: 04_combine_files.sh
+
+```
+#!/usr/bin/env bash
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=4
+#SBATCH --no-requeue
+#SBATCH --mem=16GB
+#SBATCH -t 03:59:00 --qos=short
+#SBATCH --mail-type=END,FAIL,TIME_LIMIT_80
+#SBATCH --error=../scripts/outs_errs/%x_error.%j #if your job fails, the error report will be put in this file
+#SBATCH --output=../scripts/outs_errs/%x_output.%j #once your job is completed, any final job report comments will be put in this file
+
+# enter trimmed data directory
+cd /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/
+
+# make a directory to move combined files (and files from samples with only one run) into
+mkdir -p combined_files
+
+for f in *R1_trim.fastq.gz; do
+  # skip "run-2" files
+  if [[ "$f" == run-2-* ]]; then
+    continue
+  fi
+
+  # extract the sample ID for the file, which is the first three underscore-sep. fields (ex: POR_R1_C2)
+  sample=$(echo "$f" | sed -E 's/^run-2-//; s/_S.*//')
+
+  # define output names
+  combinedR1="combined_files/${sample}_R1_trim.fastq.gz"
+  combinedR2="combined_files/${sample}_R2_trim.fastq.gz"
+
+  # gather all matching R1 and R2 files (run-1 + run-2)
+  r1_files=( *${sample}*R1_trim.fastq.gz )
+  r2_files=( *${sample}*R2_trim.fastq.gz )
+  
+  echo "Combining sample: $sample from files ${r1_files[@]} and ${r2_files[@]}"
+
+  # concatenate the two r1 files (if there are two) and the two r2 files (if there are two)
+    cat "${r1_files[@]}" > "$combinedR1"
+    cat "${r2_files[@]}" > "$combinedR2"
+done
+```
+
+
 ## Alignment with STAR
 
 I am using [STAR](https://github.com/alexdobin/STAR) for alignment, manual is [here](https://github.com/alexdobin/STAR/blob/master/doc/STARmanual.pdf)
@@ -347,12 +414,12 @@ I am using [STAR](https://github.com/alexdobin/STAR) for alignment, manual is [h
 
 ```
 cd /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/scripts
-nano 04_STAR.sh
+nano 05_STAR.sh
 
 #enter text in next code chunk
 ```
 
-#### Script: 04_STAR.sh
+#### Script: 05_STAR.sh
 
 ```
 #!/usr/bin/env bash
@@ -422,14 +489,14 @@ done
 ```
 
 ```
-chmod +x 04_STAR.sh
+chmod +x 05_STAR.sh
 ```
 
 Then run as follows:
 
 ```
 # run STAR standard script
-sbatch 04_STAR.sh "$species" "$genome" "$genome_path" "$gff_path" T/F
+sbatch 05_STAR.sh "$species" "$genome" "$genome_path" "$gff_path" T/F
 ```
 
 ### MON Genome Version 3 ([*Montipora capitata*](http://cyanophora.rutgers.edu/montipora/))
@@ -439,13 +506,13 @@ sbatch 04_STAR.sh "$species" "$genome" "$genome_path" "$gff_path" T/F
 ```
 cd /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/scripts
 
-sbatch 04_STAR.sh MON MCapV3 \
+sbatch 05_STAR.sh MON MCapV3 \
      "/work/pi_hputnam_uri_edu/HI_Genomes/MCapV3/Montipora_capitata_HIv3.assembly.fasta" \
      "/work/pi_hputnam_uri_edu/HI_Genomes/MCapV3/Montipora_capitata_HIv3.genes.gff3" \
      T
 ```
 
-#### Alt Script: 05_MON_STAR.sh
+#### Alt Script: MON_STAR.sh
 
 Alternatively I can have the STAR script not have the sbatch parameters in it and then run like this
 
@@ -467,7 +534,7 @@ genome_path="/work/pi_hputnam_uri_edu/HI_Genomes/MCapV3/Montipora_capitata_HIv3.
 gff_path="/work/pi_hputnam_uri_edu/HI_Genomes/MCapV3/Montipora_capitata_HIv3.genes.gff3"
 
 # run STAR standard script
-./04_STAR.sh "$species" "$genome" "$genome_path" "$gff_path" "T"
+./05_STAR.sh "$species" "$genome" "$genome_path" "$gff_path" "T"
 ```
 
 ### POC Genome Version 2 ([*Pocillopora acuta*](http://cyanophora.rutgers.edu/Pocillopora_acuta/))
@@ -477,7 +544,7 @@ gff_path="/work/pi_hputnam_uri_edu/HI_Genomes/MCapV3/Montipora_capitata_HIv3.gen
 ```
 cd /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/scripts
 
-sbatch 04_STAR.sh POC PacutaV2 \
+sbatch 05_STAR.sh POC PacutaV2 \
      "/work/pi_hputnam_uri_edu/HI_Genomes/PacutaV2/Pocillopora_acuta_HIv2.assembly.fasta" \
      "/work/pi_hputnam_uri_edu/HI_Genomes/PacutaV2/Pocillopora_acuta_HIv2.genes.gff3" \
      T
@@ -490,7 +557,7 @@ sbatch 04_STAR.sh POC PacutaV2 \
 ```
 cd /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/scripts
 
-sbatch 04_STAR.sh POR Pcomp \
+sbatch 05_STAR.sh POR Pcomp \
      "/work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.assembly.fasta" \
      "/work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.genes.gff3" \
      T

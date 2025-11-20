@@ -1,6 +1,5 @@
 .DS_Store
 *.tiff
-*fastq.gz
 
 # History files
 .Rhistory
@@ -16,3 +15,7 @@
 # RStudio files
 .Rproj.user/
 code.Rproj
+
+# large bioinformatic files
+*multiqc_data.json
+*fastq.gz
