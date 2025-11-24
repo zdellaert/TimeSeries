@@ -62,3 +62,34 @@ paste(nrow(QC_trim_summarized %>% arrange(total_Mseq) %>% filter(total_Mseq < 15
 
 write.csv(QC_trim_summarized %>% arrange(total_Mseq) , "../output_RNA/trimmed_qc/multiqc_data/concatenated_runs_nreads_post_trim.csv")
 ```
+
+### rRNA contamination and mapping comparison
+
+
+```{r}
+# load in multiqc data of mapping data
+POR_map <- read.delim("../output_RNA/alignment_qc/POR_Pcomp/multiqc_data/multiqc_star.txt", header = TRUE)
+POR_rRNA <- 
+```
+
+```{r}
+QC_trim <- QC_trim %>%
+  mutate(sample_id = str_replace(Sample, "run-2-", "")) %>%
+  mutate(sample_id = str_replace(sample_id, "_S[0-9]+", ""))
+
+QC_trim_summarized <- QC_trim %>%
+  group_by(sample_id) %>%
+  summarise(
+    total_seq = sum(Total.Sequences),
+    n_fastqs = n(),
+    .groups = "drop"
+  ) %>%
+  mutate(total_Mseq = total_seq/1000000)
+
+QC_trim_summarized %>% arrange(total_Mseq) %>% filter(total_Mseq < 15) 
+paste(nrow(QC_trim_summarized %>% arrange(total_Mseq) %>% filter(total_Mseq < 15))/2, "samples have fewer than 15M reads in each direction")
+
+write.csv(QC_trim_summarized %>% arrange(total_Mseq) , "../output_RNA/trimmed_qc/multiqc_data/concatenated_runs_nreads_post_trim.csv")
+```
+```
+

@@ -68,6 +68,11 @@ Last Updated: 11/17/2024
     - [run-2-MON\_R72\_H2](#run-2-mon_r72_h2)
     - [GOOD sample example: MON\_R72\_H3](#good-sample-example-mon_r72_h3)
     - [GOOD sample example: run-2-MON\_R72\_H3](#good-sample-example-run-2-mon_r72_h3)
+- [Alternative alignment: *Pseudoalignment* using kallisto](#alternative-alignment-pseudoalignment-using-kallisto)
+    - [Script: 010\_kallisto\_index.sh](#script-010_kallisto_indexsh)
+- [rRNA contamination screen](#rrna-contamination-screen)
+  - [Script: 011\_bbduk\_rRNA.sh](#script-011_bbduk_rrnash)
+  - [rRNA contamination results:](#rrna-contamination-results)
 
 ## Download genomes
 
@@ -580,11 +585,13 @@ cd /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/scripts
 
 sbatch 05_STAR.sh POR Pcomp \
      "/work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.assembly.fasta" \
-     "/work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.genes.gff3" \
+     "/work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf" \
      T
 ```
 
 ## Assess Mapping Quality
+
+I am using [Qualimap](http://qualimap.conesalab.org/) to assess the STAR mapping quality, then performing multiqc on the Qualimap and STAR log files to get a cohesive mapping report. Qualimap is SUPER slow, so I am running it as an array job. 
 
 ```
 cd /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/scripts
@@ -598,11 +605,12 @@ nano 06_qualimap.sh
 ```
 #!/usr/bin/env bash
 #SBATCH --export=NONE
-#SBATCH --ntasks=1 --cpus-per-task=20
-#SBATCH --mem=100GB
-#SBATCH --time=24:00:00
-#SBATCH --error=../scripts/outs_errs/%x_error.%j #if your job fails, the error report will be put in this file
-#SBATCH --output=../scripts/outs_errs/%x_output.%j #once your job is completed, any final job report comments will be put in this file
+#SBATCH --ntasks=1 --cpus-per-task=2
+#SBATCH --mem=16GB
+#SBATCH --time=04:00:00
+#SBATCH --error=../scripts/outs_errs/%x_%A_%a_error #if your job fails, the error report will be put in this file
+#SBATCH --output=../scripts/outs_errs/%x_%A_%a_output #once your job is completed, any final job report comments will be put in this file
+#SBATCH --array=0-41
 #SBATCH --mail-type=END,FAIL,TIME_LIMIT_80
 #SBATCH --no-requeue
 
@@ -622,12 +630,15 @@ qc_dir="/project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_
 # make the output directory if it does not exist (-p checks for this)
 mkdir -p "${qc_dir}"
 
-cd "${alignments_dir}"
+# make list of BAM files
 
-for f in *Aligned.sortedByCoord.out.bam; do
-	sample_name=$(echo "$f" | sed -E 's/_Aligned.*//')
+bam_files=("${alignments_dir}"/*Aligned.sortedByCoord.out.bam)
 
-  echo "Running Qualimap on ${sample_name}..."
+# get the BAM for this array task
+f="${bam_files[$SLURM_ARRAY_TASK_ID]}"
+sample_name=$(basename "$f" | sed -E 's/_Aligned.*//')
+
+echo "Running Qualimap on ${sample_name}..."
 
 	qualimap rnaseq \
     --java-mem-size=8G \
@@ -636,18 +647,6 @@ for f in *Aligned.sortedByCoord.out.bam; do
     --sequencing-protocol strand-specific-reverse \
     -bam "${f}"  \
     -outdir "${qc_dir}"/"${sample_name}" 
-done
-
-# load modules needed for multiqc
-module purge
-module load uri/main
-module load MultiQC/1.12-foss-2021b
-
-cd "${qc_dir}"
-
-multiqc . "${alignments_dir}"
-
-echo "MultiQC report of STAR and qualimap outputs generated in "${qc_dir}"/multiqc_report"
 ```
 
 Then run as follows:
@@ -665,6 +664,26 @@ cd /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/scripts
 sbatch 06_qualimap.sh MON MCapV3 "/work/pi_hputnam_uri_edu/HI_Genomes/MCapV3/Montipora_capitata_HIv3.gtf"
 sbatch 06_qualimap.sh POC PacutaV2 "/work/pi_hputnam_uri_edu/HI_Genomes/PacutaV2/Pocillopora_acuta_HIv2.gtf"
 sbatch 06_qualimap.sh POR Pcomp "/work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf"
+```
+
+Then:
+
+```
+# load modules needed for multiqc
+module purge
+module load uri/main
+module load MultiQC/1.12-foss-2021b
+
+species="MON"
+genome="MCapV3"
+scratch_dir="/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries"
+alignments_dir="${scratch_dir}/aligned/${species}_${genome}"
+qc_dir="/project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/alignment_qc/${species}_${genome}"
+
+cd "${qc_dir}"
+
+multiqc . 
+"${alignments_dir}"
 ```
 
 ## Assembly with Stringtie
@@ -836,6 +855,8 @@ Woohoo! [Gene count matrices complete.](https://github.com/zdellaert/TimeSeries/
 
 ## Contamination screen for poorly mapped samples
 
+I am going to use [kraken](https://github.com/DerrickWood/kraken2) to screen for contaminants in files that are mapping poorly.
+
 ```
 cd /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/scripts
 nano 09_kraken.sh
@@ -931,3 +952,237 @@ I am running these samples in particular because they showed 0.5% mapping, while
 - **2.3% bacterial**  
   - 0.74% Terrabacteria  
   - 0.40% Bacillota
+
+## Alternative alignment: *Pseudoalignment* using kallisto
+
+[kallisto]() is a pseudoaligner. Since the POR reads are multi-mapping so much, I want to try alignment with kallisto to see if this helps
+
+
+```
+cd /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/scripts
+nano 010_kallisto.sh
+
+#enter text in next code chunk
+```
+
+#### Script: 010_kallisto_index.sh
+
+```
+#!/usr/bin/env bash
+#SBATCH --export=NONE
+#SBATCH --ntasks=1 --cpus-per-task=20
+#SBATCH --mem=100GB
+#SBATCH -t 03:59:00 --qos=short
+#SBATCH --error=../scripts/outs_errs/%x_error.%j #if your job fails, the error report will be put in this file
+#SBATCH --output=../scripts/outs_errs/%x_output.%j #once your job is completed, any final job report comments will be put in this file
+#SBATCH --mail-type=END,FAIL,TIME_LIMIT_80
+#SBATCH --no-requeue
+
+data_dir="/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed"
+out_dir="/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/kallisto/POR_Pcomp"
+
+mkdir -p "${out_dir}"
+cd "${out_dir}"
+
+# load modules 
+module load kallisto/0.50.1
+module load gffread/0.12.7
+
+# Extract transcriptome from your genome + GFF
+#gffread -w transcripts.fa -g /work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.assembly.fasta /work/pi_hputnam_uri_edu/#HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf
+
+# Build kallisto index
+#kallisto index -i kallisto_index transcripts.fa
+
+# Quantify
+kallisto quant -i kallisto_index \
+               -o POR_R120_H2_kallisto \
+               -t 10 \
+               -b 100 \
+               "${data_dir}"/POR_R120_H2_S46_R1_trim.fastq.gz \
+               "${data_dir}"/POR_R120_H2_S46_R2_trim.fastq.gz
+
+# Check the mapping rate
+echo "Mapping rate:"
+cat POR_R120_H2_kallisto/run_info.json | grep "p_pseudoaligned"
+echo ""
+echo "Number of reads processed:"s
+cat POR_R120_H2_kallisto/run_info.json | grep "n_processed"
+```
+
+Unfortunately this yielded really similar results to STAR. Worked poorly on the same samples that STAR failed on. 
+
+## rRNA contamination screen
+
+I identified the following sequences to screen for *Porites* rRNA sequences, based on BLAST results from overrepresented sequences in 
+
+- PREDICTED: Porites lutea large subunit ribosomal RNA (LOC140953427), rRNA
+  - NCBI Reference Sequence: XR_012167455.1
+- PREDICTED: Porites lutea large subunit ribosomal RNA (LOC140925451), rRNA
+  - NCBI Reference Sequence: XR_012164410.1
+- PREDICTED: Porites lutea large subunit ribosomal RNA (LOC140953428), rRNA
+  - NCBI Reference Sequence: XR_012167456.1
+- PREDICTED: Porites lutea large subunit ribosomal RNA (LOC140925447), rRNA
+  - NCBI Reference Sequence: XR_012164406.1
+- PREDICTED: Porites lutea small subunit ribosomal RNA (LOC140925449), rRNA
+  - NCBI Reference Sequence: XR_012164408.1
+- PREDICTED: Porites lutea small subunit ribosomal RNA (LOC140953426), rRNA
+  - NCBI Reference Sequence: XR_012167454.1
+
+Combine these sequences:
+
+```
+cd /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/
+nano Plutea_rRNA.txt
+```
+
+```
+XR_012167455.1
+XR_012164410.1
+XR_012167456.1
+XR_012164406.1
+XR_012164408.1
+XR_012167454.1
+```
+
+Then, run the following accession script to gather the sequences into a fasta file.
+
+```
+# Read the input file line by line and fetch FASTA sequences
+while read -r accession; do
+  if [[ -n "$accession" ]]; then
+    echo "Fetching $accession..."
+    curl -s "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id=${accession}&rettype=fasta&retmode=text" >> "Plutea_rRNA.fasta"
+    echo >> "Plutea_rRNA.fasta"  # Add a newline between sequences
+    sleep 1  # Avoid hitting rate limits
+  fi
+done < "Plutea_rRNA.txt"
+```
+
+```
+cd /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/scripts
+nano 011_bbduk_rRNA.sh
+
+#enter text in next code chunk
+```
+
+### Script: 011_bbduk_rRNA.sh
+
+```
+#!/usr/bin/env bash
+#SBATCH --export=NONE
+#SBATCH --ntasks=1 --cpus-per-task=4
+#SBATCH --mem=16GB
+#SBATCH -t 03:59:00
+#SBATCH --array=0-41
+#SBATCH --error=../scripts/outs_errs/%x_error.%j #if your job fails, the error report will be put in this file
+#SBATCH --output=../scripts/outs_errs/%x_output.%j #once your job is completed, any final job report comments will be put in this file
+#SBATCH --mail-type=END,FAIL,TIME_LIMIT_80
+#SBATCH --no-requeue
+
+data_dir="/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files"
+out_dir="/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp"
+rrna_ref="/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta"
+
+mkdir -p "${out_dir}"
+cd "${out_dir}"
+
+module load bbmap/39.01
+
+# Get array of sample files
+samples=(${data_dir}/POR*R1_trim.fastq.gz)
+R1_file="${samples[$SLURM_ARRAY_TASK_ID]}"
+sample_name=$(basename "${R1_file}" _R1_trim.fastq.gz)
+R2_file="${data_dir}/${sample_name}_R2_trim.fastq.gz"
+
+echo "Processing ${sample_name}..."
+echo "R1: ${R1_file}"
+echo "R2: ${R2_file}"
+
+# Run BBDuk to match against rRNA
+
+bbduk.sh in1="${R1_file}" \
+         in2="${R2_file}" \
+         ref="${rrna_ref}" \
+         outm="${sample_name}_rRNA.fq.gz" \
+         outu="${sample_name}_clean.fq.gz" \
+         stats="${sample_name}_stats.txt" \
+         k=31 \
+         hdist=1 \
+         threads=4 \
+         overwrite=t
+
+echo "Completed ${sample_name}"
+```
+
+Then, compile the results:
+
+```
+cd /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp
+
+
+echo "sample,total_reads,matched_reads,percent_rrna" > rRNA_contamination_bbduk_summary.csv
+
+for f in *_stats.txt; do
+    sample=$(basename "$f" _stats.txt)
+
+    # Get total reads
+    total=$(grep "^#Total" "$f" | awk '{print $2}')
+
+    # Get total rRNA matched
+    matched=$(grep "^#Matched" "$f" | awk '{print $2}')
+
+    # Get percent rRNA
+    pct=$(grep "^#Matched" "$f" | awk '{print $3}' | tr -d '%')
+
+    echo "${sample},${total},${matched},${pct}" >> rRNA_contamination_bbduk_summary.csv
+done
+```
+
+### rRNA contamination results:
+
+cat rRNA_contamination_bbduk_summary.csv
+
+sample,total_reads,matched_reads,percent_rrna
+POR_R0_C1,45589054,31206913,68.45264
+POR_R0_C2,37069978,26285943,70.90898
+POR_R0_C3,33947180,13854056,40.81062
+POR_R0_H1,32914680,25135482,76.36557
+POR_R0_H2,38624220,28274977,73.20530
+POR_R0_H3,38597738,26013967,67.39765
+POR_R120_C1,27977398,23364958,83.51369
+POR_R120_C2,41769952,19281889,46.16210
+POR_R120_C3,42044314,37289145,88.69010
+POR_R120_H1,22734936,1860738,8.18449
+POR_R120_H2,39575082,2212221,5.58993
+POR_R120_H3,34319848,24365946,70.99666
+POR_R12_C1,29764350,24342366,81.78363
+POR_R12_C2,36509814,13680376,37.47041
+POR_R12_C3,30173416,23408606,77.58023
+POR_R12_H1,36189852,5684737,15.70810
+POR_R12_H2,41438228,11114266,26.82129
+POR_R12_H3,40298122,18240296,45.26339
+POR_R1_C1,31988376,26280941,82.15778
+POR_R1_C2,30029098,15546481,51.77139
+POR_R1_C3,32310340,17939929,55.52380
+POR_R1_H1,37379278,30943859,82.78346
+POR_R1_H2,34940374,29564230,84.61338
+POR_R1_H3,43700528,27234165,62.31999
+POR_R24_C1,42863760,20321477,47.40946
+POR_R24_C2,31993170,23107390,72.22601
+POR_R24_C3,15686114,10388989,66.23048
+POR_R24_H1,34527796,28461837,82.43166
+POR_R24_H2,31502354,11275710,35.79323
+POR_R24_H3,41588334,13480610,32.41440
+POR_R3_C1,30903968,14791361,47.86234
+POR_R3_C2,17141672,8654448,50.48777
+POR_R3_C3,29899132,21991083,73.55091
+POR_R3_H1,28495988,13874756,48.69021
+POR_R3_H2,39225808,10054452,25.63224
+POR_R3_H3,36341772,22111994,60.84457
+POR_R72_C1,31702046,22416835,70.71100
+POR_R72_C2,35441652,19142209,54.01049
+POR_R72_C3,30685500,16845500,54.89726
+POR_R72_H1,30937140,25833256,83.50241
+POR_R72_H2,30321176,24478830,80.73180
+POR_R72_H3,32191874,9157287,28.44596
