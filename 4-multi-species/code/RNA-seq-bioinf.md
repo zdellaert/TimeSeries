@@ -72,7 +72,7 @@ Last Updated: 11/17/2024
     - [Script: 010\_kallisto\_index.sh](#script-010_kallisto_indexsh)
 - [rRNA contamination screen](#rrna-contamination-screen)
   - [Script: 011\_bbduk\_rRNA.sh](#script-011_bbduk_rrnash)
-  - [rRNA contamination results:](#rrna-contamination-results)
+  - [POR rRNA contamination results](#por-rrna-contamination-results)
 
 ## Download genomes
 
@@ -1139,50 +1139,53 @@ for f in *_stats.txt; do
 done
 ```
 
-### rRNA contamination results:
+### POR rRNA contamination results
 
-cat rRNA_contamination_bbduk_summary.csv
+Unfortunately there is very clear rRNA contamination in our polyA selected libraries. When comparing this to the mapping rates, we can see a clear effect of rRNA amount and *unique* alignment to the genome:
 
-sample,total_reads,matched_reads,percent_rrna
-POR_R0_C1,45589054,31206913,68.45264
-POR_R0_C2,37069978,26285943,70.90898
-POR_R0_C3,33947180,13854056,40.81062
-POR_R0_H1,32914680,25135482,76.36557
-POR_R0_H2,38624220,28274977,73.20530
-POR_R0_H3,38597738,26013967,67.39765
-POR_R120_C1,27977398,23364958,83.51369
-POR_R120_C2,41769952,19281889,46.16210
-POR_R120_C3,42044314,37289145,88.69010
-POR_R120_H1,22734936,1860738,8.18449
-POR_R120_H2,39575082,2212221,5.58993
-POR_R120_H3,34319848,24365946,70.99666
-POR_R12_C1,29764350,24342366,81.78363
-POR_R12_C2,36509814,13680376,37.47041
-POR_R12_C3,30173416,23408606,77.58023
-POR_R12_H1,36189852,5684737,15.70810
-POR_R12_H2,41438228,11114266,26.82129
-POR_R12_H3,40298122,18240296,45.26339
-POR_R1_C1,31988376,26280941,82.15778
-POR_R1_C2,30029098,15546481,51.77139
-POR_R1_C3,32310340,17939929,55.52380
-POR_R1_H1,37379278,30943859,82.78346
-POR_R1_H2,34940374,29564230,84.61338
-POR_R1_H3,43700528,27234165,62.31999
-POR_R24_C1,42863760,20321477,47.40946
-POR_R24_C2,31993170,23107390,72.22601
-POR_R24_C3,15686114,10388989,66.23048
-POR_R24_H1,34527796,28461837,82.43166
-POR_R24_H2,31502354,11275710,35.79323
-POR_R24_H3,41588334,13480610,32.41440
-POR_R3_C1,30903968,14791361,47.86234
-POR_R3_C2,17141672,8654448,50.48777
-POR_R3_C3,29899132,21991083,73.55091
-POR_R3_H1,28495988,13874756,48.69021
-POR_R3_H2,39225808,10054452,25.63224
-POR_R3_H3,36341772,22111994,60.84457
-POR_R72_C1,31702046,22416835,70.71100
-POR_R72_C2,35441652,19142209,54.01049
-POR_R72_C3,30685500,16845500,54.89726
-POR_R72_H1,30937140,25833256,83.50241
-POR_R72_H2,30321176,24478830,80.73180
-POR_R72_H3,32191874,9157287,28.44596
+![](./images/POR_rRNA_v_mapping.png)
+ 
+| sample      | percent_rrna |
+|-------------|--------------|
+| POR_R120_C3 | 89           |
+| POR_R1_H2   | 85           |
+| POR_R120_C1 | 84           |
+| POR_R72_H1  | 84           |
+| POR_R1_H1   | 83           |
+| POR_R24_H1  | 82           |
+| POR_R1_C1   | 82           |
+| POR_R12_C1  | 82           |
+| POR_R72_H2  | 81           |
+| POR_R12_C3  | 78           |
+| POR_R0_H1   | 76           |
+| POR_R3_C3   | 74           |
+| POR_R0_H2   | 73           |
+| POR_R24_C2  | 72           |
+| POR_R120_H3 | 71           |
+| POR_R0_C2   | 71           |
+| POR_R72_C1  | 71           |
+| POR_R0_C1   | 68           |
+| POR_R0_H3   | 67           |
+| POR_R24_C3  | 66           |
+| POR_R1_H3   | 62           |
+| POR_R3_H3   | 61           |
+| POR_R1_C3   | 56           |
+| POR_R72_C3  | 55           |
+| POR_R72_C2  | 54           |
+| POR_R1_C2   | 52           |
+| POR_R3_C2   | 50           |
+| POR_R3_H1   | 49           |
+| POR_R3_C1   | 48           |
+| POR_R24_C1  | 47           |
+| POR_R120_C2 | 46           |
+| POR_R12_H3  | 45           |
+| POR_R0_C3   | 41           |
+| POR_R12_C2  | 37           |
+| POR_R24_H2  | 36           |
+| POR_R24_H3  | 32           |
+| POR_R72_H3  | 28           |
+| POR_R12_H2  | 27           |
+| POR_R3_H2   | 26           |
+| POR_R12_H1  | 16           |
+| POR_R120_H1 | 8            |
+| POR_R120_H2 | 6            |
