@@ -1118,10 +1118,11 @@ echo "Completed ${sample_name}"
 Then, compile the results:
 
 ```
+mkdir /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/rRNA_screen/
+
 cd /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp
 
-
-echo "sample,total_reads,matched_reads,percent_rrna" > rRNA_contamination_bbduk_summary.csv
+echo "sample,total_reads,matched_reads,percent_rrna" > /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/rRNA_screen/rRNA_contamination_bbduk_POR.csv
 
 for f in *_stats.txt; do
     sample=$(basename "$f" _stats.txt)
@@ -1135,7 +1136,7 @@ for f in *_stats.txt; do
     # Get percent rRNA
     pct=$(grep "^#Matched" "$f" | awk '{print $3}' | tr -d '%')
 
-    echo "${sample},${total},${matched},${pct}" >> rRNA_contamination_bbduk_summary.csv
+    echo "${sample},${total},${matched},${pct}" >> /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/rRNA_screen/rRNA_contamination_bbduk_POR.csv
 done
 ```
 
@@ -1144,7 +1145,7 @@ done
 Unfortunately there is very clear rRNA contamination in our polyA selected libraries. When comparing this to the mapping rates, we can see a clear effect of rRNA amount and *unique* alignment to the genome:
 
 ![](./images/POR_rRNA_v_mapping.png)
- 
+
 | sample      | percent_rrna |
 |-------------|--------------|
 | POR_R120_C3 | 89           |

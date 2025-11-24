@@ -69,7 +69,7 @@ write.csv(QC_trim_summarized %>% arrange(total_Mseq) , "../output_RNA/trimmed_qc
 ```{r}
 # load in multiqc data of mapping data
 POR_map <- read.delim("../output_RNA/alignment_qc/POR_Pcomp/multiqc_data/multiqc_star.txt", header = TRUE)
-POR_rRNA <- read.csv("~/Downloads/rRNA_contamination_bbduk_summary.csv") %>% select(-total_reads)
+POR_rRNA <- read.csv("../output_RNA/rRNA_screen/rRNA_contamination_bbduk_POR.csv") %>% select(-total_reads)
 ```
 
 ```{r}
@@ -81,8 +81,8 @@ library(ggplot2)
 
 plot <- ggplot(POR_rRNA) + 
   geom_point(aes(x = percent_rrna, y =uniquely_mapped_percent, color=total_reads_Million)) + theme_bw() + 
-  theme(title = "Percent rRNA reads vs. Unique Mapping Rates:\nPOR Samples")
+  labs(title = "Percent rRNA reads vs. Unique Mapping Rates:\nPOR Samples")
 plot
-ggsave
+ggsave("images/POR_rRNA_v_mapping.png")
 ```
 
