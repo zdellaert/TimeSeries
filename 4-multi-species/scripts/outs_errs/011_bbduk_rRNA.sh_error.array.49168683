@@ -1,0 +1,2132 @@
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_H3_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_H3_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R72_H3_rRNA.fq.gz outu=POR_R72_H3_clean.fq.gz stats=POR_R72_H3_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_H3_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_H3_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R72_H3_rRNA.fq.gz, outu=POR_R72_H3_clean.fq.gz, stats=POR_R72_H3_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.079 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.326 seconds.
+Memory: max=7000m, total=7000m, free=6960m, used=40m
+
+Input is being processed as paired
+Started output streams:	0.092 seconds.
+Processing time:   		78.913 seconds.
+
+Input:                  	32191874 reads 		4445215336 bases.
+Contaminants:           	9237726 reads (28.70%) 	1274779511 bases (28.68%)
+Total Removed:          	9237726 reads (28.70%) 	1274779511 bases (28.68%)
+Result:                 	22954148 reads (71.30%) 	3170435825 bases (71.32%)
+
+Time:                         	79.359 seconds.
+Reads Processed:      32191k 	405.65k reads/sec
+Bases Processed:       4445m 	56.01m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx4629m -Xms4629m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_C1_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_C1_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R0_C1_rRNA.fq.gz outu=POR_R0_C1_clean.fq.gz stats=POR_R0_C1_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_C1_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_C1_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R0_C1_rRNA.fq.gz, outu=POR_R0_C1_clean.fq.gz, stats=POR_R0_C1_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.203 seconds.
+Initial:
+Memory: max=4857m, total=4857m, free=4824m, used=33m
+
+Added 500165 kmers; time: 	0.555 seconds.
+Memory: max=4857m, total=4857m, free=4806m, used=51m
+
+Input is being processed as paired
+Started output streams:	0.147 seconds.
+Processing time:   		114.349 seconds.
+
+Input:                  	45589054 reads 		6292949264 bases.
+Contaminants:           	31231676 reads (68.51%) 	4317160052 bases (68.60%)
+Total Removed:          	31231676 reads (68.51%) 	4317160052 bases (68.60%)
+Result:                 	14357378 reads (31.49%) 	1975789212 bases (31.40%)
+
+Time:                         	115.094 seconds.
+Reads Processed:      45589k 	396.10k reads/sec
+Bases Processed:       6292m 	54.68m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_C2_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_C2_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R0_C2_rRNA.fq.gz outu=POR_R0_C2_clean.fq.gz stats=POR_R0_C2_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_C2_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_C2_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R0_C2_rRNA.fq.gz, outu=POR_R0_C2_clean.fq.gz, stats=POR_R0_C2_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.242 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.353 seconds.
+Memory: max=7000m, total=7000m, free=6960m, used=40m
+
+Input is being processed as paired
+Started output streams:	0.103 seconds.
+Processing time:   		97.894 seconds.
+
+Input:                  	37069978 reads 		5110064194 bases.
+Contaminants:           	26313676 reads (70.98%) 	3627810543 bases (70.99%)
+Total Removed:          	26313676 reads (70.98%) 	3627810543 bases (70.99%)
+Result:                 	10756302 reads (29.02%) 	1482253651 bases (29.01%)
+
+Time:                         	98.391 seconds.
+Reads Processed:      37069k 	376.76k reads/sec
+Bases Processed:       5110m 	51.94m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_C3_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_C3_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R0_C3_rRNA.fq.gz outu=POR_R0_C3_clean.fq.gz stats=POR_R0_C3_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_C3_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_C3_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R0_C3_rRNA.fq.gz, outu=POR_R0_C3_clean.fq.gz, stats=POR_R0_C3_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.078 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.285 seconds.
+Memory: max=7000m, total=7000m, free=6960m, used=40m
+
+Input is being processed as paired
+Started output streams:	0.105 seconds.
+Processing time:   		70.130 seconds.
+
+Input:                  	33947180 reads 		4647064996 bases.
+Contaminants:           	13874418 reads (40.87%) 	1898604807 bases (40.86%)
+Total Removed:          	13874418 reads (40.87%) 	1898604807 bases (40.86%)
+Result:                 	20072762 reads (59.13%) 	2748460189 bases (59.14%)
+
+Time:                         	70.557 seconds.
+Reads Processed:      33947k 	481.13k reads/sec
+Bases Processed:       4647m 	65.86m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_H1_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_H1_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R0_H1_rRNA.fq.gz outu=POR_R0_H1_clean.fq.gz stats=POR_R0_H1_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_H1_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_H1_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R0_H1_rRNA.fq.gz, outu=POR_R0_H1_clean.fq.gz, stats=POR_R0_H1_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.078 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.337 seconds.
+Memory: max=7000m, total=7000m, free=6958m, used=42m
+
+Input is being processed as paired
+Started output streams:	0.052 seconds.
+Processing time:   		83.482 seconds.
+
+Input:                  	32914680 reads 		4526153651 bases.
+Contaminants:           	25160662 reads (76.44%) 	3462035944 bases (76.49%)
+Total Removed:          	25160662 reads (76.44%) 	3462035944 bases (76.49%)
+Result:                 	7754018 reads (23.56%) 	1064117707 bases (23.51%)
+
+Time:                         	83.885 seconds.
+Reads Processed:      32914k 	392.38k reads/sec
+Bases Processed:       4526m 	53.96m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_H2_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_H2_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R0_H2_rRNA.fq.gz outu=POR_R0_H2_clean.fq.gz stats=POR_R0_H2_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_H2_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_H2_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R0_H2_rRNA.fq.gz, outu=POR_R0_H2_clean.fq.gz, stats=POR_R0_H2_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.172 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.374 seconds.
+Memory: max=7000m, total=7000m, free=6960m, used=40m
+
+Input is being processed as paired
+Started output streams:	0.123 seconds.
+Processing time:   		90.655 seconds.
+
+Input:                  	38624220 reads 		5273077275 bases.
+Contaminants:           	28289930 reads (73.24%) 	3864179070 bases (73.28%)
+Total Removed:          	28289930 reads (73.24%) 	3864179070 bases (73.28%)
+Result:                 	10334290 reads (26.76%) 	1408898205 bases (26.72%)
+
+Time:                         	91.184 seconds.
+Reads Processed:      38624k 	423.59k reads/sec
+Bases Processed:       5273m 	57.83m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_H3_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_H3_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R0_H3_rRNA.fq.gz outu=POR_R0_H3_clean.fq.gz stats=POR_R0_H3_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_H3_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_H3_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R0_H3_rRNA.fq.gz, outu=POR_R0_H3_clean.fq.gz, stats=POR_R0_H3_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.105 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.301 seconds.
+Memory: max=7000m, total=7000m, free=6960m, used=40m
+
+Input is being processed as paired
+Started output streams:	0.101 seconds.
+Processing time:   		81.944 seconds.
+
+Input:                  	38597738 reads 		5313794676 bases.
+Contaminants:           	26045336 reads (67.48%) 	3587297691 bases (67.51%)
+Total Removed:          	26045336 reads (67.48%) 	3587297691 bases (67.51%)
+Result:                 	12552402 reads (32.52%) 	1726496985 bases (32.49%)
+
+Time:                         	82.376 seconds.
+Reads Processed:      38597k 	468.56k reads/sec
+Bases Processed:       5313m 	64.51m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_C1_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_C1_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R120_C1_rRNA.fq.gz outu=POR_R120_C1_clean.fq.gz stats=POR_R120_C1_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_C1_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_C1_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R120_C1_rRNA.fq.gz, outu=POR_R120_C1_clean.fq.gz, stats=POR_R120_C1_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.096 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.309 seconds.
+Memory: max=7000m, total=7000m, free=6960m, used=40m
+
+Input is being processed as paired
+Started output streams:	0.072 seconds.
+Processing time:   		72.183 seconds.
+
+Input:                  	27977398 reads 		3829468904 bases.
+Contaminants:           	23378894 reads (83.56%) 	3204032637 bases (83.67%)
+Total Removed:          	23378894 reads (83.56%) 	3204032637 bases (83.67%)
+Result:                 	4598504 reads (16.44%) 	625436267 bases (16.33%)
+
+Time:                         	72.596 seconds.
+Reads Processed:      27977k 	385.38k reads/sec
+Bases Processed:       3829m 	52.75m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_C2_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_C2_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R120_C2_rRNA.fq.gz outu=POR_R120_C2_clean.fq.gz stats=POR_R120_C2_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_C2_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_C2_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R120_C2_rRNA.fq.gz, outu=POR_R120_C2_clean.fq.gz, stats=POR_R120_C2_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.109 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.323 seconds.
+Memory: max=7000m, total=7000m, free=6962m, used=38m
+
+Input is being processed as paired
+Started output streams:	0.053 seconds.
+Processing time:   		92.067 seconds.
+
+Input:                  	41769952 reads 		5763136440 bases.
+Contaminants:           	19372400 reads (46.38%) 	2672182708 bases (46.37%)
+Total Removed:          	19372400 reads (46.38%) 	2672182708 bases (46.37%)
+Result:                 	22397552 reads (53.62%) 	3090953732 bases (53.63%)
+
+Time:                         	92.454 seconds.
+Reads Processed:      41769k 	451.79k reads/sec
+Bases Processed:       5763m 	62.34m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_C3_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_C3_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R120_C3_rRNA.fq.gz outu=POR_R120_C3_clean.fq.gz stats=POR_R120_C3_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_C3_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_C3_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R120_C3_rRNA.fq.gz, outu=POR_R120_C3_clean.fq.gz, stats=POR_R120_C3_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.121 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.319 seconds.
+Memory: max=7000m, total=7000m, free=6964m, used=36m
+
+Input is being processed as paired
+Started output streams:	0.101 seconds.
+Processing time:   		121.891 seconds.
+
+Input:                  	42044314 reads 		5777746238 bases.
+Contaminants:           	37309066 reads (88.74%) 	5130217242 bases (88.79%)
+Total Removed:          	37309066 reads (88.74%) 	5130217242 bases (88.79%)
+Result:                 	4735248 reads (11.26%) 	647528996 bases (11.21%)
+
+Time:                         	122.325 seconds.
+Reads Processed:      42044k 	343.71k reads/sec
+Bases Processed:       5777m 	47.23m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_H1_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_H1_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R120_H1_rRNA.fq.gz outu=POR_R120_H1_clean.fq.gz stats=POR_R120_H1_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_H1_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_H1_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R120_H1_rRNA.fq.gz, outu=POR_R120_H1_clean.fq.gz, stats=POR_R120_H1_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.126 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.386 seconds.
+Memory: max=7000m, total=7000m, free=6960m, used=40m
+
+Input is being processed as paired
+Started output streams:	0.043 seconds.
+Processing time:   		96.508 seconds.
+
+Input:                  	22734936 reads 		3137506081 bases.
+Contaminants:           	1873406 reads (8.24%) 	258644605 bases (8.24%)
+Total Removed:          	1873406 reads (8.24%) 	258644605 bases (8.24%)
+Result:                 	20861530 reads (91.76%) 	2878861476 bases (91.76%)
+
+Time:                         	96.970 seconds.
+Reads Processed:      22734k 	234.45k reads/sec
+Bases Processed:       3137m 	32.36m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_H2_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_H2_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R120_H2_rRNA.fq.gz outu=POR_R120_H2_clean.fq.gz stats=POR_R120_H2_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_H2_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_H2_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R120_H2_rRNA.fq.gz, outu=POR_R120_H2_clean.fq.gz, stats=POR_R120_H2_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.100 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.308 seconds.
+Memory: max=7000m, total=7000m, free=6962m, used=38m
+
+Input is being processed as paired
+Started output streams:	0.100 seconds.
+Processing time:   		134.227 seconds.
+
+Input:                  	39575082 reads 		5473244808 bases.
+Contaminants:           	2228722 reads (5.63%) 	307602980 bases (5.62%)
+Total Removed:          	2228722 reads (5.63%) 	307602980 bases (5.62%)
+Result:                 	37346360 reads (94.37%) 	5165641828 bases (94.38%)
+
+Time:                         	134.645 seconds.
+Reads Processed:      39575k 	293.92k reads/sec
+Bases Processed:       5473m 	40.65m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_H3_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_H3_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R120_H3_rRNA.fq.gz outu=POR_R120_H3_clean.fq.gz stats=POR_R120_H3_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_H3_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_H3_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R120_H3_rRNA.fq.gz, outu=POR_R120_H3_clean.fq.gz, stats=POR_R120_H3_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.100 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.306 seconds.
+Memory: max=7000m, total=7000m, free=6960m, used=40m
+
+Input is being processed as paired
+Started output streams:	0.100 seconds.
+Processing time:   		108.732 seconds.
+
+Input:                  	34319848 reads 		4701707468 bases.
+Contaminants:           	24464984 reads (71.29%) 	3356032236 bases (71.38%)
+Total Removed:          	24464984 reads (71.29%) 	3356032236 bases (71.38%)
+Result:                 	9854864 reads (28.71%) 	1345675232 bases (28.62%)
+
+Time:                         	109.179 seconds.
+Reads Processed:      34319k 	314.34k reads/sec
+Bases Processed:       4701m 	43.06m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_C1_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_C1_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R12_C1_rRNA.fq.gz outu=POR_R12_C1_clean.fq.gz stats=POR_R12_C1_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_C1_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_C1_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R12_C1_rRNA.fq.gz, outu=POR_R12_C1_clean.fq.gz, stats=POR_R12_C1_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.197 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.408 seconds.
+Memory: max=7000m, total=7000m, free=6962m, used=38m
+
+Input is being processed as paired
+Started output streams:	0.108 seconds.
+Processing time:   		80.435 seconds.
+
+Input:                  	29764350 reads 		4084293971 bases.
+Contaminants:           	24365164 reads (81.86%) 	3346598919 bases (81.94%)
+Total Removed:          	24365164 reads (81.86%) 	3346598919 bases (81.94%)
+Result:                 	5399186 reads (18.14%) 	737695052 bases (18.06%)
+
+Time:                         	80.988 seconds.
+Reads Processed:      29764k 	367.51k reads/sec
+Bases Processed:       4084m 	50.43m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_C2_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_C2_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R12_C2_rRNA.fq.gz outu=POR_R12_C2_clean.fq.gz stats=POR_R12_C2_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_C2_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_C2_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R12_C2_rRNA.fq.gz, outu=POR_R12_C2_clean.fq.gz, stats=POR_R12_C2_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.136 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.436 seconds.
+Memory: max=7000m, total=7000m, free=6962m, used=38m
+
+Input is being processed as paired
+Started output streams:	0.096 seconds.
+Processing time:   		107.527 seconds.
+
+Input:                  	36509814 reads 		5049125024 bases.
+Contaminants:           	13705668 reads (37.54%) 	1895990935 bases (37.55%)
+Total Removed:          	13705668 reads (37.54%) 	1895990935 bases (37.55%)
+Result:                 	22804146 reads (62.46%) 	3153134089 bases (62.45%)
+
+Time:                         	108.101 seconds.
+Reads Processed:      36509k 	337.74k reads/sec
+Bases Processed:       5049m 	46.71m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_C3_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_C3_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R12_C3_rRNA.fq.gz outu=POR_R12_C3_clean.fq.gz stats=POR_R12_C3_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_C3_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_C3_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R12_C3_rRNA.fq.gz, outu=POR_R12_C3_clean.fq.gz, stats=POR_R12_C3_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.131 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.422 seconds.
+Memory: max=7000m, total=7000m, free=6958m, used=42m
+
+Input is being processed as paired
+Started output streams:	0.117 seconds.
+Processing time:   		87.593 seconds.
+
+Input:                  	30173416 reads 		4176299894 bases.
+Contaminants:           	23447536 reads (77.71%) 	3248048635 bases (77.77%)
+Total Removed:          	23447536 reads (77.71%) 	3248048635 bases (77.77%)
+Result:                 	6725880 reads (22.29%) 	928251259 bases (22.23%)
+
+Time:                         	88.174 seconds.
+Reads Processed:      30173k 	342.20k reads/sec
+Bases Processed:       4176m 	47.36m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_H1_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_H1_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R12_H1_rRNA.fq.gz outu=POR_R12_H1_clean.fq.gz stats=POR_R12_H1_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_H1_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_H1_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R12_H1_rRNA.fq.gz, outu=POR_R12_H1_clean.fq.gz, stats=POR_R12_H1_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.116 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.371 seconds.
+Memory: max=7000m, total=7000m, free=6960m, used=40m
+
+Input is being processed as paired
+Started output streams:	0.092 seconds.
+Processing time:   		121.066 seconds.
+
+Input:                  	36189852 reads 		4965681283 bases.
+Contaminants:           	5707368 reads (15.77%) 	781294362 bases (15.73%)
+Total Removed:          	5707368 reads (15.77%) 	781294362 bases (15.73%)
+Result:                 	30482484 reads (84.23%) 	4184386921 bases (84.27%)
+
+Time:                         	121.564 seconds.
+Reads Processed:      36189k 	297.70k reads/sec
+Bases Processed:       4965m 	40.85m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_H2_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_H2_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R12_H2_rRNA.fq.gz outu=POR_R12_H2_clean.fq.gz stats=POR_R12_H2_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_H2_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_H2_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R12_H2_rRNA.fq.gz, outu=POR_R12_H2_clean.fq.gz, stats=POR_R12_H2_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.117 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.371 seconds.
+Memory: max=7000m, total=7000m, free=6962m, used=38m
+
+Input is being processed as paired
+Started output streams:	0.093 seconds.
+Processing time:   		121.973 seconds.
+
+Input:                  	41438228 reads 		5719592199 bases.
+Contaminants:           	11134604 reads (26.87%) 	1536169418 bases (26.86%)
+Total Removed:          	11134604 reads (26.87%) 	1536169418 bases (26.86%)
+Result:                 	30303624 reads (73.13%) 	4183422781 bases (73.14%)
+
+Time:                         	122.456 seconds.
+Reads Processed:      41438k 	338.39k reads/sec
+Bases Processed:       5719m 	46.71m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_H3_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_H3_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R12_H3_rRNA.fq.gz outu=POR_R12_H3_clean.fq.gz stats=POR_R12_H3_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_H3_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_H3_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R12_H3_rRNA.fq.gz, outu=POR_R12_H3_clean.fq.gz, stats=POR_R12_H3_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.117 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.379 seconds.
+Memory: max=7000m, total=7000m, free=6960m, used=40m
+
+Input is being processed as paired
+Started output streams:	0.082 seconds.
+Processing time:   		99.831 seconds.
+
+Input:                  	40298122 reads 		5542230240 bases.
+Contaminants:           	18275378 reads (45.35%) 	2512835625 bases (45.34%)
+Total Removed:          	18275378 reads (45.35%) 	2512835625 bases (45.34%)
+Result:                 	22022744 reads (54.65%) 	3029394615 bases (54.66%)
+
+Time:                         	100.329 seconds.
+Reads Processed:      40298k 	401.66k reads/sec
+Bases Processed:       5542m 	55.24m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_C1_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_C1_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R1_C1_rRNA.fq.gz outu=POR_R1_C1_clean.fq.gz stats=POR_R1_C1_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_C1_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_C1_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R1_C1_rRNA.fq.gz, outu=POR_R1_C1_clean.fq.gz, stats=POR_R1_C1_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.109 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.391 seconds.
+Memory: max=7000m, total=7000m, free=6962m, used=38m
+
+Input is being processed as paired
+Started output streams:	0.070 seconds.
+Processing time:   		100.025 seconds.
+
+Input:                  	31988376 reads 		4376551747 bases.
+Contaminants:           	26298618 reads (82.21%) 	3600817973 bases (82.28%)
+Total Removed:          	26298618 reads (82.21%) 	3600817973 bases (82.28%)
+Result:                 	5689758 reads (17.79%) 	775733774 bases (17.72%)
+
+Time:                         	100.507 seconds.
+Reads Processed:      31988k 	318.27k reads/sec
+Bases Processed:       4376m 	43.54m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx2797m -Xms2797m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_C2_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_C2_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R1_C2_rRNA.fq.gz outu=POR_R1_C2_clean.fq.gz stats=POR_R1_C2_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_C2_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_C2_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R1_C2_rRNA.fq.gz, outu=POR_R1_C2_clean.fq.gz, stats=POR_R1_C2_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.172 seconds.
+Initial:
+Memory: max=2933m, total=2933m, free=2906m, used=27m
+
+Added 500165 kmers; time: 	0.337 seconds.
+Memory: max=2933m, total=2933m, free=2897m, used=36m
+
+Input is being processed as paired
+Started output streams:	0.075 seconds.
+Processing time:   		63.709 seconds.
+
+Input:                  	30029098 reads 		4133401684 bases.
+Contaminants:           	15582606 reads (51.89%) 	2145532044 bases (51.91%)
+Total Removed:          	15582606 reads (51.89%) 	2145532044 bases (51.91%)
+Result:                 	14446492 reads (48.11%) 	1987869640 bases (48.09%)
+
+Time:                         	64.155 seconds.
+Reads Processed:      30029k 	468.07k reads/sec
+Bases Processed:       4133m 	64.43m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx5028m -Xms5028m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_C3_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_C3_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R1_C3_rRNA.fq.gz outu=POR_R1_C3_clean.fq.gz stats=POR_R1_C3_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_C3_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_C3_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R1_C3_rRNA.fq.gz, outu=POR_R1_C3_clean.fq.gz, stats=POR_R1_C3_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.174 seconds.
+Initial:
+Memory: max=5272m, total=5272m, free=5234m, used=38m
+
+Added 500165 kmers; time: 	0.376 seconds.
+Memory: max=5272m, total=5272m, free=5221m, used=51m
+
+Input is being processed as paired
+Started output streams:	0.037 seconds.
+Processing time:   		74.314 seconds.
+
+Input:                  	32310340 reads 		4424310093 bases.
+Contaminants:           	17961408 reads (55.59%) 	2458979905 bases (55.58%)
+Total Removed:          	17961408 reads (55.59%) 	2458979905 bases (55.58%)
+Result:                 	14348932 reads (44.41%) 	1965330188 bases (44.42%)
+
+Time:                         	74.752 seconds.
+Reads Processed:      32310k 	432.23k reads/sec
+Bases Processed:       4424m 	59.19m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_H1_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_H1_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R1_H1_rRNA.fq.gz outu=POR_R1_H1_clean.fq.gz stats=POR_R1_H1_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_H1_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_H1_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R1_H1_rRNA.fq.gz, outu=POR_R1_H1_clean.fq.gz, stats=POR_R1_H1_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.117 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.316 seconds.
+Memory: max=7000m, total=7000m, free=6958m, used=42m
+
+Input is being processed as paired
+Started output streams:	0.100 seconds.
+Processing time:   		114.099 seconds.
+
+Input:                  	37379278 reads 		5130375097 bases.
+Contaminants:           	30966230 reads (82.84%) 	4254143478 bases (82.92%)
+Total Removed:          	30966230 reads (82.84%) 	4254143478 bases (82.92%)
+Result:                 	6413048 reads (17.16%) 	876231619 bases (17.08%)
+
+Time:                         	114.534 seconds.
+Reads Processed:      37379k 	326.36k reads/sec
+Bases Processed:       5130m 	44.79m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_H2_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_H2_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R1_H2_rRNA.fq.gz outu=POR_R1_H2_clean.fq.gz stats=POR_R1_H2_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_H2_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_H2_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R1_H2_rRNA.fq.gz, outu=POR_R1_H2_clean.fq.gz, stats=POR_R1_H2_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.128 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.329 seconds.
+Memory: max=7000m, total=7000m, free=6960m, used=40m
+
+Input is being processed as paired
+Started output streams:	0.088 seconds.
+Processing time:   		109.558 seconds.
+
+Input:                  	34940374 reads 		4812240889 bases.
+Contaminants:           	29620078 reads (84.77%) 	4080627350 bases (84.80%)
+Total Removed:          	29620078 reads (84.77%) 	4080627350 bases (84.80%)
+Result:                 	5320296 reads (15.23%) 	731613539 bases (15.20%)
+
+Time:                         	110.010 seconds.
+Reads Processed:      34940k 	317.61k reads/sec
+Bases Processed:       4812m 	43.74m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_H3_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_H3_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R1_H3_rRNA.fq.gz outu=POR_R1_H3_clean.fq.gz stats=POR_R1_H3_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_H3_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_H3_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R1_H3_rRNA.fq.gz, outu=POR_R1_H3_clean.fq.gz, stats=POR_R1_H3_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.136 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.406 seconds.
+Memory: max=7000m, total=7000m, free=6960m, used=40m
+
+Input is being processed as paired
+Started output streams:	0.108 seconds.
+Processing time:   		100.703 seconds.
+
+Input:                  	43700528 reads 		6027339216 bases.
+Contaminants:           	27279648 reads (62.42%) 	3762113382 bases (62.42%)
+Total Removed:          	27279648 reads (62.42%) 	3762113382 bases (62.42%)
+Result:                 	16420880 reads (37.58%) 	2265225834 bases (37.58%)
+
+Time:                         	101.261 seconds.
+Reads Processed:      43700k 	431.56k reads/sec
+Bases Processed:       6027m 	59.52m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R24_C1_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R24_C1_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R24_C1_rRNA.fq.gz outu=POR_R24_C1_clean.fq.gz stats=POR_R24_C1_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R24_C1_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R24_C1_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R24_C1_rRNA.fq.gz, outu=POR_R24_C1_clean.fq.gz, stats=POR_R24_C1_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.113 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.319 seconds.
+Memory: max=7000m, total=7000m, free=6962m, used=38m
+
+Input is being processed as paired
+Started output streams:	0.081 seconds.
+Processing time:   		95.956 seconds.
+
+Input:                  	42863760 reads 		5909011596 bases.
+Contaminants:           	20343820 reads (47.46%) 	2803194365 bases (47.44%)
+Total Removed:          	20343820 reads (47.46%) 	2803194365 bases (47.44%)
+Result:                 	22519940 reads (52.54%) 	3105817231 bases (52.56%)
+
+Time:                         	96.376 seconds.
+Reads Processed:      42863k 	444.76k reads/sec
+Bases Processed:       5909m 	61.31m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R24_C2_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R24_C2_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R24_C2_rRNA.fq.gz outu=POR_R24_C2_clean.fq.gz stats=POR_R24_C2_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R24_C2_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R24_C2_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R24_C2_rRNA.fq.gz, outu=POR_R24_C2_clean.fq.gz, stats=POR_R24_C2_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.114 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.301 seconds.
+Memory: max=7000m, total=7000m, free=6956m, used=44m
+
+Input is being processed as paired
+Started output streams:	0.092 seconds.
+Processing time:   		86.706 seconds.
+
+Input:                  	31993170 reads 		4406955922 bases.
+Contaminants:           	23139640 reads (72.33%) 	3189247985 bases (72.37%)
+Total Removed:          	23139640 reads (72.33%) 	3189247985 bases (72.37%)
+Result:                 	8853530 reads (27.67%) 	1217707937 bases (27.63%)
+
+Time:                         	87.126 seconds.
+Reads Processed:      31993k 	367.21k reads/sec
+Bases Processed:       4406m 	50.58m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_H3_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_H3_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R72_H3_rRNA.fq.gz outu=POR_R72_H3_clean.fq.gz stats=POR_R72_H3_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_H3_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_H3_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R72_H3_rRNA.fq.gz, outu=POR_R72_H3_clean.fq.gz, stats=POR_R72_H3_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.079 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.326 seconds.
+Memory: max=7000m, total=7000m, free=6960m, used=40m
+
+Input is being processed as paired
+Started output streams:	0.092 seconds.
+Processing time:   		78.913 seconds.
+
+Input:                  	32191874 reads 		4445215336 bases.
+Contaminants:           	9237726 reads (28.70%) 	1274779511 bases (28.68%)
+Total Removed:          	9237726 reads (28.70%) 	1274779511 bases (28.68%)
+Result:                 	22954148 reads (71.30%) 	3170435825 bases (71.32%)
+
+Time:                         	79.359 seconds.
+Reads Processed:      32191k 	405.65k reads/sec
+Bases Processed:       4445m 	56.01m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx4629m -Xms4629m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_C1_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_C1_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R0_C1_rRNA.fq.gz outu=POR_R0_C1_clean.fq.gz stats=POR_R0_C1_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_C1_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_C1_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R0_C1_rRNA.fq.gz, outu=POR_R0_C1_clean.fq.gz, stats=POR_R0_C1_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.203 seconds.
+Initial:
+Memory: max=4857m, total=4857m, free=4824m, used=33m
+
+Added 500165 kmers; time: 	0.555 seconds.
+Memory: max=4857m, total=4857m, free=4806m, used=51m
+
+Input is being processed as paired
+Started output streams:	0.147 seconds.
+Processing time:   		114.349 seconds.
+
+Input:                  	45589054 reads 		6292949264 bases.
+Contaminants:           	31231676 reads (68.51%) 	4317160052 bases (68.60%)
+Total Removed:          	31231676 reads (68.51%) 	4317160052 bases (68.60%)
+Result:                 	14357378 reads (31.49%) 	1975789212 bases (31.40%)
+
+Time:                         	115.094 seconds.
+Reads Processed:      45589k 	396.10k reads/sec
+Bases Processed:       6292m 	54.68m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_C2_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_C2_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R0_C2_rRNA.fq.gz outu=POR_R0_C2_clean.fq.gz stats=POR_R0_C2_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_C2_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_C2_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R0_C2_rRNA.fq.gz, outu=POR_R0_C2_clean.fq.gz, stats=POR_R0_C2_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.242 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.353 seconds.
+Memory: max=7000m, total=7000m, free=6960m, used=40m
+
+Input is being processed as paired
+Started output streams:	0.103 seconds.
+Processing time:   		97.894 seconds.
+
+Input:                  	37069978 reads 		5110064194 bases.
+Contaminants:           	26313676 reads (70.98%) 	3627810543 bases (70.99%)
+Total Removed:          	26313676 reads (70.98%) 	3627810543 bases (70.99%)
+Result:                 	10756302 reads (29.02%) 	1482253651 bases (29.01%)
+
+Time:                         	98.391 seconds.
+Reads Processed:      37069k 	376.76k reads/sec
+Bases Processed:       5110m 	51.94m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_C3_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_C3_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R0_C3_rRNA.fq.gz outu=POR_R0_C3_clean.fq.gz stats=POR_R0_C3_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_C3_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_C3_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R0_C3_rRNA.fq.gz, outu=POR_R0_C3_clean.fq.gz, stats=POR_R0_C3_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.078 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.285 seconds.
+Memory: max=7000m, total=7000m, free=6960m, used=40m
+
+Input is being processed as paired
+Started output streams:	0.105 seconds.
+Processing time:   		70.130 seconds.
+
+Input:                  	33947180 reads 		4647064996 bases.
+Contaminants:           	13874418 reads (40.87%) 	1898604807 bases (40.86%)
+Total Removed:          	13874418 reads (40.87%) 	1898604807 bases (40.86%)
+Result:                 	20072762 reads (59.13%) 	2748460189 bases (59.14%)
+
+Time:                         	70.557 seconds.
+Reads Processed:      33947k 	481.13k reads/sec
+Bases Processed:       4647m 	65.86m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_H1_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_H1_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R0_H1_rRNA.fq.gz outu=POR_R0_H1_clean.fq.gz stats=POR_R0_H1_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_H1_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_H1_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R0_H1_rRNA.fq.gz, outu=POR_R0_H1_clean.fq.gz, stats=POR_R0_H1_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.078 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.337 seconds.
+Memory: max=7000m, total=7000m, free=6958m, used=42m
+
+Input is being processed as paired
+Started output streams:	0.052 seconds.
+Processing time:   		83.482 seconds.
+
+Input:                  	32914680 reads 		4526153651 bases.
+Contaminants:           	25160662 reads (76.44%) 	3462035944 bases (76.49%)
+Total Removed:          	25160662 reads (76.44%) 	3462035944 bases (76.49%)
+Result:                 	7754018 reads (23.56%) 	1064117707 bases (23.51%)
+
+Time:                         	83.885 seconds.
+Reads Processed:      32914k 	392.38k reads/sec
+Bases Processed:       4526m 	53.96m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_H2_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_H2_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R0_H2_rRNA.fq.gz outu=POR_R0_H2_clean.fq.gz stats=POR_R0_H2_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_H2_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_H2_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R0_H2_rRNA.fq.gz, outu=POR_R0_H2_clean.fq.gz, stats=POR_R0_H2_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.172 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.374 seconds.
+Memory: max=7000m, total=7000m, free=6960m, used=40m
+
+Input is being processed as paired
+Started output streams:	0.123 seconds.
+Processing time:   		90.655 seconds.
+
+Input:                  	38624220 reads 		5273077275 bases.
+Contaminants:           	28289930 reads (73.24%) 	3864179070 bases (73.28%)
+Total Removed:          	28289930 reads (73.24%) 	3864179070 bases (73.28%)
+Result:                 	10334290 reads (26.76%) 	1408898205 bases (26.72%)
+
+Time:                         	91.184 seconds.
+Reads Processed:      38624k 	423.59k reads/sec
+Bases Processed:       5273m 	57.83m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_H3_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_H3_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R0_H3_rRNA.fq.gz outu=POR_R0_H3_clean.fq.gz stats=POR_R0_H3_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_H3_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_H3_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R0_H3_rRNA.fq.gz, outu=POR_R0_H3_clean.fq.gz, stats=POR_R0_H3_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.105 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.301 seconds.
+Memory: max=7000m, total=7000m, free=6960m, used=40m
+
+Input is being processed as paired
+Started output streams:	0.101 seconds.
+Processing time:   		81.944 seconds.
+
+Input:                  	38597738 reads 		5313794676 bases.
+Contaminants:           	26045336 reads (67.48%) 	3587297691 bases (67.51%)
+Total Removed:          	26045336 reads (67.48%) 	3587297691 bases (67.51%)
+Result:                 	12552402 reads (32.52%) 	1726496985 bases (32.49%)
+
+Time:                         	82.376 seconds.
+Reads Processed:      38597k 	468.56k reads/sec
+Bases Processed:       5313m 	64.51m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_C1_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_C1_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R120_C1_rRNA.fq.gz outu=POR_R120_C1_clean.fq.gz stats=POR_R120_C1_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_C1_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_C1_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R120_C1_rRNA.fq.gz, outu=POR_R120_C1_clean.fq.gz, stats=POR_R120_C1_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.096 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.309 seconds.
+Memory: max=7000m, total=7000m, free=6960m, used=40m
+
+Input is being processed as paired
+Started output streams:	0.072 seconds.
+Processing time:   		72.183 seconds.
+
+Input:                  	27977398 reads 		3829468904 bases.
+Contaminants:           	23378894 reads (83.56%) 	3204032637 bases (83.67%)
+Total Removed:          	23378894 reads (83.56%) 	3204032637 bases (83.67%)
+Result:                 	4598504 reads (16.44%) 	625436267 bases (16.33%)
+
+Time:                         	72.596 seconds.
+Reads Processed:      27977k 	385.38k reads/sec
+Bases Processed:       3829m 	52.75m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_C2_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_C2_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R120_C2_rRNA.fq.gz outu=POR_R120_C2_clean.fq.gz stats=POR_R120_C2_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_C2_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_C2_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R120_C2_rRNA.fq.gz, outu=POR_R120_C2_clean.fq.gz, stats=POR_R120_C2_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.109 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.323 seconds.
+Memory: max=7000m, total=7000m, free=6962m, used=38m
+
+Input is being processed as paired
+Started output streams:	0.053 seconds.
+Processing time:   		92.067 seconds.
+
+Input:                  	41769952 reads 		5763136440 bases.
+Contaminants:           	19372400 reads (46.38%) 	2672182708 bases (46.37%)
+Total Removed:          	19372400 reads (46.38%) 	2672182708 bases (46.37%)
+Result:                 	22397552 reads (53.62%) 	3090953732 bases (53.63%)
+
+Time:                         	92.454 seconds.
+Reads Processed:      41769k 	451.79k reads/sec
+Bases Processed:       5763m 	62.34m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_C3_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_C3_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R120_C3_rRNA.fq.gz outu=POR_R120_C3_clean.fq.gz stats=POR_R120_C3_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_C3_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_C3_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R120_C3_rRNA.fq.gz, outu=POR_R120_C3_clean.fq.gz, stats=POR_R120_C3_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.121 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.319 seconds.
+Memory: max=7000m, total=7000m, free=6964m, used=36m
+
+Input is being processed as paired
+Started output streams:	0.101 seconds.
+Processing time:   		121.891 seconds.
+
+Input:                  	42044314 reads 		5777746238 bases.
+Contaminants:           	37309066 reads (88.74%) 	5130217242 bases (88.79%)
+Total Removed:          	37309066 reads (88.74%) 	5130217242 bases (88.79%)
+Result:                 	4735248 reads (11.26%) 	647528996 bases (11.21%)
+
+Time:                         	122.325 seconds.
+Reads Processed:      42044k 	343.71k reads/sec
+Bases Processed:       5777m 	47.23m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_H1_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_H1_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R120_H1_rRNA.fq.gz outu=POR_R120_H1_clean.fq.gz stats=POR_R120_H1_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_H1_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_H1_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R120_H1_rRNA.fq.gz, outu=POR_R120_H1_clean.fq.gz, stats=POR_R120_H1_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.126 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.386 seconds.
+Memory: max=7000m, total=7000m, free=6960m, used=40m
+
+Input is being processed as paired
+Started output streams:	0.043 seconds.
+Processing time:   		96.508 seconds.
+
+Input:                  	22734936 reads 		3137506081 bases.
+Contaminants:           	1873406 reads (8.24%) 	258644605 bases (8.24%)
+Total Removed:          	1873406 reads (8.24%) 	258644605 bases (8.24%)
+Result:                 	20861530 reads (91.76%) 	2878861476 bases (91.76%)
+
+Time:                         	96.970 seconds.
+Reads Processed:      22734k 	234.45k reads/sec
+Bases Processed:       3137m 	32.36m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_H2_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_H2_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R120_H2_rRNA.fq.gz outu=POR_R120_H2_clean.fq.gz stats=POR_R120_H2_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_H2_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_H2_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R120_H2_rRNA.fq.gz, outu=POR_R120_H2_clean.fq.gz, stats=POR_R120_H2_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.100 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.308 seconds.
+Memory: max=7000m, total=7000m, free=6962m, used=38m
+
+Input is being processed as paired
+Started output streams:	0.100 seconds.
+Processing time:   		134.227 seconds.
+
+Input:                  	39575082 reads 		5473244808 bases.
+Contaminants:           	2228722 reads (5.63%) 	307602980 bases (5.62%)
+Total Removed:          	2228722 reads (5.63%) 	307602980 bases (5.62%)
+Result:                 	37346360 reads (94.37%) 	5165641828 bases (94.38%)
+
+Time:                         	134.645 seconds.
+Reads Processed:      39575k 	293.92k reads/sec
+Bases Processed:       5473m 	40.65m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_H3_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_H3_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R120_H3_rRNA.fq.gz outu=POR_R120_H3_clean.fq.gz stats=POR_R120_H3_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_H3_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_H3_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R120_H3_rRNA.fq.gz, outu=POR_R120_H3_clean.fq.gz, stats=POR_R120_H3_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.100 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.306 seconds.
+Memory: max=7000m, total=7000m, free=6960m, used=40m
+
+Input is being processed as paired
+Started output streams:	0.100 seconds.
+Processing time:   		108.732 seconds.
+
+Input:                  	34319848 reads 		4701707468 bases.
+Contaminants:           	24464984 reads (71.29%) 	3356032236 bases (71.38%)
+Total Removed:          	24464984 reads (71.29%) 	3356032236 bases (71.38%)
+Result:                 	9854864 reads (28.71%) 	1345675232 bases (28.62%)
+
+Time:                         	109.179 seconds.
+Reads Processed:      34319k 	314.34k reads/sec
+Bases Processed:       4701m 	43.06m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_C1_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_C1_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R12_C1_rRNA.fq.gz outu=POR_R12_C1_clean.fq.gz stats=POR_R12_C1_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_C1_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_C1_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R12_C1_rRNA.fq.gz, outu=POR_R12_C1_clean.fq.gz, stats=POR_R12_C1_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.197 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.408 seconds.
+Memory: max=7000m, total=7000m, free=6962m, used=38m
+
+Input is being processed as paired
+Started output streams:	0.108 seconds.
+Processing time:   		80.435 seconds.
+
+Input:                  	29764350 reads 		4084293971 bases.
+Contaminants:           	24365164 reads (81.86%) 	3346598919 bases (81.94%)
+Total Removed:          	24365164 reads (81.86%) 	3346598919 bases (81.94%)
+Result:                 	5399186 reads (18.14%) 	737695052 bases (18.06%)
+
+Time:                         	80.988 seconds.
+Reads Processed:      29764k 	367.51k reads/sec
+Bases Processed:       4084m 	50.43m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_C2_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_C2_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R12_C2_rRNA.fq.gz outu=POR_R12_C2_clean.fq.gz stats=POR_R12_C2_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_C2_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_C2_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R12_C2_rRNA.fq.gz, outu=POR_R12_C2_clean.fq.gz, stats=POR_R12_C2_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.136 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.436 seconds.
+Memory: max=7000m, total=7000m, free=6962m, used=38m
+
+Input is being processed as paired
+Started output streams:	0.096 seconds.
+Processing time:   		107.527 seconds.
+
+Input:                  	36509814 reads 		5049125024 bases.
+Contaminants:           	13705668 reads (37.54%) 	1895990935 bases (37.55%)
+Total Removed:          	13705668 reads (37.54%) 	1895990935 bases (37.55%)
+Result:                 	22804146 reads (62.46%) 	3153134089 bases (62.45%)
+
+Time:                         	108.101 seconds.
+Reads Processed:      36509k 	337.74k reads/sec
+Bases Processed:       5049m 	46.71m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_C3_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_C3_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R12_C3_rRNA.fq.gz outu=POR_R12_C3_clean.fq.gz stats=POR_R12_C3_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_C3_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_C3_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R12_C3_rRNA.fq.gz, outu=POR_R12_C3_clean.fq.gz, stats=POR_R12_C3_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.131 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.422 seconds.
+Memory: max=7000m, total=7000m, free=6958m, used=42m
+
+Input is being processed as paired
+Started output streams:	0.117 seconds.
+Processing time:   		87.593 seconds.
+
+Input:                  	30173416 reads 		4176299894 bases.
+Contaminants:           	23447536 reads (77.71%) 	3248048635 bases (77.77%)
+Total Removed:          	23447536 reads (77.71%) 	3248048635 bases (77.77%)
+Result:                 	6725880 reads (22.29%) 	928251259 bases (22.23%)
+
+Time:                         	88.174 seconds.
+Reads Processed:      30173k 	342.20k reads/sec
+Bases Processed:       4176m 	47.36m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_H1_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_H1_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R12_H1_rRNA.fq.gz outu=POR_R12_H1_clean.fq.gz stats=POR_R12_H1_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_H1_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_H1_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R12_H1_rRNA.fq.gz, outu=POR_R12_H1_clean.fq.gz, stats=POR_R12_H1_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.116 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.371 seconds.
+Memory: max=7000m, total=7000m, free=6960m, used=40m
+
+Input is being processed as paired
+Started output streams:	0.092 seconds.
+Processing time:   		121.066 seconds.
+
+Input:                  	36189852 reads 		4965681283 bases.
+Contaminants:           	5707368 reads (15.77%) 	781294362 bases (15.73%)
+Total Removed:          	5707368 reads (15.77%) 	781294362 bases (15.73%)
+Result:                 	30482484 reads (84.23%) 	4184386921 bases (84.27%)
+
+Time:                         	121.564 seconds.
+Reads Processed:      36189k 	297.70k reads/sec
+Bases Processed:       4965m 	40.85m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_H2_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_H2_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R12_H2_rRNA.fq.gz outu=POR_R12_H2_clean.fq.gz stats=POR_R12_H2_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_H2_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_H2_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R12_H2_rRNA.fq.gz, outu=POR_R12_H2_clean.fq.gz, stats=POR_R12_H2_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.117 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.371 seconds.
+Memory: max=7000m, total=7000m, free=6962m, used=38m
+
+Input is being processed as paired
+Started output streams:	0.093 seconds.
+Processing time:   		121.973 seconds.
+
+Input:                  	41438228 reads 		5719592199 bases.
+Contaminants:           	11134604 reads (26.87%) 	1536169418 bases (26.86%)
+Total Removed:          	11134604 reads (26.87%) 	1536169418 bases (26.86%)
+Result:                 	30303624 reads (73.13%) 	4183422781 bases (73.14%)
+
+Time:                         	122.456 seconds.
+Reads Processed:      41438k 	338.39k reads/sec
+Bases Processed:       5719m 	46.71m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_H3_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_H3_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R12_H3_rRNA.fq.gz outu=POR_R12_H3_clean.fq.gz stats=POR_R12_H3_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_H3_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_H3_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R12_H3_rRNA.fq.gz, outu=POR_R12_H3_clean.fq.gz, stats=POR_R12_H3_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.117 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.379 seconds.
+Memory: max=7000m, total=7000m, free=6960m, used=40m
+
+Input is being processed as paired
+Started output streams:	0.082 seconds.
+Processing time:   		99.831 seconds.
+
+Input:                  	40298122 reads 		5542230240 bases.
+Contaminants:           	18275378 reads (45.35%) 	2512835625 bases (45.34%)
+Total Removed:          	18275378 reads (45.35%) 	2512835625 bases (45.34%)
+Result:                 	22022744 reads (54.65%) 	3029394615 bases (54.66%)
+
+Time:                         	100.329 seconds.
+Reads Processed:      40298k 	401.66k reads/sec
+Bases Processed:       5542m 	55.24m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_C1_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_C1_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R1_C1_rRNA.fq.gz outu=POR_R1_C1_clean.fq.gz stats=POR_R1_C1_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_C1_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_C1_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R1_C1_rRNA.fq.gz, outu=POR_R1_C1_clean.fq.gz, stats=POR_R1_C1_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.109 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.391 seconds.
+Memory: max=7000m, total=7000m, free=6962m, used=38m
+
+Input is being processed as paired
+Started output streams:	0.070 seconds.
+Processing time:   		100.025 seconds.
+
+Input:                  	31988376 reads 		4376551747 bases.
+Contaminants:           	26298618 reads (82.21%) 	3600817973 bases (82.28%)
+Total Removed:          	26298618 reads (82.21%) 	3600817973 bases (82.28%)
+Result:                 	5689758 reads (17.79%) 	775733774 bases (17.72%)
+
+Time:                         	100.507 seconds.
+Reads Processed:      31988k 	318.27k reads/sec
+Bases Processed:       4376m 	43.54m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx2797m -Xms2797m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_C2_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_C2_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R1_C2_rRNA.fq.gz outu=POR_R1_C2_clean.fq.gz stats=POR_R1_C2_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_C2_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_C2_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R1_C2_rRNA.fq.gz, outu=POR_R1_C2_clean.fq.gz, stats=POR_R1_C2_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.172 seconds.
+Initial:
+Memory: max=2933m, total=2933m, free=2906m, used=27m
+
+Added 500165 kmers; time: 	0.337 seconds.
+Memory: max=2933m, total=2933m, free=2897m, used=36m
+
+Input is being processed as paired
+Started output streams:	0.075 seconds.
+Processing time:   		63.709 seconds.
+
+Input:                  	30029098 reads 		4133401684 bases.
+Contaminants:           	15582606 reads (51.89%) 	2145532044 bases (51.91%)
+Total Removed:          	15582606 reads (51.89%) 	2145532044 bases (51.91%)
+Result:                 	14446492 reads (48.11%) 	1987869640 bases (48.09%)
+
+Time:                         	64.155 seconds.
+Reads Processed:      30029k 	468.07k reads/sec
+Bases Processed:       4133m 	64.43m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx5028m -Xms5028m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_C3_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_C3_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R1_C3_rRNA.fq.gz outu=POR_R1_C3_clean.fq.gz stats=POR_R1_C3_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_C3_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_C3_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R1_C3_rRNA.fq.gz, outu=POR_R1_C3_clean.fq.gz, stats=POR_R1_C3_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.174 seconds.
+Initial:
+Memory: max=5272m, total=5272m, free=5234m, used=38m
+
+Added 500165 kmers; time: 	0.376 seconds.
+Memory: max=5272m, total=5272m, free=5221m, used=51m
+
+Input is being processed as paired
+Started output streams:	0.037 seconds.
+Processing time:   		74.314 seconds.
+
+Input:                  	32310340 reads 		4424310093 bases.
+Contaminants:           	17961408 reads (55.59%) 	2458979905 bases (55.58%)
+Total Removed:          	17961408 reads (55.59%) 	2458979905 bases (55.58%)
+Result:                 	14348932 reads (44.41%) 	1965330188 bases (44.42%)
+
+Time:                         	74.752 seconds.
+Reads Processed:      32310k 	432.23k reads/sec
+Bases Processed:       4424m 	59.19m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_H1_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_H1_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R1_H1_rRNA.fq.gz outu=POR_R1_H1_clean.fq.gz stats=POR_R1_H1_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_H1_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_H1_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R1_H1_rRNA.fq.gz, outu=POR_R1_H1_clean.fq.gz, stats=POR_R1_H1_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.117 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.316 seconds.
+Memory: max=7000m, total=7000m, free=6958m, used=42m
+
+Input is being processed as paired
+Started output streams:	0.100 seconds.
+Processing time:   		114.099 seconds.
+
+Input:                  	37379278 reads 		5130375097 bases.
+Contaminants:           	30966230 reads (82.84%) 	4254143478 bases (82.92%)
+Total Removed:          	30966230 reads (82.84%) 	4254143478 bases (82.92%)
+Result:                 	6413048 reads (17.16%) 	876231619 bases (17.08%)
+
+Time:                         	114.534 seconds.
+Reads Processed:      37379k 	326.36k reads/sec
+Bases Processed:       5130m 	44.79m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_H2_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_H2_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R1_H2_rRNA.fq.gz outu=POR_R1_H2_clean.fq.gz stats=POR_R1_H2_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_H2_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_H2_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R1_H2_rRNA.fq.gz, outu=POR_R1_H2_clean.fq.gz, stats=POR_R1_H2_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.128 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.329 seconds.
+Memory: max=7000m, total=7000m, free=6960m, used=40m
+
+Input is being processed as paired
+Started output streams:	0.088 seconds.
+Processing time:   		109.558 seconds.
+
+Input:                  	34940374 reads 		4812240889 bases.
+Contaminants:           	29620078 reads (84.77%) 	4080627350 bases (84.80%)
+Total Removed:          	29620078 reads (84.77%) 	4080627350 bases (84.80%)
+Result:                 	5320296 reads (15.23%) 	731613539 bases (15.20%)
+
+Time:                         	110.010 seconds.
+Reads Processed:      34940k 	317.61k reads/sec
+Bases Processed:       4812m 	43.74m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_H3_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_H3_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R1_H3_rRNA.fq.gz outu=POR_R1_H3_clean.fq.gz stats=POR_R1_H3_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_H3_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_H3_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R1_H3_rRNA.fq.gz, outu=POR_R1_H3_clean.fq.gz, stats=POR_R1_H3_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.136 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.406 seconds.
+Memory: max=7000m, total=7000m, free=6960m, used=40m
+
+Input is being processed as paired
+Started output streams:	0.108 seconds.
+Processing time:   		100.703 seconds.
+
+Input:                  	43700528 reads 		6027339216 bases.
+Contaminants:           	27279648 reads (62.42%) 	3762113382 bases (62.42%)
+Total Removed:          	27279648 reads (62.42%) 	3762113382 bases (62.42%)
+Result:                 	16420880 reads (37.58%) 	2265225834 bases (37.58%)
+
+Time:                         	101.261 seconds.
+Reads Processed:      43700k 	431.56k reads/sec
+Bases Processed:       6027m 	59.52m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R24_C1_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R24_C1_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R24_C1_rRNA.fq.gz outu=POR_R24_C1_clean.fq.gz stats=POR_R24_C1_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R24_C1_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R24_C1_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R24_C1_rRNA.fq.gz, outu=POR_R24_C1_clean.fq.gz, stats=POR_R24_C1_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.113 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.319 seconds.
+Memory: max=7000m, total=7000m, free=6962m, used=38m
+
+Input is being processed as paired
+Started output streams:	0.081 seconds.
+Processing time:   		95.956 seconds.
+
+Input:                  	42863760 reads 		5909011596 bases.
+Contaminants:           	20343820 reads (47.46%) 	2803194365 bases (47.44%)
+Total Removed:          	20343820 reads (47.46%) 	2803194365 bases (47.44%)
+Result:                 	22519940 reads (52.54%) 	3105817231 bases (52.56%)
+
+Time:                         	96.376 seconds.
+Reads Processed:      42863k 	444.76k reads/sec
+Bases Processed:       5909m 	61.31m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R24_C2_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R24_C2_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R24_C2_rRNA.fq.gz outu=POR_R24_C2_clean.fq.gz stats=POR_R24_C2_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R24_C2_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R24_C2_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R24_C2_rRNA.fq.gz, outu=POR_R24_C2_clean.fq.gz, stats=POR_R24_C2_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.114 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.301 seconds.
+Memory: max=7000m, total=7000m, free=6956m, used=44m
+
+Input is being processed as paired
+Started output streams:	0.092 seconds.
+Processing time:   		86.706 seconds.
+
+Input:                  	31993170 reads 		4406955922 bases.
+Contaminants:           	23139640 reads (72.33%) 	3189247985 bases (72.37%)
+Total Removed:          	23139640 reads (72.33%) 	3189247985 bases (72.37%)
+Result:                 	8853530 reads (27.67%) 	1217707937 bases (27.63%)
+
+Time:                         	87.126 seconds.
+Reads Processed:      31993k 	367.21k reads/sec
+Bases Processed:       4406m 	50.58m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R24_H1_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R24_H1_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R24_H1_rRNA.fq.gz outu=POR_R24_H1_clean.fq.gz stats=POR_R24_H1_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R24_H1_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R24_H1_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R24_H1_rRNA.fq.gz, outu=POR_R24_H1_clean.fq.gz, stats=POR_R24_H1_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.113 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.325 seconds.
+Memory: max=7000m, total=7000m, free=6958m, used=42m
+
+Input is being processed as paired
+Started output streams:	0.067 seconds.
+Processing time:   		106.945 seconds.
+
+Input:                  	34527796 reads 		4742191557 bases.
+Contaminants:           	28603864 reads (82.84%) 	3936605190 bases (83.01%)
+Total Removed:          	28603864 reads (82.84%) 	3936605190 bases (83.01%)
+Result:                 	5923932 reads (17.16%) 	805586367 bases (16.99%)
+
+Time:                         	107.358 seconds.
+Reads Processed:      34527k 	321.61k reads/sec
+Bases Processed:       4742m 	44.17m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R24_H2_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R24_H2_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R24_H2_rRNA.fq.gz outu=POR_R24_H2_clean.fq.gz stats=POR_R24_H2_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R24_H2_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R24_H2_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R24_H2_rRNA.fq.gz, outu=POR_R24_H2_clean.fq.gz, stats=POR_R24_H2_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.130 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.365 seconds.
+Memory: max=7000m, total=7000m, free=6960m, used=40m
+
+Input is being processed as paired
+Started output streams:	0.110 seconds.
+Processing time:   		112.100 seconds.
+
+Input:                  	31502354 reads 		4341240679 bases.
+Contaminants:           	11290650 reads (35.84%) 	1554590929 bases (35.81%)
+Total Removed:          	11290650 reads (35.84%) 	1554590929 bases (35.81%)
+Result:                 	20211704 reads (64.16%) 	2786649750 bases (64.19%)
+
+Time:                         	112.615 seconds.
+Reads Processed:      31502k 	279.74k reads/sec
+Bases Processed:       4341m 	38.55m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R24_H3_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R24_H3_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R24_H3_rRNA.fq.gz outu=POR_R24_H3_clean.fq.gz stats=POR_R24_H3_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R24_H3_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R24_H3_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R24_H3_rRNA.fq.gz, outu=POR_R24_H3_clean.fq.gz, stats=POR_R24_H3_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.125 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.402 seconds.
+Memory: max=7000m, total=7000m, free=6958m, used=42m
+
+Input is being processed as paired
+Started output streams:	0.062 seconds.
+Processing time:   		150.405 seconds.
+
+Input:                  	41588334 reads 		5742488814 bases.
+Contaminants:           	13526302 reads (32.52%) 	1868171463 bases (32.53%)
+Total Removed:          	13526302 reads (32.52%) 	1868171463 bases (32.53%)
+Result:                 	28062032 reads (67.48%) 	3874317351 bases (67.47%)
+
+Time:                         	150.893 seconds.
+Reads Processed:      41588k 	275.62k reads/sec
+Bases Processed:       5742m 	38.06m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_C1_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_C1_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R3_C1_rRNA.fq.gz outu=POR_R3_C1_clean.fq.gz stats=POR_R3_C1_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_C1_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_C1_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R3_C1_rRNA.fq.gz, outu=POR_R3_C1_clean.fq.gz, stats=POR_R3_C1_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.132 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.372 seconds.
+Memory: max=7000m, total=7000m, free=6958m, used=42m
+
+Input is being processed as paired
+Started output streams:	0.054 seconds.
+Processing time:   		89.324 seconds.
+
+Input:                  	30903968 reads 		4249794772 bases.
+Contaminants:           	14816036 reads (47.94%) 	2036963852 bases (47.93%)
+Total Removed:          	14816036 reads (47.94%) 	2036963852 bases (47.93%)
+Result:                 	16087932 reads (52.06%) 	2212830920 bases (52.07%)
+
+Time:                         	89.770 seconds.
+Reads Processed:      30903k 	344.26k reads/sec
+Bases Processed:       4249m 	47.34m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_C2_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_C2_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R3_C2_rRNA.fq.gz outu=POR_R3_C2_clean.fq.gz stats=POR_R3_C2_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_C2_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_C2_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R3_C2_rRNA.fq.gz, outu=POR_R3_C2_clean.fq.gz, stats=POR_R3_C2_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.117 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.367 seconds.
+Memory: max=7000m, total=7000m, free=6962m, used=38m
+
+Input is being processed as paired
+Started output streams:	0.069 seconds.
+Processing time:   		50.187 seconds.
+
+Input:                  	17141672 reads 		2360075924 bases.
+Contaminants:           	8661772 reads (50.53%) 	1194795418 bases (50.63%)
+Total Removed:          	8661772 reads (50.53%) 	1194795418 bases (50.63%)
+Result:                 	8479900 reads (49.47%) 	1165280506 bases (49.37%)
+
+Time:                         	50.669 seconds.
+Reads Processed:      17141k 	338.31k reads/sec
+Bases Processed:       2360m 	46.58m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_C3_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_C3_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R3_C3_rRNA.fq.gz outu=POR_R3_C3_clean.fq.gz stats=POR_R3_C3_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_C3_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_C3_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R3_C3_rRNA.fq.gz, outu=POR_R3_C3_clean.fq.gz, stats=POR_R3_C3_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.138 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.376 seconds.
+Memory: max=7000m, total=7000m, free=6958m, used=42m
+
+Input is being processed as paired
+Started output streams:	0.061 seconds.
+Processing time:   		86.425 seconds.
+
+Input:                  	29899132 reads 		4116294326 bases.
+Contaminants:           	22031002 reads (73.68%) 	3034656054 bases (73.72%)
+Total Removed:          	22031002 reads (73.68%) 	3034656054 bases (73.72%)
+Result:                 	7868130 reads (26.32%) 	1081638272 bases (26.28%)
+
+Time:                         	86.884 seconds.
+Reads Processed:      29899k 	344.13k reads/sec
+Bases Processed:       4116m 	47.38m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_H1_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_H1_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R3_H1_rRNA.fq.gz outu=POR_R3_H1_clean.fq.gz stats=POR_R3_H1_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_H1_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_H1_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R3_H1_rRNA.fq.gz, outu=POR_R3_H1_clean.fq.gz, stats=POR_R3_H1_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.107 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.354 seconds.
+Memory: max=7000m, total=7000m, free=6958m, used=42m
+
+Input is being processed as paired
+Started output streams:	0.077 seconds.
+Processing time:   		80.593 seconds.
+
+Input:                  	28495988 reads 		3920515988 bases.
+Contaminants:           	13888110 reads (48.74%) 	1910063173 bases (48.72%)
+Total Removed:          	13888110 reads (48.74%) 	1910063173 bases (48.72%)
+Result:                 	14607878 reads (51.26%) 	2010452815 bases (51.28%)
+
+Time:                         	81.052 seconds.
+Reads Processed:      28495k 	351.58k reads/sec
+Bases Processed:       3920m 	48.37m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_H2_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_H2_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R3_H2_rRNA.fq.gz outu=POR_R3_H2_clean.fq.gz stats=POR_R3_H2_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_H2_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_H2_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R3_H2_rRNA.fq.gz, outu=POR_R3_H2_clean.fq.gz, stats=POR_R3_H2_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.135 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.355 seconds.
+Memory: max=7000m, total=7000m, free=6958m, used=42m
+
+Input is being processed as paired
+Started output streams:	0.080 seconds.
+Processing time:   		128.078 seconds.
+
+Input:                  	39225808 reads 		5425251460 bases.
+Contaminants:           	10073172 reads (25.68%) 	1392217658 bases (25.66%)
+Total Removed:          	10073172 reads (25.68%) 	1392217658 bases (25.66%)
+Result:                 	29152636 reads (74.32%) 	4033033802 bases (74.34%)
+
+Time:                         	128.539 seconds.
+Reads Processed:      39225k 	305.17k reads/sec
+Bases Processed:       5425m 	42.21m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_H3_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_H3_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R3_H3_rRNA.fq.gz outu=POR_R3_H3_clean.fq.gz stats=POR_R3_H3_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_H3_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_H3_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R3_H3_rRNA.fq.gz, outu=POR_R3_H3_clean.fq.gz, stats=POR_R3_H3_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.135 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.355 seconds.
+Memory: max=7000m, total=7000m, free=6958m, used=42m
+
+Input is being processed as paired
+Started output streams:	0.077 seconds.
+Processing time:   		94.874 seconds.
+
+Input:                  	36341772 reads 		4961110379 bases.
+Contaminants:           	22129830 reads (60.89%) 	3022488594 bases (60.92%)
+Total Removed:          	22129830 reads (60.89%) 	3022488594 bases (60.92%)
+Result:                 	14211942 reads (39.11%) 	1938621785 bases (39.08%)
+
+Time:                         	95.326 seconds.
+Reads Processed:      36341k 	381.24k reads/sec
+Bases Processed:       4961m 	52.04m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_C1_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_C1_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R72_C1_rRNA.fq.gz outu=POR_R72_C1_clean.fq.gz stats=POR_R72_C1_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_C1_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_C1_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R72_C1_rRNA.fq.gz, outu=POR_R72_C1_clean.fq.gz, stats=POR_R72_C1_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.127 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.382 seconds.
+Memory: max=7000m, total=7000m, free=6960m, used=40m
+
+Input is being processed as paired
+Started output streams:	0.056 seconds.
+Processing time:   		89.261 seconds.
+
+Input:                  	31702046 reads 		4364411658 bases.
+Contaminants:           	22436444 reads (70.77%) 	3089973557 bases (70.80%)
+Total Removed:          	22436444 reads (70.77%) 	3089973557 bases (70.80%)
+Result:                 	9265602 reads (29.23%) 	1274438101 bases (29.20%)
+
+Time:                         	89.720 seconds.
+Reads Processed:      31702k 	353.34k reads/sec
+Bases Processed:       4364m 	48.64m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_C2_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_C2_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R72_C2_rRNA.fq.gz outu=POR_R72_C2_clean.fq.gz stats=POR_R72_C2_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_C2_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_C2_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R72_C2_rRNA.fq.gz, outu=POR_R72_C2_clean.fq.gz, stats=POR_R72_C2_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.146 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.378 seconds.
+Memory: max=7000m, total=7000m, free=6960m, used=40m
+
+Input is being processed as paired
+Started output streams:	0.060 seconds.
+Processing time:   		105.172 seconds.
+
+Input:                  	35441652 reads 		4887069774 bases.
+Contaminants:           	19170620 reads (54.09%) 	2644128186 bases (54.10%)
+Total Removed:          	19170620 reads (54.09%) 	2644128186 bases (54.10%)
+Result:                 	16271032 reads (45.91%) 	2242941588 bases (45.90%)
+
+Time:                         	105.633 seconds.
+Reads Processed:      35441k 	335.52k reads/sec
+Bases Processed:       4887m 	46.26m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_C3_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_C3_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R72_C3_rRNA.fq.gz outu=POR_R72_C3_clean.fq.gz stats=POR_R72_C3_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_C3_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_C3_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R72_C3_rRNA.fq.gz, outu=POR_R72_C3_clean.fq.gz, stats=POR_R72_C3_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.168 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.386 seconds.
+Memory: max=7000m, total=7000m, free=6962m, used=38m
+
+Input is being processed as paired
+Started output streams:	0.062 seconds.
+Processing time:   		84.771 seconds.
+
+Input:                  	30685500 reads 		4223051044 bases.
+Contaminants:           	16898648 reads (55.07%) 	2326556639 bases (55.09%)
+Total Removed:          	16898648 reads (55.07%) 	2326556639 bases (55.09%)
+Result:                 	13786852 reads (44.93%) 	1896494405 bases (44.91%)
+
+Time:                         	85.262 seconds.
+Reads Processed:      30685k 	359.89k reads/sec
+Bases Processed:       4223m 	49.53m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_H1_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_H1_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R72_H1_rRNA.fq.gz outu=POR_R72_H1_clean.fq.gz stats=POR_R72_H1_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_H1_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_H1_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R72_H1_rRNA.fq.gz, outu=POR_R72_H1_clean.fq.gz, stats=POR_R72_H1_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.165 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.370 seconds.
+Memory: max=7000m, total=7000m, free=6960m, used=40m
+
+Input is being processed as paired
+Started output streams:	0.077 seconds.
+Processing time:   		105.933 seconds.
+
+Input:                  	30937140 reads 		4196678041 bases.
+Contaminants:           	26040950 reads (84.17%) 	3546591075 bases (84.51%)
+Total Removed:          	26040950 reads (84.17%) 	3546591075 bases (84.51%)
+Result:                 	4896190 reads (15.83%) 	650086966 bases (15.49%)
+
+Time:                         	106.402 seconds.
+Reads Processed:      30937k 	290.76k reads/sec
+Bases Processed:       4196m 	39.44m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_H2_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_H2_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R72_H2_rRNA.fq.gz outu=POR_R72_H2_clean.fq.gz stats=POR_R72_H2_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_H2_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_H2_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R72_H2_rRNA.fq.gz, outu=POR_R72_H2_clean.fq.gz, stats=POR_R72_H2_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.150 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.367 seconds.
+Memory: max=7000m, total=7000m, free=6958m, used=42m
+
+Input is being processed as paired
+Started output streams:	0.069 seconds.
+Processing time:   		94.200 seconds.
+
+Input:                  	30321176 reads 		4157352426 bases.
+Contaminants:           	24625768 reads (81.22%) 	3381244149 bases (81.33%)
+Total Removed:          	24625768 reads (81.22%) 	3381244149 bases (81.33%)
+Result:                 	5695408 reads (18.78%) 	776108277 bases (18.67%)
+
+Time:                         	94.657 seconds.
+Reads Processed:      30321k 	320.33k reads/sec
+Bases Processed:       4157m 	43.92m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R24_H1_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R24_H1_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R24_H1_rRNA.fq.gz outu=POR_R24_H1_clean.fq.gz stats=POR_R24_H1_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R24_H1_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R24_H1_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R24_H1_rRNA.fq.gz, outu=POR_R24_H1_clean.fq.gz, stats=POR_R24_H1_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.113 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.325 seconds.
+Memory: max=7000m, total=7000m, free=6958m, used=42m
+
+Input is being processed as paired
+Started output streams:	0.067 seconds.
+Processing time:   		106.945 seconds.
+
+Input:                  	34527796 reads 		4742191557 bases.
+Contaminants:           	28603864 reads (82.84%) 	3936605190 bases (83.01%)
+Total Removed:          	28603864 reads (82.84%) 	3936605190 bases (83.01%)
+Result:                 	5923932 reads (17.16%) 	805586367 bases (16.99%)
+
+Time:                         	107.358 seconds.
+Reads Processed:      34527k 	321.61k reads/sec
+Bases Processed:       4742m 	44.17m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R24_H2_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R24_H2_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R24_H2_rRNA.fq.gz outu=POR_R24_H2_clean.fq.gz stats=POR_R24_H2_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R24_H2_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R24_H2_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R24_H2_rRNA.fq.gz, outu=POR_R24_H2_clean.fq.gz, stats=POR_R24_H2_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.130 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.365 seconds.
+Memory: max=7000m, total=7000m, free=6960m, used=40m
+
+Input is being processed as paired
+Started output streams:	0.110 seconds.
+Processing time:   		112.100 seconds.
+
+Input:                  	31502354 reads 		4341240679 bases.
+Contaminants:           	11290650 reads (35.84%) 	1554590929 bases (35.81%)
+Total Removed:          	11290650 reads (35.84%) 	1554590929 bases (35.81%)
+Result:                 	20211704 reads (64.16%) 	2786649750 bases (64.19%)
+
+Time:                         	112.615 seconds.
+Reads Processed:      31502k 	279.74k reads/sec
+Bases Processed:       4341m 	38.55m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R24_H3_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R24_H3_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R24_H3_rRNA.fq.gz outu=POR_R24_H3_clean.fq.gz stats=POR_R24_H3_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R24_H3_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R24_H3_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R24_H3_rRNA.fq.gz, outu=POR_R24_H3_clean.fq.gz, stats=POR_R24_H3_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.125 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.402 seconds.
+Memory: max=7000m, total=7000m, free=6958m, used=42m
+
+Input is being processed as paired
+Started output streams:	0.062 seconds.
+Processing time:   		150.405 seconds.
+
+Input:                  	41588334 reads 		5742488814 bases.
+Contaminants:           	13526302 reads (32.52%) 	1868171463 bases (32.53%)
+Total Removed:          	13526302 reads (32.52%) 	1868171463 bases (32.53%)
+Result:                 	28062032 reads (67.48%) 	3874317351 bases (67.47%)
+
+Time:                         	150.893 seconds.
+Reads Processed:      41588k 	275.62k reads/sec
+Bases Processed:       5742m 	38.06m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_C1_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_C1_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R3_C1_rRNA.fq.gz outu=POR_R3_C1_clean.fq.gz stats=POR_R3_C1_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_C1_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_C1_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R3_C1_rRNA.fq.gz, outu=POR_R3_C1_clean.fq.gz, stats=POR_R3_C1_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.132 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.372 seconds.
+Memory: max=7000m, total=7000m, free=6958m, used=42m
+
+Input is being processed as paired
+Started output streams:	0.054 seconds.
+Processing time:   		89.324 seconds.
+
+Input:                  	30903968 reads 		4249794772 bases.
+Contaminants:           	14816036 reads (47.94%) 	2036963852 bases (47.93%)
+Total Removed:          	14816036 reads (47.94%) 	2036963852 bases (47.93%)
+Result:                 	16087932 reads (52.06%) 	2212830920 bases (52.07%)
+
+Time:                         	89.770 seconds.
+Reads Processed:      30903k 	344.26k reads/sec
+Bases Processed:       4249m 	47.34m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_C2_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_C2_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R3_C2_rRNA.fq.gz outu=POR_R3_C2_clean.fq.gz stats=POR_R3_C2_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_C2_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_C2_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R3_C2_rRNA.fq.gz, outu=POR_R3_C2_clean.fq.gz, stats=POR_R3_C2_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.117 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.367 seconds.
+Memory: max=7000m, total=7000m, free=6962m, used=38m
+
+Input is being processed as paired
+Started output streams:	0.069 seconds.
+Processing time:   		50.187 seconds.
+
+Input:                  	17141672 reads 		2360075924 bases.
+Contaminants:           	8661772 reads (50.53%) 	1194795418 bases (50.63%)
+Total Removed:          	8661772 reads (50.53%) 	1194795418 bases (50.63%)
+Result:                 	8479900 reads (49.47%) 	1165280506 bases (49.37%)
+
+Time:                         	50.669 seconds.
+Reads Processed:      17141k 	338.31k reads/sec
+Bases Processed:       2360m 	46.58m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_C3_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_C3_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R3_C3_rRNA.fq.gz outu=POR_R3_C3_clean.fq.gz stats=POR_R3_C3_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_C3_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_C3_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R3_C3_rRNA.fq.gz, outu=POR_R3_C3_clean.fq.gz, stats=POR_R3_C3_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.138 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.376 seconds.
+Memory: max=7000m, total=7000m, free=6958m, used=42m
+
+Input is being processed as paired
+Started output streams:	0.061 seconds.
+Processing time:   		86.425 seconds.
+
+Input:                  	29899132 reads 		4116294326 bases.
+Contaminants:           	22031002 reads (73.68%) 	3034656054 bases (73.72%)
+Total Removed:          	22031002 reads (73.68%) 	3034656054 bases (73.72%)
+Result:                 	7868130 reads (26.32%) 	1081638272 bases (26.28%)
+
+Time:                         	86.884 seconds.
+Reads Processed:      29899k 	344.13k reads/sec
+Bases Processed:       4116m 	47.38m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_H1_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_H1_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R3_H1_rRNA.fq.gz outu=POR_R3_H1_clean.fq.gz stats=POR_R3_H1_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_H1_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_H1_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R3_H1_rRNA.fq.gz, outu=POR_R3_H1_clean.fq.gz, stats=POR_R3_H1_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.107 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.354 seconds.
+Memory: max=7000m, total=7000m, free=6958m, used=42m
+
+Input is being processed as paired
+Started output streams:	0.077 seconds.
+Processing time:   		80.593 seconds.
+
+Input:                  	28495988 reads 		3920515988 bases.
+Contaminants:           	13888110 reads (48.74%) 	1910063173 bases (48.72%)
+Total Removed:          	13888110 reads (48.74%) 	1910063173 bases (48.72%)
+Result:                 	14607878 reads (51.26%) 	2010452815 bases (51.28%)
+
+Time:                         	81.052 seconds.
+Reads Processed:      28495k 	351.58k reads/sec
+Bases Processed:       3920m 	48.37m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_H2_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_H2_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R3_H2_rRNA.fq.gz outu=POR_R3_H2_clean.fq.gz stats=POR_R3_H2_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_H2_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_H2_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R3_H2_rRNA.fq.gz, outu=POR_R3_H2_clean.fq.gz, stats=POR_R3_H2_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.135 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.355 seconds.
+Memory: max=7000m, total=7000m, free=6958m, used=42m
+
+Input is being processed as paired
+Started output streams:	0.080 seconds.
+Processing time:   		128.078 seconds.
+
+Input:                  	39225808 reads 		5425251460 bases.
+Contaminants:           	10073172 reads (25.68%) 	1392217658 bases (25.66%)
+Total Removed:          	10073172 reads (25.68%) 	1392217658 bases (25.66%)
+Result:                 	29152636 reads (74.32%) 	4033033802 bases (74.34%)
+
+Time:                         	128.539 seconds.
+Reads Processed:      39225k 	305.17k reads/sec
+Bases Processed:       5425m 	42.21m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_H3_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_H3_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R3_H3_rRNA.fq.gz outu=POR_R3_H3_clean.fq.gz stats=POR_R3_H3_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_H3_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_H3_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R3_H3_rRNA.fq.gz, outu=POR_R3_H3_clean.fq.gz, stats=POR_R3_H3_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.135 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.355 seconds.
+Memory: max=7000m, total=7000m, free=6958m, used=42m
+
+Input is being processed as paired
+Started output streams:	0.077 seconds.
+Processing time:   		94.874 seconds.
+
+Input:                  	36341772 reads 		4961110379 bases.
+Contaminants:           	22129830 reads (60.89%) 	3022488594 bases (60.92%)
+Total Removed:          	22129830 reads (60.89%) 	3022488594 bases (60.92%)
+Result:                 	14211942 reads (39.11%) 	1938621785 bases (39.08%)
+
+Time:                         	95.326 seconds.
+Reads Processed:      36341k 	381.24k reads/sec
+Bases Processed:       4961m 	52.04m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_C1_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_C1_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R72_C1_rRNA.fq.gz outu=POR_R72_C1_clean.fq.gz stats=POR_R72_C1_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_C1_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_C1_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R72_C1_rRNA.fq.gz, outu=POR_R72_C1_clean.fq.gz, stats=POR_R72_C1_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.127 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.382 seconds.
+Memory: max=7000m, total=7000m, free=6960m, used=40m
+
+Input is being processed as paired
+Started output streams:	0.056 seconds.
+Processing time:   		89.261 seconds.
+
+Input:                  	31702046 reads 		4364411658 bases.
+Contaminants:           	22436444 reads (70.77%) 	3089973557 bases (70.80%)
+Total Removed:          	22436444 reads (70.77%) 	3089973557 bases (70.80%)
+Result:                 	9265602 reads (29.23%) 	1274438101 bases (29.20%)
+
+Time:                         	89.720 seconds.
+Reads Processed:      31702k 	353.34k reads/sec
+Bases Processed:       4364m 	48.64m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_C2_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_C2_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R72_C2_rRNA.fq.gz outu=POR_R72_C2_clean.fq.gz stats=POR_R72_C2_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_C2_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_C2_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R72_C2_rRNA.fq.gz, outu=POR_R72_C2_clean.fq.gz, stats=POR_R72_C2_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.146 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.378 seconds.
+Memory: max=7000m, total=7000m, free=6960m, used=40m
+
+Input is being processed as paired
+Started output streams:	0.060 seconds.
+Processing time:   		105.172 seconds.
+
+Input:                  	35441652 reads 		4887069774 bases.
+Contaminants:           	19170620 reads (54.09%) 	2644128186 bases (54.10%)
+Total Removed:          	19170620 reads (54.09%) 	2644128186 bases (54.10%)
+Result:                 	16271032 reads (45.91%) 	2242941588 bases (45.90%)
+
+Time:                         	105.633 seconds.
+Reads Processed:      35441k 	335.52k reads/sec
+Bases Processed:       4887m 	46.26m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_C3_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_C3_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R72_C3_rRNA.fq.gz outu=POR_R72_C3_clean.fq.gz stats=POR_R72_C3_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_C3_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_C3_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R72_C3_rRNA.fq.gz, outu=POR_R72_C3_clean.fq.gz, stats=POR_R72_C3_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.168 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.386 seconds.
+Memory: max=7000m, total=7000m, free=6962m, used=38m
+
+Input is being processed as paired
+Started output streams:	0.062 seconds.
+Processing time:   		84.771 seconds.
+
+Input:                  	30685500 reads 		4223051044 bases.
+Contaminants:           	16898648 reads (55.07%) 	2326556639 bases (55.09%)
+Total Removed:          	16898648 reads (55.07%) 	2326556639 bases (55.09%)
+Result:                 	13786852 reads (44.93%) 	1896494405 bases (44.91%)
+
+Time:                         	85.262 seconds.
+Reads Processed:      30685k 	359.89k reads/sec
+Bases Processed:       4223m 	49.53m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_H1_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_H1_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R72_H1_rRNA.fq.gz outu=POR_R72_H1_clean.fq.gz stats=POR_R72_H1_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_H1_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_H1_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R72_H1_rRNA.fq.gz, outu=POR_R72_H1_clean.fq.gz, stats=POR_R72_H1_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.165 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.370 seconds.
+Memory: max=7000m, total=7000m, free=6960m, used=40m
+
+Input is being processed as paired
+Started output streams:	0.077 seconds.
+Processing time:   		105.933 seconds.
+
+Input:                  	30937140 reads 		4196678041 bases.
+Contaminants:           	26040950 reads (84.17%) 	3546591075 bases (84.51%)
+Total Removed:          	26040950 reads (84.17%) 	3546591075 bases (84.51%)
+Result:                 	4896190 reads (15.83%) 	650086966 bases (15.49%)
+
+Time:                         	106.402 seconds.
+Reads Processed:      30937k 	290.76k reads/sec
+Bases Processed:       4196m 	39.44m bases/sec
+Loading openjdk version 17.0.8.1_1
+Loading bbmap version 39.01
+java -ea -Xmx6676m -Xms6676m -cp /modules/spack/packages/linux-ubuntu24.04-x86_64_v3/gcc-13.2.0/bbmap-39.01-6ouly7s6ne4pbpdk6uf3n5evhelbknog/bin/current/ jgi.BBDuk in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_H2_R1_trim.fastq.gz in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_H2_R2_trim.fastq.gz ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta outm=POR_R72_H2_rRNA.fq.gz outu=POR_R72_H2_clean.fq.gz stats=POR_R72_H2_stats.txt k=31 hdist=1 threads=4 overwrite=t
+Executing jgi.BBDuk [in1=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_H2_R1_trim.fastq.gz, in2=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_H2_R2_trim.fastq.gz, ref=/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta, outm=POR_R72_H2_rRNA.fq.gz, outu=POR_R72_H2_clean.fq.gz, stats=POR_R72_H2_stats.txt, k=31, hdist=1, threads=4, overwrite=t]
+Version 39.01
+
+Set threads to 4
+0.150 seconds.
+Initial:
+Memory: max=7000m, total=7000m, free=6975m, used=25m
+
+Added 500165 kmers; time: 	0.367 seconds.
+Memory: max=7000m, total=7000m, free=6958m, used=42m
+
+Input is being processed as paired
+Started output streams:	0.069 seconds.
+Processing time:   		94.200 seconds.
+
+Input:                  	30321176 reads 		4157352426 bases.
+Contaminants:           	24625768 reads (81.22%) 	3381244149 bases (81.33%)
+Total Removed:          	24625768 reads (81.22%) 	3381244149 bases (81.33%)
+Result:                 	5695408 reads (18.78%) 	776108277 bases (18.67%)
+
+Time:                         	94.657 seconds.
+Reads Processed:      30321k 	320.33k reads/sec
+Bases Processed:       4157m 	43.92m bases/sec
