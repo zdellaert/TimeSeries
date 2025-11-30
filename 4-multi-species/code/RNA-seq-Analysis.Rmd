@@ -3,7 +3,6 @@ title: "DE"
 author: "Zoe Dellaert"
 date: "2025-11-20"
 output:
-  html_document: default
   github_document: default
 ---
 
@@ -370,7 +369,7 @@ First, reformat our metadata table to match the column names used in the Impulse
 
 ```{r}
 meta_impulse <- meta %>%
-  rename(Sample = sample, Time = time, Batch = replicate) %>% 
+  dplyr::rename(Sample = sample, Time = time, Batch = replicate) %>% 
   mutate(Time = as.numeric(as.character(Time)),
          #Time = as.numeric(Time),
          Condition = str_replace(treatment, "C", "control"),
@@ -432,8 +431,9 @@ draw(lsHeatmaps$complexHeatmapRaw)
 
 
 ```{r}
-stress_genes_ids <- unique(HeatStressGenes_Pacuta$query)
-plot_stress_genes <- stress_genes_ids[stress_genes_ids %in% rownames(objectImpulseDE2@matCountDataProc)]
+majerova_genes <- HeatStressGenes_Pacuta %>% filter(ref_first_author =="Majerova")
+stress_genes_ids <- unique(majerova_genes$query)
+plot_stress_genes <- stress_genes_ids[stress_genes_ids %in% rownames(objectImpulseDE2@matCountDataProc)] 
 
 impulse_results %>% filter(Gene %in% stress_genes_ids) %>% arrange(padj) %>% left_join(HeatStressGenes_Pacuta_unique, by = join_by(Gene==query))
 
@@ -563,6 +563,14 @@ dds <- DESeqDataSetFromMatrix(countData = filtered_counts,
                               design= ~ treatment + time + treatment:time)
 
 dds <- DESeq(dds)
+```
+
+Check size factors. 
+```{r}
+SF.dds <- estimateSizeFactors(dds) #estimate size factors to determine if we can use vst  to transform our data. Size factors should be less than 4 for us to use vst
+print(sizeFactors(SF.dds)) #View size factors
+
+all(sizeFactors(SF.dds)) < 4
 ```
 
 Transforming count data for visualization 
@@ -803,7 +811,7 @@ First, reformat our metadata table to match the column names used in the Impulse
 
 ```{r}
 meta_impulse <- meta %>%
-  rename(Sample = sample, Time = time, Batch = replicate) %>% 
+  dplyr::rename(Sample = sample, Time = time, Batch = replicate) %>% 
   mutate(Time = as.numeric(as.character(Time)),
          #Time = as.numeric(Time),
          Condition = str_replace(treatment, "C", "control"),
@@ -865,7 +873,8 @@ draw(lsHeatmaps$complexHeatmapRaw)
 
 
 ```{r}
-stress_genes_ids <- unique(HeatStressGenes_Mcap$query)
+majerova_genes <- HeatStressGenes_Mcap %>% filter(ref_first_author =="Majerova")
+stress_genes_ids <- unique(majerova_genes$query)
 plot_stress_genes <- stress_genes_ids[stress_genes_ids %in% rownames(objectImpulseDE2@matCountDataProc)]
 
 impulse_results %>% filter(Gene %in% stress_genes_ids) %>% arrange(padj) %>% left_join(HeatStressGenes_Mcap_unique, by = join_by(Gene==query))
@@ -929,6 +938,9 @@ pheatmap(vsd_mat[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
 
 Read in raw count data
 ```{r}
+#set standard output directory for figures
+outdir <- "../output_RNA/differential_expression/POR_Pcomp"
+
 counts_raw <- read.csv("../output_RNA/count_matrices/POR_Pcomp_gene_count_matrix.csv", row.names = 1) #load in data
 
 samples <- colnames(counts_raw)
@@ -985,6 +997,14 @@ dds <- DESeqDataSetFromMatrix(countData = filtered_counts,
                               design= ~ treatment + time + treatment:time)
 
 dds <- DESeq(dds)
+```
+
+Check size factors. 
+```{r}
+SF.dds <- estimateSizeFactors(dds) #estimate size factors to determine if we can use vst  to transform our data. Size factors should be less than 4 for us to use vst
+print(sizeFactors(SF.dds)) #View size factors
+
+all(sizeFactors(SF.dds)) < 4
 ```
 
 Transforming count data for visualization 
@@ -1044,7 +1064,7 @@ names(time_colors) <- levels(meta$time)
 
 #view top 500 most vairable genes
 pheatmap(assay(vsd)[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
-         cluster_cols=FALSE, cutree_cols = 2,
+         cluster_cols=FALSE, #cutree_cols = 2,
          annotation_col= meta[,c("treatment","time")],
          annotation_colors = list("treatment" = treat_colors,
                                   "time" = time_colors))

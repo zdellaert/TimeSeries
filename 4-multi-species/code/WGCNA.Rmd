@@ -3,7 +3,6 @@ title: "WGCNA"
 author: "Zoe Dellaert"
 date: "2025-11-28"
 output:
-  html_document: default
   github_document: default
 ---
 

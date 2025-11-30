@@ -2,15 +2,15 @@
 
 ## locations of important files:
 1. Code:
-   1. differential expression: [DESeq LRT + ImpulseDE2 time course modeling](../code/RNA-seq-Analysis.Rmd)
-   2. [WGCNA](../code/WGCNA.Rmd)
+   1. differential expression: [DESeq LRT + ImpulseDE2 time course modeling](../code/RNA-seq-Analysis.md)
+   2. [WGCNA](../code/WGCNA.md)
 2. Output files:
    1. differential expression:
-      1. output_RNA/differential_expression/POC_PacutaV2
-      2. output_RNA/differential_expression/MON_MCapV3
+      1. [POC files](output_RNA/differential_expression/POC_PacutaV2)
+      2. [MON files](output_RNA/differential_expression/MON_MCapV3)
    2. WGCNA
-      1. output_RNA/WGCNA/POC_PacutaV2
-      2. output_RNA/WGCNA/MON_MCapV3
+      1. [POC files](output_RNA/WGCNA/POC_PacutaV2)
+      2. [MON files](output_RNA/WGCNA/MON_MCapV3)
 
 
 3. PCA separation by treatment and timepoint
