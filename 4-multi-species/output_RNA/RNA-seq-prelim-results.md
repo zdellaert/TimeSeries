@@ -12,13 +12,12 @@
       1. [POC files](output_RNA/WGCNA/POC_PacutaV2)
       2. [MON files](output_RNA/WGCNA/MON_MCapV3)
 
-
-3. PCA separation by treatment and timepoint
+## PCA separation by treatment and timepoint
    1. POC: ![](differential_expression/POC_PacutaV2/PCA_POC.png)
    2. MON: ![](differential_expression/MON_MCapV3/PCA_MON.png)
       1. **Important caveat 2 outliers in heat treatment at 72 hours are removed**
 
-4. Expression trajectories of heat stress genes:
+## Expression trajectories of heat stress genes:
    1. POC:
       1. DE Heat stress genes by DESeq LRT
          1. ![](../code/RNA-seq-Analysis_files/figure-html/unnamed-chunk-15-2.png)
@@ -31,7 +30,7 @@
                1. ![](../code/RNA-seq-Analysis_files/figure-html/unnamed-chunk-36-3.png)
                   1. **HSF1 not DE**
 
-5. ImpuseDE2 Results
+## ImpuseDE2 Results
    1. Overall patterns of DE genes either transiently or non-transiently affected by time*treatment
       1. POC: ![](../code/RNA-seq-Analysis_files/figure-html/unnamed-chunk-20-1.png)
       2. MON: ![](../code/RNA-seq-Analysis_files/figure-html/unnamed-chunk-40-1.png)
@@ -49,7 +48,7 @@
       1. POC: [ImpulseDE2_Results.txt](differential_expression/POC_PacutaV2/ImpulseDE2_Results.txt)
       2. POC: [ImpulseDE2_Results.txt](differential_expression/MON_MCapV3/ImpulseDE2_Results.txt)
 
-6. WGCNA:
+## WGCNA:
    1. POC:
       1. [Time-module heatmap](WGCNA/POC_PacutaV2/times_heatmap.pdf)
       2. [Treatment-module heatmap](WGCNA/POC_PacutaV2/treatments_heatmap.pdf)
