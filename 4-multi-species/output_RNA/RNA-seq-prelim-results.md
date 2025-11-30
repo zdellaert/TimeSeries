@@ -2,7 +2,7 @@
 
 ## locations of important files:
 1. Code:
-   1. differential expression: [DESeq LRT + ImpulseDE2 time course modeling](../code/RNA-seq-Analysis.RMD)
+   1. differential expression: [DESeq LRT + ImpulseDE2 time course modeling](../code/RNA-seq-Analysis.Rmd)
    2. [WGCNA](../code/WGCNA.Rmd)
 2. Output files:
    1. differential expression:
