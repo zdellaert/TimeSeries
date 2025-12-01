@@ -238,11 +238,11 @@ plot_df %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) 
   theme_bw() +
   labs(y="VST expression", x="Timepoint")
 
-plot_df %>% filter(grepl("HSP70",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_id)) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_id)) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
   stat_summary(fun="mean", geom="line") +
   scale_color_manual(values = treat_colors) +
   stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
-  facet_wrap(~gene_id) +
+  facet_wrap(~paste0(str_replace(query,"Pocillopora_acuta_HIv2___",""), ": ", gene_id)) +
   theme_bw() +
   labs(y="VST expression", x="Timepoint")
 ```
@@ -337,11 +337,11 @@ plot_df %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) 
   theme_bw() +
   labs(y="VST expression", x="Timepoint")
 
-plot_df %>% filter(grepl("HSP70",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_id)) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_id)) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
   stat_summary(fun="mean", geom="line") +
   scale_color_manual(values = treat_colors) +
   stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
-  facet_wrap(~gene_id) +
+  facet_wrap(~paste0(str_replace(query,"Pocillopora_acuta_HIv2___",""), ": ", gene_id)) +
   theme_bw() +
   labs(y="VST expression", x="Timepoint")
 ```
@@ -427,6 +427,10 @@ lsHeatmaps <- plotHeatmap(
   boolIdentifyTransients = TRUE, #set to true if true above
   scaQThres              = 0.01)
 draw(lsHeatmaps$complexHeatmapRaw) 
+
+png(paste0(outdir,"/ImpulseDE/ImpulseDE2_heatmap.png"), width = 2000, height = 2400, res = 300)
+draw(lsHeatmaps$complexHeatmapRaw)
+dev.off()
 ```
 
 
@@ -440,7 +444,7 @@ impulse_results %>% filter(Gene %in% stress_genes_ids) %>% arrange(padj) %>% lef
 heatgenes <- plotGenes(
   vecGeneIDs       = plot_stress_genes,
   objectImpulseDE2 = objectImpulseDE2,
-  boolCaseCtrl     = TRUE,
+  boolSimplePlot = TRUE,   boolCaseCtrl     = TRUE,
   dirOut           = "../output_RNA/differential_expression/POC_PacutaV2/ImpulseDE/",
   strFileName = "stress_genes_Majerova.pdf",
   boolMultiplePlotsPerPage = FALSE,
@@ -448,22 +452,25 @@ heatgenes <- plotGenes(
 
 heatgenes
 
-HSP70 <- plotGenes(
-  vecGeneIDs       = "Pocillopora_acuta_HIv2___RNAseq.g23086.t1",
+HSPS <- impulse_results %>% filter(Gene %in% stress_genes_ids) %>% arrange(padj) %>% left_join(HeatStressGenes_Pacuta_unique, by = join_by(Gene==query)) %>% filter(grepl("HSP",gene_id)) %>% pull(Gene)
+
+HSPs <- plotGenes(
+  vecGeneIDs       = HSPS,
   objectImpulseDE2 = objectImpulseDE2,
+  boolSimplePlot = TRUE,
   boolCaseCtrl     = TRUE,
-  dirOut           = "../output_RNA/differential_expression/POC_PacutaV2/ImpulseDE/",
-  strFileName = "HSP70.pdf",
+  dirOut           = "../output_RNA/differential_expression/POR_Pcomp/ImpulseDE/",
+  strFileName = "HSPs.pdf",
   boolMultiplePlotsPerPage = FALSE,
   strNameRefMethod = NULL)
 
-HSP70
+HSPs
 
 lsgplotsGenes <- plotGenes(
   vecGeneIDs       = NULL,
   scaNTopIDs       = 10,
   objectImpulseDE2 = objectImpulseDE2,
-  boolCaseCtrl     = TRUE,
+  boolSimplePlot = TRUE,   boolCaseCtrl     = TRUE,
   dirOut           = "../output_RNA/differential_expression/POC_PacutaV2/ImpulseDE/",
   boolMultiplePlotsPerPage = FALSE,
   strNameRefMethod = NULL)
@@ -680,11 +687,11 @@ plot_df %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) 
   theme_bw() +
   labs(y="VST expression", x="Timepoint")
 
-plot_df %>% filter(grepl("HSP70",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_id)) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_id)) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
   stat_summary(fun="mean", geom="line") +
   scale_color_manual(values = treat_colors) +
   stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
-  facet_wrap(~gene_id) +
+  facet_wrap(~paste0(str_replace(query,"Montipora_capitata_HIv3___",""), ": ", gene_id)) +
   theme_bw() +
   labs(y="VST expression", x="Timepoint")
 ```
@@ -779,11 +786,11 @@ plot_df %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) 
   theme_bw() +
   labs(y="VST expression", x="Timepoint")
 
-plot_df %>% filter(grepl("HSP70",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_id)) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_id)) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
   stat_summary(fun="mean", geom="line") +
   scale_color_manual(values = treat_colors) +
   stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
-  facet_wrap(~gene_id) +
+  facet_wrap(~paste0(str_replace(query,"Montipora_capitata_HIv3___",""), ": ", gene_id)) +
   theme_bw() +
   labs(y="VST expression", x="Timepoint")
 ```
@@ -869,6 +876,10 @@ lsHeatmaps <- plotHeatmap(
   boolIdentifyTransients = TRUE, #set to true if true above
   scaQThres              = 0.01)
 draw(lsHeatmaps$complexHeatmapRaw) 
+
+png(paste0(outdir,"/ImpulseDE/ImpulseDE2_heatmap.png"), width = 2000, height = 2400, res = 300)
+draw(lsHeatmaps$complexHeatmapRaw)
+dev.off()
 ```
 
 
@@ -882,7 +893,7 @@ impulse_results %>% filter(Gene %in% stress_genes_ids) %>% arrange(padj) %>% lef
 heatgenes <- plotGenes(
   vecGeneIDs       = plot_stress_genes,
   objectImpulseDE2 = objectImpulseDE2,
-  boolCaseCtrl     = TRUE,
+  boolSimplePlot = TRUE,   boolCaseCtrl     = TRUE,
   dirOut           = "../output_RNA/differential_expression/MON_MCapV3/ImpulseDE/",
   strFileName = "stress_genes_Majerova.pdf",
   boolMultiplePlotsPerPage = FALSE,
@@ -890,22 +901,25 @@ heatgenes <- plotGenes(
 
 heatgenes
 
-HSP70 <- plotGenes(
-  vecGeneIDs       = "Montipora_capitata_HIv3___TS.g35289.t2",
+HSPS <- impulse_results %>% filter(Gene %in% stress_genes_ids) %>% arrange(padj) %>% left_join(HeatStressGenes_Mcap_unique, by = join_by(Gene==query)) %>% filter(grepl("HSP",gene_id)) %>% pull(Gene)
+
+HSPs <- plotGenes(
+  vecGeneIDs       = HSPS,
   objectImpulseDE2 = objectImpulseDE2,
+  boolSimplePlot = TRUE,
   boolCaseCtrl     = TRUE,
-  dirOut           = "../output_RNA/differential_expression/MON_MCapV3/ImpulseDE/",
-  strFileName = "HSP70.pdf",
+  dirOut           = "../output_RNA/differential_expression/POR_Pcomp/ImpulseDE/",
+  strFileName = "HSPs.pdf",
   boolMultiplePlotsPerPage = FALSE,
   strNameRefMethod = NULL)
 
-HSP70
+HSPs
 
 lsgplotsGenes <- plotGenes(
   vecGeneIDs       = NULL,
   scaNTopIDs       = 10,
   objectImpulseDE2 = objectImpulseDE2,
-  boolCaseCtrl     = TRUE,
+  boolSimplePlot = TRUE,   boolCaseCtrl     = TRUE,
   dirOut           = "../output_RNA/differential_expression/MON_MCapV3/ImpulseDE/",
   boolMultiplePlotsPerPage = FALSE,
   strNameRefMethod = NULL)
@@ -933,7 +947,6 @@ pheatmap(vsd_mat[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
 
 ```
 
-
 ## POR: pre-processing and visualization
 
 Read in raw count data
@@ -946,7 +959,7 @@ counts_raw <- read.csv("../output_RNA/count_matrices/POR_Pcomp_gene_count_matrix
 samples <- colnames(counts_raw)
 ```
 
-Read in metadata 
+### Read in metadata 
 ```{r}
 meta <- data.frame(
   sample = samples, 
@@ -962,11 +975,18 @@ meta$time <- factor(meta$time, levels = as.character(sort(unique(as.numeric(meta
 meta$treatment <- factor(meta$treatment)
 
 meta <- meta %>% arrange(time, treatment)
+write.csv(meta, paste0(outdir,"/RNA_seq_metadata.csv"))
 ```
 
 Reorder sample columns based on factor order
 ```{r}
 counts_raw <- counts_raw[, meta$sample]
+```
+
+Remove outliers:
+```{r}
+#counts_raw <- counts_raw[, !(colnames(counts_raw) %in% c("MON_R72_H1","MON_R72_H2"))]
+#meta <- meta[!(rownames(meta) %in% c("MON_R72_H1","MON_R72_H2")),]
 ```
 
 Data sanity checks!
@@ -975,7 +995,7 @@ stopifnot(all(meta$sample %in% colnames(counts_raw))) #are all of the sample nam
 stopifnot(all(meta$sample == colnames(counts_raw))) #are they the same in the same order?
 ```
 
-pOverA filtering to reduce dataset
+### pOverA filtering to reduce dataset
 
 ```{r}
 ffun<-filterfun(pOverA(0.07,10))  # Keep genes expressed at 10+ counts in at least 7% of samples - expressed in all 3 samples at one timepoint from one treatment
@@ -1053,6 +1073,25 @@ PCA <- ggplot() +
 PCA
 save_ggplot(PCA, "PCA_POR")
 ```
+The following samples had mapping rates < 20%:
+
+| sample      | uniquely_mapped_percent | rRNA_matched_reads_Million | total_reads_Million |
+|-------------|-------------------------|----------------------------|---------------------|
+| POR_R72_H1  | 6.4                     | 12.92                      | 15.47               |
+| POR_R24_H1  | 7.67                    | 14.23                      | 17.26               |
+| POR_R120_C3 | 7.77                    | 18.64                      | 21.02               |
+| POR_R72_H2  | 8.77                    | 12.24                      | 15.16               |
+| POR_R1_H2   | 10.37                   | 14.78                      | 17.47               |
+| POR_R120_C1 | 10.78                   | 11.68                      | 13.99               |
+| POR_R1_H1   | 11.72                   | 15.47                      | 18.69               |
+| POR_R1_C1   | 12.04                   | 13.14                      | 15.99               |
+| POR_R12_C1  | 12.2                    | 12.17                      | 14.88               |
+| POR_R12_C3  | 15.78                   | 11.7                       | 15.09               |
+| POR_R0_H1   | 16.57                   | 12.57                      | 16.46               |
+| POR_R120_H3 | 18.23                   | 12.18                      | 17.16               |
+| POR_R3_C3   | 18.27                   | 11                         | 14.95               |
+| POR_R0_H2   | 18.35                   | 14.14                      | 19.31               |
+| POR_R24_C2  | 19.72                   | 11.55                      | 16                  |
 
 ### Heatmap of count matrix
 
@@ -1064,7 +1103,7 @@ names(time_colors) <- levels(meta$time)
 
 #view top 500 most vairable genes
 pheatmap(assay(vsd)[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
-         cluster_cols=FALSE, #cutree_cols = 2,
+         cluster_cols=FALSE, 
          annotation_col= meta[,c("treatment","time")],
          annotation_colors = list("treatment" = treat_colors,
                                   "time" = time_colors))
@@ -1074,4 +1113,303 @@ pheatmap(assay(vsd)[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
          annotation_col= meta[,c("treatment","time")],
          annotation_colors = list("treatment" = treat_colors,
                                   "time" = time_colors))
+```
+
+
+### Heat stress genes
+
+```{r}
+HeatStressGenes_Pcomp <- read_csv("/project/pi_hputnam_uri_edu/zdellaert/snRNA_analysis/multi-sp-snRNA/reference_genes/genes_of_interest/HeatStressGenes_Pcomp.csv") %>% dplyr::select(-1) %>% dplyr::rename(query = Pcomp_gene) %>% dplyr::select(query,everything()) #%>% filter(ref_first_author =="Majerova")
+
+HeatStressGenes_Pcomp_unique <- HeatStressGenes_Pcomp %>% group_by(query) %>%
+  summarize(gene_id = paste(unique(gene_id), collapse = ","),
+            response_type = paste(unique(response_type), collapse = ","),
+            category = paste(unique(category), collapse = ",")
+            ) 
+
+HeatStressGenes_Pcomp_unique <- HeatStressGenes_Pcomp_unique %>% filter(query %in% rownames(vsd_mat))
+ 
+stress_genes_ids <- unique(HeatStressGenes_Pcomp_unique$query) 
+stress_genes_vsd <- vsd_mat[stress_genes_ids, ]
+
+plot_df <- as.data.frame(t(stress_genes_vsd)) %>%
+  rownames_to_column(var="sample") %>%
+  left_join(meta, by=c("sample"="sample")) %>%
+  pivot_longer(cols = all_of(stress_genes_ids), names_to="query", values_to="expression") %>%
+  left_join(HeatStressGenes_Pcomp_unique)
+
+plot_df %>% ggplot(aes(x=time, y=expression, color=gene_id, group=gene_id)) +
+  stat_summary(fun="mean", geom="line") +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+  facet_wrap(treatment~response_type) +
+  theme_bw() +
+  labs(y="VST expression", x="Timepoint")
+
+plot_df %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+  stat_summary(fun="mean", geom="line") +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+  scale_color_manual(values = treat_colors) +
+  facet_wrap(gene_id~response_type) +
+  theme_bw() +
+  labs(y="VST expression", x="Timepoint")
+
+plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_id)) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+  stat_summary(fun="mean", geom="line") +
+  scale_color_manual(values = treat_colors) +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+  facet_wrap(~paste0(str_replace(query,"Porites_compressa_HIv1___",""), ": ", gene_id)) +
+  theme_bw() +
+  labs(y="VST expression", x="Timepoint")
+```
+
+### DESeq LRT Test
+
+```{r}
+dds <- DESeqDataSetFromMatrix(countData = filtered_counts,
+                              colData = meta,
+                              design= ~ treatment + time + treatment:time)
+
+dds <- DESeq(dds, test = "LRT", reduced = ~ treatment + time)
+
+res <- results(dds)
+sig_genes <- subset(res, padj < 0.05)
+lrt_res <- as.data.frame(res)
+
+DE_05 <- lrt_res[rownames(lrt_res %>% filter(padj<0.05)),]
+
+time_colors <- colorRampPalette(c("#ffffcc","#0c2c84"))(7)
+names(time_colors) <- levels(meta$time)
+
+top_500_DE_genes <- DE_05 %>% arrange(padj) %>% head(500) %>% rownames()
+
+#view top 500 most vairable genes
+pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
+         cluster_cols=FALSE, 
+         annotation_col= meta[,c("treatment","time")],
+         annotation_colors = list("treatment" = treat_colors,
+                                  "time" = time_colors))
+
+pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
+         cluster_cols=TRUE, cutree_cols = 2,
+         annotation_col= meta[,c("treatment","time")],
+         annotation_colors = list("treatment" = treat_colors,
+                                  "time" = time_colors))
+
+top_500_DE_genes <- DE_05 %>% arrange(log2FoldChange) %>% head(500) %>% rownames()
+
+#view top 500 most vairable genes
+pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
+         cluster_cols=FALSE,
+         annotation_col= meta[,c("treatment","time")],
+         annotation_colors = list("treatment" = treat_colors,
+                                  "time" = time_colors))
+
+pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
+         cluster_cols=TRUE, cutree_cols = 2,
+         annotation_col= meta[,c("treatment","time")],
+         annotation_colors = list("treatment" = treat_colors,
+                                  "time" = time_colors))
+
+top_500_DE_genes <- DE_05 %>% arrange(desc(log2FoldChange)) %>% head(500) %>% rownames()
+
+#view top 500 most vairable genes
+pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
+         cluster_cols=FALSE, 
+         annotation_col= meta[,c("treatment","time")],
+         annotation_colors = list("treatment" = treat_colors,
+                                  "time" = time_colors))
+
+pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
+         cluster_cols=TRUE, cutree_cols = 2,
+         annotation_col= meta[,c("treatment","time")],
+         annotation_colors = list("treatment" = treat_colors,
+                                  "time" = time_colors))
+```
+
+
+### DE Heat stress genes
+
+```{r}
+plot_df <- as.data.frame(t(stress_genes_vsd)) %>%
+  rownames_to_column(var="sample") %>%
+  left_join(meta, by=c("sample"="sample")) %>%
+  pivot_longer(cols = all_of(stress_genes_ids), names_to="query", values_to="expression") %>%
+  left_join(HeatStressGenes_Pcomp_unique) %>% left_join(DE_05 %>% rownames_to_column(var="query")) %>%
+  filter(!is.na(padj))
+
+plot_df %>% ggplot(aes(x=time, y=expression, color=gene_id, group=gene_id)) +
+  stat_summary(fun="mean", geom="line") +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+  facet_wrap(treatment~response_type) +
+  theme_bw() +
+  labs(y="VST expression", x="Timepoint")
+
+plot_df %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+  stat_summary(fun="mean", geom="line") +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+  scale_color_manual(values = treat_colors) +
+  facet_wrap(gene_id~response_type) +
+  theme_bw() +
+  labs(y="VST expression", x="Timepoint")
+
+plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_id)) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+  stat_summary(fun="mean", geom="line") +
+  scale_color_manual(values = treat_colors) +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+  facet_wrap(~paste0(str_replace(query,"Porites_compressa_HIv1___",""), ": ", gene_id)) +
+  theme_bw() +
+  labs(y="VST expression", x="Timepoint")
+```
+
+### ImpulseDE2
+
+Based on [this paper](https://academic.oup.com/bib/article/20/1/288/4364840#130283262), this is the best package to use other than comparing each time point against each other individually. I am also planning to ID gene modules via WGCNA. 
+
+Repo here: https://github.com/YosefLab/ImpulseDE2
+
+Tutorial here: http://bioconductor.statistik.tu-dortmund.de/packages/3.11/bioc/vignettes/ImpulseDE2/inst/doc/ImpulseDE2_Tutorial.html , I followed closely with the section "Case-control differential expression analysis"
+
+Read the ImpulseDE2 paper [here](https://academic.oup.com/nar/article/46/20/e119/5068248)
+
+David S Fischer, Fabian J Theis, Nir Yosef, Impulse model-based differential expression analysis of time course sequencing data, Nucleic Acids Research, Volume 46, Issue 20, 16 November 2018, Page e119, https://doi.org/10.1093/nar/gky675
+
+```{r}
+#library(devtools)
+#install_github("YosefLab/ImpulseDE2")
+
+library(ImpulseDE2)
+```
+
+First, reformat our metadata table to match the column names used in the ImpulseDE2 vignette.
+
+```{r}
+meta_impulse <- meta %>%
+  dplyr::rename(Sample = sample, Time = time, Batch = replicate) %>% 
+  mutate(Time = as.numeric(as.character(Time)),
+         #Time = as.numeric(Time),
+         Condition = str_replace(treatment, "C", "control"),
+         Condition = str_replace(Condition, "H", "case")
+         ) %>%
+  select(-c(species,treatment))
+```
+
+Then, generate the ImpulseDE2 object
+
+```{r, eval=FALSE} 
+#test with just 500 genes that I determined to be DE by treatment/timepoint with DESeq2 
+objectImpulseDE2 <- runImpulseDE2(
+  matCountData    = as.matrix(filtered_counts)[top_500_DE_genes,], #or use filtered_counts 
+  dfAnnotation    = meta_impulse,
+  boolCaseCtrl    = TRUE,
+  vecConfounders  = c("Batch"), #only use if you want to try to control for batch effects
+  boolIdentifyTransients = TRUE, #use if you want to ID transiently- vs permanently-regulated genes
+  scaNProc        = 8 )
+
+#run with all genes
+objectImpulseDE2 <- runImpulseDE2(
+  matCountData    = as.matrix(counts_raw), #or use filtered_counts 
+  dfAnnotation    = meta_impulse,
+  boolCaseCtrl    = TRUE,
+  vecConfounders  = c("Batch"), #only use if you want to try to control for batch effects
+  boolIdentifyTransients = TRUE, #use if you want to ID transiently- vs permanently-regulated genes
+  scaNProc        = 18 )
+
+saveRDS(objectImpulseDE2, file = paste0(outdir, "/objectImpulseDE2.rds"))
+```
+
+```{r}
+objectImpulseDE2 <- readRDS(paste0(outdir, "/objectImpulseDE2.rds"))
+
+impulse_results <- objectImpulseDE2$dfImpulseDE2Results
+head(impulse_results)
+write.table(impulse_results,file.path(outdir, "ImpulseDE2_Results.txt"),row.names=F,quote=F,sep="\t")
+
+# Genes with significant treatment effect on temporal trajectory
+sig_genes <- impulse_results[impulse_results$padj < 0.05 & 
+                               impulse_results$loglik_full > impulse_results$loglik_red, ]
+
+nrow(sig_genes)
+head(sig_genes[order(sig_genes$padj), ])
+```
+
+
+```{r}
+library(ComplexHeatmap)
+
+lsHeatmaps <- plotHeatmap(
+  objectImpulseDE2       = objectImpulseDE2,
+  strCondition           = "case",
+  boolIdentifyTransients = TRUE, #set to true if true above
+  scaQThres              = 0.01)
+draw(lsHeatmaps$complexHeatmapRaw) 
+
+png(paste0(outdir,"/ImpulseDE/ImpulseDE2_heatmap.png"), width = 2000, height = 2400, res = 300)
+draw(lsHeatmaps$complexHeatmapRaw)
+dev.off()
+```
+
+
+```{r}
+majerova_genes <- HeatStressGenes_Pcomp %>% filter(ref_first_author =="Majerova")
+stress_genes_ids <- unique(majerova_genes$query)
+plot_stress_genes <- stress_genes_ids[stress_genes_ids %in% rownames(objectImpulseDE2@matCountDataProc)]
+
+impulse_results %>% filter(Gene %in% stress_genes_ids) %>% arrange(padj) %>% left_join(HeatStressGenes_Pcomp_unique, by = join_by(Gene==query))
+
+heatgenes <- plotGenes(
+  vecGeneIDs       = plot_stress_genes,
+  objectImpulseDE2 = objectImpulseDE2,
+  boolSimplePlot = TRUE,   boolCaseCtrl     = TRUE,
+  dirOut           = "../output_RNA/differential_expression/POR_Pcomp/ImpulseDE/",
+  strFileName = "stress_genes_Majerova.pdf",
+  boolMultiplePlotsPerPage = FALSE,
+  strNameRefMethod = NULL)
+
+heatgenes
+
+HSPS <- impulse_results %>% filter(Gene %in% stress_genes_ids) %>% arrange(padj) %>% left_join(HeatStressGenes_Pcomp_unique, by = join_by(Gene==query)) %>% filter(grepl("HSP",gene_id)) %>% pull(Gene)
+
+HSPs <- plotGenes(
+  vecGeneIDs       = HSPS,
+  objectImpulseDE2 = objectImpulseDE2,
+  boolSimplePlot = TRUE,
+  boolCaseCtrl     = TRUE,
+  dirOut           = "../output_RNA/differential_expression/POR_Pcomp/ImpulseDE/",
+  strFileName = "HSPs.pdf",
+  boolMultiplePlotsPerPage = FALSE,
+  strNameRefMethod = NULL)
+
+HSPs
+
+lsgplotsGenes <- plotGenes(
+  vecGeneIDs       = NULL,
+  scaNTopIDs       = 10,
+  objectImpulseDE2 = objectImpulseDE2,
+  boolSimplePlot = TRUE,
+  boolCaseCtrl     = TRUE,
+  dirOut           = "../output_RNA/differential_expression/POR_Pcomp/ImpulseDE/",
+  boolMultiplePlotsPerPage = FALSE,
+  strNameRefMethod = NULL)
+
+lsgplotsGenes
+```
+
+
+
+```{r}
+top_500_DE_genes <- impulse_results %>% arrange(padj) %>% head(500) %>% rownames()
+
+#view top 500 most vairable genes
+pheatmap(vsd_mat[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
+         cluster_cols=FALSE, #cutree_cols = 2,
+         annotation_col= meta[,c("treatment","time")],
+         annotation_colors = list("treatment" = treat_colors,
+                                  "time" = time_colors))
+
+pheatmap(vsd_mat[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
+         cluster_cols=TRUE, cutree_cols = 2,
+         annotation_col= meta[,c("treatment","time")],
+         annotation_colors = list("treatment" = treat_colors,
+                                  "time" = time_colors))
+
 ```

@@ -8,6 +8,7 @@
    1. differential expression:
       1. [POC files](output_RNA/differential_expression/POC_PacutaV2)
       2. [MON files](output_RNA/differential_expression/MON_MCapV3)
+      3. [POR files](output_RNA/differential_expression/POR_Pcomp)
    2. WGCNA
       1. [POC files](output_RNA/WGCNA/POC_PacutaV2)
       2. [MON files](output_RNA/WGCNA/MON_MCapV3)
@@ -16,37 +17,51 @@
    1. POC: ![](differential_expression/POC_PacutaV2/PCA_POC.png)
    2. MON: ![](differential_expression/MON_MCapV3/PCA_MON.png)
       1. **Important caveat 2 outliers in heat treatment at 72 hours are removed**
+   3. MON: ![](differential_expression/POR_Pcomp/PCA_POR.png)
+      1. **Important caveat no outliers removed yet, many have very low mapping and high rRNA**
 
 ## Expression trajectories of heat stress genes:
    1. POC:
       1. DE Heat stress genes by DESeq LRT
-         1. ![](../code/RNA-seq-Analysis_files/figure-html/unnamed-chunk-15-2.png)
+         1. ![](../code/RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-15-2.png)
          2. Subset of quick important ones of note:
-            1. ![](../code/RNA-seq-Analysis_files/figure-html/unnamed-chunk-15-3.png)
+            1. ![](../code/RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-15-3.png)
    2. MON:
          1. DE Heat stress genes by DESeq LRT
-            1. ![](../code/RNA-seq-Analysis_files/figure-html/unnamed-chunk-36-2.png)
+            1. ![](../code/RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-37-2.png)
             2. Subset of quick important ones of note:
-               1. ![](../code/RNA-seq-Analysis_files/figure-html/unnamed-chunk-36-3.png)
+               1. ![](../code/RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-37-3.png)
+                  1. **HSF1 not DE**
+   3. POR:
+         1. DE Heat stress genes by DESeq LRT
+            1. ![](../code/RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-59-2.png)
+            2. Subset of quick important ones of note:
+               1. ![](../code/RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-59-3.png)
                   1. **HSF1 not DE**
 
 ## ImpuseDE2 Results
    1. Overall patterns of DE genes either transiently or non-transiently affected by time*treatment
-      1. POC: ![](../code/RNA-seq-Analysis_files/figure-html/unnamed-chunk-20-1.png)
-      2. MON: ![](../code/RNA-seq-Analysis_files/figure-html/unnamed-chunk-40-1.png)
+      1. POC: ![](differential_expression/POC_PacutaV2/ImpulseDE/ImpulseDE2_heatmap.png)
+      2. MON: ![](differential_expression/MON_MCapV3/ImpulseDE/ImpulseDE2_heatmap.png)
+      3. POR: ![](differential_expression/POR_Pcomp/ImpulseDE/ImpulseDE2_heatmap.png)
    2. Treatment-and timepoint annotated heatmap of *500 most significant* DE genes by ImpulseDE2 model
       1. POC:
-         1. ![](../code/RNA-seq-Analysis_files/figure-html/unnamed-chunk-22-1.png)
-         2. ![](../code/RNA-seq-Analysis_files/figure-html/unnamed-chunk-22-2.png)
+         1. ![](../code/RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-22-1.png)
+         2. ![](../code/RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-22-2.png)
       2. MON:
-         1. ![](../code/RNA-seq-Analysis_files/figure-html/unnamed-chunk-43-1.png)
-         2. ![](../code/RNA-seq-Analysis_files/figure-html/unnamed-chunk-43-2.png)
+         1. ![](../code/RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-44-1.png)
+         2. ![](../code/RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-44-2.png)
+      3. POR:
+         1. ![](../code/RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-66-1.png)
+         2. ![](../code/RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-66-2.png)
    3. Example gene: HSP70
-      1. POC: [HSP70.pdf](differential_expression/POC_PacutaV2/ImpulseDE/HSP70.pdf)
-      2. MON: [HSP70.pdf](differential_expression/MON_MCapV3/ImpulseDE/HSP70.pdf)
+      1. POC: [HSPs.pdf](differential_expression/POC_PacutaV2/ImpulseDE/HSPs.pdf)
+      2. MON: [HSPs.pdf](differential_expression/MON_MCapV3/ImpulseDE/HSPs.pdf)
+      3. POR: [HSPs.pdf](differential_expression/MON_MCapV3/ImpulseDE/HSPs.pdf)
    4. Results text files (p-values and log likelihood)
       1. POC: [ImpulseDE2_Results.txt](differential_expression/POC_PacutaV2/ImpulseDE2_Results.txt)
-      2. POC: [ImpulseDE2_Results.txt](differential_expression/MON_MCapV3/ImpulseDE2_Results.txt)
+      2. MON: [ImpulseDE2_Results.txt](differential_expression/MON_MCapV3/ImpulseDE2_Results.txt)
+      3. POR: [ImpulseDE2_Results.txt](differential_expression/POR_Pcomp/ImpulseDE2_Results.txt)
 
 ## WGCNA:
    1. POC:

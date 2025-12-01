@@ -73,9 +73,13 @@ POR_rRNA <- read.csv("../output_RNA/rRNA_screen/rRNA_contamination_bbduk_POR.csv
 ```
 
 ```{r}
-POR_rRNA <- POR_rRNA %>% left_join(POR_map %>% select(Sample,total_reads, uniquely_mapped_percent), by = join_by(sample==Sample))
+POR_rRNA <- POR_rRNA %>% left_join(POR_map %>% select(Sample,total_reads, uniquely_mapped, uniquely_mapped_percent), by = join_by(sample==Sample))
 
-POR_rRNA <- POR_rRNA %>% mutate(total_reads_Million = total_reads/1000000)
+POR_rRNA <- POR_rRNA %>% mutate(total_reads_Million = total_reads/1000000) %>%
+  mutate(matched_reads_pairs = matched_reads/2) %>%
+  mutate(matched_reads_pairs_Million = matched_reads_pairs/1000000) %>%
+  mutate(reads_non_rRNA_Million = total_reads_Million-matched_reads_pairs_Million) %>%
+  mutate(uniquely_mapped_Million = uniquely_mapped/1000000)
 
 library(ggplot2)
 
@@ -84,5 +88,33 @@ plot <- ggplot(POR_rRNA) +
   labs(title = "Percent rRNA reads vs. Unique Mapping Rates:\nPOR Samples")
 plot
 ggsave("images/POR_rRNA_v_mapping.png")
+
+ggplot(POR_rRNA) + 
+  geom_point(aes(x = percent_rrna, y =uniquely_mapped_percent, color=total_reads_Million)) + theme_bw() + 
+  labs(title = "Percent rRNA reads vs. Unique Mapping Rates:\nPOR Samples")
+
+ggplot(POR_rRNA) + 
+  geom_point(aes(x = percent_rrna, y =total_reads_Million, color=total_reads_Million)) + theme_bw() + 
+  labs(title = "Percent rRNA reads vs. Unique Mapping Rates:\nPOR Samples")
+
+ggplot(POR_rRNA) + 
+  geom_point(aes(x = total_reads_Million, y =uniquely_mapped_percent, color=total_reads_Million)) + theme_bw() + 
+  labs(title = "Percent rRNA reads vs. Unique Mapping Rates:\nPOR Samples")
+
+POR_rRNA_summary <- POR_rRNA %>% select(sample,uniquely_mapped_percent,matched_reads_pairs_Million,total_reads_Million) %>% 
+  dplyr::rename(rRNA_matched_reads_Million=matched_reads_pairs_Million) %>% arrange(uniquely_mapped_percent) %>%
+  mutate(across(contains("_"), ~ round(as.numeric(.x), 2)))
+
+
+POR_rRNA_summary %>% pivot_longer(cols = contains("_"),
+               names_to = "metric",
+               values_to = "value") %>%
+  ggplot(aes(x = value)) +
+  geom_density() +
+  facet_wrap(~ metric, scales = "free") +
+  theme_bw() 
+
+
+write_csv(POR_rRNA_summary, "../output_RNA/differential_expression/POR_Pcomp/rRNA_and_mapping_metadata.csv")
 ```
 
