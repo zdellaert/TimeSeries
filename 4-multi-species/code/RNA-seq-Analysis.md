@@ -874,13 +874,13 @@ HSPs <- plotGenes(
   objectImpulseDE2 = objectImpulseDE2,
   boolSimplePlot = TRUE,
   boolCaseCtrl     = TRUE,
-  dirOut           = "../output_RNA/differential_expression/POR_Pcomp/ImpulseDE/",
+  dirOut           = "../output_RNA/differential_expression/POC_PacutaV2/ImpulseDE/",
   strFileName = "HSPs.pdf",
   boolMultiplePlotsPerPage = FALSE,
   strNameRefMethod = NULL)
 ```
 
-    ## [1] "Creating ../output_RNA/differential_expression/POR_Pcomp/ImpulseDE/HSPs.pdf"
+    ## [1] "Creating ../output_RNA/differential_expression/POC_PacutaV2/ImpulseDE/HSPs.pdf"
 
 ``` r
 HSPs
@@ -1715,13 +1715,13 @@ HSPs <- plotGenes(
   objectImpulseDE2 = objectImpulseDE2,
   boolSimplePlot = TRUE,
   boolCaseCtrl     = TRUE,
-  dirOut           = "../output_RNA/differential_expression/POR_Pcomp/ImpulseDE/",
+  dirOut           = "../output_RNA/differential_expression/MON_MCapV3/ImpulseDE/",
   strFileName = "HSPs.pdf",
   boolMultiplePlotsPerPage = FALSE,
   strNameRefMethod = NULL)
 ```
 
-    ## [1] "Creating ../output_RNA/differential_expression/POR_Pcomp/ImpulseDE/HSPs.pdf"
+    ## [1] "Creating ../output_RNA/differential_expression/MON_MCapV3/ImpulseDE/HSPs.pdf"
 
 ``` r
 HSPs
