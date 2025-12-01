@@ -287,7 +287,7 @@ names(time_colors) <- levels(meta$time)
 
 #view top 500 most vairable genes
 pheatmap(assay(vsd)[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
-         cluster_cols=FALSE, cutree_cols = 2,
+         cluster_cols=FALSE, 
          annotation_col= meta[,c("treatment","time")],
          annotation_colors = list("treatment" = treat_colors,
                                   "time" = time_colors))
@@ -338,16 +338,48 @@ plot_df %>% ggplot(aes(x=time, y=expression, color=gene_id, group=gene_id)) +
 ![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
 
 ``` r
-plot_df %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
-  stat_summary(fun="mean", geom="line") +
-  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+plot_df %>% filter(grepl("Type1", response_type)) %>%
+  ggplot(aes(x=time, y=expression, color=treatment, group=interaction(treatment,query))) +
+  stat_summary(fun="mean", geom="line", alpha=0.6) +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2,linewidth=0.5, alpha=0.6) +
   scale_color_manual(values = treat_colors) +
-  facet_wrap(gene_id~response_type) +
+  facet_wrap(~gene_id, ncol= 3,scales="free_y") +
   theme_bw() +
-  labs(y="VST expression", x="Timepoint")
+  theme(
+    strip.text = element_text(face="bold", size=8),panel.spacing = unit(0.4, "lines")
+  ) +
+  labs(y="VST expression", x="Timepoint", title = "Type 1 Expressed Response genes")
 ```
 
 ![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-13-2.png)<!-- -->
+
+``` r
+save_ggplot(get_last_plot(), "All_Type1")
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-13-3.png)<!-- -->
+
+``` r
+plot_df %>% filter(grepl("Type2", response_type)) %>%
+  ggplot(aes(x=time, y=expression, color=treatment, group=interaction(treatment,query))) +
+  stat_summary(fun="mean", geom="line", alpha=0.6) +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2,linewidth=0.5, alpha=0.6) +
+  scale_color_manual(values = treat_colors) +
+  facet_wrap(~gene_id, ncol= 3,scales="free_y") +
+  theme_bw() +
+  theme(
+    strip.text = element_text(face="bold", size=8),panel.spacing = unit(0.4, "lines")
+  ) +
+  labs(y="VST expression", x="Timepoint", title = "Type 2 Expressed Response genes")
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-13-4.png)<!-- -->
+
+``` r
+save_ggplot(get_last_plot(), "All_Type2")
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-13-5.png)<!-- -->
 
 ``` r
 plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_id)) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
@@ -359,7 +391,7 @@ plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_
   labs(y="VST expression", x="Timepoint")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-13-3.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-13-6.png)<!-- -->
 
 ### DESeq LRT Test
 
@@ -383,7 +415,7 @@ top_500_DE_genes <- DE_05 %>% arrange(padj) %>% head(500) %>% rownames()
 
 #view top 500 most vairable genes
 pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
-         cluster_cols=FALSE, cutree_cols = 2,
+         cluster_cols=FALSE, 
          annotation_col= meta[,c("treatment","time")],
          annotation_colors = list("treatment" = treat_colors,
                                   "time" = time_colors))
@@ -468,28 +500,84 @@ plot_df %>% ggplot(aes(x=time, y=expression, color=gene_id, group=gene_id)) +
 ![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
 
 ``` r
-plot_df %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
-  stat_summary(fun="mean", geom="line") +
-  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+plot_df %>% filter(grepl("Type1", response_type)) %>%
+  ggplot(aes(x=time, y=expression, color=treatment, group=interaction(treatment,query))) +
+  stat_summary(fun="mean", geom="line", alpha=0.6) +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2,linewidth=0.5, alpha=0.6) +
   scale_color_manual(values = treat_colors) +
-  facet_wrap(gene_id~response_type) +
+  facet_wrap(~gene_id, ncol= 3,scales="free_y") +
   theme_bw() +
-  labs(y="VST expression", x="Timepoint")
+  theme(
+    strip.text = element_text(face="bold", size=8),panel.spacing = unit(0.4, "lines")
+  ) +
+  labs(y="VST expression", x="Timepoint", title = "Type 1 DE (LRT) Response genes")
 ```
 
 ![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-15-2.png)<!-- -->
+
+``` r
+save_ggplot(get_last_plot(), "DE_Type1")
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-15-3.png)<!-- -->
+
+``` r
+plot_df %>% filter(grepl("Type2", response_type)) %>%
+  ggplot(aes(x=time, y=expression, color=treatment, group=interaction(treatment,query))) +
+  stat_summary(fun="mean", geom="line", alpha=0.6) +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2,linewidth=0.5, alpha=0.6) +
+  scale_color_manual(values = treat_colors) +
+  facet_wrap(~gene_id, ncol= 3,scales="free_y") +
+  theme_bw() +
+  theme(
+    strip.text = element_text(face="bold", size=8),panel.spacing = unit(0.4, "lines")
+  ) +
+  labs(y="VST expression", x="Timepoint", title = "Type 2 DE (LRT) Response genes")
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-15-4.png)<!-- -->
+
+``` r
+save_ggplot(get_last_plot(), "DE_Type2")
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-15-5.png)<!-- -->
 
 ``` r
 plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_id)) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
   stat_summary(fun="mean", geom="line") +
   scale_color_manual(values = treat_colors) +
   stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
-  facet_wrap(~paste0(str_replace(query,"Pocillopora_acuta_HIv2___",""), ": ", gene_id)) +
+  facet_wrap(~paste0(gene_id, ": ",str_replace(query,"Pocillopora_acuta_HIv2___","")),scales="free_y") +
   theme_bw() +
-  labs(y="VST expression", x="Timepoint")
+  labs(y="VST expression", x="Timepoint", title = "Selected Type 1 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-15-3.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-15-6.png)<!-- -->
+
+``` r
+save_ggplot(get_last_plot(), "highlighted_DE_Type1")
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-15-7.png)<!-- -->
+
+``` r
+plot_df %>% filter(grepl("GDH",gene_id)|grepl("GS",gene_id)|grepl("AMT1",gene_id)) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+  stat_summary(fun="mean", geom="line") +
+  scale_color_manual(values = treat_colors) +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+  facet_wrap(~paste0(gene_id, ": ",str_replace(query,"Pocillopora_acuta_HIv2___","")),scales="free_y") +
+  theme_bw() +
+  labs(y="VST expression", x="Timepoint", title = "Selected Type 2 DE (LRT) Response genes")
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-15-8.png)<!-- -->
+
+``` r
+save_ggplot(get_last_plot(), "highlighted_DE_Type2")
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-15-9.png)<!-- -->
 
 ### ImpulseDE2
 
@@ -1187,16 +1275,48 @@ plot_df %>% ggplot(aes(x=time, y=expression, color=gene_id, group=gene_id)) +
 ![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-35-1.png)<!-- -->
 
 ``` r
-plot_df %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
-  stat_summary(fun="mean", geom="line") +
-  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+plot_df %>% filter(grepl("Type1", response_type)) %>%
+  ggplot(aes(x=time, y=expression, color=treatment, group=interaction(treatment,query))) +
+  stat_summary(fun="mean", geom="line", alpha=0.6) +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2,linewidth=0.5, alpha=0.6) +
   scale_color_manual(values = treat_colors) +
-  facet_wrap(gene_id~response_type) +
+  facet_wrap(~gene_id, ncol= 3,scales="free_y") +
   theme_bw() +
-  labs(y="VST expression", x="Timepoint")
+  theme(
+    strip.text = element_text(face="bold", size=8),panel.spacing = unit(0.4, "lines")
+  ) +
+  labs(y="VST expression", x="Timepoint", title = "Type 1 Expressed Response genes")
 ```
 
 ![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-35-2.png)<!-- -->
+
+``` r
+save_ggplot(get_last_plot(), "All_Type1")
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-35-3.png)<!-- -->
+
+``` r
+plot_df %>% filter(grepl("Type2", response_type)) %>%
+  ggplot(aes(x=time, y=expression, color=treatment, group=interaction(treatment,query))) +
+  stat_summary(fun="mean", geom="line", alpha=0.6) +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2,linewidth=0.5, alpha=0.6) +
+  scale_color_manual(values = treat_colors) +
+  facet_wrap(~gene_id, ncol= 3,scales="free_y") +
+  theme_bw() +
+  theme(
+    strip.text = element_text(face="bold", size=8),panel.spacing = unit(0.4, "lines")
+  ) +
+  labs(y="VST expression", x="Timepoint", title = "Type 2 Expressed Response genes")
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-35-4.png)<!-- -->
+
+``` r
+save_ggplot(get_last_plot(), "All_Type2")
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-35-5.png)<!-- -->
 
 ``` r
 plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_id)) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
@@ -1208,7 +1328,7 @@ plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_
   labs(y="VST expression", x="Timepoint")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-35-3.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-35-6.png)<!-- -->
 
 ### DESeq LRT Test
 
@@ -1317,16 +1437,48 @@ plot_df %>% ggplot(aes(x=time, y=expression, color=gene_id, group=gene_id)) +
 ![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-37-1.png)<!-- -->
 
 ``` r
-plot_df %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
-  stat_summary(fun="mean", geom="line") +
-  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+plot_df %>% filter(grepl("Type1", response_type)) %>%
+  ggplot(aes(x=time, y=expression, color=treatment, group=interaction(treatment,query))) +
+  stat_summary(fun="mean", geom="line", alpha=0.6) +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2,linewidth=0.5, alpha=0.6) +
   scale_color_manual(values = treat_colors) +
-  facet_wrap(gene_id~response_type) +
+  facet_wrap(~gene_id, ncol= 3,scales="free_y") +
   theme_bw() +
-  labs(y="VST expression", x="Timepoint")
+  theme(
+    strip.text = element_text(face="bold", size=8),panel.spacing = unit(0.4, "lines")
+  ) +
+  labs(y="VST expression", x="Timepoint", title = "Type 1 DE (LRT) Response genes")
 ```
 
 ![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-37-2.png)<!-- -->
+
+``` r
+save_ggplot(get_last_plot(), "DE_Type1")
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-37-3.png)<!-- -->
+
+``` r
+plot_df %>% filter(grepl("Type2", response_type)) %>%
+  ggplot(aes(x=time, y=expression, color=treatment, group=interaction(treatment,query))) +
+  stat_summary(fun="mean", geom="line", alpha=0.6) +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2,linewidth=0.5, alpha=0.6) +
+  scale_color_manual(values = treat_colors) +
+  facet_wrap(~gene_id, ncol= 3,scales="free_y") +
+  theme_bw() +
+  theme(
+    strip.text = element_text(face="bold", size=8),panel.spacing = unit(0.4, "lines")
+  ) +
+  labs(y="VST expression", x="Timepoint", title = "Type 2 DE (LRT) Response genes")
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-37-4.png)<!-- -->
+
+``` r
+save_ggplot(get_last_plot(), "DE_Type2")
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-37-5.png)<!-- -->
 
 ``` r
 plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_id)) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
@@ -1338,7 +1490,43 @@ plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_
   labs(y="VST expression", x="Timepoint")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-37-3.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-37-6.png)<!-- -->
+
+``` r
+plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_id)) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+  stat_summary(fun="mean", geom="line") +
+  scale_color_manual(values = treat_colors) +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+  facet_wrap(~paste0(gene_id, ": ",str_replace(query,"Pocillopora_acuta_HIv2___","")),scales="free_y") +
+  theme_bw() +
+  labs(y="VST expression", x="Timepoint", title = "Selected Type 1 DE (LRT) Response genes")
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-37-7.png)<!-- -->
+
+``` r
+save_ggplot(get_last_plot(), "highlighted_DE_Type1")
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-37-8.png)<!-- -->
+
+``` r
+plot_df %>% filter(grepl("GDH",gene_id)|grepl("GS",gene_id)|grepl("AMT1",gene_id)) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+  stat_summary(fun="mean", geom="line") +
+  scale_color_manual(values = treat_colors) +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+  facet_wrap(~paste0(gene_id, ": ",str_replace(query,"Pocillopora_acuta_HIv2___","")),scales="free_y") +
+  theme_bw() +
+  labs(y="VST expression", x="Timepoint", title = "Selected Type 2 DE (LRT) Response genes")
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-37-9.png)<!-- -->
+
+``` r
+save_ggplot(get_last_plot(), "highlighted_DE_Type2")
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-37-10.png)<!-- -->
 
 ### ImpulseDE2
 
@@ -2045,16 +2233,48 @@ plot_df %>% ggplot(aes(x=time, y=expression, color=gene_id, group=gene_id)) +
 ![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-57-1.png)<!-- -->
 
 ``` r
-plot_df %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
-  stat_summary(fun="mean", geom="line") +
-  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+plot_df %>% filter(grepl("Type1", response_type)) %>%
+  ggplot(aes(x=time, y=expression, color=treatment, group=interaction(treatment,query))) +
+  stat_summary(fun="mean", geom="line", alpha=0.6) +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2,linewidth=0.5, alpha=0.6) +
   scale_color_manual(values = treat_colors) +
-  facet_wrap(gene_id~response_type) +
+  facet_wrap(~gene_id, ncol= 3,scales="free_y") +
   theme_bw() +
-  labs(y="VST expression", x="Timepoint")
+  theme(
+    strip.text = element_text(face="bold", size=8),panel.spacing = unit(0.4, "lines")
+  ) +
+  labs(y="VST expression", x="Timepoint", title = "Type 1 Expressed Response genes")
 ```
 
 ![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-57-2.png)<!-- -->
+
+``` r
+save_ggplot(get_last_plot(), "All_Type1")
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-57-3.png)<!-- -->
+
+``` r
+plot_df %>% filter(grepl("Type2", response_type)) %>%
+  ggplot(aes(x=time, y=expression, color=treatment, group=interaction(treatment,query))) +
+  stat_summary(fun="mean", geom="line", alpha=0.6) +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2,linewidth=0.5, alpha=0.6) +
+  scale_color_manual(values = treat_colors) +
+  facet_wrap(~gene_id, ncol= 3,scales="free_y") +
+  theme_bw() +
+  theme(
+    strip.text = element_text(face="bold", size=8),panel.spacing = unit(0.4, "lines")
+  ) +
+  labs(y="VST expression", x="Timepoint", title = "Type 2 Expressed Response genes")
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-57-4.png)<!-- -->
+
+``` r
+save_ggplot(get_last_plot(), "All_Type2")
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-57-5.png)<!-- -->
 
 ``` r
 plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_id)) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
@@ -2066,7 +2286,7 @@ plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_
   labs(y="VST expression", x="Timepoint")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-57-3.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-57-6.png)<!-- -->
 
 ### DESeq LRT Test
 
@@ -2175,16 +2395,48 @@ plot_df %>% ggplot(aes(x=time, y=expression, color=gene_id, group=gene_id)) +
 ![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-59-1.png)<!-- -->
 
 ``` r
-plot_df %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
-  stat_summary(fun="mean", geom="line") +
-  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+plot_df %>% filter(grepl("Type1", response_type)) %>%
+  ggplot(aes(x=time, y=expression, color=treatment, group=interaction(treatment,query))) +
+  stat_summary(fun="mean", geom="line", alpha=0.6) +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2,linewidth=0.5, alpha=0.6) +
   scale_color_manual(values = treat_colors) +
-  facet_wrap(gene_id~response_type) +
+  facet_wrap(~gene_id, ncol= 3,scales="free_y") +
   theme_bw() +
-  labs(y="VST expression", x="Timepoint")
+  theme(
+    strip.text = element_text(face="bold", size=8),panel.spacing = unit(0.4, "lines")
+  ) +
+  labs(y="VST expression", x="Timepoint", title = "Type 1 DE (LRT) Response genes")
 ```
 
 ![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-59-2.png)<!-- -->
+
+``` r
+save_ggplot(get_last_plot(), "DE_Type1")
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-59-3.png)<!-- -->
+
+``` r
+plot_df %>% filter(grepl("Type2", response_type)) %>%
+  ggplot(aes(x=time, y=expression, color=treatment, group=interaction(treatment,query))) +
+  stat_summary(fun="mean", geom="line", alpha=0.6) +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2,linewidth=0.5, alpha=0.6) +
+  scale_color_manual(values = treat_colors) +
+  facet_wrap(~gene_id, ncol= 3,scales="free_y") +
+  theme_bw() +
+  theme(
+    strip.text = element_text(face="bold", size=8),panel.spacing = unit(0.4, "lines")
+  ) +
+  labs(y="VST expression", x="Timepoint", title = "Type 2 DE (LRT) Response genes")
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-59-4.png)<!-- -->
+
+``` r
+save_ggplot(get_last_plot(), "DE_Type2")
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-59-5.png)<!-- -->
 
 ``` r
 plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_id)) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
@@ -2196,7 +2448,43 @@ plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_
   labs(y="VST expression", x="Timepoint")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-59-3.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-59-6.png)<!-- -->
+
+``` r
+plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_id)) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+  stat_summary(fun="mean", geom="line") +
+  scale_color_manual(values = treat_colors) +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+  facet_wrap(~paste0(gene_id, ": ",str_replace(query,"Pocillopora_acuta_HIv2___","")),scales="free_y") +
+  theme_bw() +
+  labs(y="VST expression", x="Timepoint", title = "Selected Type 1 DE (LRT) Response genes")
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-59-7.png)<!-- -->
+
+``` r
+save_ggplot(get_last_plot(), "highlighted_DE_Type1")
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-59-8.png)<!-- -->
+
+``` r
+plot_df %>% filter(grepl("GDH",gene_id)|grepl("GS",gene_id)|grepl("AMT1",gene_id)) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+  stat_summary(fun="mean", geom="line") +
+  scale_color_manual(values = treat_colors) +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+  facet_wrap(~paste0(gene_id, ": ",str_replace(query,"Pocillopora_acuta_HIv2___","")),scales="free_y") +
+  theme_bw() +
+  labs(y="VST expression", x="Timepoint", title = "Selected Type 2 DE (LRT) Response genes")
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-59-9.png)<!-- -->
+
+``` r
+save_ggplot(get_last_plot(), "highlighted_DE_Type2")
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-59-10.png)<!-- -->
 
 ### ImpulseDE2
 

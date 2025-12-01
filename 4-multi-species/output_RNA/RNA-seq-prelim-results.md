@@ -24,21 +24,35 @@
 ## Expression trajectories of heat stress genes:
    1. POC:
       1. DE Heat stress genes by DESeq LRT
-         1. <img src="../code/RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-15-2.png" width="500">
-         2. Subset of quick important ones of note:
-            1. <img src="../code/RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-15-3.png" width="500">
+         1. <img src="differential_expression/POC_PacutaV2/DE_Type1.png" width="500">
+            1. Subset of quick important ones of note:
+               1. <img src="differential_expression/POC_PacutaV2/highlighted_DE_Type1.png" width="500">
+         2. <img src="differential_expression/POC_PacutaV2/DE_Type2.png" width="500">
+            1. Subset of quick important ones of note:
+               1. <img src="differential_expression/POC_PacutaV2/highlighted_DE_Type2.png" width="500">
+         3. **Subset of POC genes which were DE in LCM -- all were up in Oral Epidermis**
+            1. <img src="differential_expression/POC_PacutaV2/tissue_LCM_heatmap.png" width="400">
+            2. <img src="differential_expression/POC_PacutaV2/highlighted_tissue_DE.png" width="500">
+            3. For the record here was the expression overview of all the heat stress genes in LCM
+               1. <img src="differential_expression/POC_PacutaV2/tissue_LCM_heatmap_allgenes.png" width="400">
    2. MON:
          1. DE Heat stress genes by DESeq LRT
-            1. <img src="../code/RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-37-2.png" width="500">
-            2. Subset of quick important ones of note:
-               1. <img src="../code/RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-37-3.png" width="500">
-                  1. **HSF1 not DE**
+         2. <img src="differential_expression/MON_MCapV3/DE_Type1.png" width="500">
+            1. Subset of quick important ones of note:
+               1. <img src="differential_expression/MON_MCapV3/highlighted_DE_Type1.png" width="500">
+               2. **HSF1 not DE**
+         3. <img src="differential_expression/MON_MCapV3/DE_Type2.png" width="500">
+            1. Subset of quick important ones of note:
+               1. <img src="differential_expression/MON_MCapV3/highlighted_DE_Type2.png" width="500">
    3. POR:
          1. DE Heat stress genes by DESeq LRT
-            1. <img src="../code/RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-59-2.png" width="500">
-            2. Subset of quick important ones of note:
-               1. <img src="../code/RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-59-3.png" width="500">
-                  1. **HSF1 not DE**
+         2. <img src="differential_expression/POR_Pcomp/DE_Type1.png" width="500">
+            1. Subset of quick important ones of note:
+               1. <img src="differential_expression/POR_Pcomp/highlighted_DE_Type1.png" width="500">
+               2. **HSF1 not DE**
+         3. <img src="differential_expression/POR_Pcomp/DE_Type2.png" width="500">
+            1. Subset of quick important ones of note:
+               1. <img src="differential_expression/POR_Pcomp/highlighted_DE_Type2.png" width="500">
 
 ## ImpuseDE2 Results
    1. Overall patterns of DE genes either transiently or non-transiently affected by time*treatment
