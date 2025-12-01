@@ -17,7 +17,7 @@
    1. POC: ![](differential_expression/POC_PacutaV2/PCA_POC.png)
    2. MON: ![](differential_expression/MON_MCapV3/PCA_MON.png)
       1. **Important caveat 2 outliers in heat treatment at 72 hours are removed**
-   3. MON: ![](differential_expression/POR_Pcomp/PCA_POR.png)
+   3. POR: ![](differential_expression/POR_Pcomp/PCA_POR.png)
       1. **Important caveat no outliers removed yet, many have very low mapping and high rRNA**
 
 ## Expression trajectories of heat stress genes:
