@@ -579,6 +579,24 @@ save_ggplot(get_last_plot(), "highlighted_DE_Type2")
 
 ![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-15-9.png)<!-- -->
 
+``` r
+plot_df %>% filter(grepl("DNaj",gene_id)|grepl("ALOX",gene_id)|grepl("AMT1",gene_id)|grepl("ST1C2",gene_id)|grepl("GDH",gene_id)) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+  stat_summary(fun="mean", geom="line") +
+  scale_color_manual(values = treat_colors) +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+  facet_wrap(~paste0(gene_id, ": ",str_replace(query,"Pocillopora_acuta_HIv2___","")),scales="free_y") +
+  theme_bw() +
+  labs(y="VST expression", x="Timepoint", title = "Type 1 & 2 DE (LRT) Response genes also DE in Oral Epidermis by LCM")
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-15-10.png)<!-- -->
+
+``` r
+save_ggplot(get_last_plot(), "highlighted_tissue_DE")
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-15-11.png)<!-- -->
+
 ### ImpulseDE2
 
 Based on [this
@@ -1497,7 +1515,7 @@ plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_
   stat_summary(fun="mean", geom="line") +
   scale_color_manual(values = treat_colors) +
   stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
-  facet_wrap(~paste0(gene_id, ": ",str_replace(query,"Pocillopora_acuta_HIv2___","")),scales="free_y") +
+  facet_wrap(~paste0(gene_id, ": ",str_replace(query,"Montipora_capitata_HIv3___","")),scales="free_y") +
   theme_bw() +
   labs(y="VST expression", x="Timepoint", title = "Selected Type 1 DE (LRT) Response genes")
 ```
@@ -1515,7 +1533,7 @@ plot_df %>% filter(grepl("GDH",gene_id)|grepl("GS",gene_id)|grepl("AMT1",gene_id
   stat_summary(fun="mean", geom="line") +
   scale_color_manual(values = treat_colors) +
   stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
-  facet_wrap(~paste0(gene_id, ": ",str_replace(query,"Pocillopora_acuta_HIv2___","")),scales="free_y") +
+  facet_wrap(~paste0(gene_id, ": ",str_replace(query,"Montipora_capitata_HIv3___","")),scales="free_y") +
   theme_bw() +
   labs(y="VST expression", x="Timepoint", title = "Selected Type 2 DE (LRT) Response genes")
 ```
@@ -2455,7 +2473,7 @@ plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_
   stat_summary(fun="mean", geom="line") +
   scale_color_manual(values = treat_colors) +
   stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
-  facet_wrap(~paste0(gene_id, ": ",str_replace(query,"Pocillopora_acuta_HIv2___","")),scales="free_y") +
+  facet_wrap(~paste0(gene_id, ": ",str_replace(query,"Porites_compressa_HIv1___","")),scales="free_y") +
   theme_bw() +
   labs(y="VST expression", x="Timepoint", title = "Selected Type 1 DE (LRT) Response genes")
 ```
@@ -2473,7 +2491,7 @@ plot_df %>% filter(grepl("GDH",gene_id)|grepl("GS",gene_id)|grepl("AMT1",gene_id
   stat_summary(fun="mean", geom="line") +
   scale_color_manual(values = treat_colors) +
   stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
-  facet_wrap(~paste0(gene_id, ": ",str_replace(query,"Pocillopora_acuta_HIv2___","")),scales="free_y") +
+  facet_wrap(~paste0(gene_id, ": ",str_replace(query,"Porites_compressa_HIv1___","")),scales="free_y") +
   theme_bw() +
   labs(y="VST expression", x="Timepoint", title = "Selected Type 2 DE (LRT) Response genes")
 ```
