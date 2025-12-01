@@ -72,9 +72,12 @@
 
 ## ImpuseDE2 Results
    1. Overall patterns of DE genes either transiently or non-transiently affected by time*treatment
-      1. POC: <img src="differential_expression/POC_PacutaV2/ImpulseDE/ImpulseDE2_heatmap.png" width="500">
-      2. MON: <img src="differential_expression/MON_MCapV3/ImpulseDE/ImpulseDE2_heatmap.png" width="500">
-      3. POR: <img src="differential_expression/POR_Pcomp/ImpulseDE/ImpulseDE2_heatmap.png" width="500">
+      1. POC:
+         1. <img src="differential_expression/POC_PacutaV2/ImpulseDE/ImpulseDE2_heatmap.png" width="500">
+      2. MON:
+         1. <img src="differential_expression/MON_MCapV3/ImpulseDE/ImpulseDE2_heatmap.png" width="500">
+      3. POR:
+         1. <img src="differential_expression/POR_Pcomp/ImpulseDE/ImpulseDE2_heatmap.png" width="500">
    2. Treatment-and timepoint annotated heatmap of *500 most significant* DE genes by ImpulseDE2 model
       1. POC:
          1. <img src="../code/RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-22-1.png" width="500">
