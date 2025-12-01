@@ -14,10 +14,10 @@
       2. [MON files](output_RNA/WGCNA/MON_MCapV3)
 
 ## PCA separation by treatment and timepoint
-   1. POC: ![](differential_expression/POC_PacutaV2/PCA_POC.png)
-   2. MON: ![](differential_expression/MON_MCapV3/PCA_MON.png)
+   1. POC: ![](differential_expression/POC_PacutaV2/PCA_POC.png){width=300}
+   2. MON: ![](differential_expression/MON_MCapV3/PCA_MON.png){width=200}
       1. **Important caveat 2 outliers in heat treatment at 72 hours are removed**
-   3. POR: ![](differential_expression/POR_Pcomp/PCA_POR.png)
+   3. POR: ![](differential_expression/POR_Pcomp/PCA_POR.png){width=300}
       1. **Important caveat no outliers removed yet, many have very low mapping and high rRNA**
 
 ## Expression trajectories of heat stress genes:
@@ -41,9 +41,9 @@
 
 ## ImpuseDE2 Results
    1. Overall patterns of DE genes either transiently or non-transiently affected by time*treatment
-      1. POC: ![](differential_expression/POC_PacutaV2/ImpulseDE/ImpulseDE2_heatmap.png)
-      2. MON: ![](differential_expression/MON_MCapV3/ImpulseDE/ImpulseDE2_heatmap.png)
-      3. POR: ![](differential_expression/POR_Pcomp/ImpulseDE/ImpulseDE2_heatmap.png)
+      1. POC: ![](differential_expression/POC_PacutaV2/ImpulseDE/ImpulseDE2_heatmap.png){width=300}
+      2. MON: ![](differential_expression/MON_MCapV3/ImpulseDE/ImpulseDE2_heatmap.png){width=200}
+      3. POR: ![](differential_expression/POR_Pcomp/ImpulseDE/ImpulseDE2_heatmap.png){width=300}
    2. Treatment-and timepoint annotated heatmap of *500 most significant* DE genes by ImpulseDE2 model
       1. POC:
          1. ![](../code/RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-22-1.png)
@@ -57,7 +57,7 @@
    3. Example gene: HSP70
       1. POC: [HSPs.pdf](differential_expression/POC_PacutaV2/ImpulseDE/HSPs.pdf)
       2. MON: [HSPs.pdf](differential_expression/MON_MCapV3/ImpulseDE/HSPs.pdf)
-      3. POR: [HSPs.pdf](differential_expression/MON_MCapV3/ImpulseDE/HSPs.pdf)
+      3. POR: [HSPs.pdf](differential_expression/POR_Pcomp/ImpulseDE/HSPs.pdf)
    4. Results text files (p-values and log likelihood)
       1. POC: [ImpulseDE2_Results.txt](differential_expression/POC_PacutaV2/ImpulseDE2_Results.txt)
       2. MON: [ImpulseDE2_Results.txt](differential_expression/MON_MCapV3/ImpulseDE2_Results.txt)
