@@ -220,7 +220,7 @@ options(stringsAsFactors = FALSE)
 enableWGCNAThreads() #Allow multi-threading within WGCNA
 ```
 
-    ## Allowing parallel execution with up to 127 working processes.
+    ## Allowing parallel execution with up to 191 working processes.
 
 ``` r
 softPower = 5 # set the soft threshold based on the plots above 
@@ -480,10 +480,6 @@ all(rownames(meta2) == rownames(vst2))  # should be TRUE
     ## [1] TRUE
 
 ``` r
-meta2 <- meta2 %>%
-  mutate(treatment = ifelse(treatment == "H", 1, 0)) %>%
-  mutate(time = as.numeric(time)) %>% select(-c(species,replicate)) 
-
 treatment <- meta2 %>%
   mutate(control = as.factor(as.numeric(treatment == "C"))) %>% 
   mutate(heat = as.factor(as.numeric(treatment == "H"))) %>%
@@ -500,6 +496,23 @@ time <- meta2 %>%
   select(contains("hr"))
 
 time_treat <- bind_cols(time,treatment)
+
+time_treat_factorial <- meta2 %>%
+  mutate(`0hr-Control` = as.factor(as.numeric(time == "0" & treatment == "C"))) %>% 
+  mutate(`1hr-Control` = as.factor(as.numeric(time == "1" & treatment == "C"))) %>% 
+  mutate(`3hr-Control` = as.factor(as.numeric(time == "3" & treatment == "C"))) %>% 
+  mutate(`12hr-Control` = as.factor(as.numeric(time == "12" & treatment == "C"))) %>% 
+  mutate(`24hr-Control` = as.factor(as.numeric(time == "24" & treatment == "C"))) %>% 
+  mutate(`72hr-Control` = as.factor(as.numeric(time == "72" & treatment == "C"))) %>% 
+  mutate(`120hr-Control` = as.factor(as.numeric(time == "120" & treatment == "C"))) %>% 
+  mutate(`0hr-Heat` = as.factor(as.numeric(time == "0" & treatment == "H"))) %>% 
+  mutate(`1hr-Heat` = as.factor(as.numeric(time == "1" & treatment == "H"))) %>% 
+  mutate(`3hr-Heat` = as.factor(as.numeric(time == "3" & treatment == "H"))) %>% 
+  mutate(`12hr-Heat` = as.factor(as.numeric(time == "12" & treatment == "H"))) %>% 
+  mutate(`24hr-Heat` = as.factor(as.numeric(time == "24" & treatment == "H"))) %>% 
+  mutate(`72hr-Heat` = as.factor(as.numeric(time == "72" & treatment == "H"))) %>% 
+  mutate(`120hr-Heat` = as.factor(as.numeric(time == "120" & treatment == "H"))) %>% 
+  select(contains("hr"))
 ```
 
 #### identify modules that are significantly associated with the measured clinical traits.
@@ -511,14 +524,14 @@ significant associations:
 ###### Treatment
 
 ``` r
-moduleTraitCor = cor(MEs, treatment, use = "p");
+moduleTraitCor = WGCNA::cor(MEs, treatment, use = "p");
 moduleTraitPvalue = corPvalueStudent(moduleTraitCor, nSamples);
 
 pdf(paste0(outdir,"/treatments_heatmap.pdf"))
 # Will display correlations and their p-values
 d0.PRIMARYTreatments.matrix <-  paste(signif(moduleTraitCor, 3), "\n(",
                                        signif(moduleTraitPvalue, 3), ")", sep = "")
-par(mar = c(5, 8, 4, 2))
+#par(mar = c(5, 8, 4, 2))
 labeledHeatmap(Matrix = moduleTraitCor,
                xLabels = names(treatment),
                yLabels = names(MEs),
@@ -540,7 +553,7 @@ dev.off()
 ###### Time
 
 ``` r
-moduleTraitCor = cor(MEs, time, use = "p");
+moduleTraitCor =  WGCNA::cor(MEs, time, use = "p");
 moduleTraitPvalue = corPvalueStudent(moduleTraitCor, nSamples);
 
 pdf(paste0(outdir,"/times_heatmap.pdf"))
@@ -569,7 +582,7 @@ dev.off()
 ###### Time + Treatment
 
 ``` r
-moduleTraitCor = cor(MEs, time_treat, use = "p");
+moduleTraitCor =  WGCNA::cor(MEs, time_treat, use = "p");
 moduleTraitPvalue = corPvalueStudent(moduleTraitCor, nSamples);
 
 pdf(paste0(outdir,"/time_treat_heatmap.pdf"))
@@ -595,24 +608,27 @@ dev.off()
     ## png 
     ##   2
 
-###### Treatment
+###### Factorial
 
 ``` r
-moduleTraitCor = cor(MEs, meta2, use = "p");
+moduleTraitCor =  WGCNA::cor(MEs, time_treat_factorial, use = "p");
 moduleTraitPvalue = corPvalueStudent(moduleTraitCor, nSamples);
 
-pdf(paste0(outdir,"/all_heatmap.pdf"))
+textMatrix <- ifelse(moduleTraitPvalue < 0.05,
+                     paste0(signif(moduleTraitCor, 3), "\n(", signif(moduleTraitPvalue, 3), ")"),
+                     "")
+
+pdf(paste0(outdir,"/all_heatmap.pdf"),width=10)
 # Will display correlations and their p-values
-d0.PRIMARYTreatments.matrix <-  paste(signif(moduleTraitCor, 3), "\n(",
-                                       signif(moduleTraitPvalue, 3), ")", sep = "")
+
 par(mar = c(5, 8, 4, 2))
 labeledHeatmap(Matrix = moduleTraitCor,
-               xLabels = names(meta2),
+               xLabels = names(time_treat_factorial),
                yLabels = names(MEs),
                ySymbols = names(MEs),
                colorLabels = TRUE,
                colors = blueWhiteRed(50),
-               textMatrix = d0.PRIMARYTreatments.matrix,
+               textMatrix = textMatrix,
                setStdMargins = FALSE,
                cex.text = 0.5,
                zlim = c(-1,1),
@@ -623,6 +639,44 @@ dev.off()
 
     ## png 
     ##   2
+
+``` r
+png(paste0(outdir,"/all_heatmap.png"), width=2600, height=2000, res=300)
+par(mar = c(6, 8, 3, 2))
+labeledHeatmap(Matrix = moduleTraitCor,
+               xLabels = names(time_treat_factorial),
+               yLabels = names(MEs),
+               ySymbols = names(MEs),
+               colorLabels = TRUE,
+               colors = blueWhiteRed(50),
+               textMatrix = textMatrix,
+               setStdMargins = FALSE,
+               cex.text = 0.5,
+               zlim = c(-1,1),
+               main = paste("Module-trait relationships - all"))
+
+dev.off()
+```
+
+    ## png 
+    ##   2
+
+``` r
+par(mar = c(5, 8, 4, 2))
+labeledHeatmap(Matrix = moduleTraitCor,
+               xLabels = names(time_treat_factorial),
+               yLabels = names(MEs),
+               ySymbols = names(MEs),
+               colorLabels = TRUE,
+               colors = blueWhiteRed(50),
+               textMatrix = textMatrix,
+               setStdMargins = FALSE,
+               cex.text = 0.5,
+               zlim = c(-1,1),
+               main = paste("Module-trait relationships - all"))
+```
+
+![](WGCNA_files/figure-gfm/unnamed-chunk-21-1.png)<!-- -->
 
 ``` r
 ### Make dataframe for box plots
@@ -848,7 +902,7 @@ options(stringsAsFactors = FALSE)
 enableWGCNAThreads() #Allow multi-threading within WGCNA
 ```
 
-    ## Allowing parallel execution with up to 127 working processes.
+    ## Allowing parallel execution with up to 191 working processes.
 
 ``` r
 softPower = 6 # set the soft threshold based on the plots above 
@@ -1125,10 +1179,6 @@ all(rownames(meta2) == rownames(vst2))  # should be TRUE
     ## [1] TRUE
 
 ``` r
-meta3 <- meta2 %>%
-  mutate(treatment = ifelse(treatment == "H", 1, 0)) %>%
-  mutate(time = as.numeric(time)) %>% select(-c(species,replicate)) 
-
 treatment <- meta2 %>%
   mutate(control = as.factor(as.numeric(treatment == "C"))) %>% 
   mutate(heat = as.factor(as.numeric(treatment == "H"))) %>%
@@ -1145,6 +1195,23 @@ time <- meta2 %>%
   select(contains("hr"))
 
 time_treat <- bind_cols(time,treatment)
+
+time_treat_factorial <- meta2 %>%
+  mutate(`0hr-Control` = as.factor(as.numeric(time == "0" & treatment == "C"))) %>% 
+  mutate(`1hr-Control` = as.factor(as.numeric(time == "1" & treatment == "C"))) %>% 
+  mutate(`3hr-Control` = as.factor(as.numeric(time == "3" & treatment == "C"))) %>% 
+  mutate(`12hr-Control` = as.factor(as.numeric(time == "12" & treatment == "C"))) %>% 
+  mutate(`24hr-Control` = as.factor(as.numeric(time == "24" & treatment == "C"))) %>% 
+  mutate(`72hr-Control` = as.factor(as.numeric(time == "72" & treatment == "C"))) %>% 
+  mutate(`120hr-Control` = as.factor(as.numeric(time == "120" & treatment == "C"))) %>% 
+  mutate(`0hr-Heat` = as.factor(as.numeric(time == "0" & treatment == "H"))) %>% 
+  mutate(`1hr-Heat` = as.factor(as.numeric(time == "1" & treatment == "H"))) %>% 
+  mutate(`3hr-Heat` = as.factor(as.numeric(time == "3" & treatment == "H"))) %>% 
+  mutate(`12hr-Heat` = as.factor(as.numeric(time == "12" & treatment == "H"))) %>% 
+  mutate(`24hr-Heat` = as.factor(as.numeric(time == "24" & treatment == "H"))) %>% 
+  mutate(`72hr-Heat` = as.factor(as.numeric(time == "72" & treatment == "H"))) %>% 
+  mutate(`120hr-Heat` = as.factor(as.numeric(time == "120" & treatment == "H"))) %>% 
+  select(contains("hr"))
 ```
 
 #### identify modules that are significantly associated with the measured clinical traits.
@@ -1240,24 +1307,27 @@ dev.off()
     ## png 
     ##   2
 
-###### Treatment
+###### Factorial
 
 ``` r
-moduleTraitCor = cor(MEs, meta3, use = "p");
+moduleTraitCor =  WGCNA::cor(MEs, time_treat_factorial, use = "p");
 moduleTraitPvalue = corPvalueStudent(moduleTraitCor, nSamples);
 
-pdf(paste0(outdir,"/all_heatmap.pdf"))
+textMatrix <- ifelse(moduleTraitPvalue < 0.05,
+                     paste0(signif(moduleTraitCor, 3), "\n(", signif(moduleTraitPvalue, 3), ")"),
+                     "")
+
+pdf(paste0(outdir,"/all_heatmap.pdf"),width=10)
 # Will display correlations and their p-values
-d0.PRIMARYTreatments.matrix <-  paste(signif(moduleTraitCor, 3), "\n(",
-                                       signif(moduleTraitPvalue, 3), ")", sep = "")
+
 par(mar = c(5, 8, 4, 2))
 labeledHeatmap(Matrix = moduleTraitCor,
-               xLabels = names(meta3),
+               xLabels = names(time_treat_factorial),
                yLabels = names(MEs),
                ySymbols = names(MEs),
                colorLabels = TRUE,
                colors = blueWhiteRed(50),
-               textMatrix = d0.PRIMARYTreatments.matrix,
+               textMatrix = textMatrix,
                setStdMargins = FALSE,
                cex.text = 0.5,
                zlim = c(-1,1),
@@ -1268,6 +1338,44 @@ dev.off()
 
     ## png 
     ##   2
+
+``` r
+png(paste0(outdir,"/all_heatmap.png"), width=2600, height=2000, res=300)
+par(mar = c(6, 8, 3, 2))
+labeledHeatmap(Matrix = moduleTraitCor,
+               xLabels = names(time_treat_factorial),
+               yLabels = names(MEs),
+               ySymbols = names(MEs),
+               colorLabels = TRUE,
+               colors = blueWhiteRed(50),
+               textMatrix = textMatrix,
+               setStdMargins = FALSE,
+               cex.text = 0.5,
+               zlim = c(-1,1),
+               main = paste("Module-trait relationships - all"))
+
+dev.off()
+```
+
+    ## png 
+    ##   2
+
+``` r
+par(mar = c(5, 8, 4, 2))
+labeledHeatmap(Matrix = moduleTraitCor,
+               xLabels = names(time_treat_factorial),
+               yLabels = names(MEs),
+               ySymbols = names(MEs),
+               colorLabels = TRUE,
+               colors = blueWhiteRed(50),
+               textMatrix = textMatrix,
+               setStdMargins = FALSE,
+               cex.text = 0.5,
+               zlim = c(-1,1),
+               main = paste("Module-trait relationships - all"))
+```
+
+![](WGCNA_files/figure-gfm/unnamed-chunk-41-1.png)<!-- -->
 
 ``` r
 ### Make dataframe for box plots

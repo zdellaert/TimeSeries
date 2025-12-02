@@ -101,6 +101,8 @@
    1. POC:
       1. [Time-module heatmap](WGCNA/POC_PacutaV2/times_heatmap.pdf)
       2. [Treatment-module heatmap](WGCNA/POC_PacutaV2/treatments_heatmap.pdf)
+      3. ![](WGCNA/POC_PacutaV2/all_heatmap.png)
    2. MON:
       1. [Time-module heatmap](WGCNA/MON_MCapV3/times_heatmap.pdf)
       2. [Treatment-module heatmap](WGCNA/MON_MCapV3/treatments_heatmap.pdf)
+      3. ![](WGCNA/MON_MCapV3/all_heatmap.png)
