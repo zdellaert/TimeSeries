@@ -6,11 +6,20 @@ output:
   github_document: default
 ---
 
-### Network analysis of Time Series Bulk RNA Data -- WGCNA
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 ```
+
+### Network analysis of Time Series Bulk RNA Data -- WGCNA
+
+## Introduction
+
+The goal of this script is to identify co-expressed gene modules from our time-course RNA-seq data. I hope to identify genes which respond to the heat stress similarly over time.
+
+- helpful links: https://alexslemonade.github.io/refinebio-examples/04-advanced-topics/network-analysis_rnaseq_01_wgcna.html
+- https://github.com/fscucchia/HI_PhotoPhysio_TPC_geneExpr/blob/983b837e2dbd9bad2dfeda764dcc0b9da254073a/Gene_expression/scripts/WGCNA_Network_Analysis/WGCNA_Pacu.r
+
+## Install necessary packages
 
 First, download the necessary packages.
 
@@ -24,16 +33,12 @@ install.packages("dendextend")
 install.packages("car")
 ```
 
-Next, load the packages 
+### Load packages + general set-up
 
 ```{r}
 library(tidyverse)
 library(WGCNA)
-sessionInfo()
-```
 
-
-```{r}
 #set standard output directory for figures
 save_ggplot <- function(plot, filename, width = 10, height = 7, units = "in", dpi = 300,bg=NULL) {
   print(plot)
@@ -54,10 +59,13 @@ treat_colors <- c("C" = "lightblue4", "H" = "#D55E00")
 
 # The following setting is important, do not omit.
 options(stringsAsFactors = FALSE)
+
+sessionInfo()
 ```
 
+## POC
 
-## POC: pre-processing and visualization
+### pre-processing and visualization
 
 Read in variance-stabilized count info and metadata
 
@@ -986,3 +994,467 @@ theme(
     panel.grid = element_blank()
   )
 ```
+
+## POR: pre-processing and visualization
+
+Read in variance-stabilized count info and metadata
+
+```{r}
+outdir <- "../output_RNA/WGCNA/POR_Pcomp/"
+vst <- read.csv("../output_RNA/differential_expression/POR_Pcomp/vsd_expression_matrix.csv")
+
+vst <- vst %>% column_to_rownames(var = "X")
+vst2 <- t(vst)
+
+meta <- read.csv("../output_RNA/differential_expression/POR_Pcomp/RNA_seq_metadata.csv")
+meta <- meta %>% column_to_rownames(var = "X")
+```
+
+### Check for genes and samples with too many missing values with goodSamplesGenes. There shouldn't be any because we performed pre-filtering
+```{r}
+dim(vst) #  24788 genes; 42  samples
+gsg <- goodSamplesGenes(vst, verbose = 3);  # We first check for genes and samples with too many missing values
+gsg$allOK # If the statement returns TRUE, all genes have passed the cuts. 
+```
+
+```{r}
+###Soft threshold
+dim(vst2) #  42 27116
+
+# Choose a set of soft-thresholding powers
+powers = c(c(1:10), seq(from = 12, to=40, by=2))
+#powers <- c(seq(from = 1, to=19, by=2), c(21:30))
+
+# Call the network topology analysis function
+
+#the below takes a long time to run, so is commented out and the pre-run results are loaded in below
+sft = pickSoftThreshold(vst2, powerVector = powers, verbose = 5)
+save(sft, file = paste0(outdir, "sft.RData"))
+load(paste0(outdir, "sft.RData"))
+
+# pickSoftThreshold 
+#  performs the analysis of network topology and aids the
+# user in choosing a proper soft-thresholding power.
+# The user chooses a set of candidate powers (the function provides suitable default values)
+# function returns a set of network indices that should be inspected
+
+sizeGrWindow(9, 5) # set window size 
+par(mfrow = c(1,2));
+cex1 = 0.9;
+# Scale-free topology fit index as a function of the soft-thresholding power
+
+pdf(paste0(outdir,'network','.pdf'))
+plot(sft$fitIndices[,1], -sign(sft$fitIndices[,3])*sft$fitIndices[,2],
+     xlab="Soft Threshold (power)",ylab="Scale Free Topology Model Fit,signed R^2",type="n",
+     main = paste("Scale independence"));
+text(sft$fitIndices[,1], -sign(sft$fitIndices[,3])*sft$fitIndices[,2],
+     labels=powers,cex=cex1,col="red");
+# this line corresponds to using an R^2 cut-off of h
+abline(h=0.90,col="red");
+abline(h=0.80,col="red")
+
+# Mean connectivity as a function of the soft-thresholding power
+plot(sft$fitIndices[,1], sft$fitIndices[,5],
+     xlab="Soft Threshold (power)",ylab="Mean Connectivity", type="n",
+     main = paste("Mean connectivity"))
+text(sft$fitIndices[,1], sft$fitIndices[,5], labels=powers, cex=cex1,col="red")
+dev.off() # output 
+
+#I used a scale-free topology fit index **R^2 of 0.8**. This lowest recommended R^2 by Langfelder and Horvath is 0.8. It appears that our **soft thresholding power is 5** because it is the lowest power above the R^2=0.8 threshold that maximizes with model fit.  
+```
+
+### Look for outliers by examining tree of samples  
+
+```{r}
+sampleTree = hclust(dist(vst2), method = "average") # Next we cluster the samples (in contrast to clustering genes that will come later)  to see if there are any obvious outliers.There don't look to be any outliers, so we will move on with business as usual.  
+sizeGrWindow(12,9) 
+par(cex = 0.6);
+par(mar = c(0,4,2,0))
+plot(sampleTree)
+```
+
+### Network construction and module detection:
+####  Start the step-wise module construction:  
+###### Step 1: Create adjacency matrix 
+
+```{r}
+options(stringsAsFactors = FALSE)
+enableWGCNAThreads() #Allow multi-threading within WGCNA
+
+softPower = 7 # set the soft threshold based on the plots above 
+adjacency = adjacency(vst2, power = softPower, type="signed")  #Calculate adjacency
+```
+
+####  Step 2: Turn adjacency into topological overlap: Calculation of the topological overlap matrix, (TOM) and the corresponding dissimilarity, from a given adjacency matrix.
+
+```{r}
+#the below takes a long time to run, so is commented out and the pre-run results are loaded in below
+TOM = TOMsimilarity(adjacency, TOMType="signed") #Translate adjacency into topological overlap matrix
+dissTOM   = 1-TOM #Calculate dissimilarity in TOM
+save(TOM, file = paste0(outdir, "TOM.Rdata"))
+save(dissTOM, file = paste0(outdir, "dissTOM.Rdata"))
+load(paste0(outdir, "TOM.Rdata"))
+load(paste0(outdir, "dissTOM.Rdata"))
+```
+
+####  Step 3: Call the hierarchical clustering function - plot the tree
+
+```{r}
+# Call the hierarchical clustering function
+geneTree   = hclust(as.dist(dissTOM), method = "average");
+
+# Plot the resulting clustering tree (dendrogram) Each leaf corresponds to a gene, branches grouping together densely are interconnected, highly co-expressed genes.  
+pdf(file=paste0(outdir, "dissTOMClustering.pdf"), width=20, height=20)
+plot(geneTree, xlab="", sub="", main= "Gene Clustering on TOM-based dissimilarity", labels= FALSE,hang=0.04)
+dev.off()
+```
+
+
+####  Step 4: Set module size and 'cutreeDynamic' to create modules 
+
+Module identification is essentially cutting the branches off the tree in the dendrogram above. We like large modules, so we set the **minimum module size** relatively high, so we will set the minimum size at 30. 
+
+```{r}
+minModuleSize = 30
+
+dynamicMods = cutreeDynamic(dendro = geneTree, distM = dissTOM,
+                            deepSplit = 1, pamRespectsDendro = FALSE,
+                            minClusterSize = minModuleSize);
+table(dynamicMods) # number of genes per module. Module 0 is reserved for unassigned genes. The are other modules will be listed largest to smallest. 
+
+save(dynamicMods, geneTree, file = paste0(outdir,"dyMod_geneTree.RData"))
+```
+
+####  Step 5: convert numeric network to colors and plot the dendrogram
+
+```{r} 
+dynamicColors = labels2colors(dynamicMods) # Convert numeric labels into colors
+table(dynamicColors) 
+
+# Plot the dendrogram and colors underneath
+pdf(file=paste0(outdir, "dissTOMClustering_modules.pdf"))
+plotDendroAndColors(geneTree, dynamicColors, "Dynamic Tree Cut",
+                    dendroLabels = FALSE, hang = 0.03,
+                    addGuide = TRUE, guideHang = 0.05,
+                    main = "Gene dendrogram and module colors")
+dev.off()
+```
+
+####  Step 6: Calculate Eigengenes - view thier connectivity based on 'MEDiss = 1-cor(MEs)'
+
+```{r}
+# Calculate eigengenes
+MEList = moduleEigengenes(vst2, colors = dynamicColors, softPower = 5)
+
+MEs = MEList$eigengenes
+
+# Calculate dissimilarity of module eigengenes
+MEDiss = 1-cor(MEs)
+
+# Cluster module eigengenes
+METree = hclust(as.dist(MEDiss), method = "average")
+
+# Merge modules with >85% eigengene similarity (most studies use 80-90% similarity)
+pdf(file=paste0(outdir, "eigengeneClustering_80sim.pdf"))
+plot(METree, main = "Clustering of module eigengenes (dissimilarity calc = MEDiss = 1-cor(MEs))",
+     xlab = "", sub = "")
+MEDissThres = 0.2 
+abline(h=MEDissThres, col = "red")
+dev.off()
+
+# Merge modules with >85% eigengene similarity (most studies use 80-90% similarity)
+pdf(file=paste0(outdir, "eigengeneClustering_85sim.pdf"))
+plot(METree, main = "Clustering of module eigengenes (dissimilarity calc = MEDiss = 1-cor(MEs))",
+     xlab = "", sub = "")
+MEDissThres = 0.15 
+abline(h=MEDissThres, col = "red")
+dev.off()
+
+# Merge modules with >85% eigengene similarity (most studies use 80-90% similarity)
+pdf(file=paste0(outdir, "eigengeneClustering_90sim.pdf"))
+plot(METree, main = "Clustering of module eigengenes (dissimilarity calc = MEDiss = 1-cor(MEs))",
+     xlab = "", sub = "")
+MEDissThres = 0.1 
+abline(h=MEDissThres, col = "red")
+dev.off()
+```
+
+####  Step 7: Specify the cut line for the dendrogram (module) - Calc MODULE EIGENGENES (mergeMEs)
+###### We had 17 modules before merging, and 15 modules after merging
+
+```{r}
+MEDissThres = 0.15 # **Merge modules with >85% eigengene similarity.** Most studies use somewhere between 80-90% similarity. I will use 85% similarity as my merging threshold.
+
+merge= mergeCloseModules(vst2, dynamicColors, cutHeight= MEDissThres, verbose =3)
+
+mergedColors= merge$colors
+mergedMEs= merge$newMEs
+
+pdf(file=paste0(outdir,"mergedClusters.pdf"), width=20, height=20)
+plotDendroAndColors(geneTree, cbind(dynamicColors, mergedColors), c("Dynamic Tree Cut", "Merged dynamic"), dendroLabels= FALSE, hang=0.03, addGuide= TRUE, guideHang=0.05)
+dev.off()
+```
+
+```{r}
+#Save new colors
+
+moduleColors = mergedColors # Rename to moduleColors
+colorOrder = c("grey", standardColors(50)) # Construct numerical labels corresponding to the colors
+moduleLabels = match(moduleColors, colorOrder)-1
+MEs = mergedMEs
+ncol(MEs) 
+
+# Plot new tree
+#Calculate dissimilarity of module eigengenes
+MEDiss = 1-cor(MEs)
+#Cluster again and plot the results
+pdf(file=paste0(outdir,"eigengeneClustering_85sim_merged.pdf"))
+METree = hclust(as.dist(MEDiss), method = "average")
+MEtreePlot = plot(METree, main = "Clustering of module eigengenes", xlab = "", sub = "")
+dev.off()
+
+# Save module colors and labels for use in subsequent parts
+save(MEs, moduleLabels, moduleColors, geneTree, file = paste0(outdir, "networkConstruction-stepByStep.RData"))
+
+# write csv - save the module eigengenes
+write.csv(MEs, paste0(outdir, "WGCNA_ModuleEigengenes.csv"))
+table(mergedColors)
+```
+
+Now there are 39 modules.
+
+### Prepare for  module trait associations - Eigengene calc - trait data as factors
+
+```{r}
+# Define numbers of genes and samples
+nGenes = ncol(vst2)
+nSamples = nrow(vst2)
+
+#Recalculate MEs with color labels
+MEs0 = moduleEigengenes(vst2, moduleColors,softPower=5)$eigengenes
+MEs = orderMEs(MEs0)
+names(MEs)
+
+Colors=sub("ME","",names(MEs))
+```
+
+```{r}
+meta2 = meta[match(rownames(vst2), meta$sample), colnames(meta) != "sample"] #make metadata df in exact order as the vst matrix
+all(rownames(meta2) == rownames(vst2))  # should be TRUE
+```
+
+```{r}
+treatment <- meta2 %>%
+  mutate(control = as.factor(as.numeric(treatment == "C"))) %>% 
+  mutate(heat = as.factor(as.numeric(treatment == "H"))) %>%
+  select(c(control, heat))
+
+time <- meta2 %>%
+  mutate(`0hr` = as.factor(as.numeric(time == "0"))) %>% 
+  mutate(`1hr` = as.factor(as.numeric(time == "1"))) %>% 
+  mutate(`3hr` = as.factor(as.numeric(time == "3"))) %>% 
+  mutate(`12hr` = as.factor(as.numeric(time == "12"))) %>% 
+  mutate(`24hr` = as.factor(as.numeric(time == "24"))) %>% 
+  mutate(`72hr` = as.factor(as.numeric(time == "72"))) %>% 
+  mutate(`120hr` = as.factor(as.numeric(time == "120"))) %>% 
+  select(contains("hr"))
+
+time_treat <- bind_cols(time,treatment)
+
+time_treat_factorial <- meta2 %>%
+  mutate(`0hr-Control` = as.factor(as.numeric(time == "0" & treatment == "C"))) %>% 
+  mutate(`1hr-Control` = as.factor(as.numeric(time == "1" & treatment == "C"))) %>% 
+  mutate(`3hr-Control` = as.factor(as.numeric(time == "3" & treatment == "C"))) %>% 
+  mutate(`12hr-Control` = as.factor(as.numeric(time == "12" & treatment == "C"))) %>% 
+  mutate(`24hr-Control` = as.factor(as.numeric(time == "24" & treatment == "C"))) %>% 
+  mutate(`72hr-Control` = as.factor(as.numeric(time == "72" & treatment == "C"))) %>% 
+  mutate(`120hr-Control` = as.factor(as.numeric(time == "120" & treatment == "C"))) %>% 
+  mutate(`0hr-Heat` = as.factor(as.numeric(time == "0" & treatment == "H"))) %>% 
+  mutate(`1hr-Heat` = as.factor(as.numeric(time == "1" & treatment == "H"))) %>% 
+  mutate(`3hr-Heat` = as.factor(as.numeric(time == "3" & treatment == "H"))) %>% 
+  mutate(`12hr-Heat` = as.factor(as.numeric(time == "12" & treatment == "H"))) %>% 
+  mutate(`24hr-Heat` = as.factor(as.numeric(time == "24" & treatment == "H"))) %>% 
+  mutate(`72hr-Heat` = as.factor(as.numeric(time == "72" & treatment == "H"))) %>% 
+  mutate(`120hr-Heat` = as.factor(as.numeric(time == "120" & treatment == "H"))) %>% 
+  select(contains("hr"))
+```
+
+
+#### identify modules that are significantly associated with the measured clinical traits.
+
+ Since we already have a summary profile (eigengene) for each module, we simply correlate eigengenes with external traits and look for the most significant associations:
+
+###### Treatment
+
+```{r}
+moduleTraitCor = WGCNA::cor(MEs, treatment, use = "p");
+moduleTraitPvalue = corPvalueStudent(moduleTraitCor, nSamples);
+
+pdf(paste0(outdir,"/treatments_heatmap.pdf"))
+# Will display correlations and their p-values
+d0.PRIMARYTreatments.matrix <-  paste(signif(moduleTraitCor, 3), "\n(",
+                                       signif(moduleTraitPvalue, 3), ")", sep = "")
+#par(mar = c(5, 8, 4, 2))
+labeledHeatmap(Matrix = moduleTraitCor,
+               xLabels = names(treatment),
+               yLabels = names(MEs),
+               ySymbols = names(MEs),
+               colorLabels = TRUE,
+               colors = blueWhiteRed(50),
+               textMatrix = d0.PRIMARYTreatments.matrix,
+               setStdMargins = FALSE,
+               cex.text = 0.5,
+               zlim = c(-1,1),
+               main = paste("Module-trait relationships - treatment"))
+
+dev.off()
+```
+###### Time
+
+```{r}
+moduleTraitCor =  WGCNA::cor(MEs, time, use = "p");
+moduleTraitPvalue = corPvalueStudent(moduleTraitCor, nSamples);
+
+pdf(paste0(outdir,"/times_heatmap.pdf"))
+# Will display correlations and their p-values
+d0.PRIMARYtimes.matrix <-  paste(signif(moduleTraitCor, 3), "\n(",
+                                       signif(moduleTraitPvalue, 3), ")", sep = "")
+par(mar = c(5, 8, 4, 2))
+labeledHeatmap(Matrix = moduleTraitCor,
+               xLabels = names(time),
+               yLabels = names(MEs),
+               ySymbols = names(MEs),
+               colorLabels = TRUE,
+               colors = blueWhiteRed(50),
+               textMatrix = d0.PRIMARYtimes.matrix,
+               setStdMargins = FALSE,
+               cex.text = 0.5,
+               zlim = c(-1,1),
+               main = paste("Module-trait relationships - time"))
+
+dev.off()
+```
+
+###### Time + Treatment
+
+```{r}
+moduleTraitCor =  WGCNA::cor(MEs, time_treat, use = "p");
+moduleTraitPvalue = corPvalueStudent(moduleTraitCor, nSamples);
+
+pdf(paste0(outdir,"/time_treat_heatmap.pdf"))
+# Will display correlations and their p-values
+d0.PRIMARYtimes.matrix <-  paste(signif(moduleTraitCor, 3), "\n(",
+                                       signif(moduleTraitPvalue, 3), ")", sep = "")
+par(mar = c(5, 8, 4, 2))
+labeledHeatmap(Matrix = moduleTraitCor,
+               xLabels = names(time_treat),
+               yLabels = names(MEs),
+               ySymbols = names(MEs),
+               colorLabels = TRUE,
+               colors = blueWhiteRed(50),
+               textMatrix = d0.PRIMARYtimes.matrix,
+               setStdMargins = FALSE,
+               cex.text = 0.5,
+               zlim = c(-1,1),
+               main = paste("Module-trait relationships - time + treament"))
+
+dev.off()
+```
+
+###### Factorial
+
+```{r}
+moduleTraitCor =  WGCNA::cor(MEs, time_treat_factorial, use = "p");
+moduleTraitPvalue = corPvalueStudent(moduleTraitCor, nSamples);
+
+textMatrix <- ifelse(moduleTraitPvalue < 0.05,
+                     paste0(signif(moduleTraitCor, 3), "\n(", signif(moduleTraitPvalue, 3), ")"),
+                     "")
+
+pdf(paste0(outdir,"/all_heatmap.pdf"),width=10)
+# Will display correlations and their p-values
+
+par(mar = c(5, 8, 4, 2))
+labeledHeatmap(Matrix = moduleTraitCor,
+               xLabels = names(time_treat_factorial),
+               yLabels = names(MEs),
+               ySymbols = names(MEs),
+               colorLabels = TRUE,
+               colors = blueWhiteRed(50),
+               textMatrix = textMatrix,
+               setStdMargins = FALSE,
+               cex.text = 0.5,
+               zlim = c(-1,1),
+               main = paste("Module-trait relationships - all"))
+
+dev.off()
+
+png(paste0(outdir,"/all_heatmap.png"), width=2600, height=2000, res=300)
+par(mar = c(6, 8, 3, 2))
+labeledHeatmap(Matrix = moduleTraitCor,
+               xLabels = names(time_treat_factorial),
+               yLabels = names(MEs),
+               ySymbols = names(MEs),
+               colorLabels = TRUE,
+               colors = blueWhiteRed(50),
+               textMatrix = textMatrix,
+               setStdMargins = FALSE,
+               cex.text = 0.5,
+               zlim = c(-1,1),
+               main = paste("Module-trait relationships - all"))
+
+dev.off()
+
+par(mar = c(5, 8, 4, 2))
+labeledHeatmap(Matrix = moduleTraitCor,
+               xLabels = names(time_treat_factorial),
+               yLabels = names(MEs),
+               ySymbols = names(MEs),
+               colorLabels = TRUE,
+               colors = blueWhiteRed(50),
+               textMatrix = textMatrix,
+               setStdMargins = FALSE,
+               cex.text = 0.5,
+               zlim = c(-1,1),
+               main = paste("Module-trait relationships - all"))
+```
+
+```{r}
+### Make dataframe for box plots
+head(MEs)
+names(MEs)
+
+meta_MEs <- MEs
+meta_MEs$time <- meta$time
+meta_MEs$treatment <- meta$treatment
+meta_MEs$sample_id <- rownames(meta_MEs)
+head(meta_MEs)
+
+library(tidyr)
+library(ggplot2)
+
+# Convert to long format for ggplot
+meta_MEs_long <- meta_MEs %>%
+  pivot_longer(
+    cols = starts_with("ME"),
+    names_to = "Module",
+    values_to = "Eigengene"
+  )
+
+# Boxplot with dots, faceted by Module
+ggplot(meta_MEs_long, aes(x = time, y = Eigengene, group=time)) +
+  geom_hline(yintercept = 0, linetype = "dotted", color = "grey50", size = 0.7) +
+  geom_boxplot(aes(color = treatment),outlier.shape = NA, fill = NA, size = 0.5) +
+  geom_jitter(aes(color = treatment), width = 0.2, size = 2, show.legend = FALSE) +
+  facet_wrap(~ Module, scales = "free_y") +
+  scale_color_manual(values = treat_colors) +
+  theme_bw() +
+  labs(title = "Eigengene Expression by Module and Time, and Treatment",
+       x = "Time",
+       y = "Module Eigengene Value")+
+theme(
+    strip.background = element_rect(fill = "gray", color = NA),
+    panel.grid = element_blank()
+  )
+```
+
