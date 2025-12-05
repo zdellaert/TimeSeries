@@ -19,6 +19,10 @@ code.Rproj
 # large bioinformatic files
 *multiqc_data.json
 *fastq.gz
+4-multi-species/output_RNA/WGCNA/*/*.Rdata
+4-multi-species/output_RNA/WGCNA/*/*.RData
+4-multi-species/output_RNA/multiWGCNA/*/*.RData
+4-multi-species/output_RNA/multiWGCNA/*/*.RDS
 
 # plentiful qc files
 4-multi-species/output_RNA/alignment_qc/*/**

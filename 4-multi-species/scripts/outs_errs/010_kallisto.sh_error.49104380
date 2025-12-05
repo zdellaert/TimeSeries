@@ -1,0 +1,20 @@
+Loading zlib-ng version 2.1.6
+Loading kallisto version 0.50.1
+Loading gffread version 0.12.7
+
+[quant] fragment length distribution will be estimated from the data
+Warning: kallisto was not compiled with HDF5 support so no bootstrapping
+will be performed. Run quant with --plaintext option or recompile with
+HDF5 support to obtain bootstrap estimates.
+[index] k-mer length: 31
+[index] number of targets: 44,130
+[index] number of k-mers: 47,162,259
+[quant] running in paired-end mode
+[quant] will process pair 1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/POR_R120_H2_S46_R1_trim.fastq.gz
+                             /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/POR_R120_H2_S46_R2_trim.fastq.gz
+[quant] finding pseudoalignments for the reads ...[progress] 1M reads processed (51.7% mapped)             [progress] 2M reads processed (51.9% mapped)             [progress] 3M reads processed (51.9% mapped)             [progress] 4M reads processed (51.9% mapped)             [progress] 5M reads processed (51.9% mapped)             [progress] 6M reads processed (51.9% mapped)             [progress] 7M reads processed (51.9% mapped)             [progress] 8M reads processed (51.9% mapped)             [progress] 9M reads processed (51.9% mapped)             [progress] 10M reads processed (51.9% mapped)             [progress] 11M reads processed (51.9% mapped)             [progress] 12M reads processed (52.0% mapped)             [progress] 13M reads processed (51.9% mapped)             [progress] 14M reads processed (52.0% mapped)             [progress] 15M reads processed (52.0% mapped)             [progress] 16M reads processed (51.9% mapped)             [progress] 17M reads processed (52.0% mapped)             [progress] 18M reads processed (52.0% mapped)             [progress] 19M reads processed (52.0% mapped)              done
+[quant] processed 19,787,541 reads, 10,282,198 reads pseudoaligned
+[quant] estimated average fragment length: 244.7
+[   em] quantifying the abundances ... done
+[   em] the Expectation-Maximization algorithm ran for 653 rounds
+

@@ -1,0 +1,28 @@
+KmerStream::KmerStream(): Start computing k-mer cardinality estimations (1/2)
+KmerStream::KmerStream(): Start computing k-mer cardinality estimations (1/2)
+KmerStream::KmerStream(): Finished
+CompactedDBG::build(): Estimated number of k-mers occurring at least once: 47101704
+CompactedDBG::build(): Estimated number of minimizer occurring at least once: 11574971
+CompactedDBG::filter(): Processed 56189274 k-mers in 44130 reads
+CompactedDBG::filter(): Found 47121171 unique k-mers
+CompactedDBG::filter(): Number of blocks in Bloom filter is 321986
+CompactedDBG::construct(): Extract approximate unitigs (1/2)
+CompactedDBG::construct(): Extract approximate unitigs (2/2)
+CompactedDBG::construct(): Closed all input files
+
+CompactedDBG::construct(): Splitting unitigs (1/2)
+
+CompactedDBG::construct(): Splitting unitigs (2/2)
+CompactedDBG::construct(): Before split: 443651 unitigs
+CompactedDBG::construct(): After split (1/1): 443651 unitigs
+CompactedDBG::construct(): Unitigs split: 1093
+CompactedDBG::construct(): Unitigs deleted: 0
+
+CompactedDBG::construct(): Joining unitigs
+CompactedDBG::construct(): After join: 421245 unitigs
+CompactedDBG::construct(): Joined 22693 unitigs
+Mapping rate:
+	"p_pseudoaligned": 6.0,
+
+Number of reads processed:
+	"n_processed": 10913654,
