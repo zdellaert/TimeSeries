@@ -1,0 +1,539 @@
+---
+title: "multiWGCNA"
+author: "Zoe Dellaert"
+date: "2025-12-03"
+output:
+  github_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+### Network analysis of Time Series Bulk RNA Data -- multiWGCNA
+
+## Introduction
+
+The goal of this script is to identify co-expressed gene modules from our time-course RNA-seq data. I hope to identify genes which respond to the heat stress similarly over time.
+
+I will be following [this vignette](https://bioc.r-universe.dev/articles/multiWGCNA/autism_full_workflow.html) for the package  [multiWGCNA](https://github.com/fogellab/multiWGCNA), which is described in this [paper](https://link.springer.com/article/10.1186/s12859-023-05233-z#Abs1). An example paper with a use of this package I really like is [here, figure 4](https://www.pnas.org/doi/epub/10.1073/pnas.2420811122). Helpful *general* WGCNA tutorial to help with parameter decisions can be found [here](https://alexslemonade.github.io/refinebio-examples/04-advanced-topics/network-analysis_rnaseq_01_wgcna.html#46_Determine_parameters_for_WGCNA).
+
+## Install necessary packages
+
+First, download the necessary packages.
+
+```{r install packages, eval=FALSE}
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("impute", type = "source")
+BiocManager::install("WGCNA",force = TRUE)
+BiocManager::install("multiWGCNA")
+```
+
+### Load packages + general set-up
+
+```{r}
+library(tidyverse)
+library(WGCNA)
+library(multiWGCNA)
+
+#set standard output directory for figures
+save_ggplot <- function(plot, filename, width = 10, height = 7, units = "in", dpi = 300,bg=NULL) {
+  png_path <- file.path(outdir, paste0(filename, ".png"))
+  pdf_dir <- file.path(outdir, "pdf_figs")
+  pdf_path <- file.path(pdf_dir, paste0(filename, ".pdf"))
+  
+  # Ensure the pdf_figs directory exists
+  if (!dir.exists(pdf_dir)) dir.create(pdf_dir, recursive = TRUE)
+  
+  # Save plots
+  ggsave(filename = png_path, plot = plot, width = width, height = height, units = units, dpi = dpi,bg = bg)
+  ggsave(filename = pdf_path, plot = plot, width = width, height = height, units = units, dpi = dpi,bg = bg)
+}
+
+treat_colors <- c("C" = "lightblue4", "H" = "#D55E00")
+time_colors <- colorRampPalette(c("#ffffcc","#0c2c84"))(7)
+names(time_colors) <- c("0", "1", "3", "12", "24", "72", "120")
+sessionInfo()
+```
+
+## POC
+
+### Pre-processing
+
+Read in variance-stabilized count info and metadata
+
+```{r}
+outdir <- "../output_RNA/multiWGCNA/POC_PacutaV2/"
+getwd()
+vst <- read.csv("../output_RNA/differential_expression/POC_PacutaV2/vsd_expression_matrix.csv")
+
+vst <- vst %>% column_to_rownames(var = "X")
+normalized_counts <- t(vst)
+
+meta <- read.csv("../output_RNA/differential_expression/POC_PacutaV2/RNA_seq_metadata.csv")
+meta <- meta %>% column_to_rownames(var = "X") %>% select(-c(species, replicate))
+```
+
+### First, identify and remove any outliers
+
+Cluster the samples and view as a tree.
+
+```{r}
+sampleTree = hclust(dist(normalized_counts), method = "average")
+sizeGrWindow(12,9) 
+par(cex = 0.6);
+par(mar = c(0,4,2,0))
+plot(sampleTree)
+```
+
+I did not identify outliers based on this plot.
+
+### Determine parameters for WGCNA
+
+https://alexslemonade.github.io/refinebio-examples/04-advanced-topics/network-analysis_rnaseq_01_wgcna.html#46_Determine_parameters_for_WGCNA
+
+https://bioinformaticsworkbook.org/tutorials/wgcna.html#gsc.tab=0
+
+```{r}
+options(stringsAsFactors = FALSE)
+enableWGCNAThreads()
+
+#set powers to test
+powers = c(c(1:10), seq(from = 12, to=40, by=2))
+
+#the below takes a long time to run, so is commented out and the pre-run results are loaded in below
+#sft <- pickSoftThreshold(normalized_counts, power=powers, networkType = "signed")
+#save(sft, file = paste0(outdir, "sft.RData"))
+load(paste0(outdir, "sft.RData"))
+
+sft_df <- data.frame(sft$fitIndices) %>% dplyr::mutate(model_fit = -sign(slope) * SFT.R.sq)
+
+ggplot(sft_df, aes(x = Power, y = model_fit, label = Power)) +
+  geom_point() +
+  geom_text(nudge_y = 0.1) +
+  # We will plot what WGCNA recommends as an R^2 cutoff
+  geom_hline(yintercept = 0.80, col = "red") +
+  ylim(c(min(sft_df$model_fit), 1.05)) +
+  xlab("Soft Threshold (power)") +
+  ylab("Scale Free Topology Model Fit, signed R^2") +
+  ggtitle("Scale independence") +
+  theme_classic()
+
+ggplot(sft_df, aes(x = Power, y = mean.k., label = Power)) +
+  geom_point() +
+  geom_text(nudge_y = 500) +
+  xlab("Soft Threshold (power)") +
+  ylab("Mean Connectivity") +
+  ggtitle("Mean Connectivity") +
+  theme_classic()
+```
+
+We will move forward with Power = 12.
+
+### One-step module detection
+
+```{r, eval = FALSE}
+picked_power = 12
+
+temp_cor <- cor
+cor <- WGCNA::cor # Force it to use WGCNA cor function (fix a namespace conflict issue)
+netwk <- blockwiseModules(normalized_counts,
+                          nThreads = 16,
+
+                          # Adjacency Function
+                          power = picked_power,
+                          corType = "bicor",
+                          networkType = "signed",
+                          TOMType = "signed",
+
+                          # Tree and Block Options
+                          deepSplit = 1,
+                          pamRespectsDendro = F,
+                          minModuleSize = 30,
+                          maxBlockSize = 50000,
+
+                          # topological overlap matrix, (TOM)
+                          saveTOMs = TRUE,
+                          saveTOMFileBase = paste0(outdir, "blockwiseTOM"),
+                          #loadTOM = FALSE, #uncomment this if you are re-running with a previously saved TOM
+
+                          # Output Options
+                          mergeCutHeight = 0.25,
+                          numericLabels = TRUE,
+                          verbose = 3)
+
+cor <- temp_cor     # Return cor function to original namespace
+readr::write_rds(netwk, file = file.path(outdir, "wgcna_results.RDS"))
+```
+
+
+```{r}
+# load WGCNAresults
+netwk <- readr::read_rds(file = file.path(outdir, "wgcna_results.RDS"))
+
+# what is stored in this object?
+names(netwk)
+
+# save the module labels
+moduleLabels = netwk$colors
+
+# how many modules are there?
+paste("There are", length(unique(moduleLabels)), "modules in our current analysis.")
+
+# see the distribution of genes across these labelled modules
+table(netwk$colors)
+
+# Convert labels to colors for plotting
+moduleColors = labels2colors(moduleLabels)
+
+# Plot the dendrogram and the module colors underneath
+plotDendroAndColors(
+  netwk$dendrograms[[1]],
+  moduleColors,
+  "Module colors",
+  dendroLabels = FALSE,
+  hang = 0.03,
+  addGuide = TRUE,
+  guideHang = 0.05, main = "Consensus gene dendrogram and module colors")
+```
+
+### Treatment and Time Module Correlation
+
+```{r}
+# save the module info as a dataframe and txt file
+module_df <- data.frame(
+  gene_id = names(netwk$colors),
+  module = paste0("ME", netwk$colors),
+  color = labels2colors(netwk$colors)
+)
+
+head(module_df)
+write_delim(module_df, file = paste0(outdir,"gene_modules.txt"), delim = "\t")
+
+# get the module eigengenes
+module_eigengenes <- netwk$MEs
+head(module_eigengenes)
+
+# get a list of all the genes in a module
+gene_module_key <- tibble::enframe(netwk$colors, name = "gene", value = "module") %>%
+  # Let's add the `ME` part so its more clear what these numbers are and it matches elsewhere
+  dplyr::mutate(module = paste0("ME", module))
+
+# confirm that the sample metadata and sample labels for the module eigengenes are matching
+all.equal(meta$sample, rownames(module_eigengenes))
+```
+
+#### Time+Treatment-Module Correlation Heatmaps
+
+```{r}
+nSamples = nrow(normalized_counts)
+
+time_treat_factorial <- meta %>%
+  mutate(group = paste0(time, "hr-", ifelse(treatment == "C", "Control", "Heat"))) %>%
+  select(sample, group) %>% 
+  mutate(value = 1) %>% 
+  tidyr::pivot_wider(names_from = group, values_from = value, values_fill = 0) %>%
+  column_to_rownames(var = "sample") %>%
+  relocate(contains("Control"), contains("Heat")) %>%
+   mutate(across(everything(), as.factor))
+
+# Reorder modules so similar modules are next to each other
+module_eigengenes_ordered <- orderMEs(module_eigengenes)
+module_order = names(module_eigengenes_ordered) 
+
+moduleTraitCor =  WGCNA::cor(module_eigengenes_ordered, time_treat_factorial, use = "p");
+moduleTraitPvalue = corPvalueStudent(moduleTraitCor, nSamples);
+
+textMatrix <- ifelse(moduleTraitPvalue < 0.05,
+                     paste0(signif(moduleTraitCor, 2), "\n(",
+                            signif(moduleTraitPvalue, 2), ")"),"")
+
+pdf(paste0(outdir,"/all_heatmap.pdf"),width=8, height=8)
+# Will display correlations and their p-values
+
+par(mar = c(4, 3, 2, 2))
+labeledHeatmap(Matrix = moduleTraitCor,
+               textMatrix = textMatrix,
+               xLabels = names(time_treat_factorial),
+               yLabels = names(module_eigengenes_ordered),
+               ySymbols = names(module_eigengenes_ordered),
+               colorLabels = TRUE,
+               colors = blueWhiteRed(100),
+               setStdMargins = FALSE,
+               cex.text = 0.5,
+               cex.lab = 0.7,
+               cex.colorLabels = 0.7,
+               zlim = c(-1,1),
+               main = paste("Module-trait relationships - all"))
+
+dev.off()
+```
+
+##### ggplot version
+
+```{r}
+# Add treatment names
+module_eigengenes_ordered$treatment_time = paste0(meta$time,"hr","-",ifelse(meta$treatment == "C", "Control", "Heat"))
+module_eigengenes_ordered$treatment = meta$treatment
+module_eigengenes_ordered <- module_eigengenes_ordered %>% arrange(treatment)
+
+mmPval = moduleTraitPvalue %>% as.data.frame() %>% rownames_to_column("module") %>%
+  pivot_longer(-module, names_to = "treatment_time", values_to = "pvalue")
+
+mmCor = moduleTraitCor %>% as.data.frame() %>% rownames_to_column("module") %>%
+  pivot_longer(-module, names_to = "treatment_time", values_to = "correlation") %>%
+  left_join(mmPval, by = c("module", "treatment_time")) %>%
+  mutate(
+    label = ifelse(pvalue < 0.05,
+                   paste0(signif(correlation, 2)), ""),
+    # use this if you want the p-value also plotted
+    #label = ifelse(pvalue < 0.05,
+    #               paste0(signif(correlation, 2), "\n(", signif(pvalue, 2), ")"), ""),
+    module = factor(module, levels = rev(module_order)),
+    treatment_time = factor(treatment_time, levels = unique(module_eigengenes_ordered$treatment_time)))
+
+ggplot(mmCor, aes(x=treatment_time, y=module, fill=correlation)) +
+  geom_tile(color = "white", linewidth = 0.3) +
+  geom_text(aes(label = label), size = 3, color = "black") +
+  theme_minimal(base_size = 12) +
+  scale_fill_gradient2(
+    low = "#4575B4",
+    high = "#D73027",
+    mid = "white",
+    midpoint = 0,
+    limits = c(-1, 1)) +
+  labs(title = "Module-trait Relationships", y = "Modules", fill="Correlation")+ 
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    panel.grid = element_blank(),
+    axis.ticks = element_blank()
+  ) +coord_fixed(ratio = 0.7) 
+
+save_ggplot(plot = last_plot(), filename = "all_heatmap_ggplot", width = 10, height = 8)
+```
+
+#### Run linear model on each module vs. treatment
+
+```{r}
+# Create the design matrix for full (with interaction) models, use factor for time since non-evenly spaced intervals
+
+meta$time_factor <- factor(meta$time)
+des_mat_full <- model.matrix(~ treatment*time_factor, data = meta)
+head(des_mat_full)
+```
+
+```{r}
+# lmFit() needs a transposed version of the matrix
+fit_full <- limma::lmFit(t(module_eigengenes), design = des_mat_full)
+
+# Apply empirical Bayes to smooth standard errors
+fit_full <- limma::eBayes(fit_full)
+
+# Apply multiple testing correction and obtain stats
+
+## interaction <- treatment effect differs by time
+interaction_coefs <- grep("treatment.*:time", colnames(des_mat_full), value = TRUE)
+
+stats_interaction <- limma::topTable(fit_full, coef = interaction_coefs, number = ncol(module_eigengenes)) %>%
+  tibble::rownames_to_column("module")
+
+stats_df_full <- limma::topTable(fit_full, number = ncol(module_eigengenes)) %>%
+  tibble::rownames_to_column("module")
+
+# we care most about the interaction, the full model will pull out modules that vary in both treatments by time also (like a circadian rhythm 0hr vs 12hr difference)
+
+# almost all of our modules significant by this model:
+stats_interaction %>% filter(adj.P.Val < 0.05)  %>% nrow()
+
+#save these as a vector
+top_mod_sig_interaction <- stats_interaction %>% filter(adj.P.Val < 0.05)  %>% pull(module)
+
+# print the top 5:
+stats_interaction %>% filter(adj.P.Val < 0.05)  %>% head(5)
+```
+
+Module 2 is the most differentially expressed across treatments + in the full model.
+
+#### Plot example module over time
+
+```{r}
+eigengenes_treatment_df <- module_eigengenes %>%
+  tibble::rownames_to_column("sample") %>%
+  dplyr::inner_join(meta %>%
+    dplyr::select(sample, treatment,time),
+  by = c("sample" = "sample"))
+
+ggplot(eigengenes_treatment_df, aes(x = factor(time), y = ME2,color = treatment)) +
+  geom_boxplot(outlier.shape = NA) +
+  ggforce::geom_sina(size=1, alpha = 0.5) +
+  scale_color_manual(values = treat_colors) +
+  theme_classic()
+```
+
+#### Trajectory plots for all modules
+
+```{r}
+eigengenes_treatment_df_long <- eigengenes_treatment_df %>%
+  pivot_longer(cols = starts_with("ME"),
+               names_to = "module",
+               values_to = "eigengene_value") %>%
+  mutate(module = factor(module, levels = module_order)) %>%
+  mutate(module_label = ifelse(module %in% top_mod_sig_interaction, 
+                                paste0("*",module), 
+                                as.character(module)))
+
+ggplot(eigengenes_treatment_df_long, aes(x = factor(time), y = eigengene_value,color = treatment)) +
+  geom_boxplot(outlier.shape = NA) +
+  ggforce::geom_sina(size=1, alpha = 0.5) +
+  scale_color_manual(values = treat_colors) +
+  facet_wrap(~module_label, ncol = 5) +
+  theme_classic() + theme(
+    strip.text = element_text(size = 8, face = "bold"),
+    axis.text = element_text(size = 7),
+    legend.position = "bottom") +
+  labs(x = "Time (hours)", y = "Module Eigengene")
+
+save_ggplot(plot = last_plot(), filename = "all_modules", width = 14, height = 12)
+
+eigengenes_summary <- eigengenes_treatment_df_long %>%
+  group_by(module, module_label, time, treatment) %>%
+  summarize(mean_value = mean(eigengene_value),
+            se = sd(eigengene_value) / sqrt(n()),
+            .groups = "drop")
+
+ggplot(eigengenes_summary, aes(x = factor(time), y = mean_value, color = treatment, group = treatment)) +
+  geom_line(linewidth = 0.5) +
+  geom_errorbar(aes(ymin = mean_value - se, ymax = mean_value + se), width = 0.2) +
+  scale_color_manual(values = treat_colors) +
+  facet_wrap(~module_label, ncol = 5, scales = "free_y") +
+  theme_classic() +
+  theme(
+    strip.text = element_text(size = 8, face = "bold"),
+    axis.text = element_text(size = 7),
+    legend.position = "bottom") +
+  labs(x = "Time (hours)", y = "Module Eigengene")
+
+save_ggplot(plot = last_plot(), filename = "all_modules_lines", width = 14, height = 12)
+```
+
+
+#### Heatmap function based heavily off of the following tutorial:
+
+https://alexslemonade.github.io/refinebio-examples/04-advanced-topics/network-analysis_rnaseq_01_wgcna.html#46_Determine_parameters_for_WGCNA
+
+```{r}
+make_module_heatmap <- function(module_name,
+                                expression_mat = normalized_counts,
+                                metadata_df = meta,
+                                gene_module_key_df = module_df,
+                                module_eigengenes_df = module_eigengenes) {
+  # Create a summary heatmap of a given module.
+  # based on https://alexslemonade.github.io/refinebio-examples/04-advanced-topics/network-analysis_rnaseq_01_wgcna.html#46_Determine_parameters_for_WGCNA
+
+  # Set up the module eigengene with its sample
+  module_eigengene <- module_eigengenes_df %>%
+    dplyr::select(all_of(module_name)) %>%
+    tibble::rownames_to_column("sample")
+
+  # Set up column annotation from metadata
+  col_annot_df <- metadata_df %>%
+    # Only select the treatment, time, and sample ID columns
+    dplyr::select(sample, treatment, time) %>%
+    # Add on the eigengene expression by joining with sample IDs
+    dplyr::inner_join(module_eigengene, by = "sample") %>%
+    # Arrange by treatment and time point
+    dplyr::arrange(treatment, time, sample) %>%
+    # Store sample
+    tibble::column_to_rownames("sample")
+
+  # Create the ComplexHeatmap column annotation object
+  col_annot <- ComplexHeatmap::HeatmapAnnotation(
+    # Supply treatment and time labels
+    treatment = col_annot_df$treatment,
+    time = col_annot_df$time,
+    # Add annotation barplot
+    module_eigengene = ComplexHeatmap::anno_barplot(dplyr::select(col_annot_df, module_name)),
+    # Pick colors for each experimental group in treatment
+    col = list(treatment = c("C" = "lightblue4", "H" = "#D55E00"),
+               time = time_colors)
+  )
+
+  # Get a vector of the gene IDs that correspond to this module
+  module_genes <- gene_module_key_df %>%
+    dplyr::filter(module == module_name) %>%
+    dplyr::pull(gene_id)
+
+  # Set up the gene expression data frame
+  mod_mat <- expression_mat %>%
+    t() %>%
+    as.data.frame() %>%
+    # Only keep genes from this module
+    dplyr::filter(rownames(.) %in% module_genes) %>%
+    # Order the samples to match col_annot_df
+    dplyr::select(rownames(col_annot_df)) %>%
+    # Data needs to be a matrix
+    as.matrix()
+
+  # Normalize the gene expression values
+  mod_mat <- mod_mat %>%
+    # Scale can work on matrices, but it does it by column so we will need to
+    # transpose first
+    t() %>%
+    scale() %>%
+    # And now we need to transpose back
+    t()
+
+  # Create a color function based on standardized scale
+  color_func <- circlize::colorRamp2(
+    c(-1.5, 0, 1.5),
+    c("#67a9cf", "#f7f7f7", "#ef8a62")
+  )
+
+  # Plot on a heatmap
+  heatmap <- ComplexHeatmap::Heatmap(mod_mat,
+    name = module_name,
+    # Supply color function
+    col = color_func,
+    # Supply column annotation
+    bottom_annotation = col_annot,
+    # We don't want to cluster samples
+    cluster_columns = FALSE,
+    # We don't need to show sample or gene labels
+    show_row_names = FALSE,
+    show_column_names = FALSE
+  )
+
+  # Return heatmap
+  return(heatmap)
+}
+```
+
+```{r}
+make_module_heatmap(module_name = "ME2")
+make_module_heatmap(module_name = "ME0")
+make_module_heatmap(module_name = "ME21")
+```
+
+
+
+
+### multiWGCNA
+
+```{r, eval=FALSE}
+# Construct the combined networks
+autism_networks = constructNetworks(autism_se, meta, unique(meta$time), unique(meta$treatment),
+                                  networkType = "signed", power = 12,
+                                  minModuleSize = 50, maxBlockSize = 25000,
+                                  reassignThreshold = 0, minKMEtoStay = 0.7,
+                                  mergeCutHeight = 0.10, numericLabels = TRUE,
+                                  pamRespectsDendro = FALSE, verbose=3,
+                                  saveTOMs = TRUE)
+```
+
+
+
+
+
+
