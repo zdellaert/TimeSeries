@@ -4,14 +4,14 @@
 1. Code:
    1. differential expression: [DESeq LRT + ImpulseDE2 time course modeling](../code/RNA-seq-Analysis.md)
       1. **See this knit Rmd for more detailed information**
-   2. [WGCNA](../code/WGCNA.md)
+   2. [WGCNA](../code/WGCNA.md) updated: [multiWGCNA](../code/multiWGCNA.md)
 2. Output files:
    1. differential expression:
       1. [POC files](output_RNA/differential_expression/POC_PacutaV2)
       2. [MON files](output_RNA/differential_expression/MON_MCapV3)
       3. [POR files](output_RNA/differential_expression/POR_Pcomp)
    2. WGCNA
-      1. [POC files](output_RNA/WGCNA/POC_PacutaV2)
+      1. [POC files](output_RNA/multiWGCNA/POC_PacutaV2)
       2. [MON files](output_RNA/WGCNA/MON_MCapV3)
 
 ## PCA separation by treatment and timepoint
@@ -99,10 +99,8 @@
 
 ## WGCNA:
    1. POC:
-      1. [Time-module heatmap](WGCNA/POC_PacutaV2/times_heatmap.pdf)
-      2. [Treatment-module heatmap](WGCNA/POC_PacutaV2/treatments_heatmap.pdf)
-      3. ![](WGCNA/POC_PacutaV2/all_heatmap.png)
+      1.  <img src="multiWGCNA/POC_PacutaV2/all_heatmap_ggplot.png" width="800">
+      2.  <img src="multiWGCNA/POC_PacutaV2/all_modules_lines.png" width="500">
+      3.  <img src="multiWGCNA/POC_PacutaV2/all_modules.png" width="500">
    2. MON:
-      1. [Time-module heatmap](WGCNA/MON_MCapV3/times_heatmap.pdf)
-      2. [Treatment-module heatmap](WGCNA/MON_MCapV3/treatments_heatmap.pdf)
-      3. ![](WGCNA/MON_MCapV3/all_heatmap.png)
+      1. old version: ![](WGCNA/MON_MCapV3/all_heatmap.png)
