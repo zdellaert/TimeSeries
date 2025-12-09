@@ -499,6 +499,47 @@ for (genelist in names(list)){
 }
 ```
 
+#### Mechanosensing and other channels
+
+```{r}
+DESeq_SwissProt_annotation <- read_csv("../output_RNA/differential_expression/POC_PacutaV2/DESeq_SwissProt_annotation.csv")
+
+plot_df <- as.data.frame(t(vsd_mat)) %>%
+  rownames_to_column(var="sample") %>%
+  left_join(meta, by=c("sample"="sample")) %>% 
+  pivot_longer(cols = all_of(rownames(vsd_mat)), names_to="query", values_to="expression") %>%
+  mutate(is_DE = query %in% rownames(DE_05))
+
+## note this list is not complete I need to redo the annotations for all 3 species in the same way - -this is just a jumping off point from LCM paper
+
+list <- list(aquaporin = DESeq_SwissProt_annotation %>% filter(grepl("Aquaporin", ProteinNames, ignore.case = TRUE)) %>% pull(query),
+             TRP = DESeq_SwissProt_annotation %>% filter(grepl("transient receptor potential", ProteinNames, ignore.case = TRUE)) %>% pull(query),
+             Mechanosensory = DESeq_SwissProt_annotation %>% filter(grepl("Mechanosens", ProteinNames, ignore.case = TRUE)) %>% pull(query),
+             calcium_transport_1 = DESeq_SwissProt_annotation %>% filter(grepl("calcium ion transport", BiologicalProcess, ignore.case = TRUE)) %>% head(34) %>% pull(query),
+             calcium_transport_2 = DESeq_SwissProt_annotation %>% filter(grepl("calcium ion transport", BiologicalProcess, ignore.case = TRUE)) %>% tail(34) %>% pull(query),
+             SLCs_1 = DESeq_SwissProt_annotation %>% filter(grepl("Solute carrier", ProteinNames, ignore.case = TRUE)) %>% slice(1:30) %>% pull(query),
+             SLCs_2 = DESeq_SwissProt_annotation %>% filter(grepl("Solute carrier", ProteinNames, ignore.case = TRUE)) %>% slice(31:60) %>% pull(query),
+             SLCs_3 = DESeq_SwissProt_annotation %>% filter(grepl("Solute carrier", ProteinNames, ignore.case = TRUE)) %>% slice(61:90) %>% pull(query),
+             SLCs_4 = DESeq_SwissProt_annotation %>% filter(grepl("Solute carrier", ProteinNames, ignore.case = TRUE)) %>% slice(91:120) %>% pull(query),
+             SLCs_5 = DESeq_SwissProt_annotation %>% filter(grepl("Solute carrier", ProteinNames, ignore.case = TRUE)) %>% slice(121:150) %>% pull(query),
+             SLCs_6 = DESeq_SwissProt_annotation %>% filter(grepl("Solute carrier", ProteinNames, ignore.case = TRUE)) %>% slice(151:180) %>% pull(query),
+             SLCs_7 = DESeq_SwissProt_annotation %>% filter(grepl("Solute carrier", ProteinNames, ignore.case = TRUE)) %>% slice(181:211) %>% pull(query)
+             )
+
+for (genelist in names(list)){
+  genes <- list[[genelist]]
+  
+  plot <- plot_df %>% filter(query %in% genes) %>% filter(is_DE == TRUE) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+  stat_summary(fun="mean", geom="line") +
+  scale_color_manual(values = treat_colors) +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+  facet_wrap(paste0(str_replace(query,"Pocillopora_acuta_HIv2___",""), ": ", genelist)~ ~paste0("DE by LRT: ",is_DE),scales="free_y") +
+  theme_bw() +
+  labs(y="VST expression", x="Timepoint")
+  print(plot)
+}
+```
+
 ### ImpulseDE2
 
 #### Background info
@@ -681,6 +722,136 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
          annotation_colors = list("treatment" = treat_colors,
                                   "time" = time_colors))
 ```
+
+#### 8. Cluster ImpulseDE2-significant genes by trajectory
+
+For this we will use the package [Mfuzz](https://bioconductor.org/packages/release/bioc/html/Mfuzz.html), [vignette here](https://bioconductor.org/packages/release/bioc/vignettes/Mfuzz/inst/doc/Mfuzz.pdf).
+
+```{r}
+#BiocManager::install("Mfuzz")
+library(Mfuzz)
+```
+
+```{r}
+# analyze which of our ImpulseDE2 significant genes are in our vsd matrix
+sum(impulse_sig_genes$Gene %in% rownames(vsd_mat))
+length(impulse_sig_genes$Gene)
+
+# which ones are missing? 
+missing_genes <- impulse_sig_genes$Gene[!(impulse_sig_genes$Gene %in% rownames(vsd_mat))]
+
+# 9 are missing and it is because they were filtered out during pOverA filtering -- as seen with rowSums below, each has fewer than 3 samples with a count >10
+
+counts_raw[missing_genes,]
+impulse_sig_genes[missing_genes,]
+rowSums(counts_raw[missing_genes,] > 10)
+```
+
+```{r}
+impulse_sig_genes_transient <- impulse_sig_genes %>% filter(isTransient==TRUE)
+impulse_sig_genes_mat <- vsd_mat[rownames(vsd_mat) %in% impulse_sig_genes_transient$Gene,]
+
+heat <- impulse_sig_genes_mat %>% as.data.frame %>% select(contains("_H"))
+
+# average values together across replicates
+heat_avg <- heat %>%
+  rowwise() %>%
+  mutate(
+    R0 = mean(c_across(starts_with("POC_R0"))),
+    R1 = mean(c_across(starts_with("POC_R1"))),
+    R3 = mean(c_across(starts_with("POC_R3"))),
+    R12 = mean(c_across(starts_with("POC_R12"))),
+    R24 = mean(c_across(starts_with("POC_R24"))),
+    R72 = mean(c_across(starts_with("POC_R72"))),
+    R120 = mean(c_across(starts_with("POC_R120")))
+  ) %>%
+  select(R0, R1, R3, R12, R24, R72, R120)
+
+rownames(heat_avg) <- rownames(heat)
+
+heat_eset <- ExpressionSet(assayData = as.matrix(heat_avg))
+heat_eset <- standardise(heat_eset) 
+```
+
+For fuzzy c-means clustering, the fuzzifier m and the number of clusters c has to be chosen in advance
+
+```{r}
+# Determine fuzzifier
+m <- mestimate(heat_eset)
+
+# Choose optimal cluster number
+#Dmin(heat_eset, m = m, repeats = 3)
+optimal_c <- 6
+
+# Run Mfuzz clustering
+mfuzz_clusters <- mfuzz(heat_eset, c = optimal_c, m = m)
+
+mfuzz.plot(heat_eset, cl = mfuzz_clusters, new.window =FALSE, mfrow = c(3,3), time.labels =  c(0,1,3,12,24,72,120))
+
+# Visualize clusters
+pdf(paste0(outdir,"/temporal_clusters.pdf"), width = 12, height = 10)
+mfuzz.plot2(heat_eset, cl = mfuzz_clusters, mfrow = c(3, 4), 
+            time.labels = c("0", "1", "3", "12", "24", "72", "120"),
+            xlab = "Time (hours)",x11=FALSE)
+dev.off()
+```
+
+```{r}
+cluster2 <- plotGenes(
+  vecGeneIDs       = head(names(mfuzz_clusters$cluster)[mfuzz_clusters$cluster==2],5),
+  objectImpulseDE2 = objectImpulseDE2,
+  boolSimplePlot = TRUE,
+  boolCaseCtrl     = TRUE,
+  dirOut           = paste0(outdir,"/ImpulseDE/"),
+  strFileName = "cluster2.pdf",
+  boolMultiplePlotsPerPage = FALSE,
+  strNameRefMethod = NULL)
+
+cluster2
+```
+
+```{r}
+cluster3 <- plotGenes(
+  vecGeneIDs       = head(names(mfuzz_clusters$cluster)[mfuzz_clusters$cluster==3],5),
+  objectImpulseDE2 = objectImpulseDE2,
+  boolSimplePlot = TRUE,
+  boolCaseCtrl     = TRUE,
+  dirOut           = paste0(outdir,"/ImpulseDE/"),
+  strFileName = "cluster3.pdf",
+  boolMultiplePlotsPerPage = FALSE,
+  strNameRefMethod = NULL)
+
+cluster3
+```
+
+```{r}
+# Extract cluster assignments
+cluster_assignments <- data.frame(
+  gene = names(mfuzz_clusters$cluster),
+  cluster = mfuzz_clusters$cluster,
+  membership = apply(mfuzz_clusters$membership, 1, max)
+)
+
+# Get cluster centers (average trajectory)
+cluster_centers <- mfuzz_clusters$centers
+
+# Identify peak timepoint for each cluster
+peak_times <- apply(cluster_centers, 1, which.max)
+timepoints <- c(0, 1, 3, 12, 24, 72, 120)
+cluster_peaks <- data.frame(
+  cluster = 1:optimal_c,
+  peak_time = timepoints[peak_times])
+
+print(cluster_peaks)
+```
+
+```{r}
+HSPS <- impulse_results %>% filter(Gene %in% stress_genes_ids) %>% arrange(padj) %>% left_join(HeatStressGenes_unique, by = join_by(Gene==query)) %>% filter(grepl("HSP",gene_id)) %>% pull(Gene)
+
+cluster_assignments %>% filter(gene %in% HSPS)
+```
+
+
 
 ## MON: pre-processing and visualization
 
