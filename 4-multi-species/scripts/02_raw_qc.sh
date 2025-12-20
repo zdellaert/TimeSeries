@@ -17,7 +17,7 @@ module load uri/main
 module load MultiQC/1.12-foss-2021b
 
 #go into directory with raw data (symlinks)
-cd /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/data_RNA
+cd /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/data_RNA
 
 #make raw_qc output folder
 mkdir -p ../output_RNA/raw_qc/

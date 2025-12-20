@@ -1,0 +1,76 @@
+Starting fastqc... Sat Dec 20 15:22:25 UTC 2025
+application/gzip
+Analysis complete for run-3_POC_R1_H1_S5_R1_001.fastq.gz
+Processed run-3_POC_R1_H1_S5_R1_001.fastq.gz
+application/gzip
+Analysis complete for run-3_POC_R1_H1_S5_R2_001.fastq.gz
+Processed run-3_POC_R1_H1_S5_R2_001.fastq.gz
+application/gzip
+Analysis complete for run-3_POC_R120_C1_S4_R1_001.fastq.gz
+Processed run-3_POC_R120_C1_S4_R1_001.fastq.gz
+application/gzip
+Analysis complete for run-3_POC_R120_C1_S4_R2_001.fastq.gz
+Processed run-3_POC_R120_C1_S4_R2_001.fastq.gz
+application/gzip
+Analysis complete for run-3_POC_R3_H2_S11_R1_001.fastq.gz
+Processed run-3_POC_R3_H2_S11_R1_001.fastq.gz
+application/gzip
+Analysis complete for run-3_POC_R12_C3_S6_R2_001.fastq.gz
+Processed run-3_POC_R12_C3_S6_R2_001.fastq.gz
+application/gzip
+Analysis complete for run-3_POC_R12_C3_S6_R1_001.fastq.gz
+Processed run-3_POC_R12_C3_S6_R1_001.fastq.gz
+application/gzip
+Analysis complete for run-3_POR_R120_H1_S13_R2_001.fastq.gz
+Processed run-3_POR_R120_H1_S13_R2_001.fastq.gz
+application/gzip
+Analysis complete for run-3_MON_R3_H2_S12_R2_001.fastq.gz
+Processed run-3_MON_R3_H2_S12_R2_001.fastq.gz
+application/gzip
+Analysis complete for run-3_POC_R3_H2_S11_R2_001.fastq.gz
+Processed run-3_POC_R3_H2_S11_R2_001.fastq.gz
+application/gzip
+Analysis complete for run-3_POR_R120_H1_S13_R1_001.fastq.gz
+Processed run-3_POR_R120_H1_S13_R1_001.fastq.gz
+application/gzip
+Analysis complete for run-3_MON_R0_H2_S7_R1_001.fastq.gz
+Processed run-3_MON_R0_H2_S7_R1_001.fastq.gz
+application/gzip
+Analysis complete for run-3_MON_R3_H2_S12_R1_001.fastq.gz
+Processed run-3_MON_R3_H2_S12_R1_001.fastq.gz
+application/gzip
+Analysis complete for run-3_POR_R24_C3_S124_R1_001.fastq.gz
+Processed run-3_POR_R24_C3_S124_R1_001.fastq.gz
+application/gzip
+Analysis complete for run-3_MON_R120_C3_S10_R1_001.fastq.gz
+Processed run-3_MON_R120_C3_S10_R1_001.fastq.gz
+application/gzip
+Analysis complete for run-3_MON_R120_C3_S10_R2_001.fastq.gz
+Processed run-3_MON_R120_C3_S10_R2_001.fastq.gz
+application/gzip
+Analysis complete for run-3_MON_R0_H2_S7_R2_001.fastq.gz
+Processed run-3_MON_R0_H2_S7_R2_001.fastq.gz
+application/gzip
+Analysis complete for run-3_POR_R24_C3_S124_R2_001.fastq.gz
+Processed run-3_POR_R24_C3_S124_R2_001.fastq.gz
+application/gzip
+Analysis complete for run-3_POR_R120_C1_S123_R1_001.fastq.gz
+Processed run-3_POR_R120_C1_S123_R1_001.fastq.gz
+application/gzip
+Analysis complete for run-3_POR_R120_C1_S123_R2_001.fastq.gz
+Processed run-3_POR_R120_C1_S123_R2_001.fastq.gz
+application/gzip
+Analysis complete for run-3_POR_R3_H1_S8_R2_001.fastq.gz
+Processed run-3_POR_R3_H1_S8_R2_001.fastq.gz
+application/gzip
+Analysis complete for run-3_POR_R3_H1_S8_R1_001.fastq.gz
+Processed run-3_POR_R3_H1_S8_R1_001.fastq.gz
+application/gzip
+Analysis complete for run-3_POR_R3_C2_S9_R2_001.fastq.gz
+Processed run-3_POR_R3_C2_S9_R2_001.fastq.gz
+application/gzip
+Analysis complete for run-3_POR_R3_C2_S9_R1_001.fastq.gz
+Processed run-3_POR_R3_C2_S9_R1_001.fastq.gz
+fastQC done. Sat Dec 20 15:26:31 UTC 2025
+|         searching | ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 769/769  
+Initial QC of RNA-seq data complete. Sat Dec 20 15:27:31 UTC 2025
