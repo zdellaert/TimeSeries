@@ -1,0 +1,91 @@
+There are 12 samples to process
+Starting trimming at Sat Dec 20 15:44:06 UTC 2025
+trimming of run-3_POC_R1_H1_S5 complete at Sat Dec 20 15:48:47 UTC 2025
+trimming of run-3_MON_R0_H2_S7 complete at Sat Dec 20 15:49:14 UTC 2025
+trimming of run-3_MON_R120_C3_S10 complete at Sat Dec 20 15:50:00 UTC 2025
+trimming of run-3_POC_R120_C1_S4 complete at Sat Dec 20 15:50:36 UTC 2025
+trimming of run-3_POC_R3_H2_S11 complete at Sat Dec 20 15:50:42 UTC 2025
+trimming of run-3_POR_R120_H1_S13 complete at Sat Dec 20 15:51:38 UTC 2025
+trimming of run-3_MON_R3_H2_S12 complete at Sat Dec 20 15:51:52 UTC 2025
+trimming of run-3_POC_R12_C3_S6 complete at Sat Dec 20 15:52:14 UTC 2025
+trimming of run-3_POR_R24_C3_S124 complete at Sat Dec 20 15:53:50 UTC 2025
+trimming of run-3_POR_R3_C2_S9 complete at Sat Dec 20 15:54:20 UTC 2025
+trimming of run-3_POR_R3_H1_S8 complete at Sat Dec 20 15:55:02 UTC 2025
+trimming of run-3_POR_R120_C1_S123 complete at Sat Dec 20 15:57:19 UTC 2025
+Starting fastqc on trimmed files at Sat Dec 20 15:57:19 UTC 2025
+application/gzip
+Analysis complete for run-3_POC_R1_H1_S5_R1_trim.fastq.gz
+Processed /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/run-3_POC_R1_H1_S5_R1_trim.fastq.gz
+application/gzip
+Analysis complete for run-3_POC_R120_C1_S4_R1_trim.fastq.gz
+Processed /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/run-3_POC_R120_C1_S4_R1_trim.fastq.gz
+application/gzip
+Analysis complete for run-3_POC_R120_C1_S4_R2_trim.fastq.gz
+Processed /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/run-3_POC_R120_C1_S4_R2_trim.fastq.gz
+application/gzip
+Analysis complete for run-3_POC_R1_H1_S5_R2_trim.fastq.gz
+Processed /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/run-3_POC_R1_H1_S5_R2_trim.fastq.gz
+application/gzip
+Analysis complete for run-3_MON_R0_H2_S7_R2_trim.fastq.gz
+Processed /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/run-3_MON_R0_H2_S7_R2_trim.fastq.gz
+application/gzip
+Analysis complete for run-3_MON_R120_C3_S10_R2_trim.fastq.gz
+Processed /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/run-3_MON_R120_C3_S10_R2_trim.fastq.gz
+application/gzip
+Analysis complete for run-3_MON_R0_H2_S7_R1_trim.fastq.gz
+Processed /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/run-3_MON_R0_H2_S7_R1_trim.fastq.gz
+application/gzip
+Analysis complete for run-3_POC_R3_H2_S11_R2_trim.fastq.gz
+Processed /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/run-3_POC_R3_H2_S11_R2_trim.fastq.gz
+application/gzip
+Analysis complete for run-3_POC_R12_C3_S6_R1_trim.fastq.gz
+Processed /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/run-3_POC_R12_C3_S6_R1_trim.fastq.gz
+application/gzip
+Analysis complete for run-3_MON_R120_C3_S10_R1_trim.fastq.gz
+Processed /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/run-3_MON_R120_C3_S10_R1_trim.fastq.gz
+application/gzip
+Analysis complete for run-3_MON_R3_H2_S12_R1_trim.fastq.gz
+Processed /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/run-3_MON_R3_H2_S12_R1_trim.fastq.gz
+application/gzip
+Analysis complete for run-3_POC_R12_C3_S6_R2_trim.fastq.gz
+Processed /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/run-3_POC_R12_C3_S6_R2_trim.fastq.gz
+application/gzip
+Analysis complete for run-3_MON_R3_H2_S12_R2_trim.fastq.gz
+Processed /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/run-3_MON_R3_H2_S12_R2_trim.fastq.gz
+application/gzip
+Analysis complete for run-3_POR_R120_H1_S13_R2_trim.fastq.gz
+Processed /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/run-3_POR_R120_H1_S13_R2_trim.fastq.gz
+application/gzip
+Analysis complete for run-3_POC_R3_H2_S11_R1_trim.fastq.gz
+Processed /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/run-3_POC_R3_H2_S11_R1_trim.fastq.gz
+application/gzip
+Analysis complete for run-3_POR_R120_H1_S13_R1_trim.fastq.gz
+Processed /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/run-3_POR_R120_H1_S13_R1_trim.fastq.gz
+application/gzip
+Analysis complete for run-3_POR_R24_C3_S124_R1_trim.fastq.gz
+Processed /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/run-3_POR_R24_C3_S124_R1_trim.fastq.gz
+application/gzip
+Analysis complete for run-3_POR_R24_C3_S124_R2_trim.fastq.gz
+Processed /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/run-3_POR_R24_C3_S124_R2_trim.fastq.gz
+application/gzip
+Analysis complete for run-3_POR_R120_C1_S123_R1_trim.fastq.gz
+Processed /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/run-3_POR_R120_C1_S123_R1_trim.fastq.gz
+application/gzip
+Analysis complete for run-3_POR_R3_H1_S8_R2_trim.fastq.gz
+Processed /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/run-3_POR_R3_H1_S8_R2_trim.fastq.gz
+application/gzip
+Analysis complete for run-3_POR_R3_C2_S9_R1_trim.fastq.gz
+Processed /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/run-3_POR_R3_C2_S9_R1_trim.fastq.gz
+application/gzip
+Analysis complete for run-3_POR_R120_C1_S123_R2_trim.fastq.gz
+Processed /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/run-3_POR_R120_C1_S123_R2_trim.fastq.gz
+application/gzip
+Analysis complete for run-3_POR_R3_C2_S9_R2_trim.fastq.gz
+Processed /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/run-3_POR_R3_C2_S9_R2_trim.fastq.gz
+application/gzip
+Analysis complete for run-3_POR_R3_H1_S8_R1_trim.fastq.gz
+Processed /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/run-3_POR_R3_H1_S8_R1_trim.fastq.gz
+fastQC done. Sat Dec 20 16:01:07 UTC 2025
+Running MultiQC
+|         searching | ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 1153/1153  
+QC of trimmed RNA-seq data complete. Sat Dec 20 16:06:59 UTC 2025

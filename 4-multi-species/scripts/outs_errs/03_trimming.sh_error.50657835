@@ -1,0 +1,1098 @@
+Loading perl version 5.38.2
+Loading parallel version 20240822
+Loading gzip version 1.13
+Loading zlib-ng version 2.1.6
+Loading libdeflate version 1.18
+Loading libisal version 2.29.0
+Loading fastp version 0.23.4
+Detecting adapter sequence for read1...
+>Illumina TruSeq Adapter Read 1
+AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+
+Detecting adapter sequence for read2...
+>Illumina TruSeq Adapter Read 2
+AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT
+
+Read1 before filtering:
+total reads: 15125371
+total bases: 2283931021
+Q20 bases: 2258876133(98.903%)
+Q30 bases: 2191193248(95.9396%)
+
+Read2 before filtering:
+total reads: 15125371
+total bases: 2283931021
+Q20 bases: 2258394161(98.8819%)
+Q30 bases: 2182452492(95.5568%)
+
+Read1 after filtering:
+total reads: 15021563
+total bases: 1950842251
+Q20 bases: 1939928255(99.4405%)
+Q30 bases: 1892613095(97.0152%)
+
+Read2 after filtering:
+total reads: 15021563
+total bases: 1950842502
+Q20 bases: 1938161295(99.35%)
+Q30 bases: 1889323543(96.8465%)
+
+Filtering result:
+reads passed filter: 30043126
+reads failed due to low quality: 147006
+reads failed due to too many N: 820
+reads failed due to too short: 59790
+reads with adapter trimmed: 12903798
+bases trimmed due to adapters: 332365018
+
+Duplication rate: 9.50424%
+
+Insert size peak (evaluated by paired-end reads): 139
+
+JSON report: /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/trimmed_qc/run-3_POC_R1_H1_S5_fastp.json
+HTML report: /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/trimmed_qc/run-3_POC_R1_H1_S5_fastp.html
+
+fastp --in1 /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/data_RNA/run-3_POC_R1_H1_S5_R1_001.fastq.gz --in2 /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/data_RNA/run-3_POC_R1_H1_S5_R2_001.fastq.gz --out1 /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/run-3_POC_R1_H1_S5_R1_trim.fastq.gz --out2 /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/run-3_POC_R1_H1_S5_R2_trim.fastq.gz --detect_adapter_for_pe --qualified_quality_phred 20 --trim_poly_g --trim_front1 10 --trim_front2 10 --length_required 20 --thread 2 --overrepresentation_analysis --html /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/trimmed_qc/run-3_POC_R1_H1_S5_fastp.html --json /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/trimmed_qc/run-3_POC_R1_H1_S5_fastp.json 
+fastp v0.23.4, time used: 281 seconds
+Detecting adapter sequence for read1...
+>Illumina TruSeq Adapter Read 1
+AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+
+Detecting adapter sequence for read2...
+>Illumina TruSeq Adapter Read 2
+AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT
+
+Read1 before filtering:
+total reads: 19077947
+total bases: 2880769997
+Q20 bases: 2850997344(98.9665%)
+Q30 bases: 2769989028(96.1545%)
+
+Read2 before filtering:
+total reads: 19077947
+total bases: 2880769997
+Q20 bases: 2851983786(99.0007%)
+Q30 bases: 2765395217(95.995%)
+
+Read1 after filtering:
+total reads: 18941760
+total bases: 2466466378
+Q20 bases: 2453250539(99.4642%)
+Q30 bases: 2396465211(97.1619%)
+
+Read2 after filtering:
+total reads: 18941760
+total bases: 2466479822
+Q20 bases: 2452066892(99.4156%)
+Q30 bases: 2395873415(97.1374%)
+
+Filtering result:
+reads passed filter: 37883520
+reads failed due to low quality: 175090
+reads failed due to too many N: 1044
+reads failed due to too short: 96240
+reads with adapter trimmed: 16279137
+bases trimmed due to adapters: 406464944
+
+Duplication rate: 14.6463%
+
+Insert size peak (evaluated by paired-end reads): 139
+
+JSON report: /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/trimmed_qc/run-3_MON_R0_H2_S7_fastp.json
+HTML report: /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/trimmed_qc/run-3_MON_R0_H2_S7_fastp.html
+
+fastp --in1 /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/data_RNA/run-3_MON_R0_H2_S7_R1_001.fastq.gz --in2 /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/data_RNA/run-3_MON_R0_H2_S7_R2_001.fastq.gz --out1 /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/run-3_MON_R0_H2_S7_R1_trim.fastq.gz --out2 /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/run-3_MON_R0_H2_S7_R2_trim.fastq.gz --detect_adapter_for_pe --qualified_quality_phred 20 --trim_poly_g --trim_front1 10 --trim_front2 10 --length_required 20 --thread 2 --overrepresentation_analysis --html /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/trimmed_qc/run-3_MON_R0_H2_S7_fastp.html --json /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/trimmed_qc/run-3_MON_R0_H2_S7_fastp.json 
+fastp v0.23.4, time used: 308 seconds
+Detecting adapter sequence for read1...
+>Illumina TruSeq Adapter Read 1
+AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+
+Detecting adapter sequence for read2...
+>Illumina TruSeq Adapter Read 2
+AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT
+
+Read1 before filtering:
+total reads: 19622358
+total bases: 2962976058
+Q20 bases: 2929928887(98.8847%)
+Q30 bases: 2841284538(95.8929%)
+
+Read2 before filtering:
+total reads: 19622358
+total bases: 2962976058
+Q20 bases: 2931489452(98.9373%)
+Q30 bases: 2836314869(95.7252%)
+
+Read1 after filtering:
+total reads: 19517390
+total bases: 2481332867
+Q20 bases: 2467639116(99.4481%)
+Q30 bases: 2408258933(97.0551%)
+
+Read2 after filtering:
+total reads: 19517390
+total bases: 2481327538
+Q20 bases: 2466527118(99.4035%)
+Q30 bases: 2407805700(97.037%)
+
+Filtering result:
+reads passed filter: 39034780
+reads failed due to low quality: 178938
+reads failed due to too many N: 940
+reads failed due to too short: 30058
+reads with adapter trimmed: 19360951
+bases trimmed due to adapters: 538211032
+
+Duplication rate: 13.5327%
+
+Insert size peak (evaluated by paired-end reads): 131
+
+JSON report: /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/trimmed_qc/run-3_MON_R120_C3_S10_fastp.json
+HTML report: /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/trimmed_qc/run-3_MON_R120_C3_S10_fastp.html
+
+fastp --in1 /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/data_RNA/run-3_MON_R120_C3_S10_R1_001.fastq.gz --in2 /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/data_RNA/run-3_MON_R120_C3_S10_R2_001.fastq.gz --out1 /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/run-3_MON_R120_C3_S10_R1_trim.fastq.gz --out2 /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/run-3_MON_R120_C3_S10_R2_trim.fastq.gz --detect_adapter_for_pe --qualified_quality_phred 20 --trim_poly_g --trim_front1 10 --trim_front2 10 --length_required 20 --thread 2 --overrepresentation_analysis --html /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/trimmed_qc/run-3_MON_R120_C3_S10_fastp.html --json /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/trimmed_qc/run-3_MON_R120_C3_S10_fastp.json 
+fastp v0.23.4, time used: 354 seconds
+Detecting adapter sequence for read1...
+>Illumina TruSeq Adapter Read 1
+AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+
+Detecting adapter sequence for read2...
+>Illumina TruSeq Adapter Read 2
+AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT
+
+Read1 before filtering:
+total reads: 16160207
+total bases: 2440191257
+Q20 bases: 2415704773(98.9965%)
+Q30 bases: 2349359507(96.2777%)
+
+Read2 before filtering:
+total reads: 16160207
+total bases: 2440191257
+Q20 bases: 2416002397(99.0087%)
+Q30 bases: 2339846568(95.8878%)
+
+Read1 after filtering:
+total reads: 16060102
+total bases: 2076626478
+Q20 bases: 2067461920(99.5587%)
+Q30 bases: 2024020621(97.4668%)
+
+Read2 after filtering:
+total reads: 16060102
+total bases: 2076643779
+Q20 bases: 2064836759(99.4314%)
+Q30 bases: 2015660997(97.0634%)
+
+Filtering result:
+reads passed filter: 32120204
+reads failed due to low quality: 133250
+reads failed due to too many N: 760
+reads failed due to too short: 66200
+reads with adapter trimmed: 13810509
+bases trimmed due to adapters: 371757014
+
+Duplication rate: 12.2693%
+
+Insert size peak (evaluated by paired-end reads): 140
+
+JSON report: /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/trimmed_qc/run-3_POC_R120_C1_S4_fastp.json
+HTML report: /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/trimmed_qc/run-3_POC_R120_C1_S4_fastp.html
+
+fastp --in1 /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/data_RNA/run-3_POC_R120_C1_S4_R1_001.fastq.gz --in2 /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/data_RNA/run-3_POC_R120_C1_S4_R2_001.fastq.gz --out1 /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/run-3_POC_R120_C1_S4_R1_trim.fastq.gz --out2 /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/run-3_POC_R120_C1_S4_R2_trim.fastq.gz --detect_adapter_for_pe --qualified_quality_phred 20 --trim_poly_g --trim_front1 10 --trim_front2 10 --length_required 20 --thread 2 --overrepresentation_analysis --html /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/trimmed_qc/run-3_POC_R120_C1_S4_fastp.html --json /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/trimmed_qc/run-3_POC_R120_C1_S4_fastp.json 
+fastp v0.23.4, time used: 390 seconds
+Detecting adapter sequence for read1...
+>Illumina TruSeq Adapter Read 1
+AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+
+Detecting adapter sequence for read2...
+>Illumina TruSeq Adapter Read 2
+AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT
+
+Read1 before filtering:
+total reads: 20965923
+total bases: 3165854373
+Q20 bases: 3136127182(99.061%)
+Q30 bases: 3047543771(96.2629%)
+
+Read2 before filtering:
+total reads: 20965923
+total bases: 3165854373
+Q20 bases: 3134503081(99.0097%)
+Q30 bases: 3041530771(96.073%)
+
+Read1 after filtering:
+total reads: 20854624
+total bases: 2740567949
+Q20 bases: 2725511022(99.4506%)
+Q30 bases: 2660821548(97.0902%)
+
+Read2 after filtering:
+total reads: 20854624
+total bases: 2740558265
+Q20 bases: 2723402251(99.374%)
+Q30 bases: 2658181667(96.9942%)
+
+Filtering result:
+reads passed filter: 41709248
+reads failed due to low quality: 195044
+reads failed due to too many N: 1108
+reads failed due to too short: 26446
+reads with adapter trimmed: 16750705
+bases trimmed due to adapters: 398245143
+
+Duplication rate: 12.1013%
+
+Insert size peak (evaluated by paired-end reads): 140
+
+JSON report: /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/trimmed_qc/run-3_POC_R3_H2_S11_fastp.json
+HTML report: /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/trimmed_qc/run-3_POC_R3_H2_S11_fastp.html
+
+fastp --in1 /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/data_RNA/run-3_POC_R3_H2_S11_R1_001.fastq.gz --in2 /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/data_RNA/run-3_POC_R3_H2_S11_R2_001.fastq.gz --out1 /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/run-3_POC_R3_H2_S11_R1_trim.fastq.gz --out2 /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/run-3_POC_R3_H2_S11_R2_trim.fastq.gz --detect_adapter_for_pe --qualified_quality_phred 20 --trim_poly_g --trim_front1 10 --trim_front2 10 --length_required 20 --thread 2 --overrepresentation_analysis --html /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/trimmed_qc/run-3_POC_R3_H2_S11_fastp.html --json /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/trimmed_qc/run-3_POC_R3_H2_S11_fastp.json 
+fastp v0.23.4, time used: 395 seconds
+Detecting adapter sequence for read1...
+>Illumina TruSeq Adapter Read 1
+AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+
+Detecting adapter sequence for read2...
+>Illumina TruSeq Adapter Read 2
+AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT
+
+Read1 before filtering:
+total reads: 21549300
+total bases: 3253944300
+Q20 bases: 3227673233(99.1926%)
+Q30 bases: 3143101308(96.5936%)
+
+Read2 before filtering:
+total reads: 21549300
+total bases: 3253944300
+Q20 bases: 3223845612(99.075%)
+Q30 bases: 3132065402(96.2544%)
+
+Read1 after filtering:
+total reads: 21435725
+total bases: 2842759326
+Q20 bases: 2829028387(99.517%)
+Q30 bases: 2766643102(97.3225%)
+
+Read2 after filtering:
+total reads: 21435725
+total bases: 2842566387
+Q20 bases: 2826436484(99.4326%)
+Q30 bases: 2761941648(97.1637%)
+
+Filtering result:
+reads passed filter: 42871450
+reads failed due to low quality: 176904
+reads failed due to too many N: 1168
+reads failed due to too short: 49078
+reads with adapter trimmed: 16419070
+bases trimmed due to adapters: 360167729
+
+Duplication rate: 17.7299%
+
+Insert size peak (evaluated by paired-end reads): 141
+
+JSON report: /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/trimmed_qc/run-3_POR_R120_H1_S13_fastp.json
+HTML report: /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/trimmed_qc/run-3_POR_R120_H1_S13_fastp.html
+
+fastp --in1 /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/data_RNA/run-3_POR_R120_H1_S13_R1_001.fastq.gz --in2 /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/data_RNA/run-3_POR_R120_H1_S13_R2_001.fastq.gz --out1 /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/run-3_POR_R120_H1_S13_R1_trim.fastq.gz --out2 /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/run-3_POR_R120_H1_S13_R2_trim.fastq.gz --detect_adapter_for_pe --qualified_quality_phred 20 --trim_poly_g --trim_front1 10 --trim_front2 10 --length_required 20 --thread 2 --overrepresentation_analysis --html /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/trimmed_qc/run-3_POR_R120_H1_S13_fastp.html --json /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/trimmed_qc/run-3_POR_R120_H1_S13_fastp.json 
+fastp v0.23.4, time used: 451 seconds
+Detecting adapter sequence for read1...
+>Illumina TruSeq Adapter Read 1
+AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+
+Detecting adapter sequence for read2...
+>Illumina TruSeq Adapter Read 2
+AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT
+
+Read1 before filtering:
+total reads: 21150038
+total bases: 3193655738
+Q20 bases: 3167005911(99.1655%)
+Q30 bases: 3082852085(96.5305%)
+
+Read2 before filtering:
+total reads: 21150038
+total bases: 3193655738
+Q20 bases: 3163498515(99.0557%)
+Q30 bases: 3071739557(96.1826%)
+
+Read1 after filtering:
+total reads: 21041031
+total bases: 2784968416
+Q20 bases: 2770499211(99.4805%)
+Q30 bases: 2706564097(97.1847%)
+
+Read2 after filtering:
+total reads: 21041031
+total bases: 2784829500
+Q20 bases: 2768632945(99.4184%)
+Q30 bases: 2704336110(97.1096%)
+
+Filtering result:
+reads passed filter: 42082062
+reads failed due to low quality: 187644
+reads failed due to too many N: 1208
+reads failed due to too short: 29162
+reads with adapter trimmed: 16825405
+bases trimmed due to adapters: 363128317
+
+Duplication rate: 14.2924%
+
+Insert size peak (evaluated by paired-end reads): 140
+
+JSON report: /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/trimmed_qc/run-3_MON_R3_H2_S12_fastp.json
+HTML report: /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/trimmed_qc/run-3_MON_R3_H2_S12_fastp.html
+
+fastp --in1 /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/data_RNA/run-3_MON_R3_H2_S12_R1_001.fastq.gz --in2 /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/data_RNA/run-3_MON_R3_H2_S12_R2_001.fastq.gz --out1 /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/run-3_MON_R3_H2_S12_R1_trim.fastq.gz --out2 /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/run-3_MON_R3_H2_S12_R2_trim.fastq.gz --detect_adapter_for_pe --qualified_quality_phred 20 --trim_poly_g --trim_front1 10 --trim_front2 10 --length_required 20 --thread 2 --overrepresentation_analysis --html /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/trimmed_qc/run-3_MON_R3_H2_S12_fastp.html --json /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/trimmed_qc/run-3_MON_R3_H2_S12_fastp.json 
+fastp v0.23.4, time used: 465 seconds
+Detecting adapter sequence for read1...
+>Illumina TruSeq Adapter Read 1
+AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+
+Detecting adapter sequence for read2...
+>Illumina TruSeq Adapter Read 2
+AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT
+
+Read1 before filtering:
+total reads: 21008116
+total bases: 3172225516
+Q20 bases: 3138673887(98.9423%)
+Q30 bases: 3043194904(95.9325%)
+
+Read2 before filtering:
+total reads: 21008116
+total bases: 3172225516
+Q20 bases: 3140006304(98.9843%)
+Q30 bases: 3041138254(95.8677%)
+
+Read1 after filtering:
+total reads: 20865468
+total bases: 2718859455
+Q20 bases: 2703101395(99.4204%)
+Q30 bases: 2635492668(96.9338%)
+
+Read2 after filtering:
+total reads: 20865468
+total bases: 2718885395
+Q20 bases: 2701762748(99.3702%)
+Q30 bases: 2635110162(96.9188%)
+
+Filtering result:
+reads passed filter: 41730936
+reads failed due to low quality: 195060
+reads failed due to too many N: 1134
+reads failed due to too short: 89102
+reads with adapter trimmed: 17561894
+bases trimmed due to adapters: 443401451
+
+Duplication rate: 15.6778%
+
+Insert size peak (evaluated by paired-end reads): 140
+
+JSON report: /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/trimmed_qc/run-3_POC_R12_C3_S6_fastp.json
+HTML report: /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/trimmed_qc/run-3_POC_R12_C3_S6_fastp.html
+
+fastp --in1 /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/data_RNA/run-3_POC_R12_C3_S6_R1_001.fastq.gz --in2 /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/data_RNA/run-3_POC_R12_C3_S6_R2_001.fastq.gz --out1 /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/run-3_POC_R12_C3_S6_R1_trim.fastq.gz --out2 /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/run-3_POC_R12_C3_S6_R2_trim.fastq.gz --detect_adapter_for_pe --qualified_quality_phred 20 --trim_poly_g --trim_front1 10 --trim_front2 10 --length_required 20 --thread 2 --overrepresentation_analysis --html /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/trimmed_qc/run-3_POC_R12_C3_S6_fastp.html --json /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/trimmed_qc/run-3_POC_R12_C3_S6_fastp.json 
+fastp v0.23.4, time used: 487 seconds
+Detecting adapter sequence for read1...
+>Illumina TruSeq Adapter Read 1
+AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+
+Detecting adapter sequence for read2...
+>Illumina TruSeq Adapter Read 2
+AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT
+
+Read1 before filtering:
+total reads: 30147489
+total bases: 4552270839
+Q20 bases: 4474718356(98.2964%)
+Q30 bases: 4297105632(94.3948%)
+
+Read2 before filtering:
+total reads: 30147489
+total bases: 4552270839
+Q20 bases: 4475177310(98.3065%)
+Q30 bases: 4281322323(94.0481%)
+
+Read1 after filtering:
+total reads: 29775438
+total bases: 3822061032
+Q20 bases: 3793245851(99.2461%)
+Q30 bases: 3678067750(96.2326%)
+
+Read2 after filtering:
+total reads: 29775438
+total bases: 3822423594
+Q20 bases: 3788981536(99.1251%)
+Q30 bases: 3670409522(96.0231%)
+
+Filtering result:
+reads passed filter: 59550876
+reads failed due to low quality: 611988
+reads failed due to too many N: 12810
+reads failed due to too short: 119304
+reads with adapter trimmed: 27373199
+bases trimmed due to adapters: 738294150
+
+Duplication rate: 66.9676%
+
+Insert size peak (evaluated by paired-end reads): 143
+
+JSON report: /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/trimmed_qc/run-3_POR_R24_C3_S124_fastp.json
+HTML report: /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/trimmed_qc/run-3_POR_R24_C3_S124_fastp.html
+
+fastp --in1 /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/data_RNA/run-3_POR_R24_C3_S124_R1_001.fastq.gz --in2 /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/data_RNA/run-3_POR_R24_C3_S124_R2_001.fastq.gz --out1 /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/run-3_POR_R24_C3_S124_R1_trim.fastq.gz --out2 /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/run-3_POR_R24_C3_S124_R2_trim.fastq.gz --detect_adapter_for_pe --qualified_quality_phred 20 --trim_poly_g --trim_front1 10 --trim_front2 10 --length_required 20 --thread 2 --overrepresentation_analysis --html /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/trimmed_qc/run-3_POR_R24_C3_S124_fastp.html --json /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/trimmed_qc/run-3_POR_R24_C3_S124_fastp.json 
+fastp v0.23.4, time used: 584 seconds
+Detecting adapter sequence for read1...
+>Illumina TruSeq Adapter Read 1
+AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+
+Detecting adapter sequence for read2...
+>Illumina TruSeq Adapter Read 2
+AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT
+
+Read1 before filtering:
+total reads: 18499464
+total bases: 2793419064
+Q20 bases: 2768879979(99.1215%)
+Q30 bases: 2690467598(96.3145%)
+
+Read2 before filtering:
+total reads: 18499464
+total bases: 2793419064
+Q20 bases: 2753594737(98.5744%)
+Q30 bases: 2647436651(94.7741%)
+
+Read1 after filtering:
+total reads: 18376014
+total bases: 2423396450
+Q20 bases: 2410095774(99.4512%)
+Q30 bases: 2351400292(97.0291%)
+
+Read2 after filtering:
+total reads: 18376014
+total bases: 2423335860
+Q20 bases: 2399811848(99.0293%)
+Q30 bases: 2323397128(95.876%)
+
+Filtering result:
+reads passed filter: 36752028
+reads failed due to low quality: 222642
+reads failed due to too many N: 966
+reads failed due to too short: 23292
+reads with adapter trimmed: 15378681
+bases trimmed due to adapters: 334738666
+
+Duplication rate: 43.7422%
+
+Insert size peak (evaluated by paired-end reads): 141
+
+JSON report: /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/trimmed_qc/run-3_POR_R3_C2_S9_fastp.json
+HTML report: /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/trimmed_qc/run-3_POR_R3_C2_S9_fastp.html
+
+fastp --in1 /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/data_RNA/run-3_POR_R3_C2_S9_R1_001.fastq.gz --in2 /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/data_RNA/run-3_POR_R3_C2_S9_R2_001.fastq.gz --out1 /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/run-3_POR_R3_C2_S9_R1_trim.fastq.gz --out2 /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/run-3_POR_R3_C2_S9_R2_trim.fastq.gz --detect_adapter_for_pe --qualified_quality_phred 20 --trim_poly_g --trim_front1 10 --trim_front2 10 --length_required 20 --thread 2 --overrepresentation_analysis --html /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/trimmed_qc/run-3_POR_R3_C2_S9_fastp.html --json /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/trimmed_qc/run-3_POR_R3_C2_S9_fastp.json 
+fastp v0.23.4, time used: 333 seconds
+Detecting adapter sequence for read1...
+>Illumina TruSeq Adapter Read 1
+AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+
+Detecting adapter sequence for read2...
+>Illumina TruSeq Adapter Read 2
+AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT
+
+Read1 before filtering:
+total reads: 16881208
+total bases: 2549062408
+Q20 bases: 2524703528(99.0444%)
+Q30 bases: 2451109696(96.1573%)
+
+Read2 before filtering:
+total reads: 16881208
+total bases: 2549062408
+Q20 bases: 2518310386(98.7936%)
+Q30 bases: 2429215608(95.2984%)
+
+Read1 after filtering:
+total reads: 16736783
+total bases: 2178697463
+Q20 bases: 2166998534(99.463%)
+Q30 bases: 2114405521(97.0491%)
+
+Read2 after filtering:
+total reads: 16736783
+total bases: 2178630475
+Q20 bases: 2162495858(99.2594%)
+Q30 bases: 2102650332(96.5125%)
+
+Filtering result:
+reads passed filter: 33473566
+reads failed due to low quality: 183950
+reads failed due to too many N: 796
+reads failed due to too short: 104104
+reads with adapter trimmed: 14963529
+bases trimmed due to adapters: 361033481
+
+Duplication rate: 42.7761%
+
+Insert size peak (evaluated by paired-end reads): 140
+
+JSON report: /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/trimmed_qc/run-3_POR_R3_H1_S8_fastp.json
+HTML report: /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/trimmed_qc/run-3_POR_R3_H1_S8_fastp.html
+
+fastp --in1 /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/data_RNA/run-3_POR_R3_H1_S8_R1_001.fastq.gz --in2 /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/data_RNA/run-3_POR_R3_H1_S8_R2_001.fastq.gz --out1 /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/run-3_POR_R3_H1_S8_R1_trim.fastq.gz --out2 /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/run-3_POR_R3_H1_S8_R2_trim.fastq.gz --detect_adapter_for_pe --qualified_quality_phred 20 --trim_poly_g --trim_front1 10 --trim_front2 10 --length_required 20 --thread 2 --overrepresentation_analysis --html /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/trimmed_qc/run-3_POR_R3_H1_S8_fastp.html --json /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/trimmed_qc/run-3_POR_R3_H1_S8_fastp.json 
+fastp v0.23.4, time used: 348 seconds
+Detecting adapter sequence for read1...
+>Illumina TruSeq Adapter Read 1
+AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+
+Detecting adapter sequence for read2...
+>Illumina TruSeq Adapter Read 2
+AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT
+
+Read1 before filtering:
+total reads: 34978730
+total bases: 5281788230
+Q20 bases: 5184232751(98.153%)
+Q30 bases: 4962032618(93.9461%)
+
+Read2 before filtering:
+total reads: 34978730
+total bases: 5281788230
+Q20 bases: 5186771086(98.201%)
+Q30 bases: 4943386040(93.593%)
+
+Read1 after filtering:
+total reads: 34339678
+total bases: 4354718503
+Q20 bases: 4321080040(99.2275%)
+Q30 bases: 4188574179(96.1847%)
+
+Read2 after filtering:
+total reads: 34339678
+total bases: 4355511069
+Q20 bases: 4316363593(99.1012%)
+Q30 bases: 4177238356(95.907%)
+
+Filtering result:
+reads passed filter: 68679356
+reads failed due to low quality: 706698
+reads failed due to too many N: 14232
+reads failed due to too short: 557174
+reads with adapter trimmed: 33603251
+bases trimmed due to adapters: 940380688
+
+Duplication rate: 70.0349%
+
+Insert size peak (evaluated by paired-end reads): 140
+
+JSON report: /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/trimmed_qc/run-3_POR_R120_C1_S123_fastp.json
+HTML report: /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/trimmed_qc/run-3_POR_R120_C1_S123_fastp.html
+
+fastp --in1 /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/data_RNA/run-3_POR_R120_C1_S123_R1_001.fastq.gz --in2 /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/data_RNA/run-3_POR_R120_C1_S123_R2_001.fastq.gz --out1 /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/run-3_POR_R120_C1_S123_R1_trim.fastq.gz --out2 /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/run-3_POR_R120_C1_S123_R2_trim.fastq.gz --detect_adapter_for_pe --qualified_quality_phred 20 --trim_poly_g --trim_front1 10 --trim_front2 10 --length_required 20 --thread 2 --overrepresentation_analysis --html /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/trimmed_qc/run-3_POR_R120_C1_S123_fastp.html --json /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/trimmed_qc/run-3_POR_R120_C1_S123_fastp.json 
+fastp v0.23.4, time used: 792 seconds
+Loading openjdk version 17.0.8.1_1
+Loading fastqc version 0.12.1
+Loading uri version main
+NOTE: The modules under this branch will not run on the login node. Use
+--constraint=avx512 for sbatch or srun sessions. 
+Removing gzip version 1.13
+
+The following have been reloaded with a version change:
+  1) gzip/1.13-6ywtnqq => gzip/1.10-GCCcore-11.2.0
+
+Started analysis of run-3_POC_R1_H1_S5_R1_trim.fastq.gz
+Approx 5% complete for run-3_POC_R1_H1_S5_R1_trim.fastq.gz
+Approx 10% complete for run-3_POC_R1_H1_S5_R1_trim.fastq.gz
+Approx 15% complete for run-3_POC_R1_H1_S5_R1_trim.fastq.gz
+Approx 20% complete for run-3_POC_R1_H1_S5_R1_trim.fastq.gz
+Approx 25% complete for run-3_POC_R1_H1_S5_R1_trim.fastq.gz
+Approx 30% complete for run-3_POC_R1_H1_S5_R1_trim.fastq.gz
+Approx 35% complete for run-3_POC_R1_H1_S5_R1_trim.fastq.gz
+Approx 40% complete for run-3_POC_R1_H1_S5_R1_trim.fastq.gz
+Approx 45% complete for run-3_POC_R1_H1_S5_R1_trim.fastq.gz
+Approx 50% complete for run-3_POC_R1_H1_S5_R1_trim.fastq.gz
+Approx 55% complete for run-3_POC_R1_H1_S5_R1_trim.fastq.gz
+Approx 60% complete for run-3_POC_R1_H1_S5_R1_trim.fastq.gz
+Approx 65% complete for run-3_POC_R1_H1_S5_R1_trim.fastq.gz
+Approx 70% complete for run-3_POC_R1_H1_S5_R1_trim.fastq.gz
+Approx 75% complete for run-3_POC_R1_H1_S5_R1_trim.fastq.gz
+Approx 80% complete for run-3_POC_R1_H1_S5_R1_trim.fastq.gz
+Approx 85% complete for run-3_POC_R1_H1_S5_R1_trim.fastq.gz
+Approx 90% complete for run-3_POC_R1_H1_S5_R1_trim.fastq.gz
+Approx 95% complete for run-3_POC_R1_H1_S5_R1_trim.fastq.gz
+Started analysis of run-3_POC_R120_C1_S4_R1_trim.fastq.gz
+Approx 5% complete for run-3_POC_R120_C1_S4_R1_trim.fastq.gz
+Approx 10% complete for run-3_POC_R120_C1_S4_R1_trim.fastq.gz
+Approx 15% complete for run-3_POC_R120_C1_S4_R1_trim.fastq.gz
+Approx 20% complete for run-3_POC_R120_C1_S4_R1_trim.fastq.gz
+Approx 25% complete for run-3_POC_R120_C1_S4_R1_trim.fastq.gz
+Approx 30% complete for run-3_POC_R120_C1_S4_R1_trim.fastq.gz
+Approx 35% complete for run-3_POC_R120_C1_S4_R1_trim.fastq.gz
+Approx 40% complete for run-3_POC_R120_C1_S4_R1_trim.fastq.gz
+Approx 45% complete for run-3_POC_R120_C1_S4_R1_trim.fastq.gz
+Approx 50% complete for run-3_POC_R120_C1_S4_R1_trim.fastq.gz
+Approx 55% complete for run-3_POC_R120_C1_S4_R1_trim.fastq.gz
+Approx 60% complete for run-3_POC_R120_C1_S4_R1_trim.fastq.gz
+Approx 65% complete for run-3_POC_R120_C1_S4_R1_trim.fastq.gz
+Approx 70% complete for run-3_POC_R120_C1_S4_R1_trim.fastq.gz
+Approx 75% complete for run-3_POC_R120_C1_S4_R1_trim.fastq.gz
+Approx 80% complete for run-3_POC_R120_C1_S4_R1_trim.fastq.gz
+Approx 85% complete for run-3_POC_R120_C1_S4_R1_trim.fastq.gz
+Approx 90% complete for run-3_POC_R120_C1_S4_R1_trim.fastq.gz
+Approx 95% complete for run-3_POC_R120_C1_S4_R1_trim.fastq.gz
+Started analysis of run-3_POC_R120_C1_S4_R2_trim.fastq.gz
+Approx 5% complete for run-3_POC_R120_C1_S4_R2_trim.fastq.gz
+Approx 10% complete for run-3_POC_R120_C1_S4_R2_trim.fastq.gz
+Approx 15% complete for run-3_POC_R120_C1_S4_R2_trim.fastq.gz
+Approx 20% complete for run-3_POC_R120_C1_S4_R2_trim.fastq.gz
+Approx 25% complete for run-3_POC_R120_C1_S4_R2_trim.fastq.gz
+Approx 30% complete for run-3_POC_R120_C1_S4_R2_trim.fastq.gz
+Approx 35% complete for run-3_POC_R120_C1_S4_R2_trim.fastq.gz
+Approx 40% complete for run-3_POC_R120_C1_S4_R2_trim.fastq.gz
+Approx 45% complete for run-3_POC_R120_C1_S4_R2_trim.fastq.gz
+Approx 50% complete for run-3_POC_R120_C1_S4_R2_trim.fastq.gz
+Approx 55% complete for run-3_POC_R120_C1_S4_R2_trim.fastq.gz
+Approx 60% complete for run-3_POC_R120_C1_S4_R2_trim.fastq.gz
+Approx 65% complete for run-3_POC_R120_C1_S4_R2_trim.fastq.gz
+Approx 70% complete for run-3_POC_R120_C1_S4_R2_trim.fastq.gz
+Approx 75% complete for run-3_POC_R120_C1_S4_R2_trim.fastq.gz
+Approx 80% complete for run-3_POC_R120_C1_S4_R2_trim.fastq.gz
+Approx 85% complete for run-3_POC_R120_C1_S4_R2_trim.fastq.gz
+Approx 90% complete for run-3_POC_R120_C1_S4_R2_trim.fastq.gz
+Approx 95% complete for run-3_POC_R120_C1_S4_R2_trim.fastq.gz
+Started analysis of run-3_POC_R1_H1_S5_R2_trim.fastq.gz
+Approx 5% complete for run-3_POC_R1_H1_S5_R2_trim.fastq.gz
+Approx 10% complete for run-3_POC_R1_H1_S5_R2_trim.fastq.gz
+Approx 15% complete for run-3_POC_R1_H1_S5_R2_trim.fastq.gz
+Approx 20% complete for run-3_POC_R1_H1_S5_R2_trim.fastq.gz
+Approx 25% complete for run-3_POC_R1_H1_S5_R2_trim.fastq.gz
+Approx 30% complete for run-3_POC_R1_H1_S5_R2_trim.fastq.gz
+Approx 35% complete for run-3_POC_R1_H1_S5_R2_trim.fastq.gz
+Approx 40% complete for run-3_POC_R1_H1_S5_R2_trim.fastq.gz
+Approx 45% complete for run-3_POC_R1_H1_S5_R2_trim.fastq.gz
+Approx 50% complete for run-3_POC_R1_H1_S5_R2_trim.fastq.gz
+Approx 55% complete for run-3_POC_R1_H1_S5_R2_trim.fastq.gz
+Approx 60% complete for run-3_POC_R1_H1_S5_R2_trim.fastq.gz
+Approx 65% complete for run-3_POC_R1_H1_S5_R2_trim.fastq.gz
+Approx 70% complete for run-3_POC_R1_H1_S5_R2_trim.fastq.gz
+Approx 75% complete for run-3_POC_R1_H1_S5_R2_trim.fastq.gz
+Approx 80% complete for run-3_POC_R1_H1_S5_R2_trim.fastq.gz
+Approx 85% complete for run-3_POC_R1_H1_S5_R2_trim.fastq.gz
+Approx 90% complete for run-3_POC_R1_H1_S5_R2_trim.fastq.gz
+Approx 95% complete for run-3_POC_R1_H1_S5_R2_trim.fastq.gz
+Started analysis of run-3_MON_R0_H2_S7_R2_trim.fastq.gz
+Approx 5% complete for run-3_MON_R0_H2_S7_R2_trim.fastq.gz
+Approx 10% complete for run-3_MON_R0_H2_S7_R2_trim.fastq.gz
+Approx 15% complete for run-3_MON_R0_H2_S7_R2_trim.fastq.gz
+Approx 20% complete for run-3_MON_R0_H2_S7_R2_trim.fastq.gz
+Approx 25% complete for run-3_MON_R0_H2_S7_R2_trim.fastq.gz
+Approx 30% complete for run-3_MON_R0_H2_S7_R2_trim.fastq.gz
+Approx 35% complete for run-3_MON_R0_H2_S7_R2_trim.fastq.gz
+Approx 40% complete for run-3_MON_R0_H2_S7_R2_trim.fastq.gz
+Approx 45% complete for run-3_MON_R0_H2_S7_R2_trim.fastq.gz
+Approx 50% complete for run-3_MON_R0_H2_S7_R2_trim.fastq.gz
+Approx 55% complete for run-3_MON_R0_H2_S7_R2_trim.fastq.gz
+Approx 60% complete for run-3_MON_R0_H2_S7_R2_trim.fastq.gz
+Approx 65% complete for run-3_MON_R0_H2_S7_R2_trim.fastq.gz
+Approx 70% complete for run-3_MON_R0_H2_S7_R2_trim.fastq.gz
+Approx 75% complete for run-3_MON_R0_H2_S7_R2_trim.fastq.gz
+Approx 80% complete for run-3_MON_R0_H2_S7_R2_trim.fastq.gz
+Approx 85% complete for run-3_MON_R0_H2_S7_R2_trim.fastq.gz
+Approx 90% complete for run-3_MON_R0_H2_S7_R2_trim.fastq.gz
+Approx 95% complete for run-3_MON_R0_H2_S7_R2_trim.fastq.gz
+Started analysis of run-3_MON_R120_C3_S10_R2_trim.fastq.gz
+Approx 5% complete for run-3_MON_R120_C3_S10_R2_trim.fastq.gz
+Approx 10% complete for run-3_MON_R120_C3_S10_R2_trim.fastq.gz
+Approx 15% complete for run-3_MON_R120_C3_S10_R2_trim.fastq.gz
+Approx 20% complete for run-3_MON_R120_C3_S10_R2_trim.fastq.gz
+Approx 25% complete for run-3_MON_R120_C3_S10_R2_trim.fastq.gz
+Approx 30% complete for run-3_MON_R120_C3_S10_R2_trim.fastq.gz
+Approx 35% complete for run-3_MON_R120_C3_S10_R2_trim.fastq.gz
+Approx 40% complete for run-3_MON_R120_C3_S10_R2_trim.fastq.gz
+Approx 45% complete for run-3_MON_R120_C3_S10_R2_trim.fastq.gz
+Approx 50% complete for run-3_MON_R120_C3_S10_R2_trim.fastq.gz
+Approx 55% complete for run-3_MON_R120_C3_S10_R2_trim.fastq.gz
+Approx 60% complete for run-3_MON_R120_C3_S10_R2_trim.fastq.gz
+Approx 65% complete for run-3_MON_R120_C3_S10_R2_trim.fastq.gz
+Approx 70% complete for run-3_MON_R120_C3_S10_R2_trim.fastq.gz
+Approx 75% complete for run-3_MON_R120_C3_S10_R2_trim.fastq.gz
+Approx 80% complete for run-3_MON_R120_C3_S10_R2_trim.fastq.gz
+Approx 85% complete for run-3_MON_R120_C3_S10_R2_trim.fastq.gz
+Approx 90% complete for run-3_MON_R120_C3_S10_R2_trim.fastq.gz
+Approx 95% complete for run-3_MON_R120_C3_S10_R2_trim.fastq.gz
+Started analysis of run-3_MON_R0_H2_S7_R1_trim.fastq.gz
+Approx 5% complete for run-3_MON_R0_H2_S7_R1_trim.fastq.gz
+Approx 10% complete for run-3_MON_R0_H2_S7_R1_trim.fastq.gz
+Approx 15% complete for run-3_MON_R0_H2_S7_R1_trim.fastq.gz
+Approx 20% complete for run-3_MON_R0_H2_S7_R1_trim.fastq.gz
+Approx 25% complete for run-3_MON_R0_H2_S7_R1_trim.fastq.gz
+Approx 30% complete for run-3_MON_R0_H2_S7_R1_trim.fastq.gz
+Approx 35% complete for run-3_MON_R0_H2_S7_R1_trim.fastq.gz
+Approx 40% complete for run-3_MON_R0_H2_S7_R1_trim.fastq.gz
+Approx 45% complete for run-3_MON_R0_H2_S7_R1_trim.fastq.gz
+Approx 50% complete for run-3_MON_R0_H2_S7_R1_trim.fastq.gz
+Approx 55% complete for run-3_MON_R0_H2_S7_R1_trim.fastq.gz
+Approx 60% complete for run-3_MON_R0_H2_S7_R1_trim.fastq.gz
+Approx 65% complete for run-3_MON_R0_H2_S7_R1_trim.fastq.gz
+Approx 70% complete for run-3_MON_R0_H2_S7_R1_trim.fastq.gz
+Approx 75% complete for run-3_MON_R0_H2_S7_R1_trim.fastq.gz
+Approx 80% complete for run-3_MON_R0_H2_S7_R1_trim.fastq.gz
+Approx 85% complete for run-3_MON_R0_H2_S7_R1_trim.fastq.gz
+Approx 90% complete for run-3_MON_R0_H2_S7_R1_trim.fastq.gz
+Approx 95% complete for run-3_MON_R0_H2_S7_R1_trim.fastq.gz
+Started analysis of run-3_POC_R3_H2_S11_R2_trim.fastq.gz
+Approx 5% complete for run-3_POC_R3_H2_S11_R2_trim.fastq.gz
+Approx 10% complete for run-3_POC_R3_H2_S11_R2_trim.fastq.gz
+Approx 15% complete for run-3_POC_R3_H2_S11_R2_trim.fastq.gz
+Approx 20% complete for run-3_POC_R3_H2_S11_R2_trim.fastq.gz
+Approx 25% complete for run-3_POC_R3_H2_S11_R2_trim.fastq.gz
+Approx 30% complete for run-3_POC_R3_H2_S11_R2_trim.fastq.gz
+Approx 35% complete for run-3_POC_R3_H2_S11_R2_trim.fastq.gz
+Approx 40% complete for run-3_POC_R3_H2_S11_R2_trim.fastq.gz
+Approx 45% complete for run-3_POC_R3_H2_S11_R2_trim.fastq.gz
+Approx 50% complete for run-3_POC_R3_H2_S11_R2_trim.fastq.gz
+Approx 55% complete for run-3_POC_R3_H2_S11_R2_trim.fastq.gz
+Approx 60% complete for run-3_POC_R3_H2_S11_R2_trim.fastq.gz
+Approx 65% complete for run-3_POC_R3_H2_S11_R2_trim.fastq.gz
+Approx 70% complete for run-3_POC_R3_H2_S11_R2_trim.fastq.gz
+Approx 75% complete for run-3_POC_R3_H2_S11_R2_trim.fastq.gz
+Approx 80% complete for run-3_POC_R3_H2_S11_R2_trim.fastq.gz
+Approx 85% complete for run-3_POC_R3_H2_S11_R2_trim.fastq.gz
+Approx 90% complete for run-3_POC_R3_H2_S11_R2_trim.fastq.gz
+Approx 95% complete for run-3_POC_R3_H2_S11_R2_trim.fastq.gz
+Started analysis of run-3_POC_R12_C3_S6_R1_trim.fastq.gz
+Approx 5% complete for run-3_POC_R12_C3_S6_R1_trim.fastq.gz
+Approx 10% complete for run-3_POC_R12_C3_S6_R1_trim.fastq.gz
+Approx 15% complete for run-3_POC_R12_C3_S6_R1_trim.fastq.gz
+Approx 20% complete for run-3_POC_R12_C3_S6_R1_trim.fastq.gz
+Approx 25% complete for run-3_POC_R12_C3_S6_R1_trim.fastq.gz
+Approx 30% complete for run-3_POC_R12_C3_S6_R1_trim.fastq.gz
+Approx 35% complete for run-3_POC_R12_C3_S6_R1_trim.fastq.gz
+Approx 40% complete for run-3_POC_R12_C3_S6_R1_trim.fastq.gz
+Approx 45% complete for run-3_POC_R12_C3_S6_R1_trim.fastq.gz
+Approx 50% complete for run-3_POC_R12_C3_S6_R1_trim.fastq.gz
+Approx 55% complete for run-3_POC_R12_C3_S6_R1_trim.fastq.gz
+Approx 60% complete for run-3_POC_R12_C3_S6_R1_trim.fastq.gz
+Approx 65% complete for run-3_POC_R12_C3_S6_R1_trim.fastq.gz
+Approx 70% complete for run-3_POC_R12_C3_S6_R1_trim.fastq.gz
+Approx 75% complete for run-3_POC_R12_C3_S6_R1_trim.fastq.gz
+Approx 80% complete for run-3_POC_R12_C3_S6_R1_trim.fastq.gz
+Approx 85% complete for run-3_POC_R12_C3_S6_R1_trim.fastq.gz
+Approx 90% complete for run-3_POC_R12_C3_S6_R1_trim.fastq.gz
+Approx 95% complete for run-3_POC_R12_C3_S6_R1_trim.fastq.gz
+Started analysis of run-3_MON_R120_C3_S10_R1_trim.fastq.gz
+Approx 5% complete for run-3_MON_R120_C3_S10_R1_trim.fastq.gz
+Approx 10% complete for run-3_MON_R120_C3_S10_R1_trim.fastq.gz
+Approx 15% complete for run-3_MON_R120_C3_S10_R1_trim.fastq.gz
+Approx 20% complete for run-3_MON_R120_C3_S10_R1_trim.fastq.gz
+Approx 25% complete for run-3_MON_R120_C3_S10_R1_trim.fastq.gz
+Approx 30% complete for run-3_MON_R120_C3_S10_R1_trim.fastq.gz
+Approx 35% complete for run-3_MON_R120_C3_S10_R1_trim.fastq.gz
+Approx 40% complete for run-3_MON_R120_C3_S10_R1_trim.fastq.gz
+Approx 45% complete for run-3_MON_R120_C3_S10_R1_trim.fastq.gz
+Approx 50% complete for run-3_MON_R120_C3_S10_R1_trim.fastq.gz
+Approx 55% complete for run-3_MON_R120_C3_S10_R1_trim.fastq.gz
+Approx 60% complete for run-3_MON_R120_C3_S10_R1_trim.fastq.gz
+Approx 65% complete for run-3_MON_R120_C3_S10_R1_trim.fastq.gz
+Approx 70% complete for run-3_MON_R120_C3_S10_R1_trim.fastq.gz
+Approx 75% complete for run-3_MON_R120_C3_S10_R1_trim.fastq.gz
+Approx 80% complete for run-3_MON_R120_C3_S10_R1_trim.fastq.gz
+Approx 85% complete for run-3_MON_R120_C3_S10_R1_trim.fastq.gz
+Approx 90% complete for run-3_MON_R120_C3_S10_R1_trim.fastq.gz
+Approx 95% complete for run-3_MON_R120_C3_S10_R1_trim.fastq.gz
+Started analysis of run-3_MON_R3_H2_S12_R1_trim.fastq.gz
+Approx 5% complete for run-3_MON_R3_H2_S12_R1_trim.fastq.gz
+Approx 10% complete for run-3_MON_R3_H2_S12_R1_trim.fastq.gz
+Approx 15% complete for run-3_MON_R3_H2_S12_R1_trim.fastq.gz
+Approx 20% complete for run-3_MON_R3_H2_S12_R1_trim.fastq.gz
+Approx 25% complete for run-3_MON_R3_H2_S12_R1_trim.fastq.gz
+Approx 30% complete for run-3_MON_R3_H2_S12_R1_trim.fastq.gz
+Approx 35% complete for run-3_MON_R3_H2_S12_R1_trim.fastq.gz
+Approx 40% complete for run-3_MON_R3_H2_S12_R1_trim.fastq.gz
+Approx 45% complete for run-3_MON_R3_H2_S12_R1_trim.fastq.gz
+Approx 50% complete for run-3_MON_R3_H2_S12_R1_trim.fastq.gz
+Approx 55% complete for run-3_MON_R3_H2_S12_R1_trim.fastq.gz
+Approx 60% complete for run-3_MON_R3_H2_S12_R1_trim.fastq.gz
+Approx 65% complete for run-3_MON_R3_H2_S12_R1_trim.fastq.gz
+Approx 70% complete for run-3_MON_R3_H2_S12_R1_trim.fastq.gz
+Approx 75% complete for run-3_MON_R3_H2_S12_R1_trim.fastq.gz
+Approx 80% complete for run-3_MON_R3_H2_S12_R1_trim.fastq.gz
+Approx 85% complete for run-3_MON_R3_H2_S12_R1_trim.fastq.gz
+Approx 90% complete for run-3_MON_R3_H2_S12_R1_trim.fastq.gz
+Approx 95% complete for run-3_MON_R3_H2_S12_R1_trim.fastq.gz
+Started analysis of run-3_POC_R12_C3_S6_R2_trim.fastq.gz
+Approx 5% complete for run-3_POC_R12_C3_S6_R2_trim.fastq.gz
+Approx 10% complete for run-3_POC_R12_C3_S6_R2_trim.fastq.gz
+Approx 15% complete for run-3_POC_R12_C3_S6_R2_trim.fastq.gz
+Approx 20% complete for run-3_POC_R12_C3_S6_R2_trim.fastq.gz
+Approx 25% complete for run-3_POC_R12_C3_S6_R2_trim.fastq.gz
+Approx 30% complete for run-3_POC_R12_C3_S6_R2_trim.fastq.gz
+Approx 35% complete for run-3_POC_R12_C3_S6_R2_trim.fastq.gz
+Approx 40% complete for run-3_POC_R12_C3_S6_R2_trim.fastq.gz
+Approx 45% complete for run-3_POC_R12_C3_S6_R2_trim.fastq.gz
+Approx 50% complete for run-3_POC_R12_C3_S6_R2_trim.fastq.gz
+Approx 55% complete for run-3_POC_R12_C3_S6_R2_trim.fastq.gz
+Approx 60% complete for run-3_POC_R12_C3_S6_R2_trim.fastq.gz
+Approx 65% complete for run-3_POC_R12_C3_S6_R2_trim.fastq.gz
+Approx 70% complete for run-3_POC_R12_C3_S6_R2_trim.fastq.gz
+Approx 75% complete for run-3_POC_R12_C3_S6_R2_trim.fastq.gz
+Approx 80% complete for run-3_POC_R12_C3_S6_R2_trim.fastq.gz
+Approx 85% complete for run-3_POC_R12_C3_S6_R2_trim.fastq.gz
+Approx 90% complete for run-3_POC_R12_C3_S6_R2_trim.fastq.gz
+Approx 95% complete for run-3_POC_R12_C3_S6_R2_trim.fastq.gz
+Started analysis of run-3_MON_R3_H2_S12_R2_trim.fastq.gz
+Approx 5% complete for run-3_MON_R3_H2_S12_R2_trim.fastq.gz
+Approx 10% complete for run-3_MON_R3_H2_S12_R2_trim.fastq.gz
+Approx 15% complete for run-3_MON_R3_H2_S12_R2_trim.fastq.gz
+Approx 20% complete for run-3_MON_R3_H2_S12_R2_trim.fastq.gz
+Approx 25% complete for run-3_MON_R3_H2_S12_R2_trim.fastq.gz
+Approx 30% complete for run-3_MON_R3_H2_S12_R2_trim.fastq.gz
+Approx 35% complete for run-3_MON_R3_H2_S12_R2_trim.fastq.gz
+Approx 40% complete for run-3_MON_R3_H2_S12_R2_trim.fastq.gz
+Approx 45% complete for run-3_MON_R3_H2_S12_R2_trim.fastq.gz
+Approx 50% complete for run-3_MON_R3_H2_S12_R2_trim.fastq.gz
+Approx 55% complete for run-3_MON_R3_H2_S12_R2_trim.fastq.gz
+Approx 60% complete for run-3_MON_R3_H2_S12_R2_trim.fastq.gz
+Approx 65% complete for run-3_MON_R3_H2_S12_R2_trim.fastq.gz
+Approx 70% complete for run-3_MON_R3_H2_S12_R2_trim.fastq.gz
+Approx 75% complete for run-3_MON_R3_H2_S12_R2_trim.fastq.gz
+Approx 80% complete for run-3_MON_R3_H2_S12_R2_trim.fastq.gz
+Approx 85% complete for run-3_MON_R3_H2_S12_R2_trim.fastq.gz
+Approx 90% complete for run-3_MON_R3_H2_S12_R2_trim.fastq.gz
+Approx 95% complete for run-3_MON_R3_H2_S12_R2_trim.fastq.gz
+Started analysis of run-3_POR_R120_H1_S13_R2_trim.fastq.gz
+Approx 5% complete for run-3_POR_R120_H1_S13_R2_trim.fastq.gz
+Approx 10% complete for run-3_POR_R120_H1_S13_R2_trim.fastq.gz
+Approx 15% complete for run-3_POR_R120_H1_S13_R2_trim.fastq.gz
+Approx 20% complete for run-3_POR_R120_H1_S13_R2_trim.fastq.gz
+Approx 25% complete for run-3_POR_R120_H1_S13_R2_trim.fastq.gz
+Approx 30% complete for run-3_POR_R120_H1_S13_R2_trim.fastq.gz
+Approx 35% complete for run-3_POR_R120_H1_S13_R2_trim.fastq.gz
+Approx 40% complete for run-3_POR_R120_H1_S13_R2_trim.fastq.gz
+Approx 45% complete for run-3_POR_R120_H1_S13_R2_trim.fastq.gz
+Approx 50% complete for run-3_POR_R120_H1_S13_R2_trim.fastq.gz
+Approx 55% complete for run-3_POR_R120_H1_S13_R2_trim.fastq.gz
+Approx 60% complete for run-3_POR_R120_H1_S13_R2_trim.fastq.gz
+Approx 65% complete for run-3_POR_R120_H1_S13_R2_trim.fastq.gz
+Approx 70% complete for run-3_POR_R120_H1_S13_R2_trim.fastq.gz
+Approx 75% complete for run-3_POR_R120_H1_S13_R2_trim.fastq.gz
+Approx 80% complete for run-3_POR_R120_H1_S13_R2_trim.fastq.gz
+Approx 85% complete for run-3_POR_R120_H1_S13_R2_trim.fastq.gz
+Approx 90% complete for run-3_POR_R120_H1_S13_R2_trim.fastq.gz
+Approx 95% complete for run-3_POR_R120_H1_S13_R2_trim.fastq.gz
+Started analysis of run-3_POC_R3_H2_S11_R1_trim.fastq.gz
+Approx 5% complete for run-3_POC_R3_H2_S11_R1_trim.fastq.gz
+Approx 10% complete for run-3_POC_R3_H2_S11_R1_trim.fastq.gz
+Approx 15% complete for run-3_POC_R3_H2_S11_R1_trim.fastq.gz
+Approx 20% complete for run-3_POC_R3_H2_S11_R1_trim.fastq.gz
+Approx 25% complete for run-3_POC_R3_H2_S11_R1_trim.fastq.gz
+Approx 30% complete for run-3_POC_R3_H2_S11_R1_trim.fastq.gz
+Approx 35% complete for run-3_POC_R3_H2_S11_R1_trim.fastq.gz
+Approx 40% complete for run-3_POC_R3_H2_S11_R1_trim.fastq.gz
+Approx 45% complete for run-3_POC_R3_H2_S11_R1_trim.fastq.gz
+Approx 50% complete for run-3_POC_R3_H2_S11_R1_trim.fastq.gz
+Approx 55% complete for run-3_POC_R3_H2_S11_R1_trim.fastq.gz
+Approx 60% complete for run-3_POC_R3_H2_S11_R1_trim.fastq.gz
+Approx 65% complete for run-3_POC_R3_H2_S11_R1_trim.fastq.gz
+Approx 70% complete for run-3_POC_R3_H2_S11_R1_trim.fastq.gz
+Approx 75% complete for run-3_POC_R3_H2_S11_R1_trim.fastq.gz
+Approx 80% complete for run-3_POC_R3_H2_S11_R1_trim.fastq.gz
+Approx 85% complete for run-3_POC_R3_H2_S11_R1_trim.fastq.gz
+Approx 90% complete for run-3_POC_R3_H2_S11_R1_trim.fastq.gz
+Approx 95% complete for run-3_POC_R3_H2_S11_R1_trim.fastq.gz
+Started analysis of run-3_POR_R120_H1_S13_R1_trim.fastq.gz
+Approx 5% complete for run-3_POR_R120_H1_S13_R1_trim.fastq.gz
+Approx 10% complete for run-3_POR_R120_H1_S13_R1_trim.fastq.gz
+Approx 15% complete for run-3_POR_R120_H1_S13_R1_trim.fastq.gz
+Approx 20% complete for run-3_POR_R120_H1_S13_R1_trim.fastq.gz
+Approx 25% complete for run-3_POR_R120_H1_S13_R1_trim.fastq.gz
+Approx 30% complete for run-3_POR_R120_H1_S13_R1_trim.fastq.gz
+Approx 35% complete for run-3_POR_R120_H1_S13_R1_trim.fastq.gz
+Approx 40% complete for run-3_POR_R120_H1_S13_R1_trim.fastq.gz
+Approx 45% complete for run-3_POR_R120_H1_S13_R1_trim.fastq.gz
+Approx 50% complete for run-3_POR_R120_H1_S13_R1_trim.fastq.gz
+Approx 55% complete for run-3_POR_R120_H1_S13_R1_trim.fastq.gz
+Approx 60% complete for run-3_POR_R120_H1_S13_R1_trim.fastq.gz
+Approx 65% complete for run-3_POR_R120_H1_S13_R1_trim.fastq.gz
+Approx 70% complete for run-3_POR_R120_H1_S13_R1_trim.fastq.gz
+Approx 75% complete for run-3_POR_R120_H1_S13_R1_trim.fastq.gz
+Approx 80% complete for run-3_POR_R120_H1_S13_R1_trim.fastq.gz
+Approx 85% complete for run-3_POR_R120_H1_S13_R1_trim.fastq.gz
+Approx 90% complete for run-3_POR_R120_H1_S13_R1_trim.fastq.gz
+Approx 95% complete for run-3_POR_R120_H1_S13_R1_trim.fastq.gz
+Started analysis of run-3_POR_R24_C3_S124_R1_trim.fastq.gz
+Approx 5% complete for run-3_POR_R24_C3_S124_R1_trim.fastq.gz
+Approx 10% complete for run-3_POR_R24_C3_S124_R1_trim.fastq.gz
+Approx 15% complete for run-3_POR_R24_C3_S124_R1_trim.fastq.gz
+Approx 20% complete for run-3_POR_R24_C3_S124_R1_trim.fastq.gz
+Approx 25% complete for run-3_POR_R24_C3_S124_R1_trim.fastq.gz
+Approx 30% complete for run-3_POR_R24_C3_S124_R1_trim.fastq.gz
+Approx 35% complete for run-3_POR_R24_C3_S124_R1_trim.fastq.gz
+Approx 40% complete for run-3_POR_R24_C3_S124_R1_trim.fastq.gz
+Approx 45% complete for run-3_POR_R24_C3_S124_R1_trim.fastq.gz
+Approx 50% complete for run-3_POR_R24_C3_S124_R1_trim.fastq.gz
+Approx 55% complete for run-3_POR_R24_C3_S124_R1_trim.fastq.gz
+Approx 60% complete for run-3_POR_R24_C3_S124_R1_trim.fastq.gz
+Approx 65% complete for run-3_POR_R24_C3_S124_R1_trim.fastq.gz
+Approx 70% complete for run-3_POR_R24_C3_S124_R1_trim.fastq.gz
+Approx 75% complete for run-3_POR_R24_C3_S124_R1_trim.fastq.gz
+Approx 80% complete for run-3_POR_R24_C3_S124_R1_trim.fastq.gz
+Approx 85% complete for run-3_POR_R24_C3_S124_R1_trim.fastq.gz
+Approx 90% complete for run-3_POR_R24_C3_S124_R1_trim.fastq.gz
+Approx 95% complete for run-3_POR_R24_C3_S124_R1_trim.fastq.gz
+Started analysis of run-3_POR_R24_C3_S124_R2_trim.fastq.gz
+Approx 5% complete for run-3_POR_R24_C3_S124_R2_trim.fastq.gz
+Approx 10% complete for run-3_POR_R24_C3_S124_R2_trim.fastq.gz
+Approx 15% complete for run-3_POR_R24_C3_S124_R2_trim.fastq.gz
+Approx 20% complete for run-3_POR_R24_C3_S124_R2_trim.fastq.gz
+Approx 25% complete for run-3_POR_R24_C3_S124_R2_trim.fastq.gz
+Approx 30% complete for run-3_POR_R24_C3_S124_R2_trim.fastq.gz
+Approx 35% complete for run-3_POR_R24_C3_S124_R2_trim.fastq.gz
+Approx 40% complete for run-3_POR_R24_C3_S124_R2_trim.fastq.gz
+Approx 45% complete for run-3_POR_R24_C3_S124_R2_trim.fastq.gz
+Approx 50% complete for run-3_POR_R24_C3_S124_R2_trim.fastq.gz
+Approx 55% complete for run-3_POR_R24_C3_S124_R2_trim.fastq.gz
+Approx 60% complete for run-3_POR_R24_C3_S124_R2_trim.fastq.gz
+Approx 65% complete for run-3_POR_R24_C3_S124_R2_trim.fastq.gz
+Approx 70% complete for run-3_POR_R24_C3_S124_R2_trim.fastq.gz
+Approx 75% complete for run-3_POR_R24_C3_S124_R2_trim.fastq.gz
+Approx 80% complete for run-3_POR_R24_C3_S124_R2_trim.fastq.gz
+Approx 85% complete for run-3_POR_R24_C3_S124_R2_trim.fastq.gz
+Approx 90% complete for run-3_POR_R24_C3_S124_R2_trim.fastq.gz
+Approx 95% complete for run-3_POR_R24_C3_S124_R2_trim.fastq.gz
+Started analysis of run-3_POR_R120_C1_S123_R1_trim.fastq.gz
+Approx 5% complete for run-3_POR_R120_C1_S123_R1_trim.fastq.gz
+Approx 10% complete for run-3_POR_R120_C1_S123_R1_trim.fastq.gz
+Approx 15% complete for run-3_POR_R120_C1_S123_R1_trim.fastq.gz
+Approx 20% complete for run-3_POR_R120_C1_S123_R1_trim.fastq.gz
+Approx 25% complete for run-3_POR_R120_C1_S123_R1_trim.fastq.gz
+Approx 30% complete for run-3_POR_R120_C1_S123_R1_trim.fastq.gz
+Approx 35% complete for run-3_POR_R120_C1_S123_R1_trim.fastq.gz
+Approx 40% complete for run-3_POR_R120_C1_S123_R1_trim.fastq.gz
+Approx 45% complete for run-3_POR_R120_C1_S123_R1_trim.fastq.gz
+Approx 50% complete for run-3_POR_R120_C1_S123_R1_trim.fastq.gz
+Approx 55% complete for run-3_POR_R120_C1_S123_R1_trim.fastq.gz
+Approx 60% complete for run-3_POR_R120_C1_S123_R1_trim.fastq.gz
+Approx 65% complete for run-3_POR_R120_C1_S123_R1_trim.fastq.gz
+Approx 70% complete for run-3_POR_R120_C1_S123_R1_trim.fastq.gz
+Approx 75% complete for run-3_POR_R120_C1_S123_R1_trim.fastq.gz
+Approx 80% complete for run-3_POR_R120_C1_S123_R1_trim.fastq.gz
+Approx 85% complete for run-3_POR_R120_C1_S123_R1_trim.fastq.gz
+Approx 90% complete for run-3_POR_R120_C1_S123_R1_trim.fastq.gz
+Approx 95% complete for run-3_POR_R120_C1_S123_R1_trim.fastq.gz
+Started analysis of run-3_POR_R3_H1_S8_R2_trim.fastq.gz
+Approx 5% complete for run-3_POR_R3_H1_S8_R2_trim.fastq.gz
+Approx 10% complete for run-3_POR_R3_H1_S8_R2_trim.fastq.gz
+Approx 15% complete for run-3_POR_R3_H1_S8_R2_trim.fastq.gz
+Approx 20% complete for run-3_POR_R3_H1_S8_R2_trim.fastq.gz
+Approx 25% complete for run-3_POR_R3_H1_S8_R2_trim.fastq.gz
+Approx 30% complete for run-3_POR_R3_H1_S8_R2_trim.fastq.gz
+Approx 35% complete for run-3_POR_R3_H1_S8_R2_trim.fastq.gz
+Approx 40% complete for run-3_POR_R3_H1_S8_R2_trim.fastq.gz
+Approx 45% complete for run-3_POR_R3_H1_S8_R2_trim.fastq.gz
+Approx 50% complete for run-3_POR_R3_H1_S8_R2_trim.fastq.gz
+Approx 55% complete for run-3_POR_R3_H1_S8_R2_trim.fastq.gz
+Approx 60% complete for run-3_POR_R3_H1_S8_R2_trim.fastq.gz
+Approx 65% complete for run-3_POR_R3_H1_S8_R2_trim.fastq.gz
+Approx 70% complete for run-3_POR_R3_H1_S8_R2_trim.fastq.gz
+Approx 75% complete for run-3_POR_R3_H1_S8_R2_trim.fastq.gz
+Approx 80% complete for run-3_POR_R3_H1_S8_R2_trim.fastq.gz
+Approx 85% complete for run-3_POR_R3_H1_S8_R2_trim.fastq.gz
+Approx 90% complete for run-3_POR_R3_H1_S8_R2_trim.fastq.gz
+Approx 95% complete for run-3_POR_R3_H1_S8_R2_trim.fastq.gz
+Started analysis of run-3_POR_R3_C2_S9_R1_trim.fastq.gz
+Approx 5% complete for run-3_POR_R3_C2_S9_R1_trim.fastq.gz
+Approx 10% complete for run-3_POR_R3_C2_S9_R1_trim.fastq.gz
+Approx 15% complete for run-3_POR_R3_C2_S9_R1_trim.fastq.gz
+Approx 20% complete for run-3_POR_R3_C2_S9_R1_trim.fastq.gz
+Approx 25% complete for run-3_POR_R3_C2_S9_R1_trim.fastq.gz
+Approx 30% complete for run-3_POR_R3_C2_S9_R1_trim.fastq.gz
+Approx 35% complete for run-3_POR_R3_C2_S9_R1_trim.fastq.gz
+Approx 40% complete for run-3_POR_R3_C2_S9_R1_trim.fastq.gz
+Approx 45% complete for run-3_POR_R3_C2_S9_R1_trim.fastq.gz
+Approx 50% complete for run-3_POR_R3_C2_S9_R1_trim.fastq.gz
+Approx 55% complete for run-3_POR_R3_C2_S9_R1_trim.fastq.gz
+Approx 60% complete for run-3_POR_R3_C2_S9_R1_trim.fastq.gz
+Approx 65% complete for run-3_POR_R3_C2_S9_R1_trim.fastq.gz
+Approx 70% complete for run-3_POR_R3_C2_S9_R1_trim.fastq.gz
+Approx 75% complete for run-3_POR_R3_C2_S9_R1_trim.fastq.gz
+Approx 80% complete for run-3_POR_R3_C2_S9_R1_trim.fastq.gz
+Approx 85% complete for run-3_POR_R3_C2_S9_R1_trim.fastq.gz
+Approx 90% complete for run-3_POR_R3_C2_S9_R1_trim.fastq.gz
+Approx 95% complete for run-3_POR_R3_C2_S9_R1_trim.fastq.gz
+Started analysis of run-3_POR_R120_C1_S123_R2_trim.fastq.gz
+Approx 5% complete for run-3_POR_R120_C1_S123_R2_trim.fastq.gz
+Approx 10% complete for run-3_POR_R120_C1_S123_R2_trim.fastq.gz
+Approx 15% complete for run-3_POR_R120_C1_S123_R2_trim.fastq.gz
+Approx 20% complete for run-3_POR_R120_C1_S123_R2_trim.fastq.gz
+Approx 25% complete for run-3_POR_R120_C1_S123_R2_trim.fastq.gz
+Approx 30% complete for run-3_POR_R120_C1_S123_R2_trim.fastq.gz
+Approx 35% complete for run-3_POR_R120_C1_S123_R2_trim.fastq.gz
+Approx 40% complete for run-3_POR_R120_C1_S123_R2_trim.fastq.gz
+Approx 45% complete for run-3_POR_R120_C1_S123_R2_trim.fastq.gz
+Approx 50% complete for run-3_POR_R120_C1_S123_R2_trim.fastq.gz
+Approx 55% complete for run-3_POR_R120_C1_S123_R2_trim.fastq.gz
+Approx 60% complete for run-3_POR_R120_C1_S123_R2_trim.fastq.gz
+Approx 65% complete for run-3_POR_R120_C1_S123_R2_trim.fastq.gz
+Approx 70% complete for run-3_POR_R120_C1_S123_R2_trim.fastq.gz
+Approx 75% complete for run-3_POR_R120_C1_S123_R2_trim.fastq.gz
+Approx 80% complete for run-3_POR_R120_C1_S123_R2_trim.fastq.gz
+Approx 85% complete for run-3_POR_R120_C1_S123_R2_trim.fastq.gz
+Approx 90% complete for run-3_POR_R120_C1_S123_R2_trim.fastq.gz
+Approx 95% complete for run-3_POR_R120_C1_S123_R2_trim.fastq.gz
+Started analysis of run-3_POR_R3_C2_S9_R2_trim.fastq.gz
+Approx 5% complete for run-3_POR_R3_C2_S9_R2_trim.fastq.gz
+Approx 10% complete for run-3_POR_R3_C2_S9_R2_trim.fastq.gz
+Approx 15% complete for run-3_POR_R3_C2_S9_R2_trim.fastq.gz
+Approx 20% complete for run-3_POR_R3_C2_S9_R2_trim.fastq.gz
+Approx 25% complete for run-3_POR_R3_C2_S9_R2_trim.fastq.gz
+Approx 30% complete for run-3_POR_R3_C2_S9_R2_trim.fastq.gz
+Approx 35% complete for run-3_POR_R3_C2_S9_R2_trim.fastq.gz
+Approx 40% complete for run-3_POR_R3_C2_S9_R2_trim.fastq.gz
+Approx 45% complete for run-3_POR_R3_C2_S9_R2_trim.fastq.gz
+Approx 50% complete for run-3_POR_R3_C2_S9_R2_trim.fastq.gz
+Approx 55% complete for run-3_POR_R3_C2_S9_R2_trim.fastq.gz
+Approx 60% complete for run-3_POR_R3_C2_S9_R2_trim.fastq.gz
+Approx 65% complete for run-3_POR_R3_C2_S9_R2_trim.fastq.gz
+Approx 70% complete for run-3_POR_R3_C2_S9_R2_trim.fastq.gz
+Approx 75% complete for run-3_POR_R3_C2_S9_R2_trim.fastq.gz
+Approx 80% complete for run-3_POR_R3_C2_S9_R2_trim.fastq.gz
+Approx 85% complete for run-3_POR_R3_C2_S9_R2_trim.fastq.gz
+Approx 90% complete for run-3_POR_R3_C2_S9_R2_trim.fastq.gz
+Approx 95% complete for run-3_POR_R3_C2_S9_R2_trim.fastq.gz
+Started analysis of run-3_POR_R3_H1_S8_R1_trim.fastq.gz
+Approx 5% complete for run-3_POR_R3_H1_S8_R1_trim.fastq.gz
+Approx 10% complete for run-3_POR_R3_H1_S8_R1_trim.fastq.gz
+Approx 15% complete for run-3_POR_R3_H1_S8_R1_trim.fastq.gz
+Approx 20% complete for run-3_POR_R3_H1_S8_R1_trim.fastq.gz
+Approx 25% complete for run-3_POR_R3_H1_S8_R1_trim.fastq.gz
+Approx 30% complete for run-3_POR_R3_H1_S8_R1_trim.fastq.gz
+Approx 35% complete for run-3_POR_R3_H1_S8_R1_trim.fastq.gz
+Approx 40% complete for run-3_POR_R3_H1_S8_R1_trim.fastq.gz
+Approx 45% complete for run-3_POR_R3_H1_S8_R1_trim.fastq.gz
+Approx 50% complete for run-3_POR_R3_H1_S8_R1_trim.fastq.gz
+Approx 55% complete for run-3_POR_R3_H1_S8_R1_trim.fastq.gz
+Approx 60% complete for run-3_POR_R3_H1_S8_R1_trim.fastq.gz
+Approx 65% complete for run-3_POR_R3_H1_S8_R1_trim.fastq.gz
+Approx 70% complete for run-3_POR_R3_H1_S8_R1_trim.fastq.gz
+Approx 75% complete for run-3_POR_R3_H1_S8_R1_trim.fastq.gz
+Approx 80% complete for run-3_POR_R3_H1_S8_R1_trim.fastq.gz
+Approx 85% complete for run-3_POR_R3_H1_S8_R1_trim.fastq.gz
+Approx 90% complete for run-3_POR_R3_H1_S8_R1_trim.fastq.gz
+Approx 95% complete for run-3_POR_R3_H1_S8_R1_trim.fastq.gz
+
+  /// MultiQC 🔍 | v1.12
+
+|           multiqc | MultiQC Version v1.33 now available!
+|           multiqc | Search path : /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/trimmed_qc
+|             fastp | Found 192 reports
+|            fastqc | Found 384 reports
+|           multiqc | Compressing plot data
+|           multiqc | Previous MultiQC output found! Adjusting filenames..
+|           multiqc | Use -f or --force to overwrite existing reports instead
+|           multiqc | Report      : multiqc_report_1.html
+|           multiqc | Data        : multiqc_data_1
+|           multiqc | MultiQC complete

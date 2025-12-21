@@ -270,7 +270,7 @@ Important notes:
 - MANY of the Porites samples have extremely high duplication rates
   - overrepresented seqs are matching to rRNA...
 - 54 samples were run over 2 runs. I thought about concatenating the files across runs but for now am going to trim and align separately. Though, we could probably just ignore the files with fewer than 1M reads.
-
+- Update 12/20/25: 12 samples were re-run "run-3" and I QC'd them and reran multiQC with them here. Since they encompass all three species, I will rerun all steps below with all the new files and the old files together. **Now, no samples have fewer than 15M reads**
 
 ## Trimming Reads
 
@@ -399,13 +399,13 @@ echo "QC of trimmed RNA-seq data complete." $(date)
 All adapter content is gone!
 
 Important notes:
-- Now 14 samples have fewer than 15M reads in each direction
+- Now 2 samples have fewer than 15M reads in each direction (they have 14.9M, so it's fine!)
 - MANY of the Porites samples still have extremely high duplication rates
 
 ## Combining samples across runs
 
 - sed command breakdown:
-  - `s/^run-2-//` removes `run-2-` from any file names that have it
+  - `s/^run-[0-9][-_]//` removes `run-2-` or `run-3_` from any file names that have it
   - `s/_S.*//` removes the `_S##` number and everything after (incl `_R1_trim.fastq.gz`) from all the file names
 
 ```
@@ -435,26 +435,23 @@ cd /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/
 # make a directory to move combined files (and files from samples with only one run) into
 mkdir -p combined_files
 
-for f in *R1_trim.fastq.gz; do
-  # skip "run-2" files
-  if [[ "$f" == run-2-* ]]; then
-    continue
-  fi
+# get unique sample id
+samples=$(ls *R1_trim.fastq.gz | \
+  sed -E 's/^run-[0-9][-_]//; s/_S.*//' | \
+  sort -u)
 
-  # extract the sample ID for the file, which is the first three underscore-sep. fields (ex: POR_R1_C2)
-  sample=$(echo "$f" | sed -E 's/^run-2-//; s/_S.*//')
-
+for sample in $samples; do
   # define output names
   combinedR1="combined_files/${sample}_R1_trim.fastq.gz"
   combinedR2="combined_files/${sample}_R2_trim.fastq.gz"
 
-  # gather all matching R1 and R2 files (run-1 + run-2)
+  # gather all matching R1 and R2 files across runs
   r1_files=( *${sample}*R1_trim.fastq.gz )
   r2_files=( *${sample}*R2_trim.fastq.gz )
   
   echo "Combining sample: $sample from files ${r1_files[@]} and ${r2_files[@]}"
 
-  # concatenate the two r1 files (if there are two) and the two r2 files (if there are two)
+  # concatenate the multiple r1 files (if there are multiple) and the multiple r2 files (if there are multiple)
     cat "${r1_files[@]}" > "$combinedR1"
     cat "${r2_files[@]}" > "$combinedR2"
 done

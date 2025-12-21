@@ -35,6 +35,7 @@ if [ "${makeindex}" = "T" ]; then
       --genomeDir "${genome_index_dir}" \
       --genomeFastaFiles "${genome_path}" \
       --sjdbGTFfile "${gff_path}" \
+      --sjdbGTFtagExonParentTranscript Parent \
       --genomeSAindexNbases 13
 fi
 

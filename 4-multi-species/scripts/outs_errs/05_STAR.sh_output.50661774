@@ -1,0 +1,336 @@
+	STAR --runMode alignReads --genomeDir /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/STAR_indexes/MCapV3 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R0_C1_R1_trim.fastq.gz /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R0_C1_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/aligned/MON_MCapV3/MON_R0_C1_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+Dec 20 19:47:08 ..... started STAR run
+Dec 20 19:47:08 ..... loading genome
+Dec 20 19:47:34 ..... started mapping
+Dec 20 19:57:00 ..... finished mapping
+Dec 20 19:57:02 ..... started sorting BAM
+Dec 20 19:57:44 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/STAR_indexes/MCapV3 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R0_C2_R1_trim.fastq.gz /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R0_C2_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/aligned/MON_MCapV3/MON_R0_C2_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+Dec 20 19:57:48 ..... started STAR run
+Dec 20 19:57:48 ..... loading genome
+Dec 20 19:57:53 ..... started mapping
+Dec 20 20:02:12 ..... finished mapping
+Dec 20 20:02:14 ..... started sorting BAM
+Dec 20 20:02:36 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/STAR_indexes/MCapV3 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R0_C3_R1_trim.fastq.gz /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R0_C3_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/aligned/MON_MCapV3/MON_R0_C3_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+Dec 20 20:02:38 ..... started STAR run
+Dec 20 20:02:38 ..... loading genome
+Dec 20 20:02:43 ..... started mapping
+Dec 20 20:07:46 ..... finished mapping
+Dec 20 20:07:48 ..... started sorting BAM
+Dec 20 20:08:13 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/STAR_indexes/MCapV3 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R0_H1_R1_trim.fastq.gz /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R0_H1_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/aligned/MON_MCapV3/MON_R0_H1_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+Dec 20 20:08:16 ..... started STAR run
+Dec 20 20:08:16 ..... loading genome
+Dec 20 20:08:20 ..... started mapping
+Dec 20 20:20:42 ..... finished mapping
+Dec 20 20:20:43 ..... started sorting BAM
+Dec 20 20:21:30 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/STAR_indexes/MCapV3 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R0_H2_R1_trim.fastq.gz /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R0_H2_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/aligned/MON_MCapV3/MON_R0_H2_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+Dec 20 20:21:34 ..... started STAR run
+Dec 20 20:21:34 ..... loading genome
+Dec 20 20:21:38 ..... started mapping
+Dec 20 20:30:08 ..... finished mapping
+Dec 20 20:30:10 ..... started sorting BAM
+Dec 20 20:31:08 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/STAR_indexes/MCapV3 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R0_H3_R1_trim.fastq.gz /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R0_H3_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/aligned/MON_MCapV3/MON_R0_H3_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+Dec 20 20:31:11 ..... started STAR run
+Dec 20 20:31:11 ..... loading genome
+Dec 20 20:31:16 ..... started mapping
+Dec 20 20:36:07 ..... finished mapping
+Dec 20 20:36:08 ..... started sorting BAM
+Dec 20 20:36:33 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/STAR_indexes/MCapV3 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R120_C1_R1_trim.fastq.gz /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R120_C1_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/aligned/MON_MCapV3/MON_R120_C1_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+Dec 20 20:36:36 ..... started STAR run
+Dec 20 20:36:36 ..... loading genome
+Dec 20 20:36:40 ..... started mapping
+Dec 20 20:43:08 ..... finished mapping
+Dec 20 20:43:10 ..... started sorting BAM
+Dec 20 20:43:37 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/STAR_indexes/MCapV3 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R120_C2_R1_trim.fastq.gz /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R120_C2_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/aligned/MON_MCapV3/MON_R120_C2_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+Dec 20 20:43:40 ..... started STAR run
+Dec 20 20:43:40 ..... loading genome
+Dec 20 20:43:45 ..... started mapping
+Dec 20 20:50:04 ..... finished mapping
+Dec 20 20:50:06 ..... started sorting BAM
+Dec 20 20:50:31 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/STAR_indexes/MCapV3 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R120_C3_R1_trim.fastq.gz /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R120_C3_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/aligned/MON_MCapV3/MON_R120_C3_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+Dec 20 20:50:33 ..... started STAR run
+Dec 20 20:50:33 ..... loading genome
+Dec 20 20:50:38 ..... started mapping
+Dec 20 20:57:41 ..... finished mapping
+Dec 20 20:57:43 ..... started sorting BAM
+Dec 20 20:58:39 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/STAR_indexes/MCapV3 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R120_H1_R1_trim.fastq.gz /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R120_H1_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/aligned/MON_MCapV3/MON_R120_H1_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+Dec 20 20:58:42 ..... started STAR run
+Dec 20 20:58:42 ..... loading genome
+Dec 20 20:58:47 ..... started mapping
+Dec 20 21:02:45 ..... finished mapping
+Dec 20 21:02:47 ..... started sorting BAM
+Dec 20 21:03:09 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/STAR_indexes/MCapV3 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R120_H2_R1_trim.fastq.gz /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R120_H2_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/aligned/MON_MCapV3/MON_R120_H2_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+Dec 20 21:03:11 ..... started STAR run
+Dec 20 21:03:11 ..... loading genome
+Dec 20 21:03:15 ..... started mapping
+Dec 20 21:10:58 ..... finished mapping
+Dec 20 21:11:00 ..... started sorting BAM
+Dec 20 21:11:38 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/STAR_indexes/MCapV3 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R120_H3_R1_trim.fastq.gz /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R120_H3_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/aligned/MON_MCapV3/MON_R120_H3_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+Dec 20 21:11:43 ..... started STAR run
+Dec 20 21:11:43 ..... loading genome
+Dec 20 21:11:47 ..... started mapping
+Dec 20 21:16:31 ..... finished mapping
+Dec 20 21:16:33 ..... started sorting BAM
+Dec 20 21:17:00 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/STAR_indexes/MCapV3 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R12_C1_R1_trim.fastq.gz /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R12_C1_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/aligned/MON_MCapV3/MON_R12_C1_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+Dec 20 21:17:03 ..... started STAR run
+Dec 20 21:17:03 ..... loading genome
+Dec 20 21:17:07 ..... started mapping
+Dec 20 21:21:18 ..... finished mapping
+Dec 20 21:21:20 ..... started sorting BAM
+Dec 20 21:21:41 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/STAR_indexes/MCapV3 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R12_C2_R1_trim.fastq.gz /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R12_C2_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/aligned/MON_MCapV3/MON_R12_C2_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+Dec 20 21:21:43 ..... started STAR run
+Dec 20 21:21:43 ..... loading genome
+Dec 20 21:21:47 ..... started mapping
+Dec 20 21:26:46 ..... finished mapping
+Dec 20 21:26:48 ..... started sorting BAM
+Dec 20 21:27:12 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/STAR_indexes/MCapV3 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R12_C3_R1_trim.fastq.gz /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R12_C3_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/aligned/MON_MCapV3/MON_R12_C3_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+Dec 20 21:27:14 ..... started STAR run
+Dec 20 21:27:15 ..... loading genome
+Dec 20 21:27:19 ..... started mapping
+Dec 20 21:32:16 ..... finished mapping
+Dec 20 21:32:18 ..... started sorting BAM
+Dec 20 21:32:41 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/STAR_indexes/MCapV3 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R12_H1_R1_trim.fastq.gz /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R12_H1_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/aligned/MON_MCapV3/MON_R12_H1_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+Dec 20 21:32:44 ..... started STAR run
+Dec 20 21:32:44 ..... loading genome
+Dec 20 21:32:48 ..... started mapping
+Dec 20 21:38:02 ..... finished mapping
+Dec 20 21:38:04 ..... started sorting BAM
+Dec 20 21:38:30 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/STAR_indexes/MCapV3 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R12_H2_R1_trim.fastq.gz /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R12_H2_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/aligned/MON_MCapV3/MON_R12_H2_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+Dec 20 21:38:32 ..... started STAR run
+Dec 20 21:38:32 ..... loading genome
+Dec 20 21:38:37 ..... started mapping
+Dec 20 21:43:08 ..... finished mapping
+Dec 20 21:43:10 ..... started sorting BAM
+Dec 20 21:43:34 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/STAR_indexes/MCapV3 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R12_H3_R1_trim.fastq.gz /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R12_H3_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/aligned/MON_MCapV3/MON_R12_H3_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+Dec 20 21:43:36 ..... started STAR run
+Dec 20 21:43:36 ..... loading genome
+Dec 20 21:43:41 ..... started mapping
+Dec 20 21:47:54 ..... finished mapping
+Dec 20 21:47:56 ..... started sorting BAM
+Dec 20 21:48:16 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/STAR_indexes/MCapV3 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R1_C1_R1_trim.fastq.gz /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R1_C1_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/aligned/MON_MCapV3/MON_R1_C1_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+Dec 20 21:48:18 ..... started STAR run
+Dec 20 21:48:18 ..... loading genome
+Dec 20 21:48:23 ..... started mapping
+Dec 20 21:54:48 ..... finished mapping
+Dec 20 21:54:50 ..... started sorting BAM
+Dec 20 21:55:15 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/STAR_indexes/MCapV3 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R1_C2_R1_trim.fastq.gz /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R1_C2_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/aligned/MON_MCapV3/MON_R1_C2_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+Dec 20 21:55:18 ..... started STAR run
+Dec 20 21:55:18 ..... loading genome
+Dec 20 21:55:22 ..... started mapping
+Dec 20 22:00:49 ..... finished mapping
+Dec 20 22:00:50 ..... started sorting BAM
+Dec 20 22:01:17 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/STAR_indexes/MCapV3 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R1_C3_R1_trim.fastq.gz /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R1_C3_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/aligned/MON_MCapV3/MON_R1_C3_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+Dec 20 22:01:19 ..... started STAR run
+Dec 20 22:01:19 ..... loading genome
+Dec 20 22:01:24 ..... started mapping
+Dec 20 22:09:40 ..... finished mapping
+Dec 20 22:09:42 ..... started sorting BAM
+Dec 20 22:10:16 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/STAR_indexes/MCapV3 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R1_H1_R1_trim.fastq.gz /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R1_H1_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/aligned/MON_MCapV3/MON_R1_H1_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+Dec 20 22:10:19 ..... started STAR run
+Dec 20 22:10:19 ..... loading genome
+Dec 20 22:10:24 ..... started mapping
+Dec 20 22:16:20 ..... finished mapping
+Dec 20 22:16:22 ..... started sorting BAM
+Dec 20 22:16:47 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/STAR_indexes/MCapV3 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R1_H2_R1_trim.fastq.gz /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R1_H2_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/aligned/MON_MCapV3/MON_R1_H2_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+Dec 20 22:16:49 ..... started STAR run
+Dec 20 22:16:49 ..... loading genome
+Dec 20 22:16:55 ..... started mapping
+Dec 20 22:22:41 ..... finished mapping
+Dec 20 22:22:43 ..... started sorting BAM
+Dec 20 22:23:04 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/STAR_indexes/MCapV3 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R1_H3_R1_trim.fastq.gz /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R1_H3_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/aligned/MON_MCapV3/MON_R1_H3_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+Dec 20 22:23:07 ..... started STAR run
+Dec 20 22:23:07 ..... loading genome
+Dec 20 22:23:11 ..... started mapping
+Dec 20 22:27:27 ..... finished mapping
+Dec 20 22:27:29 ..... started sorting BAM
+Dec 20 22:27:51 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/STAR_indexes/MCapV3 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R24_C1_R1_trim.fastq.gz /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R24_C1_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/aligned/MON_MCapV3/MON_R24_C1_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+Dec 20 22:27:54 ..... started STAR run
+Dec 20 22:27:54 ..... loading genome
+Dec 20 22:27:58 ..... started mapping
+Dec 20 22:32:45 ..... finished mapping
+Dec 20 22:32:47 ..... started sorting BAM
+Dec 20 22:33:11 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/STAR_indexes/MCapV3 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R24_C2_R1_trim.fastq.gz /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R24_C2_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/aligned/MON_MCapV3/MON_R24_C2_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+Dec 20 22:33:13 ..... started STAR run
+Dec 20 22:33:13 ..... loading genome
+Dec 20 22:33:18 ..... started mapping
+Dec 20 22:39:29 ..... finished mapping
+Dec 20 22:39:31 ..... started sorting BAM
+Dec 20 22:39:55 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/STAR_indexes/MCapV3 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R24_C3_R1_trim.fastq.gz /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R24_C3_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/aligned/MON_MCapV3/MON_R24_C3_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+Dec 20 22:39:58 ..... started STAR run
+Dec 20 22:39:58 ..... loading genome
+Dec 20 22:40:02 ..... started mapping
+Dec 20 22:45:40 ..... finished mapping
+Dec 20 22:45:42 ..... started sorting BAM
+Dec 20 22:46:10 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/STAR_indexes/MCapV3 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R24_H1_R1_trim.fastq.gz /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R24_H1_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/aligned/MON_MCapV3/MON_R24_H1_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+Dec 20 22:46:13 ..... started STAR run
+Dec 20 22:46:13 ..... loading genome
+Dec 20 22:46:18 ..... started mapping
+Dec 20 22:50:46 ..... finished mapping
+Dec 20 22:50:48 ..... started sorting BAM
+Dec 20 22:51:14 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/STAR_indexes/MCapV3 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R24_H2_R1_trim.fastq.gz /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R24_H2_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/aligned/MON_MCapV3/MON_R24_H2_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+Dec 20 22:51:16 ..... started STAR run
+Dec 20 22:51:16 ..... loading genome
+Dec 20 22:51:21 ..... started mapping
+Dec 20 22:55:12 ..... finished mapping
+Dec 20 22:55:13 ..... started sorting BAM
+Dec 20 22:55:34 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/STAR_indexes/MCapV3 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R24_H3_R1_trim.fastq.gz /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R24_H3_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/aligned/MON_MCapV3/MON_R24_H3_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+Dec 20 22:55:37 ..... started STAR run
+Dec 20 22:55:37 ..... loading genome
+Dec 20 22:55:41 ..... started mapping
+Dec 20 23:01:17 ..... finished mapping
+Dec 20 23:01:19 ..... started sorting BAM
+Dec 20 23:01:44 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/STAR_indexes/MCapV3 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R3_C1_R1_trim.fastq.gz /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R3_C1_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/aligned/MON_MCapV3/MON_R3_C1_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+Dec 20 23:01:47 ..... started STAR run
+Dec 20 23:01:47 ..... loading genome
+Dec 20 23:01:51 ..... started mapping
+Dec 20 23:05:54 ..... finished mapping
+Dec 20 23:05:56 ..... started sorting BAM
+Dec 20 23:06:20 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/STAR_indexes/MCapV3 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R3_C2_R1_trim.fastq.gz /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R3_C2_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/aligned/MON_MCapV3/MON_R3_C2_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+Dec 20 23:06:22 ..... started STAR run
+Dec 20 23:06:22 ..... loading genome
+Dec 20 23:06:27 ..... started mapping
+Dec 20 23:11:16 ..... finished mapping
+Dec 20 23:11:19 ..... started sorting BAM
+Dec 20 23:11:50 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/STAR_indexes/MCapV3 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R3_C3_R1_trim.fastq.gz /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R3_C3_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/aligned/MON_MCapV3/MON_R3_C3_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+Dec 20 23:11:52 ..... started STAR run
+Dec 20 23:11:52 ..... loading genome
+Dec 20 23:11:58 ..... started mapping
+Dec 20 23:18:11 ..... finished mapping
+Dec 20 23:18:13 ..... started sorting BAM
+Dec 20 23:18:39 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/STAR_indexes/MCapV3 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R3_H1_R1_trim.fastq.gz /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R3_H1_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/aligned/MON_MCapV3/MON_R3_H1_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+Dec 20 23:18:42 ..... started STAR run
+Dec 20 23:18:42 ..... loading genome
+Dec 20 23:18:47 ..... started mapping
+Dec 20 23:24:27 ..... finished mapping
+Dec 20 23:24:29 ..... started sorting BAM
+Dec 20 23:24:57 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/STAR_indexes/MCapV3 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R3_H2_R1_trim.fastq.gz /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R3_H2_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/aligned/MON_MCapV3/MON_R3_H2_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+Dec 20 23:25:00 ..... started STAR run
+Dec 20 23:25:00 ..... loading genome
+Dec 20 23:25:04 ..... started mapping
+Dec 20 23:32:44 ..... finished mapping
+Dec 20 23:32:46 ..... started sorting BAM
+Dec 20 23:33:42 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/STAR_indexes/MCapV3 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R3_H3_R1_trim.fastq.gz /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R3_H3_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/aligned/MON_MCapV3/MON_R3_H3_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+Dec 20 23:33:47 ..... started STAR run
+Dec 20 23:33:47 ..... loading genome
+Dec 20 23:33:51 ..... started mapping
+Dec 20 23:38:27 ..... finished mapping
+Dec 20 23:38:29 ..... started sorting BAM
+Dec 20 23:38:51 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/STAR_indexes/MCapV3 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R72_C1_R1_trim.fastq.gz /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R72_C1_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/aligned/MON_MCapV3/MON_R72_C1_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+Dec 20 23:38:53 ..... started STAR run
+Dec 20 23:38:53 ..... loading genome
+Dec 20 23:38:58 ..... started mapping
+Dec 20 23:43:59 ..... finished mapping
+Dec 20 23:44:01 ..... started sorting BAM
+Dec 20 23:44:25 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/STAR_indexes/MCapV3 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R72_C2_R1_trim.fastq.gz /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R72_C2_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/aligned/MON_MCapV3/MON_R72_C2_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+Dec 20 23:44:28 ..... started STAR run
+Dec 20 23:44:28 ..... loading genome
+Dec 20 23:44:33 ..... started mapping
+Dec 20 23:48:54 ..... finished mapping
+Dec 20 23:48:56 ..... started sorting BAM
+Dec 20 23:49:18 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/STAR_indexes/MCapV3 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R72_C3_R1_trim.fastq.gz /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R72_C3_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/aligned/MON_MCapV3/MON_R72_C3_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+Dec 20 23:49:20 ..... started STAR run
+Dec 20 23:49:20 ..... loading genome
+Dec 20 23:49:25 ..... started mapping
+Dec 20 23:55:52 ..... finished mapping
+Dec 20 23:55:54 ..... started sorting BAM
+Dec 20 23:56:24 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/STAR_indexes/MCapV3 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R72_H1_R1_trim.fastq.gz /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R72_H1_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/aligned/MON_MCapV3/MON_R72_H1_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+Dec 20 23:56:27 ..... started STAR run
+Dec 20 23:56:27 ..... loading genome
+Dec 20 23:56:33 ..... started mapping
+Dec 21 00:11:33 ..... finished mapping
+Dec 21 00:11:34 ..... started sorting BAM
+Dec 21 00:12:52 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/STAR_indexes/MCapV3 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R72_H2_R1_trim.fastq.gz /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R72_H2_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/aligned/MON_MCapV3/MON_R72_H2_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+Dec 21 00:12:54 ..... started STAR run
+Dec 21 00:12:54 ..... loading genome
+Dec 21 00:13:00 ..... started mapping
+Dec 21 00:38:09 ..... finished mapping
+Dec 21 00:38:10 ..... started sorting BAM
+Dec 21 00:40:01 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/STAR_indexes/MCapV3 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R72_H3_R1_trim.fastq.gz /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/MON_R72_H3_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/aligned/MON_MCapV3/MON_R72_H3_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+Dec 21 00:40:03 ..... started STAR run
+Dec 21 00:40:03 ..... loading genome
+Dec 21 00:40:08 ..... started mapping
+Dec 21 00:44:33 ..... finished mapping
+Dec 21 00:44:35 ..... started sorting BAM
+Dec 21 00:44:58 ..... finished successfully
