@@ -10,8 +10,8 @@ library(tidyverse)
 
 ```{r}
 # load in multiqc data
-QC_raw_full <- read.delim("../output_RNA/raw_qc/multiqc_data/multiqc_fastqc.txt", header = TRUE)
-QC_raw <- read.delim("../output_RNA/raw_qc/multiqc_data/multiqc_general_stats.txt", header = TRUE)
+QC_raw_full <- read.delim("../output_RNA/raw_qc/multiqc_data_1/multiqc_fastqc.txt", header = TRUE)
+QC_raw <- read.delim("../output_RNA/raw_qc/multiqc_data_1/multiqc_general_stats.txt", header = TRUE)
 
 colnames(QC_raw) <- str_replace(colnames(QC_raw) , "FastQC_mqc.generalstats.fastqc.", "") 
 ```
@@ -19,6 +19,7 @@ colnames(QC_raw) <- str_replace(colnames(QC_raw) , "FastQC_mqc.generalstats.fast
 ```{r}
 QC_raw <- QC_raw %>%
   mutate(sample_id = str_replace(Sample, "run-2-", "")) %>%
+  mutate(sample_id = str_replace(sample_id, "run-3_", "")) %>%
   mutate(sample_id = str_replace(sample_id, "_S[0-9]+", ""))
 
 QC_raw_summarized <- QC_raw %>%
@@ -39,13 +40,14 @@ write.csv(QC_raw_summarized %>% arrange(total_Mseq), "../output_RNA/raw_qc/multi
 
 ```{r}
 # load in multiqc data
-QC_trim <- read.delim("../output_RNA/trimmed_qc/multiqc_data/multiqc_fastqc.txt", header = TRUE)
+QC_trim <- read.delim("../output_RNA/trimmed_qc/multiqc_data_1/multiqc_fastqc.txt", header = TRUE)
 #QC_trim <- read.delim("../output_RNA/trimmed_qc/multiqc_data/multiqc_general_stats.txt", header = TRUE)
 ```
 
 ```{r}
 QC_trim <- QC_trim %>%
   mutate(sample_id = str_replace(Sample, "run-2-", "")) %>%
+  mutate(sample_id = str_replace(sample_id, "run-3_", "")) %>%
   mutate(sample_id = str_replace(sample_id, "_S[0-9]+", ""))
 
 QC_trim_summarized <- QC_trim %>%
@@ -117,4 +119,127 @@ POR_rRNA_summary %>% pivot_longer(cols = contains("_"),
 
 write_csv(POR_rRNA_summary, "../output_RNA/differential_expression/POR_Pcomp/rRNA_and_mapping_metadata.csv")
 ```
+### POR mRNA-decontaminated rarefaction analysis
+
+
+```{r}
+# Directory containing all rarefaction CSV outputs
+resdir <- "/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_rarefaction/"
+
+# Load all CSVs
+csv_files <- list.files(resdir, pattern = "_rarefaction.csv$", recursive = TRUE, full.names = TRUE)
+
+all_results <- map_df(csv_files, function(f) {
+  # Extract sample name from parent directory
+  sample_name <- basename(dirname(f))
+  
+  read_csv(f) %>%
+    mutate(sample = sample_name)
+})
+
+head(all_results)
+```
+
+```{r}
+all_results <- all_results %>%
+  mutate(
+    depth = as.numeric(depth),
+    pairs_processed = as.numeric(pairs_processed),
+    pairs_mapped = as.numeric(pairs_mapped),
+    percent_mapped = as.numeric(percent_mapped),
+    percent_unique = as.numeric(percent_unique),
+    genes_detected = as.numeric(genes_detected),
+  )
+```
+
+```{r}
+# Genes detected
+ggplot(all_results, aes(x = depth, y = pairs_processed, color = sample)) +
+  geom_line(size = 1) +
+  geom_point(size = 2) +
+  scale_x_continuous(labels = scales::percent_format(accuracy = 1)) +
+  labs(
+    title = "Reads processed at each subsampling depth",
+    x = "Fraction of original reads used",
+    y = "Reads processed"
+  ) +
+  theme_bw()
+
+# Genes detected
+ggplot(all_results, aes(x = depth, y = pairs_mapped, color = sample)) +
+  geom_line(size = 1) +
+  geom_point(size = 2) +
+  scale_x_continuous(labels = scales::percent_format(accuracy = 1)) +
+  labs(
+    title = "Reads pseudoaligned by subsampling depth",
+    x = "Fraction of original reads used",
+    y = "Reads pseudoaligned"
+  ) +
+  theme_bw()
+
+# Genes detected
+ggplot(all_results, aes(x = depth, y = genes_detected, color = sample)) +
+  geom_line(size = 1) +
+  geom_point(size = 2) +
+  scale_x_continuous(labels = scales::percent_format(accuracy = 1)) +
+  labs(
+    title = "Rarefaction of detected genes by subsampling depth",
+    x = "Fraction of original reads used",
+    y = "Number of genes detected (TPM > 0.5)"
+  ) +
+  theme_bw()
+
+# Mapping rate
+ggplot(all_results, aes(x = depth, y = percent_mapped, color = sample)) +
+  geom_line(size = 1) +
+  geom_point(size = 2) +
+  scale_x_continuous(labels = scales::percent_format()) +
+  labs(
+    title = "Rarefaction of pseudoalignment (mapping) rate by subsampling depth",
+    x = "Fraction of original reads used",
+    y = "Pseudoalignment (mapping) rate"
+  ) +
+  theme_bw()
+
+
+# Mapping rate
+ggplot(all_results, aes(x = depth, y = percent_unique, color = sample)) +
+  geom_line(size = 1) +
+  geom_point(size = 2) +
+  scale_x_continuous(labels = scales::percent_format()) +
+  labs(
+    title = "Rarefaction of unique pseudoalignment (mapping) rate by subsampling depth",
+    x = "Fraction of original reads used",
+    y = "Unique Pseudoalignment (mapping) rate"
+  ) +
+  theme_bw()
+
+```
+```{r}
+plateau <- all_results %>%
+  group_by(sample) %>%
+  arrange(depth) %>%
+  mutate(delta = genes_detected - lag(genes_detected))# %>%
+  #filter(!is.na(delta) & delta < 50)  # threshold for minimal new genes
+
+head(plateau)
+```
+
+```{r}
+POR_combined <- all_results %>% left_join(POR_rRNA_summary)
+
+# Genes detected
+ggplot(POR_combined, aes(x = depth, y = genes_detected, group=sample, color = uniquely_mapped_percent)) +
+  geom_line(size = 1) +
+  geom_point(size = 2) +
+  scale_x_continuous(labels = scales::percent_format(accuracy = 1)) +
+  scale_color_distiller(palette = "Spectral") +
+  labs(
+    title = "Rarefaction of detected genes by subsampling depth",
+    x = "Fraction of original reads used",
+    y = "Number of genes detected (TPM > 0.5)"
+  ) +
+  theme_bw()
+```
+
 

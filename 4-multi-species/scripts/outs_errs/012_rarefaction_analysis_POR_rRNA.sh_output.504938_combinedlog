@@ -1,0 +1,714 @@
+Processing POR_R72_H3...
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_H3_R1_trim.fastq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_H3_R2_trim.fastq.gz
+bbduk completed for POR_R72_H3
+Processing sample: POR_R72_H3
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R72_H3_clean_R1.fq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R72_H3_clean_R2.fq.gz
+Total paired reads: 11477074
+Subsampling depth = 0.01
+Subsampling depth = 0.02
+Subsampling depth = 0.05
+Subsampling depth = 0.1
+Subsampling depth = 0.2
+Subsampling depth = 0.5
+Subsampling depth = 1.0
+Finished sample POR_R72_H3
+Results written to: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_rarefaction/POR_R72_H3/POR_R72_H3_rarefaction.csv
+Processing POR_R0_C1...
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_C1_R1_trim.fastq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_C1_R2_trim.fastq.gz
+bbduk completed for POR_R0_C1
+Processing sample: POR_R0_C1
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R0_C1_clean_R1.fq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R0_C1_clean_R2.fq.gz
+Total paired reads: 7178689
+Subsampling depth = 0.01
+Subsampling depth = 0.02
+Subsampling depth = 0.05
+Subsampling depth = 0.1
+Subsampling depth = 0.2
+Subsampling depth = 0.5
+Subsampling depth = 1.0
+Finished sample POR_R0_C1
+Results written to: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_rarefaction/POR_R0_C1/POR_R0_C1_rarefaction.csv
+Processing POR_R0_C2...
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_C2_R1_trim.fastq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_C2_R2_trim.fastq.gz
+bbduk completed for POR_R0_C2
+Processing sample: POR_R0_C2
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R0_C2_clean_R1.fq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R0_C2_clean_R2.fq.gz
+Total paired reads: 5378151
+Subsampling depth = 0.01
+Subsampling depth = 0.02
+Subsampling depth = 0.05
+Subsampling depth = 0.1
+Subsampling depth = 0.2
+Subsampling depth = 0.5
+Subsampling depth = 1.0
+Finished sample POR_R0_C2
+Results written to: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_rarefaction/POR_R0_C2/POR_R0_C2_rarefaction.csv
+Processing POR_R0_C3...
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_C3_R1_trim.fastq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_C3_R2_trim.fastq.gz
+bbduk completed for POR_R0_C3
+Processing sample: POR_R0_C3
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R0_C3_clean_R1.fq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R0_C3_clean_R2.fq.gz
+Total paired reads: 10036381
+Subsampling depth = 0.01
+Subsampling depth = 0.02
+Subsampling depth = 0.05
+Subsampling depth = 0.1
+Subsampling depth = 0.2
+Subsampling depth = 0.5
+Subsampling depth = 1.0
+Finished sample POR_R0_C3
+Results written to: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_rarefaction/POR_R0_C3/POR_R0_C3_rarefaction.csv
+Processing POR_R0_H1...
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_H1_R1_trim.fastq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_H1_R2_trim.fastq.gz
+bbduk completed for POR_R0_H1
+Processing sample: POR_R0_H1
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R0_H1_clean_R1.fq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R0_H1_clean_R2.fq.gz
+Total paired reads: 3877009
+Subsampling depth = 0.01
+Subsampling depth = 0.02
+Subsampling depth = 0.05
+Subsampling depth = 0.1
+Subsampling depth = 0.2
+Subsampling depth = 0.5
+Subsampling depth = 1.0
+Finished sample POR_R0_H1
+Results written to: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_rarefaction/POR_R0_H1/POR_R0_H1_rarefaction.csv
+Processing POR_R0_H2...
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_H2_R1_trim.fastq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_H2_R2_trim.fastq.gz
+bbduk completed for POR_R0_H2
+Processing sample: POR_R0_H2
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R0_H2_clean_R1.fq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R0_H2_clean_R2.fq.gz
+Total paired reads: 5167145
+Subsampling depth = 0.01
+Subsampling depth = 0.02
+Subsampling depth = 0.05
+Subsampling depth = 0.1
+Subsampling depth = 0.2
+Subsampling depth = 0.5
+Subsampling depth = 1.0
+Finished sample POR_R0_H2
+Results written to: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_rarefaction/POR_R0_H2/POR_R0_H2_rarefaction.csv
+Processing POR_R0_H3...
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_H3_R1_trim.fastq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R0_H3_R2_trim.fastq.gz
+bbduk completed for POR_R0_H3
+Processing sample: POR_R0_H3
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R0_H3_clean_R1.fq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R0_H3_clean_R2.fq.gz
+Total paired reads: 6276201
+Subsampling depth = 0.01
+Subsampling depth = 0.02
+Subsampling depth = 0.05
+Subsampling depth = 0.1
+Subsampling depth = 0.2
+Subsampling depth = 0.5
+Subsampling depth = 1.0
+Finished sample POR_R0_H3
+Results written to: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_rarefaction/POR_R0_H3/POR_R0_H3_rarefaction.csv
+Processing POR_R120_C1...
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_C1_R1_trim.fastq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_C1_R2_trim.fastq.gz
+bbduk completed for POR_R120_C1
+Processing sample: POR_R120_C1
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R120_C1_clean_R1.fq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R120_C1_clean_R2.fq.gz
+Total paired reads: 2299252
+Subsampling depth = 0.01
+Subsampling depth = 0.02
+Subsampling depth = 0.05
+Subsampling depth = 0.1
+Subsampling depth = 0.2
+Subsampling depth = 0.5
+Subsampling depth = 1.0
+Finished sample POR_R120_C1
+Results written to: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_rarefaction/POR_R120_C1/POR_R120_C1_rarefaction.csv
+Processing POR_R120_C2...
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_C2_R1_trim.fastq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_C2_R2_trim.fastq.gz
+bbduk completed for POR_R120_C2
+Processing sample: POR_R120_C2
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R120_C2_clean_R1.fq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R120_C2_clean_R2.fq.gz
+Total paired reads: 11198776
+Subsampling depth = 0.01
+Subsampling depth = 0.02
+Subsampling depth = 0.05
+Subsampling depth = 0.1
+Subsampling depth = 0.2
+Subsampling depth = 0.5
+Subsampling depth = 1.0
+Finished sample POR_R120_C2
+Results written to: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_rarefaction/POR_R120_C2/POR_R120_C2_rarefaction.csv
+Processing POR_R120_C3...
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_C3_R1_trim.fastq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_C3_R2_trim.fastq.gz
+bbduk completed for POR_R120_C3
+Processing sample: POR_R120_C3
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R120_C3_clean_R1.fq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R120_C3_clean_R2.fq.gz
+Total paired reads: 2367624
+Subsampling depth = 0.01
+Subsampling depth = 0.02
+Subsampling depth = 0.05
+Subsampling depth = 0.1
+Subsampling depth = 0.2
+Subsampling depth = 0.5
+Subsampling depth = 1.0
+Finished sample POR_R120_C3
+Results written to: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_rarefaction/POR_R120_C3/POR_R120_C3_rarefaction.csv
+Processing POR_R120_H1...
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_H1_R1_trim.fastq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_H1_R2_trim.fastq.gz
+bbduk completed for POR_R120_H1
+Processing sample: POR_R120_H1
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R120_H1_clean_R1.fq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R120_H1_clean_R2.fq.gz
+Total paired reads: 10430765
+Subsampling depth = 0.01
+Subsampling depth = 0.02
+Subsampling depth = 0.05
+Subsampling depth = 0.1
+Subsampling depth = 0.2
+Subsampling depth = 0.5
+Subsampling depth = 1.0
+Finished sample POR_R120_H1
+Results written to: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_rarefaction/POR_R120_H1/POR_R120_H1_rarefaction.csv
+Processing POR_R120_H2...
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_H2_R1_trim.fastq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_H2_R2_trim.fastq.gz
+bbduk completed for POR_R120_H2
+Processing sample: POR_R120_H2
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R120_H2_clean_R1.fq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R120_H2_clean_R2.fq.gz
+Total paired reads: 18673180
+Subsampling depth = 0.01
+Subsampling depth = 0.02
+Subsampling depth = 0.05
+Subsampling depth = 0.1
+Subsampling depth = 0.2
+Subsampling depth = 0.5
+Subsampling depth = 1.0
+Finished sample POR_R120_H2
+Results written to: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_rarefaction/POR_R120_H2/POR_R120_H2_rarefaction.csv
+Processing POR_R120_H3...
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_H3_R1_trim.fastq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R120_H3_R2_trim.fastq.gz
+bbduk completed for POR_R120_H3
+Processing sample: POR_R120_H3
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R120_H3_clean_R1.fq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R120_H3_clean_R2.fq.gz
+Total paired reads: 4927432
+Subsampling depth = 0.01
+Subsampling depth = 0.02
+Subsampling depth = 0.05
+Subsampling depth = 0.1
+Subsampling depth = 0.2
+Subsampling depth = 0.5
+Subsampling depth = 1.0
+Finished sample POR_R120_H3
+Results written to: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_rarefaction/POR_R120_H3/POR_R120_H3_rarefaction.csv
+Processing POR_R12_C1...
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_C1_R1_trim.fastq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_C1_R2_trim.fastq.gz
+bbduk completed for POR_R12_C1
+Processing sample: POR_R12_C1
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R12_C1_clean_R1.fq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R12_C1_clean_R2.fq.gz
+Total paired reads: 2699593
+Subsampling depth = 0.01
+Subsampling depth = 0.02
+Subsampling depth = 0.05
+Subsampling depth = 0.1
+Subsampling depth = 0.2
+Subsampling depth = 0.5
+Subsampling depth = 1.0
+Finished sample POR_R12_C1
+Results written to: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_rarefaction/POR_R12_C1/POR_R12_C1_rarefaction.csv
+Processing POR_R12_C2...
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_C2_R1_trim.fastq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_C2_R2_trim.fastq.gz
+bbduk completed for POR_R12_C2
+Processing sample: POR_R12_C2
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R12_C2_clean_R1.fq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R12_C2_clean_R2.fq.gz
+Total paired reads: 11402073
+Subsampling depth = 0.01
+Subsampling depth = 0.02
+Subsampling depth = 0.05
+Subsampling depth = 0.1
+Subsampling depth = 0.2
+Subsampling depth = 0.5
+Subsampling depth = 1.0
+Finished sample POR_R12_C2
+Results written to: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_rarefaction/POR_R12_C2/POR_R12_C2_rarefaction.csv
+Processing POR_R12_C3...
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_C3_R1_trim.fastq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_C3_R2_trim.fastq.gz
+bbduk completed for POR_R12_C3
+Processing sample: POR_R12_C3
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R12_C3_clean_R1.fq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R12_C3_clean_R2.fq.gz
+Total paired reads: 3362940
+Subsampling depth = 0.01
+Subsampling depth = 0.02
+Subsampling depth = 0.05
+Subsampling depth = 0.1
+Subsampling depth = 0.2
+Subsampling depth = 0.5
+Subsampling depth = 1.0
+Finished sample POR_R12_C3
+Results written to: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_rarefaction/POR_R12_C3/POR_R12_C3_rarefaction.csv
+Processing POR_R12_H1...
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_H1_R1_trim.fastq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_H1_R2_trim.fastq.gz
+bbduk completed for POR_R12_H1
+Processing sample: POR_R12_H1
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R12_H1_clean_R1.fq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R12_H1_clean_R2.fq.gz
+Total paired reads: 15241242
+Subsampling depth = 0.01
+Subsampling depth = 0.02
+Subsampling depth = 0.05
+Subsampling depth = 0.1
+Subsampling depth = 0.2
+Subsampling depth = 0.5
+Subsampling depth = 1.0
+Finished sample POR_R12_H1
+Results written to: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_rarefaction/POR_R12_H1/POR_R12_H1_rarefaction.csv
+Processing POR_R12_H2...
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_H2_R1_trim.fastq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_H2_R2_trim.fastq.gz
+bbduk completed for POR_R12_H2
+Processing sample: POR_R12_H2
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R12_H2_clean_R1.fq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R12_H2_clean_R2.fq.gz
+Total paired reads: 15151812
+Subsampling depth = 0.01
+Subsampling depth = 0.02
+Subsampling depth = 0.05
+Subsampling depth = 0.1
+Subsampling depth = 0.2
+Subsampling depth = 0.5
+Subsampling depth = 1.0
+Finished sample POR_R12_H2
+Results written to: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_rarefaction/POR_R12_H2/POR_R12_H2_rarefaction.csv
+Processing POR_R12_H3...
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_H3_R1_trim.fastq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R12_H3_R2_trim.fastq.gz
+bbduk completed for POR_R12_H3
+Processing sample: POR_R12_H3
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R12_H3_clean_R1.fq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R12_H3_clean_R2.fq.gz
+Total paired reads: 11011372
+Subsampling depth = 0.01
+Subsampling depth = 0.02
+Subsampling depth = 0.05
+Subsampling depth = 0.1
+Subsampling depth = 0.2
+Subsampling depth = 0.5
+Subsampling depth = 1.0
+Finished sample POR_R12_H3
+Results written to: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_rarefaction/POR_R12_H3/POR_R12_H3_rarefaction.csv
+Processing POR_R1_C1...
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_C1_R1_trim.fastq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_C1_R2_trim.fastq.gz
+bbduk completed for POR_R1_C1
+Processing sample: POR_R1_C1
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R1_C1_clean_R1.fq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R1_C1_clean_R2.fq.gz
+Total paired reads: 2844879
+Subsampling depth = 0.01
+Subsampling depth = 0.02
+Subsampling depth = 0.05
+Subsampling depth = 0.1
+Subsampling depth = 0.2
+Subsampling depth = 0.5
+Subsampling depth = 1.0
+Finished sample POR_R1_C1
+Results written to: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_rarefaction/POR_R1_C1/POR_R1_C1_rarefaction.csv
+Processing POR_R1_C2...
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_C2_R1_trim.fastq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_C2_R2_trim.fastq.gz
+bbduk completed for POR_R1_C2
+Processing sample: POR_R1_C2
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R1_C2_clean_R1.fq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R1_C2_clean_R2.fq.gz
+Total paired reads: 7223246
+Subsampling depth = 0.01
+Subsampling depth = 0.02
+Subsampling depth = 0.05
+Subsampling depth = 0.1
+Subsampling depth = 0.2
+Subsampling depth = 0.5
+Subsampling depth = 1.0
+Finished sample POR_R1_C2
+Results written to: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_rarefaction/POR_R1_C2/POR_R1_C2_rarefaction.csv
+Processing POR_R1_C3...
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_C3_R1_trim.fastq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_C3_R2_trim.fastq.gz
+bbduk completed for POR_R1_C3
+Processing sample: POR_R1_C3
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R1_C3_clean_R1.fq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R1_C3_clean_R2.fq.gz
+Total paired reads: 7174466
+Subsampling depth = 0.01
+Subsampling depth = 0.02
+Subsampling depth = 0.05
+Subsampling depth = 0.1
+Subsampling depth = 0.2
+Subsampling depth = 0.5
+Subsampling depth = 1.0
+Finished sample POR_R1_C3
+Results written to: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_rarefaction/POR_R1_C3/POR_R1_C3_rarefaction.csv
+Processing POR_R1_H1...
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_H1_R1_trim.fastq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_H1_R2_trim.fastq.gz
+bbduk completed for POR_R1_H1
+Processing sample: POR_R1_H1
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R1_H1_clean_R1.fq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R1_H1_clean_R2.fq.gz
+Total paired reads: 3206524
+Subsampling depth = 0.01
+Subsampling depth = 0.02
+Subsampling depth = 0.05
+Subsampling depth = 0.1
+Subsampling depth = 0.2
+Subsampling depth = 0.5
+Subsampling depth = 1.0
+Finished sample POR_R1_H1
+Results written to: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_rarefaction/POR_R1_H1/POR_R1_H1_rarefaction.csv
+Processing POR_R1_H2...
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_H2_R1_trim.fastq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_H2_R2_trim.fastq.gz
+bbduk completed for POR_R1_H2
+Processing sample: POR_R1_H2
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R1_H2_clean_R1.fq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R1_H2_clean_R2.fq.gz
+Total paired reads: 2660148
+Subsampling depth = 0.01
+Subsampling depth = 0.02
+Subsampling depth = 0.05
+Subsampling depth = 0.1
+Subsampling depth = 0.2
+Subsampling depth = 0.5
+Subsampling depth = 1.0
+Finished sample POR_R1_H2
+Results written to: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_rarefaction/POR_R1_H2/POR_R1_H2_rarefaction.csv
+Processing POR_R1_H3...
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_H3_R1_trim.fastq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R1_H3_R2_trim.fastq.gz
+bbduk completed for POR_R1_H3
+Processing sample: POR_R1_H3
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R1_H3_clean_R1.fq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R1_H3_clean_R2.fq.gz
+Total paired reads: 8210440
+Subsampling depth = 0.01
+Subsampling depth = 0.02
+Subsampling depth = 0.05
+Subsampling depth = 0.1
+Subsampling depth = 0.2
+Subsampling depth = 0.5
+Subsampling depth = 1.0
+Finished sample POR_R1_H3
+Results written to: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_rarefaction/POR_R1_H3/POR_R1_H3_rarefaction.csv
+Processing POR_R24_C1...
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R24_C1_R1_trim.fastq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R24_C1_R2_trim.fastq.gz
+bbduk completed for POR_R24_C1
+Processing sample: POR_R24_C1
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R24_C1_clean_R1.fq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R24_C1_clean_R2.fq.gz
+Total paired reads: 11259970
+Subsampling depth = 0.01
+Subsampling depth = 0.02
+Subsampling depth = 0.05
+Subsampling depth = 0.1
+Subsampling depth = 0.2
+Subsampling depth = 0.5
+Subsampling depth = 1.0
+Finished sample POR_R24_C1
+Results written to: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_rarefaction/POR_R24_C1/POR_R24_C1_rarefaction.csv
+Processing POR_R24_C2...
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R24_C2_R1_trim.fastq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R24_C2_R2_trim.fastq.gz
+bbduk completed for POR_R24_C2
+Processing sample: POR_R24_C2
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R24_C2_clean_R1.fq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R24_C2_clean_R2.fq.gz
+Total paired reads: 4426765
+Subsampling depth = 0.01
+Subsampling depth = 0.02
+Subsampling depth = 0.05
+Subsampling depth = 0.1
+Subsampling depth = 0.2
+Subsampling depth = 0.5
+Subsampling depth = 1.0
+Finished sample POR_R24_C2
+Results written to: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_rarefaction/POR_R24_C2/POR_R24_C2_rarefaction.csv
+Processing POR_R24_C3...
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R24_C3_R1_trim.fastq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R24_C3_R2_trim.fastq.gz
+bbduk completed for POR_R24_C3
+Processing sample: POR_R24_C3
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R24_C3_clean_R1.fq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R24_C3_clean_R2.fq.gz
+Total paired reads: 2645702
+Subsampling depth = 0.01
+Subsampling depth = 0.02
+Subsampling depth = 0.05
+Subsampling depth = 0.1
+Subsampling depth = 0.2
+Subsampling depth = 0.5
+Subsampling depth = 1.0
+Finished sample POR_R24_C3
+Results written to: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_rarefaction/POR_R24_C3/POR_R24_C3_rarefaction.csv
+Processing POR_R24_H1...
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R24_H1_R1_trim.fastq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R24_H1_R2_trim.fastq.gz
+bbduk completed for POR_R24_H1
+Processing sample: POR_R24_H1
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R24_H1_clean_R1.fq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R24_H1_clean_R2.fq.gz
+Total paired reads: 2961966
+Subsampling depth = 0.01
+Subsampling depth = 0.02
+Subsampling depth = 0.05
+Subsampling depth = 0.1
+Subsampling depth = 0.2
+Subsampling depth = 0.5
+Subsampling depth = 1.0
+Finished sample POR_R24_H1
+Results written to: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_rarefaction/POR_R24_H1/POR_R24_H1_rarefaction.csv
+Processing POR_R24_H2...
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R24_H2_R1_trim.fastq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R24_H2_R2_trim.fastq.gz
+bbduk completed for POR_R24_H2
+Processing sample: POR_R24_H2
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R24_H2_clean_R1.fq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R24_H2_clean_R2.fq.gz
+Total paired reads: 10105852
+Subsampling depth = 0.01
+Subsampling depth = 0.02
+Subsampling depth = 0.05
+Subsampling depth = 0.1
+Subsampling depth = 0.2
+Subsampling depth = 0.5
+Subsampling depth = 1.0
+Finished sample POR_R24_H2
+Results written to: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_rarefaction/POR_R24_H2/POR_R24_H2_rarefaction.csv
+Processing POR_R24_H3...
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R24_H3_R1_trim.fastq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R24_H3_R2_trim.fastq.gz
+bbduk completed for POR_R24_H3
+Processing sample: POR_R24_H3
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R24_H3_clean_R1.fq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R24_H3_clean_R2.fq.gz
+Total paired reads: 14031016
+Subsampling depth = 0.01
+Subsampling depth = 0.02
+Subsampling depth = 0.05
+Subsampling depth = 0.1
+Subsampling depth = 0.2
+Subsampling depth = 0.5
+Subsampling depth = 1.0
+Finished sample POR_R24_H3
+Results written to: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_rarefaction/POR_R24_H3/POR_R24_H3_rarefaction.csv
+Processing POR_R3_C1...
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_C1_R1_trim.fastq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_C1_R2_trim.fastq.gz
+bbduk completed for POR_R3_C1
+Processing sample: POR_R3_C1
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R3_C1_clean_R1.fq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R3_C1_clean_R2.fq.gz
+Total paired reads: 8043966
+Subsampling depth = 0.01
+Subsampling depth = 0.02
+Subsampling depth = 0.05
+Subsampling depth = 0.1
+Subsampling depth = 0.2
+Subsampling depth = 0.5
+Subsampling depth = 1.0
+Finished sample POR_R3_C1
+Results written to: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_rarefaction/POR_R3_C1/POR_R3_C1_rarefaction.csv
+Processing POR_R3_C2...
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_C2_R1_trim.fastq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_C2_R2_trim.fastq.gz
+bbduk completed for POR_R3_C2
+Processing sample: POR_R3_C2
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R3_C2_clean_R1.fq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R3_C2_clean_R2.fq.gz
+Total paired reads: 4239950
+Subsampling depth = 0.01
+Subsampling depth = 0.02
+Subsampling depth = 0.05
+Subsampling depth = 0.1
+Subsampling depth = 0.2
+Subsampling depth = 0.5
+Subsampling depth = 1.0
+Finished sample POR_R3_C2
+Results written to: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_rarefaction/POR_R3_C2/POR_R3_C2_rarefaction.csv
+Processing POR_R3_C3...
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_C3_R1_trim.fastq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_C3_R2_trim.fastq.gz
+bbduk completed for POR_R3_C3
+Processing sample: POR_R3_C3
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R3_C3_clean_R1.fq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R3_C3_clean_R2.fq.gz
+Total paired reads: 3934065
+Subsampling depth = 0.01
+Subsampling depth = 0.02
+Subsampling depth = 0.05
+Subsampling depth = 0.1
+Subsampling depth = 0.2
+Subsampling depth = 0.5
+Subsampling depth = 1.0
+Finished sample POR_R3_C3
+Results written to: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_rarefaction/POR_R3_C3/POR_R3_C3_rarefaction.csv
+Processing POR_R3_H1...
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_H1_R1_trim.fastq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_H1_R2_trim.fastq.gz
+bbduk completed for POR_R3_H1
+Processing sample: POR_R3_H1
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R3_H1_clean_R1.fq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R3_H1_clean_R2.fq.gz
+Total paired reads: 7303939
+Subsampling depth = 0.01
+Subsampling depth = 0.02
+Subsampling depth = 0.05
+Subsampling depth = 0.1
+Subsampling depth = 0.2
+Subsampling depth = 0.5
+Subsampling depth = 1.0
+Finished sample POR_R3_H1
+Results written to: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_rarefaction/POR_R3_H1/POR_R3_H1_rarefaction.csv
+Processing POR_R3_H2...
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_H2_R1_trim.fastq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_H2_R2_trim.fastq.gz
+bbduk completed for POR_R3_H2
+Processing sample: POR_R3_H2
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R3_H2_clean_R1.fq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R3_H2_clean_R2.fq.gz
+Total paired reads: 14576318
+Subsampling depth = 0.01
+Subsampling depth = 0.02
+Subsampling depth = 0.05
+Subsampling depth = 0.1
+Subsampling depth = 0.2
+Subsampling depth = 0.5
+Subsampling depth = 1.0
+Finished sample POR_R3_H2
+Results written to: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_rarefaction/POR_R3_H2/POR_R3_H2_rarefaction.csv
+Processing POR_R3_H3...
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_H3_R1_trim.fastq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R3_H3_R2_trim.fastq.gz
+bbduk completed for POR_R3_H3
+Processing sample: POR_R3_H3
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R3_H3_clean_R1.fq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R3_H3_clean_R2.fq.gz
+Total paired reads: 7105971
+Subsampling depth = 0.01
+Subsampling depth = 0.02
+Subsampling depth = 0.05
+Subsampling depth = 0.1
+Subsampling depth = 0.2
+Subsampling depth = 0.5
+Subsampling depth = 1.0
+Finished sample POR_R3_H3
+Results written to: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_rarefaction/POR_R3_H3/POR_R3_H3_rarefaction.csv
+Processing POR_R72_C1...
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_C1_R1_trim.fastq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_C1_R2_trim.fastq.gz
+bbduk completed for POR_R72_C1
+Processing sample: POR_R72_C1
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R72_C1_clean_R1.fq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R72_C1_clean_R2.fq.gz
+Total paired reads: 4632801
+Subsampling depth = 0.01
+Subsampling depth = 0.02
+Subsampling depth = 0.05
+Subsampling depth = 0.1
+Subsampling depth = 0.2
+Subsampling depth = 0.5
+Subsampling depth = 1.0
+Finished sample POR_R72_C1
+Results written to: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_rarefaction/POR_R72_C1/POR_R72_C1_rarefaction.csv
+Processing POR_R72_C2...
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_C2_R1_trim.fastq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_C2_R2_trim.fastq.gz
+bbduk completed for POR_R72_C2
+Processing sample: POR_R72_C2
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R72_C2_clean_R1.fq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R72_C2_clean_R2.fq.gz
+Total paired reads: 8135516
+Subsampling depth = 0.01
+Subsampling depth = 0.02
+Subsampling depth = 0.05
+Subsampling depth = 0.1
+Subsampling depth = 0.2
+Subsampling depth = 0.5
+Subsampling depth = 1.0
+Finished sample POR_R72_C2
+Results written to: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_rarefaction/POR_R72_C2/POR_R72_C2_rarefaction.csv
+Processing POR_R72_C3...
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_C3_R1_trim.fastq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_C3_R2_trim.fastq.gz
+bbduk completed for POR_R72_C3
+Processing sample: POR_R72_C3
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R72_C3_clean_R1.fq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R72_C3_clean_R2.fq.gz
+Total paired reads: 6893426
+Subsampling depth = 0.01
+Subsampling depth = 0.02
+Subsampling depth = 0.05
+Subsampling depth = 0.1
+Subsampling depth = 0.2
+Subsampling depth = 0.5
+Subsampling depth = 1.0
+Finished sample POR_R72_C3
+Results written to: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_rarefaction/POR_R72_C3/POR_R72_C3_rarefaction.csv
+Processing POR_R72_H1...
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_H1_R1_trim.fastq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_H1_R2_trim.fastq.gz
+bbduk completed for POR_R72_H1
+Processing sample: POR_R72_H1
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R72_H1_clean_R1.fq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R72_H1_clean_R2.fq.gz
+Total paired reads: 2448095
+Subsampling depth = 0.01
+Subsampling depth = 0.02
+Subsampling depth = 0.05
+Subsampling depth = 0.1
+Subsampling depth = 0.2
+Subsampling depth = 0.5
+Subsampling depth = 1.0
+Finished sample POR_R72_H1
+Results written to: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_rarefaction/POR_R72_H1/POR_R72_H1_rarefaction.csv
+Processing POR_R72_H2...
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_H2_R1_trim.fastq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files/POR_R72_H2_R2_trim.fastq.gz
+bbduk completed for POR_R72_H2
+Processing sample: POR_R72_H2
+R1: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R72_H2_clean_R1.fq.gz
+R2: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired/POR_R72_H2_clean_R2.fq.gz
+Total paired reads: 2847704
+Subsampling depth = 0.01
+Subsampling depth = 0.02
+Subsampling depth = 0.05
+Subsampling depth = 0.1
+Subsampling depth = 0.2
+Subsampling depth = 0.5
+Subsampling depth = 1.0
+Finished sample POR_R72_H2
+Results written to: /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_rarefaction/POR_R72_H2/POR_R72_H2_rarefaction.csv
