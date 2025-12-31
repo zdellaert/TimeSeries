@@ -16,6 +16,13 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 
 The goal of this script is to identify co-expressed gene modules from our time-course RNA-seq data. I hope to identify genes which respond to the heat stress similarly over time.
 
+### Normal WGCNA:
+
+- helpful links: https://alexslemonade.github.io/refinebio-examples/04-advanced-topics/network-analysis_rnaseq_01_wgcna.html
+- https://github.com/fscucchia/HI_PhotoPhysio_TPC_geneExpr/blob/983b837e2dbd9bad2dfeda764dcc0b9da254073a/Gene_expression/scripts/WGCNA_Network_Analysis/WGCNA_Pacu.r
+
+### multiWGCNA package:
+
 I will be following [this vignette](https://bioc.r-universe.dev/articles/multiWGCNA/autism_full_workflow.html) for the package  [multiWGCNA](https://github.com/fogellab/multiWGCNA), which is described in this [paper](https://link.springer.com/article/10.1186/s12859-023-05233-z#Abs1). An example paper with a use of this package I really like is [here, figure 4](https://www.pnas.org/doi/epub/10.1073/pnas.2420811122). Helpful *general* WGCNA tutorial to help with parameter decisions can be found [here](https://alexslemonade.github.io/refinebio-examples/04-advanced-topics/network-analysis_rnaseq_01_wgcna.html#46_Determine_parameters_for_WGCNA).
 
 ## Install necessary packages
@@ -465,7 +472,7 @@ top_mod_sig_interaction <- stats_interaction %>% filter(adj.P.Val < 0.05)  %>% p
 stats_interaction %>% filter(adj.P.Val < 0.05)  %>% head(5)
 ```
 
-Module 2 is the most differentially expressed across treatments + in the full model.
+Module 1 is the most differentially expressed across treatments + in the full model.
 
 #### Plot example module over time
 
@@ -476,7 +483,7 @@ eigengenes_treatment_df <- module_eigengenes %>%
     dplyr::select(sample, treatment,time),
   by = c("sample" = "sample"))
 
-ggplot(eigengenes_treatment_df, aes(x = factor(time), y = ME2,color = treatment)) +
+ggplot(eigengenes_treatment_df, aes(x = factor(time), y = ME1,color = treatment)) +
   geom_boxplot(outlier.shape = NA) +
   ggforce::geom_sina(size=1, alpha = 0.5) +
   scale_color_manual(values = treat_colors) +
@@ -532,9 +539,9 @@ save_ggplot(plot = last_plot(), filename = "all_modules_lines", width = 14, heig
 #### Individual module heatmaps
 
 ```{r}
-make_module_heatmap(module_name = "ME2")
+make_module_heatmap(module_name = "ME1")
 make_module_heatmap(module_name = "ME0")
-make_module_heatmap(module_name = "ME21")
+make_module_heatmap(module_name = "ME3")
 ```
 
 ### multiWGCNA
@@ -1296,7 +1303,7 @@ top_mod_sig_interaction <- stats_interaction %>% filter(adj.P.Val < 0.05)  %>% p
 stats_interaction %>% filter(adj.P.Val < 0.05)  %>% head(5)
 ```
 
-Module 2 is the most differentially expressed across treatments + in the full model.
+Module 5 is the most differentially expressed across treatments + in the full model.
 
 #### Plot example module over time
 
@@ -1307,7 +1314,7 @@ eigengenes_treatment_df <- module_eigengenes %>%
     dplyr::select(sample, treatment,time),
   by = c("sample" = "sample"))
 
-ggplot(eigengenes_treatment_df, aes(x = factor(time), y = ME2,color = treatment)) +
+ggplot(eigengenes_treatment_df, aes(x = factor(time), y = ME5,color = treatment)) +
   geom_boxplot(outlier.shape = NA) +
   ggforce::geom_sina(size=1, alpha = 0.5) +
   scale_color_manual(values = treat_colors) +
@@ -1363,9 +1370,9 @@ save_ggplot(plot = last_plot(), filename = "all_modules_lines", width = 14, heig
 #### Individual module heatmaps
 
 ```{r}
-make_module_heatmap(module_name = "ME2")
-make_module_heatmap(module_name = "ME0")
-make_module_heatmap(module_name = "ME21")
+make_module_heatmap(module_name = "ME5")
+make_module_heatmap(module_name = "ME22")
+make_module_heatmap(module_name = "ME3")
 ```
 
 ## POR
@@ -1696,7 +1703,7 @@ top_mod_sig_interaction <- stats_interaction %>% filter(adj.P.Val < 0.05)  %>% p
 stats_interaction %>% filter(adj.P.Val < 0.05)  %>% head(5)
 ```
 
-Module 6 is the most differentially expressed across treatments + in the full model.
+Module 15 is the most differentially expressed across treatments + in the full model.
 
 #### Plot example module over time
 
@@ -1707,7 +1714,7 @@ eigengenes_treatment_df <- module_eigengenes %>%
     dplyr::select(sample, treatment,time),
   by = c("sample" = "sample"))
 
-ggplot(eigengenes_treatment_df, aes(x = factor(time), y = ME6,color = treatment)) +
+ggplot(eigengenes_treatment_df, aes(x = factor(time), y = ME15,color = treatment)) +
   geom_boxplot(outlier.shape = NA) +
   ggforce::geom_sina(size=1, alpha = 0.5) +
   scale_color_manual(values = treat_colors) +
@@ -1763,8 +1770,7 @@ save_ggplot(plot = last_plot(), filename = "all_modules_lines", width = 14, heig
 #### Individual module heatmaps
 
 ```{r}
-make_module_heatmap(module_name = "ME6")
 make_module_heatmap(module_name = "ME15")
 make_module_heatmap(module_name = "ME2")
-make_module_heatmap(module_name = "ME0")
+make_module_heatmap(module_name = "ME3")
 ```
