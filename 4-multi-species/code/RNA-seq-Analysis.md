@@ -176,7 +176,7 @@ filtered_counts <- counts_raw[counts_filt_poa,] #keep only rows that passed filt
 paste0("Number of genes after filtering: ", sum(counts_filt_poa))
 ```
 
-    ## [1] "Number of genes after filtering: 24788"
+    ## [1] "Number of genes after filtering: 24941"
 
 ``` r
 write.csv(filtered_counts, file = file.path(outdir, "filtered_counts.csv"))
@@ -206,19 +206,19 @@ print(sizeFactors(SF.dds)) #View size factors
 ```
 
     ##   POC_R0_C1   POC_R0_C2   POC_R0_C3   POC_R0_H1   POC_R0_H2   POC_R0_H3 
-    ##   1.1400513   1.0054138   1.0730462   1.0656934   1.0344791   1.2362674 
+    ##   1.0660151   0.9397061   1.0037728   0.9967210   0.9679379   1.1556707 
     ##   POC_R1_C1   POC_R1_C2   POC_R1_C3   POC_R1_H1   POC_R1_H2   POC_R1_H3 
-    ##   1.1375714   1.4320163   1.1739872   0.7374017   1.2005566   1.0448926 
+    ##   1.0634877   1.3406688   1.0982417   1.1864185   1.1232481   0.9768898 
     ##   POC_R3_C1   POC_R3_C2   POC_R3_C3   POC_R3_H1   POC_R3_H2   POC_R3_H3 
-    ##   1.0620672   1.0220145   1.2373402   0.6891664   0.4336651   0.7143330 
+    ##   0.9923358   0.9561270   1.1572729   0.6441244   1.0328153   0.6671524 
     ##  POC_R12_C1  POC_R12_C2  POC_R12_C3  POC_R12_H1  POC_R12_H2  POC_R12_H3 
-    ##   0.9365758   1.2352574   0.7657006   0.9766124   1.0704378   0.8340966 
+    ##   0.8762806   1.1544485   1.4840731   0.9102299   0.9996347   0.7792660 
     ##  POC_R24_C1  POC_R24_C2  POC_R24_C3  POC_R24_H1  POC_R24_H2  POC_R24_H3 
-    ##   1.2237477   0.9300323   1.3443019   1.0667102   0.9626905   1.0305861 
+    ##   1.1446236   0.8702174   1.2568407   0.9971496   0.8999134   0.9638295 
     ##  POC_R72_C1  POC_R72_C2  POC_R72_C3  POC_R72_H1  POC_R72_H2  POC_R72_H3 
-    ##   1.0343116   1.4124681   1.0367336   1.3044786   0.9473403   0.8361998 
+    ##   0.9669207   1.3217117   0.9700146   1.2201376   0.8865256   0.7824193 
     ## POC_R120_C1 POC_R120_C2 POC_R120_C3 POC_R120_H1 POC_R120_H2 POC_R120_H3 
-    ##   0.7399601   0.9449157   1.0560854   0.9492946   1.3124819   0.9963775
+    ##   1.2534718   0.8836445   0.9880893   0.8877139   1.2278940   0.9313091
 
 ``` r
 all(sizeFactors(SF.dds)) < 4
@@ -785,44 +785,44 @@ impulse_sig_genes %>% arrange(padj) %>% head(5) %>% dplyr::select(!contains("con
     ##                                                                                Gene
     ## Pocillopora_acuta_HIv2___TS.g798.t2             Pocillopora_acuta_HIv2___TS.g798.t2
     ## Pocillopora_acuta_HIv2___RNAseq.g26418.t1 Pocillopora_acuta_HIv2___RNAseq.g26418.t1
-    ## Pocillopora_acuta_HIv2___RNAseq.g18469.t1 Pocillopora_acuta_HIv2___RNAseq.g18469.t1
-    ## Pocillopora_acuta_HIv2___TS.g28751.t1         Pocillopora_acuta_HIv2___TS.g28751.t1
+    ## Pocillopora_acuta_HIv2___RNAseq.g5165.t1   Pocillopora_acuta_HIv2___RNAseq.g5165.t1
+    ## Pocillopora_acuta_HIv2___RNAseq.g22728.t1 Pocillopora_acuta_HIv2___RNAseq.g22728.t1
     ## Pocillopora_acuta_HIv2___RNAseq.g26847.t1 Pocillopora_acuta_HIv2___RNAseq.g26847.t1
     ##                                                      p         padj loglik_full
-    ## Pocillopora_acuta_HIv2___TS.g798.t2       2.620672e-96 7.887698e-92   -326.5592
-    ## Pocillopora_acuta_HIv2___RNAseq.g26418.t1 9.105863e-90 1.370341e-85   -370.2883
-    ## Pocillopora_acuta_HIv2___RNAseq.g18469.t1 2.195131e-83 2.202302e-79   -311.6048
-    ## Pocillopora_acuta_HIv2___TS.g28751.t1     3.888001e-82 2.925526e-78   -339.8588
-    ## Pocillopora_acuta_HIv2___RNAseq.g26847.t1 6.212947e-82 3.739946e-78   -308.4492
+    ## Pocillopora_acuta_HIv2___TS.g798.t2       1.785547e-91 5.388779e-87   -328.8425
+    ## Pocillopora_acuta_HIv2___RNAseq.g26418.t1 8.064791e-88 1.216977e-83   -372.3030
+    ## Pocillopora_acuta_HIv2___RNAseq.g5165.t1  4.697900e-82 4.726087e-78   -235.3446
+    ## Pocillopora_acuta_HIv2___RNAseq.g22728.t1 1.539658e-81 1.161672e-77   -292.0287
+    ## Pocillopora_acuta_HIv2___RNAseq.g26847.t1 3.637731e-81 2.195734e-77   -312.5755
     ##                                           loglik_red df_full df_red      mean
-    ## Pocillopora_acuta_HIv2___TS.g798.t2        -554.5095      17     12 1073.8541
-    ## Pocillopora_acuta_HIv2___RNAseq.g26418.t1  -583.0748      17     12 3789.4822
-    ## Pocillopora_acuta_HIv2___RNAseq.g18469.t1  -509.5883      17     12 6194.2984
-    ## Pocillopora_acuta_HIv2___TS.g28751.t1      -534.9461      17     12 1878.5545
-    ## Pocillopora_acuta_HIv2___RNAseq.g26847.t1  -503.0641      17     12  820.8331
+    ## Pocillopora_acuta_HIv2___TS.g798.t2        -545.5883      17     12 1155.4787
+    ## Pocillopora_acuta_HIv2___RNAseq.g26418.t1  -580.5737      17     12 4069.0998
+    ## Pocillopora_acuta_HIv2___RNAseq.g5165.t1   -430.2411      17     12  431.8172
+    ## Pocillopora_acuta_HIv2___RNAseq.g22728.t1  -485.7291      17     12  572.6731
+    ## Pocillopora_acuta_HIv2___RNAseq.g26847.t1  -505.4094      17     12  870.6789
     ##                                           impulseTOsigmoid_p
-    ## Pocillopora_acuta_HIv2___TS.g798.t2             1.967931e-01
-    ## Pocillopora_acuta_HIv2___RNAseq.g26418.t1      8.490893e-158
-    ## Pocillopora_acuta_HIv2___RNAseq.g18469.t1       3.186167e-80
-    ## Pocillopora_acuta_HIv2___TS.g28751.t1          1.439746e-200
-    ## Pocillopora_acuta_HIv2___RNAseq.g26847.t1       6.082036e-01
+    ## Pocillopora_acuta_HIv2___TS.g798.t2             2.116394e-01
+    ## Pocillopora_acuta_HIv2___RNAseq.g26418.t1      1.337443e-154
+    ## Pocillopora_acuta_HIv2___RNAseq.g5165.t1       3.174080e-194
+    ## Pocillopora_acuta_HIv2___RNAseq.g22728.t1       4.710900e-15
+    ## Pocillopora_acuta_HIv2___RNAseq.g26847.t1       5.377848e-01
     ##                                           impulseTOsigmoid_padj
-    ## Pocillopora_acuta_HIv2___TS.g798.t2                3.339392e-01
-    ## Pocillopora_acuta_HIv2___RNAseq.g26418.t1         5.111178e-154
-    ## Pocillopora_acuta_HIv2___RNAseq.g18469.t1          2.739922e-77
-    ## Pocillopora_acuta_HIv2___TS.g28751.t1             1.444449e-196
-    ## Pocillopora_acuta_HIv2___RNAseq.g26847.t1          7.746538e-01
+    ## Pocillopora_acuta_HIv2___TS.g798.t2                3.520907e-01
+    ## Pocillopora_acuta_HIv2___RNAseq.g26418.t1         6.727339e-151
+    ## Pocillopora_acuta_HIv2___RNAseq.g5165.t1          3.193124e-190
+    ## Pocillopora_acuta_HIv2___RNAseq.g22728.t1          1.087796e-13
+    ## Pocillopora_acuta_HIv2___RNAseq.g26847.t1          7.090273e-01
     ##                                           sigmoidTOconst_p sigmoidTOconst_padj
-    ## Pocillopora_acuta_HIv2___TS.g798.t2          2.829212e-131       2.838454e-127
-    ## Pocillopora_acuta_HIv2___RNAseq.g26418.t1    2.727102e-105       9.120036e-102
-    ## Pocillopora_acuta_HIv2___RNAseq.g18469.t1     8.192855e-38        1.086293e-35
-    ## Pocillopora_acuta_HIv2___TS.g28751.t1         2.432609e-30        2.005936e-28
-    ## Pocillopora_acuta_HIv2___RNAseq.g26847.t1    1.147646e-133       1.727092e-129
+    ## Pocillopora_acuta_HIv2___TS.g798.t2          1.515162e-125       1.143189e-121
+    ## Pocillopora_acuta_HIv2___RNAseq.g26418.t1    1.084480e-102        3.272959e-99
+    ## Pocillopora_acuta_HIv2___RNAseq.g5165.t1      5.093000e-19        1.738764e-17
+    ## Pocillopora_acuta_HIv2___RNAseq.g22728.t1    9.892457e-117       4.975906e-113
+    ## Pocillopora_acuta_HIv2___RNAseq.g26847.t1    2.697721e-132       2.713907e-128
     ##                                           isTransient isMonotonous allZero
     ## Pocillopora_acuta_HIv2___TS.g798.t2             FALSE         TRUE   FALSE
     ## Pocillopora_acuta_HIv2___RNAseq.g26418.t1        TRUE        FALSE   FALSE
-    ## Pocillopora_acuta_HIv2___RNAseq.g18469.t1        TRUE        FALSE   FALSE
-    ## Pocillopora_acuta_HIv2___TS.g28751.t1            TRUE        FALSE   FALSE
+    ## Pocillopora_acuta_HIv2___RNAseq.g5165.t1         TRUE        FALSE   FALSE
+    ## Pocillopora_acuta_HIv2___RNAseq.g22728.t1        TRUE        FALSE   FALSE
     ## Pocillopora_acuta_HIv2___RNAseq.g26847.t1       FALSE         TRUE   FALSE
 
 ``` r
@@ -830,7 +830,7 @@ cat("\nTotal significant genes:", nrow(impulse_sig_genes), "\n")
 ```
 
     ## 
-    ## Total significant genes: 9624
+    ## Total significant genes: 9718
 
 ``` r
 cat("\nResponse patterns:\n")
@@ -843,19 +843,19 @@ cat("\nResponse patterns:\n")
 cat("Transient:", sum(impulse_sig_genes$isTransient), "\n")
 ```
 
-    ## Transient: 5005
+    ## Transient: 5095
 
 ``` r
 cat("Monotonous:", sum(impulse_sig_genes$isMonotonous), "\n")
 ```
 
-    ## Monotonous: 3059
+    ## Monotonous: 3062
 
 ``` r
 cat("Complex:", sum(!impulse_sig_genes$isTransient & !impulse_sig_genes$isMonotonous), "\n")
 ```
 
-    ## Complex: 1560
+    ## Complex: 1561
 
 #### 5. Heatmap of transient and non-transiently heat-affected genes
 
@@ -933,10 +933,10 @@ str(lsHeatmaps$lsvecGeneGroups)
 ```
 
     ## List of 4
-    ##  $ transition_up  : chr [1:1378] "Pocillopora_acuta_HIv2___RNAseq.g27410.t1" "Pocillopora_acuta_HIv2___RNAseq.g27486.t1" "Pocillopora_acuta_HIv2___RNAseq.g27591.t1" "Pocillopora_acuta_HIv2___RNAseq.g27639.t1" ...
-    ##  $ transition_down: chr [1:1681] "Pocillopora_acuta_HIv2___RNAseq.g13351.t1" "Pocillopora_acuta_HIv2___RNAseq.g23871.t1" "Pocillopora_acuta_HIv2___RNAseq.g27678.t1" "Pocillopora_acuta_HIv2___TS.g10629.t3" ...
-    ##  $ transient_up   : chr [1:2277] "Pocillopora_acuta_HIv2___RNAseq.g27789.t1" "Pocillopora_acuta_HIv2___TS.g11181.t1" "Pocillopora_acuta_HIv2___RNAseq.1568_t" "Pocillopora_acuta_HIv2___RNAseq.g10404.t1" ...
-    ##  $ transient_down : chr [1:2728] "Pocillopora_acuta_HIv2___RNAseq.g27542.t1" "Pocillopora_acuta_HIv2___TS.g10620.t1" "Pocillopora_acuta_HIv2___RNAseq.g28264.t1" "Pocillopora_acuta_HIv2___RNAseq.g28295.t1" ...
+    ##  $ transition_up  : chr [1:1360] "Pocillopora_acuta_HIv2___RNAseq.g27486.t1" "Pocillopora_acuta_HIv2___RNAseq.g27541.t1" "Pocillopora_acuta_HIv2___RNAseq.g27591.t1" "Pocillopora_acuta_HIv2___RNAseq.g27616.t1" ...
+    ##  $ transition_down: chr [1:1702] "Pocillopora_acuta_HIv2___RNAseq.g27572.t1" "Pocillopora_acuta_HIv2___RNAseq.g27678.t1" "Pocillopora_acuta_HIv2___TS.g10629.t3" "Pocillopora_acuta_HIv2___RNAseq.g27943.t1" ...
+    ##  $ transient_up   : chr [1:2283] "Pocillopora_acuta_HIv2___RNAseq.g27789.t1" "Pocillopora_acuta_HIv2___TS.g11181.t1" "Pocillopora_acuta_HIv2___RNAseq.1568_t" "Pocillopora_acuta_HIv2___RNAseq.g10404.t1" ...
+    ##  $ transient_down : chr [1:2812] "Pocillopora_acuta_HIv2___RNAseq.g27542.t1" "Pocillopora_acuta_HIv2___TS.g10620.t1" "Pocillopora_acuta_HIv2___RNAseq.g28264.t1" "Pocillopora_acuta_HIv2___RNAseq.g28295.t1" ...
 
 #### 6. Plot trajectories of top impulseDE genes and specific genes of interest
 
@@ -997,72 +997,72 @@ impulse_results %>% filter(Gene %in% stress_genes_ids) %>% arrange(padj) %>% lef
 ```
 
     ##                                         Gene            p         padj
-    ## 1  Pocillopora_acuta_HIv2___RNAseq.g23086.t1 9.531360e-22 1.000816e-19
-    ## 2   Pocillopora_acuta_HIv2___RNAseq.g8390.t1 4.195724e-12 1.232028e-10
-    ## 3  Pocillopora_acuta_HIv2___RNAseq.g11741.t1 6.223221e-08 8.627660e-07
-    ## 4   Pocillopora_acuta_HIv2___RNAseq.g7990.t1 1.006531e-07 1.329876e-06
-    ## 5   Pocillopora_acuta_HIv2___RNAseq.g7011.t1 2.169449e-05 1.661854e-04
-    ## 6  Pocillopora_acuta_HIv2___RNAseq.g28750.t1 2.489336e-04 1.419823e-03
-    ## 7   Pocillopora_acuta_HIv2___RNAseq.g1543.t1 4.292494e-04 2.285837e-03
-    ## 8  Pocillopora_acuta_HIv2___RNAseq.g15654.t1 4.924850e-03 1.867286e-02
-    ## 9  Pocillopora_acuta_HIv2___RNAseq.g28257.t1 1.840394e-02 5.613314e-02
-    ## 10 Pocillopora_acuta_HIv2___RNAseq.g19827.t1 4.248327e-02 1.118102e-01
-    ## 11     Pocillopora_acuta_HIv2___TS.g1420.t1c 2.658636e-01 4.785576e-01
-    ## 12     Pocillopora_acuta_HIv2___TS.g11056.t1 7.031684e-01 9.558681e-01
-    ## 13     Pocillopora_acuta_HIv2___TS.g22794.t1 9.869052e-01 1.000000e+00
+    ## 1  Pocillopora_acuta_HIv2___RNAseq.g23086.t1 1.205649e-25 1.966836e-23
+    ## 2   Pocillopora_acuta_HIv2___RNAseq.g8390.t1 5.864485e-12 1.696933e-10
+    ## 3   Pocillopora_acuta_HIv2___RNAseq.g7990.t1 8.705708e-08 1.170848e-06
+    ## 4  Pocillopora_acuta_HIv2___RNAseq.g11741.t1 1.033821e-07 1.368452e-06
+    ## 5   Pocillopora_acuta_HIv2___RNAseq.g7011.t1 1.943587e-05 1.513350e-04
+    ## 6  Pocillopora_acuta_HIv2___RNAseq.g28750.t1 3.812607e-04 2.063197e-03
+    ## 7   Pocillopora_acuta_HIv2___RNAseq.g1543.t1 4.439332e-04 2.351334e-03
+    ## 8  Pocillopora_acuta_HIv2___RNAseq.g15654.t1 5.884784e-03 2.173575e-02
+    ## 9  Pocillopora_acuta_HIv2___RNAseq.g19827.t1 1.071314e-02 3.576183e-02
+    ## 10 Pocillopora_acuta_HIv2___RNAseq.g28257.t1 1.862649e-02 5.650858e-02
+    ## 11     Pocillopora_acuta_HIv2___TS.g1420.t1c 2.089094e-01 3.966835e-01
+    ## 12     Pocillopora_acuta_HIv2___TS.g11056.t1 3.148303e-01 5.433653e-01
+    ## 13     Pocillopora_acuta_HIv2___TS.g22794.t1 9.824282e-01 1.000000e+00
     ##    loglik_full loglik_red df_full df_red        mean converge_combined
-    ## 1    -228.6372  -282.7695      17     12    15.53524                 0
-    ## 2    -309.3454  -340.4621      17     12  1435.74518                 0
-    ## 3    -336.8019  -357.7429      17     12  6358.58800                 0
-    ## 4    -357.9047  -378.3292      17     12  2265.91671                 0
-    ## 5    -333.9890  -348.5627      17     12  3283.85436                 0
-    ## 6    -395.7910  -407.6363      17     12 15600.94668                 0
-    ## 7    -314.6311  -325.8577      17     12  1801.22432                 0
-    ## 8    -379.7205  -388.1133      17     12 13672.24376                 0
-    ## 9    -341.4634  -348.2604      17     12  4014.93615                 0
-    ## 10   -268.4807  -274.2258      17     12  1040.97860                 0
-    ## 11   -266.9347  -270.1539      17     12   963.26076                 0
-    ## 12   -225.7617  -227.2514      17     12   511.20373                 0
-    ## 13   -306.6056  -306.9173      17     12  2362.04636                 0
+    ## 1    -226.7029  -290.0421      17     12    16.88214                 0
+    ## 2    -311.9988  -342.7642      17     12  1516.79604                 0
+    ## 3    -360.2671  -380.8476      17     12  2406.05959                 0
+    ## 4    -338.8354  -359.2311      17     12  6737.69717                 0
+    ## 5    -336.0962  -350.7914      17     12  3495.73645                 0
+    ## 6    -398.1313  -409.4929      17     12 16580.59460                 0
+    ## 7    -317.6602  -328.8485      17     12  1927.73258                 0
+    ## 8    -382.6847  -390.8654      17     12 14536.36147                 0
+    ## 9    -270.7317  -278.1913      17     12  1117.97938                 0
+    ## 10   -343.8170  -350.5992      17     12  4267.53272                 0
+    ## 11   -270.0951  -273.6758      17     12  1020.64181                 0
+    ## 12   -228.0786  -231.0348      17     12   549.66866                 0
+    ## 13   -310.1762  -310.5311      17     12  2539.03987                 0
     ##    converge_case converge_control converge_sigmoid impulseTOsigmoid_p
-    ## 1              0                0                0       5.219971e-21
-    ## 2              0                0                0       3.644976e-32
-    ## 3              0                0                0       7.231044e-02
-    ## 4              0                0                0       5.838978e-14
-    ## 5              0                0                0       2.986487e-16
-    ## 6              0                0                0       1.574349e-10
-    ## 7              0                0                0       1.148572e-16
-    ## 8              0                0                0       8.276784e-15
-    ## 9              0                0                0       2.574850e-14
-    ## 10             0                0                0       4.541043e-05
-    ## 11             0                0                0       1.887574e-04
-    ## 12             0                0                0       1.820024e-01
-    ## 13             0                0                0       4.227763e-01
+    ## 1              0                0                0       9.036014e-25
+    ## 2              0                0                0       9.621245e-32
+    ## 3              0                0                0       2.056098e-17
+    ## 4              0                0                0       1.030922e-01
+    ## 5              0                0                0       2.372638e-16
+    ## 6              0                0                0       1.647502e-10
+    ## 7              0                0                0       1.331483e-16
+    ## 8              0                0                0       1.964108e-14
+    ## 9              0                0                0       9.212830e-06
+    ## 10             0                0                0       1.813011e-14
+    ## 11             0                0                0       1.271732e-02
+    ## 12             0                0                0       5.266291e-04
+    ## 13             0                0                0       3.934446e-01
     ##    impulseTOsigmoid_padj sigmoidTOconst_p sigmoidTOconst_padj isTransient
-    ## 1           2.250870e-19     8.943872e-46        1.909168e-43        TRUE
-    ## 2           3.460772e-30     5.915155e-07        4.676499e-06        TRUE
-    ## 3           1.504701e-01     2.100597e-21        8.854871e-20       FALSE
-    ## 4           1.205360e-12     1.878181e-13        3.635337e-12        TRUE
-    ## 5           8.025650e-15     5.868654e-01        9.085670e-01        TRUE
-    ## 6           2.072824e-09     2.636104e-14        5.579568e-13        TRUE
-    ## 7           3.227797e-15     4.193565e-01        7.144679e-01        TRUE
-    ## 8           1.903091e-13     9.981691e-01        1.000000e+00        TRUE
-    ## 9           5.515861e-13     5.631308e-04        2.502452e-03        TRUE
-    ## 10          2.415630e-04     1.077605e-05        6.810952e-05        TRUE
-    ## 11          8.702851e-04     7.704779e-01        1.000000e+00        TRUE
-    ## 12          3.148042e-01     5.687765e-03        1.967253e-02       FALSE
-    ## 13          5.956988e-01     2.791210e-01        5.250616e-01       FALSE
+    ## 1           5.234297e-23     1.273167e-50        3.525153e-48        TRUE
+    ## 2           9.017676e-30     8.147251e-07        6.325805e-06        TRUE
+    ## 3           6.125672e-16     2.328604e-10        3.079635e-09        TRUE
+    ## 4           1.997638e-01     4.018418e-21        1.663592e-19       FALSE
+    ## 5           6.342447e-15     6.502038e-01        9.643774e-01        TRUE
+    ## 6           2.133975e-09     4.210250e-14        8.901608e-13        TRUE
+    ## 7           3.656429e-15     4.110883e-01        7.020113e-01        TRUE
+    ## 8           4.225002e-13     9.998479e-01        1.000000e+00        TRUE
+    ## 9           5.623852e-05     8.444456e-06        5.435139e-05        TRUE
+    ## 10          3.919532e-13     7.133615e-04        3.085304e-03        TRUE
+    ## 11          3.517630e-02     2.643449e-02        7.456706e-02       FALSE
+    ## 12          2.191323e-03     6.652087e-01        9.781719e-01       FALSE
+    ## 13          5.639056e-01     2.546886e-01        4.865337e-01       FALSE
     ##    isMonotonous allZero     gene_id response_type     category
     ## 1         FALSE   FALSE HSP70,Hsc71         Type1          UPR
     ## 2         FALSE   FALSE       Bcl-2         Type1    Apoptosis
-    ## 3          TRUE   FALSE       Foxo3         Type1 ROS response
-    ## 4         FALSE   FALSE        HSF1         Type1          UPR
+    ## 3         FALSE   FALSE        HSF1         Type1          UPR
+    ## 4          TRUE   FALSE       Foxo3         Type1 ROS response
     ## 5         FALSE   FALSE       Bcl-2         Type1    Apoptosis
     ## 6         FALSE   FALSE   Nrf2,Nrf1         Type1 ROS response
     ## 7         FALSE   FALSE         BAX         Type1    Apoptosis
     ## 8         FALSE   FALSE        BI-1         Type1    Apoptosis
-    ## 9         FALSE   FALSE       Bcl-2         Type1    Apoptosis
-    ## 10        FALSE   FALSE        AMPK         Type1 ROS response
+    ## 9         FALSE   FALSE        AMPK         Type1 ROS response
+    ## 10        FALSE   FALSE       Bcl-2         Type1    Apoptosis
     ## 11        FALSE   FALSE        HO-1         Type1 ROS response
     ## 12        FALSE   FALSE         BAK         Type1    Apoptosis
     ## 13        FALSE   FALSE          GR         Type1 ROS response
@@ -1186,281 +1186,256 @@ library(Mfuzz)
 sum(impulse_sig_genes$Gene %in% rownames(vsd_mat))
 ```
 
-    ## [1] 9615
+    ## [1] 9710
 
 ``` r
 length(impulse_sig_genes$Gene)
 ```
 
-    ## [1] 9624
+    ## [1] 9718
 
 ``` r
 # which ones are missing? 
 missing_genes <- impulse_sig_genes$Gene[!(impulse_sig_genes$Gene %in% rownames(vsd_mat))]
 
-# 9 are missing and it is because they were filtered out during pOverA filtering -- as seen with rowSums below, each has fewer than 3 samples with a count >10
+# 8 are missing and it is because they were filtered out during pOverA filtering -- as seen with rowSums below, each has fewer than 3 samples with a count >10
 
 counts_raw[missing_genes,]
 ```
 
-    ##                                            POC_R0_C1 POC_R0_C2 POC_R0_C3
-    ## Pocillopora_acuta_HIv2___RNAseq.g25114.t1          2         2         3
-    ## Pocillopora_acuta_HIv2___TS.g25792.t1b            10         0         5
-    ## Pocillopora_acuta_HIv2___RNAseq.g4270.t1           8         0         2
-    ## Pocillopora_acuta_HIv2___TS.g24316.t1              4         0         0
-    ## Pocillopora_acuta_HIv2___TS.g6083.t2               1         1         0
-    ## Pocillopora_acuta_HIv2___TS.g18862.t1              0         0         0
-    ## Pocillopora_acuta_HIv2___RNAseq.g8768.t1           4         3         5
-    ## Pocillopora_acuta_HIv2___RNAseq.g29082.t1b         5         5         3
-    ## Pocillopora_acuta_HIv2___RNAseq.g30962.t1          6         7         7
-    ##                                            POC_R0_H1 POC_R0_H2 POC_R0_H3
-    ## Pocillopora_acuta_HIv2___RNAseq.g25114.t1          0         3         0
-    ## Pocillopora_acuta_HIv2___TS.g25792.t1b            15         9        23
-    ## Pocillopora_acuta_HIv2___RNAseq.g4270.t1           0         0         0
-    ## Pocillopora_acuta_HIv2___TS.g24316.t1              4         0         0
-    ## Pocillopora_acuta_HIv2___TS.g6083.t2               0         1         1
-    ## Pocillopora_acuta_HIv2___TS.g18862.t1             11         5         4
-    ## Pocillopora_acuta_HIv2___RNAseq.g8768.t1           0         0         0
-    ## Pocillopora_acuta_HIv2___RNAseq.g29082.t1b         4         5         6
-    ## Pocillopora_acuta_HIv2___RNAseq.g30962.t1         10        10         6
-    ##                                            POC_R1_C1 POC_R1_C2 POC_R1_C3
-    ## Pocillopora_acuta_HIv2___RNAseq.g25114.t1          2         2         2
-    ## Pocillopora_acuta_HIv2___TS.g25792.t1b             0         6         4
-    ## Pocillopora_acuta_HIv2___RNAseq.g4270.t1           0         0         0
-    ## Pocillopora_acuta_HIv2___TS.g24316.t1              1         4         0
-    ## Pocillopora_acuta_HIv2___TS.g6083.t2               1         1         0
-    ## Pocillopora_acuta_HIv2___TS.g18862.t1              4         3         1
-    ## Pocillopora_acuta_HIv2___RNAseq.g8768.t1           0         0         0
-    ## Pocillopora_acuta_HIv2___RNAseq.g29082.t1b         2         5         2
-    ## Pocillopora_acuta_HIv2___RNAseq.g30962.t1          4        10        10
-    ##                                            POC_R1_H1 POC_R1_H2 POC_R1_H3
-    ## Pocillopora_acuta_HIv2___RNAseq.g25114.t1          3         2         3
-    ## Pocillopora_acuta_HIv2___TS.g25792.t1b             6         3         3
-    ## Pocillopora_acuta_HIv2___RNAseq.g4270.t1           3         2         3
-    ## Pocillopora_acuta_HIv2___TS.g24316.t1             11        12         9
-    ## Pocillopora_acuta_HIv2___TS.g6083.t2               1         1         1
-    ## Pocillopora_acuta_HIv2___TS.g18862.t1              3         8         2
-    ## Pocillopora_acuta_HIv2___RNAseq.g8768.t1          10         8         6
-    ## Pocillopora_acuta_HIv2___RNAseq.g29082.t1b         9        13        23
-    ## Pocillopora_acuta_HIv2___RNAseq.g30962.t1          2         8         6
-    ##                                            POC_R3_C1 POC_R3_C2 POC_R3_C3
-    ## Pocillopora_acuta_HIv2___RNAseq.g25114.t1          1         2         3
-    ## Pocillopora_acuta_HIv2___TS.g25792.t1b             4         4         0
-    ## Pocillopora_acuta_HIv2___RNAseq.g4270.t1           0         0         0
-    ## Pocillopora_acuta_HIv2___TS.g24316.t1              3         3         0
-    ## Pocillopora_acuta_HIv2___TS.g6083.t2               0         1         1
-    ## Pocillopora_acuta_HIv2___TS.g18862.t1              3         1        10
-    ## Pocillopora_acuta_HIv2___RNAseq.g8768.t1           0         0         2
-    ## Pocillopora_acuta_HIv2___RNAseq.g29082.t1b         2         5         6
-    ## Pocillopora_acuta_HIv2___RNAseq.g30962.t1          7         7         4
-    ##                                            POC_R3_H1 POC_R3_H2 POC_R3_H3
-    ## Pocillopora_acuta_HIv2___RNAseq.g25114.t1          6         5         5
-    ## Pocillopora_acuta_HIv2___TS.g25792.t1b             4         3         2
-    ## Pocillopora_acuta_HIv2___RNAseq.g4270.t1           5         5         0
-    ## Pocillopora_acuta_HIv2___TS.g24316.t1              5         2         2
-    ## Pocillopora_acuta_HIv2___TS.g6083.t2              10        27        35
-    ## Pocillopora_acuta_HIv2___TS.g18862.t1              3         1         1
-    ## Pocillopora_acuta_HIv2___RNAseq.g8768.t1           3         0         0
-    ## Pocillopora_acuta_HIv2___RNAseq.g29082.t1b         3         2         3
-    ## Pocillopora_acuta_HIv2___RNAseq.g30962.t1          0         3         0
-    ##                                            POC_R12_C1 POC_R12_C2 POC_R12_C3
-    ## Pocillopora_acuta_HIv2___RNAseq.g25114.t1           0          0          0
-    ## Pocillopora_acuta_HIv2___TS.g25792.t1b              3          0          0
-    ## Pocillopora_acuta_HIv2___RNAseq.g4270.t1            9         14          0
-    ## Pocillopora_acuta_HIv2___TS.g24316.t1               2          0          0
-    ## Pocillopora_acuta_HIv2___TS.g6083.t2                0          1          1
-    ## Pocillopora_acuta_HIv2___TS.g18862.t1               5          5          8
-    ## Pocillopora_acuta_HIv2___RNAseq.g8768.t1            2          0          1
-    ## Pocillopora_acuta_HIv2___RNAseq.g29082.t1b          2          8          4
-    ## Pocillopora_acuta_HIv2___RNAseq.g30962.t1           5         12          9
-    ##                                            POC_R12_H1 POC_R12_H2 POC_R12_H3
-    ## Pocillopora_acuta_HIv2___RNAseq.g25114.t1           5          1          3
-    ## Pocillopora_acuta_HIv2___TS.g25792.t1b              0          0          0
-    ## Pocillopora_acuta_HIv2___RNAseq.g4270.t1            8          8         10
-    ## Pocillopora_acuta_HIv2___TS.g24316.t1               4          0          0
-    ## Pocillopora_acuta_HIv2___TS.g6083.t2                1          0          2
-    ## Pocillopora_acuta_HIv2___TS.g18862.t1               5          3          0
-    ## Pocillopora_acuta_HIv2___RNAseq.g8768.t1            0          3          0
-    ## Pocillopora_acuta_HIv2___RNAseq.g29082.t1b          3          2          2
-    ## Pocillopora_acuta_HIv2___RNAseq.g30962.t1           0          0          2
-    ##                                            POC_R24_C1 POC_R24_C2 POC_R24_C3
-    ## Pocillopora_acuta_HIv2___RNAseq.g25114.t1           0          0          0
-    ## Pocillopora_acuta_HIv2___TS.g25792.t1b              3         10          3
-    ## Pocillopora_acuta_HIv2___RNAseq.g4270.t1            3          1          7
-    ## Pocillopora_acuta_HIv2___TS.g24316.t1               2          6          0
-    ## Pocillopora_acuta_HIv2___TS.g6083.t2                0          1          1
-    ## Pocillopora_acuta_HIv2___TS.g18862.t1               2          3          2
-    ## Pocillopora_acuta_HIv2___RNAseq.g8768.t1            0          0          3
-    ## Pocillopora_acuta_HIv2___RNAseq.g29082.t1b          6          5         10
-    ## Pocillopora_acuta_HIv2___RNAseq.g30962.t1           8          3         10
-    ##                                            POC_R24_H1 POC_R24_H2 POC_R24_H3
-    ## Pocillopora_acuta_HIv2___RNAseq.g25114.t1           7          4          1
-    ## Pocillopora_acuta_HIv2___TS.g25792.t1b              0          0          0
-    ## Pocillopora_acuta_HIv2___RNAseq.g4270.t1           13          5          8
-    ## Pocillopora_acuta_HIv2___TS.g24316.t1               2          0          0
-    ## Pocillopora_acuta_HIv2___TS.g6083.t2                1          1          1
-    ## Pocillopora_acuta_HIv2___TS.g18862.t1               0          1          2
-    ## Pocillopora_acuta_HIv2___RNAseq.g8768.t1            3          2          4
-    ## Pocillopora_acuta_HIv2___RNAseq.g29082.t1b          5          4          0
-    ## Pocillopora_acuta_HIv2___RNAseq.g30962.t1           1          0          1
-    ##                                            POC_R72_C1 POC_R72_C2 POC_R72_C3
-    ## Pocillopora_acuta_HIv2___RNAseq.g25114.t1           0          4          3
-    ## Pocillopora_acuta_HIv2___TS.g25792.t1b              0          3          4
-    ## Pocillopora_acuta_HIv2___RNAseq.g4270.t1            2          3          5
-    ## Pocillopora_acuta_HIv2___TS.g24316.t1               2          8          7
-    ## Pocillopora_acuta_HIv2___TS.g6083.t2                0          0          0
-    ## Pocillopora_acuta_HIv2___TS.g18862.t1               3          9          2
-    ## Pocillopora_acuta_HIv2___RNAseq.g8768.t1            2          3          0
-    ## Pocillopora_acuta_HIv2___RNAseq.g29082.t1b          5          7          3
-    ## Pocillopora_acuta_HIv2___RNAseq.g30962.t1           3          5          6
-    ##                                            POC_R72_H1 POC_R72_H2 POC_R72_H3
-    ## Pocillopora_acuta_HIv2___RNAseq.g25114.t1           4          1          3
-    ## Pocillopora_acuta_HIv2___TS.g25792.t1b              0          0          0
-    ## Pocillopora_acuta_HIv2___RNAseq.g4270.t1            5          4          7
-    ## Pocillopora_acuta_HIv2___TS.g24316.t1               0          0          1
-    ## Pocillopora_acuta_HIv2___TS.g6083.t2                1          1          0
-    ## Pocillopora_acuta_HIv2___TS.g18862.t1               4          2          0
-    ## Pocillopora_acuta_HIv2___RNAseq.g8768.t1           15          8          8
-    ## Pocillopora_acuta_HIv2___RNAseq.g29082.t1b          5          4          2
-    ## Pocillopora_acuta_HIv2___RNAseq.g30962.t1           0          2          1
-    ##                                            POC_R120_C1 POC_R120_C2 POC_R120_C3
-    ## Pocillopora_acuta_HIv2___RNAseq.g25114.t1            1           2           1
-    ## Pocillopora_acuta_HIv2___TS.g25792.t1b               0           0           0
-    ## Pocillopora_acuta_HIv2___RNAseq.g4270.t1             0           1           7
-    ## Pocillopora_acuta_HIv2___TS.g24316.t1                3           2           5
-    ## Pocillopora_acuta_HIv2___TS.g6083.t2                 0           1           1
-    ## Pocillopora_acuta_HIv2___TS.g18862.t1                0           8           2
-    ## Pocillopora_acuta_HIv2___RNAseq.g8768.t1             0           3           0
-    ## Pocillopora_acuta_HIv2___RNAseq.g29082.t1b           2           2           2
-    ## Pocillopora_acuta_HIv2___RNAseq.g30962.t1            4           5           3
-    ##                                            POC_R120_H1 POC_R120_H2 POC_R120_H3
-    ## Pocillopora_acuta_HIv2___RNAseq.g25114.t1            3           4           6
-    ## Pocillopora_acuta_HIv2___TS.g25792.t1b               0           0           0
-    ## Pocillopora_acuta_HIv2___RNAseq.g4270.t1             0           3           6
-    ## Pocillopora_acuta_HIv2___TS.g24316.t1                1           0           0
-    ## Pocillopora_acuta_HIv2___TS.g6083.t2                 1           1           1
-    ## Pocillopora_acuta_HIv2___TS.g18862.t1                1           0           0
-    ## Pocillopora_acuta_HIv2___RNAseq.g8768.t1             6          25          10
-    ## Pocillopora_acuta_HIv2___RNAseq.g29082.t1b           4           3           6
-    ## Pocillopora_acuta_HIv2___RNAseq.g30962.t1            3           1           0
+    ##                                           POC_R0_C1 POC_R0_C2 POC_R0_C3
+    ## Pocillopora_acuta_HIv2___RNAseq.g24988.t1         0         0         0
+    ## Pocillopora_acuta_HIv2___RNAseq.g25114.t1         2         2         3
+    ## Pocillopora_acuta_HIv2___TS.g6083.t2              1         1         0
+    ## Pocillopora_acuta_HIv2___TS.g6525.t1              1         0         0
+    ## Pocillopora_acuta_HIv2___RNAseq.g8082.t1          2         2         5
+    ## Pocillopora_acuta_HIv2___RNAseq.g517.t1           5         5         6
+    ## Pocillopora_acuta_HIv2___TS.g18862.t1             0         0         0
+    ## Pocillopora_acuta_HIv2___RNAseq.g8619.t1          9         6         5
+    ##                                           POC_R0_H1 POC_R0_H2 POC_R0_H3
+    ## Pocillopora_acuta_HIv2___RNAseq.g24988.t1         7         7         4
+    ## Pocillopora_acuta_HIv2___RNAseq.g25114.t1         0         3         0
+    ## Pocillopora_acuta_HIv2___TS.g6083.t2              0         1         1
+    ## Pocillopora_acuta_HIv2___TS.g6525.t1              4         0         3
+    ## Pocillopora_acuta_HIv2___RNAseq.g8082.t1          4         7         9
+    ## Pocillopora_acuta_HIv2___RNAseq.g517.t1           6         6         5
+    ## Pocillopora_acuta_HIv2___TS.g18862.t1            11         5         4
+    ## Pocillopora_acuta_HIv2___RNAseq.g8619.t1          6         8         3
+    ##                                           POC_R1_C1 POC_R1_C2 POC_R1_C3
+    ## Pocillopora_acuta_HIv2___RNAseq.g24988.t1         0         6         4
+    ## Pocillopora_acuta_HIv2___RNAseq.g25114.t1         2         2         2
+    ## Pocillopora_acuta_HIv2___TS.g6083.t2              1         1         0
+    ## Pocillopora_acuta_HIv2___TS.g6525.t1              4         1         2
+    ## Pocillopora_acuta_HIv2___RNAseq.g8082.t1         12         5         6
+    ## Pocillopora_acuta_HIv2___RNAseq.g517.t1           5         2         7
+    ## Pocillopora_acuta_HIv2___TS.g18862.t1             4         3         1
+    ## Pocillopora_acuta_HIv2___RNAseq.g8619.t1          4        11         0
+    ##                                           POC_R1_H1 POC_R1_H2 POC_R1_H3
+    ## Pocillopora_acuta_HIv2___RNAseq.g24988.t1         8         5         0
+    ## Pocillopora_acuta_HIv2___RNAseq.g25114.t1         8         2         3
+    ## Pocillopora_acuta_HIv2___TS.g6083.t2              1         1         1
+    ## Pocillopora_acuta_HIv2___TS.g6525.t1              3         2         3
+    ## Pocillopora_acuta_HIv2___RNAseq.g8082.t1          0         2        11
+    ## Pocillopora_acuta_HIv2___RNAseq.g517.t1           6         5         6
+    ## Pocillopora_acuta_HIv2___TS.g18862.t1             8         8         2
+    ## Pocillopora_acuta_HIv2___RNAseq.g8619.t1          9         7         0
+    ##                                           POC_R3_C1 POC_R3_C2 POC_R3_C3
+    ## Pocillopora_acuta_HIv2___RNAseq.g24988.t1         0        10         0
+    ## Pocillopora_acuta_HIv2___RNAseq.g25114.t1         1         2         3
+    ## Pocillopora_acuta_HIv2___TS.g6083.t2              0         1         1
+    ## Pocillopora_acuta_HIv2___TS.g6525.t1              5         2         1
+    ## Pocillopora_acuta_HIv2___RNAseq.g8082.t1          6         4         9
+    ## Pocillopora_acuta_HIv2___RNAseq.g517.t1          11         7         7
+    ## Pocillopora_acuta_HIv2___TS.g18862.t1             3         1        10
+    ## Pocillopora_acuta_HIv2___RNAseq.g8619.t1          0         4         6
+    ##                                           POC_R3_H1 POC_R3_H2 POC_R3_H3
+    ## Pocillopora_acuta_HIv2___RNAseq.g24988.t1        10        15         0
+    ## Pocillopora_acuta_HIv2___RNAseq.g25114.t1         6         6         5
+    ## Pocillopora_acuta_HIv2___TS.g6083.t2             10        59        35
+    ## Pocillopora_acuta_HIv2___TS.g6525.t1              2         1         4
+    ## Pocillopora_acuta_HIv2___RNAseq.g8082.t1          0         0         0
+    ## Pocillopora_acuta_HIv2___RNAseq.g517.t1           0         0         0
+    ## Pocillopora_acuta_HIv2___TS.g18862.t1             3         9         1
+    ## Pocillopora_acuta_HIv2___RNAseq.g8619.t1          6         6         0
+    ##                                           POC_R12_C1 POC_R12_C2 POC_R12_C3
+    ## Pocillopora_acuta_HIv2___RNAseq.g24988.t1          0          0          0
+    ## Pocillopora_acuta_HIv2___RNAseq.g25114.t1          0          0          0
+    ## Pocillopora_acuta_HIv2___TS.g6083.t2               0          1          2
+    ## Pocillopora_acuta_HIv2___TS.g6525.t1               4          0          8
+    ## Pocillopora_acuta_HIv2___RNAseq.g8082.t1           9          6         10
+    ## Pocillopora_acuta_HIv2___RNAseq.g517.t1            5          7         10
+    ## Pocillopora_acuta_HIv2___TS.g18862.t1              5          5         12
+    ## Pocillopora_acuta_HIv2___RNAseq.g8619.t1           3          5          1
+    ##                                           POC_R12_H1 POC_R12_H2 POC_R12_H3
+    ## Pocillopora_acuta_HIv2___RNAseq.g24988.t1          6          6          4
+    ## Pocillopora_acuta_HIv2___RNAseq.g25114.t1          5          1          3
+    ## Pocillopora_acuta_HIv2___TS.g6083.t2               1          0          2
+    ## Pocillopora_acuta_HIv2___TS.g6525.t1               1          0          0
+    ## Pocillopora_acuta_HIv2___RNAseq.g8082.t1           8          6          4
+    ## Pocillopora_acuta_HIv2___RNAseq.g517.t1            3          7          3
+    ## Pocillopora_acuta_HIv2___TS.g18862.t1              5          3          0
+    ## Pocillopora_acuta_HIv2___RNAseq.g8619.t1           3          3          5
+    ##                                           POC_R24_C1 POC_R24_C2 POC_R24_C3
+    ## Pocillopora_acuta_HIv2___RNAseq.g24988.t1          4          7          3
+    ## Pocillopora_acuta_HIv2___RNAseq.g25114.t1          0          0          0
+    ## Pocillopora_acuta_HIv2___TS.g6083.t2               0          1          1
+    ## Pocillopora_acuta_HIv2___TS.g6525.t1               2          1          0
+    ## Pocillopora_acuta_HIv2___RNAseq.g8082.t1           3          5          7
+    ## Pocillopora_acuta_HIv2___RNAseq.g517.t1            7          4         10
+    ## Pocillopora_acuta_HIv2___TS.g18862.t1              2          3          2
+    ## Pocillopora_acuta_HIv2___RNAseq.g8619.t1           0          0          0
+    ##                                           POC_R24_H1 POC_R24_H2 POC_R24_H3
+    ## Pocillopora_acuta_HIv2___RNAseq.g24988.t1          8          0          8
+    ## Pocillopora_acuta_HIv2___RNAseq.g25114.t1          7          4          1
+    ## Pocillopora_acuta_HIv2___TS.g6083.t2               1          1          1
+    ## Pocillopora_acuta_HIv2___TS.g6525.t1               0          0          1
+    ## Pocillopora_acuta_HIv2___RNAseq.g8082.t1           5          7          8
+    ## Pocillopora_acuta_HIv2___RNAseq.g517.t1            7          6          9
+    ## Pocillopora_acuta_HIv2___TS.g18862.t1              0          1          2
+    ## Pocillopora_acuta_HIv2___RNAseq.g8619.t1           2          4          1
+    ##                                           POC_R72_C1 POC_R72_C2 POC_R72_C3
+    ## Pocillopora_acuta_HIv2___RNAseq.g24988.t1          4         12         10
+    ## Pocillopora_acuta_HIv2___RNAseq.g25114.t1          0          4          3
+    ## Pocillopora_acuta_HIv2___TS.g6083.t2               0          0          0
+    ## Pocillopora_acuta_HIv2___TS.g6525.t1               3          7          2
+    ## Pocillopora_acuta_HIv2___RNAseq.g8082.t1           3          9          9
+    ## Pocillopora_acuta_HIv2___RNAseq.g517.t1            5          6          2
+    ## Pocillopora_acuta_HIv2___TS.g18862.t1              3          9          2
+    ## Pocillopora_acuta_HIv2___RNAseq.g8619.t1           4          3          3
+    ##                                           POC_R72_H1 POC_R72_H2 POC_R72_H3
+    ## Pocillopora_acuta_HIv2___RNAseq.g24988.t1          0          0          0
+    ## Pocillopora_acuta_HIv2___RNAseq.g25114.t1          4          1          3
+    ## Pocillopora_acuta_HIv2___TS.g6083.t2               1          1          0
+    ## Pocillopora_acuta_HIv2___TS.g6525.t1               0          0          0
+    ## Pocillopora_acuta_HIv2___RNAseq.g8082.t1           7          3          3
+    ## Pocillopora_acuta_HIv2___RNAseq.g517.t1            0          2          7
+    ## Pocillopora_acuta_HIv2___TS.g18862.t1              4          2          0
+    ## Pocillopora_acuta_HIv2___RNAseq.g8619.t1           0          0          0
+    ##                                           POC_R120_C1 POC_R120_C2 POC_R120_C3
+    ## Pocillopora_acuta_HIv2___RNAseq.g24988.t1           0           3           3
+    ## Pocillopora_acuta_HIv2___RNAseq.g25114.t1           5           2           1
+    ## Pocillopora_acuta_HIv2___TS.g6083.t2                1           1           1
+    ## Pocillopora_acuta_HIv2___TS.g6525.t1                1           0           0
+    ## Pocillopora_acuta_HIv2___RNAseq.g8082.t1            5           4           9
+    ## Pocillopora_acuta_HIv2___RNAseq.g517.t1             8           9           0
+    ## Pocillopora_acuta_HIv2___TS.g18862.t1               3           8           2
+    ## Pocillopora_acuta_HIv2___RNAseq.g8619.t1            5           0           6
+    ##                                           POC_R120_H1 POC_R120_H2 POC_R120_H3
+    ## Pocillopora_acuta_HIv2___RNAseq.g24988.t1           0           3           6
+    ## Pocillopora_acuta_HIv2___RNAseq.g25114.t1           3           4           6
+    ## Pocillopora_acuta_HIv2___TS.g6083.t2                1           1           1
+    ## Pocillopora_acuta_HIv2___TS.g6525.t1                0           0           0
+    ## Pocillopora_acuta_HIv2___RNAseq.g8082.t1            5           6           2
+    ## Pocillopora_acuta_HIv2___RNAseq.g517.t1             4           4          10
+    ## Pocillopora_acuta_HIv2___TS.g18862.t1               1           0           0
+    ## Pocillopora_acuta_HIv2___RNAseq.g8619.t1            2           4           0
 
 ``` r
 impulse_sig_genes[missing_genes,]
 ```
 
-    ##                                                                                  Gene
-    ## Pocillopora_acuta_HIv2___RNAseq.g25114.t1   Pocillopora_acuta_HIv2___RNAseq.g25114.t1
-    ## Pocillopora_acuta_HIv2___TS.g25792.t1b         Pocillopora_acuta_HIv2___TS.g25792.t1b
-    ## Pocillopora_acuta_HIv2___RNAseq.g4270.t1     Pocillopora_acuta_HIv2___RNAseq.g4270.t1
-    ## Pocillopora_acuta_HIv2___TS.g24316.t1           Pocillopora_acuta_HIv2___TS.g24316.t1
-    ## Pocillopora_acuta_HIv2___TS.g6083.t2             Pocillopora_acuta_HIv2___TS.g6083.t2
-    ## Pocillopora_acuta_HIv2___TS.g18862.t1           Pocillopora_acuta_HIv2___TS.g18862.t1
-    ## Pocillopora_acuta_HIv2___RNAseq.g8768.t1     Pocillopora_acuta_HIv2___RNAseq.g8768.t1
-    ## Pocillopora_acuta_HIv2___RNAseq.g29082.t1b Pocillopora_acuta_HIv2___RNAseq.g29082.t1b
-    ## Pocillopora_acuta_HIv2___RNAseq.g30962.t1   Pocillopora_acuta_HIv2___RNAseq.g30962.t1
+    ##                                                                                Gene
+    ## Pocillopora_acuta_HIv2___RNAseq.g24988.t1 Pocillopora_acuta_HIv2___RNAseq.g24988.t1
+    ## Pocillopora_acuta_HIv2___RNAseq.g25114.t1 Pocillopora_acuta_HIv2___RNAseq.g25114.t1
+    ## Pocillopora_acuta_HIv2___TS.g6083.t2           Pocillopora_acuta_HIv2___TS.g6083.t2
+    ## Pocillopora_acuta_HIv2___TS.g6525.t1           Pocillopora_acuta_HIv2___TS.g6525.t1
+    ## Pocillopora_acuta_HIv2___RNAseq.g8082.t1   Pocillopora_acuta_HIv2___RNAseq.g8082.t1
+    ## Pocillopora_acuta_HIv2___RNAseq.g517.t1     Pocillopora_acuta_HIv2___RNAseq.g517.t1
+    ## Pocillopora_acuta_HIv2___TS.g18862.t1         Pocillopora_acuta_HIv2___TS.g18862.t1
+    ## Pocillopora_acuta_HIv2___RNAseq.g8619.t1   Pocillopora_acuta_HIv2___RNAseq.g8619.t1
     ##                                                      p        padj loglik_full
-    ## Pocillopora_acuta_HIv2___RNAseq.g25114.t1  0.003239711 0.013121017   -68.63036
-    ## Pocillopora_acuta_HIv2___TS.g25792.t1b     0.012973452 0.042045329   -74.18791
-    ## Pocillopora_acuta_HIv2___RNAseq.g4270.t1   0.002297565 0.009767249   -86.74194
-    ## Pocillopora_acuta_HIv2___TS.g24316.t1      0.006482336 0.023529075   -74.12042
-    ## Pocillopora_acuta_HIv2___TS.g6083.t2       0.004060868 0.015922879   -51.22640
-    ## Pocillopora_acuta_HIv2___TS.g18862.t1      0.001010980 0.004809308   -78.25192
-    ## Pocillopora_acuta_HIv2___RNAseq.g8768.t1   0.014269431 0.045471819   -77.92587
-    ## Pocillopora_acuta_HIv2___RNAseq.g29082.t1b 0.007179862 0.025649792   -86.82370
-    ## Pocillopora_acuta_HIv2___RNAseq.g30962.t1  0.009186742 0.031521041   -86.57386
-    ##                                            loglik_red df_full df_red      mean
-    ## Pocillopora_acuta_HIv2___RNAseq.g25114.t1   -77.51870      17     12 0.8253008
-    ## Pocillopora_acuta_HIv2___TS.g25792.t1b      -81.41447      17     12 2.6241824
-    ## Pocillopora_acuta_HIv2___RNAseq.g4270.t1    -96.03360      17     12 3.0133869
-    ## Pocillopora_acuta_HIv2___TS.g24316.t1       -82.18546      17     12 2.4019297
-    ## Pocillopora_acuta_HIv2___TS.g6083.t2        -59.84801      17     12 0.2722026
-    ## Pocillopora_acuta_HIv2___TS.g18862.t1       -88.49683      17     12 2.3328929
-    ## Pocillopora_acuta_HIv2___RNAseq.g8768.t1    -85.03598      17     12 1.0941990
-    ## Pocillopora_acuta_HIv2___RNAseq.g29082.t1b  -94.76626      17     12 3.2727724
-    ## Pocillopora_acuta_HIv2___RNAseq.g30962.t1   -94.21962      17     12 5.0799037
-    ##                                            converge_combined converge_case
-    ## Pocillopora_acuta_HIv2___RNAseq.g25114.t1                  0             0
-    ## Pocillopora_acuta_HIv2___TS.g25792.t1b                     0             0
-    ## Pocillopora_acuta_HIv2___RNAseq.g4270.t1                   0             0
-    ## Pocillopora_acuta_HIv2___TS.g24316.t1                      0             0
-    ## Pocillopora_acuta_HIv2___TS.g6083.t2                       0             0
-    ## Pocillopora_acuta_HIv2___TS.g18862.t1                      0             0
-    ## Pocillopora_acuta_HIv2___RNAseq.g8768.t1                   0             0
-    ## Pocillopora_acuta_HIv2___RNAseq.g29082.t1b                 0             0
-    ## Pocillopora_acuta_HIv2___RNAseq.g30962.t1                  0             0
-    ##                                            converge_control converge_sigmoid
-    ## Pocillopora_acuta_HIv2___RNAseq.g25114.t1                 0                0
-    ## Pocillopora_acuta_HIv2___TS.g25792.t1b                    0                0
-    ## Pocillopora_acuta_HIv2___RNAseq.g4270.t1                  0                0
-    ## Pocillopora_acuta_HIv2___TS.g24316.t1                     0                0
-    ## Pocillopora_acuta_HIv2___TS.g6083.t2                      0                0
-    ## Pocillopora_acuta_HIv2___TS.g18862.t1                     0                0
-    ## Pocillopora_acuta_HIv2___RNAseq.g8768.t1                  0                0
-    ## Pocillopora_acuta_HIv2___RNAseq.g29082.t1b                0                0
-    ## Pocillopora_acuta_HIv2___RNAseq.g30962.t1                 0                0
-    ##                                            impulseTOsigmoid_p
-    ## Pocillopora_acuta_HIv2___RNAseq.g25114.t1        1.592967e-02
-    ## Pocillopora_acuta_HIv2___TS.g25792.t1b           7.029139e-01
-    ## Pocillopora_acuta_HIv2___RNAseq.g4270.t1         7.542952e-03
-    ## Pocillopora_acuta_HIv2___TS.g24316.t1            6.705625e-02
-    ## Pocillopora_acuta_HIv2___TS.g6083.t2             8.632516e-09
-    ## Pocillopora_acuta_HIv2___TS.g18862.t1            3.436257e-01
-    ## Pocillopora_acuta_HIv2___RNAseq.g8768.t1         1.764328e-02
-    ## Pocillopora_acuta_HIv2___RNAseq.g29082.t1b       8.058583e-03
-    ## Pocillopora_acuta_HIv2___RNAseq.g30962.t1        7.467413e-02
-    ##                                            impulseTOsigmoid_padj
-    ## Pocillopora_acuta_HIv2___RNAseq.g25114.t1           4.287705e-02
-    ## Pocillopora_acuta_HIv2___TS.g25792.t1b              8.551802e-01
-    ## Pocillopora_acuta_HIv2___RNAseq.g4270.t1            2.267330e-02
-    ## Pocillopora_acuta_HIv2___TS.g24316.t1               1.414535e-01
-    ## Pocillopora_acuta_HIv2___TS.g6083.t2                8.828456e-08
-    ## Pocillopora_acuta_HIv2___TS.g18862.t1               5.107381e-01
-    ## Pocillopora_acuta_HIv2___RNAseq.g8768.t1            4.676595e-02
-    ## Pocillopora_acuta_HIv2___RNAseq.g29082.t1b          2.400982e-02
-    ## Pocillopora_acuta_HIv2___RNAseq.g30962.t1           1.544323e-01
-    ##                                            sigmoidTOconst_p sigmoidTOconst_padj
-    ## Pocillopora_acuta_HIv2___RNAseq.g25114.t1      9.899551e-01        1.000000e+00
-    ## Pocillopora_acuta_HIv2___TS.g25792.t1b         8.665801e-06        5.567199e-05
-    ## Pocillopora_acuta_HIv2___RNAseq.g4270.t1       5.010333e-01        8.147881e-01
-    ## Pocillopora_acuta_HIv2___TS.g24316.t1          3.228857e-03        1.197119e-02
-    ## Pocillopora_acuta_HIv2___TS.g6083.t2           1.000112e-07        8.924215e-07
-    ## Pocillopora_acuta_HIv2___TS.g18862.t1          3.513632e-02        9.551418e-02
-    ## Pocillopora_acuta_HIv2___RNAseq.g8768.t1       1.846043e-01        3.798865e-01
-    ## Pocillopora_acuta_HIv2___RNAseq.g29082.t1b     1.291506e-02        4.039882e-02
-    ## Pocillopora_acuta_HIv2___RNAseq.g30962.t1      1.604546e-04        8.030201e-04
-    ##                                            isTransient isMonotonous allZero
-    ## Pocillopora_acuta_HIv2___RNAseq.g25114.t1        FALSE        FALSE   FALSE
-    ## Pocillopora_acuta_HIv2___TS.g25792.t1b           FALSE         TRUE   FALSE
-    ## Pocillopora_acuta_HIv2___RNAseq.g4270.t1         FALSE        FALSE   FALSE
-    ## Pocillopora_acuta_HIv2___TS.g24316.t1            FALSE        FALSE   FALSE
-    ## Pocillopora_acuta_HIv2___TS.g6083.t2              TRUE        FALSE   FALSE
-    ## Pocillopora_acuta_HIv2___TS.g18862.t1            FALSE        FALSE   FALSE
-    ## Pocillopora_acuta_HIv2___RNAseq.g8768.t1         FALSE        FALSE   FALSE
-    ## Pocillopora_acuta_HIv2___RNAseq.g29082.t1b       FALSE        FALSE   FALSE
-    ## Pocillopora_acuta_HIv2___RNAseq.g30962.t1        FALSE         TRUE   FALSE
+    ## Pocillopora_acuta_HIv2___RNAseq.g24988.t1 0.0039094717 0.015341029   -90.22438
+    ## Pocillopora_acuta_HIv2___RNAseq.g25114.t1 0.0021180548 0.009103232   -72.12994
+    ## Pocillopora_acuta_HIv2___TS.g6083.t2      0.0018758413 0.008181053   -52.90157
+    ## Pocillopora_acuta_HIv2___TS.g6525.t1      0.0134332306 0.043097151   -59.68394
+    ## Pocillopora_acuta_HIv2___RNAseq.g8082.t1  0.0076825983 0.027036009   -95.48470
+    ## Pocillopora_acuta_HIv2___RNAseq.g517.t1   0.0118539770 0.038852414   -96.98523
+    ## Pocillopora_acuta_HIv2___TS.g18862.t1     0.0002083791 0.001215948   -79.99205
+    ## Pocillopora_acuta_HIv2___RNAseq.g8619.t1  0.0114374278 0.037770169   -85.62440
+    ##                                           loglik_red df_full df_red      mean
+    ## Pocillopora_acuta_HIv2___RNAseq.g24988.t1  -98.89095      17     12 1.0899684
+    ## Pocillopora_acuta_HIv2___RNAseq.g25114.t1  -81.51668      17     12 1.3128410
+    ## Pocillopora_acuta_HIv2___TS.g6083.t2       -62.42999      17     12 0.4031693
+    ## Pocillopora_acuta_HIv2___TS.g6525.t1       -66.86795      17     12 2.8211754
+    ## Pocillopora_acuta_HIv2___RNAseq.g8082.t1  -103.34596      17     12 5.5355091
+    ## Pocillopora_acuta_HIv2___RNAseq.g517.t1   -104.32183      17     12 6.2594712
+    ## Pocillopora_acuta_HIv2___TS.g18862.t1      -92.03844      17     12 2.7739904
+    ## Pocillopora_acuta_HIv2___RNAseq.g8619.t1   -93.00453      17     12 3.3941360
+    ##                                           converge_combined converge_case
+    ## Pocillopora_acuta_HIv2___RNAseq.g24988.t1                 0             0
+    ## Pocillopora_acuta_HIv2___RNAseq.g25114.t1                 0             0
+    ## Pocillopora_acuta_HIv2___TS.g6083.t2                      0             0
+    ## Pocillopora_acuta_HIv2___TS.g6525.t1                      0             0
+    ## Pocillopora_acuta_HIv2___RNAseq.g8082.t1                  0             0
+    ## Pocillopora_acuta_HIv2___RNAseq.g517.t1                   0             0
+    ## Pocillopora_acuta_HIv2___TS.g18862.t1                     0             0
+    ## Pocillopora_acuta_HIv2___RNAseq.g8619.t1                  0             0
+    ##                                           converge_control converge_sigmoid
+    ## Pocillopora_acuta_HIv2___RNAseq.g24988.t1                0                0
+    ## Pocillopora_acuta_HIv2___RNAseq.g25114.t1                0                0
+    ## Pocillopora_acuta_HIv2___TS.g6083.t2                     0                0
+    ## Pocillopora_acuta_HIv2___TS.g6525.t1                     0                0
+    ## Pocillopora_acuta_HIv2___RNAseq.g8082.t1                 0                0
+    ## Pocillopora_acuta_HIv2___RNAseq.g517.t1                  0                0
+    ## Pocillopora_acuta_HIv2___TS.g18862.t1                    0                0
+    ## Pocillopora_acuta_HIv2___RNAseq.g8619.t1                 0                0
+    ##                                           impulseTOsigmoid_p
+    ## Pocillopora_acuta_HIv2___RNAseq.g24988.t1       2.602942e-02
+    ## Pocillopora_acuta_HIv2___RNAseq.g25114.t1       5.948662e-02
+    ## Pocillopora_acuta_HIv2___TS.g6083.t2            2.183896e-09
+    ## Pocillopora_acuta_HIv2___TS.g6525.t1            7.035202e-01
+    ## Pocillopora_acuta_HIv2___RNAseq.g8082.t1        7.744185e-04
+    ## Pocillopora_acuta_HIv2___RNAseq.g517.t1         8.429851e-04
+    ## Pocillopora_acuta_HIv2___TS.g18862.t1           3.177501e-01
+    ## Pocillopora_acuta_HIv2___RNAseq.g8619.t1        5.042968e-02
+    ##                                           impulseTOsigmoid_padj
+    ## Pocillopora_acuta_HIv2___RNAseq.g24988.t1          6.468206e-02
+    ## Pocillopora_acuta_HIv2___RNAseq.g25114.t1          1.281659e-01
+    ## Pocillopora_acuta_HIv2___TS.g6083.t2               2.412518e-08
+    ## Pocillopora_acuta_HIv2___TS.g6525.t1               8.525634e-01
+    ## Pocillopora_acuta_HIv2___RNAseq.g8082.t1           3.076066e-03
+    ## Pocillopora_acuta_HIv2___RNAseq.g517.t1            3.311374e-03
+    ## Pocillopora_acuta_HIv2___TS.g18862.t1              4.817008e-01
+    ## Pocillopora_acuta_HIv2___RNAseq.g8619.t1           1.119506e-01
+    ##                                           sigmoidTOconst_p sigmoidTOconst_padj
+    ## Pocillopora_acuta_HIv2___RNAseq.g24988.t1     7.164121e-01        1.000000e+00
+    ## Pocillopora_acuta_HIv2___RNAseq.g25114.t1     9.958419e-01        1.000000e+00
+    ## Pocillopora_acuta_HIv2___TS.g6083.t2          6.845509e-08        6.317966e-07
+    ## Pocillopora_acuta_HIv2___TS.g6525.t1          5.917554e-03        2.031761e-02
+    ## Pocillopora_acuta_HIv2___RNAseq.g8082.t1      5.452880e-01        8.605759e-01
+    ## Pocillopora_acuta_HIv2___RNAseq.g517.t1       7.551148e-01        1.000000e+00
+    ## Pocillopora_acuta_HIv2___TS.g18862.t1         8.532836e-03        2.801882e-02
+    ## Pocillopora_acuta_HIv2___RNAseq.g8619.t1      1.337476e-01        2.913811e-01
+    ##                                           isTransient isMonotonous allZero
+    ## Pocillopora_acuta_HIv2___RNAseq.g24988.t1       FALSE        FALSE   FALSE
+    ## Pocillopora_acuta_HIv2___RNAseq.g25114.t1       FALSE        FALSE   FALSE
+    ## Pocillopora_acuta_HIv2___TS.g6083.t2             TRUE        FALSE   FALSE
+    ## Pocillopora_acuta_HIv2___TS.g6525.t1            FALSE        FALSE   FALSE
+    ## Pocillopora_acuta_HIv2___RNAseq.g8082.t1        FALSE        FALSE   FALSE
+    ## Pocillopora_acuta_HIv2___RNAseq.g517.t1         FALSE        FALSE   FALSE
+    ## Pocillopora_acuta_HIv2___TS.g18862.t1           FALSE        FALSE   FALSE
+    ## Pocillopora_acuta_HIv2___RNAseq.g8619.t1        FALSE        FALSE   FALSE
 
 ``` r
 rowSums(counts_raw[missing_genes,] > 10)
 ```
 
-    ##  Pocillopora_acuta_HIv2___RNAseq.g25114.t1 
-    ##                                          0 
-    ##     Pocillopora_acuta_HIv2___TS.g25792.t1b 
-    ##                                          2 
-    ##   Pocillopora_acuta_HIv2___RNAseq.g4270.t1 
-    ##                                          2 
-    ##      Pocillopora_acuta_HIv2___TS.g24316.t1 
-    ##                                          2 
-    ##       Pocillopora_acuta_HIv2___TS.g6083.t2 
-    ##                                          2 
-    ##      Pocillopora_acuta_HIv2___TS.g18862.t1 
-    ##                                          1 
-    ##   Pocillopora_acuta_HIv2___RNAseq.g8768.t1 
-    ##                                          2 
-    ## Pocillopora_acuta_HIv2___RNAseq.g29082.t1b 
-    ##                                          2 
-    ##  Pocillopora_acuta_HIv2___RNAseq.g30962.t1 
-    ##                                          1
+    ## Pocillopora_acuta_HIv2___RNAseq.g24988.t1 
+    ##                                         2 
+    ## Pocillopora_acuta_HIv2___RNAseq.g25114.t1 
+    ##                                         0 
+    ##      Pocillopora_acuta_HIv2___TS.g6083.t2 
+    ##                                         2 
+    ##      Pocillopora_acuta_HIv2___TS.g6525.t1 
+    ##                                         0 
+    ##  Pocillopora_acuta_HIv2___RNAseq.g8082.t1 
+    ##                                         2 
+    ##   Pocillopora_acuta_HIv2___RNAseq.g517.t1 
+    ##                                         1 
+    ##     Pocillopora_acuta_HIv2___TS.g18862.t1 
+    ##                                         2 
+    ##  Pocillopora_acuta_HIv2___RNAseq.g8619.t1 
+    ##                                         1
 
 ``` r
 impulse_sig_genes_transient <- impulse_sig_genes %>% filter(isTransient==TRUE)
@@ -1603,12 +1578,12 @@ print(cluster_peaks)
 ```
 
     ##   cluster peak_time
-    ## 1       1         0
+    ## 1       1         3
     ## 2       2         3
-    ## 3       3        24
-    ## 4       4       120
-    ## 5       5         0
-    ## 6       6         3
+    ## 3       3       120
+    ## 4       4         0
+    ## 5       5        24
+    ## 6       6         0
 
 ``` r
 HSPS <- impulse_results %>% filter(Gene %in% stress_genes_ids) %>% arrange(padj) %>% left_join(HeatStressGenes_unique, by = join_by(Gene==query)) %>% filter(grepl("HSP",gene_id)) %>% pull(Gene)
@@ -1619,7 +1594,20 @@ cluster_assignments %>% filter(gene %in% HSPS)
     ##                                                                                gene
     ## Pocillopora_acuta_HIv2___RNAseq.g23086.t1 Pocillopora_acuta_HIv2___RNAseq.g23086.t1
     ##                                           cluster membership
-    ## Pocillopora_acuta_HIv2___RNAseq.g23086.t1       6   0.914737
+    ## Pocillopora_acuta_HIv2___RNAseq.g23086.t1       1  0.9177708
+
+``` r
+heat_clustered <- HeatStressGenes_unique %>% left_join(cluster_assignments, by = join_by(query==gene)) %>%
+  arrange(cluster, desc(cluster))
+
+# plot this to show which genes are in which cluster
+heat_clustered %>% filter(!is.na(cluster)) %>% ggplot(aes(y=reorder(gene_id, cluster), x=factor(cluster), fill=cluster)) +
+  geom_tile() +
+  theme_bw() +
+  labs(x="Gene ID", y="Mfuzz Cluster", title="Heat stress genes clustered by temporal expression pattern")
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-33-1.png)<!-- -->
 
 ## MON: pre-processing and visualization
 
@@ -1685,7 +1673,7 @@ filtered_counts <- counts_raw[counts_filt_poa,] #keep only rows that passed filt
 paste0("Number of genes after filtering: ", sum(counts_filt_poa))
 ```
 
-    ## [1] "Number of genes after filtering: 29843"
+    ## [1] "Number of genes after filtering: 30089"
 
 ``` r
 write.csv(filtered_counts, file = file.path(outdir, "filtered_counts.csv"))
@@ -1711,19 +1699,19 @@ print(sizeFactors(SF.dds)) #View size factors
 ```
 
     ##   MON_R0_C1   MON_R0_C2   MON_R0_C3   MON_R0_H1   MON_R0_H2   MON_R0_H3 
-    ##   2.2444761   1.0059560   1.1353697   1.4001510   0.8713788   1.1562386 
+    ##   2.1094335   0.9463374   1.0690971   1.3170480   1.5587529   1.0888544 
     ##   MON_R1_C1   MON_R1_C2   MON_R1_C3   MON_R1_H1   MON_R1_H2   MON_R1_H3 
-    ##   1.1018520   1.1522112   1.2956672   0.8004175   0.9581830   0.9722348 
+    ##   1.0357805   1.0829338   1.2185597   0.7527752   0.9017303   0.9159839 
     ##   MON_R3_C1   MON_R3_C2   MON_R3_C3   MON_R3_H1   MON_R3_H2   MON_R3_H3 
-    ##   1.1267602   0.9503468   1.0665713   0.7424362   0.5301173   0.7547313 
+    ##   1.0601390   0.8939502   1.0031709   0.6966089   1.1896652   0.7107221 
     ##  MON_R12_C1  MON_R12_C2  MON_R12_C3  MON_R12_H1  MON_R12_H2  MON_R12_H3 
-    ##   1.0049563   1.0177941   1.1765023   0.6747464   0.9681069   0.8610991 
+    ##   0.9459142   0.9588396   1.1063628   0.6356368   0.9103193   0.8089286 
     ##  MON_R24_C1  MON_R24_C2  MON_R24_C3  MON_R24_H1  MON_R24_H2  MON_R24_H3 
-    ##   1.0541723   1.0758358   1.1971885   1.1701290   0.9429320   0.7418793 
+    ##   0.9927572   1.0112260   1.1280895   1.0996072   0.8861458   0.6973926 
     ##  MON_R72_C1  MON_R72_C2  MON_R72_C3  MON_R72_H3 MON_R120_C1 MON_R120_C2 
-    ##   1.0176838   1.0275066   1.4198992   0.9646864   1.2352749   1.0816837 
+    ##   0.9598847   0.9675785   1.3366416   0.9064791   1.1648070   1.0167688 
     ## MON_R120_C3 MON_R120_H1 MON_R120_H2 MON_R120_H3 
-    ##   0.4853055   1.0089948   1.5702473   1.0278783
+    ##   1.1313671   0.9501645   1.4756437   0.9679888
 
 ``` r
 all(sizeFactors(SF.dds)) < 4
@@ -1753,7 +1741,7 @@ pheatmap(sampleDistMatrix,
          col=colorRampPalette( rev(brewer.pal(9, "Blues")) )(255))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-42-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-43-1.png)<!-- -->
 
 ### Principal component plot of the samples
 
@@ -1780,7 +1768,7 @@ PCA <- ggplot() +
 PCA
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-43-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-44-1.png)<!-- -->
 
 ``` r
 save_ggplot(PCA, "PCA_MON")
@@ -1802,7 +1790,7 @@ pheatmap(assay(vsd)[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-44-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-45-1.png)<!-- -->
 
 ``` r
 pheatmap(assay(vsd)[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
@@ -1812,7 +1800,7 @@ pheatmap(assay(vsd)[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-44-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-45-2.png)<!-- -->
 
 ### Heat stress genes
 
@@ -1844,7 +1832,7 @@ plot_df %>% ggplot(aes(x=time, y=expression, color=gene_id, group=gene_id)) +
   labs(y="VST expression", x="Timepoint")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-45-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-46-1.png)<!-- -->
 
 ``` r
 plot_df %>% filter(grepl("Type1", response_type)) %>%
@@ -1860,7 +1848,7 @@ plot_df %>% filter(grepl("Type1", response_type)) %>%
   labs(y="VST expression", x="Timepoint", title = "Type 1 Expressed Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-45-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-46-2.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "All_Type1")
@@ -1878,7 +1866,7 @@ plot_df %>% filter(grepl("Type2", response_type)) %>%
   labs(y="VST expression", x="Timepoint", title = "Type 2 Expressed Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-45-3.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-46-3.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "All_Type2")
@@ -1892,7 +1880,7 @@ plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_
   labs(y="VST expression", x="Timepoint")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-45-4.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-46-4.png)<!-- -->
 
 ### DESeq LRT Test
 
@@ -1922,7 +1910,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-46-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-47-1.png)<!-- -->
 
 ``` r
 pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
@@ -1932,7 +1920,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-46-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-47-2.png)<!-- -->
 
 ``` r
 top_500_DE_genes <- DE_05 %>% arrange(log2FoldChange) %>% head(500) %>% rownames()
@@ -1945,7 +1933,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-46-3.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-47-3.png)<!-- -->
 
 ``` r
 pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
@@ -1955,7 +1943,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-46-4.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-47-4.png)<!-- -->
 
 ``` r
 top_500_DE_genes <- DE_05 %>% arrange(desc(log2FoldChange)) %>% head(500) %>% rownames()
@@ -1968,7 +1956,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-46-5.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-47-5.png)<!-- -->
 
 ``` r
 pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
@@ -1978,7 +1966,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-46-6.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-47-6.png)<!-- -->
 
 ### DE Heat stress genes
 
@@ -1998,7 +1986,7 @@ plot_df %>% ggplot(aes(x=time, y=expression, color=gene_id, group=gene_id)) +
   labs(y="VST expression", x="Timepoint")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-47-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-48-1.png)<!-- -->
 
 ``` r
 plot_df %>% filter(grepl("Type1", response_type)) %>%
@@ -2014,7 +2002,7 @@ plot_df %>% filter(grepl("Type1", response_type)) %>%
   labs(y="VST expression", x="Timepoint", title = "Type 1 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-47-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-48-2.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "DE_Type1")
@@ -2032,7 +2020,7 @@ plot_df %>% filter(grepl("Type2", response_type)) %>%
   labs(y="VST expression", x="Timepoint", title = "Type 2 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-47-3.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-48-3.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "DE_Type2")
@@ -2046,7 +2034,7 @@ plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_
   labs(y="VST expression", x="Timepoint")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-47-4.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-48-4.png)<!-- -->
 
 ``` r
 plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_id)) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
@@ -2058,7 +2046,7 @@ plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_
   labs(y="VST expression", x="Timepoint", title = "Selected Type 1 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-47-5.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-48-5.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "highlighted_DE_Type1")
@@ -2072,7 +2060,7 @@ plot_df %>% filter(grepl("GDH",gene_id)|grepl("GS",gene_id)|grepl("AMT1",gene_id
   labs(y="VST expression", x="Timepoint", title = "Selected Type 2 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-47-6.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-48-6.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "highlighted_DE_Type2")
@@ -2161,18 +2149,18 @@ head(impulse_results)
     ## Montipora_capitata_HIv3___RNAseq.g4753.t1 Montipora_capitata_HIv3___RNAseq.g4753.t1
     ## Montipora_capitata_HIv3___RNAseq.g4763.t1                                      <NA>
     ##                                                      p        padj loglik_full
-    ## Montipora_capitata_HIv3___RNAseq.g4581.t1 0.2257152482 0.682410072  -222.50399
-    ## Montipora_capitata_HIv3___RNAseq.g4750.t1 0.5083786054 1.000000000   -70.18258
-    ## Montipora_capitata_HIv3___RNAseq.g4751.t1 0.1989148505 0.629285767  -208.41331
-    ## Montipora_capitata_HIv3___RNAseq.g4752.t1 0.0041882368 0.037202928  -212.75809
-    ## Montipora_capitata_HIv3___RNAseq.g4753.t1 0.0001015878 0.001841498  -276.08620
+    ## Montipora_capitata_HIv3___RNAseq.g4581.t1 0.2659787573 0.753200054  -225.00426
+    ## Montipora_capitata_HIv3___RNAseq.g4750.t1 0.8332509794 1.000000000   -75.39967
+    ## Montipora_capitata_HIv3___RNAseq.g4751.t1 0.1100827237 0.423666339  -210.17009
+    ## Montipora_capitata_HIv3___RNAseq.g4752.t1 0.0036448166 0.033193214  -215.41533
+    ## Montipora_capitata_HIv3___RNAseq.g4753.t1 0.0001124423 0.001992063  -278.99327
     ## Montipora_capitata_HIv3___RNAseq.g4763.t1           NA          NA          NA
     ##                                           loglik_red df_full df_red        mean
-    ## Montipora_capitata_HIv3___RNAseq.g4581.t1 -225.97020      17     12  446.886622
-    ## Montipora_capitata_HIv3___RNAseq.g4750.t1  -72.32789      17     12    4.211895
-    ## Montipora_capitata_HIv3___RNAseq.g4751.t1 -212.06590      17     12  201.376414
-    ## Montipora_capitata_HIv3___RNAseq.g4752.t1 -221.34314      17     12  194.037947
-    ## Montipora_capitata_HIv3___RNAseq.g4753.t1 -288.94095      17     12 2243.017572
+    ## Montipora_capitata_HIv3___RNAseq.g4581.t1 -228.22281      17     12  474.573139
+    ## Montipora_capitata_HIv3___RNAseq.g4750.t1  -76.45634      17     12    4.476436
+    ## Montipora_capitata_HIv3___RNAseq.g4751.t1 -214.65738      17     12  213.864038
+    ## Montipora_capitata_HIv3___RNAseq.g4752.t1 -224.16473      17     12  206.042970
+    ## Montipora_capitata_HIv3___RNAseq.g4753.t1 -291.73417      17     12 2382.308192
     ## Montipora_capitata_HIv3___RNAseq.g4763.t1         NA      NA     NA          NA
     ##                                           converge_combined converge_case
     ## Montipora_capitata_HIv3___RNAseq.g4581.t1                 0             0
@@ -2189,25 +2177,25 @@ head(impulse_results)
     ## Montipora_capitata_HIv3___RNAseq.g4753.t1                0                0
     ## Montipora_capitata_HIv3___RNAseq.g4763.t1               NA               NA
     ##                                           impulseTOsigmoid_p
-    ## Montipora_capitata_HIv3___RNAseq.g4581.t1       1.082908e-03
-    ## Montipora_capitata_HIv3___RNAseq.g4750.t1       2.919618e-01
-    ## Montipora_capitata_HIv3___RNAseq.g4751.t1       2.081050e-01
-    ## Montipora_capitata_HIv3___RNAseq.g4752.t1       5.661366e-07
-    ## Montipora_capitata_HIv3___RNAseq.g4753.t1       3.976130e-09
+    ## Montipora_capitata_HIv3___RNAseq.g4581.t1       1.472912e-03
+    ## Montipora_capitata_HIv3___RNAseq.g4750.t1       2.832922e-01
+    ## Montipora_capitata_HIv3___RNAseq.g4751.t1       2.242969e-01
+    ## Montipora_capitata_HIv3___RNAseq.g4752.t1       4.218156e-07
+    ## Montipora_capitata_HIv3___RNAseq.g4753.t1       4.332476e-09
     ## Montipora_capitata_HIv3___RNAseq.g4763.t1                 NA
     ##                                           impulseTOsigmoid_padj
-    ## Montipora_capitata_HIv3___RNAseq.g4581.t1          1.206826e-02
-    ## Montipora_capitata_HIv3___RNAseq.g4750.t1          6.814848e-01
-    ## Montipora_capitata_HIv3___RNAseq.g4751.t1          5.582285e-01
-    ## Montipora_capitata_HIv3___RNAseq.g4752.t1          2.326930e-05
-    ## Montipora_capitata_HIv3___RNAseq.g4753.t1          3.179893e-07
+    ## Montipora_capitata_HIv3___RNAseq.g4581.t1          1.527376e-02
+    ## Montipora_capitata_HIv3___RNAseq.g4750.t1          6.677200e-01
+    ## Montipora_capitata_HIv3___RNAseq.g4751.t1          5.843571e-01
+    ## Montipora_capitata_HIv3___RNAseq.g4752.t1          1.840360e-05
+    ## Montipora_capitata_HIv3___RNAseq.g4753.t1          3.499842e-07
     ## Montipora_capitata_HIv3___RNAseq.g4763.t1                    NA
     ##                                           sigmoidTOconst_p sigmoidTOconst_padj
-    ## Montipora_capitata_HIv3___RNAseq.g4581.t1      0.008282858          0.06414355
-    ## Montipora_capitata_HIv3___RNAseq.g4750.t1      0.919696108          1.00000000
-    ## Montipora_capitata_HIv3___RNAseq.g4751.t1      0.011525881          0.08472483
-    ## Montipora_capitata_HIv3___RNAseq.g4752.t1      0.028906859          0.17906920
-    ## Montipora_capitata_HIv3___RNAseq.g4753.t1      0.002396725          0.02246338
+    ## Montipora_capitata_HIv3___RNAseq.g4581.t1      0.012080884          0.08773932
+    ## Montipora_capitata_HIv3___RNAseq.g4750.t1      0.941110041          1.00000000
+    ## Montipora_capitata_HIv3___RNAseq.g4751.t1      0.006020669          0.04892814
+    ## Montipora_capitata_HIv3___RNAseq.g4752.t1      0.025241110          0.16017914
+    ## Montipora_capitata_HIv3___RNAseq.g4753.t1      0.002283761          0.02143738
     ## Montipora_capitata_HIv3___RNAseq.g4763.t1               NA                  NA
     ##                                           isTransient isMonotonous allZero
     ## Montipora_capitata_HIv3___RNAseq.g4581.t1       FALSE        FALSE   FALSE
@@ -2227,7 +2215,7 @@ sig_genes <- impulse_results[impulse_results$padj < 0.05 &
 nrow(sig_genes)
 ```
 
-    ## [1] 12972
+    ## [1] 12918
 
 ``` r
 head(sig_genes[order(sig_genes$padj), ])
@@ -2237,64 +2225,64 @@ head(sig_genes[order(sig_genes$padj), ])
     ## Montipora_capitata_HIv3___RNAseq.g49833.t1 Montipora_capitata_HIv3___RNAseq.g49833.t1
     ## Montipora_capitata_HIv3___RNAseq.g49832.t1 Montipora_capitata_HIv3___RNAseq.g49832.t1
     ## Montipora_capitata_HIv3___RNAseq.g7282.t1   Montipora_capitata_HIv3___RNAseq.g7282.t1
-    ## Montipora_capitata_HIv3___RNAseq.g40931.t1 Montipora_capitata_HIv3___RNAseq.g40931.t1
     ## Montipora_capitata_HIv3___TS.g637.t1             Montipora_capitata_HIv3___TS.g637.t1
+    ## Montipora_capitata_HIv3___RNAseq.g40931.t1 Montipora_capitata_HIv3___RNAseq.g40931.t1
     ## Montipora_capitata_HIv3___RNAseq.g984.t1     Montipora_capitata_HIv3___RNAseq.g984.t1
     ##                                                        p          padj
-    ## Montipora_capitata_HIv3___RNAseq.g49833.t1 2.101772e-169 9.917210e-165
-    ## Montipora_capitata_HIv3___RNAseq.g49832.t1  5.582186e-76  1.316977e-71
-    ## Montipora_capitata_HIv3___RNAseq.g7282.t1   1.307219e-41  2.056038e-37
-    ## Montipora_capitata_HIv3___RNAseq.g40931.t1  2.016644e-39  2.378883e-35
-    ## Montipora_capitata_HIv3___TS.g637.t1        8.498198e-38  8.019749e-34
-    ## Montipora_capitata_HIv3___RNAseq.g984.t1    1.206638e-36  9.489199e-33
+    ## Montipora_capitata_HIv3___RNAseq.g49833.t1 1.039742e-133 4.921930e-129
+    ## Montipora_capitata_HIv3___RNAseq.g49832.t1  9.937684e-61  2.352150e-56
+    ## Montipora_capitata_HIv3___RNAseq.g7282.t1   4.581857e-43  7.229865e-39
+    ## Montipora_capitata_HIv3___TS.g637.t1        1.770894e-42  2.095765e-38
+    ## Montipora_capitata_HIv3___RNAseq.g40931.t1  1.716716e-37  1.625318e-33
+    ## Montipora_capitata_HIv3___RNAseq.g984.t1    2.668861e-36  2.105642e-32
     ##                                            loglik_full loglik_red df_full
-    ## Montipora_capitata_HIv3___RNAseq.g49833.t1   -317.6468  -714.7362      17
-    ## Montipora_capitata_HIv3___RNAseq.g49832.t1   -348.5602  -529.3567      17
-    ## Montipora_capitata_HIv3___RNAseq.g7282.t1    -301.9292  -402.7170      17
-    ## Montipora_capitata_HIv3___RNAseq.g40931.t1   -228.3290  -324.0007      17
-    ## Montipora_capitata_HIv3___TS.g637.t1         -302.0436  -393.9141      17
-    ## Montipora_capitata_HIv3___RNAseq.g984.t1     -255.9804  -345.1536      17
+    ## Montipora_capitata_HIv3___RNAseq.g49833.t1   -321.9301  -636.4818      17
+    ## Montipora_capitata_HIv3___RNAseq.g49832.t1   -351.5874  -496.9431      17
+    ## Montipora_capitata_HIv3___RNAseq.g7282.t1    -303.9529  -408.1409      17
+    ## Montipora_capitata_HIv3___TS.g637.t1         -303.6075  -406.4238      17
+    ## Montipora_capitata_HIv3___RNAseq.g40931.t1   -231.1116  -322.2674      17
+    ## Montipora_capitata_HIv3___RNAseq.g984.t1     -258.1393  -346.5052      17
     ##                                            df_red      mean converge_combined
-    ## Montipora_capitata_HIv3___RNAseq.g49833.t1     12 5747.1890                 0
-    ## Montipora_capitata_HIv3___RNAseq.g49832.t1     12 8957.2926                 0
-    ## Montipora_capitata_HIv3___RNAseq.g7282.t1      12 4881.9575                 0
-    ## Montipora_capitata_HIv3___RNAseq.g40931.t1     12  784.3567                 0
-    ## Montipora_capitata_HIv3___TS.g637.t1           12 2190.6237                 0
-    ## Montipora_capitata_HIv3___RNAseq.g984.t1       12 1041.4904                 0
+    ## Montipora_capitata_HIv3___RNAseq.g49833.t1     12 6104.4116                 0
+    ## Montipora_capitata_HIv3___RNAseq.g49832.t1     12 9512.9893                 0
+    ## Montipora_capitata_HIv3___RNAseq.g7282.t1      12 5185.0437                 0
+    ## Montipora_capitata_HIv3___TS.g637.t1           12 2326.8821                 0
+    ## Montipora_capitata_HIv3___RNAseq.g40931.t1     12  832.9663                 0
+    ## Montipora_capitata_HIv3___RNAseq.g984.t1       12 1106.3270                 0
     ##                                            converge_case converge_control
     ## Montipora_capitata_HIv3___RNAseq.g49833.t1             0                0
     ## Montipora_capitata_HIv3___RNAseq.g49832.t1             0                0
     ## Montipora_capitata_HIv3___RNAseq.g7282.t1              0                0
-    ## Montipora_capitata_HIv3___RNAseq.g40931.t1             0                0
     ## Montipora_capitata_HIv3___TS.g637.t1                   0                0
+    ## Montipora_capitata_HIv3___RNAseq.g40931.t1             0                0
     ## Montipora_capitata_HIv3___RNAseq.g984.t1               0                0
     ##                                            converge_sigmoid impulseTOsigmoid_p
-    ## Montipora_capitata_HIv3___RNAseq.g49833.t1                0      6.809465e-107
-    ## Montipora_capitata_HIv3___RNAseq.g49832.t1                0       1.258637e-55
-    ## Montipora_capitata_HIv3___RNAseq.g7282.t1                 0       7.174913e-36
-    ## Montipora_capitata_HIv3___RNAseq.g40931.t1                0       6.165902e-01
-    ## Montipora_capitata_HIv3___TS.g637.t1                      0       8.958718e-06
-    ## Montipora_capitata_HIv3___RNAseq.g984.t1                  0       2.921581e-02
+    ## Montipora_capitata_HIv3___RNAseq.g49833.t1                0       1.621986e-84
+    ## Montipora_capitata_HIv3___RNAseq.g49832.t1                0       5.447334e-46
+    ## Montipora_capitata_HIv3___RNAseq.g7282.t1                 0       9.010205e-63
+    ## Montipora_capitata_HIv3___TS.g637.t1                      0       3.345414e-06
+    ## Montipora_capitata_HIv3___RNAseq.g40931.t1                0       6.233101e-01
+    ## Montipora_capitata_HIv3___RNAseq.g984.t1                  0       2.864061e-02
     ##                                            impulseTOsigmoid_padj
-    ## Montipora_capitata_HIv3___RNAseq.g49833.t1         3.213046e-102
-    ## Montipora_capitata_HIv3___RNAseq.g49832.t1          2.969440e-51
-    ## Montipora_capitata_HIv3___RNAseq.g7282.t1           2.821236e-32
-    ## Montipora_capitata_HIv3___RNAseq.g40931.t1          9.956842e-01
-    ## Montipora_capitata_HIv3___TS.g637.t1                2.371817e-04
-    ## Montipora_capitata_HIv3___RNAseq.g984.t1            1.503816e-01
+    ## Montipora_capitata_HIv3___RNAseq.g49833.t1          7.678158e-80
+    ## Montipora_capitata_HIv3___RNAseq.g49832.t1          6.446647e-42
+    ## Montipora_capitata_HIv3___RNAseq.g7282.t1           2.132625e-58
+    ## Montipora_capitata_HIv3___TS.g637.t1                1.046134e-04
+    ## Montipora_capitata_HIv3___RNAseq.g40931.t1          9.948876e-01
+    ## Montipora_capitata_HIv3___RNAseq.g984.t1            1.474483e-01
     ##                                            sigmoidTOconst_p sigmoidTOconst_padj
-    ## Montipora_capitata_HIv3___RNAseq.g49833.t1    3.067710e-148       1.447499e-143
-    ## Montipora_capitata_HIv3___RNAseq.g49832.t1     3.638694e-77        8.584588e-73
-    ## Montipora_capitata_HIv3___RNAseq.g7282.t1      6.036153e-46        2.589235e-42
-    ## Montipora_capitata_HIv3___RNAseq.g40931.t1     9.060929e-69        1.425133e-64
-    ## Montipora_capitata_HIv3___TS.g637.t1           2.623811e-60        2.476090e-56
-    ## Montipora_capitata_HIv3___RNAseq.g984.t1       2.921379e-61        3.446131e-57
+    ## Montipora_capitata_HIv3___RNAseq.g49833.t1    6.956522e-118       3.293078e-113
+    ## Montipora_capitata_HIv3___RNAseq.g49832.t1     1.064145e-61        1.259362e-57
+    ## Montipora_capitata_HIv3___RNAseq.g7282.t1      1.407595e-22        4.412764e-20
+    ## Montipora_capitata_HIv3___TS.g637.t1           3.039450e-67        7.194075e-63
+    ## Montipora_capitata_HIv3___RNAseq.g40931.t1     2.228143e-66        3.515861e-62
+    ## Montipora_capitata_HIv3___RNAseq.g984.t1       8.894864e-61        8.421302e-57
     ##                                            isTransient isMonotonous allZero
     ## Montipora_capitata_HIv3___RNAseq.g49833.t1        TRUE        FALSE   FALSE
     ## Montipora_capitata_HIv3___RNAseq.g49832.t1        TRUE        FALSE   FALSE
     ## Montipora_capitata_HIv3___RNAseq.g7282.t1         TRUE        FALSE   FALSE
-    ## Montipora_capitata_HIv3___RNAseq.g40931.t1       FALSE         TRUE   FALSE
     ## Montipora_capitata_HIv3___TS.g637.t1              TRUE        FALSE   FALSE
+    ## Montipora_capitata_HIv3___RNAseq.g40931.t1       FALSE         TRUE   FALSE
     ## Montipora_capitata_HIv3___RNAseq.g984.t1         FALSE         TRUE   FALSE
 
 ``` r
@@ -2308,7 +2296,7 @@ lsHeatmaps <- plotHeatmap(
 draw(lsHeatmaps$complexHeatmapRaw) 
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-52-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-53-1.png)<!-- -->
 
 ``` r
 png(paste0(outdir,"/ImpulseDE/ImpulseDE2_heatmap.png"), width = 2000, height = 2400, res = 300)
@@ -2327,71 +2315,71 @@ plot_stress_genes <- stress_genes_ids[stress_genes_ids %in% rownames(objectImpul
 impulse_results %>% filter(Gene %in% stress_genes_ids) %>% arrange(padj) %>% left_join(HeatStressGenes_Mcap_unique, by = join_by(Gene==query))
 ```
 
-    ##                                          Gene            p         padj
-    ## 1      Montipora_capitata_HIv3___TS.g35289.t2 2.087429e-05 0.0004999762
-    ## 2  Montipora_capitata_HIv3___RNAseq.g37104.t1 1.361281e-04 0.0023545475
-    ## 3  Montipora_capitata_HIv3___RNAseq.g27769.t1 3.650833e-04 0.0052858104
-    ## 4      Montipora_capitata_HIv3___TS.g26835.t1 1.008155e-03 0.0120438862
-    ## 5  Montipora_capitata_HIv3___RNAseq.g45609.t1 1.049596e-02 0.0756804290
-    ## 6    Montipora_capitata_HIv3___RNAseq.10384_t 1.464971e-02 0.0983840591
-    ## 7  Montipora_capitata_HIv3___RNAseq.g20389.t1 3.042748e-02 0.1707564984
-    ## 8      Montipora_capitata_HIv3___TS.g50400.t1 4.784406e-02 0.2381101310
-    ## 9  Montipora_capitata_HIv3___RNAseq.g20408.t1 5.154284e-02 0.2510139837
-    ## 10 Montipora_capitata_HIv3___RNAseq.g43322.t1 1.838455e-01 0.5974755743
-    ## 11 Montipora_capitata_HIv3___RNAseq.g34531.t1 2.303774e-01 0.6915867028
-    ## 12 Montipora_capitata_HIv3___RNAseq.g47592.t2 3.369727e-01 0.8748923381
+    ##                                          Gene            p        padj
+    ## 1  Montipora_capitata_HIv3___RNAseq.g37104.t1 0.0003748174 0.005331462
+    ## 2  Montipora_capitata_HIv3___RNAseq.g27769.t1 0.0004129965 0.005768790
+    ## 3      Montipora_capitata_HIv3___TS.g26835.t1 0.0008895054 0.010818963
+    ## 4  Montipora_capitata_HIv3___RNAseq.g45609.t1 0.0105686218 0.075493801
+    ## 5    Montipora_capitata_HIv3___RNAseq.10384_t 0.0142234098 0.095261428
+    ## 6  Montipora_capitata_HIv3___RNAseq.g20389.t1 0.0334375549 0.182148098
+    ## 7      Montipora_capitata_HIv3___TS.g50400.t1 0.0452905693 0.227187132
+    ## 8  Montipora_capitata_HIv3___RNAseq.g20408.t1 0.0565690134 0.264951416
+    ## 9  Montipora_capitata_HIv3___RNAseq.g43322.t1 0.2048581139 0.638528673
+    ## 10 Montipora_capitata_HIv3___RNAseq.g34531.t1 0.2539042905 0.731179744
+    ## 11 Montipora_capitata_HIv3___RNAseq.g47592.t2 0.3546798825 0.894408496
+    ## 12     Montipora_capitata_HIv3___TS.g35289.t2 1.0000000000 1.000000000
     ##    loglik_full loglik_red df_full df_red        mean converge_combined
-    ## 1    -282.3475  -296.9638      17     12    57.53749                 0
-    ## 2    -291.5624  -304.0886      17     12  3430.54072                 0
-    ## 3    -275.5180  -286.9290      17     12  1187.65669                 0
-    ## 4    -282.8865  -293.1347      17     12  1133.49455                 0
-    ## 5    -359.1013  -366.5857      17     12 11175.65580                 0
-    ## 6    -393.2145  -400.2924      17     12 14048.65941                 0
-    ## 7    -323.3563  -329.5257      17     12  1764.37002                 0
-    ## 8    -350.9887  -356.5809      17     12  4805.12020                 0
-    ## 9    -220.3106  -225.8065      17     12   244.87537                 0
-    ## 10   -275.0532  -278.8203      17     12   779.13566                 0
-    ## 11   -346.0900  -349.5258      17     12  3957.46149                 0
-    ## 12   -378.1751  -381.0229      17     12  7612.15876                 0
+    ## 1    -294.2213  -305.6024      17     12  3642.90271                 0
+    ## 2    -277.9355  -289.2061      17     12  1261.60026                 0
+    ## 3    -284.7643  -295.1567      17     12  1204.05096                 0
+    ## 4    -361.6464  -369.1225      17     12 11865.94009                 0
+    ## 5    -394.9973  -402.1114      17     12 14918.53821                 0
+    ## 6    -326.0298  -332.0800      17     12  1873.61645                 0
+    ## 7    -353.2302  -358.8931      17     12  5103.36659                 0
+    ## 8    -224.8884  -230.2634      17     12   260.06067                 0
+    ## 9    -277.3306  -280.9400      17     12   827.64542                 0
+    ## 10   -348.3636  -351.6529      17     12  4202.57892                 0
+    ## 11   -380.6378  -383.4027      17     12  8084.21453                 0
+    ## 12   -307.2346  -299.4049      17     12    61.13291                 0
     ##    converge_case converge_control converge_sigmoid impulseTOsigmoid_p
-    ## 1              0                0                0       4.554020e-11
-    ## 2              0                0                0       1.175161e-06
-    ## 3              0                0                0       1.926888e-12
-    ## 4              0                0                0       2.592305e-08
-    ## 5              0                0                0       2.776352e-06
-    ## 6              0                0                0       6.864059e-09
-    ## 7              0                0                0       3.393920e-04
-    ## 8              0                0                0       1.371734e-05
-    ## 9              0                0                0       8.631802e-01
-    ## 10             0                0                0       5.136780e-03
-    ## 11             0                0                0       1.859302e-02
-    ## 12             0                0                0       8.750091e-02
+    ## 1              0                0                0       3.894180e-06
+    ## 2              0                0                0       3.784452e-12
+    ## 3              0                0                0       2.184191e-08
+    ## 4              0                0                0       1.940554e-04
+    ## 5              0                0                0       4.445599e-09
+    ## 6              0                0                0       5.359714e-04
+    ## 7              0                0                0       1.216749e-05
+    ## 8              0                0                0       8.938109e-01
+    ## 9              0                0                0       6.450836e-03
+    ## 10             0                0                0       2.092133e-02
+    ## 11             0                0                0       8.126363e-02
+    ## 12             0                0                0       5.932445e-02
     ##    impulseTOsigmoid_padj sigmoidTOconst_p sigmoidTOconst_padj isTransient
-    ## 1           6.246553e-09     3.905412e-05        0.0005959796        TRUE
-    ## 2           4.352430e-05     9.318929e-01        1.0000000000        TRUE
-    ## 3           3.496931e-10     5.824029e-01        1.0000000000        TRUE
-    ## 4           1.637455e-06     5.926565e-01        1.0000000000        TRUE
-    ## 5           8.875487e-05     2.655569e-01        0.9587639458        TRUE
-    ## 6           5.132815e-07     1.091418e-01        0.5075751286        TRUE
-    ## 7           4.819204e-03     1.285383e-01        0.5734216398       FALSE
-    ## 8           3.400843e-04     8.959022e-01        1.0000000000        TRUE
-    ## 9           1.000000e+00     5.494296e-03        0.0454981281       FALSE
-    ## 10          4.091475e-02     2.475184e-02        0.1574434365       FALSE
-    ## 11          1.081099e-01     3.797293e-01        1.0000000000       FALSE
-    ## 12          3.211474e-01     8.389922e-02        0.4147597907       FALSE
+    ## 1           1.184722e-04     0.9253247955         1.000000000        TRUE
+    ## 2           6.635125e-10     0.6171138042         1.000000000        TRUE
+    ## 3           1.419412e-06     0.6023577161         1.000000000        TRUE
+    ## 4           3.056140e-03     0.0066678039         0.053254682       FALSE
+    ## 5           3.579010e-07     0.1182046062         0.534315202        TRUE
+    ## 6           6.937006e-03     0.1208567140         0.543315777       FALSE
+    ## 7           3.058867e-04     0.9002040366         1.000000000        TRUE
+    ## 8           1.000000e+00     0.0160013353         0.110412032       FALSE
+    ## 9           4.859480e-02     0.0237589668         0.152709025       FALSE
+    ## 10          1.176496e-01     0.3589209753         1.000000000       FALSE
+    ## 11          3.063874e-01     0.0928900469         0.447464032       FALSE
+    ## 12          2.479517e-01     0.0001465574         0.001937915       FALSE
     ##    isMonotonous allZero     gene_id response_type     category
-    ## 1         FALSE   FALSE HSP70,Hsc71         Type1          UPR
-    ## 2         FALSE   FALSE          GR         Type1 ROS response
-    ## 3         FALSE   FALSE        AMPK         Type1 ROS response
-    ## 4         FALSE   FALSE         BAX         Type1    Apoptosis
-    ## 5         FALSE   FALSE        BI-1         Type1    Apoptosis
-    ## 6         FALSE   FALSE   Nrf2,Nrf1         Type1 ROS response
+    ## 1         FALSE   FALSE          GR         Type1 ROS response
+    ## 2         FALSE   FALSE        AMPK         Type1 ROS response
+    ## 3         FALSE   FALSE         BAX         Type1    Apoptosis
+    ## 4         FALSE   FALSE        BI-1         Type1    Apoptosis
+    ## 5         FALSE   FALSE   Nrf2,Nrf1         Type1 ROS response
+    ## 6         FALSE   FALSE       Bcl-2         Type1    Apoptosis
     ## 7         FALSE   FALSE       Bcl-2         Type1    Apoptosis
-    ## 8         FALSE   FALSE       Bcl-2         Type1    Apoptosis
-    ## 9         FALSE   FALSE         BAK         Type1    Apoptosis
-    ## 10        FALSE   FALSE       Bcl-2         Type1    Apoptosis
-    ## 11        FALSE   FALSE       Foxo3         Type1 ROS response
-    ## 12        FALSE   FALSE        HSF1         Type1          UPR
+    ## 8         FALSE   FALSE         BAK         Type1    Apoptosis
+    ## 9         FALSE   FALSE       Bcl-2         Type1    Apoptosis
+    ## 10        FALSE   FALSE       Foxo3         Type1 ROS response
+    ## 11        FALSE   FALSE        HSF1         Type1          UPR
+    ## 12        FALSE   FALSE HSP70,Hsc71         Type1          UPR
 
 ``` r
 heatgenes <- plotGenes(
@@ -2524,7 +2512,7 @@ pheatmap(vsd_mat[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-54-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-55-1.png)<!-- -->
 
 ``` r
 pheatmap(vsd_mat[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
@@ -2534,7 +2522,7 @@ pheatmap(vsd_mat[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-54-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-55-2.png)<!-- -->
 
 ## POR: pre-processing and visualization
 
@@ -2600,7 +2588,7 @@ filtered_counts <- counts_raw[counts_filt_poa,] #keep only rows that passed filt
 paste0("Number of genes after filtering: ", sum(counts_filt_poa))
 ```
 
-    ## [1] "Number of genes after filtering: 27116"
+    ## [1] "Number of genes after filtering: 27533"
 
 ``` r
 write.csv(filtered_counts, file = file.path(outdir, "filtered_counts.csv"))
@@ -2626,19 +2614,19 @@ print(sizeFactors(SF.dds)) #View size factors
 ```
 
     ##   POR_R0_C1   POR_R0_C2   POR_R0_C3   POR_R0_H1   POR_R0_H2   POR_R0_H3 
-    ##   1.2252631   0.9659378   1.7729540   0.7498610   0.9167721   1.2671513 
+    ##   1.1064526   0.8719468   1.6057443   0.6777339   0.8281278   1.1440124 
     ##   POR_R1_C1   POR_R1_C2   POR_R1_C3   POR_R1_H1   POR_R1_H2   POR_R1_H3 
-    ##   0.4592916   1.2997922   1.0930788   0.5123211   0.4449590   1.3915887 
+    ##   0.4150671   1.1759630   0.9875187   0.4640600   0.4029134   1.2567150 
     ##   POR_R3_C1   POR_R3_C2   POR_R3_C3   POR_R3_H1   POR_R3_H2   POR_R3_H3 
-    ##   1.6538415   0.5495657   0.7348005   1.2777840   2.2847763   1.1982420 
+    ##   1.4963637   1.2841829   0.6649097   2.0347063   2.0586128   1.0852146 
     ##  POR_R12_C1  POR_R12_C2  POR_R12_C3  POR_R12_H1  POR_R12_H2  POR_R12_H3 
-    ##   0.4413986   2.1794103   0.6348244   2.5677433   2.9661446   1.9199485 
+    ##   0.3981970   1.9697598   0.5738960   2.3125857   2.6778535   1.7302729 
     ##  POR_R24_C1  POR_R24_C2  POR_R24_C3  POR_R24_H1  POR_R24_H2  POR_R24_H3 
-    ##   2.3367591   0.8640240   0.3345967   0.3077996   2.0780240   2.5999454 
+    ##   2.1137645   0.7805666   0.7411381   0.2788869   1.8799754   2.3502852 
     ##  POR_R72_C1  POR_R72_C2  POR_R72_C3  POR_R72_H1  POR_R72_H2  POR_R72_H3 
-    ##   0.8608913   1.5542805   0.8215578   0.2113815   0.2992481   2.0753389 
+    ##   0.7770175   1.4041362   0.7425228   0.1915412   0.2704780   1.8744531 
     ## POR_R120_C1 POR_R120_C2 POR_R120_C3 POR_R120_H1 POR_R120_H2 POR_R120_H3 
-    ##   0.3579785   2.0125909   0.4016439   1.7376927   3.7500382   0.8065197
+    ##   0.8354057   1.8182241   0.3622529   3.8086275   3.3817337   0.7298652
 
 ``` r
 all(sizeFactors(SF.dds)) < 4
@@ -2668,7 +2656,7 @@ pheatmap(sampleDistMatrix,
          col=colorRampPalette( rev(brewer.pal(9, "Blues")) )(255))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-64-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-65-1.png)<!-- -->
 
 ### Principal component plot of the samples
 
@@ -2695,7 +2683,7 @@ PCA <- ggplot() +
 PCA
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-65-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-66-1.png)<!-- -->
 
 ``` r
 save_ggplot(PCA, "PCA_POR")
@@ -2737,7 +2725,7 @@ pheatmap(assay(vsd)[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-66-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-67-1.png)<!-- -->
 
 ``` r
 pheatmap(assay(vsd)[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
@@ -2747,7 +2735,7 @@ pheatmap(assay(vsd)[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-66-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-67-2.png)<!-- -->
 
 ### Heat stress genes
 
@@ -2779,7 +2767,7 @@ plot_df %>% ggplot(aes(x=time, y=expression, color=gene_id, group=gene_id)) +
   labs(y="VST expression", x="Timepoint")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-67-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-68-1.png)<!-- -->
 
 ``` r
 plot_df %>% filter(grepl("Type1", response_type)) %>%
@@ -2795,7 +2783,7 @@ plot_df %>% filter(grepl("Type1", response_type)) %>%
   labs(y="VST expression", x="Timepoint", title = "Type 1 Expressed Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-67-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-68-2.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "All_Type1")
@@ -2813,7 +2801,7 @@ plot_df %>% filter(grepl("Type2", response_type)) %>%
   labs(y="VST expression", x="Timepoint", title = "Type 2 Expressed Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-67-3.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-68-3.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "All_Type2")
@@ -2827,7 +2815,7 @@ plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_
   labs(y="VST expression", x="Timepoint")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-67-4.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-68-4.png)<!-- -->
 
 ### DESeq LRT Test
 
@@ -2857,7 +2845,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-68-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-69-1.png)<!-- -->
 
 ``` r
 pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
@@ -2867,7 +2855,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-68-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-69-2.png)<!-- -->
 
 ``` r
 top_500_DE_genes <- DE_05 %>% arrange(log2FoldChange) %>% head(500) %>% rownames()
@@ -2880,7 +2868,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-68-3.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-69-3.png)<!-- -->
 
 ``` r
 pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
@@ -2890,7 +2878,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-68-4.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-69-4.png)<!-- -->
 
 ``` r
 top_500_DE_genes <- DE_05 %>% arrange(desc(log2FoldChange)) %>% head(500) %>% rownames()
@@ -2903,7 +2891,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-68-5.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-69-5.png)<!-- -->
 
 ``` r
 pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
@@ -2913,7 +2901,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-68-6.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-69-6.png)<!-- -->
 
 ### DE Heat stress genes
 
@@ -2933,7 +2921,7 @@ plot_df %>% ggplot(aes(x=time, y=expression, color=gene_id, group=gene_id)) +
   labs(y="VST expression", x="Timepoint")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-69-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-70-1.png)<!-- -->
 
 ``` r
 plot_df %>% filter(grepl("Type1", response_type)) %>%
@@ -2949,7 +2937,7 @@ plot_df %>% filter(grepl("Type1", response_type)) %>%
   labs(y="VST expression", x="Timepoint", title = "Type 1 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-69-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-70-2.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "DE_Type1")
@@ -2967,7 +2955,7 @@ plot_df %>% filter(grepl("Type2", response_type)) %>%
   labs(y="VST expression", x="Timepoint", title = "Type 2 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-69-3.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-70-3.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "DE_Type2")
@@ -2981,7 +2969,7 @@ plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_
   labs(y="VST expression", x="Timepoint")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-69-4.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-70-4.png)<!-- -->
 
 ``` r
 plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_id)) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
@@ -2993,7 +2981,7 @@ plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_
   labs(y="VST expression", x="Timepoint", title = "Selected Type 1 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-69-5.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-70-5.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "highlighted_DE_Type1")
@@ -3007,7 +2995,7 @@ plot_df %>% filter(grepl("GDH",gene_id)|grepl("GS",gene_id)|grepl("AMT1",gene_id
   labs(y="VST expression", x="Timepoint", title = "Selected Type 2 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-69-6.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-70-6.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "highlighted_DE_Type2")
@@ -3089,68 +3077,68 @@ head(impulse_results)
 ```
 
     ##                                                                              Gene
-    ## Porites_compressa_HIv1___TS.g4306.t1                                         <NA>
+    ## Porites_compressa_HIv1___RNAseq.g9868.t1 Porites_compressa_HIv1___RNAseq.g9868.t1
+    ## Porites_compressa_HIv1___TS.g4306.t1         Porites_compressa_HIv1___TS.g4306.t1
     ## Porites_compressa_HIv1___TS.g4309.t1                                         <NA>
     ## Porites_compressa_HIv1___TS.g4310.t1                                         <NA>
     ## Porites_compressa_HIv1___RNAseq.g9679.t1                                     <NA>
     ## Porites_compressa_HIv1___RNAseq.g9682.t1 Porites_compressa_HIv1___RNAseq.g9682.t1
-    ## Porites_compressa_HIv1___RNAseq.g9683.t1 Porites_compressa_HIv1___RNAseq.g9683.t1
     ##                                                  p padj loglik_full loglik_red
-    ## Porites_compressa_HIv1___TS.g4306.t1            NA   NA          NA         NA
+    ## Porites_compressa_HIv1___RNAseq.g9868.t1 0.9917506    1  -25.137228 -25.392255
+    ## Porites_compressa_HIv1___TS.g4306.t1     1.0000000    1   -3.850928  -3.850814
     ## Porites_compressa_HIv1___TS.g4309.t1            NA   NA          NA         NA
     ## Porites_compressa_HIv1___TS.g4310.t1            NA   NA          NA         NA
     ## Porites_compressa_HIv1___RNAseq.g9679.t1        NA   NA          NA         NA
-    ## Porites_compressa_HIv1___RNAseq.g9682.t1 0.9670807    1   -31.56618  -32.03735
-    ## Porites_compressa_HIv1___RNAseq.g9683.t1 0.9997436    1   -26.44982  -26.51003
-    ##                                          df_full df_red      mean
-    ## Porites_compressa_HIv1___TS.g4306.t1          NA     NA        NA
-    ## Porites_compressa_HIv1___TS.g4309.t1          NA     NA        NA
-    ## Porites_compressa_HIv1___TS.g4310.t1          NA     NA        NA
-    ## Porites_compressa_HIv1___RNAseq.g9679.t1      NA     NA        NA
-    ## Porites_compressa_HIv1___RNAseq.g9682.t1      17     12 0.1881769
-    ## Porites_compressa_HIv1___RNAseq.g9683.t1      17     12 0.4478369
+    ## Porites_compressa_HIv1___RNAseq.g9682.t1 0.9659703    1  -31.844187 -32.322613
+    ##                                          df_full df_red         mean
+    ## Porites_compressa_HIv1___RNAseq.g9868.t1      17     12 7.522115e-01
+    ## Porites_compressa_HIv1___TS.g4306.t1          17     12 1.860825e-06
+    ## Porites_compressa_HIv1___TS.g4309.t1          NA     NA           NA
+    ## Porites_compressa_HIv1___TS.g4310.t1          NA     NA           NA
+    ## Porites_compressa_HIv1___RNAseq.g9679.t1      NA     NA           NA
+    ## Porites_compressa_HIv1___RNAseq.g9682.t1      17     12 2.033463e-01
     ##                                          converge_combined converge_case
-    ## Porites_compressa_HIv1___TS.g4306.t1                    NA            NA
+    ## Porites_compressa_HIv1___RNAseq.g9868.t1                 0             0
+    ## Porites_compressa_HIv1___TS.g4306.t1                     0             0
     ## Porites_compressa_HIv1___TS.g4309.t1                    NA            NA
     ## Porites_compressa_HIv1___TS.g4310.t1                    NA            NA
     ## Porites_compressa_HIv1___RNAseq.g9679.t1                NA            NA
     ## Porites_compressa_HIv1___RNAseq.g9682.t1                 0             0
-    ## Porites_compressa_HIv1___RNAseq.g9683.t1                 0             0
     ##                                          converge_control converge_sigmoid
-    ## Porites_compressa_HIv1___TS.g4306.t1                   NA               NA
+    ## Porites_compressa_HIv1___RNAseq.g9868.t1                0                0
+    ## Porites_compressa_HIv1___TS.g4306.t1                    0                0
     ## Porites_compressa_HIv1___TS.g4309.t1                   NA               NA
     ## Porites_compressa_HIv1___TS.g4310.t1                   NA               NA
     ## Porites_compressa_HIv1___RNAseq.g9679.t1               NA               NA
     ## Porites_compressa_HIv1___RNAseq.g9682.t1                0                0
-    ## Porites_compressa_HIv1___RNAseq.g9683.t1                0                0
     ##                                          impulseTOsigmoid_p
-    ## Porites_compressa_HIv1___TS.g4306.t1                     NA
+    ## Porites_compressa_HIv1___RNAseq.g9868.t1          0.8085221
+    ## Porites_compressa_HIv1___TS.g4306.t1              1.0000000
     ## Porites_compressa_HIv1___TS.g4309.t1                     NA
     ## Porites_compressa_HIv1___TS.g4310.t1                     NA
     ## Porites_compressa_HIv1___RNAseq.g9679.t1                 NA
-    ## Porites_compressa_HIv1___RNAseq.g9682.t1          0.4904407
-    ## Porites_compressa_HIv1___RNAseq.g9683.t1          0.7256079
+    ## Porites_compressa_HIv1___RNAseq.g9682.t1          0.4845805
     ##                                          impulseTOsigmoid_padj sigmoidTOconst_p
-    ## Porites_compressa_HIv1___TS.g4306.t1                        NA               NA
+    ## Porites_compressa_HIv1___RNAseq.g9868.t1             1.0000000        0.8244647
+    ## Porites_compressa_HIv1___TS.g4306.t1                 1.0000000        1.0000000
     ## Porites_compressa_HIv1___TS.g4309.t1                        NA               NA
     ## Porites_compressa_HIv1___TS.g4310.t1                        NA               NA
     ## Porites_compressa_HIv1___RNAseq.g9679.t1                    NA               NA
-    ## Porites_compressa_HIv1___RNAseq.g9682.t1             0.8964122        0.9962277
-    ## Porites_compressa_HIv1___RNAseq.g9683.t1             1.0000000        0.7994276
+    ## Porites_compressa_HIv1___RNAseq.g9682.t1             0.8832432        0.9959793
     ##                                          sigmoidTOconst_padj isTransient
-    ## Porites_compressa_HIv1___TS.g4306.t1                      NA          NA
+    ## Porites_compressa_HIv1___RNAseq.g9868.t1                   1       FALSE
+    ## Porites_compressa_HIv1___TS.g4306.t1                       1       FALSE
     ## Porites_compressa_HIv1___TS.g4309.t1                      NA          NA
     ## Porites_compressa_HIv1___TS.g4310.t1                      NA          NA
     ## Porites_compressa_HIv1___RNAseq.g9679.t1                  NA          NA
     ## Porites_compressa_HIv1___RNAseq.g9682.t1                   1       FALSE
-    ## Porites_compressa_HIv1___RNAseq.g9683.t1                   1       FALSE
     ##                                          isMonotonous allZero
-    ## Porites_compressa_HIv1___TS.g4306.t1               NA    TRUE
+    ## Porites_compressa_HIv1___RNAseq.g9868.t1        FALSE   FALSE
+    ## Porites_compressa_HIv1___TS.g4306.t1            FALSE   FALSE
     ## Porites_compressa_HIv1___TS.g4309.t1               NA    TRUE
     ## Porites_compressa_HIv1___TS.g4310.t1               NA    TRUE
     ## Porites_compressa_HIv1___RNAseq.g9679.t1           NA    TRUE
     ## Porites_compressa_HIv1___RNAseq.g9682.t1        FALSE   FALSE
-    ## Porites_compressa_HIv1___RNAseq.g9683.t1        FALSE   FALSE
 
 ``` r
 write.table(impulse_results,file.path(outdir, "ImpulseDE2_Results.txt"),row.names=F,quote=F,sep="\t")
@@ -3162,7 +3150,7 @@ sig_genes <- impulse_results[impulse_results$padj < 0.05 &
 nrow(sig_genes)
 ```
 
-    ## [1] 9278
+    ## [1] 9118
 
 ``` r
 head(sig_genes[order(sig_genes$padj), ])
@@ -3171,66 +3159,66 @@ head(sig_genes[order(sig_genes$padj), ])
     ##                                                                                Gene
     ## Porites_compressa_HIv1___RNAseq.g40862.t1 Porites_compressa_HIv1___RNAseq.g40862.t1
     ## Porites_compressa_HIv1___RNAseq.12682_t     Porites_compressa_HIv1___RNAseq.12682_t
+    ## Porites_compressa_HIv1___RNAseq.g19794.t1 Porites_compressa_HIv1___RNAseq.g19794.t1
+    ## Porites_compressa_HIv1___RNAseq.g24271.t1 Porites_compressa_HIv1___RNAseq.g24271.t1
     ## Porites_compressa_HIv1___RNAseq.g40324.t1 Porites_compressa_HIv1___RNAseq.g40324.t1
     ## Porites_compressa_HIv1___RNAseq.g41296.t1 Porites_compressa_HIv1___RNAseq.g41296.t1
-    ## Porites_compressa_HIv1___RNAseq.g19794.t1 Porites_compressa_HIv1___RNAseq.g19794.t1
-    ## Porites_compressa_HIv1___RNAseq.g31547.t1 Porites_compressa_HIv1___RNAseq.g31547.t1
     ##                                                      p         padj loglik_full
-    ## Porites_compressa_HIv1___RNAseq.g40862.t1 2.014819e-53 7.710308e-49   -338.5965
-    ## Porites_compressa_HIv1___RNAseq.12682_t   1.659037e-31 3.174401e-27   -206.8279
-    ## Porites_compressa_HIv1___RNAseq.g40324.t1 1.010386e-28 1.288849e-24   -302.4718
-    ## Porites_compressa_HIv1___RNAseq.g41296.t1 3.995210e-26 3.822217e-22   -194.9618
-    ## Porites_compressa_HIv1___RNAseq.g19794.t1 8.322814e-26 6.369949e-22   -189.1394
-    ## Porites_compressa_HIv1___RNAseq.g31547.t1 1.719150e-25 1.096474e-21   -280.4032
-    ##                                           loglik_red df_full df_red      mean
-    ## Porites_compressa_HIv1___RNAseq.g40862.t1  -466.9421      17     12 8844.5182
-    ## Porites_compressa_HIv1___RNAseq.12682_t    -283.9547      17     12  272.0178
-    ## Porites_compressa_HIv1___RNAseq.g40324.t1  -373.0555      17     12 2343.0067
-    ## Porites_compressa_HIv1___RNAseq.g41296.t1  -259.4318      17     12  149.3366
-    ## Porites_compressa_HIv1___RNAseq.g19794.t1  -252.8581      17     12   87.3517
-    ## Porites_compressa_HIv1___RNAseq.g31547.t1  -343.3791      17     12 1164.1131
+    ## Porites_compressa_HIv1___RNAseq.g40862.t1 1.444275e-46 5.560314e-42   -345.3443
+    ## Porites_compressa_HIv1___RNAseq.12682_t   1.785042e-32 3.436116e-28   -209.9890
+    ## Porites_compressa_HIv1___RNAseq.g19794.t1 1.149079e-28 1.474613e-24   -192.9607
+    ## Porites_compressa_HIv1___RNAseq.g24271.t1 7.430912e-27 7.152067e-23   -240.6193
+    ## Porites_compressa_HIv1___RNAseq.g40324.t1 1.539538e-26 1.185414e-22   -309.1734
+    ## Porites_compressa_HIv1___RNAseq.g41296.t1 3.540472e-26 2.271744e-22   -198.1882
+    ##                                           loglik_red df_full df_red       mean
+    ## Porites_compressa_HIv1___RNAseq.g40862.t1  -457.7068      17     12 9609.45623
+    ## Porites_compressa_HIv1___RNAseq.12682_t    -289.3881      17     12  299.57639
+    ## Porites_compressa_HIv1___RNAseq.g19794.t1  -263.4130      17     12   93.93792
+    ## Porites_compressa_HIv1___RNAseq.g24271.t1  -306.8102      17     12  490.66126
+    ## Porites_compressa_HIv1___RNAseq.g40324.t1  -374.6191      17     12 2700.51478
+    ## Porites_compressa_HIv1___RNAseq.g41296.t1  -262.7818      17     12  151.12608
     ##                                           converge_combined converge_case
     ## Porites_compressa_HIv1___RNAseq.g40862.t1                 0             0
     ## Porites_compressa_HIv1___RNAseq.12682_t                   0             0
+    ## Porites_compressa_HIv1___RNAseq.g19794.t1                 0             0
+    ## Porites_compressa_HIv1___RNAseq.g24271.t1                 0             0
     ## Porites_compressa_HIv1___RNAseq.g40324.t1                 0             0
     ## Porites_compressa_HIv1___RNAseq.g41296.t1                 0             0
-    ## Porites_compressa_HIv1___RNAseq.g19794.t1                 0             0
-    ## Porites_compressa_HIv1___RNAseq.g31547.t1                 0             0
     ##                                           converge_control converge_sigmoid
     ## Porites_compressa_HIv1___RNAseq.g40862.t1                0                0
     ## Porites_compressa_HIv1___RNAseq.12682_t                  0                0
+    ## Porites_compressa_HIv1___RNAseq.g19794.t1                0                0
+    ## Porites_compressa_HIv1___RNAseq.g24271.t1                0                0
     ## Porites_compressa_HIv1___RNAseq.g40324.t1                0                0
     ## Porites_compressa_HIv1___RNAseq.g41296.t1                0                0
-    ## Porites_compressa_HIv1___RNAseq.g19794.t1                0                0
-    ## Porites_compressa_HIv1___RNAseq.g31547.t1                0                0
     ##                                           impulseTOsigmoid_p
-    ## Porites_compressa_HIv1___RNAseq.g40862.t1       6.984786e-06
-    ## Porites_compressa_HIv1___RNAseq.12682_t         1.410970e-05
-    ## Porites_compressa_HIv1___RNAseq.g40324.t1       2.407507e-25
-    ## Porites_compressa_HIv1___RNAseq.g41296.t1       2.135662e-01
+    ## Porites_compressa_HIv1___RNAseq.g40862.t1       5.983611e-15
+    ## Porites_compressa_HIv1___RNAseq.12682_t         2.704661e-06
     ## Porites_compressa_HIv1___RNAseq.g19794.t1       1.000000e+00
-    ## Porites_compressa_HIv1___RNAseq.g31547.t1       1.835770e-01
+    ## Porites_compressa_HIv1___RNAseq.g24271.t1       1.348840e-03
+    ## Porites_compressa_HIv1___RNAseq.g40324.t1       1.208993e-20
+    ## Porites_compressa_HIv1___RNAseq.g41296.t1       3.602406e-02
     ##                                           impulseTOsigmoid_padj
-    ## Porites_compressa_HIv1___RNAseq.g40862.t1          3.743610e-04
-    ## Porites_compressa_HIv1___RNAseq.12682_t            6.344889e-04
-    ## Porites_compressa_HIv1___RNAseq.g40324.t1          9.213046e-22
-    ## Porites_compressa_HIv1___RNAseq.g41296.t1          5.668828e-01
+    ## Porites_compressa_HIv1___RNAseq.g40862.t1          4.701287e-12
+    ## Porites_compressa_HIv1___RNAseq.12682_t            1.718263e-04
     ## Porites_compressa_HIv1___RNAseq.g19794.t1          1.000000e+00
-    ## Porites_compressa_HIv1___RNAseq.g31547.t1          5.181613e-01
+    ## Porites_compressa_HIv1___RNAseq.g24271.t1          1.929729e-02
+    ## Porites_compressa_HIv1___RNAseq.g40324.t1          2.585835e-17
+    ## Porites_compressa_HIv1___RNAseq.g41296.t1          1.860358e-01
     ##                                           sigmoidTOconst_p sigmoidTOconst_padj
-    ## Porites_compressa_HIv1___RNAseq.g40862.t1     7.173503e-70        2.745156e-65
-    ## Porites_compressa_HIv1___RNAseq.12682_t       2.557762e-48        3.262682e-44
-    ## Porites_compressa_HIv1___RNAseq.g40324.t1     1.406371e-31        2.989945e-28
-    ## Porites_compressa_HIv1___RNAseq.g41296.t1     1.827583e-34        5.828162e-31
-    ## Porites_compressa_HIv1___RNAseq.g19794.t1     4.474857e-49        8.562192e-45
-    ## Porites_compressa_HIv1___RNAseq.g31547.t1     2.636937e-40        1.681839e-36
+    ## Porites_compressa_HIv1___RNAseq.g40862.t1     3.697629e-52        7.117752e-48
+    ## Porites_compressa_HIv1___RNAseq.12682_t       1.058081e-48        1.357835e-44
+    ## Porites_compressa_HIv1___RNAseq.g19794.t1     7.940164e-54        3.056884e-49
+    ## Porites_compressa_HIv1___RNAseq.g24271.t1     2.378702e-36        1.144721e-32
+    ## Porites_compressa_HIv1___RNAseq.g40324.t1     8.338210e-31        1.783404e-27
+    ## Porites_compressa_HIv1___RNAseq.g41296.t1     8.434002e-35        3.247006e-31
     ##                                           isTransient isMonotonous allZero
     ## Porites_compressa_HIv1___RNAseq.g40862.t1       FALSE         TRUE   FALSE
     ## Porites_compressa_HIv1___RNAseq.12682_t         FALSE         TRUE   FALSE
+    ## Porites_compressa_HIv1___RNAseq.g19794.t1       FALSE         TRUE   FALSE
+    ## Porites_compressa_HIv1___RNAseq.g24271.t1       FALSE         TRUE   FALSE
     ## Porites_compressa_HIv1___RNAseq.g40324.t1        TRUE        FALSE   FALSE
     ## Porites_compressa_HIv1___RNAseq.g41296.t1       FALSE         TRUE   FALSE
-    ## Porites_compressa_HIv1___RNAseq.g19794.t1       FALSE         TRUE   FALSE
-    ## Porites_compressa_HIv1___RNAseq.g31547.t1       FALSE         TRUE   FALSE
 
 ``` r
 library(ComplexHeatmap)
@@ -3243,7 +3231,7 @@ lsHeatmaps <- plotHeatmap(
 draw(lsHeatmaps$complexHeatmapRaw) 
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-74-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-75-1.png)<!-- -->
 
 ``` r
 png(paste0(outdir,"/ImpulseDE/ImpulseDE2_heatmap.png"), width = 2000, height = 2400, res = 300)
@@ -3263,61 +3251,61 @@ impulse_results %>% filter(Gene %in% stress_genes_ids) %>% arrange(padj) %>% lef
 ```
 
     ##                                         Gene            p         padj
-    ## 1      Porites_compressa_HIv1___TS.g16287.t1 6.275509e-14 3.001890e-11
-    ## 2  Porites_compressa_HIv1___RNAseq.g10172.t1 2.522865e-09 3.435766e-07
-    ## 3  Porites_compressa_HIv1___RNAseq.g12818.t1 2.116698e-07 1.629815e-05
-    ## 4  Porites_compressa_HIv1___RNAseq.g28962.t1 3.914660e-06 1.856335e-04
-    ## 5  Porites_compressa_HIv1___RNAseq.g40602.t1 6.371480e-05 1.788876e-03
-    ## 6        Porites_compressa_HIv1___TS.g982.t1 1.200620e-03 1.815303e-02
-    ## 7   Porites_compressa_HIv1___RNAseq.g8182.t1 2.753656e-02 1.912720e-01
-    ## 8  Porites_compressa_HIv1___RNAseq.g29198.t1 3.044181e-02 2.046958e-01
-    ## 9  Porites_compressa_HIv1___RNAseq.g39940.t1 1.045937e-01 4.740326e-01
-    ## 10 Porites_compressa_HIv1___RNAseq.g25821.t1 1.059808e-01 4.775097e-01
-    ## 11  Porites_compressa_HIv1___RNAseq.g4837.t1 9.062605e-01 1.000000e+00
-    ## 12 Porites_compressa_HIv1___RNAseq.g16374.t1 5.235370e-01 1.000000e+00
-    ## 13 Porites_compressa_HIv1___RNAseq.g27468.t1 6.143969e-01 1.000000e+00
+    ## 1      Porites_compressa_HIv1___TS.g16287.t1 1.261458e-13 5.518734e-11
+    ## 2  Porites_compressa_HIv1___RNAseq.g10172.t1 3.846990e-11 8.511797e-09
+    ## 3  Porites_compressa_HIv1___RNAseq.g12818.t1 1.304024e-07 1.052487e-05
+    ## 4  Porites_compressa_HIv1___RNAseq.g28962.t1 6.462794e-06 2.761500e-04
+    ## 5  Porites_compressa_HIv1___RNAseq.g40602.t1 8.078547e-05 2.158334e-03
+    ## 6        Porites_compressa_HIv1___TS.g982.t1 1.589032e-03 2.218134e-02
+    ## 7  Porites_compressa_HIv1___RNAseq.g29198.t1 2.438273e-02 1.705506e-01
+    ## 8   Porites_compressa_HIv1___RNAseq.g8182.t1 3.467725e-02 2.205583e-01
+    ## 9  Porites_compressa_HIv1___RNAseq.g25821.t1 1.245956e-01 5.224143e-01
+    ## 10  Porites_compressa_HIv1___RNAseq.g4837.t1 8.129055e-01 1.000000e+00
+    ## 11 Porites_compressa_HIv1___RNAseq.g39940.t1 4.314555e-01 1.000000e+00
+    ## 12 Porites_compressa_HIv1___RNAseq.g16374.t1 5.174867e-01 1.000000e+00
+    ## 13 Porites_compressa_HIv1___RNAseq.g27468.t1 5.878061e-01 1.000000e+00
     ##    loglik_full loglik_red df_full df_red         mean converge_combined
-    ## 1   -271.33741  -306.8490      17     12  605.6569002                 0
-    ## 2   -214.67067  -239.0344      17     12   10.1304584                 0
-    ## 3   -240.99020  -260.6143      17     12  279.6737993                 0
-    ## 4   -339.31774  -355.7747      17     12 2619.4348680                 0
-    ## 5   -332.95370  -346.3303      17     12 2233.8429530                 0
-    ## 6   -301.83951  -311.8859      17     12  535.9964777                 0
-    ## 7   -303.64026  -309.9354      17     12 1332.3531141                 0
-    ## 8   -261.98582  -268.1547      17     12  228.6611494                 0
-    ## 9    -74.71639   -79.2735      17     12    0.2552776                 0
-    ## 10  -320.09667  -324.6358      17     12 1040.5419247                 0
-    ## 11  -217.56241  -218.3415      17     12   99.3529816                 0
-    ## 12  -286.03231  -288.1233      17     12  407.4939132                 0
-    ## 13  -333.22072  -335.0005      17     12 4333.3645280                 0
+    ## 1   -276.01269 -310.79585      17     12  684.6283272                 0
+    ## 2   -217.36204 -246.15008      17     12   11.7711762                 0
+    ## 3   -244.87368 -265.01964      17     12  306.5868096                 0
+    ## 4   -343.79470 -359.70241      17     12 2849.3022295                 0
+    ## 5   -336.92645 -350.03779      17     12 2457.1732425                 0
+    ## 6   -306.50506 -316.22655      17     12  601.7781322                 0
+    ## 7   -265.41825 -271.86576      17     12  248.5890079                 0
+    ## 8   -308.10943 -314.11347      17     12 1462.3644030                 0
+    ## 9   -324.36793 -328.68480      17     12 1116.2528933                 0
+    ## 10  -220.65522 -221.78254      17     12  110.2963144                 0
+    ## 11   -80.35187  -82.78885      17     12    0.2755157                 0
+    ## 12  -289.78216 -291.89470      17     12  439.5541347                 0
+    ## 13  -337.86862 -339.73733      17     12 4780.4888836                 0
     ##    converge_case converge_control converge_sigmoid impulseTOsigmoid_p
-    ## 1              0                0                0       9.275385e-21
-    ## 2              0                0                0       1.645728e-18
-    ## 3              0                0                0       3.930531e-15
-    ## 4              0                0                0       3.040006e-08
-    ## 5              0                0                0       6.035365e-07
-    ## 6              0                0                0       4.847613e-05
-    ## 7              0                0                0       7.484153e-02
-    ## 8              0                0                0       1.264228e-03
-    ## 9              0                0                0       2.759740e-02
-    ## 10             0                0                0       4.448799e-01
-    ## 11             0                0                0       3.350548e-01
-    ## 12             0                0                0       1.902373e-02
-    ## 13             0                0                0       9.992878e-01
+    ## 1              0                0                0       4.834378e-20
+    ## 2              0                0                0       1.183871e-20
+    ## 3              0                0                0       1.346497e-15
+    ## 4              0                0                0       9.925605e-08
+    ## 5              0                0                0       9.695619e-07
+    ## 6              0                0                0       5.407888e-05
+    ## 7              0                0                0       9.267664e-04
+    ## 8              0                0                0       8.525076e-02
+    ## 9              0                0                0       4.326380e-01
+    ## 10             0                0                0       3.133143e-01
+    ## 11             0                0                0       1.543946e-02
+    ## 12             0                0                0       1.905614e-02
+    ## 13             0                0                0       3.265727e-01
     ##    impulseTOsigmoid_padj sigmoidTOconst_p sigmoidTOconst_padj isTransient
-    ## 1           1.971947e-17     0.1839767210         0.757849425        TRUE
-    ## 2           2.738205e-15     0.0091250238         0.079670639        TRUE
-    ## 3           3.269860e-12     0.2173732542         0.843826303        TRUE
-    ## 4           4.787446e-06     0.0001275996         0.002165401        TRUE
-    ## 5           5.565334e-05     0.3515859343         1.000000000        TRUE
-    ## 6           1.635877e-03     0.8756862966         1.000000000       FALSE
-    ## 7           3.011288e-01     0.0693301245         0.384455181       FALSE
-    ## 8           1.882553e-02     0.1489081975         0.659768311       FALSE
-    ## 9           1.581626e-01     0.0804693943         0.427992047       FALSE
-    ## 10          8.535160e-01     0.3168973354         1.000000000       FALSE
-    ## 11          7.319258e-01     0.8960541996         1.000000000       FALSE
-    ## 12          1.243807e-01     0.9776576846         1.000000000       FALSE
-    ## 13          1.000000e+00     0.0901909523         0.465192811       FALSE
+    ## 1           9.305936e-17     0.1859511562         0.749720411        TRUE
+    ## 2           2.585835e-17     0.0055795584         0.052213763        TRUE
+    ## 3           1.205553e-12     0.2288512999         0.859146386        TRUE
+    ## 4           1.154459e-05     0.0001791694         0.002876498        TRUE
+    ## 5           7.975890e-05     0.3546528940         1.000000000        TRUE
+    ## 6           1.712379e-03     0.8743862575         1.000000000       FALSE
+    ## 7           1.462278e-02     0.1467437755         0.642863975       FALSE
+    ## 8           3.208279e-01     0.0720794875         0.389413608       FALSE
+    ## 9           8.326549e-01     0.3269466311         1.000000000       FALSE
+    ## 10          6.973003e-01     0.8947829027         1.000000000       FALSE
+    ## 11          1.064250e-01     0.0491092300         0.291138935       FALSE
+    ## 12          1.227032e-01     0.9778073239         1.000000000       FALSE
+    ## 13          7.134929e-01     0.2445297946         0.893924075       FALSE
     ##    isMonotonous allZero     gene_id response_type     category
     ## 1         FALSE   FALSE       Bcl-2         Type1    Apoptosis
     ## 2         FALSE   FALSE HSP70,Hsc71         Type1          UPR
@@ -3325,11 +3313,11 @@ impulse_results %>% filter(Gene %in% stress_genes_ids) %>% arrange(padj) %>% lef
     ## 4         FALSE   FALSE   Nrf2,Nrf1         Type1 ROS response
     ## 5         FALSE   FALSE       Foxo3         Type1 ROS response
     ## 6         FALSE   FALSE       Bcl-2         Type1    Apoptosis
-    ## 7         FALSE   FALSE          GR         Type1 ROS response
-    ## 8         FALSE   FALSE       Bcl-2         Type1    Apoptosis
-    ## 9         FALSE   FALSE HSP70,Hsc71         Type1          UPR
-    ## 10        FALSE   FALSE        HSF1         Type1          UPR
-    ## 11        FALSE   FALSE         BAK         Type1    Apoptosis
+    ## 7         FALSE   FALSE       Bcl-2         Type1    Apoptosis
+    ## 8         FALSE   FALSE          GR         Type1 ROS response
+    ## 9         FALSE   FALSE        HSF1         Type1          UPR
+    ## 10        FALSE   FALSE         BAK         Type1    Apoptosis
+    ## 11        FALSE   FALSE HSP70,Hsc71         Type1          UPR
     ## 12        FALSE   FALSE        AMPK         Type1 ROS response
     ## 13        FALSE   FALSE        BI-1         Type1    Apoptosis
 
@@ -3471,7 +3459,7 @@ pheatmap(vsd_mat[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-76-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-77-1.png)<!-- -->
 
 ``` r
 pheatmap(vsd_mat[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
@@ -3481,4 +3469,4 @@ pheatmap(vsd_mat[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-76-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-77-2.png)<!-- -->
