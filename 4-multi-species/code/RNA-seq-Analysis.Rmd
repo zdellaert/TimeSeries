@@ -740,7 +740,7 @@ length(impulse_sig_genes$Gene)
 # which ones are missing? 
 missing_genes <- impulse_sig_genes$Gene[!(impulse_sig_genes$Gene %in% rownames(vsd_mat))]
 
-# 9 are missing and it is because they were filtered out during pOverA filtering -- as seen with rowSums below, each has fewer than 3 samples with a count >10
+# 8 are missing and it is because they were filtered out during pOverA filtering -- as seen with rowSums below, each has fewer than 3 samples with a count >10
 
 counts_raw[missing_genes,]
 impulse_sig_genes[missing_genes,]
@@ -851,6 +851,16 @@ HSPS <- impulse_results %>% filter(Gene %in% stress_genes_ids) %>% arrange(padj)
 cluster_assignments %>% filter(gene %in% HSPS)
 ```
 
+```{r}
+heat_clustered <- HeatStressGenes_unique %>% left_join(cluster_assignments, by = join_by(query==gene)) %>%
+  arrange(cluster, desc(cluster))
+
+# plot this to show which genes are in which cluster
+heat_clustered %>% filter(!is.na(cluster)) %>% ggplot(aes(y=reorder(gene_id, cluster), x=factor(cluster), fill=cluster)) +
+  geom_tile() +
+  theme_bw() +
+  labs(x="Gene ID", y="Mfuzz Cluster", title="Heat stress genes clustered by temporal expression pattern")
+```
 
 
 ## MON: pre-processing and visualization
