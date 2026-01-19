@@ -12,9 +12,7 @@ Data and methods for Chapter Four of my dissertation, a stort-term heat stress p
 
 ### Extraction Tracking Google Sheets:
 
-- [Porites](https://docs.google.com/spreadsheets/d/1YSbTec3CTiB_jzlPmmnUCw8G7EHQEp4lCAPvE5Y3PbQ/edit?usp=sharing)
-- [Montipora](https://docs.google.com/spreadsheets/d/1N5znQ5vAMwiakrH98vXy5NZ-cQHXqJ8H3JobaCf9FuY/edit?usp=sharing)
-- [Pocillopora](https://docs.google.com/spreadsheets/d/17fJv9rguI5UyHwK8QH_VLOt18IPXVOByG2DgnAi0dJQ/edit?usp=sharing)
+- [Finalized after RNA submission Oct 2025](https://docs.google.com/spreadsheets/d/1QHUKl4J3LPnZhpgZH4eT6g07zjvgPuXU1qO1aj64CPo/edit?usp=sharing)
 
 ### Images of all lab notebook pages and datasheets:
 

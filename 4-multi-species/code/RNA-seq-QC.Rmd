@@ -72,6 +72,7 @@ write.csv(QC_trim_summarized %>% arrange(total_Mseq) , "../output_RNA/trimmed_qc
 # load in multiqc data of mapping data
 POR_map <- read.delim("../output_RNA/alignment_qc/POR_Pcomp/multiqc_data/multiqc_star.txt", header = TRUE)
 POR_rRNA <- read.csv("../output_RNA/rRNA_screen/rRNA_contamination_bbduk_POR.csv") %>% select(-total_reads)
+POR_rRNA_Fede <- read.csv("../output_RNA/rRNA_screen/rRNA_contamination_bbduk_POR_Federica.csv") %>% select(-total_reads)
 ```
 
 ```{r}
@@ -103,8 +104,10 @@ ggplot(POR_rRNA) +
   geom_point(aes(x = total_reads_Million, y =uniquely_mapped_percent, color=total_reads_Million)) + theme_bw() + 
   labs(title = "Percent rRNA reads vs. Unique Mapping Rates:\nPOR Samples")
 
-POR_rRNA_summary <- POR_rRNA %>% select(sample,uniquely_mapped_percent,matched_reads_pairs_Million,total_reads_Million) %>% 
-  dplyr::rename(rRNA_matched_reads_Million=matched_reads_pairs_Million) %>% arrange(uniquely_mapped_percent) %>%
+POR_rRNA_summary <- POR_rRNA %>% select(sample,uniquely_mapped_percent,matched_reads_pairs_Million,total_reads_Million,percent_rrna) %>% 
+  dplyr::rename(rRNA_matched_reads_pairs_Million=matched_reads_pairs_Million,
+                total_reads_pairs_Million = total_reads_Million
+                ) %>% arrange(uniquely_mapped_percent) %>%
   mutate(across(contains("_"), ~ round(as.numeric(.x), 2)))
 
 
@@ -112,7 +115,7 @@ POR_rRNA_summary %>% pivot_longer(cols = contains("_"),
                names_to = "metric",
                values_to = "value") %>%
   ggplot(aes(x = value)) +
-  geom_density() +
+  geom_density(fill="lightgray") +
   facet_wrap(~ metric, scales = "free") +
   theme_bw() 
 
@@ -241,5 +244,94 @@ ggplot(POR_combined, aes(x = depth, y = genes_detected, group=sample, color = un
   ) +
   theme_bw()
 ```
+
+
+
+```{r}
+# Load and prepare metadata
+metadata <- read.csv("../data/completed_bulk_RNA_extractions_3species.csv") %>%
+  select(fragment_name, t_hours, treatment, Tank, Extraction_Date, 
+         RNA_QBIT_AVG, RNA_Gel_quality_score, ng_RNA_total) %>%
+  mutate(across(c(t_hours, treatment, Tank, Extraction_Date), factor),
+         across(c(RNA_QBIT_AVG, RNA_Gel_quality_score, ng_RNA_total), as.numeric))
+
+# Join with rRNA data
+POR_rRNA_summary_meta <- POR_rRNA_summary %>% 
+  left_join(metadata, by = join_by("sample" == "fragment_name"))
+
+# Visualize potential batch effects
+library(patchwork)
+
+# Continuous variables
+cont_plots <- c("RNA_QBIT_AVG", "RNA_Gel_quality_score", "ng_RNA_total") %>%
+  map(~ ggplot(POR_rRNA_summary_meta, aes(x = .data[[.x]], y = percent_rrna)) +
+        geom_point(alpha = 0.6) +
+        geom_smooth(method = "lm", se = TRUE) +
+        theme_bw() +
+        labs(title = .x))
+
+# Categorical variables (biological + batch)
+cat_plots <- c("treatment", "t_hours", "Tank", "Extraction_Date") %>%
+  map(~ ggplot(POR_rRNA_summary_meta, aes(x = .data[[.x]], y = percent_rrna, color=treatment)) +
+        geom_boxplot(outlier.shape = NA) +
+        geom_jitter(alpha = 0.5, width = 0.15) +
+        theme_bw() +
+        labs(title = .x))
+
+wrap_plots(c(cont_plots, cat_plots))
+
+# Model with treatment×time interaction
+model <- lm(percent_rrna ~ RNA_QBIT_AVG + RNA_Gel_quality_score + ng_RNA_total + 
+              treatment * t_hours + Tank + Extraction_Date,
+            data = POR_rRNA_summary_meta)
+
+summary(model)
+anova(model)
+
+# Diagnostic plots
+par(mfrow = c(2, 2))
+plot(model)
+par(mfrow = c(1, 1))
+
+# Examine batch effect (Extraction_Date)
+POR_rRNA_summary_meta %>%
+  group_by(Extraction_Date) %>%
+  summarise(n = n(), 
+            mean_rRNA = mean(percent_rrna, na.rm = TRUE),
+            sd_rRNA = sd(percent_rrna, na.rm = TRUE)) %>%
+  arrange(desc(mean_rRNA))
+```
+
+
+
+```{r}
+POR_rRNA <- read.csv("../output_RNA/rRNA_screen/rRNA_contamination_bbduk_POR.csv")  %>% 
+  mutate(total_reads_M_correct = total_reads/1000000)
+POR_rRNA_Fede <- read.csv("../output_RNA/rRNA_screen/rRNA_contamination_bbduk_POR_Federica.csv")  %>% 
+  mutate(total_reads_M_correct = total_reads/1000000)
+
+POR_rRNA$dataset <- "TimeSeries"
+POR_rRNA_Fede$dataset <- "TPC"
+combined <- rbind(POR_rRNA,POR_rRNA_Fede)
+
+ggplot(combined, aes(x=percent_rrna, fill = dataset)) +
+         geom_histogram(alpha=0.5, binwidth=1) + 
+        coord_cartesian(xlim = c(0, 100)) + theme_bw()
+
+library(cowplot) 
+pmain <- ggplot(combined, aes(x=percent_rrna,y=total_reads_M_correct, color = dataset))+
+  geom_point()
+
+xdens <- axis_canvas(pmain, axis = "x")+
+  geom_density(data = combined, aes(x = percent_rrna, fill = dataset), alpha = 0.7, size=0.2)
+
+ydens <- axis_canvas(pmain, axis = "y", coord_flip = TRUE)+
+  geom_density(data = combined, aes(x = total_reads_M_correct, fill = dataset), alpha = 0.7, size=0.2)+
+  coord_flip()
+p1 <- insert_xaxis_grob(pmain, xdens, grid::unit(.2, "null"), position = "top")
+p2 <- insert_yaxis_grob(p1, ydens, grid::unit(.2, "null"), position = "right")
+ggdraw(p2)
+```
+
 
 
