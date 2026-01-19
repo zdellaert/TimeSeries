@@ -1,0 +1,118 @@
+---
+title: "Genome Annotation"
+author: "Zoe Dellaert"
+date: "2025-12-07"
+output:
+  github_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+# Genome annotation
+
+### SwissProt of ALL genes
+
+Swissprot based on [E5 Annotations](https://github.com/urol-e5/deep-dive/blob/main/D-Apul/code/20-Apul-gene-annotation.Rmd) and
+[here](https://github.com/urol-e5/deep-dive/blob/main/F-Pmea/code/20-Pmea-gene-annotation.Rmd) and Steven Robert's [notebook post here](https://sr320.github.io/tumbling-oysters/posts/sr320-27-go/)
+
+```{bash, eval=FALSE}
+cd ../references
+
+# copy all genome fasta files here
+cp  /work/pi_hputnam_uri_edu/HI_Genomes/*/*pep.faa .
+
+mkdir blast_dbs
+cd blast_dbs
+
+# download swissprot database
+curl -O https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.fasta.gz
+curl -O https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/reldate.txt
+
+gunzip uniprot_sprot.fasta.gz
+
+cat reldate.txt
+```
+
+UniProt Knowledgebase Release 2025_04 consists of:
+UniProtKB/Swiss-Prot Release 2025_04 of 08-Oct-2025
+UniProtKB/TrEMBL Release 2025_04 of 08-Oct-2025
+
+```
+mv uniprot_sprot.fasta uniprot_sprot_r2025_10_08.fasta
+
+head uniprot_sprot_r2025_10_08.fasta
+echo "Number of Sequences"
+grep -c ">" uniprot_sprot_r2025_10_08.fasta
+# 573661 sequences
+```
+
+```{bash, eval=FALSE}
+module load blast-plus/2.14.1
+
+makeblastdb \
+-in uniprot_sprot_r2025_10_08.fasta \
+-dbtype prot \
+-out uniprot_sprot_r2025_10_08
+```
+
+```{bash, eval=FALSE}
+cd ../scripts
+nano 00_blastp_SwissProt.sh
+```
+
+```{bash eval=FALSE}
+#!/bin/bash
+#SBATCH -t 18:00:00
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=48
+#SBATCH --mem=500GB
+#SBATCH --export=NONE
+#SBATCH --error=outs_errs/"%x_error.%j" #write out slurm error reports
+#SBATCH --output=outs_errs/"%x_output.%j" #write out any program outpus
+#SBATCH --mail-type=BEGIN,END,FAIL #email you when job starts, stops and/or fails
+
+module load blast-plus/2.14.1
+
+cd ../references/
+mkdir -p annotation
+
+for fasta in *.pep.faa; do
+    base=$(basename "$fasta" .pep.faa)
+
+    blastp \
+    -query "$fasta" \
+    -db blast_dbs/uniprot_sprot_r2024_10_02 \
+    -out "annotation/${base}_SwissProt_out.tab" \
+    -evalue 1E-05 \
+    -num_threads 48 \
+    -max_target_seqs 1 \
+    -max_hsps 1 \
+    -outfmt 6
+done
+
+echo "Blast complete!" $(date)
+```
+
+```
+cd ../references/annotation/
+
+ls
+
+#Montipora_capitata_HIv3.genes_SwissProt_out.tab
+#Porites_compressa_HIv1.genes_SwissProt_out.tab
+#Pocillopora_acuta_HIv2.genes_SwissProt_out.tab
+
+tr '|' '\t' <  Montipora_capitata_HIv3.genes_SwissProt_out.tab >  Montipora_capitata_HIv3_SwissProt_out_sep.tab
+tr '|' '\t' <  Pocillopora_acuta_HIv2.genes_SwissProt_out.tab > Pocillopora_acuta_HIv2_SwissProt_out_sep.tab
+tr '|' '\t' <  Porites_compressa_HIv1.genes_SwissProt_out.tab >  Porites_compressa_HIv1_SwissProt_out_sep.tab
+
+rm *_SwissProt_out.tab
+
+curl -H "Accept: text/plain; format=tsv" "https://rest.uniprot.org/uniprotkb/stream?fields=accession%2Creviewed%2Cid%2Cprotein_name%2Cgene_names%2Corganism_name%2Clength%2Cgo_p%2Cgo%2Cgo_id%2Cgo_c%2Cgo_f&format=tsv&query=%28reviewed%3Atrue%29" -o SwissProt-Annot-GO_20251207.tsv
+
+wc -l SwissProt-Annot-GO_20251207.tsv
+# 573662
+```
