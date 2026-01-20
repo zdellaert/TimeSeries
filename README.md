@@ -10,9 +10,10 @@ Data and methods for Chapter Four of my dissertation, a stort-term heat stress p
 
 ## Google Drive Links:
 
-### Extraction Tracking Google Sheets:
+### Important Google Sheets:
 
-- [Finalized after RNA submission Oct 2025](https://docs.google.com/spreadsheets/d/1QHUKl4J3LPnZhpgZH4eT6g07zjvgPuXU1qO1aj64CPo/edit?usp=sharing)
+- [Bulk RNA - Finalized after RNA submission Oct 2025](https://docs.google.com/spreadsheets/d/1QHUKl4J3LPnZhpgZH4eT6g07zjvgPuXU1qO1aj64CPo/edit?usp=sharing)
+- [All Sample Status + Location](https://docs.google.com/spreadsheets/d/1Jqejn2uAKFtD1zxPGMCGWsV_NBGxt2ujtZMzAVO3Z_E/edit?usp=sharing) - (github version [here](https://github.com/zdellaert/TimeSeries/blob/main/TimeSeries_All_Samples_Status.csv))
 
 ### Images of all lab notebook pages and datasheets:
 
