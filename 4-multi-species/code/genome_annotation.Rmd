@@ -14,15 +14,21 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 
 ### SwissProt of ALL genes
 
-Swissprot based on [E5 Annotations](https://github.com/urol-e5/deep-dive/blob/main/D-Apul/code/20-Apul-gene-annotation.Rmd) and
+Swissprot annotation method based on [E5 Annotations](https://github.com/urol-e5/deep-dive/blob/main/D-Apul/code/20-Apul-gene-annotation.Rmd) and
 [here](https://github.com/urol-e5/deep-dive/blob/main/F-Pmea/code/20-Pmea-gene-annotation.Rmd) and Steven Robert's [notebook post here](https://sr320.github.io/tumbling-oysters/posts/sr320-27-go/)
+
+#### Step 1: Gather protein fasta files
 
 ```{bash, eval=FALSE}
 cd ../references
 
 # copy all genome fasta files here
 cp  /work/pi_hputnam_uri_edu/HI_Genomes/*/*pep.faa .
+```
 
+#### Step 2: Download swissprot database
+
+```{bash, eval=FALSE}
 mkdir blast_dbs
 cd blast_dbs
 
@@ -36,10 +42,13 @@ cat reldate.txt
 ```
 
 UniProt Knowledgebase Release 2025_04 consists of:
-UniProtKB/Swiss-Prot Release 2025_04 of 08-Oct-2025
-UniProtKB/TrEMBL Release 2025_04 of 08-Oct-2025
 
-```
+- UniProtKB/Swiss-Prot Release 2025_04 of 08-Oct-2025
+- UniProtKB/TrEMBL Release 2025_04 of 08-Oct-2025
+
+#### Step 3: Rename file with release date info and confirm contents
+
+```{bash, eval=FALSE}
 mv uniprot_sprot.fasta uniprot_sprot_r2025_10_08.fasta
 
 head uniprot_sprot_r2025_10_08.fasta
@@ -47,6 +56,8 @@ echo "Number of Sequences"
 grep -c ">" uniprot_sprot_r2025_10_08.fasta
 # 573661 sequences
 ```
+
+#### Step 4: Create BLAST protein database from swissprot fasta file
 
 ```{bash, eval=FALSE}
 module load blast-plus/2.14.1
@@ -56,6 +67,8 @@ makeblastdb \
 -dbtype prot \
 -out uniprot_sprot_r2025_10_08
 ```
+
+#### Step 5: Tun BLAST of geneome protein FASTAs against swissprot BLAST database
 
 ```{bash, eval=FALSE}
 cd ../scripts
@@ -96,7 +109,9 @@ done
 echo "Blast complete!" $(date)
 ```
 
-```
+#### Step 6: Rename results files
+
+```{bash, eval=FALSE}
 cd ../references/annotation/
 
 ls
@@ -110,9 +125,96 @@ tr '|' '\t' <  Pocillopora_acuta_HIv2.genes_SwissProt_out.tab > Pocillopora_acut
 tr '|' '\t' <  Porites_compressa_HIv1.genes_SwissProt_out.tab >  Porites_compressa_HIv1_SwissProt_out_sep.tab
 
 rm *_SwissProt_out.tab
+```
 
+#### Step 7: Download Swissprot GO annotation information
+
+- Previous file was just the sequences + accession numbers, this contains the metadata and other information we need about each protein
+
+```{bash, eval=FALSE}
 curl -H "Accept: text/plain; format=tsv" "https://rest.uniprot.org/uniprotkb/stream?fields=accession%2Creviewed%2Cid%2Cprotein_name%2Cgene_names%2Corganism_name%2Clength%2Cgo_p%2Cgo%2Cgo_id%2Cgo_c%2Cgo_f&format=tsv&query=%28reviewed%3Atrue%29" -o SwissProt-Annot-GO_20251207.tsv
 
 wc -l SwissProt-Annot-GO_20251207.tsv
 # 573662
 ```
+
+#### Step 8: Join Swissprot GO annotations to BLAST results
+
+```{r load-packages}
+library(dplyr)
+library(stringr)
+library(readr)
+```
+
+```{r annotate, eval=FALSE}
+# load in GO annotations
+spgo <- read.csv("../references/annotation/SwissProt-Annot-GO_20251207.tsv", sep = '\t', header = TRUE)
+
+genomes <- list.files("../references", pattern = "*.pep.faa", full.names = FALSE, ignore.case = TRUE)
+genomes <- str_remove(genomes, ".genes.pep.faa")
+
+for (genome in genomes){
+  bltabl <- read.csv(paste0("../references/annotation/",genome,"_SwissProt_out_sep.tab"), sep = '\t', header = FALSE)
+
+  annot_tab <- left_join(bltabl, spgo, by = c("V3" = "Entry")) %>%
+    select(
+      query = V1,
+      blast_hit = V3,
+      evalue = V13,
+      ProteinNames = Protein.names,
+      BiologicalProcess = Gene.Ontology..biological.process.,
+      GeneOntologyIDs = Gene.Ontology.IDs,
+      CellularComponent = Gene.Ontology..cellular.component.,
+      MolecularFunction = Gene.Ontology..molecular.function.,
+    )
+
+  write.table(annot_tab, 
+            file = paste0("../references/annotation/",genome,"_Swissprot_GO.tsv"), 
+            sep = "\t", 
+            row.names = FALSE, 
+            quote = FALSE)
+}
+
+rm(spgo)
+rm(bltabl)
+rm(annot_tab)
+```
+
+```{r}
+species <- c("Mcap","Pacuta","Pcomp")
+
+Mcap_SwissP <- read.delim("../references/annotation/Montipora_capitata_HIv3_Swissprot_GO.tsv") %>% dplyr::rename(GOs = GeneOntologyIDs)
+Pacuta_SwissP <- read.delim("../references/annotation/Pocillopora_acuta_HIv2_Swissprot_GO.tsv") %>% dplyr::rename(GOs = GeneOntologyIDs)
+Pcomp_SwissP <- read.delim("../references/annotation/Porites_compressa_HIv1_Swissprot_GO.tsv") %>% dplyr::rename(GOs = GeneOntologyIDs)
+```
+
+## Heat Stress Genes
+
+
+```{r}
+for (i in 1:length(species)){
+  
+HeatStressGenes <- read_csv(paste0("/project/pi_hputnam_uri_edu/zdellaert/snRNA_analysis/multi-sp-snRNA/reference_genes/genes_of_interest/HeatStressGenes_", species[i] ,".csv")) %>%
+  dplyr::select(-1) %>%
+  dplyr::rename(query = paste0(species[i],"_gene")) %>%
+  dplyr::select(query,everything())
+
+assign(paste0(species[i],"_HeatStressGenes"),HeatStressGenes)
+
+HeatStressGenes_unique <- HeatStressGenes %>%
+  group_by(query) %>%
+  summarize(gene_id = paste(unique(gene_id), collapse = ","),
+            response_type = paste(unique(response_type), collapse = ","),
+            category = paste(unique(category), collapse = ",")
+            ) 
+
+assign(paste0(species[i],"_HeatStressGenes_unique"),HeatStressGenes_unique)
+
+  rm(HeatStressGenes)
+  rm(HeatStressGenes_unique)
+}
+
+
+```
+
+
