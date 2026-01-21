@@ -21,7 +21,9 @@ Data and methods for Chapter Four of my dissertation, a stort-term heat stress p
 
 ### Full-size images for color score measurements: 
 
-- [RAW_TIFF_ColorScore](https://drive.google.com/drive/folders/1VJvZi2nuNFpBn-t-O4A9bNAgSROkeTPa?usp=sharing)
+- [Raw Color Score images: .jpeg, .tiff, and .CR2](https://drive.google.com/drive/folders/1VJvZi2nuNFpBn-t-O4A9bNAgSROkeTPa?usp=sharing)
+  - All jpegs are also on this repo in `/1-Pcom/data/Images` (and etc for each species)
+  - Image --> Plug/Fragment metadata are in `1-Pcom/data/Images/ColorScore.csv`  (and etc for each species)
 
 ## Quick summary of currently available data
 

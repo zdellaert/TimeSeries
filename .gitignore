@@ -1,5 +1,6 @@
 .DS_Store
 *.tiff
+*.CR2
 
 # History files
 .Rhistory
