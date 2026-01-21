@@ -114,6 +114,8 @@ filtered_counts <- counts_raw[counts_filt_poa,] #keep only rows that passed filt
 
 paste0("Number of genes after filtering: ", sum(counts_filt_poa))
 
+paste0("% of genes kept: ", round(100*(sum(counts_filt_poa)/nrow(counts_raw)),digits=2),"%")
+
 write.csv(filtered_counts, file = file.path(outdir, "filtered_counts.csv"))
 ```
 
@@ -920,6 +922,7 @@ counts_filt_poa <- genefilter((counts_raw), ffun) #apply filter
 filtered_counts <- counts_raw[counts_filt_poa,] #keep only rows that passed filter
 
 paste0("Number of genes after filtering: ", sum(counts_filt_poa))
+paste0("% of genes kept: ", round(100*(sum(counts_filt_poa)/nrow(counts_raw)),digits=2),"%")
 
 write.csv(filtered_counts, file = file.path(outdir, "filtered_counts.csv"))
 ```
@@ -1427,6 +1430,7 @@ counts_filt_poa <- genefilter((counts_raw), ffun) #apply filter
 filtered_counts <- counts_raw[counts_filt_poa,] #keep only rows that passed filter
 
 paste0("Number of genes after filtering: ", sum(counts_filt_poa))
+paste0("% of genes kept: ", round(100*(sum(counts_filt_poa)/nrow(counts_raw)),digits=2),"%")
 
 write.csv(filtered_counts, file = file.path(outdir, "filtered_counts.csv"))
 ```
