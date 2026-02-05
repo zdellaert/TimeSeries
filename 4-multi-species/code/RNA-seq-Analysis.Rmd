@@ -504,7 +504,16 @@ for (genelist in names(list)){
 #### Mechanosensing and other channels
 
 ```{r}
-DESeq_SwissProt_annotation <- read_csv("../output_RNA/differential_expression/POC_PacutaV2/DESeq_SwissProt_annotation.csv")
+membrane_channels <- read_csv(paste0("../references/annotation/",species,"_membrane_channels.csv"))
+
+membrane_channels_unique <- membrane_channels %>% group_by(query) %>%
+  summarize(ProteinNames = paste(unique(ProteinNames), collapse = ","),
+            gene_set = paste(unique(gene_set), collapse = ","),
+            ) %>% select(gene_set, query, ProteinNames) %>%
+  mutate(short_name = str_replace(ProteinNames, "\\s+\\(.*", ""),
+         short_name = str_replace(short_name, "\\s+\\(.*", ""))
+
+membrane_channels_unique <- membrane_channels_unique %>% filter(query %in% rownames(vsd_mat))
 
 plot_df <- as.data.frame(t(vsd_mat)) %>%
   rownames_to_column(var="sample") %>%
@@ -512,24 +521,27 @@ plot_df <- as.data.frame(t(vsd_mat)) %>%
   pivot_longer(cols = all_of(rownames(vsd_mat)), names_to="query", values_to="expression") %>%
   mutate(is_DE = query %in% rownames(DE_05))
 
-## note this list is not complete I need to redo the annotations for all 3 species in the same way - -this is just a jumping off point from LCM paper
+membrane_list <- membrane_channels  %>%
+  group_by(gene_set) %>%
+  summarise(query = list(query), .groups = "drop") %>%
+  deframe()
 
-list <- list(aquaporin = DESeq_SwissProt_annotation %>% filter(grepl("Aquaporin", ProteinNames, ignore.case = TRUE)) %>% pull(query),
-             TRP = DESeq_SwissProt_annotation %>% filter(grepl("transient receptor potential", ProteinNames, ignore.case = TRUE)) %>% pull(query),
-             Mechanosensory = DESeq_SwissProt_annotation %>% filter(grepl("Mechanosens", ProteinNames, ignore.case = TRUE)) %>% pull(query),
-             calcium_transport_1 = DESeq_SwissProt_annotation %>% filter(grepl("calcium ion transport", BiologicalProcess, ignore.case = TRUE)) %>% head(34) %>% pull(query),
-             calcium_transport_2 = DESeq_SwissProt_annotation %>% filter(grepl("calcium ion transport", BiologicalProcess, ignore.case = TRUE)) %>% tail(34) %>% pull(query),
-             SLCs_1 = DESeq_SwissProt_annotation %>% filter(grepl("Solute carrier", ProteinNames, ignore.case = TRUE)) %>% slice(1:30) %>% pull(query),
-             SLCs_2 = DESeq_SwissProt_annotation %>% filter(grepl("Solute carrier", ProteinNames, ignore.case = TRUE)) %>% slice(31:60) %>% pull(query),
-             SLCs_3 = DESeq_SwissProt_annotation %>% filter(grepl("Solute carrier", ProteinNames, ignore.case = TRUE)) %>% slice(61:90) %>% pull(query),
-             SLCs_4 = DESeq_SwissProt_annotation %>% filter(grepl("Solute carrier", ProteinNames, ignore.case = TRUE)) %>% slice(91:120) %>% pull(query),
-             SLCs_5 = DESeq_SwissProt_annotation %>% filter(grepl("Solute carrier", ProteinNames, ignore.case = TRUE)) %>% slice(121:150) %>% pull(query),
-             SLCs_6 = DESeq_SwissProt_annotation %>% filter(grepl("Solute carrier", ProteinNames, ignore.case = TRUE)) %>% slice(151:180) %>% pull(query),
-             SLCs_7 = DESeq_SwissProt_annotation %>% filter(grepl("Solute carrier", ProteinNames, ignore.case = TRUE)) %>% slice(181:211) %>% pull(query)
-             )
+for (genelist in names(membrane_list)){
+  genes <- membrane_list[[genelist]]
+  
+  plot <- plot_df %>% filter(query %in% genes) %>% filter(is_DE == FALSE) %>% 
+    ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+  stat_summary(fun="mean", geom="line") +
+  scale_color_manual(values = treat_colors) +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+  facet_wrap(paste0(str_replace(query,"Pocillopora_acuta_HIv2___",""), ": ", genelist)~ ~paste0("DE by LRT: ",is_DE),scales="free_y") +
+  theme_bw() +
+  labs(y="VST expression", x="Timepoint")
+  print(plot)
+}
 
-for (genelist in names(list)){
-  genes <- list[[genelist]]
+for (genelist in names(membrane_list)){
+  genes <- membrane_list[[genelist]]
   
   plot <- plot_df %>% filter(query %in% genes) %>% filter(is_DE == TRUE) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
   stat_summary(fun="mean", geom="line") +
@@ -861,7 +873,119 @@ heat_clustered <- HeatStressGenes_unique %>% left_join(cluster_assignments, by =
 heat_clustered %>% filter(!is.na(cluster)) %>% ggplot(aes(y=reorder(gene_id, cluster), x=factor(cluster), fill=cluster)) +
   geom_tile() +
   theme_bw() +
-  labs(x="Gene ID", y="Mfuzz Cluster", title="Heat stress genes clustered by temporal expression pattern")
+  labs(x="Mfuzz Cluster", y="Gene ID", title="Heat stress genes clustered by temporal expression pattern")
+```
+
+
+```{r}
+channel_clustered <- membrane_channels_unique  %>% unique() %>% 
+  left_join(cluster_assignments, by = join_by(query==gene)) %>%
+  arrange(cluster)  %>%
+  filter(!is.na(cluster)) 
+
+# plot this to show which genes are in which cluster
+channel_clustered %>% filter(!is.na(cluster)) %>% ggplot(aes(y=reorder(gene_set, cluster), x=factor(cluster), fill=cluster)) +
+  geom_tile() +
+  theme_bw() +
+  labs(x="Mfuzz Cluster", y="Gene ID", title="Membrane channel genes clustered by temporal expression pattern")
+
+cat("Total membrane channel genes:", nrow(membrane_channels_unique), "\n")
+cat("Found in DE/Mfuzz data:", nrow(channel_clustered), "\n")
+
+channel_clustered %>%
+    ggplot(aes(x = factor(cluster), y = reorder(short_name, cluster), fill = gene_set)) +
+  geom_tile(color = "white") +
+  geom_text(aes(label = cluster), size = 2) +
+  theme_bw() +
+  theme(axis.text.y = element_text(size = 6)) +
+  labs(x = "Mfuzz Cluster", 
+       y = "Gene ID", 
+       fill = "Channel Type",
+       title = "Membrane Channel Genes - Cluster Assignment",
+       subtitle = paste0(sum(!is.na(channel_clustered$cluster)), 
+                        " genes significantly DE"))
+
+heat_eset_membrane <- heat_eset[channel_clustered$query, ]
+mfuzz_clusters_membrane <- mfuzz_clusters
+mfuzz_clusters_membrane$membership <- mfuzz_clusters$membership[channel_clustered$query, ]
+mfuzz_clusters_membrane$cluster <- mfuzz_clusters$cluster[channel_clustered$query]
+
+mfuzz.plot(
+  heat_eset_membrane,
+  cl = mfuzz_clusters_membrane,
+  new.window = FALSE,
+  mfrow = c(3,3),
+  time.labels = c(0,1,3,12,24,72,120)
+)
+
+# Visualize clusters
+pdf(paste0(outdir,"/membrane_temporal_clusters.pdf"), width = 12, height = 10)
+mfuzz.plot2(heat_eset_membrane, cl = mfuzz_clusters_membrane, mfrow = c(3, 4), 
+            time.labels = c("0", "1", "3", "12", "24", "72", "120"),
+            xlab = "Time (hours)",x11=FALSE)
+dev.off()
+
+
+expr_data <- exprs(heat_eset_membrane) %>%
+  as.data.frame() %>%
+  tibble::rownames_to_column("query") %>%
+  pivot_longer(-query, names_to = "timepoint", values_to = "expression") %>%
+  mutate(time = as.numeric(factor(timepoint, 
+                                  levels = c("R0", "R1", "R3", "R12", "R24", "R72", "R120"))) - 1,
+         time_hours = c(0, 1, 3, 12, 24, 72, 120)[time + 1])
+
+# Join with cluster and gene_set info
+plot_data <- expr_data %>%
+  left_join(channel_clustered %>% select(query, cluster, gene_set, membership,short_name), 
+            by = "query")
+
+# Plot by cluster, colored by gene_set
+p <- plot_data %>%
+  ggplot(aes(x = time_hours, y = expression, group = query, color = gene_set)) +
+  geom_line(aes(alpha = membership), linewidth = 0.8) +
+  facet_wrap(~cluster, ncol = 3, 
+             labeller = labeller(cluster = function(x) paste("Cluster", x))) +
+  scale_alpha_continuous(range = c(0.3, 1)) +
+  scale_x_continuous(breaks = c(0, 1, 3, 12, 24, 72, 120)) +
+  theme_bw() +
+  labs(x = "Time (hours)", 
+       y = "Normalized Expression",
+       color = "Channel Type",
+       alpha = "Membership",
+       title = "Membrane Channel Gene Expression Patterns by Cluster")
+
+print(p)
+
+gene_trajectories <- plot_data %>%
+  group_by(query, cluster, gene_set, membership,short_name) %>%
+  summarize(
+    max_expr = max(expression),
+    max_time = time_hours[which.max(expression)],
+    .groups = "drop"
+  ) %>%
+  group_by(cluster) %>%
+  slice_max(membership, n = 3)  # Top 3 genes per cluster
+
+library(ggrepel)
+
+p2 <- plot_data %>%
+  ggplot(aes(x = time_hours, y = expression, group = query, color = gene_set)) +
+  geom_line(aes(alpha = membership), linewidth = 0.8) +
+  geom_text_repel(data = gene_trajectories,
+                  aes(x = max_time, y = max_expr, label = short_name),
+                  size = 2.5, max.overlaps = 20, segment.size = 0.2) +
+  facet_wrap(~cluster, ncol = 3, 
+             labeller = labeller(cluster = function(x) paste("Cluster", x))) +
+  scale_alpha_continuous(range = c(0.3, 1)) +
+  scale_x_continuous(breaks = c(0, 1, 3, 12, 24, 72, 120)) +
+  theme_bw() +
+  labs(x = "Time (hours)", 
+       y = "Normalized Expression",
+       color = "Channel Type",
+       alpha = "Membership",
+       title = "Membrane Channel Gene Expression Patterns")
+
+print(p2)
 ```
 
 
@@ -1219,6 +1343,58 @@ plot_df %>% filter(grepl("GDH",gene_id)|grepl("GS",gene_id)|grepl("AMT1",gene_id
   labs(y="VST expression", x="Timepoint", title = "Selected Type 2 DE (LRT) Response genes")
 
 save_ggplot(last_plot(), "highlighted_DE_Type2")
+```
+
+#### Mechanosensing and other channels
+
+```{r}
+membrane_channels <- read_csv(paste0("../references/annotation/",species,"_membrane_channels.csv"))
+
+membrane_channels_unique <- membrane_channels %>% group_by(query) %>%
+  summarize(ProteinNames = paste(unique(ProteinNames), collapse = ","),
+            gene_set = paste(unique(gene_set), collapse = ",")
+            ) %>% select(gene_set, query, ProteinNames)
+
+membrane_channels_unique <- membrane_channels_unique %>% filter(query %in% rownames(vsd_mat))
+
+plot_df <- as.data.frame(t(vsd_mat)) %>%
+  rownames_to_column(var="sample") %>%
+  left_join(meta, by=c("sample"="sample")) %>% 
+  pivot_longer(cols = all_of(rownames(vsd_mat)), names_to="query", values_to="expression") %>%
+  mutate(is_DE = query %in% rownames(DE_05))
+
+membrane_list <- membrane_channels  %>%
+  group_by(gene_set) %>%
+  summarise(query = list(query), .groups = "drop") %>%
+  deframe()
+
+
+for (genelist in names(membrane_list)){
+  genes <- membrane_list[[genelist]]
+  
+  plot <- plot_df %>% filter(query %in% genes) %>% filter(is_DE == FALSE) %>% 
+    ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+  stat_summary(fun="mean", geom="line") +
+  scale_color_manual(values = treat_colors) +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+  facet_wrap(paste0(str_replace(query,"Montipora_capitata_HIv3___",""), ": ", genelist)~ ~paste0("DE by LRT: ",is_DE),scales="free_y") +
+  theme_bw() +
+  labs(y="VST expression", x="Timepoint")
+  print(plot)
+}
+
+for (genelist in names(membrane_list)){
+  genes <- membrane_list[[genelist]]
+  
+  plot <- plot_df %>% filter(query %in% genes) %>% filter(is_DE == TRUE) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+  stat_summary(fun="mean", geom="line") +
+  scale_color_manual(values = treat_colors) +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+  facet_wrap(paste0(str_replace(query,"Montipora_capitata_HIv3___",""), ": ", genelist)~ ~paste0("DE by LRT: ",is_DE),scales="free_y") +
+  theme_bw() +
+  labs(y="VST expression", x="Timepoint")
+  print(plot)
+}
 ```
 
 ### ImpulseDE2
@@ -1746,6 +1922,58 @@ plot_df %>% filter(grepl("GDH",gene_id)|grepl("GS",gene_id)|grepl("AMT1",gene_id
   labs(y="VST expression", x="Timepoint", title = "Selected Type 2 DE (LRT) Response genes")
 
 save_ggplot(last_plot(), "highlighted_DE_Type2")
+```
+
+#### Mechanosensing and other channels
+
+```{r}
+membrane_channels <- read_csv(paste0("../references/annotation/",species,"_membrane_channels.csv"))
+
+membrane_channels_unique <- membrane_channels %>% group_by(query) %>%
+  summarize(ProteinNames = paste(unique(ProteinNames), collapse = ","),
+            gene_set = paste(unique(gene_set), collapse = ",")
+            ) %>% select(gene_set, query, ProteinNames)
+
+membrane_channels_unique <- membrane_channels_unique %>% filter(query %in% rownames(vsd_mat))
+
+plot_df <- as.data.frame(t(vsd_mat)) %>%
+  rownames_to_column(var="sample") %>%
+  left_join(meta, by=c("sample"="sample")) %>% 
+  pivot_longer(cols = all_of(rownames(vsd_mat)), names_to="query", values_to="expression") %>%
+  mutate(is_DE = query %in% rownames(DE_05))
+
+membrane_list <- membrane_channels  %>%
+  group_by(gene_set) %>%
+  summarise(query = list(query), .groups = "drop") %>%
+  deframe()
+
+
+for (genelist in names(membrane_list)){
+  genes <- membrane_list[[genelist]]
+  
+  plot <- plot_df %>% filter(query %in% genes) %>% filter(is_DE == FALSE) %>% 
+    ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+  stat_summary(fun="mean", geom="line") +
+  scale_color_manual(values = treat_colors) +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+  facet_wrap(paste0(str_replace(query,"Porites_compressa_HIv1___",""), ": ", genelist)~ ~paste0("DE by LRT: ",is_DE),scales="free_y") +
+  theme_bw() +
+  labs(y="VST expression", x="Timepoint")
+  print(plot)
+}
+
+for (genelist in names(membrane_list)){
+  genes <- membrane_list[[genelist]]
+  
+  plot <- plot_df %>% filter(query %in% genes) %>% filter(is_DE == TRUE) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+  stat_summary(fun="mean", geom="line") +
+  scale_color_manual(values = treat_colors) +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+  facet_wrap(paste0(str_replace(query,"Porites_compressa_HIv1___",""), ": ", genelist)~ ~paste0("DE by LRT: ",is_DE),scales="free_y") +
+  theme_bw() +
+  labs(y="VST expression", x="Timepoint")
+  print(plot)
+}
 ```
 
 ### ImpulseDE2
