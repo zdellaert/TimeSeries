@@ -511,7 +511,7 @@ membrane_channels_unique <- membrane_channels %>% group_by(query) %>%
             gene_set = paste(unique(gene_set), collapse = ","),
             ) %>% select(gene_set, query, ProteinNames) %>%
   mutate(short_name = str_replace(ProteinNames, "\\s+\\(.*", ""),
-         short_name = str_replace(short_name, "\\s+\\(.*", ""))
+         short_name = str_replace(short_name, "\\s+\\[.*", ""))
 
 membrane_channels_unique <- membrane_channels_unique %>% filter(query %in% rownames(vsd_mat))
 

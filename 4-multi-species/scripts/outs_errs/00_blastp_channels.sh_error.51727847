@@ -1,0 +1,33 @@
+Loading bzip2 version 1.0.8
+Loading zlib-ng version 2.1.6
+Loading libpng version 1.6.39
+Loading freetype version 2.13.2
+Loading gettext version 0.21
+Loading libiconv version 1.17
+Loading libunistring version 1.2
+Loading libidn2 version 2.3.7
+Loading gmp version 6.2.1
+Loading nettle version 3.9.1
+Loading gnutls version 3.8.3
+Loading libjpeg-turbo version 3.0.0
+Loading lmdb version 0.9.31
+Loading lzo version 2.10
+Loading openssl version 3.0.13
+Loading pcre version 8.45
+Loading perl version 5.38.2
+Loading libmd version 1.0.4
+Loading libbsd version 0.12.1
+Loading expat version 2.6.2
+Loading ncurses version 6.5
+Loading readline version 8.2
+Loading gdbm version 1.23
+Loading libffi version 8.1.4
+Loading libxcrypt version 4.4.35
+Loading sqlite version 3.43.2
+Loading util-linux-uuid version 2.38.1
+Loading xz version 5.4.6
+Loading python version 3.11.7
+Loading blast-plus version 2.14.1
+Warning: [blastp] Examining 5 or more matches is recommended
+Warning: [blastp] Examining 5 or more matches is recommended
+Warning: [blastp] Examining 5 or more matches is recommended

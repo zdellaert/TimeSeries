@@ -1,20 +1,13 @@
----
-title: "Genome Annotation"
-author: "Zoe Dellaert"
-date: "2025-12-07"
-output:
-  github_document: default
----
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
-```
+Genome Annotation
+================
+Zoe Dellaert
+2025-12-07
 
 # Genome annotation
 
 ## Load packages
 
-```{r load-packages}
+``` r
 library(dplyr)
 library(stringr)
 library(readr)
@@ -28,12 +21,16 @@ species <- c("Mcap","Pacuta","Pcomp")
 
 ## SwissProt of ALL genes
 
-Swissprot annotation method based on [E5 Annotations](https://github.com/urol-e5/deep-dive/blob/main/D-Apul/code/20-Apul-gene-annotation.Rmd) and
-[here](https://github.com/urol-e5/deep-dive/blob/main/F-Pmea/code/20-Pmea-gene-annotation.Rmd) and Steven Robert's [notebook post here](https://sr320.github.io/tumbling-oysters/posts/sr320-27-go/)
+Swissprot annotation method based on [E5
+Annotations](https://github.com/urol-e5/deep-dive/blob/main/D-Apul/code/20-Apul-gene-annotation.Rmd)
+and
+[here](https://github.com/urol-e5/deep-dive/blob/main/F-Pmea/code/20-Pmea-gene-annotation.Rmd)
+and Steven Robert’s [notebook post
+here](https://sr320.github.io/tumbling-oysters/posts/sr320-27-go/)
 
 #### Step 1: Gather protein fasta files
 
-```{bash, eval=FALSE}
+``` bash
 cd ../references
 
 # copy all genome fasta files here
@@ -42,7 +39,7 @@ cp  /work/pi_hputnam_uri_edu/HI_Genomes/*/*pep.faa .
 
 #### Step 2: Download swissprot database
 
-```{bash, eval=FALSE}
+``` bash
 mkdir blast_dbs
 cd blast_dbs
 
@@ -62,7 +59,7 @@ UniProt Knowledgebase Release 2025_04 consists of:
 
 #### Step 3: Rename file with release date info and confirm contents
 
-```{bash, eval=FALSE}
+``` bash
 mv uniprot_sprot.fasta uniprot_sprot_r2025_10_08.fasta
 
 head uniprot_sprot_r2025_10_08.fasta
@@ -73,7 +70,7 @@ grep -c ">" uniprot_sprot_r2025_10_08.fasta
 
 #### Step 4: Create BLAST protein database from swissprot fasta file
 
-```{bash, eval=FALSE}
+``` bash
 module load blast-plus/2.14.1
 
 makeblastdb \
@@ -84,12 +81,12 @@ makeblastdb \
 
 #### Step 5: Run BLAST of geneome protein FASTAs against swissprot BLAST database
 
-```{bash, eval=FALSE}
+``` bash
 cd ../scripts
 nano 00_blastp_SwissProt.sh
 ```
 
-```{bash eval=FALSE}
+``` bash
 #!/bin/bash
 #SBATCH -t 18:00:00
 #SBATCH --nodes=1
@@ -125,7 +122,7 @@ echo "Blast complete!" $(date)
 
 #### Step 6: Rename results files
 
-```{bash, eval=FALSE}
+``` bash
 cd ../references/annotation/
 
 ls
@@ -143,9 +140,10 @@ rm *_SwissProt_out.tab
 
 #### Step 7: Download Swissprot GO annotation information
 
-- Previous file was just the sequences + accession numbers, this contains the metadata and other information we need about each protein
+- Previous file was just the sequences + accession numbers, this
+  contains the metadata and other information we need about each protein
 
-```{bash, eval=FALSE}
+``` bash
 curl -H "Accept: text/plain; format=tsv" "https://rest.uniprot.org/uniprotkb/stream?fields=accession%2Creviewed%2Cid%2Cprotein_name%2Cgene_names%2Corganism_name%2Clength%2Cgo_p%2Cgo%2Cgo_id%2Cgo_c%2Cgo_f&format=tsv&query=%28reviewed%3Atrue%29" -o SwissProt-Annot-GO_20251207.tsv
 
 wc -l SwissProt-Annot-GO_20251207.tsv
@@ -154,7 +152,7 @@ wc -l SwissProt-Annot-GO_20251207.tsv
 
 #### Step 8: Join Swissprot GO annotations to BLAST results
 
-```{r annotate, eval=FALSE}
+``` r
 # load in GO annotations
 spgo <- read.csv("../references/annotation/SwissProt-Annot-GO_20251207.tsv", sep = '\t', header = TRUE)
 
@@ -190,7 +188,7 @@ rm(annot_tab)
 
 ## Load in SwissProt Annotations
 
-```{r}
+``` r
 Mcap_SwissP <- read.delim("../references/annotation/Montipora_capitata_HIv3_Swissprot_GO.tsv") %>% dplyr::rename(GOs = GeneOntologyIDs)
 Pacuta_SwissP <- read.delim("../references/annotation/Pocillopora_acuta_HIv2_Swissprot_GO.tsv") %>% dplyr::rename(GOs = GeneOntologyIDs)
 Pcomp_SwissP <- read.delim("../references/annotation/Porites_compressa_HIv1_Swissprot_GO.tsv") %>% dplyr::rename(GOs = GeneOntologyIDs)
@@ -198,7 +196,7 @@ Pcomp_SwissP <- read.delim("../references/annotation/Porites_compressa_HIv1_Swis
 
 ## Heat Stress Genes
 
-```{r}
+``` r
 for (i in 1:length(species)){
 HeatStressGenes <- read_csv(paste0("/project/pi_hputnam_uri_edu/zdellaert/snRNA_analysis/multi-sp-snRNA/reference_genes/genes_of_interest/HeatStressGenes_", species[i] ,".csv")) %>%
   dplyr::select(-1) %>%
@@ -223,7 +221,7 @@ assign(paste0(species[i],"_HeatStressGenes_unique"),HeatStressGenes_unique)
 }
 ```
 
-```{r}
+``` r
 for_natalie <- Pacuta_HeatStressGenes_unique %>% filter(grepl("BAK",gene_id,ignore.case = TRUE)|
                                                         grepl("BAX",gene_id,ignore.case = TRUE)|
                                                         grepl("Bcl-2",gene_id,ignore.case = TRUE)|
@@ -263,13 +261,14 @@ Natalie_list <- read.csv(file = "../references/annotation/NC_HeatStress_Genes.cs
 
 ### Find coral IDs for human membrane channel sequences
 
-Based on [Bhattacharya et al 2016](https://doi.org/10.7554/eLife.13288) elife-13288-fig2-data1-v1.docx
+Based on [Bhattacharya et al 2016](https://doi.org/10.7554/eLife.13288)
+elife-13288-fig2-data1-v1.docx
 
 #### Step 1: Gather protein fasta files from Human Accession numbers
 
 [NCBI Fasta Download](https://github.com/kblin/ncbi-acc-download)
 
-```{bash, eval=FALSE}
+``` bash
 
 pip install ncbi-acc-download
 
@@ -285,7 +284,7 @@ cat * > sensing_protein_seqs.fasta
 
 #### Step 2: Create BLAST protein database for each coral species from protein fasta file
 
-```{bash, eval=FALSE}
+``` bash
 salloc
 cd references/
 module load blast-plus/2.14.1
@@ -305,12 +304,12 @@ makeblastdb -in Porites_compressa_HIv1.genes.pep.faa \
 
 #### Step 3: Run BLAST of geneome protein FASTAs against swissprot BLAST database
 
-```{bash, eval=FALSE}
+``` bash
 cd ../scripts
 nano 00_blastp_channels.sh
 ```
 
-```{bash eval=FALSE}
+``` bash
 #!/bin/bash
 #SBATCH -t 18:00:00
 #SBATCH --nodes=1
@@ -345,7 +344,7 @@ echo "Blast complete!" $(date)
 
 #### Step 4: Process results
 
-```{r}
+``` r
 Bhattacharya2016 <- read.csv("../references/2_Gene_list7.csv",header = TRUE)
 
 for (sp in species){
@@ -369,7 +368,7 @@ rm(annot_tab)
 
 ### manual search
 
-```{r}
+``` r
 channel_list <- tibble::tribble(
   ~name,            ~search_pattern,              ~SwissProt_column,
   "aquaporin",     "Aquaporin",                   "ProteinNames",
@@ -421,4 +420,3 @@ for (i in 1:length(species)){
   write_csv(channel_df,paste0("../references/annotation/",species[i],"_membrane_channels.csv"))
 }
 ```
-
