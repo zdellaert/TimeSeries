@@ -1691,11 +1691,11 @@ print(cluster_peaks)
 ```
 
     ##   cluster peak_time
-    ## 1       1         3
+    ## 1       1         0
     ## 2       2         3
-    ## 3       3         0
-    ## 4       4         3
-    ## 5       5         0
+    ## 3       3         3
+    ## 4       4         0
+    ## 5       5         3
     ## 6       6        72
 
 ##### View clustered genes of interest
@@ -1709,7 +1709,7 @@ cluster_assignments %>% filter(gene %in% HSPS)
     ##                                                                                gene
     ## Pocillopora_acuta_HIv2___RNAseq.g23086.t1 Pocillopora_acuta_HIv2___RNAseq.g23086.t1
     ##                                           cluster membership
-    ## Pocillopora_acuta_HIv2___RNAseq.g23086.t1       2  0.9050559
+    ## Pocillopora_acuta_HIv2___RNAseq.g23086.t1       2  0.9050613
 
 ``` r
 heat_clustered <- HeatStressGenes_unique %>% left_join(cluster_assignments, by = join_by(query==gene)) %>%
@@ -2957,6 +2957,453 @@ dev.off()
     ## png 
     ##   2
 
+#### 8. Cluster ImpulseDE2-significant genes by trajectory
+
+For this we will use the package
+[Mfuzz](https://bioconductor.org/packages/release/bioc/html/Mfuzz.html),
+[vignette
+here](https://bioconductor.org/packages/release/bioc/vignettes/Mfuzz/inst/doc/Mfuzz.pdf).
+
+``` r
+#BiocManager::install("Mfuzz")
+library(Mfuzz)
+```
+
+``` r
+# analyze which of our ImpulseDE2 significant genes are in our vsd matrix
+sum(impulse_sig_genes$Gene %in% rownames(vsd_mat))
+```
+
+    ## [1] 5868
+
+``` r
+length(impulse_sig_genes$Gene)
+```
+
+    ## [1] 5872
+
+``` r
+# which ones are missing? 
+missing_genes <- impulse_sig_genes$Gene[!(impulse_sig_genes$Gene %in% rownames(vsd_mat))]
+
+# 4 are missing and it is because they were filtered out during pOverA filtering -- as seen with rowSums below, each has fewer than 3 samples with a count >10
+
+counts_raw[missing_genes,]
+```
+
+    ##                                            MON_R0_C1 MON_R0_C2 MON_R0_C3
+    ## Montipora_capitata_HIv3___RNAseq.g33700.t1         1         0         2
+    ## Montipora_capitata_HIv3___RNAseq.g18128.t1         7         0         7
+    ## Montipora_capitata_HIv3___RNAseq.g36577.t1         3         4         2
+    ## Montipora_capitata_HIv3___RNAseq.g45853.t1        10         5         6
+    ##                                            MON_R0_H1 MON_R0_H2 MON_R0_H3
+    ## Montipora_capitata_HIv3___RNAseq.g33700.t1         4         4         2
+    ## Montipora_capitata_HIv3___RNAseq.g18128.t1         9         1         7
+    ## Montipora_capitata_HIv3___RNAseq.g36577.t1         8         2         2
+    ## Montipora_capitata_HIv3___RNAseq.g45853.t1         4        11         8
+    ##                                            MON_R1_C1 MON_R1_C2 MON_R1_C3
+    ## Montipora_capitata_HIv3___RNAseq.g33700.t1         2         1         0
+    ## Montipora_capitata_HIv3___RNAseq.g18128.t1        10         0         1
+    ## Montipora_capitata_HIv3___RNAseq.g36577.t1         2         1         2
+    ## Montipora_capitata_HIv3___RNAseq.g45853.t1         5         1         7
+    ##                                            MON_R1_H1 MON_R1_H2 MON_R1_H3
+    ## Montipora_capitata_HIv3___RNAseq.g33700.t1         2         9         1
+    ## Montipora_capitata_HIv3___RNAseq.g18128.t1         4         8         9
+    ## Montipora_capitata_HIv3___RNAseq.g36577.t1         3         5         3
+    ## Montipora_capitata_HIv3___RNAseq.g45853.t1         2         3         2
+    ##                                            MON_R3_C1 MON_R3_C2 MON_R3_C3
+    ## Montipora_capitata_HIv3___RNAseq.g33700.t1         0         2         0
+    ## Montipora_capitata_HIv3___RNAseq.g18128.t1         9         4         4
+    ## Montipora_capitata_HIv3___RNAseq.g36577.t1         0         2        10
+    ## Montipora_capitata_HIv3___RNAseq.g45853.t1         4         3         2
+    ##                                            MON_R3_H1 MON_R3_H2 MON_R3_H3
+    ## Montipora_capitata_HIv3___RNAseq.g33700.t1         2         3         3
+    ## Montipora_capitata_HIv3___RNAseq.g18128.t1         8         6         0
+    ## Montipora_capitata_HIv3___RNAseq.g36577.t1         0         1         0
+    ## Montipora_capitata_HIv3___RNAseq.g45853.t1         4         2         5
+    ##                                            MON_R12_C1 MON_R12_C2 MON_R12_C3
+    ## Montipora_capitata_HIv3___RNAseq.g33700.t1          6          5          2
+    ## Montipora_capitata_HIv3___RNAseq.g18128.t1         10          8          9
+    ## Montipora_capitata_HIv3___RNAseq.g36577.t1          1          0          7
+    ## Montipora_capitata_HIv3___RNAseq.g45853.t1          4          3          2
+    ##                                            MON_R12_H1 MON_R12_H2 MON_R12_H3
+    ## Montipora_capitata_HIv3___RNAseq.g33700.t1          0          0          2
+    ## Montipora_capitata_HIv3___RNAseq.g18128.t1          0          0          0
+    ## Montipora_capitata_HIv3___RNAseq.g36577.t1          0          0          0
+    ## Montipora_capitata_HIv3___RNAseq.g45853.t1          0          1          3
+    ##                                            MON_R24_C1 MON_R24_C2 MON_R24_C3
+    ## Montipora_capitata_HIv3___RNAseq.g33700.t1         10          4          3
+    ## Montipora_capitata_HIv3___RNAseq.g18128.t1          6          3          5
+    ## Montipora_capitata_HIv3___RNAseq.g36577.t1          4          4          7
+    ## Montipora_capitata_HIv3___RNAseq.g45853.t1          1          8          5
+    ##                                            MON_R24_H1 MON_R24_H2 MON_R24_H3
+    ## Montipora_capitata_HIv3___RNAseq.g33700.t1          0          0          0
+    ## Montipora_capitata_HIv3___RNAseq.g18128.t1          0          3          0
+    ## Montipora_capitata_HIv3___RNAseq.g36577.t1          0          0          0
+    ## Montipora_capitata_HIv3___RNAseq.g45853.t1          1          3          3
+    ##                                            MON_R72_C1 MON_R72_C2 MON_R72_C3
+    ## Montipora_capitata_HIv3___RNAseq.g33700.t1          0          5          8
+    ## Montipora_capitata_HIv3___RNAseq.g18128.t1          5          4          5
+    ## Montipora_capitata_HIv3___RNAseq.g36577.t1          3         10          2
+    ## Montipora_capitata_HIv3___RNAseq.g45853.t1          7          2          4
+    ##                                            MON_R72_H3 MON_R120_C1 MON_R120_C2
+    ## Montipora_capitata_HIv3___RNAseq.g33700.t1          0           2           2
+    ## Montipora_capitata_HIv3___RNAseq.g18128.t1          1           3           7
+    ## Montipora_capitata_HIv3___RNAseq.g36577.t1          7           3           3
+    ## Montipora_capitata_HIv3___RNAseq.g45853.t1          0           3           6
+    ##                                            MON_R120_C3 MON_R120_H1 MON_R120_H2
+    ## Montipora_capitata_HIv3___RNAseq.g33700.t1           0           2           5
+    ## Montipora_capitata_HIv3___RNAseq.g18128.t1           9           2           0
+    ## Montipora_capitata_HIv3___RNAseq.g36577.t1           2           2           4
+    ## Montipora_capitata_HIv3___RNAseq.g45853.t1           9           0           0
+    ##                                            MON_R120_H3
+    ## Montipora_capitata_HIv3___RNAseq.g33700.t1           9
+    ## Montipora_capitata_HIv3___RNAseq.g18128.t1           0
+    ## Montipora_capitata_HIv3___RNAseq.g36577.t1           1
+    ## Montipora_capitata_HIv3___RNAseq.g45853.t1           0
+
+``` r
+impulse_sig_genes[missing_genes,]
+```
+
+    ##                                                                                  Gene
+    ## Montipora_capitata_HIv3___RNAseq.g33700.t1 Montipora_capitata_HIv3___RNAseq.g33700.t1
+    ## Montipora_capitata_HIv3___RNAseq.g18128.t1 Montipora_capitata_HIv3___RNAseq.g18128.t1
+    ## Montipora_capitata_HIv3___RNAseq.g36577.t1 Montipora_capitata_HIv3___RNAseq.g36577.t1
+    ## Montipora_capitata_HIv3___RNAseq.g45853.t1 Montipora_capitata_HIv3___RNAseq.g45853.t1
+    ##                                                       p        padj loglik_full
+    ## Montipora_capitata_HIv3___RNAseq.g33700.t1 0.0005494792 0.007335377   -72.28073
+    ## Montipora_capitata_HIv3___RNAseq.g18128.t1 0.0049850550 0.042336299   -90.54793
+    ## Montipora_capitata_HIv3___RNAseq.g36577.t1 0.0054079432 0.045087302   -72.92717
+    ## Montipora_capitata_HIv3___RNAseq.g45853.t1 0.0029197947 0.027782360   -78.18742
+    ##                                            loglik_red df_full df_red     mean
+    ## Montipora_capitata_HIv3___RNAseq.g33700.t1  -83.22560      17     12 2.858989
+    ## Montipora_capitata_HIv3___RNAseq.g18128.t1  -98.92629      17     12 6.499824
+    ## Montipora_capitata_HIv3___RNAseq.g36577.t1  -81.20860      17     12 1.996045
+    ## Montipora_capitata_HIv3___RNAseq.g45853.t1  -87.19809      17     12 4.070318
+    ##                                            converge_combined converge_case
+    ## Montipora_capitata_HIv3___RNAseq.g33700.t1                 0             0
+    ## Montipora_capitata_HIv3___RNAseq.g18128.t1                 0             0
+    ## Montipora_capitata_HIv3___RNAseq.g36577.t1                 0             0
+    ## Montipora_capitata_HIv3___RNAseq.g45853.t1                 0             0
+    ##                                            converge_control converge_sigmoid
+    ## Montipora_capitata_HIv3___RNAseq.g33700.t1                0                0
+    ## Montipora_capitata_HIv3___RNAseq.g18128.t1                0                0
+    ## Montipora_capitata_HIv3___RNAseq.g36577.t1                0                0
+    ## Montipora_capitata_HIv3___RNAseq.g45853.t1                0                0
+    ##                                            impulseTOsigmoid_p
+    ## Montipora_capitata_HIv3___RNAseq.g33700.t1       0.0031039956
+    ## Montipora_capitata_HIv3___RNAseq.g18128.t1       0.2152756723
+    ## Montipora_capitata_HIv3___RNAseq.g36577.t1       0.0006867855
+    ## Montipora_capitata_HIv3___RNAseq.g45853.t1       0.0046269616
+    ##                                            impulseTOsigmoid_padj
+    ## Montipora_capitata_HIv3___RNAseq.g33700.t1           0.027588611
+    ## Montipora_capitata_HIv3___RNAseq.g18128.t1           0.569218554
+    ## Montipora_capitata_HIv3___RNAseq.g36577.t1           0.008344726
+    ## Montipora_capitata_HIv3___RNAseq.g45853.t1           0.037790046
+    ##                                            sigmoidTOconst_p sigmoidTOconst_padj
+    ## Montipora_capitata_HIv3___RNAseq.g33700.t1      0.650083420          1.00000000
+    ## Montipora_capitata_HIv3___RNAseq.g18128.t1      0.002393655          0.02229212
+    ## Montipora_capitata_HIv3___RNAseq.g36577.t1      0.201546347          0.78856624
+    ## Montipora_capitata_HIv3___RNAseq.g45853.t1      0.017408972          0.11827008
+    ##                                            isTransient isMonotonous allZero
+    ## Montipora_capitata_HIv3___RNAseq.g33700.t1       FALSE        FALSE   FALSE
+    ## Montipora_capitata_HIv3___RNAseq.g18128.t1       FALSE        FALSE   FALSE
+    ## Montipora_capitata_HIv3___RNAseq.g36577.t1       FALSE        FALSE   FALSE
+    ## Montipora_capitata_HIv3___RNAseq.g45853.t1       FALSE        FALSE   FALSE
+
+``` r
+rowSums(counts_raw[missing_genes,] > 10)
+```
+
+    ## Montipora_capitata_HIv3___RNAseq.g33700.t1 
+    ##                                          0 
+    ## Montipora_capitata_HIv3___RNAseq.g18128.t1 
+    ##                                          0 
+    ## Montipora_capitata_HIv3___RNAseq.g36577.t1 
+    ##                                          0 
+    ## Montipora_capitata_HIv3___RNAseq.g45853.t1 
+    ##                                          1
+
+``` r
+impulse_sig_genes_transient <- impulse_sig_genes %>% filter(isTransient==TRUE)
+impulse_sig_genes_mat <- vsd_mat[rownames(vsd_mat) %in% impulse_sig_genes_transient$Gene,]
+
+heat <- impulse_sig_genes_mat %>% as.data.frame %>% select(contains("_H"))
+
+# average values together across replicates
+heat_avg <- heat %>%
+  rowwise() %>%
+  mutate(
+    R0 = mean(c_across(starts_with("MON_R0"))),
+    R1 = mean(c_across(starts_with("MON_R1"))),
+    R3 = mean(c_across(starts_with("MON_R3"))),
+    R12 = mean(c_across(starts_with("MON_R12"))),
+    R24 = mean(c_across(starts_with("MON_R24"))),
+    R72 = mean(c_across(starts_with("MON_R72"))),
+    R120 = mean(c_across(starts_with("MON_R120")))
+  ) %>%
+  select(R0, R1, R3, R12, R24, R72, R120)
+
+rownames(heat_avg) <- rownames(heat)
+
+heat_eset <- ExpressionSet(assayData = as.matrix(heat_avg))
+heat_eset <- standardise(heat_eset) 
+```
+
+For fuzzy c-means clustering, the fuzzifier m and the number of clusters
+c has to be chosen in advance
+
+``` r
+# Determine fuzzifier
+m <- mestimate(heat_eset)
+
+# Choose optimal cluster number
+#Dmin(heat_eset, m = m, repeats = 3)
+optimal_c <- 6
+
+# Run Mfuzz clustering
+mfuzz_clusters <- mfuzz(heat_eset, c = optimal_c, m = m)
+
+mfuzz.plot(heat_eset, cl = mfuzz_clusters, new.window =FALSE, mfrow = c(3,3), time.labels =  c(0,1,3,12,24,72,120))
+
+# Visualize clusters
+pdf(paste0(outdir,"/temporal_clusters.pdf"), width = 12, height = 10)
+mfuzz.plot2(heat_eset, cl = mfuzz_clusters, mfrow = c(3, 4), 
+            time.labels = c("0", "1", "3", "12", "24", "72", "120"),
+            xlab = "Time (hours)",x11=FALSE)
+dev.off()
+```
+
+    ## png 
+    ##   2
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-64-1.png)<!-- -->
+
+``` r
+cluster1 <- plotGenes(
+  vecGeneIDs       = head(names(mfuzz_clusters$cluster)[mfuzz_clusters$cluster==1],5),
+  objectImpulseDE2 = objectImpulseDE2,
+  boolSimplePlot = TRUE,
+  boolCaseCtrl     = TRUE,
+  dirOut           = paste0(outdir,"/ImpulseDE/"),
+  strFileName = "cluster1.pdf",
+  boolMultiplePlotsPerPage = FALSE,
+  strNameRefMethod = NULL)
+```
+
+    ## [1] "Creating ../output_RNA/differential_expression/MON_MCapV3/ImpulseDE/cluster1.pdf"
+
+``` r
+cluster2
+```
+
+    ## [[1]]
+
+    ## 
+    ## [[2]]
+
+    ## 
+    ## [[3]]
+
+    ## 
+    ## [[4]]
+
+    ## 
+    ## [[5]]
+
+``` r
+cluster2 <- plotGenes(
+  vecGeneIDs       = head(names(mfuzz_clusters$cluster)[mfuzz_clusters$cluster==2],5),
+  objectImpulseDE2 = objectImpulseDE2,
+  boolSimplePlot = TRUE,
+  boolCaseCtrl     = TRUE,
+  dirOut           = paste0(outdir,"/ImpulseDE/"),
+  strFileName = "cluster2.pdf",
+  boolMultiplePlotsPerPage = FALSE,
+  strNameRefMethod = NULL)
+```
+
+    ## [1] "Creating ../output_RNA/differential_expression/MON_MCapV3/ImpulseDE/cluster2.pdf"
+
+``` r
+cluster3
+```
+
+    ## [[1]]
+
+    ## 
+    ## [[2]]
+
+    ## 
+    ## [[3]]
+
+    ## 
+    ## [[4]]
+
+    ## 
+    ## [[5]]
+
+``` r
+# Extract cluster assignments
+cluster_assignments <- data.frame(
+  gene = names(mfuzz_clusters$cluster),
+  cluster = mfuzz_clusters$cluster,
+  membership = apply(mfuzz_clusters$membership, 1, max)
+)
+
+# Get cluster centers (average trajectory)
+cluster_centers <- mfuzz_clusters$centers
+
+# Identify peak timepoint for each cluster
+peak_times <- apply(cluster_centers, 1, which.max)
+timepoints <- c(0, 1, 3, 12, 24, 72, 120)
+cluster_peaks <- data.frame(
+  cluster = 1:optimal_c,
+  peak_time = timepoints[peak_times])
+
+print(cluster_peaks)
+```
+
+    ##   cluster peak_time
+    ## 1       1         0
+    ## 2       2         3
+    ## 3       3         0
+    ## 4       4         3
+    ## 5       5         0
+    ## 6       6         0
+
+##### View clustered genes of interest
+
+``` r
+HSPS <- impulse_results %>% filter(Gene %in% stress_genes_ids) %>% arrange(padj) %>% left_join(HeatStressGenes_unique, by = join_by(Gene==query)) %>% filter(grepl("HSP",gene_id)) %>% pull(Gene)
+
+cluster_assignments %>% filter(gene %in% HSPS)
+```
+
+    ## [1] gene       cluster    membership
+    ## <0 rows> (or 0-length row.names)
+
+``` r
+heat_clustered <- HeatStressGenes_unique %>% left_join(cluster_assignments, by = join_by(query==gene)) %>%
+  arrange(cluster, desc(cluster))
+
+# plot this to show which genes are in which cluster
+heat_clustered %>% filter(!is.na(cluster)) %>% ggplot(aes(y=reorder(gene_id, cluster), x=factor(cluster), fill=cluster)) +
+  geom_tile() +
+  theme_bw() +
+  labs(x="Mfuzz Cluster", y="Gene ID", title="Heat stress genes clustered by temporal expression pattern")
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-69-1.png)<!-- -->
+
+``` r
+channel_clustered <- membrane_channels  %>% unique() %>% 
+  filter(gene_set != "SLC") %>%
+  left_join(cluster_assignments, by = join_by(query==gene)) %>%
+  arrange(cluster)  %>%
+  filter(!is.na(cluster)) 
+
+cat("Total membrane channel genes:", nrow(membrane_channels), "\n")
+```
+
+    ## Total membrane channel genes: 673
+
+``` r
+cat("Found in ImpulseDE/Mfuzz data:", nrow(channel_clustered), "\n")
+```
+
+    ## Found in ImpulseDE/Mfuzz data: 17
+
+``` r
+channel_clustered %>%
+    ggplot(aes(x = factor(cluster), y = reorder(short_name, cluster), fill = gene_set)) +
+  geom_tile(color = "white") +
+  geom_text(aes(label = cluster), size = 2) +
+  theme_bw() +
+  theme(axis.text.y = element_text(size = 6)) +
+  labs(x = "Mfuzz Cluster", 
+       y = "Gene ID", 
+       fill = "Channel Type",
+       title = "Membrane Channel Genes - Cluster Assignment",
+       subtitle = paste0(sum(!is.na(channel_clustered$cluster)), 
+                        " genes significantly DE"))
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-70-1.png)<!-- -->
+
+``` r
+heat_eset_membrane <- heat_eset[channel_clustered$query, ]
+mfuzz_clusters_membrane <- mfuzz_clusters
+mfuzz_clusters_membrane$membership <- mfuzz_clusters$membership[channel_clustered$query, ]
+mfuzz_clusters_membrane$cluster <- mfuzz_clusters$cluster[channel_clustered$query]
+
+mfuzz.plot(
+  heat_eset_membrane,
+  cl = mfuzz_clusters_membrane,
+  new.window = FALSE,
+  mfrow = c(3,3),
+  time.labels = c(0,1,3,12,24,72,120)
+)
+
+# Visualize clusters
+pdf(paste0(outdir,"/membrane_temporal_clusters.pdf"), width = 12, height = 10)
+mfuzz.plot2(heat_eset_membrane, cl = mfuzz_clusters_membrane, mfrow = c(3, 4), 
+            time.labels = c("0", "1", "3", "12", "24", "72", "120"),
+            xlab = "Time (hours)",x11=FALSE)
+dev.off()
+```
+
+    ## png 
+    ##   2
+
+``` r
+plot_df <- as.data.frame(t(vsd_mat)) %>%
+  rownames_to_column(var="sample") %>%
+  left_join(meta, by=c("sample"="sample")) %>% 
+  pivot_longer(cols = all_of(rownames(vsd_mat)), names_to="query", values_to="expression") %>%
+  mutate(is_DE = query %in% rownames(DE_05)) %>% right_join(membrane_DE_genes %>% rownames_to_column("query"))
+
+pdf(paste0(outdir,"/ImpulseDE/membrane_sig_plots_clustered.pdf"), width = 14, height = 14)
+
+for (cl in c(0,unique(channel_clustered$cluster))){
+  plot_df_filtered <- plot_df %>% left_join(channel_clustered) %>% filter(!is.na(cluster))
+  
+  if (cl ==0){
+    plot_df_low_membership <- plot_df_filtered %>% filter(membership<0.5)
+    
+    plot <- plot_df_low_membership  %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+    stat_summary(fun="mean", geom="line") +
+    scale_color_manual(values = treat_colors) +
+    stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+    facet_wrap(short_name~query,scales="free_y") +
+    theme_bw() +
+    theme(strip.text = element_text(size = 6)) +
+    labs(y="VST expression", x="Timepoint",title=paste("Membership < 0.5"))
+    print(plot)
+  } else{
+    plot_df_cluster <- plot_df_filtered %>% filter(cluster==cl)
+      if (nrow(plot_df_cluster)>1){
+    plot <- plot_df_cluster  %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+    stat_summary(fun="mean", geom="line") +
+    scale_color_manual(values = treat_colors) +
+    stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+    facet_wrap(short_name~query,scales="free_y") +
+    theme_bw() +
+    theme(strip.text = element_text(size = 6)) +
+    labs(y="VST expression", x="Timepoint",title=paste("Cluster ",cl))
+    print(plot)
+  }
+  }
+}
+dev.off()
+```
+
+    ## png 
+    ##   2
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-70-2.png)<!-- -->
+
 ## *Porites compressa*
 
 ### Preproccessing
@@ -3113,7 +3560,7 @@ pheatmap(sampleDistMatrix,
          col=colorRampPalette( rev(brewer.pal(9, "Blues")) )(255))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-70-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-80-1.png)<!-- -->
 
 #### 5. PCA
 
@@ -3173,7 +3620,7 @@ pheatmap(assay(vsd)[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-72-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-82-1.png)<!-- -->
 
 ``` r
 pheatmap(assay(vsd)[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
@@ -3183,7 +3630,7 @@ pheatmap(assay(vsd)[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-72-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-82-2.png)<!-- -->
 
 ### Heat stress genes
 
@@ -3215,7 +3662,7 @@ plot_df %>% ggplot(aes(x=time, y=expression, color=gene_id, group=gene_id)) +
   labs(y="VST expression", x="Timepoint")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-73-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-83-1.png)<!-- -->
 
 ``` r
 plot_df %>% filter(grepl("Type1", response_type)) %>%
@@ -3231,7 +3678,7 @@ plot_df %>% filter(grepl("Type1", response_type)) %>%
   labs(y="VST expression", x="Timepoint", title = "Type 1 Expressed Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-73-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-83-2.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "All_Type1")
@@ -3249,7 +3696,7 @@ plot_df %>% filter(grepl("Type2", response_type)) %>%
   labs(y="VST expression", x="Timepoint", title = "Type 2 Expressed Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-73-3.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-83-3.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "All_Type2")
@@ -3263,7 +3710,7 @@ plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_
   labs(y="VST expression", x="Timepoint")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-73-4.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-83-4.png)<!-- -->
 
 #### DESeq LRT Test
 
@@ -3293,7 +3740,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-74-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-84-1.png)<!-- -->
 
 ``` r
 pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
@@ -3303,7 +3750,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-74-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-84-2.png)<!-- -->
 
 ``` r
 top_500_DE_genes <- DE_05 %>% arrange(log2FoldChange) %>% head(500) %>% rownames()
@@ -3316,7 +3763,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-74-3.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-84-3.png)<!-- -->
 
 ``` r
 pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
@@ -3326,7 +3773,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-74-4.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-84-4.png)<!-- -->
 
 ``` r
 top_500_DE_genes <- DE_05 %>% arrange(desc(log2FoldChange)) %>% head(500) %>% rownames()
@@ -3339,7 +3786,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-74-5.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-84-5.png)<!-- -->
 
 ``` r
 pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
@@ -3349,7 +3796,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-74-6.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-84-6.png)<!-- -->
 
 #### DE Heat stress genes
 
@@ -3369,7 +3816,7 @@ plot_df %>% ggplot(aes(x=time, y=expression, color=gene_id, group=gene_id)) +
   labs(y="VST expression", x="Timepoint")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-75-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-85-1.png)<!-- -->
 
 ``` r
 plot_df %>% filter(grepl("Type1", response_type)) %>%
@@ -3385,7 +3832,7 @@ plot_df %>% filter(grepl("Type1", response_type)) %>%
   labs(y="VST expression", x="Timepoint", title = "Type 1 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-75-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-85-2.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "DE_Type1")
@@ -3403,7 +3850,7 @@ plot_df %>% filter(grepl("Type2", response_type)) %>%
   labs(y="VST expression", x="Timepoint", title = "Type 2 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-75-3.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-85-3.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "DE_Type2")
@@ -3417,7 +3864,7 @@ plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_
   labs(y="VST expression", x="Timepoint", title = "Selected Type 1 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-75-4.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-85-4.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "highlighted_DE_Type1")
@@ -3435,7 +3882,7 @@ plot_df_norm %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",
   labs(y="VST expression", x="Timepoint", title = "Norm to control -- Selected Type 1 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-75-5.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-85-5.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "highlighted_DE_Type1_norm_control")
@@ -3456,7 +3903,7 @@ plot_df_norm %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",
   labs(y="VST expression", x="Timepoint", title = "Norm to T0 -- Selected Type 1 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-75-6.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-85-6.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "highlighted_DE_Type1_norm_T0")
@@ -3470,7 +3917,7 @@ plot_df %>% filter(grepl("GDH",gene_id)|grepl("GS",gene_id)|grepl("AMT1",gene_id
   labs(y="VST expression", x="Timepoint", title = "Selected Type 2 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-75-7.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-85-7.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "highlighted_DE_Type2")
@@ -3507,7 +3954,7 @@ for (genelist in membrane_list){
 }
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-76-1.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-76-2.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-76-3.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-76-4.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-76-5.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-76-6.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-76-7.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-76-8.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-76-9.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-76-10.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-86-1.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-86-2.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-86-3.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-86-4.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-86-5.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-86-6.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-86-7.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-86-8.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-86-9.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-86-10.png)<!-- -->
 
 ``` r
 for (genelist in membrane_list){
@@ -3526,7 +3973,7 @@ for (genelist in membrane_list){
 }
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-76-11.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-76-12.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-76-13.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-76-14.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-76-15.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-76-16.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-76-17.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-76-18.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-76-19.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-76-20.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-86-11.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-86-12.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-86-13.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-86-14.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-86-15.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-86-16.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-86-17.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-86-18.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-86-19.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-86-20.png)<!-- -->
 
 ### ImpulseDE2
 
@@ -3696,13 +4143,13 @@ lsHeatmaps <- plotHeatmap(
 draw(lsHeatmaps$complexHeatmapRaw) 
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-81-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-91-1.png)<!-- -->
 
 ``` r
 draw(lsHeatmaps$complexHeatmapFit) 
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-81-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-91-2.png)<!-- -->
 
 ``` r
 lsHeatmaps <- plotHeatmap(
@@ -3713,13 +4160,13 @@ lsHeatmaps <- plotHeatmap(
 draw(lsHeatmaps$complexHeatmapRaw) 
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-81-3.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-91-3.png)<!-- -->
 
 ``` r
 draw(lsHeatmaps$complexHeatmapFit) 
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-81-4.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-91-4.png)<!-- -->
 
 ``` r
 lsHeatmaps <- plotHeatmap(
@@ -3730,13 +4177,13 @@ lsHeatmaps <- plotHeatmap(
 draw(lsHeatmaps$complexHeatmapRaw) 
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-81-5.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-91-5.png)<!-- -->
 
 ``` r
 draw(lsHeatmaps$complexHeatmapFit) 
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-81-6.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-91-6.png)<!-- -->
 
 ``` r
 png(paste0(outdir,"/ImpulseDE/ImpulseDE2_heatmap.png"), width = 2000, height = 2400, res = 300)
@@ -4028,7 +4475,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-84-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-94-1.png)<!-- -->
 
 ``` r
 pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
@@ -4038,7 +4485,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-84-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-94-2.png)<!-- -->
 
 #### 7.5. Heatmap of membrane channel genes
 
@@ -4097,3 +4544,346 @@ dev.off()
 
     ## png 
     ##   2
+
+#### 8. Cluster ImpulseDE2-significant genes by trajectory
+
+For this we will use the package
+[Mfuzz](https://bioconductor.org/packages/release/bioc/html/Mfuzz.html),
+[vignette
+here](https://bioconductor.org/packages/release/bioc/vignettes/Mfuzz/inst/doc/Mfuzz.pdf).
+
+``` r
+#BiocManager::install("Mfuzz")
+library(Mfuzz)
+```
+
+``` r
+# analyze which of our ImpulseDE2 significant genes are in our vsd matrix
+sum(impulse_sig_genes$Gene %in% rownames(vsd_mat))
+```
+
+    ## [1] 3487
+
+``` r
+length(impulse_sig_genes$Gene)
+```
+
+    ## [1] 3487
+
+``` r
+# which ones are missing? 
+missing_genes <- impulse_sig_genes$Gene[!(impulse_sig_genes$Gene %in% rownames(vsd_mat))]
+
+# 0! are missing and it is because they were filtered out during pOverA filtering -- as seen with rowSums below, each has fewer than 3 samples with a count >10
+
+counts_raw[missing_genes,]
+```
+
+    ##  [1] POR_R0_C1   POR_R0_C2   POR_R0_C3   POR_R0_H1   POR_R0_H2   POR_R0_H3  
+    ##  [7] POR_R1_C1   POR_R1_C2   POR_R1_C3   POR_R1_H1   POR_R1_H2   POR_R1_H3  
+    ## [13] POR_R3_C1   POR_R3_C2   POR_R3_C3   POR_R3_H1   POR_R3_H2   POR_R3_H3  
+    ## [19] POR_R12_C1  POR_R12_C2  POR_R12_C3  POR_R12_H1  POR_R12_H2  POR_R12_H3 
+    ## [25] POR_R24_C1  POR_R24_C2  POR_R24_C3  POR_R24_H1  POR_R24_H2  POR_R24_H3 
+    ## [31] POR_R72_C1  POR_R72_C2  POR_R72_C3  POR_R72_H1  POR_R72_H2  POR_R72_H3 
+    ## [37] POR_R120_C1 POR_R120_C2 POR_R120_C3 POR_R120_H1 POR_R120_H2 POR_R120_H3
+    ## <0 rows> (or 0-length row.names)
+
+``` r
+impulse_sig_genes[missing_genes,]
+```
+
+    ##  [1] Gene                  p                     padj                 
+    ##  [4] loglik_full           loglik_red            df_full              
+    ##  [7] df_red                mean                  converge_combined    
+    ## [10] converge_case         converge_control      converge_sigmoid     
+    ## [13] impulseTOsigmoid_p    impulseTOsigmoid_padj sigmoidTOconst_p     
+    ## [16] sigmoidTOconst_padj   isTransient           isMonotonous         
+    ## [19] allZero              
+    ## <0 rows> (or 0-length row.names)
+
+``` r
+rowSums(counts_raw[missing_genes,] > 10)
+```
+
+    ## numeric(0)
+
+``` r
+impulse_sig_genes_transient <- impulse_sig_genes %>% filter(isTransient==TRUE)
+impulse_sig_genes_mat <- vsd_mat[rownames(vsd_mat) %in% impulse_sig_genes_transient$Gene,]
+
+heat <- impulse_sig_genes_mat %>% as.data.frame %>% select(contains("_H"))
+
+# average values together across replicates
+heat_avg <- heat %>%
+  rowwise() %>%
+  mutate(
+    R0 = mean(c_across(starts_with("POR_R0"))),
+    R1 = mean(c_across(starts_with("POR_R1"))),
+    R3 = mean(c_across(starts_with("POR_R3"))),
+    R12 = mean(c_across(starts_with("POR_R12"))),
+    R24 = mean(c_across(starts_with("POR_R24"))),
+    R72 = mean(c_across(starts_with("POR_R72"))),
+    R120 = mean(c_across(starts_with("POR_R120")))
+  ) %>%
+  select(R0, R1, R3, R12, R24, R72, R120)
+
+rownames(heat_avg) <- rownames(heat)
+
+heat_eset <- ExpressionSet(assayData = as.matrix(heat_avg))
+heat_eset <- standardise(heat_eset) 
+```
+
+For fuzzy c-means clustering, the fuzzifier m and the number of clusters
+c has to be chosen in advance
+
+``` r
+# Determine fuzzifier
+m <- mestimate(heat_eset)
+
+# Choose optimal cluster number
+#Dmin(heat_eset, m = m, repeats = 3)
+optimal_c <- 6
+
+# Run Mfuzz clustering
+mfuzz_clusters <- mfuzz(heat_eset, c = optimal_c, m = m)
+
+mfuzz.plot(heat_eset, cl = mfuzz_clusters, new.window =FALSE, mfrow = c(3,3), time.labels =  c(0,1,3,12,24,72,120))
+
+# Visualize clusters
+pdf(paste0(outdir,"/temporal_clusters.pdf"), width = 12, height = 10)
+mfuzz.plot2(heat_eset, cl = mfuzz_clusters, mfrow = c(3, 4), 
+            time.labels = c("0", "1", "3", "12", "24", "72", "120"),
+            xlab = "Time (hours)",x11=FALSE)
+dev.off()
+```
+
+    ## png 
+    ##   2
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-99-1.png)<!-- -->
+
+``` r
+cluster2 <- plotGenes(
+  vecGeneIDs       = head(names(mfuzz_clusters$cluster)[mfuzz_clusters$cluster==2],5),
+  objectImpulseDE2 = objectImpulseDE2,
+  boolSimplePlot = TRUE,
+  boolCaseCtrl     = TRUE,
+  dirOut           = paste0(outdir,"/ImpulseDE/"),
+  strFileName = "cluster2.pdf",
+  boolMultiplePlotsPerPage = FALSE,
+  strNameRefMethod = NULL)
+```
+
+    ## [1] "Creating ../output_RNA/differential_expression/POR_Pcomp/ImpulseDE/cluster2.pdf"
+
+``` r
+cluster2
+```
+
+    ## [[1]]
+
+    ## 
+    ## [[2]]
+
+    ## 
+    ## [[3]]
+
+    ## 
+    ## [[4]]
+
+    ## 
+    ## [[5]]
+
+``` r
+cluster3 <- plotGenes(
+  vecGeneIDs       = head(names(mfuzz_clusters$cluster)[mfuzz_clusters$cluster==3],5),
+  objectImpulseDE2 = objectImpulseDE2,
+  boolSimplePlot = TRUE,
+  boolCaseCtrl     = TRUE,
+  dirOut           = paste0(outdir,"/ImpulseDE/"),
+  strFileName = "cluster3.pdf",
+  boolMultiplePlotsPerPage = FALSE,
+  strNameRefMethod = NULL)
+```
+
+    ## [1] "Creating ../output_RNA/differential_expression/POR_Pcomp/ImpulseDE/cluster3.pdf"
+
+``` r
+cluster3
+```
+
+    ## [[1]]
+
+    ## 
+    ## [[2]]
+
+    ## 
+    ## [[3]]
+
+    ## 
+    ## [[4]]
+
+    ## 
+    ## [[5]]
+
+``` r
+# Extract cluster assignments
+cluster_assignments <- data.frame(
+  gene = names(mfuzz_clusters$cluster),
+  cluster = mfuzz_clusters$cluster,
+  membership = apply(mfuzz_clusters$membership, 1, max)
+)
+
+# Get cluster centers (average trajectory)
+cluster_centers <- mfuzz_clusters$centers
+
+# Identify peak timepoint for each cluster
+peak_times <- apply(cluster_centers, 1, which.max)
+timepoints <- c(0, 1, 3, 12, 24, 72, 120)
+cluster_peaks <- data.frame(
+  cluster = 1:optimal_c,
+  peak_time = timepoints[peak_times])
+
+print(cluster_peaks)
+```
+
+    ##   cluster peak_time
+    ## 1       1         3
+    ## 2       2         0
+    ## 3       3         3
+    ## 4       4         3
+    ## 5       5         0
+    ## 6       6         0
+
+##### View clustered genes of interest
+
+``` r
+HSPS <- impulse_results %>% filter(Gene %in% stress_genes_ids) %>% arrange(padj) %>% left_join(HeatStressGenes_unique, by = join_by(Gene==query)) %>% filter(grepl("HSP",gene_id)) %>% pull(Gene)
+
+cluster_assignments %>% filter(gene %in% HSPS)
+```
+
+    ##                                                                                gene
+    ## Porites_compressa_HIv1___RNAseq.g10172.t1 Porites_compressa_HIv1___RNAseq.g10172.t1
+    ##                                           cluster membership
+    ## Porites_compressa_HIv1___RNAseq.g10172.t1       1  0.5709746
+
+``` r
+heat_clustered <- HeatStressGenes_unique %>% left_join(cluster_assignments, by = join_by(query==gene)) %>%
+  arrange(cluster, desc(cluster))
+
+# plot this to show which genes are in which cluster
+heat_clustered %>% filter(!is.na(cluster)) %>% ggplot(aes(y=reorder(gene_id, cluster), x=factor(cluster), fill=cluster)) +
+  geom_tile() +
+  theme_bw() +
+  labs(x="Mfuzz Cluster", y="Gene ID", title="Heat stress genes clustered by temporal expression pattern")
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-104-1.png)<!-- -->
+
+``` r
+channel_clustered <- membrane_channels  %>% unique() %>% 
+  filter(gene_set != "SLC") %>%
+  left_join(cluster_assignments, by = join_by(query==gene)) %>%
+  arrange(cluster)  %>%
+  filter(!is.na(cluster)) 
+
+cat("Total membrane channel genes:", nrow(membrane_channels), "\n")
+```
+
+    ## Total membrane channel genes: 718
+
+``` r
+cat("Found in ImpulseDE/Mfuzz data:", nrow(channel_clustered), "\n")
+```
+
+    ## Found in ImpulseDE/Mfuzz data: 7
+
+``` r
+channel_clustered %>%
+    ggplot(aes(x = factor(cluster), y = reorder(short_name, cluster), fill = gene_set)) +
+  geom_tile(color = "white") +
+  geom_text(aes(label = cluster), size = 2) +
+  theme_bw() +
+  theme(axis.text.y = element_text(size = 6)) +
+  labs(x = "Mfuzz Cluster", 
+       y = "Gene ID", 
+       fill = "Channel Type",
+       title = "Membrane Channel Genes - Cluster Assignment",
+       subtitle = paste0(sum(!is.na(channel_clustered$cluster)), 
+                        " genes significantly DE"))
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-105-1.png)<!-- -->
+
+``` r
+heat_eset_membrane <- heat_eset[channel_clustered$query, ]
+mfuzz_clusters_membrane <- mfuzz_clusters
+mfuzz_clusters_membrane$membership <- mfuzz_clusters$membership[channel_clustered$query, ]
+mfuzz_clusters_membrane$cluster <- mfuzz_clusters$cluster[channel_clustered$query]
+
+mfuzz.plot(
+  heat_eset_membrane,
+  cl = mfuzz_clusters_membrane,
+  new.window = FALSE,
+  mfrow = c(3,3),
+  time.labels = c(0,1,3,12,24,72,120)
+)
+
+# Visualize clusters
+pdf(paste0(outdir,"/membrane_temporal_clusters.pdf"), width = 12, height = 10)
+mfuzz.plot2(heat_eset_membrane, cl = mfuzz_clusters_membrane, mfrow = c(3, 4), 
+            time.labels = c("0", "1", "3", "12", "24", "72", "120"),
+            xlab = "Time (hours)",x11=FALSE)
+dev.off()
+```
+
+    ## png 
+    ##   2
+
+``` r
+plot_df <- as.data.frame(t(vsd_mat)) %>%
+  rownames_to_column(var="sample") %>%
+  left_join(meta, by=c("sample"="sample")) %>% 
+  pivot_longer(cols = all_of(rownames(vsd_mat)), names_to="query", values_to="expression") %>%
+  mutate(is_DE = query %in% rownames(DE_05)) %>% right_join(membrane_DE_genes %>% rownames_to_column("query"))
+
+pdf(paste0(outdir,"/ImpulseDE/membrane_sig_plots_clustered.pdf"), width = 14, height = 14)
+
+for (cl in c(0,unique(channel_clustered$cluster))){
+  plot_df_filtered <- plot_df %>% left_join(channel_clustered) %>% filter(!is.na(cluster))
+  
+  if (cl ==0){
+    plot_df_low_membership <- plot_df_filtered %>% filter(membership<0.5)
+    
+    plot <- plot_df_low_membership  %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+    stat_summary(fun="mean", geom="line") +
+    scale_color_manual(values = treat_colors) +
+    stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+    facet_wrap(short_name~query,scales="free_y") +
+    theme_bw() +
+    theme(strip.text = element_text(size = 6)) +
+    labs(y="VST expression", x="Timepoint",title=paste("Membership < 0.5"))
+    print(plot)
+  } else{
+    plot_df_cluster <- plot_df_filtered %>% filter(cluster==cl)
+      if (nrow(plot_df_cluster)>1){
+    plot <- plot_df_cluster  %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+    stat_summary(fun="mean", geom="line") +
+    scale_color_manual(values = treat_colors) +
+    stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+    facet_wrap(short_name~query,scales="free_y") +
+    theme_bw() +
+    theme(strip.text = element_text(size = 6)) +
+    labs(y="VST expression", x="Timepoint",title=paste("Cluster ",cl))
+    print(plot)
+  }
+  }
+}
+dev.off()
+```
+
+    ## png 
+    ##   2
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-105-2.png)<!-- -->

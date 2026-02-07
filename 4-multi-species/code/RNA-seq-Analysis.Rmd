@@ -1693,6 +1693,232 @@ for (genelist in unique(plot_df$gene_set)){
 dev.off()
 ```
 
+#### 8. Cluster ImpulseDE2-significant genes by trajectory
+
+For this we will use the package [Mfuzz](https://bioconductor.org/packages/release/bioc/html/Mfuzz.html), [vignette here](https://bioconductor.org/packages/release/bioc/vignettes/Mfuzz/inst/doc/Mfuzz.pdf).
+
+```{r}
+#BiocManager::install("Mfuzz")
+library(Mfuzz)
+```
+
+```{r}
+# analyze which of our ImpulseDE2 significant genes are in our vsd matrix
+sum(impulse_sig_genes$Gene %in% rownames(vsd_mat))
+length(impulse_sig_genes$Gene)
+
+# which ones are missing? 
+missing_genes <- impulse_sig_genes$Gene[!(impulse_sig_genes$Gene %in% rownames(vsd_mat))]
+
+# 4 are missing and it is because they were filtered out during pOverA filtering -- as seen with rowSums below, each has fewer than 3 samples with a count >10
+
+counts_raw[missing_genes,]
+impulse_sig_genes[missing_genes,]
+rowSums(counts_raw[missing_genes,] > 10)
+```
+
+```{r}
+impulse_sig_genes_transient <- impulse_sig_genes %>% filter(isTransient==TRUE)
+impulse_sig_genes_mat <- vsd_mat[rownames(vsd_mat) %in% impulse_sig_genes_transient$Gene,]
+
+heat <- impulse_sig_genes_mat %>% as.data.frame %>% select(contains("_H"))
+
+# average values together across replicates
+heat_avg <- heat %>%
+  rowwise() %>%
+  mutate(
+    R0 = mean(c_across(starts_with("MON_R0"))),
+    R1 = mean(c_across(starts_with("MON_R1"))),
+    R3 = mean(c_across(starts_with("MON_R3"))),
+    R12 = mean(c_across(starts_with("MON_R12"))),
+    R24 = mean(c_across(starts_with("MON_R24"))),
+    R72 = mean(c_across(starts_with("MON_R72"))),
+    R120 = mean(c_across(starts_with("MON_R120")))
+  ) %>%
+  select(R0, R1, R3, R12, R24, R72, R120)
+
+rownames(heat_avg) <- rownames(heat)
+
+heat_eset <- ExpressionSet(assayData = as.matrix(heat_avg))
+heat_eset <- standardise(heat_eset) 
+```
+
+For fuzzy c-means clustering, the fuzzifier m and the number of clusters c has to be chosen in advance
+
+```{r}
+# Determine fuzzifier
+m <- mestimate(heat_eset)
+
+# Choose optimal cluster number
+#Dmin(heat_eset, m = m, repeats = 3)
+optimal_c <- 6
+
+# Run Mfuzz clustering
+mfuzz_clusters <- mfuzz(heat_eset, c = optimal_c, m = m)
+
+mfuzz.plot(heat_eset, cl = mfuzz_clusters, new.window =FALSE, mfrow = c(3,3), time.labels =  c(0,1,3,12,24,72,120))
+
+# Visualize clusters
+pdf(paste0(outdir,"/temporal_clusters.pdf"), width = 12, height = 10)
+mfuzz.plot2(heat_eset, cl = mfuzz_clusters, mfrow = c(3, 4), 
+            time.labels = c("0", "1", "3", "12", "24", "72", "120"),
+            xlab = "Time (hours)",x11=FALSE)
+dev.off()
+```
+
+```{r}
+cluster1 <- plotGenes(
+  vecGeneIDs       = head(names(mfuzz_clusters$cluster)[mfuzz_clusters$cluster==1],5),
+  objectImpulseDE2 = objectImpulseDE2,
+  boolSimplePlot = TRUE,
+  boolCaseCtrl     = TRUE,
+  dirOut           = paste0(outdir,"/ImpulseDE/"),
+  strFileName = "cluster1.pdf",
+  boolMultiplePlotsPerPage = FALSE,
+  strNameRefMethod = NULL)
+
+cluster2
+```
+
+```{r}
+cluster2 <- plotGenes(
+  vecGeneIDs       = head(names(mfuzz_clusters$cluster)[mfuzz_clusters$cluster==2],5),
+  objectImpulseDE2 = objectImpulseDE2,
+  boolSimplePlot = TRUE,
+  boolCaseCtrl     = TRUE,
+  dirOut           = paste0(outdir,"/ImpulseDE/"),
+  strFileName = "cluster2.pdf",
+  boolMultiplePlotsPerPage = FALSE,
+  strNameRefMethod = NULL)
+
+cluster3
+```
+
+```{r}
+# Extract cluster assignments
+cluster_assignments <- data.frame(
+  gene = names(mfuzz_clusters$cluster),
+  cluster = mfuzz_clusters$cluster,
+  membership = apply(mfuzz_clusters$membership, 1, max)
+)
+
+# Get cluster centers (average trajectory)
+cluster_centers <- mfuzz_clusters$centers
+
+# Identify peak timepoint for each cluster
+peak_times <- apply(cluster_centers, 1, which.max)
+timepoints <- c(0, 1, 3, 12, 24, 72, 120)
+cluster_peaks <- data.frame(
+  cluster = 1:optimal_c,
+  peak_time = timepoints[peak_times])
+
+print(cluster_peaks)
+```
+
+##### View clustered genes of interest
+
+```{r}
+HSPS <- impulse_results %>% filter(Gene %in% stress_genes_ids) %>% arrange(padj) %>% left_join(HeatStressGenes_unique, by = join_by(Gene==query)) %>% filter(grepl("HSP",gene_id)) %>% pull(Gene)
+
+cluster_assignments %>% filter(gene %in% HSPS)
+```
+
+```{r}
+heat_clustered <- HeatStressGenes_unique %>% left_join(cluster_assignments, by = join_by(query==gene)) %>%
+  arrange(cluster, desc(cluster))
+
+# plot this to show which genes are in which cluster
+heat_clustered %>% filter(!is.na(cluster)) %>% ggplot(aes(y=reorder(gene_id, cluster), x=factor(cluster), fill=cluster)) +
+  geom_tile() +
+  theme_bw() +
+  labs(x="Mfuzz Cluster", y="Gene ID", title="Heat stress genes clustered by temporal expression pattern")
+```
+
+
+```{r}
+channel_clustered <- membrane_channels  %>% unique() %>% 
+  filter(gene_set != "SLC") %>%
+  left_join(cluster_assignments, by = join_by(query==gene)) %>%
+  arrange(cluster)  %>%
+  filter(!is.na(cluster)) 
+
+cat("Total membrane channel genes:", nrow(membrane_channels), "\n")
+cat("Found in ImpulseDE/Mfuzz data:", nrow(channel_clustered), "\n")
+
+channel_clustered %>%
+    ggplot(aes(x = factor(cluster), y = reorder(short_name, cluster), fill = gene_set)) +
+  geom_tile(color = "white") +
+  geom_text(aes(label = cluster), size = 2) +
+  theme_bw() +
+  theme(axis.text.y = element_text(size = 6)) +
+  labs(x = "Mfuzz Cluster", 
+       y = "Gene ID", 
+       fill = "Channel Type",
+       title = "Membrane Channel Genes - Cluster Assignment",
+       subtitle = paste0(sum(!is.na(channel_clustered$cluster)), 
+                        " genes significantly DE"))
+
+heat_eset_membrane <- heat_eset[channel_clustered$query, ]
+mfuzz_clusters_membrane <- mfuzz_clusters
+mfuzz_clusters_membrane$membership <- mfuzz_clusters$membership[channel_clustered$query, ]
+mfuzz_clusters_membrane$cluster <- mfuzz_clusters$cluster[channel_clustered$query]
+
+mfuzz.plot(
+  heat_eset_membrane,
+  cl = mfuzz_clusters_membrane,
+  new.window = FALSE,
+  mfrow = c(3,3),
+  time.labels = c(0,1,3,12,24,72,120)
+)
+
+# Visualize clusters
+pdf(paste0(outdir,"/membrane_temporal_clusters.pdf"), width = 12, height = 10)
+mfuzz.plot2(heat_eset_membrane, cl = mfuzz_clusters_membrane, mfrow = c(3, 4), 
+            time.labels = c("0", "1", "3", "12", "24", "72", "120"),
+            xlab = "Time (hours)",x11=FALSE)
+dev.off()
+
+plot_df <- as.data.frame(t(vsd_mat)) %>%
+  rownames_to_column(var="sample") %>%
+  left_join(meta, by=c("sample"="sample")) %>% 
+  pivot_longer(cols = all_of(rownames(vsd_mat)), names_to="query", values_to="expression") %>%
+  mutate(is_DE = query %in% rownames(DE_05)) %>% right_join(membrane_DE_genes %>% rownames_to_column("query"))
+
+pdf(paste0(outdir,"/ImpulseDE/membrane_sig_plots_clustered.pdf"), width = 14, height = 14)
+
+for (cl in c(0,unique(channel_clustered$cluster))){
+  plot_df_filtered <- plot_df %>% left_join(channel_clustered) %>% filter(!is.na(cluster))
+  
+  if (cl ==0){
+    plot_df_low_membership <- plot_df_filtered %>% filter(membership<0.5)
+    
+    plot <- plot_df_low_membership  %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+    stat_summary(fun="mean", geom="line") +
+    scale_color_manual(values = treat_colors) +
+    stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+    facet_wrap(short_name~query,scales="free_y") +
+    theme_bw() +
+    theme(strip.text = element_text(size = 6)) +
+    labs(y="VST expression", x="Timepoint",title=paste("Membership < 0.5"))
+    print(plot)
+  } else{
+    plot_df_cluster <- plot_df_filtered %>% filter(cluster==cl)
+      if (nrow(plot_df_cluster)>1){
+    plot <- plot_df_cluster  %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+    stat_summary(fun="mean", geom="line") +
+    scale_color_manual(values = treat_colors) +
+    stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+    facet_wrap(short_name~query,scales="free_y") +
+    theme_bw() +
+    theme(strip.text = element_text(size = 6)) +
+    labs(y="VST expression", x="Timepoint",title=paste("Cluster ",cl))
+    print(plot)
+  }
+  }
+}
+dev.off()
+```
+
 
 ## *Porites compressa*
 
@@ -2393,4 +2619,232 @@ for (genelist in unique(plot_df$gene_set)){
 
 dev.off()
 ```
+
+#### 8. Cluster ImpulseDE2-significant genes by trajectory
+
+For this we will use the package [Mfuzz](https://bioconductor.org/packages/release/bioc/html/Mfuzz.html), [vignette here](https://bioconductor.org/packages/release/bioc/vignettes/Mfuzz/inst/doc/Mfuzz.pdf).
+
+```{r}
+#BiocManager::install("Mfuzz")
+library(Mfuzz)
+```
+
+```{r}
+# analyze which of our ImpulseDE2 significant genes are in our vsd matrix
+sum(impulse_sig_genes$Gene %in% rownames(vsd_mat))
+length(impulse_sig_genes$Gene)
+
+# which ones are missing? 
+missing_genes <- impulse_sig_genes$Gene[!(impulse_sig_genes$Gene %in% rownames(vsd_mat))]
+
+# 0! are missing and it is because they were filtered out during pOverA filtering -- as seen with rowSums below, each has fewer than 3 samples with a count >10
+
+counts_raw[missing_genes,]
+impulse_sig_genes[missing_genes,]
+rowSums(counts_raw[missing_genes,] > 10)
+```
+
+```{r}
+impulse_sig_genes_transient <- impulse_sig_genes %>% filter(isTransient==TRUE)
+impulse_sig_genes_mat <- vsd_mat[rownames(vsd_mat) %in% impulse_sig_genes_transient$Gene,]
+
+heat <- impulse_sig_genes_mat %>% as.data.frame %>% select(contains("_H"))
+
+# average values together across replicates
+heat_avg <- heat %>%
+  rowwise() %>%
+  mutate(
+    R0 = mean(c_across(starts_with("POR_R0"))),
+    R1 = mean(c_across(starts_with("POR_R1"))),
+    R3 = mean(c_across(starts_with("POR_R3"))),
+    R12 = mean(c_across(starts_with("POR_R12"))),
+    R24 = mean(c_across(starts_with("POR_R24"))),
+    R72 = mean(c_across(starts_with("POR_R72"))),
+    R120 = mean(c_across(starts_with("POR_R120")))
+  ) %>%
+  select(R0, R1, R3, R12, R24, R72, R120)
+
+rownames(heat_avg) <- rownames(heat)
+
+heat_eset <- ExpressionSet(assayData = as.matrix(heat_avg))
+heat_eset <- standardise(heat_eset) 
+```
+
+For fuzzy c-means clustering, the fuzzifier m and the number of clusters c has to be chosen in advance
+
+```{r}
+# Determine fuzzifier
+m <- mestimate(heat_eset)
+
+# Choose optimal cluster number
+#Dmin(heat_eset, m = m, repeats = 3)
+optimal_c <- 6
+
+# Run Mfuzz clustering
+mfuzz_clusters <- mfuzz(heat_eset, c = optimal_c, m = m)
+
+mfuzz.plot(heat_eset, cl = mfuzz_clusters, new.window =FALSE, mfrow = c(3,3), time.labels =  c(0,1,3,12,24,72,120))
+
+# Visualize clusters
+pdf(paste0(outdir,"/temporal_clusters.pdf"), width = 12, height = 10)
+mfuzz.plot2(heat_eset, cl = mfuzz_clusters, mfrow = c(3, 4), 
+            time.labels = c("0", "1", "3", "12", "24", "72", "120"),
+            xlab = "Time (hours)",x11=FALSE)
+dev.off()
+```
+
+```{r}
+cluster2 <- plotGenes(
+  vecGeneIDs       = head(names(mfuzz_clusters$cluster)[mfuzz_clusters$cluster==2],5),
+  objectImpulseDE2 = objectImpulseDE2,
+  boolSimplePlot = TRUE,
+  boolCaseCtrl     = TRUE,
+  dirOut           = paste0(outdir,"/ImpulseDE/"),
+  strFileName = "cluster2.pdf",
+  boolMultiplePlotsPerPage = FALSE,
+  strNameRefMethod = NULL)
+
+cluster2
+```
+
+```{r}
+cluster3 <- plotGenes(
+  vecGeneIDs       = head(names(mfuzz_clusters$cluster)[mfuzz_clusters$cluster==3],5),
+  objectImpulseDE2 = objectImpulseDE2,
+  boolSimplePlot = TRUE,
+  boolCaseCtrl     = TRUE,
+  dirOut           = paste0(outdir,"/ImpulseDE/"),
+  strFileName = "cluster3.pdf",
+  boolMultiplePlotsPerPage = FALSE,
+  strNameRefMethod = NULL)
+
+cluster3
+```
+
+```{r}
+# Extract cluster assignments
+cluster_assignments <- data.frame(
+  gene = names(mfuzz_clusters$cluster),
+  cluster = mfuzz_clusters$cluster,
+  membership = apply(mfuzz_clusters$membership, 1, max)
+)
+
+# Get cluster centers (average trajectory)
+cluster_centers <- mfuzz_clusters$centers
+
+# Identify peak timepoint for each cluster
+peak_times <- apply(cluster_centers, 1, which.max)
+timepoints <- c(0, 1, 3, 12, 24, 72, 120)
+cluster_peaks <- data.frame(
+  cluster = 1:optimal_c,
+  peak_time = timepoints[peak_times])
+
+print(cluster_peaks)
+```
+
+##### View clustered genes of interest
+
+```{r}
+HSPS <- impulse_results %>% filter(Gene %in% stress_genes_ids) %>% arrange(padj) %>% left_join(HeatStressGenes_unique, by = join_by(Gene==query)) %>% filter(grepl("HSP",gene_id)) %>% pull(Gene)
+
+cluster_assignments %>% filter(gene %in% HSPS)
+```
+
+```{r}
+heat_clustered <- HeatStressGenes_unique %>% left_join(cluster_assignments, by = join_by(query==gene)) %>%
+  arrange(cluster, desc(cluster))
+
+# plot this to show which genes are in which cluster
+heat_clustered %>% filter(!is.na(cluster)) %>% ggplot(aes(y=reorder(gene_id, cluster), x=factor(cluster), fill=cluster)) +
+  geom_tile() +
+  theme_bw() +
+  labs(x="Mfuzz Cluster", y="Gene ID", title="Heat stress genes clustered by temporal expression pattern")
+```
+
+
+```{r}
+channel_clustered <- membrane_channels  %>% unique() %>% 
+  filter(gene_set != "SLC") %>%
+  left_join(cluster_assignments, by = join_by(query==gene)) %>%
+  arrange(cluster)  %>%
+  filter(!is.na(cluster)) 
+
+cat("Total membrane channel genes:", nrow(membrane_channels), "\n")
+cat("Found in ImpulseDE/Mfuzz data:", nrow(channel_clustered), "\n")
+
+channel_clustered %>%
+    ggplot(aes(x = factor(cluster), y = reorder(short_name, cluster), fill = gene_set)) +
+  geom_tile(color = "white") +
+  geom_text(aes(label = cluster), size = 2) +
+  theme_bw() +
+  theme(axis.text.y = element_text(size = 6)) +
+  labs(x = "Mfuzz Cluster", 
+       y = "Gene ID", 
+       fill = "Channel Type",
+       title = "Membrane Channel Genes - Cluster Assignment",
+       subtitle = paste0(sum(!is.na(channel_clustered$cluster)), 
+                        " genes significantly DE"))
+
+heat_eset_membrane <- heat_eset[channel_clustered$query, ]
+mfuzz_clusters_membrane <- mfuzz_clusters
+mfuzz_clusters_membrane$membership <- mfuzz_clusters$membership[channel_clustered$query, ]
+mfuzz_clusters_membrane$cluster <- mfuzz_clusters$cluster[channel_clustered$query]
+
+mfuzz.plot(
+  heat_eset_membrane,
+  cl = mfuzz_clusters_membrane,
+  new.window = FALSE,
+  mfrow = c(3,3),
+  time.labels = c(0,1,3,12,24,72,120)
+)
+
+# Visualize clusters
+pdf(paste0(outdir,"/membrane_temporal_clusters.pdf"), width = 12, height = 10)
+mfuzz.plot2(heat_eset_membrane, cl = mfuzz_clusters_membrane, mfrow = c(3, 4), 
+            time.labels = c("0", "1", "3", "12", "24", "72", "120"),
+            xlab = "Time (hours)",x11=FALSE)
+dev.off()
+
+plot_df <- as.data.frame(t(vsd_mat)) %>%
+  rownames_to_column(var="sample") %>%
+  left_join(meta, by=c("sample"="sample")) %>% 
+  pivot_longer(cols = all_of(rownames(vsd_mat)), names_to="query", values_to="expression") %>%
+  mutate(is_DE = query %in% rownames(DE_05)) %>% right_join(membrane_DE_genes %>% rownames_to_column("query"))
+
+pdf(paste0(outdir,"/ImpulseDE/membrane_sig_plots_clustered.pdf"), width = 14, height = 14)
+
+for (cl in c(0,unique(channel_clustered$cluster))){
+  plot_df_filtered <- plot_df %>% left_join(channel_clustered) %>% filter(!is.na(cluster))
+  
+  if (cl ==0){
+    plot_df_low_membership <- plot_df_filtered %>% filter(membership<0.5)
+    
+    plot <- plot_df_low_membership  %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+    stat_summary(fun="mean", geom="line") +
+    scale_color_manual(values = treat_colors) +
+    stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+    facet_wrap(short_name~query,scales="free_y") +
+    theme_bw() +
+    theme(strip.text = element_text(size = 6)) +
+    labs(y="VST expression", x="Timepoint",title=paste("Membership < 0.5"))
+    print(plot)
+  } else{
+    plot_df_cluster <- plot_df_filtered %>% filter(cluster==cl)
+      if (nrow(plot_df_cluster)>1){
+    plot <- plot_df_cluster  %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+    stat_summary(fun="mean", geom="line") +
+    scale_color_manual(values = treat_colors) +
+    stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+    facet_wrap(short_name~query,scales="free_y") +
+    theme_bw() +
+    theme(strip.text = element_text(size = 6)) +
+    labs(y="VST expression", x="Timepoint",title=paste("Cluster ",cl))
+    print(plot)
+  }
+  }
+}
+dev.off()
+```
+
+
 
