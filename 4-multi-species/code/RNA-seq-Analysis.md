@@ -764,7 +764,7 @@ meta_impulse <- meta %>%
   select(-c(species,treatment))
 ```
 
-#### 3. Then, run ImpulseDE2 object
+#### 3. Then, run ImpulseDE2
 
 This takes a ton of time and memory, so I run it once then save as an
 RDS.
@@ -1691,12 +1691,12 @@ print(cluster_peaks)
 ```
 
     ##   cluster peak_time
-    ## 1       1         0
-    ## 2       2         0
-    ## 3       3         3
+    ## 1       1         3
+    ## 2       2         3
+    ## 3       3         0
     ## 4       4         3
-    ## 5       5       120
-    ## 6       6         3
+    ## 5       5         0
+    ## 6       6        72
 
 ##### View clustered genes of interest
 
@@ -1709,7 +1709,7 @@ cluster_assignments %>% filter(gene %in% HSPS)
     ##                                                                                gene
     ## Pocillopora_acuta_HIv2___RNAseq.g23086.t1 Pocillopora_acuta_HIv2___RNAseq.g23086.t1
     ##                                           cluster membership
-    ## Pocillopora_acuta_HIv2___RNAseq.g23086.t1       6  0.7487417
+    ## Pocillopora_acuta_HIv2___RNAseq.g23086.t1       2  0.9050559
 
 ``` r
 heat_clustered <- HeatStressGenes_unique %>% left_join(cluster_assignments, by = join_by(query==gene)) %>%
@@ -1831,22 +1831,31 @@ dev.off()
 
 ![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-35-2.png)<!-- -->
 
-## MON: pre-processing and visualization
+## *Montipora capitata*
 
-Read in raw count data
+### Preproccessing
+
+#### 1. Read in raw count data
 
 ``` r
-#set standard output directory for figures
+# set standard output directory for figures
 outdir <- "../output_RNA/differential_expression/MON_MCapV3"
+species <- "Mcap"
 
-counts_raw <- read.csv("../output_RNA/count_matrices/MON_MCapV3_gene_count_matrix.csv", row.names = 1) #load in data
+# load in data
+counts_raw <- read.csv("../output_RNA/count_matrices/MON_MCapV3_gene_count_matrix.csv", row.names = 1)
 
+# make list of samples 
 samples <- colnames(counts_raw)
+
+# read in SwissProt annotation
+SwissProt <- read.delim("../references/annotation/Montipora_capitata_HIv3_Swissprot_GO.tsv")
 ```
 
-Read in metadata
+#### 2. Extract metadata from sample names
 
 ``` r
+# create metadata dataframe from sample names
 meta <- data.frame(
   sample = samples, 
   species = str_split(samples, "_", simplify = TRUE)[,1], #extract first part of sample name to get species
@@ -1855,16 +1864,19 @@ meta <- data.frame(
   treatment = str_replace(str_split(samples, "_", simplify = TRUE)[,3],"\\d", "")
 )
 
+# add rownames
 rownames(meta) <- meta$sample
 
+# make time and treatment factors
 meta$time <- factor(meta$time, levels = as.character(sort(unique(as.numeric(meta$time)))))
 meta$treatment <- factor(meta$treatment)
 
+# save metadata
 meta <- meta %>% arrange(time, treatment)
 write.csv(meta, paste0(outdir,"/RNA_seq_metadata.csv"))
 ```
 
-Reorder sample columns based on factor order
+#### 3. Confirm that sample names in metadata and count matrix match and are in the same order
 
 ``` r
 counts_raw <- counts_raw[, meta$sample]
@@ -1884,7 +1896,9 @@ stopifnot(all(meta$sample %in% colnames(counts_raw))) #are all of the sample nam
 stopifnot(all(meta$sample == colnames(counts_raw))) #are they the same in the same order?
 ```
 
-pOverA filtering to reduce dataset
+#### 4. pOverA filtering to reduce dataset
+
+##### Note to self: maybe replace this with treatment-specific filtering. To get genes expressed only at one timepoint in one treatment
 
 ``` r
 ffun<-filterfun(pOverA(0.07,10))  # Keep genes expressed at 10+ counts in at least 7% of samples - expressed in all 3 samples at one timepoint from one treatment
@@ -1907,9 +1921,13 @@ paste0("% of genes kept: ", round(100*(sum(counts_filt_poa)/nrow(counts_raw)),di
 write.csv(filtered_counts, file = file.path(outdir, "filtered_counts.csv"))
 ```
 
-### [DESeq2](https://www.bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html)
+### Visualization of overall patterns, outlier detection
 
-Create DESeq object and run DESeq2
+We will use
+[DESeq2](https://www.bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html)
+to normalize and visualize data
+
+#### 1. Create DESeq object and run DESeq2
 
 ``` r
 dds <- DESeqDataSetFromMatrix(countData = filtered_counts,
@@ -1919,7 +1937,7 @@ dds <- DESeqDataSetFromMatrix(countData = filtered_counts,
 dds <- DESeq(dds)
 ```
 
-Check size factors.
+#### 2. Check size factors
 
 ``` r
 SF.dds <- estimateSizeFactors(dds) #estimate size factors to determine if we can use vst  to transform our data. Size factors should be less than 4 for us to use vst
@@ -1947,7 +1965,7 @@ all(sizeFactors(SF.dds)) < 4
 
     ## [1] TRUE
 
-Transforming count data for visualization
+#### 3. VST-Transforming count data for visualization
 
 ``` r
 vsd <- vst(dds, blind=FALSE)
@@ -1957,10 +1975,10 @@ vsd_mat <- assay(vsd)
 write.csv(vsd_mat, file = file.path(outdir, "vsd_expression_matrix.csv"))
 ```
 
-### Heatmap of the sample-to-sample distances
+#### 4. Heatmap of the sample-to-sample distances
 
 ``` r
-sampleDists <- dist(t(assay(vsd)))
+sampleDists <- dist(t(vsd_mat))
 
 sampleDistMatrix <- as.matrix(sampleDists)
 colnames(sampleDistMatrix) <- NULL
@@ -1971,7 +1989,7 @@ pheatmap(sampleDistMatrix,
 
 ![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-45-1.png)<!-- -->
 
-### Principal component plot of the samples
+#### 5. PCA
 
 ``` r
 pcaData <- plotPCA(vsd, intgroup=c("time", "treatment"), returnData=TRUE)
@@ -1993,24 +2011,15 @@ PCA <- ggplot() +
   xlab(paste0("PC1: ",percentVar[1],"% variance")) +
   ylab(paste0("PC2: ",percentVar[2],"% variance")) + 
   coord_fixed() + theme_bw()
-PCA
-```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-46-1.png)<!-- -->
-
-``` r
 save_ggplot(PCA, "PCA_MON")
 ```
 
-### Heatmap of count matrix
+#### 6. Heatmap of variable genes
 
 ``` r
 topVarGenes <- head(order(rowVars(assay(vsd)), decreasing=TRUE), 500)
 
-time_colors <- colorRampPalette(c("#ffffcc","#0c2c84"))(7)
-names(time_colors) <- levels(meta$time)
-
-#view top 500 most vairable genes
 pheatmap(assay(vsd)[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
          cluster_cols=FALSE, 
          annotation_col= meta[,c("treatment","time")],
@@ -2033,24 +2042,24 @@ pheatmap(assay(vsd)[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
 ### Heat stress genes
 
 ``` r
-HeatStressGenes_Mcap <- read_csv("/project/pi_hputnam_uri_edu/zdellaert/snRNA_analysis/multi-sp-snRNA/reference_genes/genes_of_interest/HeatStressGenes_Mcap.csv") %>% dplyr::select(-1) %>% dplyr::rename(query = Mcap_gene) %>% dplyr::select(query,everything()) #%>% filter(ref_first_author =="Majerova")
+HeatStressGenes <- read_csv(paste0("/project/pi_hputnam_uri_edu/zdellaert/snRNA_analysis/multi-sp-snRNA/reference_genes/genes_of_interest/HeatStressGenes_", species ,".csv")) %>% dplyr::select(-1) %>% dplyr::rename(query = paste0(species,"_gene")) %>% dplyr::select(query,everything()) #%>% filter(ref_first_author =="Majerova")
 
-HeatStressGenes_Mcap_unique <- HeatStressGenes_Mcap %>% group_by(query) %>%
+HeatStressGenes_unique <- HeatStressGenes %>% group_by(query) %>%
   summarize(gene_id = paste(unique(gene_id), collapse = ","),
             response_type = paste(unique(response_type), collapse = ","),
             category = paste(unique(category), collapse = ",")
             ) 
 
-HeatStressGenes_Mcap_unique <- HeatStressGenes_Mcap_unique %>% filter(query %in% rownames(vsd_mat))
+HeatStressGenes_unique <- HeatStressGenes_unique %>% filter(query %in% rownames(vsd_mat))
  
-stress_genes_ids <- unique(HeatStressGenes_Mcap_unique$query) 
+stress_genes_ids <- unique(HeatStressGenes_unique$query) 
 stress_genes_vsd <- vsd_mat[stress_genes_ids, ]
 
 plot_df <- as.data.frame(t(stress_genes_vsd)) %>%
   rownames_to_column(var="sample") %>%
   left_join(meta, by=c("sample"="sample")) %>%
   pivot_longer(cols = all_of(stress_genes_ids), names_to="query", values_to="expression") %>%
-  left_join(HeatStressGenes_Mcap_unique)
+  left_join(HeatStressGenes_unique)
 
 plot_df %>% ggplot(aes(x=time, y=expression, color=gene_id, group=gene_id)) +
   stat_summary(fun="mean", geom="line") +
@@ -2110,7 +2119,7 @@ plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_
 
 ![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-48-4.png)<!-- -->
 
-### DESeq LRT Test
+#### DESeq LRT Test
 
 ``` r
 dds <- DESeqDataSetFromMatrix(countData = filtered_counts,
@@ -2155,7 +2164,7 @@ top_500_DE_genes <- DE_05 %>% arrange(log2FoldChange) %>% head(500) %>% rownames
 
 #view top 500 most vairable genes
 pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
-         cluster_cols=FALSE,
+         cluster_cols=FALSE, 
          annotation_col= meta[,c("treatment","time")],
          annotation_colors = list("treatment" = treat_colors,
                                   "time" = time_colors))
@@ -2196,14 +2205,14 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
 
 ![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-49-6.png)<!-- -->
 
-### DE Heat stress genes
+#### DE Heat stress genes
 
 ``` r
 plot_df <- as.data.frame(t(stress_genes_vsd)) %>%
   rownames_to_column(var="sample") %>%
   left_join(meta, by=c("sample"="sample")) %>%
   pivot_longer(cols = all_of(stress_genes_ids), names_to="query", values_to="expression") %>%
-  left_join(HeatStressGenes_Mcap_unique) %>% left_join(DE_05 %>% rownames_to_column(var="query")) %>%
+  left_join(HeatStressGenes_unique) %>% left_join(DE_05 %>% rownames_to_column(var="query")) %>%
   filter(!is.na(padj))
 
 plot_df %>% ggplot(aes(x=time, y=expression, color=gene_id, group=gene_id)) +
@@ -2257,27 +2266,54 @@ plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_
   stat_summary(fun="mean", geom="line") +
   scale_color_manual(values = treat_colors) +
   stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
-  facet_wrap(~paste0(str_replace(query,"Montipora_capitata_HIv3___",""), ": ", gene_id)) +
-  theme_bw() +
-  labs(y="VST expression", x="Timepoint")
-```
-
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-50-4.png)<!-- -->
-
-``` r
-plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_id)) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
-  stat_summary(fun="mean", geom="line") +
-  scale_color_manual(values = treat_colors) +
-  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
   facet_wrap(~paste0(gene_id, ": ",str_replace(query,"Montipora_capitata_HIv3___","")),scales="free_y") +
   theme_bw() +
   labs(y="VST expression", x="Timepoint", title = "Selected Type 1 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-50-5.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-50-4.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "highlighted_DE_Type1")
+
+plot_df_norm <- plot_df %>%
+  group_by(query, time) %>%
+  mutate(delta = expression - mean(expression[treatment == "C"]))
+
+plot_df_norm %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_id)) %>% ggplot(aes(x=time, y=delta, color=treatment, group=treatment)) +
+  stat_summary(fun="mean", geom="line") +
+  scale_color_manual(values = treat_colors) +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+  facet_wrap(~paste0(gene_id, ": ",str_replace(query,"Montipora_capitata_HIv3___","")),scales="free_y") +
+  theme_bw() +
+  labs(y="VST expression", x="Timepoint", title = "Norm to control -- Selected Type 1 DE (LRT) Response genes")
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-50-5.png)<!-- -->
+
+``` r
+save_ggplot(last_plot(), "highlighted_DE_Type1_norm_control")
+
+plot_df_norm <- plot_df %>%
+  group_by(query, treatment) %>%
+  mutate(baseline = mean(expression[time == "0"])) %>%
+  mutate(delta = expression - baseline) %>%
+  ungroup()
+
+plot_df_norm %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_id)) %>%
+  ggplot(aes(x=time, y=delta, color=treatment, group=treatment)) +
+  stat_summary(fun="mean", geom="line") +
+  scale_color_manual(values = treat_colors) +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+  facet_wrap(~paste0(gene_id, ": ",str_replace(query,"Montipora_capitata_HIv3___","")),scales="free_y") +
+  theme_bw() +
+  labs(y="VST expression", x="Timepoint", title = "Norm to T0 -- Selected Type 1 DE (LRT) Response genes")
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-50-6.png)<!-- -->
+
+``` r
+save_ggplot(last_plot(), "highlighted_DE_Type1_norm_T0")
 
 plot_df %>% filter(grepl("GDH",gene_id)|grepl("GS",gene_id)|grepl("AMT1",gene_id)) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
   stat_summary(fun="mean", geom="line") +
@@ -2288,7 +2324,7 @@ plot_df %>% filter(grepl("GDH",gene_id)|grepl("GS",gene_id)|grepl("AMT1",gene_id
   labs(y="VST expression", x="Timepoint", title = "Selected Type 2 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-50-6.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-50-7.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "highlighted_DE_Type2")
@@ -2313,17 +2349,21 @@ for (genelist in membrane_list){
   plot_df_filtered <- plot_df %>% filter(grepl(genelist,gene_set)) %>% filter(is_DE == FALSE)
   if (nrow(plot_df_filtered)>1){
     plot <- plot_df_filtered  %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
-    stat_summary(fun="mean", geom="line") +
-    scale_color_manual(values = treat_colors) +
-    stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
-    facet_wrap(short_name~paste0("DE by LRT: ",is_DE),scales="free_y") +
-    theme_bw() +
-    theme(strip.text = element_text(size = 6)) +
-    labs(y="VST expression", x="Timepoint")
-    print(plot)
+  stat_summary(fun="mean", geom="line") +
+  scale_color_manual(values = treat_colors) +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+  facet_wrap(short_name~paste0("DE by LRT: ",is_DE),scales="free_y") +
+  theme_bw() +
+  theme(strip.text = element_text(size = 6)) +
+  labs(y="VST expression", x="Timepoint")
+  print(plot)
   }
 }
+```
 
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-51-1.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-51-2.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-51-3.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-51-4.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-51-5.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-51-6.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-51-7.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-51-8.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-51-9.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-51-10.png)<!-- -->
+
+``` r
 for (genelist in membrane_list){
   plot_df_filtered <- plot_df %>% filter(grepl(genelist,gene_set)) %>% filter(is_DE == TRUE)
   if (nrow(plot_df_filtered)>1){
@@ -2340,13 +2380,16 @@ for (genelist in membrane_list){
 }
 ```
 
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-51-11.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-51-12.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-51-13.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-51-14.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-51-15.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-51-16.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-51-17.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-51-18.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-51-19.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-51-20.png)<!-- -->
+
 ### ImpulseDE2
+
+#### Background info
 
 Based on [this
 paper](https://academic.oup.com/bib/article/20/1/288/4364840#130283262),
 this is the best package to use other than comparing each time point
-against each other individually. I am also planning to ID gene modules
-via WGCNA.
+against each other individually.
 
 Repo here: <https://github.com/YosefLab/ImpulseDE2>
 
@@ -2363,12 +2406,17 @@ differential expression analysis of time course sequencing data, Nucleic
 Acids Research, Volume 46, Issue 20, 16 November 2018, Page e119,
 <https://doi.org/10.1093/nar/gky675>
 
+#### 1. Install and load
+
 ``` r
 #library(devtools)
 #install_github("YosefLab/ImpulseDE2")
 
 library(ImpulseDE2)
+library(ComplexHeatmap)
 ```
+
+#### 2. Metadata formatting
 
 First, reformat our metadata table to match the column names used in the
 ImpulseDE2 vignette.
@@ -2377,26 +2425,18 @@ ImpulseDE2 vignette.
 meta_impulse <- meta %>%
   dplyr::rename(Sample = sample, Time = time, Batch = replicate) %>% 
   mutate(Time = as.numeric(as.character(Time)),
-         #Time = as.numeric(Time),
          Condition = str_replace(treatment, "C", "control"),
          Condition = str_replace(Condition, "H", "case")
          ) %>%
   select(-c(species,treatment))
 ```
 
-Then, generate the ImpulseDE2 object
+#### 3. Then, run ImpulseDE2
+
+This takes a ton of time and memory, so I run it once then save as an
+RDS.
 
 ``` r
-#test with just 500 genes that I determined to be DE by treatment/timepoint with DESeq2 
-objectImpulseDE2 <- runImpulseDE2(
-  matCountData    = as.matrix(filtered_counts)[top_500_DE_genes,], #or use filtered_counts 
-  dfAnnotation    = meta_impulse,
-  boolCaseCtrl    = TRUE,
-  vecConfounders  = c("Batch"), #only use if you want to try to control for batch effects
-  boolIdentifyTransients = TRUE, #use if you want to ID transiently- vs permanently-regulated genes
-  scaNProc        = 8 )
-
-#run with all genes
 objectImpulseDE2 <- runImpulseDE2(
   matCountData    = as.matrix(counts_raw), #or use filtered_counts 
   dfAnnotation    = meta_impulse,
@@ -2408,91 +2448,20 @@ objectImpulseDE2 <- runImpulseDE2(
 saveRDS(objectImpulseDE2, file = paste0(outdir, "/objectImpulseDE2.rds"))
 ```
 
+#### 4. View and save results
+
 ``` r
 objectImpulseDE2 <- readRDS(paste0(outdir, "/objectImpulseDE2.rds"))
 
 impulse_results <- objectImpulseDE2$dfImpulseDE2Results
-head(impulse_results)
-```
-
-    ##                                                                                Gene
-    ## Montipora_capitata_HIv3___RNAseq.g4581.t1 Montipora_capitata_HIv3___RNAseq.g4581.t1
-    ## Montipora_capitata_HIv3___RNAseq.g4750.t1 Montipora_capitata_HIv3___RNAseq.g4750.t1
-    ## Montipora_capitata_HIv3___RNAseq.g4751.t1 Montipora_capitata_HIv3___RNAseq.g4751.t1
-    ## Montipora_capitata_HIv3___RNAseq.g4752.t1 Montipora_capitata_HIv3___RNAseq.g4752.t1
-    ## Montipora_capitata_HIv3___RNAseq.g4753.t1 Montipora_capitata_HIv3___RNAseq.g4753.t1
-    ## Montipora_capitata_HIv3___RNAseq.g4763.t1                                      <NA>
-    ##                                                      p        padj loglik_full
-    ## Montipora_capitata_HIv3___RNAseq.g4581.t1 0.2659787573 0.753200054  -225.00426
-    ## Montipora_capitata_HIv3___RNAseq.g4750.t1 0.8332509794 1.000000000   -75.39967
-    ## Montipora_capitata_HIv3___RNAseq.g4751.t1 0.1100827237 0.423666339  -210.17009
-    ## Montipora_capitata_HIv3___RNAseq.g4752.t1 0.0036448166 0.033193214  -215.41533
-    ## Montipora_capitata_HIv3___RNAseq.g4753.t1 0.0001124423 0.001992063  -278.99327
-    ## Montipora_capitata_HIv3___RNAseq.g4763.t1           NA          NA          NA
-    ##                                           loglik_red df_full df_red        mean
-    ## Montipora_capitata_HIv3___RNAseq.g4581.t1 -228.22281      17     12  474.573139
-    ## Montipora_capitata_HIv3___RNAseq.g4750.t1  -76.45634      17     12    4.476436
-    ## Montipora_capitata_HIv3___RNAseq.g4751.t1 -214.65738      17     12  213.864038
-    ## Montipora_capitata_HIv3___RNAseq.g4752.t1 -224.16473      17     12  206.042970
-    ## Montipora_capitata_HIv3___RNAseq.g4753.t1 -291.73417      17     12 2382.308192
-    ## Montipora_capitata_HIv3___RNAseq.g4763.t1         NA      NA     NA          NA
-    ##                                           converge_combined converge_case
-    ## Montipora_capitata_HIv3___RNAseq.g4581.t1                 0             0
-    ## Montipora_capitata_HIv3___RNAseq.g4750.t1                 0             0
-    ## Montipora_capitata_HIv3___RNAseq.g4751.t1                 0             0
-    ## Montipora_capitata_HIv3___RNAseq.g4752.t1                 0             0
-    ## Montipora_capitata_HIv3___RNAseq.g4753.t1                 0             0
-    ## Montipora_capitata_HIv3___RNAseq.g4763.t1                NA            NA
-    ##                                           converge_control converge_sigmoid
-    ## Montipora_capitata_HIv3___RNAseq.g4581.t1                0                0
-    ## Montipora_capitata_HIv3___RNAseq.g4750.t1                0                0
-    ## Montipora_capitata_HIv3___RNAseq.g4751.t1                0                0
-    ## Montipora_capitata_HIv3___RNAseq.g4752.t1                0                0
-    ## Montipora_capitata_HIv3___RNAseq.g4753.t1                0                0
-    ## Montipora_capitata_HIv3___RNAseq.g4763.t1               NA               NA
-    ##                                           impulseTOsigmoid_p
-    ## Montipora_capitata_HIv3___RNAseq.g4581.t1       1.472912e-03
-    ## Montipora_capitata_HIv3___RNAseq.g4750.t1       2.832922e-01
-    ## Montipora_capitata_HIv3___RNAseq.g4751.t1       2.242969e-01
-    ## Montipora_capitata_HIv3___RNAseq.g4752.t1       4.218156e-07
-    ## Montipora_capitata_HIv3___RNAseq.g4753.t1       4.332476e-09
-    ## Montipora_capitata_HIv3___RNAseq.g4763.t1                 NA
-    ##                                           impulseTOsigmoid_padj
-    ## Montipora_capitata_HIv3___RNAseq.g4581.t1          1.527376e-02
-    ## Montipora_capitata_HIv3___RNAseq.g4750.t1          6.677200e-01
-    ## Montipora_capitata_HIv3___RNAseq.g4751.t1          5.843571e-01
-    ## Montipora_capitata_HIv3___RNAseq.g4752.t1          1.840360e-05
-    ## Montipora_capitata_HIv3___RNAseq.g4753.t1          3.499842e-07
-    ## Montipora_capitata_HIv3___RNAseq.g4763.t1                    NA
-    ##                                           sigmoidTOconst_p sigmoidTOconst_padj
-    ## Montipora_capitata_HIv3___RNAseq.g4581.t1      0.012080884          0.08773932
-    ## Montipora_capitata_HIv3___RNAseq.g4750.t1      0.941110041          1.00000000
-    ## Montipora_capitata_HIv3___RNAseq.g4751.t1      0.006020669          0.04892814
-    ## Montipora_capitata_HIv3___RNAseq.g4752.t1      0.025241110          0.16017914
-    ## Montipora_capitata_HIv3___RNAseq.g4753.t1      0.002283761          0.02143738
-    ## Montipora_capitata_HIv3___RNAseq.g4763.t1               NA                  NA
-    ##                                           isTransient isMonotonous allZero
-    ## Montipora_capitata_HIv3___RNAseq.g4581.t1       FALSE        FALSE   FALSE
-    ## Montipora_capitata_HIv3___RNAseq.g4750.t1       FALSE        FALSE   FALSE
-    ## Montipora_capitata_HIv3___RNAseq.g4751.t1       FALSE        FALSE   FALSE
-    ## Montipora_capitata_HIv3___RNAseq.g4752.t1        TRUE        FALSE   FALSE
-    ## Montipora_capitata_HIv3___RNAseq.g4753.t1        TRUE        FALSE   FALSE
-    ## Montipora_capitata_HIv3___RNAseq.g4763.t1          NA           NA    TRUE
-
-``` r
+impulse_results_annot <- impulse_results %>% left_join(SwissProt, by = join_by("Gene"=="query")) %>% filter(!is.na(Gene))
 write.table(impulse_results,file.path(outdir, "ImpulseDE2_Results.txt"),row.names=F,quote=F,sep="\t")
 
 # Genes with significant treatment effect on temporal trajectory
-sig_genes <- impulse_results[impulse_results$padj < 0.05 & 
-                               impulse_results$loglik_full > impulse_results$loglik_red, ]
+impulse_sig_genes <- impulse_results %>% filter(padj < 0.05) 
 
-nrow(sig_genes)
-```
-
-    ## [1] 12918
-
-``` r
-head(sig_genes[order(sig_genes$padj), ])
+#preview top DE genes 
+impulse_sig_genes %>% arrange(padj) %>% head(5) %>% dplyr::select(!contains("converge"))
 ```
 
     ##                                                                                  Gene
@@ -2501,76 +2470,127 @@ head(sig_genes[order(sig_genes$padj), ])
     ## Montipora_capitata_HIv3___RNAseq.g7282.t1   Montipora_capitata_HIv3___RNAseq.g7282.t1
     ## Montipora_capitata_HIv3___TS.g637.t1             Montipora_capitata_HIv3___TS.g637.t1
     ## Montipora_capitata_HIv3___RNAseq.g40931.t1 Montipora_capitata_HIv3___RNAseq.g40931.t1
-    ## Montipora_capitata_HIv3___RNAseq.g984.t1     Montipora_capitata_HIv3___RNAseq.g984.t1
     ##                                                        p          padj
     ## Montipora_capitata_HIv3___RNAseq.g49833.t1 1.039742e-133 4.921930e-129
     ## Montipora_capitata_HIv3___RNAseq.g49832.t1  9.937684e-61  2.352150e-56
     ## Montipora_capitata_HIv3___RNAseq.g7282.t1   4.581857e-43  7.229865e-39
     ## Montipora_capitata_HIv3___TS.g637.t1        1.770894e-42  2.095765e-38
     ## Montipora_capitata_HIv3___RNAseq.g40931.t1  1.716716e-37  1.625318e-33
-    ## Montipora_capitata_HIv3___RNAseq.g984.t1    2.668861e-36  2.105642e-32
     ##                                            loglik_full loglik_red df_full
     ## Montipora_capitata_HIv3___RNAseq.g49833.t1   -321.9301  -636.4818      17
     ## Montipora_capitata_HIv3___RNAseq.g49832.t1   -351.5874  -496.9431      17
     ## Montipora_capitata_HIv3___RNAseq.g7282.t1    -303.9529  -408.1409      17
     ## Montipora_capitata_HIv3___TS.g637.t1         -303.6075  -406.4238      17
     ## Montipora_capitata_HIv3___RNAseq.g40931.t1   -231.1116  -322.2674      17
-    ## Montipora_capitata_HIv3___RNAseq.g984.t1     -258.1393  -346.5052      17
-    ##                                            df_red      mean converge_combined
-    ## Montipora_capitata_HIv3___RNAseq.g49833.t1     12 6104.4116                 0
-    ## Montipora_capitata_HIv3___RNAseq.g49832.t1     12 9512.9893                 0
-    ## Montipora_capitata_HIv3___RNAseq.g7282.t1      12 5185.0437                 0
-    ## Montipora_capitata_HIv3___TS.g637.t1           12 2326.8821                 0
-    ## Montipora_capitata_HIv3___RNAseq.g40931.t1     12  832.9663                 0
-    ## Montipora_capitata_HIv3___RNAseq.g984.t1       12 1106.3270                 0
-    ##                                            converge_case converge_control
-    ## Montipora_capitata_HIv3___RNAseq.g49833.t1             0                0
-    ## Montipora_capitata_HIv3___RNAseq.g49832.t1             0                0
-    ## Montipora_capitata_HIv3___RNAseq.g7282.t1              0                0
-    ## Montipora_capitata_HIv3___TS.g637.t1                   0                0
-    ## Montipora_capitata_HIv3___RNAseq.g40931.t1             0                0
-    ## Montipora_capitata_HIv3___RNAseq.g984.t1               0                0
-    ##                                            converge_sigmoid impulseTOsigmoid_p
-    ## Montipora_capitata_HIv3___RNAseq.g49833.t1                0       1.621986e-84
-    ## Montipora_capitata_HIv3___RNAseq.g49832.t1                0       5.447334e-46
-    ## Montipora_capitata_HIv3___RNAseq.g7282.t1                 0       9.010205e-63
-    ## Montipora_capitata_HIv3___TS.g637.t1                      0       3.345414e-06
-    ## Montipora_capitata_HIv3___RNAseq.g40931.t1                0       6.233101e-01
-    ## Montipora_capitata_HIv3___RNAseq.g984.t1                  0       2.864061e-02
+    ##                                            df_red      mean impulseTOsigmoid_p
+    ## Montipora_capitata_HIv3___RNAseq.g49833.t1     12 6104.4116       1.621986e-84
+    ## Montipora_capitata_HIv3___RNAseq.g49832.t1     12 9512.9893       5.447334e-46
+    ## Montipora_capitata_HIv3___RNAseq.g7282.t1      12 5185.0437       9.010205e-63
+    ## Montipora_capitata_HIv3___TS.g637.t1           12 2326.8821       3.345414e-06
+    ## Montipora_capitata_HIv3___RNAseq.g40931.t1     12  832.9663       6.233101e-01
     ##                                            impulseTOsigmoid_padj
     ## Montipora_capitata_HIv3___RNAseq.g49833.t1          7.678158e-80
     ## Montipora_capitata_HIv3___RNAseq.g49832.t1          6.446647e-42
     ## Montipora_capitata_HIv3___RNAseq.g7282.t1           2.132625e-58
     ## Montipora_capitata_HIv3___TS.g637.t1                1.046134e-04
     ## Montipora_capitata_HIv3___RNAseq.g40931.t1          9.948876e-01
-    ## Montipora_capitata_HIv3___RNAseq.g984.t1            1.474483e-01
     ##                                            sigmoidTOconst_p sigmoidTOconst_padj
     ## Montipora_capitata_HIv3___RNAseq.g49833.t1    6.956522e-118       3.293078e-113
     ## Montipora_capitata_HIv3___RNAseq.g49832.t1     1.064145e-61        1.259362e-57
     ## Montipora_capitata_HIv3___RNAseq.g7282.t1      1.407595e-22        4.412764e-20
     ## Montipora_capitata_HIv3___TS.g637.t1           3.039450e-67        7.194075e-63
     ## Montipora_capitata_HIv3___RNAseq.g40931.t1     2.228143e-66        3.515861e-62
-    ## Montipora_capitata_HIv3___RNAseq.g984.t1       8.894864e-61        8.421302e-57
     ##                                            isTransient isMonotonous allZero
     ## Montipora_capitata_HIv3___RNAseq.g49833.t1        TRUE        FALSE   FALSE
     ## Montipora_capitata_HIv3___RNAseq.g49832.t1        TRUE        FALSE   FALSE
     ## Montipora_capitata_HIv3___RNAseq.g7282.t1         TRUE        FALSE   FALSE
     ## Montipora_capitata_HIv3___TS.g637.t1              TRUE        FALSE   FALSE
     ## Montipora_capitata_HIv3___RNAseq.g40931.t1       FALSE         TRUE   FALSE
-    ## Montipora_capitata_HIv3___RNAseq.g984.t1         FALSE         TRUE   FALSE
 
 ``` r
-library(ComplexHeatmap)
+cat("\nTotal significant genes:", nrow(impulse_sig_genes), "\n")
+```
 
+    ## 
+    ## Total significant genes: 5872
+
+``` r
+cat("\nResponse patterns:\n")
+```
+
+    ## 
+    ## Response patterns:
+
+``` r
+cat("Transient:", sum(impulse_sig_genes$isTransient), "\n")
+```
+
+    ## Transient: 1696
+
+``` r
+cat("Monotonous:", sum(impulse_sig_genes$isMonotonous), "\n")
+```
+
+    ## Monotonous: 2353
+
+``` r
+cat("Complex:", sum(!impulse_sig_genes$isTransient & !impulse_sig_genes$isMonotonous), "\n")
+```
+
+    ## Complex: 1823
+
+#### 5. Heatmap of transient and non-transiently heat-affected genes
+
+``` r
 lsHeatmaps <- plotHeatmap(
   objectImpulseDE2       = objectImpulseDE2,
-  strCondition           = "case",
+  strCondition           = "control",
   boolIdentifyTransients = TRUE, #set to true if true above
-  scaQThres              = 0.01)
+  scaQThres              = 0.05)
 draw(lsHeatmaps$complexHeatmapRaw) 
 ```
 
 ![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-56-1.png)<!-- -->
+
+``` r
+draw(lsHeatmaps$complexHeatmapFit) 
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-56-2.png)<!-- -->
+
+``` r
+lsHeatmaps <- plotHeatmap(
+  objectImpulseDE2       = objectImpulseDE2,
+  strCondition           = "combined",
+  boolIdentifyTransients = TRUE, #set to true if true above
+  scaQThres              = 0.05)
+draw(lsHeatmaps$complexHeatmapRaw) 
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-56-3.png)<!-- -->
+
+``` r
+draw(lsHeatmaps$complexHeatmapFit) 
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-56-4.png)<!-- -->
+
+``` r
+lsHeatmaps <- plotHeatmap(
+  objectImpulseDE2       = objectImpulseDE2,
+  strCondition           = "case",
+  boolIdentifyTransients = TRUE, #set to true if true above
+  scaQThres              = 0.05)
+draw(lsHeatmaps$complexHeatmapRaw) 
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-56-5.png)<!-- -->
+
+``` r
+draw(lsHeatmaps$complexHeatmapFit) 
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-56-6.png)<!-- -->
 
 ``` r
 png(paste0(outdir,"/ImpulseDE/ImpulseDE2_heatmap.png"), width = 2000, height = 2400, res = 300)
@@ -2582,11 +2602,80 @@ dev.off()
     ##   2
 
 ``` r
-majerova_genes <- HeatStressGenes_Mcap %>% filter(ref_first_author =="Majerova")
-stress_genes_ids <- unique(majerova_genes$query)
-plot_stress_genes <- stress_genes_ids[stress_genes_ids %in% rownames(objectImpulseDE2@matCountDataProc)]
+png(paste0(outdir,"/ImpulseDE/ImpulseDE2_heatmap_fit.png"), width = 2000, height = 2400, res = 300)
+draw(lsHeatmaps$complexHeatmapFit)
+dev.off()
+```
 
-impulse_results %>% filter(Gene %in% stress_genes_ids) %>% arrange(padj) %>% left_join(HeatStressGenes_Mcap_unique, by = join_by(Gene==query))
+    ## png 
+    ##   2
+
+``` r
+str(lsHeatmaps$lsvecGeneGroups)
+```
+
+    ## List of 4
+    ##  $ transition_up  : chr [1:824] "Montipora_capitata_HIv3___RNAseq.g4756.t1" "Montipora_capitata_HIv3___RNAseq.g4684.t1" "Montipora_capitata_HIv3___RNAseq.g4749.t1" "Montipora_capitata_HIv3___RNAseq.g6126.t1" ...
+    ##  $ transition_down: chr [1:1529] "Montipora_capitata_HIv3___RNAseq.g26847.t1" "Montipora_capitata_HIv3___RNAseq.g6818.t2" "Montipora_capitata_HIv3___RNAseq.g7513.t1" "Montipora_capitata_HIv3___RNAseq.g8782.t1" ...
+    ##  $ transient_up   : chr [1:736] "Montipora_capitata_HIv3___RNAseq.g3063.t1" "Montipora_capitata_HIv3___TS.g8048.t1b" "Montipora_capitata_HIv3___RNAseq.g24885.t1" "Montipora_capitata_HIv3___TS.g33641.t1" ...
+    ##  $ transient_down : chr [1:960] "Montipora_capitata_HIv3___TS.g27722.t1" "Montipora_capitata_HIv3___RNAseq.g9710.t1" "Montipora_capitata_HIv3___RNAseq.g387.t1" "Montipora_capitata_HIv3___RNAseq.g25576.t1" ...
+
+#### 6. Plot trajectories of top impulseDE genes and specific genes of interest
+
+``` r
+# Plot top 10 differentially expressed (by q-value) genes
+lsgplotsGenes <- plotGenes(
+  vecGeneIDs       = NULL,
+  scaNTopIDs       = 10,
+  objectImpulseDE2 = objectImpulseDE2,
+  boolSimplePlot = TRUE,   boolCaseCtrl     = TRUE,
+  dirOut           = paste0(outdir,"/ImpulseDE/"),
+  boolMultiplePlotsPerPage = FALSE,
+  strNameRefMethod = NULL)
+```
+
+    ## [1] "Creating ../output_RNA/differential_expression/MON_MCapV3/ImpulseDE/ImpulseDE2_Trajectories.pdf"
+
+``` r
+lsgplotsGenes
+```
+
+    ## [[1]]
+
+    ## 
+    ## [[2]]
+
+    ## 
+    ## [[3]]
+
+    ## 
+    ## [[4]]
+
+    ## 
+    ## [[5]]
+
+    ## 
+    ## [[6]]
+
+    ## 
+    ## [[7]]
+
+    ## 
+    ## [[8]]
+
+    ## 
+    ## [[9]]
+
+    ## 
+    ## [[10]]
+
+``` r
+# Majerova 2021 key qPCR genes
+majerova_genes <- HeatStressGenes %>% filter(ref_first_author =="Majerova")
+stress_genes_ids <- unique(majerova_genes$query)
+plot_stress_genes <- stress_genes_ids[stress_genes_ids %in% rownames(objectImpulseDE2@matCountDataProc)] 
+
+impulse_results %>% filter(Gene %in% stress_genes_ids) %>% arrange(padj) %>% left_join(HeatStressGenes_unique, by = join_by(Gene==query))
 ```
 
     ##                                           Gene            p         padj
@@ -2695,7 +2784,7 @@ heatgenes <- plotGenes(
   vecGeneIDs       = plot_stress_genes,
   objectImpulseDE2 = objectImpulseDE2,
   boolSimplePlot = TRUE,   boolCaseCtrl     = TRUE,
-  dirOut           = "../output_RNA/differential_expression/MON_MCapV3/ImpulseDE/",
+  dirOut           = paste0(outdir,"/ImpulseDE/"),
   strFileName = "stress_genes_Majerova.pdf",
   boolMultiplePlotsPerPage = FALSE,
   strNameRefMethod = NULL)
@@ -2764,14 +2853,15 @@ heatgenes
     ## [[19]]
 
 ``` r
-HSPS <- impulse_results %>% filter(Gene %in% stress_genes_ids) %>% arrange(padj) %>% left_join(HeatStressGenes_Mcap_unique, by = join_by(Gene==query)) %>% filter(grepl("HSP",gene_id)) %>% pull(Gene)
+# HSP genes
+HSPS <- impulse_results %>% filter(Gene %in% stress_genes_ids) %>% arrange(padj) %>% left_join(HeatStressGenes_unique, by = join_by(Gene==query)) %>% filter(grepl("HSP",gene_id)) %>% pull(Gene)
 
 HSPs <- plotGenes(
   vecGeneIDs       = HSPS,
   objectImpulseDE2 = objectImpulseDE2,
   boolSimplePlot = TRUE,
   boolCaseCtrl     = TRUE,
-  dirOut           = "../output_RNA/differential_expression/MON_MCapV3/ImpulseDE/",
+  dirOut           = paste0(outdir,"/ImpulseDE/"),
   strFileName = "HSPs.pdf",
   boolMultiplePlotsPerPage = FALSE,
   strNameRefMethod = NULL)
@@ -2785,18 +2875,912 @@ HSPs
 
     ## [[1]]
 
+#### 7. Heatmap of top 500 impulseDE genes
+
 ``` r
+top_500_DE_genes <- impulse_results %>% arrange(padj) %>% head(500) %>% rownames()
+
+pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
+         cluster_cols=FALSE,
+         annotation_col= meta[,c("treatment","time")],
+         annotation_colors = list("treatment" = treat_colors,
+                                  "time" = time_colors))
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-59-1.png)<!-- -->
+
+``` r
+pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
+         cluster_cols=TRUE, cutree_cols = 2,
+         annotation_col= meta[,c("treatment","time")],
+         annotation_colors = list("treatment" = treat_colors,
+                                  "time" = time_colors))
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-59-2.png)<!-- -->
+
+#### 7.5. Heatmap of membrane channel genes
+
+``` r
+membrane_DE_genes <- impulse_results %>%
+  right_join(membrane_channels, join_by("Gene"=="query")) %>% 
+  filter(gene_set != "SLC") %>%
+  filter(padj < 0.05) %>% 
+  column_to_rownames("Gene")
+
+plot_df <- as.data.frame(t(vsd_mat)) %>%
+  rownames_to_column(var="sample") %>%
+  left_join(meta, by=c("sample"="sample")) %>% 
+  pivot_longer(cols = all_of(rownames(vsd_mat)), names_to="query", values_to="expression") %>%
+  mutate(is_DE = query %in% rownames(DE_05)) %>% right_join(membrane_DE_genes %>% rownames_to_column("query"))
+
+membrane_list <- c("aquaporin","TRP",  "Mechanosensory" ,"calcium",  "ER_calcium" ,"Golgi_calcium" , "SLC",  "PMCA",  "Sodium_calcium_exchanger","Bhattacharya2016")
+
+pdf(paste0(outdir,"/ImpulseDE/membrane_sig_plots.pdf"), width = 14, height = 14)
+
+pheatmap(assay(vsd)[rownames(membrane_DE_genes), ], cluster_rows=TRUE, show_rownames=TRUE,
+         cluster_cols=FALSE,
+         labels_row=membrane_DE_genes$short_name,
+         annotation_row = membrane_DE_genes %>% dplyr::select(gene_set),
+         annotation_col= meta[,c("treatment","time")],
+         annotation_colors = list("treatment" = treat_colors,
+                                  "time" = time_colors))
+
+pheatmap(assay(vsd)[rownames(membrane_DE_genes), ], cluster_rows=TRUE, show_rownames=TRUE,
+          cluster_cols=TRUE, cutree_cols = 2,
+         fontsize = 5,
+         labels_row=membrane_DE_genes$short_name,
+         annotation_row = membrane_DE_genes %>% dplyr::select(gene_set),
+         annotation_col= meta[,c("treatment","time")],
+         annotation_colors = list("treatment" = treat_colors,
+                                  "time" = time_colors))
+
+
+for (genelist in unique(plot_df$gene_set)){
+  plot_df_filtered <- plot_df %>% filter(grepl(genelist,gene_set))# %>% filter(is_DE == TRUE)
+  if (nrow(plot_df_filtered)>1){
+    plot <- plot_df_filtered  %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+    stat_summary(fun="mean", geom="line") +
+    scale_color_manual(values = treat_colors) +
+    stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+    facet_wrap(short_name~query,scales="free_y") +
+    theme_bw() +
+    theme(strip.text = element_text(size = 6)) +
+    labs(y="VST expression", x="Timepoint",title=paste(genelist))
+    print(plot)
+  }
+}
+
+dev.off()
+```
+
+    ## png 
+    ##   2
+
+## *Porites compressa*
+
+### Preproccessing
+
+#### 1. Read in raw count data
+
+``` r
+# set standard output directory for figures
+outdir <- "../output_RNA/differential_expression/POR_Pcomp"
+species <- "Pcomp"
+
+# load in data
+counts_raw <- read.csv("../output_RNA/count_matrices/POR_Pcomp_gene_count_matrix.csv", row.names = 1)
+
+# make list of samples 
+samples <- colnames(counts_raw)
+
+# read in SwissProt annotation
+SwissProt <- read.delim("../references/annotation/Porites_compressa_HIv1_Swissprot_GO.tsv")
+```
+
+#### 2. Extract metadata from sample names
+
+``` r
+# create metadata dataframe from sample names
+meta <- data.frame(
+  sample = samples, 
+  species = str_split(samples, "_", simplify = TRUE)[,1], #extract first part of sample name to get species
+  time = str_replace(str_split(samples, "_", simplify = TRUE)[,2],"R", ""), #extract "R##" part to get timepoint then remove R
+  replicate = str_split(samples, "_", simplify = TRUE)[,3], #extract "R##" part to get timepoint then remove R
+  treatment = str_replace(str_split(samples, "_", simplify = TRUE)[,3],"\\d", "")
+)
+
+# add rownames
+rownames(meta) <- meta$sample
+
+# make time and treatment factors
+meta$time <- factor(meta$time, levels = as.character(sort(unique(as.numeric(meta$time)))))
+meta$treatment <- factor(meta$treatment)
+
+# save metadata
+meta <- meta %>% arrange(time, treatment)
+write.csv(meta, paste0(outdir,"/RNA_seq_metadata.csv"))
+```
+
+#### 3. Confirm that sample names in metadata and count matrix match and are in the same order
+
+``` r
+counts_raw <- counts_raw[, meta$sample]
+```
+
+Remove outliers:
+
+``` r
+#counts_raw <- counts_raw[, !(colnames(counts_raw) %in% c("MON_R72_H1","MON_R72_H2"))]
+#meta <- meta[!(rownames(meta) %in% c("MON_R72_H1","MON_R72_H2")),]
+```
+
+Data sanity checks!
+
+``` r
+stopifnot(all(meta$sample %in% colnames(counts_raw))) #are all of the sample names in the metadata column names in the gene count matrix?
+stopifnot(all(meta$sample == colnames(counts_raw))) #are they the same in the same order?
+```
+
+#### 4. pOverA filtering to reduce dataset
+
+##### Note to self: maybe replace this with treatment-specific filtering. To get genes expressed only at one timepoint in one treatment
+
+``` r
+ffun<-filterfun(pOverA(0.07,10))  # Keep genes expressed at 10+ counts in at least 7% of samples - expressed in all 3 samples at one timepoint from one treatment
+counts_filt_poa <- genefilter((counts_raw), ffun) #apply filter
+
+filtered_counts <- counts_raw[counts_filt_poa,] #keep only rows that passed filter
+
+paste0("Number of genes after filtering: ", sum(counts_filt_poa))
+```
+
+    ## [1] "Number of genes after filtering: 27533"
+
+``` r
+paste0("% of genes kept: ", round(100*(sum(counts_filt_poa)/nrow(counts_raw)),digits=2),"%")
+```
+
+    ## [1] "% of genes kept: 62.39%"
+
+``` r
+write.csv(filtered_counts, file = file.path(outdir, "filtered_counts.csv"))
+```
+
+### Visualization of overall patterns, outlier detection
+
+We will use
+[DESeq2](https://www.bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html)
+to normalize and visualize data
+
+#### 1. Create DESeq object and run DESeq2
+
+``` r
+dds <- DESeqDataSetFromMatrix(countData = filtered_counts,
+                              colData = meta,
+                              design= ~ treatment + time + treatment:time)
+
+dds <- DESeq(dds)
+```
+
+#### 2. Check size factors
+
+``` r
+SF.dds <- estimateSizeFactors(dds) #estimate size factors to determine if we can use vst  to transform our data. Size factors should be less than 4 for us to use vst
+print(sizeFactors(SF.dds)) #View size factors
+```
+
+    ##   POR_R0_C1   POR_R0_C2   POR_R0_C3   POR_R0_H1   POR_R0_H2   POR_R0_H3 
+    ##   1.1064526   0.8719468   1.6057443   0.6777339   0.8281278   1.1440124 
+    ##   POR_R1_C1   POR_R1_C2   POR_R1_C3   POR_R1_H1   POR_R1_H2   POR_R1_H3 
+    ##   0.4150671   1.1759630   0.9875187   0.4640600   0.4029134   1.2567150 
+    ##   POR_R3_C1   POR_R3_C2   POR_R3_C3   POR_R3_H1   POR_R3_H2   POR_R3_H3 
+    ##   1.4963637   1.2841829   0.6649097   2.0347063   2.0586128   1.0852146 
+    ##  POR_R12_C1  POR_R12_C2  POR_R12_C3  POR_R12_H1  POR_R12_H2  POR_R12_H3 
+    ##   0.3981970   1.9697598   0.5738960   2.3125857   2.6778535   1.7302729 
+    ##  POR_R24_C1  POR_R24_C2  POR_R24_C3  POR_R24_H1  POR_R24_H2  POR_R24_H3 
+    ##   2.1137645   0.7805666   0.7411381   0.2788869   1.8799754   2.3502852 
+    ##  POR_R72_C1  POR_R72_C2  POR_R72_C3  POR_R72_H1  POR_R72_H2  POR_R72_H3 
+    ##   0.7770175   1.4041362   0.7425228   0.1915412   0.2704780   1.8744531 
+    ## POR_R120_C1 POR_R120_C2 POR_R120_C3 POR_R120_H1 POR_R120_H2 POR_R120_H3 
+    ##   0.8354057   1.8182241   0.3622529   3.8086275   3.3817337   0.7298652
+
+``` r
+all(sizeFactors(SF.dds)) < 4
+```
+
+    ## [1] TRUE
+
+#### 3. VST-Transforming count data for visualization
+
+``` r
+vsd <- vst(dds, blind=FALSE)
+
+#save the vsd transformation
+vsd_mat <- assay(vsd)
+write.csv(vsd_mat, file = file.path(outdir, "vsd_expression_matrix.csv"))
+```
+
+#### 4. Heatmap of the sample-to-sample distances
+
+``` r
+sampleDists <- dist(t(vsd_mat))
+
+sampleDistMatrix <- as.matrix(sampleDists)
+colnames(sampleDistMatrix) <- NULL
+
+pheatmap(sampleDistMatrix,
+         col=colorRampPalette( rev(brewer.pal(9, "Blues")) )(255))
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-70-1.png)<!-- -->
+
+#### 5. PCA
+
+``` r
+pcaData <- plotPCA(vsd, intgroup=c("time", "treatment"), returnData=TRUE)
+
+percentVar <- round(100 * attr(pcaData, "percentVar"))
+PCA <- ggplot() +
+  geom_point(data = subset(pcaData, treatment == "C"),
+             aes(x=PC1, y=PC2, color=time),
+                 size=2) +
+             scale_color_manual(values=brewer.pal(7, "Blues"), name = "Time (hrs) - Control") +
+  
+  #start new scale
+  ggnewscale::new_scale_color() +
+  geom_point(data = subset(pcaData, treatment == "H"),
+             aes(x=PC1, y=PC2, color=time),
+                 size=2) +
+             scale_color_manual(values=brewer.pal(7, "Oranges"), name = "Time (hrs) - Heat") +
+
+  xlab(paste0("PC1: ",percentVar[1],"% variance")) +
+  ylab(paste0("PC2: ",percentVar[2],"% variance")) + 
+  coord_fixed() + theme_bw()
+
+save_ggplot(PCA, "PCA_POR")
+```
+
+The following samples had mapping rates \< 20%:
+
+| sample | uniquely_mapped_percent | rRNA_matched_reads_Million | total_reads_Million |
+|----|----|----|----|
+| POR_R72_H1 | 6.4 | 12.92 | 15.47 |
+| POR_R24_H1 | 7.67 | 14.23 | 17.26 |
+| POR_R120_C3 | 7.77 | 18.64 | 21.02 |
+| POR_R72_H2 | 8.77 | 12.24 | 15.16 |
+| POR_R1_H2 | 10.37 | 14.78 | 17.47 |
+| POR_R120_C1 | 10.78 | 11.68 | 13.99 |
+| POR_R1_H1 | 11.72 | 15.47 | 18.69 |
+| POR_R1_C1 | 12.04 | 13.14 | 15.99 |
+| POR_R12_C1 | 12.2 | 12.17 | 14.88 |
+| POR_R12_C3 | 15.78 | 11.7 | 15.09 |
+| POR_R0_H1 | 16.57 | 12.57 | 16.46 |
+| POR_R120_H3 | 18.23 | 12.18 | 17.16 |
+| POR_R3_C3 | 18.27 | 11 | 14.95 |
+| POR_R0_H2 | 18.35 | 14.14 | 19.31 |
+| POR_R24_C2 | 19.72 | 11.55 | 16 |
+
+#### 6. Heatmap of variable genes
+
+``` r
+topVarGenes <- head(order(rowVars(assay(vsd)), decreasing=TRUE), 500)
+
+pheatmap(assay(vsd)[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
+         cluster_cols=FALSE, 
+         annotation_col= meta[,c("treatment","time")],
+         annotation_colors = list("treatment" = treat_colors,
+                                  "time" = time_colors))
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-72-1.png)<!-- -->
+
+``` r
+pheatmap(assay(vsd)[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
+         cluster_cols=TRUE, cutree_cols = 2,
+         annotation_col= meta[,c("treatment","time")],
+         annotation_colors = list("treatment" = treat_colors,
+                                  "time" = time_colors))
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-72-2.png)<!-- -->
+
+### Heat stress genes
+
+``` r
+HeatStressGenes <- read_csv(paste0("/project/pi_hputnam_uri_edu/zdellaert/snRNA_analysis/multi-sp-snRNA/reference_genes/genes_of_interest/HeatStressGenes_", species ,".csv")) %>% dplyr::select(-1) %>% dplyr::rename(query = paste0(species,"_gene")) %>% dplyr::select(query,everything()) #%>% filter(ref_first_author =="Majerova")
+
+HeatStressGenes_unique <- HeatStressGenes %>% group_by(query) %>%
+  summarize(gene_id = paste(unique(gene_id), collapse = ","),
+            response_type = paste(unique(response_type), collapse = ","),
+            category = paste(unique(category), collapse = ",")
+            ) 
+
+HeatStressGenes_unique <- HeatStressGenes_unique %>% filter(query %in% rownames(vsd_mat))
+ 
+stress_genes_ids <- unique(HeatStressGenes_unique$query) 
+stress_genes_vsd <- vsd_mat[stress_genes_ids, ]
+
+plot_df <- as.data.frame(t(stress_genes_vsd)) %>%
+  rownames_to_column(var="sample") %>%
+  left_join(meta, by=c("sample"="sample")) %>%
+  pivot_longer(cols = all_of(stress_genes_ids), names_to="query", values_to="expression") %>%
+  left_join(HeatStressGenes_unique)
+
+plot_df %>% ggplot(aes(x=time, y=expression, color=gene_id, group=gene_id)) +
+  stat_summary(fun="mean", geom="line") +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+  facet_wrap(treatment~response_type) +
+  theme_bw() +
+  labs(y="VST expression", x="Timepoint")
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-73-1.png)<!-- -->
+
+``` r
+plot_df %>% filter(grepl("Type1", response_type)) %>%
+  ggplot(aes(x=time, y=expression, color=treatment, group=interaction(treatment,query))) +
+  stat_summary(fun="mean", geom="line", alpha=0.6) +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2,linewidth=0.5, alpha=0.6) +
+  scale_color_manual(values = treat_colors) +
+  facet_wrap(~gene_id, ncol= 3,scales="free_y") +
+  theme_bw() +
+  theme(
+    strip.text = element_text(face="bold", size=8),panel.spacing = unit(0.4, "lines")
+  ) +
+  labs(y="VST expression", x="Timepoint", title = "Type 1 Expressed Response genes")
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-73-2.png)<!-- -->
+
+``` r
+save_ggplot(last_plot(), "All_Type1")
+
+plot_df %>% filter(grepl("Type2", response_type)) %>%
+  ggplot(aes(x=time, y=expression, color=treatment, group=interaction(treatment,query))) +
+  stat_summary(fun="mean", geom="line", alpha=0.6) +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2,linewidth=0.5, alpha=0.6) +
+  scale_color_manual(values = treat_colors) +
+  facet_wrap(~gene_id, ncol= 3,scales="free_y") +
+  theme_bw() +
+  theme(
+    strip.text = element_text(face="bold", size=8),panel.spacing = unit(0.4, "lines")
+  ) +
+  labs(y="VST expression", x="Timepoint", title = "Type 2 Expressed Response genes")
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-73-3.png)<!-- -->
+
+``` r
+save_ggplot(last_plot(), "All_Type2")
+
+plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_id)) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+  stat_summary(fun="mean", geom="line") +
+  scale_color_manual(values = treat_colors) +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+  facet_wrap(~paste0(str_replace(query,"Porites_compressa_HIv1___",""), ": ", gene_id)) +
+  theme_bw() +
+  labs(y="VST expression", x="Timepoint")
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-73-4.png)<!-- -->
+
+#### DESeq LRT Test
+
+``` r
+dds <- DESeqDataSetFromMatrix(countData = filtered_counts,
+                              colData = meta,
+                              design= ~ treatment + time + treatment:time)
+
+dds <- DESeq(dds, test = "LRT", reduced = ~ treatment + time)
+
+res <- results(dds)
+sig_genes <- subset(res, padj < 0.05)
+lrt_res <- as.data.frame(res)
+
+DE_05 <- lrt_res[rownames(lrt_res %>% filter(padj<0.05)),]
+
+time_colors <- colorRampPalette(c("#ffffcc","#0c2c84"))(7)
+names(time_colors) <- levels(meta$time)
+
+top_500_DE_genes <- DE_05 %>% arrange(padj) %>% head(500) %>% rownames()
+
+#view top 500 most vairable genes
+pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
+         cluster_cols=FALSE, 
+         annotation_col= meta[,c("treatment","time")],
+         annotation_colors = list("treatment" = treat_colors,
+                                  "time" = time_colors))
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-74-1.png)<!-- -->
+
+``` r
+pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
+         cluster_cols=TRUE, cutree_cols = 2,
+         annotation_col= meta[,c("treatment","time")],
+         annotation_colors = list("treatment" = treat_colors,
+                                  "time" = time_colors))
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-74-2.png)<!-- -->
+
+``` r
+top_500_DE_genes <- DE_05 %>% arrange(log2FoldChange) %>% head(500) %>% rownames()
+
+#view top 500 most vairable genes
+pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
+         cluster_cols=FALSE, 
+         annotation_col= meta[,c("treatment","time")],
+         annotation_colors = list("treatment" = treat_colors,
+                                  "time" = time_colors))
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-74-3.png)<!-- -->
+
+``` r
+pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
+         cluster_cols=TRUE, cutree_cols = 2,
+         annotation_col= meta[,c("treatment","time")],
+         annotation_colors = list("treatment" = treat_colors,
+                                  "time" = time_colors))
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-74-4.png)<!-- -->
+
+``` r
+top_500_DE_genes <- DE_05 %>% arrange(desc(log2FoldChange)) %>% head(500) %>% rownames()
+
+#view top 500 most vairable genes
+pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
+         cluster_cols=FALSE, 
+         annotation_col= meta[,c("treatment","time")],
+         annotation_colors = list("treatment" = treat_colors,
+                                  "time" = time_colors))
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-74-5.png)<!-- -->
+
+``` r
+pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
+         cluster_cols=TRUE, cutree_cols = 2,
+         annotation_col= meta[,c("treatment","time")],
+         annotation_colors = list("treatment" = treat_colors,
+                                  "time" = time_colors))
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-74-6.png)<!-- -->
+
+#### DE Heat stress genes
+
+``` r
+plot_df <- as.data.frame(t(stress_genes_vsd)) %>%
+  rownames_to_column(var="sample") %>%
+  left_join(meta, by=c("sample"="sample")) %>%
+  pivot_longer(cols = all_of(stress_genes_ids), names_to="query", values_to="expression") %>%
+  left_join(HeatStressGenes_unique) %>% left_join(DE_05 %>% rownames_to_column(var="query")) %>%
+  filter(!is.na(padj))
+
+plot_df %>% ggplot(aes(x=time, y=expression, color=gene_id, group=gene_id)) +
+  stat_summary(fun="mean", geom="line") +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+  facet_wrap(treatment~response_type) +
+  theme_bw() +
+  labs(y="VST expression", x="Timepoint")
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-75-1.png)<!-- -->
+
+``` r
+plot_df %>% filter(grepl("Type1", response_type)) %>%
+  ggplot(aes(x=time, y=expression, color=treatment, group=interaction(treatment,query))) +
+  stat_summary(fun="mean", geom="line", alpha=0.6) +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2,linewidth=0.5, alpha=0.6) +
+  scale_color_manual(values = treat_colors) +
+  facet_wrap(~gene_id, ncol= 3,scales="free_y") +
+  theme_bw() +
+  theme(
+    strip.text = element_text(face="bold", size=8),panel.spacing = unit(0.4, "lines")
+  ) +
+  labs(y="VST expression", x="Timepoint", title = "Type 1 DE (LRT) Response genes")
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-75-2.png)<!-- -->
+
+``` r
+save_ggplot(last_plot(), "DE_Type1")
+
+plot_df %>% filter(grepl("Type2", response_type)) %>%
+  ggplot(aes(x=time, y=expression, color=treatment, group=interaction(treatment,query))) +
+  stat_summary(fun="mean", geom="line", alpha=0.6) +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2,linewidth=0.5, alpha=0.6) +
+  scale_color_manual(values = treat_colors) +
+  facet_wrap(~gene_id, ncol= 3,scales="free_y") +
+  theme_bw() +
+  theme(
+    strip.text = element_text(face="bold", size=8),panel.spacing = unit(0.4, "lines")
+  ) +
+  labs(y="VST expression", x="Timepoint", title = "Type 2 DE (LRT) Response genes")
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-75-3.png)<!-- -->
+
+``` r
+save_ggplot(last_plot(), "DE_Type2")
+
+plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_id)) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+  stat_summary(fun="mean", geom="line") +
+  scale_color_manual(values = treat_colors) +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+  facet_wrap(~paste0(str_replace(query,"Porites_compressa_HIv1___",""), ": ", gene_id)) +
+  theme_bw() +
+  labs(y="VST expression", x="Timepoint", title = "Selected Type 1 DE (LRT) Response genes")
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-75-4.png)<!-- -->
+
+``` r
+save_ggplot(last_plot(), "highlighted_DE_Type1")
+
+plot_df_norm <- plot_df %>%
+  group_by(query, time) %>%
+  mutate(delta = expression - mean(expression[treatment == "C"]))
+
+plot_df_norm %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_id)) %>% ggplot(aes(x=time, y=delta, color=treatment, group=treatment)) +
+  stat_summary(fun="mean", geom="line") +
+  scale_color_manual(values = treat_colors) +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+  facet_wrap(~paste0(gene_id, ": ",str_replace(query,"Porites_compressa_HIv1___","")),scales="free_y") +
+  theme_bw() +
+  labs(y="VST expression", x="Timepoint", title = "Norm to control -- Selected Type 1 DE (LRT) Response genes")
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-75-5.png)<!-- -->
+
+``` r
+save_ggplot(last_plot(), "highlighted_DE_Type1_norm_control")
+
+plot_df_norm <- plot_df %>%
+  group_by(query, treatment) %>%
+  mutate(baseline = mean(expression[time == "0"])) %>%
+  mutate(delta = expression - baseline) %>%
+  ungroup()
+
+plot_df_norm %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_id)) %>%
+  ggplot(aes(x=time, y=delta, color=treatment, group=treatment)) +
+  stat_summary(fun="mean", geom="line") +
+  scale_color_manual(values = treat_colors) +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+  facet_wrap(~paste0(gene_id, ": ",str_replace(query,"Porites_compressa_HIv1___","")),scales="free_y") +
+  theme_bw() +
+  labs(y="VST expression", x="Timepoint", title = "Norm to T0 -- Selected Type 1 DE (LRT) Response genes")
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-75-6.png)<!-- -->
+
+``` r
+save_ggplot(last_plot(), "highlighted_DE_Type1_norm_T0")
+
+plot_df %>% filter(grepl("GDH",gene_id)|grepl("GS",gene_id)|grepl("AMT1",gene_id)) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+  stat_summary(fun="mean", geom="line") +
+  scale_color_manual(values = treat_colors) +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+  facet_wrap(~paste0(gene_id, ": ",str_replace(query,"Porites_compressa_HIv1___","")),scales="free_y") +
+  theme_bw() +
+  labs(y="VST expression", x="Timepoint", title = "Selected Type 2 DE (LRT) Response genes")
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-75-7.png)<!-- -->
+
+``` r
+save_ggplot(last_plot(), "highlighted_DE_Type2")
+```
+
+#### Mechanosensing and other channels
+
+``` r
+membrane_channels <- read_csv(paste0("../references/annotation/",species,"_membrane_channels.csv"))
+
+membrane_channels <- membrane_channels %>% filter(query %in% rownames(vsd_mat))
+
+plot_df <- as.data.frame(t(vsd_mat)) %>%
+  rownames_to_column(var="sample") %>%
+  left_join(meta, by=c("sample"="sample")) %>% 
+  pivot_longer(cols = all_of(rownames(vsd_mat)), names_to="query", values_to="expression") %>%
+  mutate(is_DE = query %in% rownames(DE_05)) %>% right_join(membrane_channels)
+
+membrane_list <- c("aquaporin","TRP",  "Mechanosensory" ,"calcium",  "ER_calcium" ,"Golgi_calcium" , "SLC",  "PMCA",  "Sodium_calcium_exchanger","Bhattacharya2016")
+
+for (genelist in membrane_list){
+  plot_df_filtered <- plot_df %>% filter(grepl(genelist,gene_set)) %>% filter(is_DE == FALSE)
+  if (nrow(plot_df_filtered)>1){
+    plot <- plot_df_filtered  %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+  stat_summary(fun="mean", geom="line") +
+  scale_color_manual(values = treat_colors) +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+  facet_wrap(short_name~paste0("DE by LRT: ",is_DE),scales="free_y") +
+  theme_bw() +
+  theme(strip.text = element_text(size = 6)) +
+  labs(y="VST expression", x="Timepoint")
+  print(plot)
+  }
+}
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-76-1.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-76-2.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-76-3.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-76-4.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-76-5.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-76-6.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-76-7.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-76-8.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-76-9.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-76-10.png)<!-- -->
+
+``` r
+for (genelist in membrane_list){
+  plot_df_filtered <- plot_df %>% filter(grepl(genelist,gene_set)) %>% filter(is_DE == TRUE)
+  if (nrow(plot_df_filtered)>1){
+    plot <- plot_df_filtered  %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+    stat_summary(fun="mean", geom="line") +
+    scale_color_manual(values = treat_colors) +
+    stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+    facet_wrap(short_name~paste0("DE by LRT: ",is_DE),scales="free_y") +
+    theme_bw() +
+    theme(strip.text = element_text(size = 6)) +
+    labs(y="VST expression", x="Timepoint")
+    print(plot)
+  }
+}
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-76-11.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-76-12.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-76-13.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-76-14.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-76-15.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-76-16.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-76-17.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-76-18.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-76-19.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-76-20.png)<!-- -->
+
+### ImpulseDE2
+
+#### Background info
+
+Based on [this
+paper](https://academic.oup.com/bib/article/20/1/288/4364840#130283262),
+this is the best package to use other than comparing each time point
+against each other individually.
+
+Repo here: <https://github.com/YosefLab/ImpulseDE2>
+
+Tutorial here:
+<http://bioconductor.statistik.tu-dortmund.de/packages/3.11/bioc/vignettes/ImpulseDE2/inst/doc/ImpulseDE2_Tutorial.html>
+, I followed closely with the section “Case-control differential
+expression analysis”
+
+Read the ImpulseDE2 paper
+[here](https://academic.oup.com/nar/article/46/20/e119/5068248)
+
+David S Fischer, Fabian J Theis, Nir Yosef, Impulse model-based
+differential expression analysis of time course sequencing data, Nucleic
+Acids Research, Volume 46, Issue 20, 16 November 2018, Page e119,
+<https://doi.org/10.1093/nar/gky675>
+
+#### 1. Install and load
+
+``` r
+#library(devtools)
+#install_github("YosefLab/ImpulseDE2")
+
+library(ImpulseDE2)
+library(ComplexHeatmap)
+```
+
+#### 2. Metadata formatting
+
+First, reformat our metadata table to match the column names used in the
+ImpulseDE2 vignette.
+
+``` r
+meta_impulse <- meta %>%
+  dplyr::rename(Sample = sample, Time = time, Batch = replicate) %>% 
+  mutate(Time = as.numeric(as.character(Time)),
+         Condition = str_replace(treatment, "C", "control"),
+         Condition = str_replace(Condition, "H", "case")
+         ) %>%
+  select(-c(species,treatment))
+```
+
+#### 3. Then, run ImpulseDE2
+
+This takes a ton of time and memory, so I run it once then save as an
+RDS.
+
+``` r
+objectImpulseDE2 <- runImpulseDE2(
+  matCountData    = as.matrix(counts_raw), #or use filtered_counts 
+  dfAnnotation    = meta_impulse,
+  boolCaseCtrl    = TRUE,
+  vecConfounders  = c("Batch"), #only use if you want to try to control for batch effects
+  boolIdentifyTransients = TRUE, #use if you want to ID transiently- vs permanently-regulated genes
+  scaNProc        = 18 )
+
+saveRDS(objectImpulseDE2, file = paste0(outdir, "/objectImpulseDE2.rds"))
+```
+
+#### 4. View and save results
+
+``` r
+objectImpulseDE2 <- readRDS(paste0(outdir, "/objectImpulseDE2.rds"))
+
+impulse_results <- objectImpulseDE2$dfImpulseDE2Results
+impulse_results_annot <- impulse_results %>% left_join(SwissProt, by = join_by("Gene"=="query")) %>% filter(!is.na(Gene))
+write.table(impulse_results,file.path(outdir, "ImpulseDE2_Results.txt"),row.names=F,quote=F,sep="\t")
+
+# Genes with significant treatment effect on temporal trajectory
+impulse_sig_genes <- impulse_results %>% filter(padj < 0.05) 
+
+#preview top DE genes 
+impulse_sig_genes %>% arrange(padj) %>% head(5) %>% dplyr::select(!contains("converge"))
+```
+
+    ##                                                                                Gene
+    ## Porites_compressa_HIv1___RNAseq.g40862.t1 Porites_compressa_HIv1___RNAseq.g40862.t1
+    ## Porites_compressa_HIv1___RNAseq.12682_t     Porites_compressa_HIv1___RNAseq.12682_t
+    ## Porites_compressa_HIv1___RNAseq.g19794.t1 Porites_compressa_HIv1___RNAseq.g19794.t1
+    ## Porites_compressa_HIv1___RNAseq.g24271.t1 Porites_compressa_HIv1___RNAseq.g24271.t1
+    ## Porites_compressa_HIv1___RNAseq.g40324.t1 Porites_compressa_HIv1___RNAseq.g40324.t1
+    ##                                                      p         padj loglik_full
+    ## Porites_compressa_HIv1___RNAseq.g40862.t1 1.444275e-46 5.560314e-42   -345.3443
+    ## Porites_compressa_HIv1___RNAseq.12682_t   1.785042e-32 3.436116e-28   -209.9890
+    ## Porites_compressa_HIv1___RNAseq.g19794.t1 1.149079e-28 1.474613e-24   -192.9607
+    ## Porites_compressa_HIv1___RNAseq.g24271.t1 7.430912e-27 7.152067e-23   -240.6193
+    ## Porites_compressa_HIv1___RNAseq.g40324.t1 1.539538e-26 1.185414e-22   -309.1734
+    ##                                           loglik_red df_full df_red       mean
+    ## Porites_compressa_HIv1___RNAseq.g40862.t1  -457.7068      17     12 9609.45623
+    ## Porites_compressa_HIv1___RNAseq.12682_t    -289.3881      17     12  299.57639
+    ## Porites_compressa_HIv1___RNAseq.g19794.t1  -263.4130      17     12   93.93792
+    ## Porites_compressa_HIv1___RNAseq.g24271.t1  -306.8102      17     12  490.66126
+    ## Porites_compressa_HIv1___RNAseq.g40324.t1  -374.6191      17     12 2700.51478
+    ##                                           impulseTOsigmoid_p
+    ## Porites_compressa_HIv1___RNAseq.g40862.t1       5.983611e-15
+    ## Porites_compressa_HIv1___RNAseq.12682_t         2.704661e-06
+    ## Porites_compressa_HIv1___RNAseq.g19794.t1       1.000000e+00
+    ## Porites_compressa_HIv1___RNAseq.g24271.t1       1.348840e-03
+    ## Porites_compressa_HIv1___RNAseq.g40324.t1       1.208993e-20
+    ##                                           impulseTOsigmoid_padj
+    ## Porites_compressa_HIv1___RNAseq.g40862.t1          4.701287e-12
+    ## Porites_compressa_HIv1___RNAseq.12682_t            1.718263e-04
+    ## Porites_compressa_HIv1___RNAseq.g19794.t1          1.000000e+00
+    ## Porites_compressa_HIv1___RNAseq.g24271.t1          1.929729e-02
+    ## Porites_compressa_HIv1___RNAseq.g40324.t1          2.585835e-17
+    ##                                           sigmoidTOconst_p sigmoidTOconst_padj
+    ## Porites_compressa_HIv1___RNAseq.g40862.t1     3.697629e-52        7.117752e-48
+    ## Porites_compressa_HIv1___RNAseq.12682_t       1.058081e-48        1.357835e-44
+    ## Porites_compressa_HIv1___RNAseq.g19794.t1     7.940164e-54        3.056884e-49
+    ## Porites_compressa_HIv1___RNAseq.g24271.t1     2.378702e-36        1.144721e-32
+    ## Porites_compressa_HIv1___RNAseq.g40324.t1     8.338210e-31        1.783404e-27
+    ##                                           isTransient isMonotonous allZero
+    ## Porites_compressa_HIv1___RNAseq.g40862.t1       FALSE         TRUE   FALSE
+    ## Porites_compressa_HIv1___RNAseq.12682_t         FALSE         TRUE   FALSE
+    ## Porites_compressa_HIv1___RNAseq.g19794.t1       FALSE         TRUE   FALSE
+    ## Porites_compressa_HIv1___RNAseq.g24271.t1       FALSE         TRUE   FALSE
+    ## Porites_compressa_HIv1___RNAseq.g40324.t1        TRUE        FALSE   FALSE
+
+``` r
+cat("\nTotal significant genes:", nrow(impulse_sig_genes), "\n")
+```
+
+    ## 
+    ## Total significant genes: 3487
+
+``` r
+cat("\nResponse patterns:\n")
+```
+
+    ## 
+    ## Response patterns:
+
+``` r
+cat("Transient:", sum(impulse_sig_genes$isTransient), "\n")
+```
+
+    ## Transient: 741
+
+``` r
+cat("Monotonous:", sum(impulse_sig_genes$isMonotonous), "\n")
+```
+
+    ## Monotonous: 1609
+
+``` r
+cat("Complex:", sum(!impulse_sig_genes$isTransient & !impulse_sig_genes$isMonotonous), "\n")
+```
+
+    ## Complex: 1137
+
+#### 5. Heatmap of transient and non-transiently heat-affected genes
+
+``` r
+lsHeatmaps <- plotHeatmap(
+  objectImpulseDE2       = objectImpulseDE2,
+  strCondition           = "control",
+  boolIdentifyTransients = TRUE, #set to true if true above
+  scaQThres              = 0.05)
+draw(lsHeatmaps$complexHeatmapRaw) 
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-81-1.png)<!-- -->
+
+``` r
+draw(lsHeatmaps$complexHeatmapFit) 
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-81-2.png)<!-- -->
+
+``` r
+lsHeatmaps <- plotHeatmap(
+  objectImpulseDE2       = objectImpulseDE2,
+  strCondition           = "combined",
+  boolIdentifyTransients = TRUE, #set to true if true above
+  scaQThres              = 0.05)
+draw(lsHeatmaps$complexHeatmapRaw) 
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-81-3.png)<!-- -->
+
+``` r
+draw(lsHeatmaps$complexHeatmapFit) 
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-81-4.png)<!-- -->
+
+``` r
+lsHeatmaps <- plotHeatmap(
+  objectImpulseDE2       = objectImpulseDE2,
+  strCondition           = "case",
+  boolIdentifyTransients = TRUE, #set to true if true above
+  scaQThres              = 0.05)
+draw(lsHeatmaps$complexHeatmapRaw) 
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-81-5.png)<!-- -->
+
+``` r
+draw(lsHeatmaps$complexHeatmapFit) 
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-81-6.png)<!-- -->
+
+``` r
+png(paste0(outdir,"/ImpulseDE/ImpulseDE2_heatmap.png"), width = 2000, height = 2400, res = 300)
+draw(lsHeatmaps$complexHeatmapRaw)
+dev.off()
+```
+
+    ## png 
+    ##   2
+
+``` r
+png(paste0(outdir,"/ImpulseDE/ImpulseDE2_heatmap_fit.png"), width = 2000, height = 2400, res = 300)
+draw(lsHeatmaps$complexHeatmapFit)
+dev.off()
+```
+
+    ## png 
+    ##   2
+
+``` r
+str(lsHeatmaps$lsvecGeneGroups)
+```
+
+    ## List of 4
+    ##  $ transition_up  : chr [1:209] "Porites_compressa_HIv1___TS.g4775.t1" "Porites_compressa_HIv1___RNAseq.g10125.t1" "Porites_compressa_HIv1___RNAseq.g10127.t1" "Porites_compressa_HIv1___RNAseq.g10129.t1" ...
+    ##  $ transition_down: chr [1:1400] "Porites_compressa_HIv1___TS.g34859.t2" "Porites_compressa_HIv1___RNAseq.g15832.t1" "Porites_compressa_HIv1___RNAseq.g40972.t1" "Porites_compressa_HIv1___RNAseq.g31801.t1" ...
+    ##  $ transient_up   : chr [1:300] "Porites_compressa_HIv1___RNAseq.g21881.t1" "Porites_compressa_HIv1___RNAseq.g16996.t1" "Porites_compressa_HIv1___RNAseq.g9922.t1" "Porites_compressa_HIv1___RNAseq.g10172.t1" ...
+    ##  $ transient_down : chr [1:441] "Porites_compressa_HIv1___RNAseq.g13793.t1" "Porites_compressa_HIv1___RNAseq.g32506.t1" "Porites_compressa_HIv1___RNAseq.g5650.t1" "Porites_compressa_HIv1___RNAseq.g20476.t1" ...
+
+#### 6. Plot trajectories of top impulseDE genes and specific genes of interest
+
+``` r
+# Plot top 10 differentially expressed (by q-value) genes
 lsgplotsGenes <- plotGenes(
   vecGeneIDs       = NULL,
   scaNTopIDs       = 10,
   objectImpulseDE2 = objectImpulseDE2,
   boolSimplePlot = TRUE,   boolCaseCtrl     = TRUE,
-  dirOut           = "../output_RNA/differential_expression/MON_MCapV3/ImpulseDE/",
+  dirOut           = paste0(outdir,"/ImpulseDE/"),
   boolMultiplePlotsPerPage = FALSE,
   strNameRefMethod = NULL)
 ```
 
-    ## [1] "Creating ../output_RNA/differential_expression/MON_MCapV3/ImpulseDE/ImpulseDE2_Trajectories.pdf"
+    ## [1] "Creating ../output_RNA/differential_expression/POR_Pcomp/ImpulseDE/ImpulseDE2_Trajectories.pdf"
 
 ``` r
 lsgplotsGenes
@@ -2832,803 +3816,12 @@ lsgplotsGenes
     ## [[10]]
 
 ``` r
-top_500_DE_genes <- impulse_results %>% arrange(padj) %>% head(500) %>% rownames()
-
-#view top 500 most vairable genes
-pheatmap(vsd_mat[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
-         cluster_cols=FALSE, #cutree_cols = 2,
-         annotation_col= meta[,c("treatment","time")],
-         annotation_colors = list("treatment" = treat_colors,
-                                  "time" = time_colors))
-```
-
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-58-1.png)<!-- -->
-
-``` r
-pheatmap(vsd_mat[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
-         cluster_cols=TRUE, cutree_cols = 2,
-         annotation_col= meta[,c("treatment","time")],
-         annotation_colors = list("treatment" = treat_colors,
-                                  "time" = time_colors))
-```
-
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-58-2.png)<!-- -->
-
-## POR: pre-processing and visualization
-
-Read in raw count data
-
-``` r
-#set standard output directory for figures
-outdir <- "../output_RNA/differential_expression/POR_Pcomp"
-
-counts_raw <- read.csv("../output_RNA/count_matrices/POR_Pcomp_gene_count_matrix.csv", row.names = 1) #load in data
-
-samples <- colnames(counts_raw)
-```
-
-### Read in metadata
-
-``` r
-meta <- data.frame(
-  sample = samples, 
-  species = str_split(samples, "_", simplify = TRUE)[,1], #extract first part of sample name to get species
-  time = str_replace(str_split(samples, "_", simplify = TRUE)[,2],"R", ""), #extract "R##" part to get timepoint then remove R
-  replicate = str_split(samples, "_", simplify = TRUE)[,3], #extract "R##" part to get timepoint then remove R
-  treatment = str_replace(str_split(samples, "_", simplify = TRUE)[,3],"\\d", "")
-)
-
-rownames(meta) <- meta$sample
-
-meta$time <- factor(meta$time, levels = as.character(sort(unique(as.numeric(meta$time)))))
-meta$treatment <- factor(meta$treatment)
-
-meta <- meta %>% arrange(time, treatment)
-write.csv(meta, paste0(outdir,"/RNA_seq_metadata.csv"))
-```
-
-Reorder sample columns based on factor order
-
-``` r
-counts_raw <- counts_raw[, meta$sample]
-```
-
-Remove outliers:
-
-``` r
-#counts_raw <- counts_raw[, !(colnames(counts_raw) %in% c("MON_R72_H1","MON_R72_H2"))]
-#meta <- meta[!(rownames(meta) %in% c("MON_R72_H1","MON_R72_H2")),]
-```
-
-Data sanity checks!
-
-``` r
-stopifnot(all(meta$sample %in% colnames(counts_raw))) #are all of the sample names in the metadata column names in the gene count matrix?
-stopifnot(all(meta$sample == colnames(counts_raw))) #are they the same in the same order?
-```
-
-### pOverA filtering to reduce dataset
-
-``` r
-ffun<-filterfun(pOverA(0.07,10))  # Keep genes expressed at 10+ counts in at least 7% of samples - expressed in all 3 samples at one timepoint from one treatment
-counts_filt_poa <- genefilter((counts_raw), ffun) #apply filter
-
-filtered_counts <- counts_raw[counts_filt_poa,] #keep only rows that passed filter
-
-paste0("Number of genes after filtering: ", sum(counts_filt_poa))
-```
-
-    ## [1] "Number of genes after filtering: 27533"
-
-``` r
-paste0("% of genes kept: ", round(100*(sum(counts_filt_poa)/nrow(counts_raw)),digits=2),"%")
-```
-
-    ## [1] "% of genes kept: 62.39%"
-
-``` r
-write.csv(filtered_counts, file = file.path(outdir, "filtered_counts.csv"))
-```
-
-### [DESeq2](https://www.bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html)
-
-Create DESeq object and run DESeq2
-
-``` r
-dds <- DESeqDataSetFromMatrix(countData = filtered_counts,
-                              colData = meta,
-                              design= ~ treatment + time + treatment:time)
-
-dds <- DESeq(dds)
-```
-
-Check size factors.
-
-``` r
-SF.dds <- estimateSizeFactors(dds) #estimate size factors to determine if we can use vst  to transform our data. Size factors should be less than 4 for us to use vst
-print(sizeFactors(SF.dds)) #View size factors
-```
-
-    ##   POR_R0_C1   POR_R0_C2   POR_R0_C3   POR_R0_H1   POR_R0_H2   POR_R0_H3 
-    ##   1.1064526   0.8719468   1.6057443   0.6777339   0.8281278   1.1440124 
-    ##   POR_R1_C1   POR_R1_C2   POR_R1_C3   POR_R1_H1   POR_R1_H2   POR_R1_H3 
-    ##   0.4150671   1.1759630   0.9875187   0.4640600   0.4029134   1.2567150 
-    ##   POR_R3_C1   POR_R3_C2   POR_R3_C3   POR_R3_H1   POR_R3_H2   POR_R3_H3 
-    ##   1.4963637   1.2841829   0.6649097   2.0347063   2.0586128   1.0852146 
-    ##  POR_R12_C1  POR_R12_C2  POR_R12_C3  POR_R12_H1  POR_R12_H2  POR_R12_H3 
-    ##   0.3981970   1.9697598   0.5738960   2.3125857   2.6778535   1.7302729 
-    ##  POR_R24_C1  POR_R24_C2  POR_R24_C3  POR_R24_H1  POR_R24_H2  POR_R24_H3 
-    ##   2.1137645   0.7805666   0.7411381   0.2788869   1.8799754   2.3502852 
-    ##  POR_R72_C1  POR_R72_C2  POR_R72_C3  POR_R72_H1  POR_R72_H2  POR_R72_H3 
-    ##   0.7770175   1.4041362   0.7425228   0.1915412   0.2704780   1.8744531 
-    ## POR_R120_C1 POR_R120_C2 POR_R120_C3 POR_R120_H1 POR_R120_H2 POR_R120_H3 
-    ##   0.8354057   1.8182241   0.3622529   3.8086275   3.3817337   0.7298652
-
-``` r
-all(sizeFactors(SF.dds)) < 4
-```
-
-    ## [1] TRUE
-
-Transforming count data for visualization
-
-``` r
-vsd <- vst(dds, blind=FALSE)
-
-#save the vsd transformation
-vsd_mat <- assay(vsd)
-write.csv(vsd_mat, file = file.path(outdir, "vsd_expression_matrix.csv"))
-```
-
-### Heatmap of the sample-to-sample distances
-
-``` r
-sampleDists <- dist(t(assay(vsd)))
-
-sampleDistMatrix <- as.matrix(sampleDists)
-colnames(sampleDistMatrix) <- NULL
-
-pheatmap(sampleDistMatrix,
-         col=colorRampPalette( rev(brewer.pal(9, "Blues")) )(255))
-```
-
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-68-1.png)<!-- -->
-
-### Principal component plot of the samples
-
-``` r
-pcaData <- plotPCA(vsd, intgroup=c("time", "treatment"), returnData=TRUE)
-
-percentVar <- round(100 * attr(pcaData, "percentVar"))
-PCA <- ggplot() +
-  geom_point(data = subset(pcaData, treatment == "C"),
-             aes(x=PC1, y=PC2, color=time),
-                 size=2) +
-             scale_color_manual(values=brewer.pal(7, "Blues"), name = "Time (hrs) - Control") +
-  
-  #start new scale
-  ggnewscale::new_scale_color() +
-  geom_point(data = subset(pcaData, treatment == "H"),
-             aes(x=PC1, y=PC2, color=time),
-                 size=2) +
-             scale_color_manual(values=brewer.pal(7, "Oranges"), name = "Time (hrs) - Heat") +
-
-  xlab(paste0("PC1: ",percentVar[1],"% variance")) +
-  ylab(paste0("PC2: ",percentVar[2],"% variance")) + 
-  coord_fixed() + theme_bw()
-PCA
-```
-
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-69-1.png)<!-- -->
-
-``` r
-save_ggplot(PCA, "PCA_POR")
-```
-
-The following samples had mapping rates \< 20%:
-
-| sample | uniquely_mapped_percent | rRNA_matched_reads_Million | total_reads_Million |
-|----|----|----|----|
-| POR_R72_H1 | 6.4 | 12.92 | 15.47 |
-| POR_R24_H1 | 7.67 | 14.23 | 17.26 |
-| POR_R120_C3 | 7.77 | 18.64 | 21.02 |
-| POR_R72_H2 | 8.77 | 12.24 | 15.16 |
-| POR_R1_H2 | 10.37 | 14.78 | 17.47 |
-| POR_R120_C1 | 10.78 | 11.68 | 13.99 |
-| POR_R1_H1 | 11.72 | 15.47 | 18.69 |
-| POR_R1_C1 | 12.04 | 13.14 | 15.99 |
-| POR_R12_C1 | 12.2 | 12.17 | 14.88 |
-| POR_R12_C3 | 15.78 | 11.7 | 15.09 |
-| POR_R0_H1 | 16.57 | 12.57 | 16.46 |
-| POR_R120_H3 | 18.23 | 12.18 | 17.16 |
-| POR_R3_C3 | 18.27 | 11 | 14.95 |
-| POR_R0_H2 | 18.35 | 14.14 | 19.31 |
-| POR_R24_C2 | 19.72 | 11.55 | 16 |
-
-### Heatmap of count matrix
-
-``` r
-topVarGenes <- head(order(rowVars(assay(vsd)), decreasing=TRUE), 500)
-
-time_colors <- colorRampPalette(c("#ffffcc","#0c2c84"))(7)
-names(time_colors) <- levels(meta$time)
-
-#view top 500 most vairable genes
-pheatmap(assay(vsd)[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
-         cluster_cols=FALSE, 
-         annotation_col= meta[,c("treatment","time")],
-         annotation_colors = list("treatment" = treat_colors,
-                                  "time" = time_colors))
-```
-
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-70-1.png)<!-- -->
-
-``` r
-pheatmap(assay(vsd)[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
-         cluster_cols=TRUE, cutree_cols = 2,
-         annotation_col= meta[,c("treatment","time")],
-         annotation_colors = list("treatment" = treat_colors,
-                                  "time" = time_colors))
-```
-
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-70-2.png)<!-- -->
-
-### Heat stress genes
-
-``` r
-HeatStressGenes_Pcomp <- read_csv("/project/pi_hputnam_uri_edu/zdellaert/snRNA_analysis/multi-sp-snRNA/reference_genes/genes_of_interest/HeatStressGenes_Pcomp.csv") %>% dplyr::select(-1) %>% dplyr::rename(query = Pcomp_gene) %>% dplyr::select(query,everything()) #%>% filter(ref_first_author =="Majerova")
-
-HeatStressGenes_Pcomp_unique <- HeatStressGenes_Pcomp %>% group_by(query) %>%
-  summarize(gene_id = paste(unique(gene_id), collapse = ","),
-            response_type = paste(unique(response_type), collapse = ","),
-            category = paste(unique(category), collapse = ",")
-            ) 
-
-HeatStressGenes_Pcomp_unique <- HeatStressGenes_Pcomp_unique %>% filter(query %in% rownames(vsd_mat))
- 
-stress_genes_ids <- unique(HeatStressGenes_Pcomp_unique$query) 
-stress_genes_vsd <- vsd_mat[stress_genes_ids, ]
-
-plot_df <- as.data.frame(t(stress_genes_vsd)) %>%
-  rownames_to_column(var="sample") %>%
-  left_join(meta, by=c("sample"="sample")) %>%
-  pivot_longer(cols = all_of(stress_genes_ids), names_to="query", values_to="expression") %>%
-  left_join(HeatStressGenes_Pcomp_unique)
-
-plot_df %>% ggplot(aes(x=time, y=expression, color=gene_id, group=gene_id)) +
-  stat_summary(fun="mean", geom="line") +
-  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
-  facet_wrap(treatment~response_type) +
-  theme_bw() +
-  labs(y="VST expression", x="Timepoint")
-```
-
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-71-1.png)<!-- -->
-
-``` r
-plot_df %>% filter(grepl("Type1", response_type)) %>%
-  ggplot(aes(x=time, y=expression, color=treatment, group=interaction(treatment,query))) +
-  stat_summary(fun="mean", geom="line", alpha=0.6) +
-  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2,linewidth=0.5, alpha=0.6) +
-  scale_color_manual(values = treat_colors) +
-  facet_wrap(~gene_id, ncol= 3,scales="free_y") +
-  theme_bw() +
-  theme(
-    strip.text = element_text(face="bold", size=8),panel.spacing = unit(0.4, "lines")
-  ) +
-  labs(y="VST expression", x="Timepoint", title = "Type 1 Expressed Response genes")
-```
-
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-71-2.png)<!-- -->
-
-``` r
-save_ggplot(last_plot(), "All_Type1")
-
-plot_df %>% filter(grepl("Type2", response_type)) %>%
-  ggplot(aes(x=time, y=expression, color=treatment, group=interaction(treatment,query))) +
-  stat_summary(fun="mean", geom="line", alpha=0.6) +
-  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2,linewidth=0.5, alpha=0.6) +
-  scale_color_manual(values = treat_colors) +
-  facet_wrap(~gene_id, ncol= 3,scales="free_y") +
-  theme_bw() +
-  theme(
-    strip.text = element_text(face="bold", size=8),panel.spacing = unit(0.4, "lines")
-  ) +
-  labs(y="VST expression", x="Timepoint", title = "Type 2 Expressed Response genes")
-```
-
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-71-3.png)<!-- -->
-
-``` r
-save_ggplot(last_plot(), "All_Type2")
-
-plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_id)) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
-  stat_summary(fun="mean", geom="line") +
-  scale_color_manual(values = treat_colors) +
-  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
-  facet_wrap(~paste0(str_replace(query,"Porites_compressa_HIv1___",""), ": ", gene_id)) +
-  theme_bw() +
-  labs(y="VST expression", x="Timepoint")
-```
-
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-71-4.png)<!-- -->
-
-### DESeq LRT Test
-
-``` r
-dds <- DESeqDataSetFromMatrix(countData = filtered_counts,
-                              colData = meta,
-                              design= ~ treatment + time + treatment:time)
-
-dds <- DESeq(dds, test = "LRT", reduced = ~ treatment + time)
-
-res <- results(dds)
-sig_genes <- subset(res, padj < 0.05)
-lrt_res <- as.data.frame(res)
-
-DE_05 <- lrt_res[rownames(lrt_res %>% filter(padj<0.05)),]
-
-time_colors <- colorRampPalette(c("#ffffcc","#0c2c84"))(7)
-names(time_colors) <- levels(meta$time)
-
-top_500_DE_genes <- DE_05 %>% arrange(padj) %>% head(500) %>% rownames()
-
-#view top 500 most vairable genes
-pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
-         cluster_cols=FALSE, 
-         annotation_col= meta[,c("treatment","time")],
-         annotation_colors = list("treatment" = treat_colors,
-                                  "time" = time_colors))
-```
-
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-72-1.png)<!-- -->
-
-``` r
-pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
-         cluster_cols=TRUE, cutree_cols = 2,
-         annotation_col= meta[,c("treatment","time")],
-         annotation_colors = list("treatment" = treat_colors,
-                                  "time" = time_colors))
-```
-
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-72-2.png)<!-- -->
-
-``` r
-top_500_DE_genes <- DE_05 %>% arrange(log2FoldChange) %>% head(500) %>% rownames()
-
-#view top 500 most vairable genes
-pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
-         cluster_cols=FALSE,
-         annotation_col= meta[,c("treatment","time")],
-         annotation_colors = list("treatment" = treat_colors,
-                                  "time" = time_colors))
-```
-
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-72-3.png)<!-- -->
-
-``` r
-pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
-         cluster_cols=TRUE, cutree_cols = 2,
-         annotation_col= meta[,c("treatment","time")],
-         annotation_colors = list("treatment" = treat_colors,
-                                  "time" = time_colors))
-```
-
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-72-4.png)<!-- -->
-
-``` r
-top_500_DE_genes <- DE_05 %>% arrange(desc(log2FoldChange)) %>% head(500) %>% rownames()
-
-#view top 500 most vairable genes
-pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
-         cluster_cols=FALSE, 
-         annotation_col= meta[,c("treatment","time")],
-         annotation_colors = list("treatment" = treat_colors,
-                                  "time" = time_colors))
-```
-
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-72-5.png)<!-- -->
-
-``` r
-pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
-         cluster_cols=TRUE, cutree_cols = 2,
-         annotation_col= meta[,c("treatment","time")],
-         annotation_colors = list("treatment" = treat_colors,
-                                  "time" = time_colors))
-```
-
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-72-6.png)<!-- -->
-
-### DE Heat stress genes
-
-``` r
-plot_df <- as.data.frame(t(stress_genes_vsd)) %>%
-  rownames_to_column(var="sample") %>%
-  left_join(meta, by=c("sample"="sample")) %>%
-  pivot_longer(cols = all_of(stress_genes_ids), names_to="query", values_to="expression") %>%
-  left_join(HeatStressGenes_Pcomp_unique) %>% left_join(DE_05 %>% rownames_to_column(var="query")) %>%
-  filter(!is.na(padj))
-
-plot_df %>% ggplot(aes(x=time, y=expression, color=gene_id, group=gene_id)) +
-  stat_summary(fun="mean", geom="line") +
-  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
-  facet_wrap(treatment~response_type) +
-  theme_bw() +
-  labs(y="VST expression", x="Timepoint")
-```
-
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-73-1.png)<!-- -->
-
-``` r
-plot_df %>% filter(grepl("Type1", response_type)) %>%
-  ggplot(aes(x=time, y=expression, color=treatment, group=interaction(treatment,query))) +
-  stat_summary(fun="mean", geom="line", alpha=0.6) +
-  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2,linewidth=0.5, alpha=0.6) +
-  scale_color_manual(values = treat_colors) +
-  facet_wrap(~gene_id, ncol= 3,scales="free_y") +
-  theme_bw() +
-  theme(
-    strip.text = element_text(face="bold", size=8),panel.spacing = unit(0.4, "lines")
-  ) +
-  labs(y="VST expression", x="Timepoint", title = "Type 1 DE (LRT) Response genes")
-```
-
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-73-2.png)<!-- -->
-
-``` r
-save_ggplot(last_plot(), "DE_Type1")
-
-plot_df %>% filter(grepl("Type2", response_type)) %>%
-  ggplot(aes(x=time, y=expression, color=treatment, group=interaction(treatment,query))) +
-  stat_summary(fun="mean", geom="line", alpha=0.6) +
-  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2,linewidth=0.5, alpha=0.6) +
-  scale_color_manual(values = treat_colors) +
-  facet_wrap(~gene_id, ncol= 3,scales="free_y") +
-  theme_bw() +
-  theme(
-    strip.text = element_text(face="bold", size=8),panel.spacing = unit(0.4, "lines")
-  ) +
-  labs(y="VST expression", x="Timepoint", title = "Type 2 DE (LRT) Response genes")
-```
-
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-73-3.png)<!-- -->
-
-``` r
-save_ggplot(last_plot(), "DE_Type2")
-
-plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_id)) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
-  stat_summary(fun="mean", geom="line") +
-  scale_color_manual(values = treat_colors) +
-  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
-  facet_wrap(~paste0(str_replace(query,"Porites_compressa_HIv1___",""), ": ", gene_id)) +
-  theme_bw() +
-  labs(y="VST expression", x="Timepoint")
-```
-
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-73-4.png)<!-- -->
-
-``` r
-plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_id)) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
-  stat_summary(fun="mean", geom="line") +
-  scale_color_manual(values = treat_colors) +
-  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
-  facet_wrap(~paste0(gene_id, ": ",str_replace(query,"Porites_compressa_HIv1___","")),scales="free_y") +
-  theme_bw() +
-  labs(y="VST expression", x="Timepoint", title = "Selected Type 1 DE (LRT) Response genes")
-```
-
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-73-5.png)<!-- -->
-
-``` r
-save_ggplot(last_plot(), "highlighted_DE_Type1")
-
-plot_df %>% filter(grepl("GDH",gene_id)|grepl("GS",gene_id)|grepl("AMT1",gene_id)) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
-  stat_summary(fun="mean", geom="line") +
-  scale_color_manual(values = treat_colors) +
-  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
-  facet_wrap(~paste0(gene_id, ": ",str_replace(query,"Porites_compressa_HIv1___","")),scales="free_y") +
-  theme_bw() +
-  labs(y="VST expression", x="Timepoint", title = "Selected Type 2 DE (LRT) Response genes")
-```
-
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-73-6.png)<!-- -->
-
-``` r
-save_ggplot(last_plot(), "highlighted_DE_Type2")
-```
-
-#### Mechanosensing and other channels
-
-``` r
-membrane_channels <- read_csv(paste0("../references/annotation/",species,"_membrane_channels.csv"))
-
-membrane_channels <- membrane_channels %>% filter(query %in% rownames(vsd_mat))
-
-plot_df <- as.data.frame(t(vsd_mat)) %>%
-  rownames_to_column(var="sample") %>%
-  left_join(meta, by=c("sample"="sample")) %>% 
-  pivot_longer(cols = all_of(rownames(vsd_mat)), names_to="query", values_to="expression") %>%
-  mutate(is_DE = query %in% rownames(DE_05)) %>% right_join(membrane_channels)
-
-membrane_list <- c("aquaporin","TRP",  "Mechanosensory" ,"calcium",  "ER_calcium" ,"Golgi_calcium" , "SLC",  "PMCA",  "Sodium_calcium_exchanger","Bhattacharya2016")
-
-for (genelist in membrane_list){
-  plot_df_filtered <- plot_df %>% filter(grepl(genelist,gene_set)) %>% filter(is_DE == FALSE)
-  if (nrow(plot_df_filtered)>1){
-    plot <- plot_df_filtered  %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
-    stat_summary(fun="mean", geom="line") +
-    scale_color_manual(values = treat_colors) +
-    stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
-    facet_wrap(short_name~paste0("DE by LRT: ",is_DE),scales="free_y") +
-    theme_bw() +
-    theme(strip.text = element_text(size = 6)) +
-    labs(y="VST expression", x="Timepoint")
-    print(plot)
-  }
-}
-for (genelist in membrane_list){
-  plot_df_filtered <- plot_df %>% filter(grepl(genelist,gene_set)) %>% filter(is_DE == TRUE)
-  if (nrow(plot_df_filtered)>1){
-    plot <- plot_df_filtered  %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
-    stat_summary(fun="mean", geom="line") +
-    scale_color_manual(values = treat_colors) +
-    stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
-    facet_wrap(short_name~paste0("DE by LRT: ",is_DE),scales="free_y") +
-    theme_bw() +
-    theme(strip.text = element_text(size = 6)) +
-    labs(y="VST expression", x="Timepoint")
-    print(plot)
-  }
-}
-```
-
-### ImpulseDE2
-
-Based on [this
-paper](https://academic.oup.com/bib/article/20/1/288/4364840#130283262),
-this is the best package to use other than comparing each time point
-against each other individually. I am also planning to ID gene modules
-via WGCNA.
-
-Repo here: <https://github.com/YosefLab/ImpulseDE2>
-
-Tutorial here:
-<http://bioconductor.statistik.tu-dortmund.de/packages/3.11/bioc/vignettes/ImpulseDE2/inst/doc/ImpulseDE2_Tutorial.html>
-, I followed closely with the section “Case-control differential
-expression analysis”
-
-Read the ImpulseDE2 paper
-[here](https://academic.oup.com/nar/article/46/20/e119/5068248)
-
-David S Fischer, Fabian J Theis, Nir Yosef, Impulse model-based
-differential expression analysis of time course sequencing data, Nucleic
-Acids Research, Volume 46, Issue 20, 16 November 2018, Page e119,
-<https://doi.org/10.1093/nar/gky675>
-
-``` r
-#library(devtools)
-#install_github("YosefLab/ImpulseDE2")
-
-library(ImpulseDE2)
-```
-
-First, reformat our metadata table to match the column names used in the
-ImpulseDE2 vignette.
-
-``` r
-meta_impulse <- meta %>%
-  dplyr::rename(Sample = sample, Time = time, Batch = replicate) %>% 
-  mutate(Time = as.numeric(as.character(Time)),
-         #Time = as.numeric(Time),
-         Condition = str_replace(treatment, "C", "control"),
-         Condition = str_replace(Condition, "H", "case")
-         ) %>%
-  select(-c(species,treatment))
-```
-
-Then, generate the ImpulseDE2 object
-
-``` r
-#test with just 500 genes that I determined to be DE by treatment/timepoint with DESeq2 
-objectImpulseDE2 <- runImpulseDE2(
-  matCountData    = as.matrix(filtered_counts)[top_500_DE_genes,], #or use filtered_counts 
-  dfAnnotation    = meta_impulse,
-  boolCaseCtrl    = TRUE,
-  vecConfounders  = c("Batch"), #only use if you want to try to control for batch effects
-  boolIdentifyTransients = TRUE, #use if you want to ID transiently- vs permanently-regulated genes
-  scaNProc        = 8 )
-
-#run with all genes
-objectImpulseDE2 <- runImpulseDE2(
-  matCountData    = as.matrix(counts_raw), #or use filtered_counts 
-  dfAnnotation    = meta_impulse,
-  boolCaseCtrl    = TRUE,
-  vecConfounders  = c("Batch"), #only use if you want to try to control for batch effects
-  boolIdentifyTransients = TRUE, #use if you want to ID transiently- vs permanently-regulated genes
-  scaNProc        = 18 )
-
-saveRDS(objectImpulseDE2, file = paste0(outdir, "/objectImpulseDE2.rds"))
-```
-
-``` r
-objectImpulseDE2 <- readRDS(paste0(outdir, "/objectImpulseDE2.rds"))
-
-impulse_results <- objectImpulseDE2$dfImpulseDE2Results
-head(impulse_results)
-```
-
-    ##                                                                              Gene
-    ## Porites_compressa_HIv1___RNAseq.g9868.t1 Porites_compressa_HIv1___RNAseq.g9868.t1
-    ## Porites_compressa_HIv1___TS.g4306.t1         Porites_compressa_HIv1___TS.g4306.t1
-    ## Porites_compressa_HIv1___TS.g4309.t1                                         <NA>
-    ## Porites_compressa_HIv1___TS.g4310.t1                                         <NA>
-    ## Porites_compressa_HIv1___RNAseq.g9679.t1                                     <NA>
-    ## Porites_compressa_HIv1___RNAseq.g9682.t1 Porites_compressa_HIv1___RNAseq.g9682.t1
-    ##                                                  p padj loglik_full loglik_red
-    ## Porites_compressa_HIv1___RNAseq.g9868.t1 0.9917506    1  -25.137228 -25.392255
-    ## Porites_compressa_HIv1___TS.g4306.t1     1.0000000    1   -3.850928  -3.850814
-    ## Porites_compressa_HIv1___TS.g4309.t1            NA   NA          NA         NA
-    ## Porites_compressa_HIv1___TS.g4310.t1            NA   NA          NA         NA
-    ## Porites_compressa_HIv1___RNAseq.g9679.t1        NA   NA          NA         NA
-    ## Porites_compressa_HIv1___RNAseq.g9682.t1 0.9659703    1  -31.844187 -32.322613
-    ##                                          df_full df_red         mean
-    ## Porites_compressa_HIv1___RNAseq.g9868.t1      17     12 7.522115e-01
-    ## Porites_compressa_HIv1___TS.g4306.t1          17     12 1.860825e-06
-    ## Porites_compressa_HIv1___TS.g4309.t1          NA     NA           NA
-    ## Porites_compressa_HIv1___TS.g4310.t1          NA     NA           NA
-    ## Porites_compressa_HIv1___RNAseq.g9679.t1      NA     NA           NA
-    ## Porites_compressa_HIv1___RNAseq.g9682.t1      17     12 2.033463e-01
-    ##                                          converge_combined converge_case
-    ## Porites_compressa_HIv1___RNAseq.g9868.t1                 0             0
-    ## Porites_compressa_HIv1___TS.g4306.t1                     0             0
-    ## Porites_compressa_HIv1___TS.g4309.t1                    NA            NA
-    ## Porites_compressa_HIv1___TS.g4310.t1                    NA            NA
-    ## Porites_compressa_HIv1___RNAseq.g9679.t1                NA            NA
-    ## Porites_compressa_HIv1___RNAseq.g9682.t1                 0             0
-    ##                                          converge_control converge_sigmoid
-    ## Porites_compressa_HIv1___RNAseq.g9868.t1                0                0
-    ## Porites_compressa_HIv1___TS.g4306.t1                    0                0
-    ## Porites_compressa_HIv1___TS.g4309.t1                   NA               NA
-    ## Porites_compressa_HIv1___TS.g4310.t1                   NA               NA
-    ## Porites_compressa_HIv1___RNAseq.g9679.t1               NA               NA
-    ## Porites_compressa_HIv1___RNAseq.g9682.t1                0                0
-    ##                                          impulseTOsigmoid_p
-    ## Porites_compressa_HIv1___RNAseq.g9868.t1          0.8085221
-    ## Porites_compressa_HIv1___TS.g4306.t1              1.0000000
-    ## Porites_compressa_HIv1___TS.g4309.t1                     NA
-    ## Porites_compressa_HIv1___TS.g4310.t1                     NA
-    ## Porites_compressa_HIv1___RNAseq.g9679.t1                 NA
-    ## Porites_compressa_HIv1___RNAseq.g9682.t1          0.4845805
-    ##                                          impulseTOsigmoid_padj sigmoidTOconst_p
-    ## Porites_compressa_HIv1___RNAseq.g9868.t1             1.0000000        0.8244647
-    ## Porites_compressa_HIv1___TS.g4306.t1                 1.0000000        1.0000000
-    ## Porites_compressa_HIv1___TS.g4309.t1                        NA               NA
-    ## Porites_compressa_HIv1___TS.g4310.t1                        NA               NA
-    ## Porites_compressa_HIv1___RNAseq.g9679.t1                    NA               NA
-    ## Porites_compressa_HIv1___RNAseq.g9682.t1             0.8832432        0.9959793
-    ##                                          sigmoidTOconst_padj isTransient
-    ## Porites_compressa_HIv1___RNAseq.g9868.t1                   1       FALSE
-    ## Porites_compressa_HIv1___TS.g4306.t1                       1       FALSE
-    ## Porites_compressa_HIv1___TS.g4309.t1                      NA          NA
-    ## Porites_compressa_HIv1___TS.g4310.t1                      NA          NA
-    ## Porites_compressa_HIv1___RNAseq.g9679.t1                  NA          NA
-    ## Porites_compressa_HIv1___RNAseq.g9682.t1                   1       FALSE
-    ##                                          isMonotonous allZero
-    ## Porites_compressa_HIv1___RNAseq.g9868.t1        FALSE   FALSE
-    ## Porites_compressa_HIv1___TS.g4306.t1            FALSE   FALSE
-    ## Porites_compressa_HIv1___TS.g4309.t1               NA    TRUE
-    ## Porites_compressa_HIv1___TS.g4310.t1               NA    TRUE
-    ## Porites_compressa_HIv1___RNAseq.g9679.t1           NA    TRUE
-    ## Porites_compressa_HIv1___RNAseq.g9682.t1        FALSE   FALSE
-
-``` r
-write.table(impulse_results,file.path(outdir, "ImpulseDE2_Results.txt"),row.names=F,quote=F,sep="\t")
-
-# Genes with significant treatment effect on temporal trajectory
-sig_genes <- impulse_results[impulse_results$padj < 0.05 & 
-                               impulse_results$loglik_full > impulse_results$loglik_red, ]
-
-nrow(sig_genes)
-```
-
-    ## [1] 9118
-
-``` r
-head(sig_genes[order(sig_genes$padj), ])
-```
-
-    ##                                                                                Gene
-    ## Porites_compressa_HIv1___RNAseq.g40862.t1 Porites_compressa_HIv1___RNAseq.g40862.t1
-    ## Porites_compressa_HIv1___RNAseq.12682_t     Porites_compressa_HIv1___RNAseq.12682_t
-    ## Porites_compressa_HIv1___RNAseq.g19794.t1 Porites_compressa_HIv1___RNAseq.g19794.t1
-    ## Porites_compressa_HIv1___RNAseq.g24271.t1 Porites_compressa_HIv1___RNAseq.g24271.t1
-    ## Porites_compressa_HIv1___RNAseq.g40324.t1 Porites_compressa_HIv1___RNAseq.g40324.t1
-    ## Porites_compressa_HIv1___RNAseq.g41296.t1 Porites_compressa_HIv1___RNAseq.g41296.t1
-    ##                                                      p         padj loglik_full
-    ## Porites_compressa_HIv1___RNAseq.g40862.t1 1.444275e-46 5.560314e-42   -345.3443
-    ## Porites_compressa_HIv1___RNAseq.12682_t   1.785042e-32 3.436116e-28   -209.9890
-    ## Porites_compressa_HIv1___RNAseq.g19794.t1 1.149079e-28 1.474613e-24   -192.9607
-    ## Porites_compressa_HIv1___RNAseq.g24271.t1 7.430912e-27 7.152067e-23   -240.6193
-    ## Porites_compressa_HIv1___RNAseq.g40324.t1 1.539538e-26 1.185414e-22   -309.1734
-    ## Porites_compressa_HIv1___RNAseq.g41296.t1 3.540472e-26 2.271744e-22   -198.1882
-    ##                                           loglik_red df_full df_red       mean
-    ## Porites_compressa_HIv1___RNAseq.g40862.t1  -457.7068      17     12 9609.45623
-    ## Porites_compressa_HIv1___RNAseq.12682_t    -289.3881      17     12  299.57639
-    ## Porites_compressa_HIv1___RNAseq.g19794.t1  -263.4130      17     12   93.93792
-    ## Porites_compressa_HIv1___RNAseq.g24271.t1  -306.8102      17     12  490.66126
-    ## Porites_compressa_HIv1___RNAseq.g40324.t1  -374.6191      17     12 2700.51478
-    ## Porites_compressa_HIv1___RNAseq.g41296.t1  -262.7818      17     12  151.12608
-    ##                                           converge_combined converge_case
-    ## Porites_compressa_HIv1___RNAseq.g40862.t1                 0             0
-    ## Porites_compressa_HIv1___RNAseq.12682_t                   0             0
-    ## Porites_compressa_HIv1___RNAseq.g19794.t1                 0             0
-    ## Porites_compressa_HIv1___RNAseq.g24271.t1                 0             0
-    ## Porites_compressa_HIv1___RNAseq.g40324.t1                 0             0
-    ## Porites_compressa_HIv1___RNAseq.g41296.t1                 0             0
-    ##                                           converge_control converge_sigmoid
-    ## Porites_compressa_HIv1___RNAseq.g40862.t1                0                0
-    ## Porites_compressa_HIv1___RNAseq.12682_t                  0                0
-    ## Porites_compressa_HIv1___RNAseq.g19794.t1                0                0
-    ## Porites_compressa_HIv1___RNAseq.g24271.t1                0                0
-    ## Porites_compressa_HIv1___RNAseq.g40324.t1                0                0
-    ## Porites_compressa_HIv1___RNAseq.g41296.t1                0                0
-    ##                                           impulseTOsigmoid_p
-    ## Porites_compressa_HIv1___RNAseq.g40862.t1       5.983611e-15
-    ## Porites_compressa_HIv1___RNAseq.12682_t         2.704661e-06
-    ## Porites_compressa_HIv1___RNAseq.g19794.t1       1.000000e+00
-    ## Porites_compressa_HIv1___RNAseq.g24271.t1       1.348840e-03
-    ## Porites_compressa_HIv1___RNAseq.g40324.t1       1.208993e-20
-    ## Porites_compressa_HIv1___RNAseq.g41296.t1       3.602406e-02
-    ##                                           impulseTOsigmoid_padj
-    ## Porites_compressa_HIv1___RNAseq.g40862.t1          4.701287e-12
-    ## Porites_compressa_HIv1___RNAseq.12682_t            1.718263e-04
-    ## Porites_compressa_HIv1___RNAseq.g19794.t1          1.000000e+00
-    ## Porites_compressa_HIv1___RNAseq.g24271.t1          1.929729e-02
-    ## Porites_compressa_HIv1___RNAseq.g40324.t1          2.585835e-17
-    ## Porites_compressa_HIv1___RNAseq.g41296.t1          1.860358e-01
-    ##                                           sigmoidTOconst_p sigmoidTOconst_padj
-    ## Porites_compressa_HIv1___RNAseq.g40862.t1     3.697629e-52        7.117752e-48
-    ## Porites_compressa_HIv1___RNAseq.12682_t       1.058081e-48        1.357835e-44
-    ## Porites_compressa_HIv1___RNAseq.g19794.t1     7.940164e-54        3.056884e-49
-    ## Porites_compressa_HIv1___RNAseq.g24271.t1     2.378702e-36        1.144721e-32
-    ## Porites_compressa_HIv1___RNAseq.g40324.t1     8.338210e-31        1.783404e-27
-    ## Porites_compressa_HIv1___RNAseq.g41296.t1     8.434002e-35        3.247006e-31
-    ##                                           isTransient isMonotonous allZero
-    ## Porites_compressa_HIv1___RNAseq.g40862.t1       FALSE         TRUE   FALSE
-    ## Porites_compressa_HIv1___RNAseq.12682_t         FALSE         TRUE   FALSE
-    ## Porites_compressa_HIv1___RNAseq.g19794.t1       FALSE         TRUE   FALSE
-    ## Porites_compressa_HIv1___RNAseq.g24271.t1       FALSE         TRUE   FALSE
-    ## Porites_compressa_HIv1___RNAseq.g40324.t1        TRUE        FALSE   FALSE
-    ## Porites_compressa_HIv1___RNAseq.g41296.t1       FALSE         TRUE   FALSE
-
-``` r
-library(ComplexHeatmap)
-
-lsHeatmaps <- plotHeatmap(
-  objectImpulseDE2       = objectImpulseDE2,
-  strCondition           = "case",
-  boolIdentifyTransients = TRUE, #set to true if true above
-  scaQThres              = 0.01)
-draw(lsHeatmaps$complexHeatmapRaw) 
-```
-
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-79-1.png)<!-- -->
-
-``` r
-png(paste0(outdir,"/ImpulseDE/ImpulseDE2_heatmap.png"), width = 2000, height = 2400, res = 300)
-draw(lsHeatmaps$complexHeatmapRaw)
-dev.off()
-```
-
-    ## png 
-    ##   2
-
-``` r
-majerova_genes <- HeatStressGenes_Pcomp %>% filter(ref_first_author =="Majerova")
+# Majerova 2021 key qPCR genes
+majerova_genes <- HeatStressGenes %>% filter(ref_first_author =="Majerova")
 stress_genes_ids <- unique(majerova_genes$query)
-plot_stress_genes <- stress_genes_ids[stress_genes_ids %in% rownames(objectImpulseDE2@matCountDataProc)]
+plot_stress_genes <- stress_genes_ids[stress_genes_ids %in% rownames(objectImpulseDE2@matCountDataProc)] 
 
-impulse_results %>% filter(Gene %in% stress_genes_ids) %>% arrange(padj) %>% left_join(HeatStressGenes_Pcomp_unique, by = join_by(Gene==query))
+impulse_results %>% filter(Gene %in% stress_genes_ids) %>% arrange(padj) %>% left_join(HeatStressGenes_unique, by = join_by(Gene==query))
 ```
 
     ##                                         Gene            p         padj
@@ -3732,7 +3925,7 @@ heatgenes <- plotGenes(
   vecGeneIDs       = plot_stress_genes,
   objectImpulseDE2 = objectImpulseDE2,
   boolSimplePlot = TRUE,   boolCaseCtrl     = TRUE,
-  dirOut           = "../output_RNA/differential_expression/POR_Pcomp/ImpulseDE/",
+  dirOut           = paste0(outdir,"/ImpulseDE/"),
   strFileName = "stress_genes_Majerova.pdf",
   boolMultiplePlotsPerPage = FALSE,
   strNameRefMethod = NULL)
@@ -3798,14 +3991,15 @@ heatgenes
     ## [[18]]
 
 ``` r
-HSPS <- impulse_results %>% filter(Gene %in% stress_genes_ids) %>% arrange(padj) %>% left_join(HeatStressGenes_Pcomp_unique, by = join_by(Gene==query)) %>% filter(grepl("HSP",gene_id)) %>% pull(Gene)
+# HSP genes
+HSPS <- impulse_results %>% filter(Gene %in% stress_genes_ids) %>% arrange(padj) %>% left_join(HeatStressGenes_unique, by = join_by(Gene==query)) %>% filter(grepl("HSP",gene_id)) %>% pull(Gene)
 
 HSPs <- plotGenes(
   vecGeneIDs       = HSPS,
   objectImpulseDE2 = objectImpulseDE2,
   boolSimplePlot = TRUE,
   boolCaseCtrl     = TRUE,
-  dirOut           = "../output_RNA/differential_expression/POR_Pcomp/ImpulseDE/",
+  dirOut           = paste0(outdir,"/ImpulseDE/"),
   strFileName = "HSPs.pdf",
   boolMultiplePlotsPerPage = FALSE,
   strNameRefMethod = NULL)
@@ -3822,72 +4016,84 @@ HSPs
     ## 
     ## [[2]]
 
-``` r
-lsgplotsGenes <- plotGenes(
-  vecGeneIDs       = NULL,
-  scaNTopIDs       = 10,
-  objectImpulseDE2 = objectImpulseDE2,
-  boolSimplePlot = TRUE,
-  boolCaseCtrl     = TRUE,
-  dirOut           = "../output_RNA/differential_expression/POR_Pcomp/ImpulseDE/",
-  boolMultiplePlotsPerPage = FALSE,
-  strNameRefMethod = NULL)
-```
-
-    ## [1] "Creating ../output_RNA/differential_expression/POR_Pcomp/ImpulseDE/ImpulseDE2_Trajectories.pdf"
-
-``` r
-lsgplotsGenes
-```
-
-    ## [[1]]
-
-    ## 
-    ## [[2]]
-
-    ## 
-    ## [[3]]
-
-    ## 
-    ## [[4]]
-
-    ## 
-    ## [[5]]
-
-    ## 
-    ## [[6]]
-
-    ## 
-    ## [[7]]
-
-    ## 
-    ## [[8]]
-
-    ## 
-    ## [[9]]
-
-    ## 
-    ## [[10]]
+#### 7. Heatmap of top 500 impulseDE genes
 
 ``` r
 top_500_DE_genes <- impulse_results %>% arrange(padj) %>% head(500) %>% rownames()
 
-#view top 500 most vairable genes
-pheatmap(vsd_mat[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
-         cluster_cols=FALSE, #cutree_cols = 2,
+pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
+         cluster_cols=FALSE,
          annotation_col= meta[,c("treatment","time")],
          annotation_colors = list("treatment" = treat_colors,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-81-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-84-1.png)<!-- -->
 
 ``` r
-pheatmap(vsd_mat[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
+pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
          cluster_cols=TRUE, cutree_cols = 2,
          annotation_col= meta[,c("treatment","time")],
          annotation_colors = list("treatment" = treat_colors,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-81-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-84-2.png)<!-- -->
+
+#### 7.5. Heatmap of membrane channel genes
+
+``` r
+membrane_DE_genes <- impulse_results %>%
+  right_join(membrane_channels, join_by("Gene"=="query")) %>% 
+  filter(gene_set != "SLC") %>%
+  filter(padj < 0.05) %>% 
+  column_to_rownames("Gene")
+
+plot_df <- as.data.frame(t(vsd_mat)) %>%
+  rownames_to_column(var="sample") %>%
+  left_join(meta, by=c("sample"="sample")) %>% 
+  pivot_longer(cols = all_of(rownames(vsd_mat)), names_to="query", values_to="expression") %>%
+  mutate(is_DE = query %in% rownames(DE_05)) %>% right_join(membrane_DE_genes %>% rownames_to_column("query"))
+
+membrane_list <- c("aquaporin","TRP",  "Mechanosensory" ,"calcium",  "ER_calcium" ,"Golgi_calcium" , "SLC",  "PMCA",  "Sodium_calcium_exchanger","Bhattacharya2016")
+
+pdf(paste0(outdir,"/ImpulseDE/membrane_sig_plots.pdf"), width = 14, height = 14)
+
+pheatmap(assay(vsd)[rownames(membrane_DE_genes), ], cluster_rows=TRUE, show_rownames=TRUE,
+         cluster_cols=FALSE,
+         labels_row=membrane_DE_genes$short_name,
+         annotation_row = membrane_DE_genes %>% dplyr::select(gene_set),
+         annotation_col= meta[,c("treatment","time")],
+         annotation_colors = list("treatment" = treat_colors,
+                                  "time" = time_colors))
+
+pheatmap(assay(vsd)[rownames(membrane_DE_genes), ], cluster_rows=TRUE, show_rownames=TRUE,
+          cluster_cols=TRUE, cutree_cols = 2,
+         fontsize = 5,
+         labels_row=membrane_DE_genes$short_name,
+         annotation_row = membrane_DE_genes %>% dplyr::select(gene_set),
+         annotation_col= meta[,c("treatment","time")],
+         annotation_colors = list("treatment" = treat_colors,
+                                  "time" = time_colors))
+
+
+for (genelist in unique(plot_df$gene_set)){
+  plot_df_filtered <- plot_df %>% filter(grepl(genelist,gene_set))# %>% filter(is_DE == TRUE)
+  if (nrow(plot_df_filtered)>1){
+    plot <- plot_df_filtered  %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+    stat_summary(fun="mean", geom="line") +
+    scale_color_manual(values = treat_colors) +
+    stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+    facet_wrap(short_name~query,scales="free_y") +
+    theme_bw() +
+    theme(strip.text = element_text(size = 6)) +
+    labs(y="VST expression", x="Timepoint",title=paste(genelist))
+    print(plot)
+  }
+}
+
+dev.off()
+```
+
+    ## png 
+    ##   2
