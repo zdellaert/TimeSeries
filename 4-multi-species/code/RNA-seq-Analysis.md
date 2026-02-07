@@ -56,7 +56,7 @@ sessionInfo() #provides list of loaded packages and version of R.
     ## other attached packages:
     ##  [1] lubridate_1.9.4             forcats_1.0.0              
     ##  [3] stringr_1.6.0               dplyr_1.1.4                
-    ##  [5] purrr_1.2.0                 readr_2.1.6                
+    ##  [5] purrr_1.2.1                 readr_2.1.6                
     ##  [7] tidyr_1.3.1                 tibble_3.3.0               
     ##  [9] tidyverse_2.0.0             RColorBrewer_1.1-3         
     ## [11] ggnewscale_0.5.2            pheatmap_1.0.13            
@@ -72,9 +72,9 @@ sessionInfo() #provides list of loaded packages and version of R.
     ##  [1] tidyselect_1.2.1        farver_2.1.2            blob_1.2.4             
     ##  [4] Biostrings_2.78.0       S7_0.2.1                fastmap_1.2.0          
     ##  [7] XML_3.99-0.18           digest_0.6.39           timechange_0.3.0       
-    ## [10] lifecycle_1.0.4         survival_3.8-3          KEGGREST_1.50.0        
+    ## [10] lifecycle_1.0.5         survival_3.8-3          KEGGREST_1.50.0        
     ## [13] RSQLite_2.4.5           magrittr_2.0.4          compiler_4.5.1         
-    ## [16] rlang_1.1.6             tools_4.5.1             yaml_2.3.11            
+    ## [16] rlang_1.1.7             tools_4.5.1             yaml_2.3.12            
     ## [19] knitr_1.50              S4Arrays_1.10.0         bit_4.6.0              
     ## [22] DelayedArray_0.36.0     abind_1.4-8             BiocParallel_1.44.0    
     ## [25] withr_3.0.2             grid_4.5.1              xtable_1.8-4           
@@ -82,15 +82,15 @@ sessionInfo() #provides list of loaded packages and version of R.
     ## [31] rmarkdown_2.30          crayon_1.5.3            rstudioapi_0.17.1      
     ## [34] httr_1.4.7              tzdb_0.5.0              DBI_1.2.3              
     ## [37] cachem_1.1.0            splines_4.5.1           parallel_4.5.1         
-    ## [40] AnnotationDbi_1.72.0    XVector_0.50.0          vctrs_0.6.5            
+    ## [40] AnnotationDbi_1.72.0    XVector_0.50.0          vctrs_0.7.0            
     ## [43] Matrix_1.7-3            jsonlite_2.0.0          hms_1.1.4              
     ## [46] bit64_4.6.0-1           locfit_1.5-9.12         annotate_1.86.1        
     ## [49] glue_1.8.0              codetools_0.2-20        stringi_1.8.7          
     ## [52] gtable_0.3.6            GenomeInfoDb_1.44.3     UCSC.utils_1.4.0       
     ## [55] pillar_1.11.1           htmltools_0.5.9         GenomeInfoDbData_1.2.14
     ## [58] R6_2.6.1                evaluate_1.0.5          lattice_0.22-7         
-    ## [61] png_0.1-8               memoise_2.0.1           Rcpp_1.1.0             
-    ## [64] SparseArray_1.10.2      xfun_0.54               pkgconfig_2.0.3
+    ## [61] png_0.1-8               memoise_2.0.1           Rcpp_1.1.1             
+    ## [64] SparseArray_1.10.2      xfun_0.56               pkgconfig_2.0.3
 
 ``` r
 save_ggplot <- function(plot, filename, width = 10, height = 7, units = "in", dpi = 300,bg=NULL) {
@@ -128,6 +128,9 @@ counts_raw <- read.csv("../output_RNA/count_matrices/POC_PacutaV2_gene_count_mat
 
 # make list of samples 
 samples <- colnames(counts_raw)
+
+# read in SwissProt annotation
+SwissProt <- read.delim("../references/annotation/Pocillopora_acuta_HIv2_Swissprot_GO.tsv")
 ```
 
 #### 2. Extract metadata from sample names
@@ -177,6 +180,12 @@ paste0("Number of genes after filtering: ", sum(counts_filt_poa))
 ```
 
     ## [1] "Number of genes after filtering: 24941"
+
+``` r
+paste0("% of genes kept: ", round(100*(sum(counts_filt_poa)/nrow(counts_raw)),digits=2),"%")
+```
+
+    ## [1] "% of genes kept: 73.94%"
 
 ``` r
 write.csv(filtered_counts, file = file.path(outdir, "filtered_counts.csv"))
@@ -660,45 +669,51 @@ for (genelist in names(list)){
 #### Mechanosensing and other channels
 
 ``` r
-DESeq_SwissProt_annotation <- read_csv("../output_RNA/differential_expression/POC_PacutaV2/DESeq_SwissProt_annotation.csv")
+membrane_channels <- read_csv(paste0("../references/annotation/",species,"_membrane_channels.csv"))
+
+membrane_channels <- membrane_channels %>% filter(query %in% rownames(vsd_mat))
 
 plot_df <- as.data.frame(t(vsd_mat)) %>%
   rownames_to_column(var="sample") %>%
   left_join(meta, by=c("sample"="sample")) %>% 
   pivot_longer(cols = all_of(rownames(vsd_mat)), names_to="query", values_to="expression") %>%
-  mutate(is_DE = query %in% rownames(DE_05))
+  mutate(is_DE = query %in% rownames(DE_05)) %>% right_join(membrane_channels)
 
-## note this list is not complete I need to redo the annotations for all 3 species in the same way - -this is just a jumping off point from LCM paper
+membrane_list <- c("aquaporin","TRP",  "Mechanosensory" ,"calcium",  "ER_calcium" ,"Golgi_calcium" , "SLC",  "PMCA",  "Sodium_calcium_exchanger","Bhattacharya2016")
 
-list <- list(aquaporin = DESeq_SwissProt_annotation %>% filter(grepl("Aquaporin", ProteinNames, ignore.case = TRUE)) %>% pull(query),
-             TRP = DESeq_SwissProt_annotation %>% filter(grepl("transient receptor potential", ProteinNames, ignore.case = TRUE)) %>% pull(query),
-             Mechanosensory = DESeq_SwissProt_annotation %>% filter(grepl("Mechanosens", ProteinNames, ignore.case = TRUE)) %>% pull(query),
-             calcium_transport_1 = DESeq_SwissProt_annotation %>% filter(grepl("calcium ion transport", BiologicalProcess, ignore.case = TRUE)) %>% head(34) %>% pull(query),
-             calcium_transport_2 = DESeq_SwissProt_annotation %>% filter(grepl("calcium ion transport", BiologicalProcess, ignore.case = TRUE)) %>% tail(34) %>% pull(query),
-             SLCs_1 = DESeq_SwissProt_annotation %>% filter(grepl("Solute carrier", ProteinNames, ignore.case = TRUE)) %>% slice(1:30) %>% pull(query),
-             SLCs_2 = DESeq_SwissProt_annotation %>% filter(grepl("Solute carrier", ProteinNames, ignore.case = TRUE)) %>% slice(31:60) %>% pull(query),
-             SLCs_3 = DESeq_SwissProt_annotation %>% filter(grepl("Solute carrier", ProteinNames, ignore.case = TRUE)) %>% slice(61:90) %>% pull(query),
-             SLCs_4 = DESeq_SwissProt_annotation %>% filter(grepl("Solute carrier", ProteinNames, ignore.case = TRUE)) %>% slice(91:120) %>% pull(query),
-             SLCs_5 = DESeq_SwissProt_annotation %>% filter(grepl("Solute carrier", ProteinNames, ignore.case = TRUE)) %>% slice(121:150) %>% pull(query),
-             SLCs_6 = DESeq_SwissProt_annotation %>% filter(grepl("Solute carrier", ProteinNames, ignore.case = TRUE)) %>% slice(151:180) %>% pull(query),
-             SLCs_7 = DESeq_SwissProt_annotation %>% filter(grepl("Solute carrier", ProteinNames, ignore.case = TRUE)) %>% slice(181:211) %>% pull(query)
-             )
-
-for (genelist in names(list)){
-  genes <- list[[genelist]]
-  
-  plot <- plot_df %>% filter(query %in% genes) %>% filter(is_DE == TRUE) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+for (genelist in membrane_list){
+  plot <- plot_df %>% filter(grepl(genelist,gene_set)) %>% filter(is_DE == FALSE) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
   stat_summary(fun="mean", geom="line") +
   scale_color_manual(values = treat_colors) +
   stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
-  facet_wrap(paste0(str_replace(query,"Pocillopora_acuta_HIv2___",""), ": ", genelist)~ ~paste0("DE by LRT: ",is_DE),scales="free_y") +
+  facet_wrap(short_name~paste0("DE by LRT: ",is_DE),scales="free_y") +
   theme_bw() +
+  theme(strip.text = element_text(size = 6)) +
   labs(y="VST expression", x="Timepoint")
   print(plot)
 }
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-2.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-3.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-4.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-5.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-6.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-7.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-8.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-9.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-10.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-11.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-12.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-2.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-3.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-4.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-5.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-6.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-7.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-8.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-9.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-10.png)<!-- -->
+
+``` r
+for (genelist in membrane_list){
+  plot_df_filtered <- plot_df %>% filter(grepl(genelist,gene_set)) %>% filter(is_DE == TRUE)
+  if (nrow(plot_df_filtered)>1){
+    plot <- plot_df_filtered  %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+    stat_summary(fun="mean", geom="line") +
+    scale_color_manual(values = treat_colors) +
+    stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+    facet_wrap(short_name~paste0("DE by LRT: ",is_DE),scales="free_y") +
+    theme_bw() +
+    theme(strip.text = element_text(size = 6)) +
+    labs(y="VST expression", x="Timepoint")
+    print(plot)
+  }
+}
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-11.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-12.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-13.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-14.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-15.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-16.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-17.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-18.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-19.png)<!-- -->
 
 ### ImpulseDE2
 
@@ -772,7 +787,7 @@ saveRDS(objectImpulseDE2, file = paste0(outdir, "/objectImpulseDE2.rds"))
 objectImpulseDE2 <- readRDS(paste0(outdir, "/objectImpulseDE2.rds"))
 
 impulse_results <- objectImpulseDE2$dfImpulseDE2Results
-
+impulse_results_annot <- impulse_results %>% left_join(SwissProt, by = join_by("Gene"=="query")) %>% filter(!is.na(Gene))
 write.table(impulse_results,file.path(outdir, "ImpulseDE2_Results.txt"),row.names=F,quote=F,sep="\t")
 
 # Genes with significant treatment effect on temporal trajectory
@@ -998,74 +1013,99 @@ impulse_results %>% filter(Gene %in% stress_genes_ids) %>% arrange(padj) %>% lef
 
     ##                                         Gene            p         padj
     ## 1  Pocillopora_acuta_HIv2___RNAseq.g23086.t1 1.205649e-25 1.966836e-23
-    ## 2   Pocillopora_acuta_HIv2___RNAseq.g8390.t1 5.864485e-12 1.696933e-10
-    ## 3   Pocillopora_acuta_HIv2___RNAseq.g7990.t1 8.705708e-08 1.170848e-06
-    ## 4  Pocillopora_acuta_HIv2___RNAseq.g11741.t1 1.033821e-07 1.368452e-06
-    ## 5   Pocillopora_acuta_HIv2___RNAseq.g7011.t1 1.943587e-05 1.513350e-04
-    ## 6  Pocillopora_acuta_HIv2___RNAseq.g28750.t1 3.812607e-04 2.063197e-03
-    ## 7   Pocillopora_acuta_HIv2___RNAseq.g1543.t1 4.439332e-04 2.351334e-03
-    ## 8  Pocillopora_acuta_HIv2___RNAseq.g15654.t1 5.884784e-03 2.173575e-02
-    ## 9  Pocillopora_acuta_HIv2___RNAseq.g19827.t1 1.071314e-02 3.576183e-02
-    ## 10 Pocillopora_acuta_HIv2___RNAseq.g28257.t1 1.862649e-02 5.650858e-02
-    ## 11     Pocillopora_acuta_HIv2___TS.g1420.t1c 2.089094e-01 3.966835e-01
-    ## 12     Pocillopora_acuta_HIv2___TS.g11056.t1 3.148303e-01 5.433653e-01
-    ## 13     Pocillopora_acuta_HIv2___TS.g22794.t1 9.824282e-01 1.000000e+00
+    ## 2  Pocillopora_acuta_HIv2___RNAseq.g25813.t1 7.469887e-17 4.352147e-15
+    ## 3   Pocillopora_acuta_HIv2___RNAseq.g8390.t1 5.864485e-12 1.696933e-10
+    ## 4   Pocillopora_acuta_HIv2___RNAseq.g7990.t1 8.705708e-08 1.170848e-06
+    ## 5  Pocillopora_acuta_HIv2___RNAseq.g11741.t1 1.033821e-07 1.368452e-06
+    ## 6   Pocillopora_acuta_HIv2___RNAseq.g7011.t1 1.943587e-05 1.513350e-04
+    ## 7      Pocillopora_acuta_HIv2___TS.g18382.t1 8.187584e-05 5.384643e-04
+    ## 8  Pocillopora_acuta_HIv2___RNAseq.g21168.t1 2.913472e-04 1.632539e-03
+    ## 9  Pocillopora_acuta_HIv2___RNAseq.g28750.t1 3.812607e-04 2.063197e-03
+    ## 10  Pocillopora_acuta_HIv2___RNAseq.g1543.t1 4.439332e-04 2.351334e-03
+    ## 11 Pocillopora_acuta_HIv2___RNAseq.g15654.t1 5.884784e-03 2.173575e-02
+    ## 12 Pocillopora_acuta_HIv2___RNAseq.g19827.t1 1.071314e-02 3.576183e-02
+    ## 13 Pocillopora_acuta_HIv2___RNAseq.g28257.t1 1.862649e-02 5.650858e-02
+    ## 14  Pocillopora_acuta_HIv2___RNAseq.g6753.t1 4.365653e-02 1.139950e-01
+    ## 15   Pocillopora_acuta_HIv2___RNAseq.g439.t1 6.252873e-02 1.524574e-01
+    ## 16     Pocillopora_acuta_HIv2___TS.g1420.t1c 2.089094e-01 3.966835e-01
+    ## 17     Pocillopora_acuta_HIv2___TS.g11056.t1 3.148303e-01 5.433653e-01
+    ## 18     Pocillopora_acuta_HIv2___TS.g22794.t1 9.824282e-01 1.000000e+00
     ##    loglik_full loglik_red df_full df_red        mean converge_combined
     ## 1    -226.7029  -290.0421      17     12    16.88214                 0
-    ## 2    -311.9988  -342.7642      17     12  1516.79604                 0
-    ## 3    -360.2671  -380.8476      17     12  2406.05959                 0
-    ## 4    -338.8354  -359.2311      17     12  6737.69717                 0
-    ## 5    -336.0962  -350.7914      17     12  3495.73645                 0
-    ## 6    -398.1313  -409.4929      17     12 16580.59460                 0
-    ## 7    -317.6602  -328.8485      17     12  1927.73258                 0
-    ## 8    -382.6847  -390.8654      17     12 14536.36147                 0
-    ## 9    -270.7317  -278.1913      17     12  1117.97938                 0
-    ## 10   -343.8170  -350.5992      17     12  4267.53272                 0
-    ## 11   -270.0951  -273.6758      17     12  1020.64181                 0
-    ## 12   -228.0786  -231.0348      17     12   549.66866                 0
-    ## 13   -310.1762  -310.5311      17     12  2539.03987                 0
+    ## 2    -342.8827  -385.3907      17     12  6866.94799                 0
+    ## 3    -311.9988  -342.7642      17     12  1516.79604                 0
+    ## 4    -360.2671  -380.8476      17     12  2406.05959                 0
+    ## 5    -338.8354  -359.2311      17     12  6737.69717                 0
+    ## 6    -336.0962  -350.7914      17     12  3495.73645                 0
+    ## 7    -259.3709  -272.4672      17     12  1104.06698                 0
+    ## 8    -270.4197  -282.0868      17     12  1272.03120                 0
+    ## 9    -398.1313  -409.4929      17     12 16580.59460                 0
+    ## 10   -317.6602  -328.8485      17     12  1927.73258                 0
+    ## 11   -382.6847  -390.8654      17     12 14536.36147                 0
+    ## 12   -270.7317  -278.1913      17     12  1117.97938                 0
+    ## 13   -343.8170  -350.5992      17     12  4267.53272                 0
+    ## 14   -288.0210  -293.7311      17     12  1295.16395                 0
+    ## 15   -227.1589  -232.4029      17     12   445.30456                 0
+    ## 16   -270.0951  -273.6758      17     12  1020.64181                 0
+    ## 17   -228.0786  -231.0348      17     12   549.66866                 0
+    ## 18   -310.1762  -310.5311      17     12  2539.03987                 0
     ##    converge_case converge_control converge_sigmoid impulseTOsigmoid_p
     ## 1              0                0                0       9.036014e-25
-    ## 2              0                0                0       9.621245e-32
-    ## 3              0                0                0       2.056098e-17
-    ## 4              0                0                0       1.030922e-01
-    ## 5              0                0                0       2.372638e-16
-    ## 6              0                0                0       1.647502e-10
-    ## 7              0                0                0       1.331483e-16
-    ## 8              0                0                0       1.964108e-14
-    ## 9              0                0                0       9.212830e-06
-    ## 10             0                0                0       1.813011e-14
-    ## 11             0                0                0       1.271732e-02
-    ## 12             0                0                0       5.266291e-04
-    ## 13             0                0                0       3.934446e-01
+    ## 2              0                0                0       1.528534e-11
+    ## 3              0                0                0       9.621245e-32
+    ## 4              0                0                0       2.056098e-17
+    ## 5              0                0                0       1.030922e-01
+    ## 6              0                0                0       2.372638e-16
+    ## 7              0                0                0       2.221378e-10
+    ## 8              0                0                0       5.931825e-07
+    ## 9              0                0                0       1.647502e-10
+    ## 10             0                0                0       1.331483e-16
+    ## 11             0                0                0       1.964108e-14
+    ## 12             0                0                0       9.212830e-06
+    ## 13             0                0                0       1.813011e-14
+    ## 14             0                0                0       4.496710e-02
+    ## 15             0                0                0       1.304164e-04
+    ## 16             0                0                0       1.271732e-02
+    ## 17             0                0                0       5.266291e-04
+    ## 18             0                0                0       3.934446e-01
     ##    impulseTOsigmoid_padj sigmoidTOconst_p sigmoidTOconst_padj isTransient
     ## 1           5.234297e-23     1.273167e-50        3.525153e-48        TRUE
-    ## 2           9.017676e-30     8.147251e-07        6.325805e-06        TRUE
-    ## 3           6.125672e-16     2.328604e-10        3.079635e-09        TRUE
-    ## 4           1.997638e-01     4.018418e-21        1.663592e-19       FALSE
-    ## 5           6.342447e-15     6.502038e-01        9.643774e-01        TRUE
-    ## 6           2.133975e-09     4.210250e-14        8.901608e-13        TRUE
-    ## 7           3.656429e-15     4.110883e-01        7.020113e-01        TRUE
-    ## 8           4.225002e-13     9.998479e-01        1.000000e+00        TRUE
-    ## 9           5.623852e-05     8.444456e-06        5.435139e-05        TRUE
-    ## 10          3.919532e-13     7.133615e-04        3.085304e-03        TRUE
-    ## 11          3.517630e-02     2.643449e-02        7.456706e-02       FALSE
-    ## 12          2.191323e-03     6.652087e-01        9.781719e-01       FALSE
-    ## 13          5.639056e-01     2.546886e-01        4.865337e-01       FALSE
-    ##    isMonotonous allZero     gene_id response_type     category
-    ## 1         FALSE   FALSE HSP70,Hsc71         Type1          UPR
-    ## 2         FALSE   FALSE       Bcl-2         Type1    Apoptosis
-    ## 3         FALSE   FALSE        HSF1         Type1          UPR
-    ## 4          TRUE   FALSE       Foxo3         Type1 ROS response
-    ## 5         FALSE   FALSE       Bcl-2         Type1    Apoptosis
-    ## 6         FALSE   FALSE   Nrf2,Nrf1         Type1 ROS response
-    ## 7         FALSE   FALSE         BAX         Type1    Apoptosis
-    ## 8         FALSE   FALSE        BI-1         Type1    Apoptosis
-    ## 9         FALSE   FALSE        AMPK         Type1 ROS response
-    ## 10        FALSE   FALSE       Bcl-2         Type1    Apoptosis
-    ## 11        FALSE   FALSE        HO-1         Type1 ROS response
-    ## 12        FALSE   FALSE         BAK         Type1    Apoptosis
-    ## 13        FALSE   FALSE          GR         Type1 ROS response
+    ## 2           2.292801e-10     4.501791e-43        8.335218e-41        TRUE
+    ## 3           9.017676e-30     8.147251e-07        6.325805e-06        TRUE
+    ## 4           6.125672e-16     2.328604e-10        3.079635e-09        TRUE
+    ## 5           1.997638e-01     4.018418e-21        1.663592e-19       FALSE
+    ## 6           6.342447e-15     6.502038e-01        9.643774e-01        TRUE
+    ## 7           2.827549e-09     1.733014e-03        6.819084e-03        TRUE
+    ## 8           4.535659e-06     1.608816e-04        8.021489e-04        TRUE
+    ## 9           2.133975e-09     4.210250e-14        8.901608e-13        TRUE
+    ## 10          3.656429e-15     4.110883e-01        7.020113e-01        TRUE
+    ## 11          4.225002e-13     9.998479e-01        1.000000e+00        TRUE
+    ## 12          5.623852e-05     8.444456e-06        5.435139e-05        TRUE
+    ## 13          3.919532e-13     7.133615e-04        3.085304e-03        TRUE
+    ## 14          1.018849e-01     3.127242e-04        1.463485e-03       FALSE
+    ## 15          6.246575e-04     5.872483e-01        9.042887e-01        TRUE
+    ## 16          3.517630e-02     2.643449e-02        7.456706e-02       FALSE
+    ## 17          2.191323e-03     6.652087e-01        9.781719e-01       FALSE
+    ## 18          5.639056e-01     2.546886e-01        4.865337e-01       FALSE
+    ##    isMonotonous allZero     gene_id response_type        category
+    ## 1         FALSE   FALSE HSP70,Hsc71         Type1             UPR
+    ## 2         FALSE   FALSE       NF-KB         Type1 Innate immunity
+    ## 3         FALSE   FALSE       Bcl-2         Type1       Apoptosis
+    ## 4         FALSE   FALSE        HSF1         Type1             UPR
+    ## 5          TRUE   FALSE       Foxo3         Type1    ROS response
+    ## 6         FALSE   FALSE       Bcl-2         Type1       Apoptosis
+    ## 7         FALSE   FALSE        mTOR         Type1       Apoptosis
+    ## 8         FALSE   FALSE        mTOR         Type1       Apoptosis
+    ## 9         FALSE   FALSE   Nrf2,Nrf1         Type1    ROS response
+    ## 10        FALSE   FALSE         BAX         Type1       Apoptosis
+    ## 11        FALSE   FALSE        BI-1         Type1       Apoptosis
+    ## 12        FALSE   FALSE        AMPK         Type1    ROS response
+    ## 13        FALSE   FALSE       Bcl-2         Type1       Apoptosis
+    ## 14        FALSE   FALSE   Cas3,Casp         Type1       Apoptosis
+    ## 15        FALSE   FALSE        OGG1         Type1    ROS response
+    ## 16        FALSE   FALSE        HO-1         Type1    ROS response
+    ## 17        FALSE   FALSE         BAK         Type1       Apoptosis
+    ## 18        FALSE   FALSE          GR         Type1    ROS response
 
 ``` r
 heatgenes <- plotGenes(
@@ -1122,6 +1162,21 @@ heatgenes
     ## 
     ## [[13]]
 
+    ## 
+    ## [[14]]
+
+    ## 
+    ## [[15]]
+
+    ## 
+    ## [[16]]
+
+    ## 
+    ## [[17]]
+
+    ## 
+    ## [[18]]
+
 ``` r
 # HSP genes
 HSPS <- impulse_results %>% filter(Gene %in% stress_genes_ids) %>% arrange(padj) %>% left_join(HeatStressGenes_unique, by = join_by(Gene==query)) %>% filter(grepl("HSP",gene_id)) %>% pull(Gene)
@@ -1168,6 +1223,64 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
 ```
 
 ![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-24-2.png)<!-- -->
+
+#### 7.5. Heatmap of membrane channel genes
+
+``` r
+membrane_DE_genes <- impulse_results %>%
+  right_join(membrane_channels, join_by("Gene"=="query")) %>% 
+  filter(gene_set != "SLC") %>%
+  filter(padj < 0.05) %>% 
+  column_to_rownames("Gene")
+
+plot_df <- as.data.frame(t(vsd_mat)) %>%
+  rownames_to_column(var="sample") %>%
+  left_join(meta, by=c("sample"="sample")) %>% 
+  pivot_longer(cols = all_of(rownames(vsd_mat)), names_to="query", values_to="expression") %>%
+  mutate(is_DE = query %in% rownames(DE_05)) %>% right_join(membrane_DE_genes %>% rownames_to_column("query"))
+
+membrane_list <- c("aquaporin","TRP",  "Mechanosensory" ,"calcium",  "ER_calcium" ,"Golgi_calcium" , "SLC",  "PMCA",  "Sodium_calcium_exchanger","Bhattacharya2016")
+
+pdf(paste0(outdir,"/ImpulseDE/membrane_sig_plots.pdf"), width = 14, height = 14)
+
+pheatmap(assay(vsd)[rownames(membrane_DE_genes), ], cluster_rows=TRUE, show_rownames=TRUE,
+         cluster_cols=FALSE,
+         labels_row=membrane_DE_genes$short_name,
+         annotation_row = membrane_DE_genes %>% dplyr::select(gene_set),
+         annotation_col= meta[,c("treatment","time")],
+         annotation_colors = list("treatment" = treat_colors,
+                                  "time" = time_colors))
+
+pheatmap(assay(vsd)[rownames(membrane_DE_genes), ], cluster_rows=TRUE, show_rownames=TRUE,
+          cluster_cols=TRUE, cutree_cols = 2,
+         fontsize = 5,
+         labels_row=membrane_DE_genes$short_name,
+         annotation_row = membrane_DE_genes %>% dplyr::select(gene_set),
+         annotation_col= meta[,c("treatment","time")],
+         annotation_colors = list("treatment" = treat_colors,
+                                  "time" = time_colors))
+
+
+for (genelist in unique(plot_df$gene_set)){
+  plot_df_filtered <- plot_df %>% filter(grepl(genelist,gene_set))# %>% filter(is_DE == TRUE)
+  if (nrow(plot_df_filtered)>1){
+    plot <- plot_df_filtered  %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+    stat_summary(fun="mean", geom="line") +
+    scale_color_manual(values = treat_colors) +
+    stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+    facet_wrap(short_name~query,scales="free_y") +
+    theme_bw() +
+    theme(strip.text = element_text(size = 6)) +
+    labs(y="VST expression", x="Timepoint",title=paste(genelist))
+    print(plot)
+  }
+}
+
+dev.off()
+```
+
+    ## png 
+    ##   2
 
 #### 8. Cluster ImpulseDE2-significant genes by trajectory
 
@@ -1490,7 +1603,7 @@ dev.off()
     ## png 
     ##   2
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-28-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-29-1.png)<!-- -->
 
 ``` r
 cluster2 <- plotGenes(
@@ -1578,12 +1691,14 @@ print(cluster_peaks)
 ```
 
     ##   cluster peak_time
-    ## 1       1         3
-    ## 2       2         3
-    ## 3       3       120
-    ## 4       4         0
-    ## 5       5        24
-    ## 6       6         0
+    ## 1       1         0
+    ## 2       2         0
+    ## 3       3         3
+    ## 4       4         3
+    ## 5       5       120
+    ## 6       6         3
+
+##### View clustered genes of interest
 
 ``` r
 HSPS <- impulse_results %>% filter(Gene %in% stress_genes_ids) %>% arrange(padj) %>% left_join(HeatStressGenes_unique, by = join_by(Gene==query)) %>% filter(grepl("HSP",gene_id)) %>% pull(Gene)
@@ -1594,7 +1709,7 @@ cluster_assignments %>% filter(gene %in% HSPS)
     ##                                                                                gene
     ## Pocillopora_acuta_HIv2___RNAseq.g23086.t1 Pocillopora_acuta_HIv2___RNAseq.g23086.t1
     ##                                           cluster membership
-    ## Pocillopora_acuta_HIv2___RNAseq.g23086.t1       1  0.9177708
+    ## Pocillopora_acuta_HIv2___RNAseq.g23086.t1       6  0.7487417
 
 ``` r
 heat_clustered <- HeatStressGenes_unique %>% left_join(cluster_assignments, by = join_by(query==gene)) %>%
@@ -1604,10 +1719,117 @@ heat_clustered <- HeatStressGenes_unique %>% left_join(cluster_assignments, by =
 heat_clustered %>% filter(!is.na(cluster)) %>% ggplot(aes(y=reorder(gene_id, cluster), x=factor(cluster), fill=cluster)) +
   geom_tile() +
   theme_bw() +
-  labs(x="Gene ID", y="Mfuzz Cluster", title="Heat stress genes clustered by temporal expression pattern")
+  labs(x="Mfuzz Cluster", y="Gene ID", title="Heat stress genes clustered by temporal expression pattern")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-33-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-34-1.png)<!-- -->
+
+``` r
+channel_clustered <- membrane_channels  %>% unique() %>% 
+  filter(gene_set != "SLC") %>%
+  left_join(cluster_assignments, by = join_by(query==gene)) %>%
+  arrange(cluster)  %>%
+  filter(!is.na(cluster)) 
+
+cat("Total membrane channel genes:", nrow(membrane_channels), "\n")
+```
+
+    ## Total membrane channel genes: 630
+
+``` r
+cat("Found in ImpulseDE/Mfuzz data:", nrow(channel_clustered), "\n")
+```
+
+    ## Found in ImpulseDE/Mfuzz data: 39
+
+``` r
+channel_clustered %>%
+    ggplot(aes(x = factor(cluster), y = reorder(short_name, cluster), fill = gene_set)) +
+  geom_tile(color = "white") +
+  geom_text(aes(label = cluster), size = 2) +
+  theme_bw() +
+  theme(axis.text.y = element_text(size = 6)) +
+  labs(x = "Mfuzz Cluster", 
+       y = "Gene ID", 
+       fill = "Channel Type",
+       title = "Membrane Channel Genes - Cluster Assignment",
+       subtitle = paste0(sum(!is.na(channel_clustered$cluster)), 
+                        " genes significantly DE"))
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-35-1.png)<!-- -->
+
+``` r
+heat_eset_membrane <- heat_eset[channel_clustered$query, ]
+mfuzz_clusters_membrane <- mfuzz_clusters
+mfuzz_clusters_membrane$membership <- mfuzz_clusters$membership[channel_clustered$query, ]
+mfuzz_clusters_membrane$cluster <- mfuzz_clusters$cluster[channel_clustered$query]
+
+mfuzz.plot(
+  heat_eset_membrane,
+  cl = mfuzz_clusters_membrane,
+  new.window = FALSE,
+  mfrow = c(3,3),
+  time.labels = c(0,1,3,12,24,72,120)
+)
+
+# Visualize clusters
+pdf(paste0(outdir,"/membrane_temporal_clusters.pdf"), width = 12, height = 10)
+mfuzz.plot2(heat_eset_membrane, cl = mfuzz_clusters_membrane, mfrow = c(3, 4), 
+            time.labels = c("0", "1", "3", "12", "24", "72", "120"),
+            xlab = "Time (hours)",x11=FALSE)
+dev.off()
+```
+
+    ## png 
+    ##   2
+
+``` r
+plot_df <- as.data.frame(t(vsd_mat)) %>%
+  rownames_to_column(var="sample") %>%
+  left_join(meta, by=c("sample"="sample")) %>% 
+  pivot_longer(cols = all_of(rownames(vsd_mat)), names_to="query", values_to="expression") %>%
+  mutate(is_DE = query %in% rownames(DE_05)) %>% right_join(membrane_DE_genes %>% rownames_to_column("query"))
+
+pdf(paste0(outdir,"/ImpulseDE/membrane_sig_plots_clustered.pdf"), width = 14, height = 14)
+
+for (cl in c(0,unique(channel_clustered$cluster))){
+  plot_df_filtered <- plot_df %>% left_join(channel_clustered) %>% filter(!is.na(cluster))
+  
+  if (cl ==0){
+    plot_df_low_membership <- plot_df_filtered %>% filter(membership<0.5)
+    
+    plot <- plot_df_low_membership  %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+    stat_summary(fun="mean", geom="line") +
+    scale_color_manual(values = treat_colors) +
+    stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+    facet_wrap(short_name~query,scales="free_y") +
+    theme_bw() +
+    theme(strip.text = element_text(size = 6)) +
+    labs(y="VST expression", x="Timepoint",title=paste("Membership < 0.5"))
+    print(plot)
+  } else{
+    plot_df_cluster <- plot_df_filtered %>% filter(cluster==cl)
+      if (nrow(plot_df_cluster)>1){
+    plot <- plot_df_cluster  %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+    stat_summary(fun="mean", geom="line") +
+    scale_color_manual(values = treat_colors) +
+    stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+    facet_wrap(short_name~query,scales="free_y") +
+    theme_bw() +
+    theme(strip.text = element_text(size = 6)) +
+    labs(y="VST expression", x="Timepoint",title=paste("Cluster ",cl))
+    print(plot)
+  }
+  }
+}
+dev.off()
+```
+
+    ## png 
+    ##   2
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-35-2.png)<!-- -->
 
 ## MON: pre-processing and visualization
 
@@ -1676,6 +1898,12 @@ paste0("Number of genes after filtering: ", sum(counts_filt_poa))
     ## [1] "Number of genes after filtering: 30089"
 
 ``` r
+paste0("% of genes kept: ", round(100*(sum(counts_filt_poa)/nrow(counts_raw)),digits=2),"%")
+```
+
+    ## [1] "% of genes kept: 55.33%"
+
+``` r
 write.csv(filtered_counts, file = file.path(outdir, "filtered_counts.csv"))
 ```
 
@@ -1741,7 +1969,7 @@ pheatmap(sampleDistMatrix,
          col=colorRampPalette( rev(brewer.pal(9, "Blues")) )(255))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-43-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-45-1.png)<!-- -->
 
 ### Principal component plot of the samples
 
@@ -1768,7 +1996,7 @@ PCA <- ggplot() +
 PCA
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-44-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-46-1.png)<!-- -->
 
 ``` r
 save_ggplot(PCA, "PCA_MON")
@@ -1790,7 +2018,7 @@ pheatmap(assay(vsd)[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-45-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-47-1.png)<!-- -->
 
 ``` r
 pheatmap(assay(vsd)[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
@@ -1800,7 +2028,7 @@ pheatmap(assay(vsd)[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-45-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-47-2.png)<!-- -->
 
 ### Heat stress genes
 
@@ -1832,7 +2060,7 @@ plot_df %>% ggplot(aes(x=time, y=expression, color=gene_id, group=gene_id)) +
   labs(y="VST expression", x="Timepoint")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-46-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-48-1.png)<!-- -->
 
 ``` r
 plot_df %>% filter(grepl("Type1", response_type)) %>%
@@ -1848,7 +2076,7 @@ plot_df %>% filter(grepl("Type1", response_type)) %>%
   labs(y="VST expression", x="Timepoint", title = "Type 1 Expressed Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-46-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-48-2.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "All_Type1")
@@ -1866,7 +2094,7 @@ plot_df %>% filter(grepl("Type2", response_type)) %>%
   labs(y="VST expression", x="Timepoint", title = "Type 2 Expressed Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-46-3.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-48-3.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "All_Type2")
@@ -1880,7 +2108,7 @@ plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_
   labs(y="VST expression", x="Timepoint")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-46-4.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-48-4.png)<!-- -->
 
 ### DESeq LRT Test
 
@@ -1910,7 +2138,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-47-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-49-1.png)<!-- -->
 
 ``` r
 pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
@@ -1920,7 +2148,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-47-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-49-2.png)<!-- -->
 
 ``` r
 top_500_DE_genes <- DE_05 %>% arrange(log2FoldChange) %>% head(500) %>% rownames()
@@ -1933,7 +2161,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-47-3.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-49-3.png)<!-- -->
 
 ``` r
 pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
@@ -1943,7 +2171,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-47-4.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-49-4.png)<!-- -->
 
 ``` r
 top_500_DE_genes <- DE_05 %>% arrange(desc(log2FoldChange)) %>% head(500) %>% rownames()
@@ -1956,7 +2184,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-47-5.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-49-5.png)<!-- -->
 
 ``` r
 pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
@@ -1966,7 +2194,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-47-6.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-49-6.png)<!-- -->
 
 ### DE Heat stress genes
 
@@ -1986,7 +2214,7 @@ plot_df %>% ggplot(aes(x=time, y=expression, color=gene_id, group=gene_id)) +
   labs(y="VST expression", x="Timepoint")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-48-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-50-1.png)<!-- -->
 
 ``` r
 plot_df %>% filter(grepl("Type1", response_type)) %>%
@@ -2002,7 +2230,7 @@ plot_df %>% filter(grepl("Type1", response_type)) %>%
   labs(y="VST expression", x="Timepoint", title = "Type 1 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-48-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-50-2.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "DE_Type1")
@@ -2020,7 +2248,7 @@ plot_df %>% filter(grepl("Type2", response_type)) %>%
   labs(y="VST expression", x="Timepoint", title = "Type 2 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-48-3.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-50-3.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "DE_Type2")
@@ -2034,7 +2262,7 @@ plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_
   labs(y="VST expression", x="Timepoint")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-48-4.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-50-4.png)<!-- -->
 
 ``` r
 plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_id)) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
@@ -2046,7 +2274,7 @@ plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_
   labs(y="VST expression", x="Timepoint", title = "Selected Type 1 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-48-5.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-50-5.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "highlighted_DE_Type1")
@@ -2060,10 +2288,56 @@ plot_df %>% filter(grepl("GDH",gene_id)|grepl("GS",gene_id)|grepl("AMT1",gene_id
   labs(y="VST expression", x="Timepoint", title = "Selected Type 2 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-48-6.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-50-6.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "highlighted_DE_Type2")
+```
+
+#### Mechanosensing and other channels
+
+``` r
+membrane_channels <- read_csv(paste0("../references/annotation/",species,"_membrane_channels.csv"))
+
+membrane_channels <- membrane_channels %>% filter(query %in% rownames(vsd_mat))
+
+plot_df <- as.data.frame(t(vsd_mat)) %>%
+  rownames_to_column(var="sample") %>%
+  left_join(meta, by=c("sample"="sample")) %>% 
+  pivot_longer(cols = all_of(rownames(vsd_mat)), names_to="query", values_to="expression") %>%
+  mutate(is_DE = query %in% rownames(DE_05)) %>% right_join(membrane_channels)
+
+membrane_list <- c("aquaporin","TRP",  "Mechanosensory" ,"calcium",  "ER_calcium" ,"Golgi_calcium" , "SLC",  "PMCA",  "Sodium_calcium_exchanger","Bhattacharya2016")
+
+for (genelist in membrane_list){
+  plot_df_filtered <- plot_df %>% filter(grepl(genelist,gene_set)) %>% filter(is_DE == FALSE)
+  if (nrow(plot_df_filtered)>1){
+    plot <- plot_df_filtered  %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+    stat_summary(fun="mean", geom="line") +
+    scale_color_manual(values = treat_colors) +
+    stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+    facet_wrap(short_name~paste0("DE by LRT: ",is_DE),scales="free_y") +
+    theme_bw() +
+    theme(strip.text = element_text(size = 6)) +
+    labs(y="VST expression", x="Timepoint")
+    print(plot)
+  }
+}
+
+for (genelist in membrane_list){
+  plot_df_filtered <- plot_df %>% filter(grepl(genelist,gene_set)) %>% filter(is_DE == TRUE)
+  if (nrow(plot_df_filtered)>1){
+    plot <- plot_df_filtered  %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+    stat_summary(fun="mean", geom="line") +
+    scale_color_manual(values = treat_colors) +
+    stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+    facet_wrap(short_name~paste0("DE by LRT: ",is_DE),scales="free_y") +
+    theme_bw() +
+    theme(strip.text = element_text(size = 6)) +
+    labs(y="VST expression", x="Timepoint")
+    print(plot)
+  }
+}
 ```
 
 ### ImpulseDE2
@@ -2296,7 +2570,7 @@ lsHeatmaps <- plotHeatmap(
 draw(lsHeatmaps$complexHeatmapRaw) 
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-53-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-56-1.png)<!-- -->
 
 ``` r
 png(paste0(outdir,"/ImpulseDE/ImpulseDE2_heatmap.png"), width = 2000, height = 2400, res = 300)
@@ -2315,71 +2589,106 @@ plot_stress_genes <- stress_genes_ids[stress_genes_ids %in% rownames(objectImpul
 impulse_results %>% filter(Gene %in% stress_genes_ids) %>% arrange(padj) %>% left_join(HeatStressGenes_Mcap_unique, by = join_by(Gene==query))
 ```
 
-    ##                                          Gene            p        padj
-    ## 1  Montipora_capitata_HIv3___RNAseq.g37104.t1 0.0003748174 0.005331462
-    ## 2  Montipora_capitata_HIv3___RNAseq.g27769.t1 0.0004129965 0.005768790
-    ## 3      Montipora_capitata_HIv3___TS.g26835.t1 0.0008895054 0.010818963
-    ## 4  Montipora_capitata_HIv3___RNAseq.g45609.t1 0.0105686218 0.075493801
-    ## 5    Montipora_capitata_HIv3___RNAseq.10384_t 0.0142234098 0.095261428
-    ## 6  Montipora_capitata_HIv3___RNAseq.g20389.t1 0.0334375549 0.182148098
-    ## 7      Montipora_capitata_HIv3___TS.g50400.t1 0.0452905693 0.227187132
-    ## 8  Montipora_capitata_HIv3___RNAseq.g20408.t1 0.0565690134 0.264951416
-    ## 9  Montipora_capitata_HIv3___RNAseq.g43322.t1 0.2048581139 0.638528673
-    ## 10 Montipora_capitata_HIv3___RNAseq.g34531.t1 0.2539042905 0.731179744
-    ## 11 Montipora_capitata_HIv3___RNAseq.g47592.t2 0.3546798825 0.894408496
-    ## 12     Montipora_capitata_HIv3___TS.g35289.t2 1.0000000000 1.000000000
+    ##                                           Gene            p         padj
+    ## 1     Montipora_capitata_HIv3___RNAseq.38369_t 2.913627e-14 8.785050e-12
+    ## 2   Montipora_capitata_HIv3___RNAseq.g49714.t1 8.231238e-06 2.249713e-04
+    ## 3   Montipora_capitata_HIv3___RNAseq.g45122.t1 2.465721e-04 3.768457e-03
+    ## 4   Montipora_capitata_HIv3___RNAseq.g37104.t1 3.748174e-04 5.331462e-03
+    ## 5   Montipora_capitata_HIv3___RNAseq.g49717.t1 3.905826e-04 5.510998e-03
+    ## 6   Montipora_capitata_HIv3___RNAseq.g27769.t1 4.129965e-04 5.768790e-03
+    ## 7       Montipora_capitata_HIv3___TS.g26835.t1 8.895054e-04 1.081896e-02
+    ## 8   Montipora_capitata_HIv3___RNAseq.g45609.t1 1.056862e-02 7.549380e-02
+    ## 9     Montipora_capitata_HIv3___RNAseq.10384_t 1.422341e-02 9.526143e-02
+    ## 10  Montipora_capitata_HIv3___RNAseq.g20389.t1 3.343755e-02 1.821481e-01
+    ## 11      Montipora_capitata_HIv3___TS.g50400.t1 4.529057e-02 2.271871e-01
+    ## 12  Montipora_capitata_HIv3___RNAseq.g20408.t1 5.656901e-02 2.649514e-01
+    ## 13  Montipora_capitata_HIv3___RNAseq.g18570.t1 1.160972e-01 4.395591e-01
+    ## 14  Montipora_capitata_HIv3___RNAseq.g18567.t1 1.491959e-01 5.201910e-01
+    ## 15  Montipora_capitata_HIv3___RNAseq.g43322.t1 2.048581e-01 6.385287e-01
+    ## 16  Montipora_capitata_HIv3___RNAseq.g34531.t1 2.539043e-01 7.311797e-01
+    ## 17  Montipora_capitata_HIv3___RNAseq.g47592.t2 3.546799e-01 8.944085e-01
+    ## 18      Montipora_capitata_HIv3___TS.g35289.t2 1.000000e+00 1.000000e+00
+    ## 19 Montipora_capitata_HIv3___RNAseq.g30015.t1b 5.454985e-01 1.000000e+00
     ##    loglik_full loglik_red df_full df_red        mean converge_combined
-    ## 1    -294.2213  -305.6024      17     12  3642.90271                 0
-    ## 2    -277.9355  -289.2061      17     12  1261.60026                 0
-    ## 3    -284.7643  -295.1567      17     12  1204.05096                 0
-    ## 4    -361.6464  -369.1225      17     12 11865.94009                 0
-    ## 5    -394.9973  -402.1114      17     12 14918.53821                 0
-    ## 6    -326.0298  -332.0800      17     12  1873.61645                 0
-    ## 7    -353.2302  -358.8931      17     12  5103.36659                 0
-    ## 8    -224.8884  -230.2634      17     12   260.06067                 0
-    ## 9    -277.3306  -280.9400      17     12   827.64542                 0
-    ## 10   -348.3636  -351.6529      17     12  4202.57892                 0
-    ## 11   -380.6378  -383.4027      17     12  8084.21453                 0
-    ## 12   -307.2346  -299.4049      17     12    61.13291                 0
+    ## 1    -345.5424  -381.8537      17     12  4957.95805                 0
+    ## 2    -252.1112  -267.7533      17     12   304.12941                 0
+    ## 3    -253.1553  -265.0114      17     12  1124.87366                 0
+    ## 4    -294.2213  -305.6024      17     12  3642.90271                 0
+    ## 5    -239.1125  -250.4467      17     12   110.87690                 0
+    ## 6    -277.9355  -289.2061      17     12  1261.60026                 0
+    ## 7    -284.7643  -295.1567      17     12  1204.05096                 0
+    ## 8    -361.6464  -369.1225      17     12 11865.94009                 0
+    ## 9    -394.9973  -402.1114      17     12 14918.53821                 0
+    ## 10   -326.0298  -332.0800      17     12  1873.61645                 0
+    ## 11   -353.2302  -358.8931      17     12  5103.36659                 0
+    ## 12   -224.8884  -230.2634      17     12   260.06067                 0
+    ## 13   -238.2374  -242.6517      17     12   380.78356                 0
+    ## 14   -237.6057  -241.6709      17     12   353.84452                 0
+    ## 15   -277.3306  -280.9400      17     12   827.64542                 0
+    ## 16   -348.3636  -351.6529      17     12  4202.57892                 0
+    ## 17   -380.6378  -383.4027      17     12  8084.21453                 0
+    ## 18   -307.2346  -299.4049      17     12    61.13291                 0
+    ## 19   -294.0160  -296.0296      17     12  3362.85746                 0
     ##    converge_case converge_control converge_sigmoid impulseTOsigmoid_p
-    ## 1              0                0                0       3.894180e-06
-    ## 2              0                0                0       3.784452e-12
-    ## 3              0                0                0       2.184191e-08
-    ## 4              0                0                0       1.940554e-04
-    ## 5              0                0                0       4.445599e-09
-    ## 6              0                0                0       5.359714e-04
-    ## 7              0                0                0       1.216749e-05
-    ## 8              0                0                0       8.938109e-01
-    ## 9              0                0                0       6.450836e-03
-    ## 10             0                0                0       2.092133e-02
-    ## 11             0                0                0       8.126363e-02
-    ## 12             0                0                0       5.932445e-02
+    ## 1              0                0                0       5.306601e-30
+    ## 2              0                0                0       8.012574e-11
+    ## 3              0                0                0       3.883041e-03
+    ## 4              0                0                0       3.894180e-06
+    ## 5              0                0                0       3.304193e-06
+    ## 6              0                0                0       3.784452e-12
+    ## 7              0                0                0       2.184191e-08
+    ## 8              0                0                0       1.940554e-04
+    ## 9              0                0                0       4.445599e-09
+    ## 10             0                0                0       5.359714e-04
+    ## 11             0                0                0       1.216749e-05
+    ## 12             0                0                0       8.938109e-01
+    ## 13             0                0                0       3.312514e-02
+    ## 14             0                0                0       8.032492e-03
+    ## 15             0                0                0       6.450836e-03
+    ## 16             0                0                0       2.092133e-02
+    ## 17             0                0                0       8.126363e-02
+    ## 18             0                0                0       5.932445e-02
+    ## 19             0                0                0       7.707735e-02
     ##    impulseTOsigmoid_padj sigmoidTOconst_p sigmoidTOconst_padj isTransient
-    ## 1           1.184722e-04     0.9253247955         1.000000000        TRUE
-    ## 2           6.635125e-10     0.6171138042         1.000000000        TRUE
-    ## 3           1.419412e-06     0.6023577161         1.000000000        TRUE
-    ## 4           3.056140e-03     0.0066678039         0.053254682       FALSE
-    ## 5           3.579010e-07     0.1182046062         0.534315202        TRUE
-    ## 6           6.937006e-03     0.1208567140         0.543315777       FALSE
-    ## 7           3.058867e-04     0.9002040366         1.000000000        TRUE
-    ## 8           1.000000e+00     0.0160013353         0.110412032       FALSE
-    ## 9           4.859480e-02     0.0237589668         0.152709025       FALSE
-    ## 10          1.176496e-01     0.3589209753         1.000000000       FALSE
-    ## 11          3.063874e-01     0.0928900469         0.447464032       FALSE
-    ## 12          2.479517e-01     0.0001465574         0.001937915       FALSE
-    ##    isMonotonous allZero     gene_id response_type     category
-    ## 1         FALSE   FALSE          GR         Type1 ROS response
-    ## 2         FALSE   FALSE        AMPK         Type1 ROS response
-    ## 3         FALSE   FALSE         BAX         Type1    Apoptosis
-    ## 4         FALSE   FALSE        BI-1         Type1    Apoptosis
-    ## 5         FALSE   FALSE   Nrf2,Nrf1         Type1 ROS response
-    ## 6         FALSE   FALSE       Bcl-2         Type1    Apoptosis
-    ## 7         FALSE   FALSE       Bcl-2         Type1    Apoptosis
-    ## 8         FALSE   FALSE         BAK         Type1    Apoptosis
-    ## 9         FALSE   FALSE       Bcl-2         Type1    Apoptosis
-    ## 10        FALSE   FALSE       Foxo3         Type1 ROS response
-    ## 11        FALSE   FALSE        HSF1         Type1          UPR
-    ## 12        FALSE   FALSE HSP70,Hsc71         Type1          UPR
+    ## 1           1.141836e-26     0.0797644678         0.397044204        TRUE
+    ## 2           1.047788e-08     0.8347328096         1.000000000        TRUE
+    ## 3           3.292413e-02     0.0023085308         0.021635563       FALSE
+    ## 4           1.184722e-04     0.9253247955         1.000000000        TRUE
+    ## 5           1.034484e-04     0.9879083477         1.000000000        TRUE
+    ## 6           6.635125e-10     0.6171138042         1.000000000        TRUE
+    ## 7           1.419412e-06     0.6023577161         1.000000000        TRUE
+    ## 8           3.056140e-03     0.0066678039         0.053254682       FALSE
+    ## 9           3.579010e-07     0.1182046062         0.534315202        TRUE
+    ## 10          6.937006e-03     0.1208567140         0.543315777       FALSE
+    ## 11          3.058867e-04     0.9002040366         1.000000000        TRUE
+    ## 12          1.000000e+00     0.0160013353         0.110412032       FALSE
+    ## 13          1.641623e-01     0.5132098319         1.000000000       FALSE
+    ## 14          5.719482e-02     0.1979778194         0.777997934       FALSE
+    ## 15          4.859480e-02     0.0237589668         0.152709025       FALSE
+    ## 16          1.176496e-01     0.3589209753         1.000000000       FALSE
+    ## 17          3.063874e-01     0.0928900469         0.447464032       FALSE
+    ## 18          2.479517e-01     0.0001465574         0.001937915       FALSE
+    ## 19          2.955658e-01     0.0425035749         0.242384560       FALSE
+    ##    isMonotonous allZero     gene_id response_type        category
+    ## 1         FALSE   FALSE       NF-KB         Type1 Innate immunity
+    ## 2         FALSE   FALSE       NF-KB         Type1 Innate immunity
+    ## 3         FALSE   FALSE        OGG1         Type1    ROS response
+    ## 4         FALSE   FALSE          GR         Type1    ROS response
+    ## 5         FALSE   FALSE       NF-KB         Type1 Innate immunity
+    ## 6         FALSE   FALSE        AMPK         Type1    ROS response
+    ## 7         FALSE   FALSE         BAX         Type1       Apoptosis
+    ## 8         FALSE   FALSE        BI-1         Type1       Apoptosis
+    ## 9         FALSE   FALSE   Nrf2,Nrf1         Type1    ROS response
+    ## 10        FALSE   FALSE       Bcl-2         Type1       Apoptosis
+    ## 11        FALSE   FALSE       Bcl-2         Type1       Apoptosis
+    ## 12        FALSE   FALSE         BAK         Type1       Apoptosis
+    ## 13        FALSE   FALSE   Cas3,Casp         Type1       Apoptosis
+    ## 14        FALSE   FALSE   Cas3,Casp         Type1       Apoptosis
+    ## 15        FALSE   FALSE       Bcl-2         Type1       Apoptosis
+    ## 16        FALSE   FALSE       Foxo3         Type1    ROS response
+    ## 17        FALSE   FALSE        HSF1         Type1             UPR
+    ## 18        FALSE   FALSE HSP70,Hsc71         Type1             UPR
+    ## 19        FALSE   FALSE        mTOR         Type1       Apoptosis
 
 ``` r
 heatgenes <- plotGenes(
@@ -2432,6 +2741,27 @@ heatgenes
 
     ## 
     ## [[12]]
+
+    ## 
+    ## [[13]]
+
+    ## 
+    ## [[14]]
+
+    ## 
+    ## [[15]]
+
+    ## 
+    ## [[16]]
+
+    ## 
+    ## [[17]]
+
+    ## 
+    ## [[18]]
+
+    ## 
+    ## [[19]]
 
 ``` r
 HSPS <- impulse_results %>% filter(Gene %in% stress_genes_ids) %>% arrange(padj) %>% left_join(HeatStressGenes_Mcap_unique, by = join_by(Gene==query)) %>% filter(grepl("HSP",gene_id)) %>% pull(Gene)
@@ -2512,7 +2842,7 @@ pheatmap(vsd_mat[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-55-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-58-1.png)<!-- -->
 
 ``` r
 pheatmap(vsd_mat[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
@@ -2522,7 +2852,7 @@ pheatmap(vsd_mat[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-55-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-58-2.png)<!-- -->
 
 ## POR: pre-processing and visualization
 
@@ -2591,6 +2921,12 @@ paste0("Number of genes after filtering: ", sum(counts_filt_poa))
     ## [1] "Number of genes after filtering: 27533"
 
 ``` r
+paste0("% of genes kept: ", round(100*(sum(counts_filt_poa)/nrow(counts_raw)),digits=2),"%")
+```
+
+    ## [1] "% of genes kept: 62.39%"
+
+``` r
 write.csv(filtered_counts, file = file.path(outdir, "filtered_counts.csv"))
 ```
 
@@ -2656,7 +2992,7 @@ pheatmap(sampleDistMatrix,
          col=colorRampPalette( rev(brewer.pal(9, "Blues")) )(255))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-65-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-68-1.png)<!-- -->
 
 ### Principal component plot of the samples
 
@@ -2683,7 +3019,7 @@ PCA <- ggplot() +
 PCA
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-66-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-69-1.png)<!-- -->
 
 ``` r
 save_ggplot(PCA, "PCA_POR")
@@ -2725,7 +3061,7 @@ pheatmap(assay(vsd)[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-67-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-70-1.png)<!-- -->
 
 ``` r
 pheatmap(assay(vsd)[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
@@ -2735,7 +3071,7 @@ pheatmap(assay(vsd)[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-67-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-70-2.png)<!-- -->
 
 ### Heat stress genes
 
@@ -2767,7 +3103,7 @@ plot_df %>% ggplot(aes(x=time, y=expression, color=gene_id, group=gene_id)) +
   labs(y="VST expression", x="Timepoint")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-68-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-71-1.png)<!-- -->
 
 ``` r
 plot_df %>% filter(grepl("Type1", response_type)) %>%
@@ -2783,7 +3119,7 @@ plot_df %>% filter(grepl("Type1", response_type)) %>%
   labs(y="VST expression", x="Timepoint", title = "Type 1 Expressed Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-68-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-71-2.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "All_Type1")
@@ -2801,7 +3137,7 @@ plot_df %>% filter(grepl("Type2", response_type)) %>%
   labs(y="VST expression", x="Timepoint", title = "Type 2 Expressed Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-68-3.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-71-3.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "All_Type2")
@@ -2815,7 +3151,7 @@ plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_
   labs(y="VST expression", x="Timepoint")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-68-4.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-71-4.png)<!-- -->
 
 ### DESeq LRT Test
 
@@ -2845,7 +3181,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-69-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-72-1.png)<!-- -->
 
 ``` r
 pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
@@ -2855,7 +3191,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-69-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-72-2.png)<!-- -->
 
 ``` r
 top_500_DE_genes <- DE_05 %>% arrange(log2FoldChange) %>% head(500) %>% rownames()
@@ -2868,7 +3204,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-69-3.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-72-3.png)<!-- -->
 
 ``` r
 pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
@@ -2878,7 +3214,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-69-4.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-72-4.png)<!-- -->
 
 ``` r
 top_500_DE_genes <- DE_05 %>% arrange(desc(log2FoldChange)) %>% head(500) %>% rownames()
@@ -2891,7 +3227,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-69-5.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-72-5.png)<!-- -->
 
 ``` r
 pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
@@ -2901,7 +3237,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-69-6.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-72-6.png)<!-- -->
 
 ### DE Heat stress genes
 
@@ -2921,7 +3257,7 @@ plot_df %>% ggplot(aes(x=time, y=expression, color=gene_id, group=gene_id)) +
   labs(y="VST expression", x="Timepoint")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-70-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-73-1.png)<!-- -->
 
 ``` r
 plot_df %>% filter(grepl("Type1", response_type)) %>%
@@ -2937,7 +3273,7 @@ plot_df %>% filter(grepl("Type1", response_type)) %>%
   labs(y="VST expression", x="Timepoint", title = "Type 1 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-70-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-73-2.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "DE_Type1")
@@ -2955,7 +3291,7 @@ plot_df %>% filter(grepl("Type2", response_type)) %>%
   labs(y="VST expression", x="Timepoint", title = "Type 2 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-70-3.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-73-3.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "DE_Type2")
@@ -2969,7 +3305,7 @@ plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_
   labs(y="VST expression", x="Timepoint")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-70-4.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-73-4.png)<!-- -->
 
 ``` r
 plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_id)) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
@@ -2981,7 +3317,7 @@ plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_
   labs(y="VST expression", x="Timepoint", title = "Selected Type 1 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-70-5.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-73-5.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "highlighted_DE_Type1")
@@ -2995,10 +3331,55 @@ plot_df %>% filter(grepl("GDH",gene_id)|grepl("GS",gene_id)|grepl("AMT1",gene_id
   labs(y="VST expression", x="Timepoint", title = "Selected Type 2 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-70-6.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-73-6.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "highlighted_DE_Type2")
+```
+
+#### Mechanosensing and other channels
+
+``` r
+membrane_channels <- read_csv(paste0("../references/annotation/",species,"_membrane_channels.csv"))
+
+membrane_channels <- membrane_channels %>% filter(query %in% rownames(vsd_mat))
+
+plot_df <- as.data.frame(t(vsd_mat)) %>%
+  rownames_to_column(var="sample") %>%
+  left_join(meta, by=c("sample"="sample")) %>% 
+  pivot_longer(cols = all_of(rownames(vsd_mat)), names_to="query", values_to="expression") %>%
+  mutate(is_DE = query %in% rownames(DE_05)) %>% right_join(membrane_channels)
+
+membrane_list <- c("aquaporin","TRP",  "Mechanosensory" ,"calcium",  "ER_calcium" ,"Golgi_calcium" , "SLC",  "PMCA",  "Sodium_calcium_exchanger","Bhattacharya2016")
+
+for (genelist in membrane_list){
+  plot_df_filtered <- plot_df %>% filter(grepl(genelist,gene_set)) %>% filter(is_DE == FALSE)
+  if (nrow(plot_df_filtered)>1){
+    plot <- plot_df_filtered  %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+    stat_summary(fun="mean", geom="line") +
+    scale_color_manual(values = treat_colors) +
+    stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+    facet_wrap(short_name~paste0("DE by LRT: ",is_DE),scales="free_y") +
+    theme_bw() +
+    theme(strip.text = element_text(size = 6)) +
+    labs(y="VST expression", x="Timepoint")
+    print(plot)
+  }
+}
+for (genelist in membrane_list){
+  plot_df_filtered <- plot_df %>% filter(grepl(genelist,gene_set)) %>% filter(is_DE == TRUE)
+  if (nrow(plot_df_filtered)>1){
+    plot <- plot_df_filtered  %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+    stat_summary(fun="mean", geom="line") +
+    scale_color_manual(values = treat_colors) +
+    stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+    facet_wrap(short_name~paste0("DE by LRT: ",is_DE),scales="free_y") +
+    theme_bw() +
+    theme(strip.text = element_text(size = 6)) +
+    labs(y="VST expression", x="Timepoint")
+    print(plot)
+  }
+}
 ```
 
 ### ImpulseDE2
@@ -3231,7 +3612,7 @@ lsHeatmaps <- plotHeatmap(
 draw(lsHeatmaps$complexHeatmapRaw) 
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-75-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-79-1.png)<!-- -->
 
 ``` r
 png(paste0(outdir,"/ImpulseDE/ImpulseDE2_heatmap.png"), width = 2000, height = 2400, res = 300)
@@ -3253,73 +3634,98 @@ impulse_results %>% filter(Gene %in% stress_genes_ids) %>% arrange(padj) %>% lef
     ##                                         Gene            p         padj
     ## 1      Porites_compressa_HIv1___TS.g16287.t1 1.261458e-13 5.518734e-11
     ## 2  Porites_compressa_HIv1___RNAseq.g10172.t1 3.846990e-11 8.511797e-09
-    ## 3  Porites_compressa_HIv1___RNAseq.g12818.t1 1.304024e-07 1.052487e-05
-    ## 4  Porites_compressa_HIv1___RNAseq.g28962.t1 6.462794e-06 2.761500e-04
-    ## 5  Porites_compressa_HIv1___RNAseq.g40602.t1 8.078547e-05 2.158334e-03
-    ## 6        Porites_compressa_HIv1___TS.g982.t1 1.589032e-03 2.218134e-02
-    ## 7  Porites_compressa_HIv1___RNAseq.g29198.t1 2.438273e-02 1.705506e-01
-    ## 8   Porites_compressa_HIv1___RNAseq.g8182.t1 3.467725e-02 2.205583e-01
-    ## 9  Porites_compressa_HIv1___RNAseq.g25821.t1 1.245956e-01 5.224143e-01
-    ## 10  Porites_compressa_HIv1___RNAseq.g4837.t1 8.129055e-01 1.000000e+00
-    ## 11 Porites_compressa_HIv1___RNAseq.g39940.t1 4.314555e-01 1.000000e+00
-    ## 12 Porites_compressa_HIv1___RNAseq.g16374.t1 5.174867e-01 1.000000e+00
-    ## 13 Porites_compressa_HIv1___RNAseq.g27468.t1 5.878061e-01 1.000000e+00
+    ## 3      Porites_compressa_HIv1___TS.g36834.t1 2.237905e-09 3.099177e-07
+    ## 4  Porites_compressa_HIv1___RNAseq.g12818.t1 1.304024e-07 1.052487e-05
+    ## 5       Porites_compressa_HIv1___TS.g3249.t1 1.643669e-07 1.286171e-05
+    ## 6  Porites_compressa_HIv1___RNAseq.g12374.t1 5.804635e-06 2.536579e-04
+    ## 7  Porites_compressa_HIv1___RNAseq.g28962.t1 6.462794e-06 2.761500e-04
+    ## 8  Porites_compressa_HIv1___RNAseq.g40602.t1 8.078547e-05 2.158334e-03
+    ## 9        Porites_compressa_HIv1___TS.g982.t1 1.589032e-03 2.218134e-02
+    ## 10 Porites_compressa_HIv1___RNAseq.g29198.t1 2.438273e-02 1.705506e-01
+    ## 11  Porites_compressa_HIv1___RNAseq.g8182.t1 3.467725e-02 2.205583e-01
+    ## 12     Porites_compressa_HIv1___TS.g30165.t1 1.056475e-01 4.708095e-01
+    ## 13 Porites_compressa_HIv1___RNAseq.g25821.t1 1.245956e-01 5.224143e-01
+    ## 14  Porites_compressa_HIv1___RNAseq.g4837.t1 8.129055e-01 1.000000e+00
+    ## 15 Porites_compressa_HIv1___RNAseq.g39940.t1 4.314555e-01 1.000000e+00
+    ## 16 Porites_compressa_HIv1___RNAseq.g16374.t1 5.174867e-01 1.000000e+00
+    ## 17 Porites_compressa_HIv1___RNAseq.g27462.t1 9.927709e-01 1.000000e+00
+    ## 18 Porites_compressa_HIv1___RNAseq.g27468.t1 5.878061e-01 1.000000e+00
     ##    loglik_full loglik_red df_full df_red         mean converge_combined
     ## 1   -276.01269 -310.79585      17     12  684.6283272                 0
     ## 2   -217.36204 -246.15008      17     12   11.7711762                 0
-    ## 3   -244.87368 -265.01964      17     12  306.5868096                 0
-    ## 4   -343.79470 -359.70241      17     12 2849.3022295                 0
-    ## 5   -336.92645 -350.03779      17     12 2457.1732425                 0
-    ## 6   -306.50506 -316.22655      17     12  601.7781322                 0
-    ## 7   -265.41825 -271.86576      17     12  248.5890079                 0
-    ## 8   -308.10943 -314.11347      17     12 1462.3644030                 0
-    ## 9   -324.36793 -328.68480      17     12 1116.2528933                 0
-    ## 10  -220.65522 -221.78254      17     12  110.2963144                 0
-    ## 11   -80.35187  -82.78885      17     12    0.2755157                 0
-    ## 12  -289.78216 -291.89470      17     12  439.5541347                 0
-    ## 13  -337.86862 -339.73733      17     12 4780.4888836                 0
+    ## 3   -308.65707 -333.14818      17     12 1058.9081342                 0
+    ## 4   -244.87368 -265.01964      17     12  306.5868096                 0
+    ## 5   -285.43918 -305.33589      17     12  555.2418782                 0
+    ## 6   -241.77167 -257.79718      17     12  276.2973510                 0
+    ## 7   -343.79470 -359.70241      17     12 2849.3022295                 0
+    ## 8   -336.92645 -350.03779      17     12 2457.1732425                 0
+    ## 9   -306.50506 -316.22655      17     12  601.7781322                 0
+    ## 10  -265.41825 -271.86576      17     12  248.5890079                 0
+    ## 11  -308.10943 -314.11347      17     12 1462.3644030                 0
+    ## 12  -301.18680 -305.73026      17     12 1803.3548563                 0
+    ## 13  -324.36793 -328.68480      17     12 1116.2528933                 0
+    ## 14  -220.65522 -221.78254      17     12  110.2963144                 0
+    ## 15   -80.35187  -82.78885      17     12    0.2755157                 0
+    ## 16  -289.78216 -291.89470      17     12  439.5541347                 0
+    ## 17  -204.65978 -204.90074      17     12   88.2376186                 0
+    ## 18  -337.86862 -339.73733      17     12 4780.4888836                 0
     ##    converge_case converge_control converge_sigmoid impulseTOsigmoid_p
     ## 1              0                0                0       4.834378e-20
     ## 2              0                0                0       1.183871e-20
-    ## 3              0                0                0       1.346497e-15
-    ## 4              0                0                0       9.925605e-08
-    ## 5              0                0                0       9.695619e-07
-    ## 6              0                0                0       5.407888e-05
-    ## 7              0                0                0       9.267664e-04
-    ## 8              0                0                0       8.525076e-02
-    ## 9              0                0                0       4.326380e-01
-    ## 10             0                0                0       3.133143e-01
-    ## 11             0                0                0       1.543946e-02
-    ## 12             0                0                0       1.905614e-02
-    ## 13             0                0                0       3.265727e-01
+    ## 3              0                0                0       2.966135e-17
+    ## 4              0                0                0       1.346497e-15
+    ## 5              0                0                0       9.114647e-16
+    ## 6              0                0                0       8.009211e-09
+    ## 7              0                0                0       9.925605e-08
+    ## 8              0                0                0       9.695619e-07
+    ## 9              0                0                0       5.407888e-05
+    ## 10             0                0                0       9.267664e-04
+    ## 11             0                0                0       8.525076e-02
+    ## 12             0                0                0       1.494941e-02
+    ## 13             0                0                0       4.326380e-01
+    ## 14             0                0                0       3.133143e-01
+    ## 15             0                0                0       1.543946e-02
+    ## 16             0                0                0       1.905614e-02
+    ## 17             0                0                0       9.452773e-01
+    ## 18             0                0                0       3.265727e-01
     ##    impulseTOsigmoid_padj sigmoidTOconst_p sigmoidTOconst_padj isTransient
     ## 1           9.305936e-17     0.1859511562         0.749720411        TRUE
     ## 2           2.585835e-17     0.0055795584         0.052213763        TRUE
-    ## 3           1.205553e-12     0.2288512999         0.859146386        TRUE
-    ## 4           1.154459e-05     0.0001791694         0.002876498        TRUE
-    ## 5           7.975890e-05     0.3546528940         1.000000000        TRUE
-    ## 6           1.712379e-03     0.8743862575         1.000000000       FALSE
-    ## 7           1.462278e-02     0.1467437755         0.642863975       FALSE
-    ## 8           3.208279e-01     0.0720794875         0.389413608       FALSE
-    ## 9           8.326549e-01     0.3269466311         1.000000000       FALSE
-    ## 10          6.973003e-01     0.8947829027         1.000000000       FALSE
-    ## 11          1.064250e-01     0.0491092300         0.291138935       FALSE
-    ## 12          1.227032e-01     0.9778073239         1.000000000       FALSE
-    ## 13          7.134929e-01     0.2445297946         0.893924075       FALSE
-    ##    isMonotonous allZero     gene_id response_type     category
-    ## 1         FALSE   FALSE       Bcl-2         Type1    Apoptosis
-    ## 2         FALSE   FALSE HSP70,Hsc71         Type1          UPR
-    ## 3         FALSE   FALSE         BAX         Type1    Apoptosis
-    ## 4         FALSE   FALSE   Nrf2,Nrf1         Type1 ROS response
-    ## 5         FALSE   FALSE       Foxo3         Type1 ROS response
-    ## 6         FALSE   FALSE       Bcl-2         Type1    Apoptosis
-    ## 7         FALSE   FALSE       Bcl-2         Type1    Apoptosis
-    ## 8         FALSE   FALSE          GR         Type1 ROS response
-    ## 9         FALSE   FALSE        HSF1         Type1          UPR
-    ## 10        FALSE   FALSE         BAK         Type1    Apoptosis
-    ## 11        FALSE   FALSE HSP70,Hsc71         Type1          UPR
-    ## 12        FALSE   FALSE        AMPK         Type1 ROS response
-    ## 13        FALSE   FALSE        BI-1         Type1    Apoptosis
+    ## 3           4.229379e-14     0.0441980252         0.269493153        TRUE
+    ## 4           1.205553e-12     0.2288512999         0.859146386        TRUE
+    ## 5           8.772620e-13     0.8914002998         1.000000000        TRUE
+    ## 6           1.527964e-06     0.2174442759         0.830577158        TRUE
+    ## 7           1.154459e-05     0.0001791694         0.002876498        TRUE
+    ## 8           7.975890e-05     0.3546528940         1.000000000        TRUE
+    ## 9           1.712379e-03     0.8743862575         1.000000000       FALSE
+    ## 10          1.462278e-02     0.1467437755         0.642863975       FALSE
+    ## 11          3.208279e-01     0.0720794875         0.389413608       FALSE
+    ## 12          1.041124e-01     0.0813171184         0.424722255       FALSE
+    ## 13          8.326549e-01     0.3269466311         1.000000000       FALSE
+    ## 14          6.973003e-01     0.8947829027         1.000000000       FALSE
+    ## 15          1.064250e-01     0.0491092300         0.291138935       FALSE
+    ## 16          1.227032e-01     0.9778073239         1.000000000       FALSE
+    ## 17          1.000000e+00     0.9664326235         1.000000000       FALSE
+    ## 18          7.134929e-01     0.2445297946         0.893924075       FALSE
+    ##    isMonotonous allZero     gene_id response_type        category
+    ## 1         FALSE   FALSE       Bcl-2         Type1       Apoptosis
+    ## 2         FALSE   FALSE HSP70,Hsc71         Type1             UPR
+    ## 3         FALSE   FALSE       NF-KB         Type1 Innate immunity
+    ## 4         FALSE   FALSE         BAX         Type1       Apoptosis
+    ## 5         FALSE   FALSE       NF-KB         Type1 Innate immunity
+    ## 6         FALSE   FALSE   Cas3,Casp         Type1       Apoptosis
+    ## 7         FALSE   FALSE   Nrf2,Nrf1         Type1    ROS response
+    ## 8         FALSE   FALSE       Foxo3         Type1    ROS response
+    ## 9         FALSE   FALSE       Bcl-2         Type1       Apoptosis
+    ## 10        FALSE   FALSE       Bcl-2         Type1       Apoptosis
+    ## 11        FALSE   FALSE          GR         Type1    ROS response
+    ## 12        FALSE   FALSE        mTOR         Type1       Apoptosis
+    ## 13        FALSE   FALSE        HSF1         Type1             UPR
+    ## 14        FALSE   FALSE         BAK         Type1       Apoptosis
+    ## 15        FALSE   FALSE HSP70,Hsc71         Type1             UPR
+    ## 16        FALSE   FALSE        AMPK         Type1    ROS response
+    ## 17        FALSE   FALSE        OGG1         Type1    ROS response
+    ## 18        FALSE   FALSE        BI-1         Type1       Apoptosis
 
 ``` r
 heatgenes <- plotGenes(
@@ -3375,6 +3781,21 @@ heatgenes
 
     ## 
     ## [[13]]
+
+    ## 
+    ## [[14]]
+
+    ## 
+    ## [[15]]
+
+    ## 
+    ## [[16]]
+
+    ## 
+    ## [[17]]
+
+    ## 
+    ## [[18]]
 
 ``` r
 HSPS <- impulse_results %>% filter(Gene %in% stress_genes_ids) %>% arrange(padj) %>% left_join(HeatStressGenes_Pcomp_unique, by = join_by(Gene==query)) %>% filter(grepl("HSP",gene_id)) %>% pull(Gene)
@@ -3459,7 +3880,7 @@ pheatmap(vsd_mat[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-77-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-81-1.png)<!-- -->
 
 ``` r
 pheatmap(vsd_mat[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
@@ -3469,4 +3890,4 @@ pheatmap(vsd_mat[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-77-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-81-2.png)<!-- -->

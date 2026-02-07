@@ -67,6 +67,9 @@ counts_raw <- read.csv("../output_RNA/count_matrices/POC_PacutaV2_gene_count_mat
 
 # make list of samples 
 samples <- colnames(counts_raw)
+
+# read in SwissProt annotation
+SwissProt <- read.delim("../references/annotation/Pocillopora_acuta_HIv2_Swissprot_GO.tsv")
 ```
 
 #### 2. Extract metadata from sample names
@@ -506,51 +509,41 @@ for (genelist in names(list)){
 ```{r}
 membrane_channels <- read_csv(paste0("../references/annotation/",species,"_membrane_channels.csv"))
 
-membrane_channels_unique <- membrane_channels %>% group_by(query) %>%
-  summarize(ProteinNames = paste(unique(ProteinNames), collapse = ","),
-            gene_set = paste(unique(gene_set), collapse = ","),
-            ) %>% select(gene_set, query, ProteinNames) %>%
-  mutate(short_name = str_replace(ProteinNames, "\\s+\\(.*", ""),
-         short_name = str_replace(short_name, "\\s+\\[.*", ""))
-
-membrane_channels_unique <- membrane_channels_unique %>% filter(query %in% rownames(vsd_mat))
+membrane_channels <- membrane_channels %>% filter(query %in% rownames(vsd_mat))
 
 plot_df <- as.data.frame(t(vsd_mat)) %>%
   rownames_to_column(var="sample") %>%
   left_join(meta, by=c("sample"="sample")) %>% 
   pivot_longer(cols = all_of(rownames(vsd_mat)), names_to="query", values_to="expression") %>%
-  mutate(is_DE = query %in% rownames(DE_05))
+  mutate(is_DE = query %in% rownames(DE_05)) %>% right_join(membrane_channels)
 
-membrane_list <- membrane_channels  %>%
-  group_by(gene_set) %>%
-  summarise(query = list(query), .groups = "drop") %>%
-  deframe()
+membrane_list <- c("aquaporin","TRP",  "Mechanosensory" ,"calcium",  "ER_calcium" ,"Golgi_calcium" , "SLC",  "PMCA",  "Sodium_calcium_exchanger","Bhattacharya2016")
 
-for (genelist in names(membrane_list)){
-  genes <- membrane_list[[genelist]]
-  
-  plot <- plot_df %>% filter(query %in% genes) %>% filter(is_DE == FALSE) %>% 
-    ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+for (genelist in membrane_list){
+  plot <- plot_df %>% filter(grepl(genelist,gene_set)) %>% filter(is_DE == FALSE) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
   stat_summary(fun="mean", geom="line") +
   scale_color_manual(values = treat_colors) +
   stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
-  facet_wrap(paste0(str_replace(query,"Pocillopora_acuta_HIv2___",""), ": ", genelist)~ ~paste0("DE by LRT: ",is_DE),scales="free_y") +
+  facet_wrap(short_name~paste0("DE by LRT: ",is_DE),scales="free_y") +
   theme_bw() +
+  theme(strip.text = element_text(size = 6)) +
   labs(y="VST expression", x="Timepoint")
   print(plot)
 }
 
-for (genelist in names(membrane_list)){
-  genes <- membrane_list[[genelist]]
-  
-  plot <- plot_df %>% filter(query %in% genes) %>% filter(is_DE == TRUE) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
-  stat_summary(fun="mean", geom="line") +
-  scale_color_manual(values = treat_colors) +
-  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
-  facet_wrap(paste0(str_replace(query,"Pocillopora_acuta_HIv2___",""), ": ", genelist)~ ~paste0("DE by LRT: ",is_DE),scales="free_y") +
-  theme_bw() +
-  labs(y="VST expression", x="Timepoint")
-  print(plot)
+for (genelist in membrane_list){
+  plot_df_filtered <- plot_df %>% filter(grepl(genelist,gene_set)) %>% filter(is_DE == TRUE)
+  if (nrow(plot_df_filtered)>1){
+    plot <- plot_df_filtered  %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+    stat_summary(fun="mean", geom="line") +
+    scale_color_manual(values = treat_colors) +
+    stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+    facet_wrap(short_name~paste0("DE by LRT: ",is_DE),scales="free_y") +
+    theme_bw() +
+    theme(strip.text = element_text(size = 6)) +
+    labs(y="VST expression", x="Timepoint")
+    print(plot)
+  }
 }
 ```
 
@@ -614,7 +607,7 @@ saveRDS(objectImpulseDE2, file = paste0(outdir, "/objectImpulseDE2.rds"))
 objectImpulseDE2 <- readRDS(paste0(outdir, "/objectImpulseDE2.rds"))
 
 impulse_results <- objectImpulseDE2$dfImpulseDE2Results
-
+impulse_results_annot <- impulse_results %>% left_join(SwissProt, by = join_by("Gene"=="query")) %>% filter(!is.na(Gene))
 write.table(impulse_results,file.path(outdir, "ImpulseDE2_Results.txt"),row.names=F,quote=F,sep="\t")
 
 # Genes with significant treatment effect on temporal trajectory
@@ -735,6 +728,61 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
          annotation_col= meta[,c("treatment","time")],
          annotation_colors = list("treatment" = treat_colors,
                                   "time" = time_colors))
+```
+
+#### 7.5. Heatmap of membrane channel genes
+
+```{r}
+membrane_DE_genes <- impulse_results %>%
+  right_join(membrane_channels, join_by("Gene"=="query")) %>% 
+  filter(gene_set != "SLC") %>%
+  filter(padj < 0.05) %>% 
+  column_to_rownames("Gene")
+
+plot_df <- as.data.frame(t(vsd_mat)) %>%
+  rownames_to_column(var="sample") %>%
+  left_join(meta, by=c("sample"="sample")) %>% 
+  pivot_longer(cols = all_of(rownames(vsd_mat)), names_to="query", values_to="expression") %>%
+  mutate(is_DE = query %in% rownames(DE_05)) %>% right_join(membrane_DE_genes %>% rownames_to_column("query"))
+
+membrane_list <- c("aquaporin","TRP",  "Mechanosensory" ,"calcium",  "ER_calcium" ,"Golgi_calcium" , "SLC",  "PMCA",  "Sodium_calcium_exchanger","Bhattacharya2016")
+
+pdf(paste0(outdir,"/ImpulseDE/membrane_sig_plots.pdf"), width = 14, height = 14)
+
+pheatmap(assay(vsd)[rownames(membrane_DE_genes), ], cluster_rows=TRUE, show_rownames=TRUE,
+         cluster_cols=FALSE,
+         labels_row=membrane_DE_genes$short_name,
+         annotation_row = membrane_DE_genes %>% dplyr::select(gene_set),
+         annotation_col= meta[,c("treatment","time")],
+         annotation_colors = list("treatment" = treat_colors,
+                                  "time" = time_colors))
+
+pheatmap(assay(vsd)[rownames(membrane_DE_genes), ], cluster_rows=TRUE, show_rownames=TRUE,
+          cluster_cols=TRUE, cutree_cols = 2,
+         fontsize = 5,
+         labels_row=membrane_DE_genes$short_name,
+         annotation_row = membrane_DE_genes %>% dplyr::select(gene_set),
+         annotation_col= meta[,c("treatment","time")],
+         annotation_colors = list("treatment" = treat_colors,
+                                  "time" = time_colors))
+
+
+for (genelist in unique(plot_df$gene_set)){
+  plot_df_filtered <- plot_df %>% filter(grepl(genelist,gene_set))# %>% filter(is_DE == TRUE)
+  if (nrow(plot_df_filtered)>1){
+    plot <- plot_df_filtered  %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+    stat_summary(fun="mean", geom="line") +
+    scale_color_manual(values = treat_colors) +
+    stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+    facet_wrap(short_name~query,scales="free_y") +
+    theme_bw() +
+    theme(strip.text = element_text(size = 6)) +
+    labs(y="VST expression", x="Timepoint",title=paste(genelist))
+    print(plot)
+  }
+}
+
+dev.off()
 ```
 
 #### 8. Cluster ImpulseDE2-significant genes by trajectory
@@ -859,6 +907,8 @@ cluster_peaks <- data.frame(
 print(cluster_peaks)
 ```
 
+##### View clustered genes of interest
+
 ```{r}
 HSPS <- impulse_results %>% filter(Gene %in% stress_genes_ids) %>% arrange(padj) %>% left_join(HeatStressGenes_unique, by = join_by(Gene==query)) %>% filter(grepl("HSP",gene_id)) %>% pull(Gene)
 
@@ -878,19 +928,14 @@ heat_clustered %>% filter(!is.na(cluster)) %>% ggplot(aes(y=reorder(gene_id, clu
 
 
 ```{r}
-channel_clustered <- membrane_channels_unique  %>% unique() %>% 
+channel_clustered <- membrane_channels  %>% unique() %>% 
+  filter(gene_set != "SLC") %>%
   left_join(cluster_assignments, by = join_by(query==gene)) %>%
   arrange(cluster)  %>%
   filter(!is.na(cluster)) 
 
-# plot this to show which genes are in which cluster
-channel_clustered %>% filter(!is.na(cluster)) %>% ggplot(aes(y=reorder(gene_set, cluster), x=factor(cluster), fill=cluster)) +
-  geom_tile() +
-  theme_bw() +
-  labs(x="Mfuzz Cluster", y="Gene ID", title="Membrane channel genes clustered by temporal expression pattern")
-
-cat("Total membrane channel genes:", nrow(membrane_channels_unique), "\n")
-cat("Found in DE/Mfuzz data:", nrow(channel_clustered), "\n")
+cat("Total membrane channel genes:", nrow(membrane_channels), "\n")
+cat("Found in ImpulseDE/Mfuzz data:", nrow(channel_clustered), "\n")
 
 channel_clustered %>%
     ggplot(aes(x = factor(cluster), y = reorder(short_name, cluster), fill = gene_set)) +
@@ -925,68 +970,47 @@ mfuzz.plot2(heat_eset_membrane, cl = mfuzz_clusters_membrane, mfrow = c(3, 4),
             xlab = "Time (hours)",x11=FALSE)
 dev.off()
 
+plot_df <- as.data.frame(t(vsd_mat)) %>%
+  rownames_to_column(var="sample") %>%
+  left_join(meta, by=c("sample"="sample")) %>% 
+  pivot_longer(cols = all_of(rownames(vsd_mat)), names_to="query", values_to="expression") %>%
+  mutate(is_DE = query %in% rownames(DE_05)) %>% right_join(membrane_DE_genes %>% rownames_to_column("query"))
 
-expr_data <- exprs(heat_eset_membrane) %>%
-  as.data.frame() %>%
-  tibble::rownames_to_column("query") %>%
-  pivot_longer(-query, names_to = "timepoint", values_to = "expression") %>%
-  mutate(time = as.numeric(factor(timepoint, 
-                                  levels = c("R0", "R1", "R3", "R12", "R24", "R72", "R120"))) - 1,
-         time_hours = c(0, 1, 3, 12, 24, 72, 120)[time + 1])
+pdf(paste0(outdir,"/ImpulseDE/membrane_sig_plots_clustered.pdf"), width = 14, height = 14)
 
-# Join with cluster and gene_set info
-plot_data <- expr_data %>%
-  left_join(channel_clustered %>% select(query, cluster, gene_set, membership,short_name), 
-            by = "query")
-
-# Plot by cluster, colored by gene_set
-p <- plot_data %>%
-  ggplot(aes(x = time_hours, y = expression, group = query, color = gene_set)) +
-  geom_line(aes(alpha = membership), linewidth = 0.8) +
-  facet_wrap(~cluster, ncol = 3, 
-             labeller = labeller(cluster = function(x) paste("Cluster", x))) +
-  scale_alpha_continuous(range = c(0.3, 1)) +
-  scale_x_continuous(breaks = c(0, 1, 3, 12, 24, 72, 120)) +
-  theme_bw() +
-  labs(x = "Time (hours)", 
-       y = "Normalized Expression",
-       color = "Channel Type",
-       alpha = "Membership",
-       title = "Membrane Channel Gene Expression Patterns by Cluster")
-
-print(p)
-
-gene_trajectories <- plot_data %>%
-  group_by(query, cluster, gene_set, membership,short_name) %>%
-  summarize(
-    max_expr = max(expression),
-    max_time = time_hours[which.max(expression)],
-    .groups = "drop"
-  ) %>%
-  group_by(cluster) %>%
-  slice_max(membership, n = 3)  # Top 3 genes per cluster
-
-library(ggrepel)
-
-p2 <- plot_data %>%
-  ggplot(aes(x = time_hours, y = expression, group = query, color = gene_set)) +
-  geom_line(aes(alpha = membership), linewidth = 0.8) +
-  geom_text_repel(data = gene_trajectories,
-                  aes(x = max_time, y = max_expr, label = short_name),
-                  size = 2.5, max.overlaps = 20, segment.size = 0.2) +
-  facet_wrap(~cluster, ncol = 3, 
-             labeller = labeller(cluster = function(x) paste("Cluster", x))) +
-  scale_alpha_continuous(range = c(0.3, 1)) +
-  scale_x_continuous(breaks = c(0, 1, 3, 12, 24, 72, 120)) +
-  theme_bw() +
-  labs(x = "Time (hours)", 
-       y = "Normalized Expression",
-       color = "Channel Type",
-       alpha = "Membership",
-       title = "Membrane Channel Gene Expression Patterns")
-
-print(p2)
+for (cl in c(0,unique(channel_clustered$cluster))){
+  plot_df_filtered <- plot_df %>% left_join(channel_clustered) %>% filter(!is.na(cluster))
+  
+  if (cl ==0){
+    plot_df_low_membership <- plot_df_filtered %>% filter(membership<0.5)
+    
+    plot <- plot_df_low_membership  %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+    stat_summary(fun="mean", geom="line") +
+    scale_color_manual(values = treat_colors) +
+    stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+    facet_wrap(short_name~query,scales="free_y") +
+    theme_bw() +
+    theme(strip.text = element_text(size = 6)) +
+    labs(y="VST expression", x="Timepoint",title=paste("Membership < 0.5"))
+    print(plot)
+  } else{
+    plot_df_cluster <- plot_df_filtered %>% filter(cluster==cl)
+      if (nrow(plot_df_cluster)>1){
+    plot <- plot_df_cluster  %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+    stat_summary(fun="mean", geom="line") +
+    scale_color_manual(values = treat_colors) +
+    stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+    facet_wrap(short_name~query,scales="free_y") +
+    theme_bw() +
+    theme(strip.text = element_text(size = 6)) +
+    labs(y="VST expression", x="Timepoint",title=paste("Cluster ",cl))
+    print(plot)
+  }
+  }
+}
+dev.off()
 ```
+
 
 
 ## MON: pre-processing and visualization
@@ -1350,50 +1374,44 @@ save_ggplot(last_plot(), "highlighted_DE_Type2")
 ```{r}
 membrane_channels <- read_csv(paste0("../references/annotation/",species,"_membrane_channels.csv"))
 
-membrane_channels_unique <- membrane_channels %>% group_by(query) %>%
-  summarize(ProteinNames = paste(unique(ProteinNames), collapse = ","),
-            gene_set = paste(unique(gene_set), collapse = ",")
-            ) %>% select(gene_set, query, ProteinNames)
-
-membrane_channels_unique <- membrane_channels_unique %>% filter(query %in% rownames(vsd_mat))
+membrane_channels <- membrane_channels %>% filter(query %in% rownames(vsd_mat))
 
 plot_df <- as.data.frame(t(vsd_mat)) %>%
   rownames_to_column(var="sample") %>%
   left_join(meta, by=c("sample"="sample")) %>% 
   pivot_longer(cols = all_of(rownames(vsd_mat)), names_to="query", values_to="expression") %>%
-  mutate(is_DE = query %in% rownames(DE_05))
+  mutate(is_DE = query %in% rownames(DE_05)) %>% right_join(membrane_channels)
 
-membrane_list <- membrane_channels  %>%
-  group_by(gene_set) %>%
-  summarise(query = list(query), .groups = "drop") %>%
-  deframe()
+membrane_list <- c("aquaporin","TRP",  "Mechanosensory" ,"calcium",  "ER_calcium" ,"Golgi_calcium" , "SLC",  "PMCA",  "Sodium_calcium_exchanger","Bhattacharya2016")
 
-
-for (genelist in names(membrane_list)){
-  genes <- membrane_list[[genelist]]
-  
-  plot <- plot_df %>% filter(query %in% genes) %>% filter(is_DE == FALSE) %>% 
-    ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
-  stat_summary(fun="mean", geom="line") +
-  scale_color_manual(values = treat_colors) +
-  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
-  facet_wrap(paste0(str_replace(query,"Montipora_capitata_HIv3___",""), ": ", genelist)~ ~paste0("DE by LRT: ",is_DE),scales="free_y") +
-  theme_bw() +
-  labs(y="VST expression", x="Timepoint")
-  print(plot)
+for (genelist in membrane_list){
+  plot_df_filtered <- plot_df %>% filter(grepl(genelist,gene_set)) %>% filter(is_DE == FALSE)
+  if (nrow(plot_df_filtered)>1){
+    plot <- plot_df_filtered  %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+    stat_summary(fun="mean", geom="line") +
+    scale_color_manual(values = treat_colors) +
+    stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+    facet_wrap(short_name~paste0("DE by LRT: ",is_DE),scales="free_y") +
+    theme_bw() +
+    theme(strip.text = element_text(size = 6)) +
+    labs(y="VST expression", x="Timepoint")
+    print(plot)
+  }
 }
 
-for (genelist in names(membrane_list)){
-  genes <- membrane_list[[genelist]]
-  
-  plot <- plot_df %>% filter(query %in% genes) %>% filter(is_DE == TRUE) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
-  stat_summary(fun="mean", geom="line") +
-  scale_color_manual(values = treat_colors) +
-  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
-  facet_wrap(paste0(str_replace(query,"Montipora_capitata_HIv3___",""), ": ", genelist)~ ~paste0("DE by LRT: ",is_DE),scales="free_y") +
-  theme_bw() +
-  labs(y="VST expression", x="Timepoint")
-  print(plot)
+for (genelist in membrane_list){
+  plot_df_filtered <- plot_df %>% filter(grepl(genelist,gene_set)) %>% filter(is_DE == TRUE)
+  if (nrow(plot_df_filtered)>1){
+    plot <- plot_df_filtered  %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+    stat_summary(fun="mean", geom="line") +
+    scale_color_manual(values = treat_colors) +
+    stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+    facet_wrap(short_name~paste0("DE by LRT: ",is_DE),scales="free_y") +
+    theme_bw() +
+    theme(strip.text = element_text(size = 6)) +
+    labs(y="VST expression", x="Timepoint")
+    print(plot)
+  }
 }
 ```
 
@@ -1929,50 +1947,43 @@ save_ggplot(last_plot(), "highlighted_DE_Type2")
 ```{r}
 membrane_channels <- read_csv(paste0("../references/annotation/",species,"_membrane_channels.csv"))
 
-membrane_channels_unique <- membrane_channels %>% group_by(query) %>%
-  summarize(ProteinNames = paste(unique(ProteinNames), collapse = ","),
-            gene_set = paste(unique(gene_set), collapse = ",")
-            ) %>% select(gene_set, query, ProteinNames)
-
-membrane_channels_unique <- membrane_channels_unique %>% filter(query %in% rownames(vsd_mat))
+membrane_channels <- membrane_channels %>% filter(query %in% rownames(vsd_mat))
 
 plot_df <- as.data.frame(t(vsd_mat)) %>%
   rownames_to_column(var="sample") %>%
   left_join(meta, by=c("sample"="sample")) %>% 
   pivot_longer(cols = all_of(rownames(vsd_mat)), names_to="query", values_to="expression") %>%
-  mutate(is_DE = query %in% rownames(DE_05))
+  mutate(is_DE = query %in% rownames(DE_05)) %>% right_join(membrane_channels)
 
-membrane_list <- membrane_channels  %>%
-  group_by(gene_set) %>%
-  summarise(query = list(query), .groups = "drop") %>%
-  deframe()
+membrane_list <- c("aquaporin","TRP",  "Mechanosensory" ,"calcium",  "ER_calcium" ,"Golgi_calcium" , "SLC",  "PMCA",  "Sodium_calcium_exchanger","Bhattacharya2016")
 
-
-for (genelist in names(membrane_list)){
-  genes <- membrane_list[[genelist]]
-  
-  plot <- plot_df %>% filter(query %in% genes) %>% filter(is_DE == FALSE) %>% 
-    ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
-  stat_summary(fun="mean", geom="line") +
-  scale_color_manual(values = treat_colors) +
-  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
-  facet_wrap(paste0(str_replace(query,"Porites_compressa_HIv1___",""), ": ", genelist)~ ~paste0("DE by LRT: ",is_DE),scales="free_y") +
-  theme_bw() +
-  labs(y="VST expression", x="Timepoint")
-  print(plot)
+for (genelist in membrane_list){
+  plot_df_filtered <- plot_df %>% filter(grepl(genelist,gene_set)) %>% filter(is_DE == FALSE)
+  if (nrow(plot_df_filtered)>1){
+    plot <- plot_df_filtered  %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+    stat_summary(fun="mean", geom="line") +
+    scale_color_manual(values = treat_colors) +
+    stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+    facet_wrap(short_name~paste0("DE by LRT: ",is_DE),scales="free_y") +
+    theme_bw() +
+    theme(strip.text = element_text(size = 6)) +
+    labs(y="VST expression", x="Timepoint")
+    print(plot)
+  }
 }
-
-for (genelist in names(membrane_list)){
-  genes <- membrane_list[[genelist]]
-  
-  plot <- plot_df %>% filter(query %in% genes) %>% filter(is_DE == TRUE) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
-  stat_summary(fun="mean", geom="line") +
-  scale_color_manual(values = treat_colors) +
-  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
-  facet_wrap(paste0(str_replace(query,"Porites_compressa_HIv1___",""), ": ", genelist)~ ~paste0("DE by LRT: ",is_DE),scales="free_y") +
-  theme_bw() +
-  labs(y="VST expression", x="Timepoint")
-  print(plot)
+for (genelist in membrane_list){
+  plot_df_filtered <- plot_df %>% filter(grepl(genelist,gene_set)) %>% filter(is_DE == TRUE)
+  if (nrow(plot_df_filtered)>1){
+    plot <- plot_df_filtered  %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+    stat_summary(fun="mean", geom="line") +
+    scale_color_manual(values = treat_colors) +
+    stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+    facet_wrap(short_name~paste0("DE by LRT: ",is_DE),scales="free_y") +
+    theme_bw() +
+    theme(strip.text = element_text(size = 6)) +
+    labs(y="VST expression", x="Timepoint")
+    print(plot)
+  }
 }
 ```
 
