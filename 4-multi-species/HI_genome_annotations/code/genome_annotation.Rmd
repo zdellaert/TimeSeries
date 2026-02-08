@@ -34,6 +34,7 @@ Swissprot annotation method based on [E5 Annotations](https://github.com/urol-e5
 #### Step 1: Gather protein fasta files
 
 ```{bash, eval=FALSE}
+mkdir -p ../references
 cd ../references
 
 # copy all genome fasta files here
@@ -85,8 +86,8 @@ makeblastdb \
 #### Step 5: Run BLAST of geneome protein FASTAs against swissprot BLAST database
 
 ```{bash, eval=FALSE}
-cd ../scripts
-nano 00_blastp_SwissProt.sh
+cd ../code
+nano 01_blastp_SwissProt.sh
 ```
 
 ```{bash eval=FALSE}
@@ -104,7 +105,7 @@ nano 00_blastp_SwissProt.sh
 module load blast-plus/2.14.1
 
 cd ../references/
-mkdir -p annotation
+mkdir -p swissprot
 
 for fasta in *.pep.faa; do
     base=$(basename "$fasta" .pep.faa)
@@ -112,7 +113,7 @@ for fasta in *.pep.faa; do
     blastp \
     -query "$fasta" \
     -db blast_dbs/uniprot_sprot_r2024_10_02 \
-    -out "annotation/${base}_SwissProt_out.tab" \
+    -out "swissprot/${base}_SwissProt_out.tab" \
     -evalue 1E-05 \
     -num_threads 48 \
     -max_target_seqs 1 \
@@ -126,7 +127,7 @@ echo "Blast complete!" $(date)
 #### Step 6: Rename results files
 
 ```{bash, eval=FALSE}
-cd ../references/annotation/
+cd ../references/swissprot/
 
 ls
 
@@ -156,13 +157,13 @@ wc -l SwissProt-Annot-GO_20251207.tsv
 
 ```{r annotate, eval=FALSE}
 # load in GO annotations
-spgo <- read.csv("../references/annotation/SwissProt-Annot-GO_20251207.tsv", sep = '\t', header = TRUE)
+spgo <- read.csv("../references/swissprot/SwissProt-Annot-GO_20251207.tsv", sep = '\t', header = TRUE)
 
 genomes <- list.files("../references", pattern = "*.pep.faa", full.names = FALSE, ignore.case = TRUE)
 genomes <- str_remove(genomes, ".genes.pep.faa")
 
 for (genome in genomes){
-  bltabl <- read.csv(paste0("../references/annotation/",genome,"_SwissProt_out_sep.tab"), sep = '\t', header = FALSE)
+  bltabl <- read.csv(paste0("../references/swissprot/",genome,"_SwissProt_out_sep.tab"), sep = '\t', header = FALSE)
 
   annot_tab <- left_join(bltabl, spgo, by = c("V3" = "Entry")) %>%
     select(
@@ -177,7 +178,7 @@ for (genome in genomes){
     )
 
   write.table(annot_tab, 
-            file = paste0("../references/annotation/",genome,"_Swissprot_GO.tsv"), 
+            file = paste0("../annotation/",genome,"_Swissprot_GO.tsv"), 
             sep = "\t", 
             row.names = FALSE, 
             quote = FALSE)
@@ -191,9 +192,9 @@ rm(annot_tab)
 ## Load in SwissProt Annotations
 
 ```{r}
-Mcap_SwissP <- read.delim("../references/annotation/Montipora_capitata_HIv3_Swissprot_GO.tsv") %>% dplyr::rename(GOs = GeneOntologyIDs)
-Pacuta_SwissP <- read.delim("../references/annotation/Pocillopora_acuta_HIv2_Swissprot_GO.tsv") %>% dplyr::rename(GOs = GeneOntologyIDs)
-Pcomp_SwissP <- read.delim("../references/annotation/Porites_compressa_HIv1_Swissprot_GO.tsv") %>% dplyr::rename(GOs = GeneOntologyIDs)
+Mcap_SwissP <- read.delim("../annotation/Montipora_capitata_HIv3_Swissprot_GO.tsv") %>% dplyr::rename(GOs = GeneOntologyIDs)
+Pacuta_SwissP <- read.delim("../annotation/Pocillopora_acuta_HIv2_Swissprot_GO.tsv") %>% dplyr::rename(GOs = GeneOntologyIDs)
+Pcomp_SwissP <- read.delim("../annotation/Porites_compressa_HIv1_Swissprot_GO.tsv") %>% dplyr::rename(GOs = GeneOntologyIDs)
 ```
 
 ## Heat Stress Genes
@@ -254,9 +255,9 @@ for_natalie_swissP_missing <- for_natalie_swissP %>% filter(!(query %in% for_nat
 
 for_natalie_added <- rbind(for_natalie,for_natalie_swissP_missing) 
 
-#write.csv(for_natalie_added, file = "../references/annotation/NC_HeatStress_Genes.csv",row.names = FALSE, quote = FALSE)
+#write.csv(for_natalie_added, file = "../annotation/NC_HeatStress_Genes.csv",row.names = FALSE, quote = FALSE)
 
-Natalie_list <- read.csv(file = "../references/annotation/NC_HeatStress_Genes.csv")
+Natalie_list <- read.csv(file = "../annotation/NC_HeatStress_Genes.csv")
 ```
 
 ## Membrane_Channels
@@ -270,7 +271,6 @@ Based on [Bhattacharya et al 2016](https://doi.org/10.7554/eLife.13288) elife-13
 [NCBI Fasta Download](https://github.com/kblin/ncbi-acc-download)
 
 ```{bash, eval=FALSE}
-
 pip install ncbi-acc-download
 
 mkdir human_channels
@@ -281,7 +281,7 @@ ncbi-acc-download --molecule protein --format fasta #HUMAN ACCESSION NUMBERS HER
 cat * > sensing_protein_seqs.fasta
 ```
 
-#### I am actually going to use this FASTA file from Hollie: `../references/sensing_protein_seqs.fasta`
+#### I am actually going to use this FASTA file from Hollie: `../references/calcium_membrane_transport/sensing_protein_seqs.fasta`
 
 #### Step 2: Create BLAST protein database for each coral species from protein fasta file
 
@@ -307,7 +307,7 @@ makeblastdb -in Porites_compressa_HIv1.genes.pep.faa \
 
 ```{bash, eval=FALSE}
 cd ../scripts
-nano 00_blastp_channels.sh
+nano 02_blastp_channels.sh
 ```
 
 ```{bash eval=FALSE}
@@ -330,9 +330,9 @@ for database in *_prot.pin; do
     species=$(basename "$database" _prot.pin)
 
     blastp \
-    -query "../sensing_protein_seqs.fasta" \
+    -query "../calcium_membrane_transport/sensing_protein_seqs.fasta" \
     -db ${species}_prot \
-    -out "../annotation/${species}_channels_BLAST_out.tab" \
+    -out "../../annotation/${species}_channels_BLAST_out.tab" \
     -evalue 1E-05 \
     -num_threads 48 \
     -max_target_seqs 1 \
@@ -346,10 +346,16 @@ echo "Blast complete!" $(date)
 #### Step 4: Process results
 
 ```{r}
-Bhattacharya2016 <- read.csv("../references/2_Gene_list7.csv",header = TRUE)
+Bhattacharya2016 <- read.csv("../references/calcium_membrane_transport/2_Gene_list7.csv",header = TRUE) %>%
+  #remove genes from this list that are not relevant here: SLC3
+    # SLC3A2 = amino acid transporter, not even mentioned in the Bhattacharya paper
+    # consider removing:
+      # SLC4 = very important, but mostly for calcification (also SLC26, another bicarbonate transporter)
+      # ABCC6 = not mentioned in the Bhattacharya paper
+  filter(!grepl("^SLC3A2$|^SLC4|^SLC26|^ABCC6", Name.HS,ignore.case = TRUE))
 
 for (sp in species){
-  bltabl <- read.csv(paste0("../references/annotation/",sp,"_channels_BLAST_out.tab"), sep = '\t', header = FALSE)
+  bltabl <- read.csv(paste0("../references/calcium_membrane_transport/",sp,"_channels_BLAST_out.tab"), sep = '\t', header = FALSE)
   bltabl <-  bltabl %>% mutate(V1 = str_extract(V1, "[A-Z]{2}_[0-9.]+"))
   colnames(bltabl) <- c("qseqid","sseqid", "pident","length","mismatch", "gapopen", "qstart", "qend",
                        "sstart", "send", "evalue", "bitscore")
@@ -378,7 +384,8 @@ channel_list <- tibble::tribble(
   "calcium",       "calcium ion transport",       "BiologicalProcess",
   "ER_calcium", "endoplasmic reticulum calcium ion homeostasis",       "BiologicalProcess",
   "Golgi_calcium", "Golgi calcium ion",       "BiologicalProcess",
-  "SLC",           "Solute carrier",              "ProteinNames",
+  "SLC24",           "solute carrier family 24",              "ProteinNames",
+  "SLC25",           "uncoupl",              "ProteinNames",
   "PMCA", "plasma membrane calcium", "ProteinNames",
   "Sodium_calcium_exchanger", "Sodium/calcium exchanger", "ProteinNames"
 )
@@ -418,7 +425,7 @@ for (i in 1:length(species)){
   
   assign(paste0(species[i],"_membrane_channels"),channel_df)
   
-  write_csv(channel_df,paste0("../references/annotation/",species[i],"_membrane_channels.csv"))
+  write_csv(channel_df,paste0("../annotation/",species[i],"_membrane_channels.csv"))
 }
 ```
 

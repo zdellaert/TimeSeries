@@ -345,7 +345,13 @@ echo "Blast complete!" $(date)
 #### Step 4: Process results
 
 ``` r
-Bhattacharya2016 <- read.csv("../references/2_Gene_list7.csv",header = TRUE)
+Bhattacharya2016 <- read.csv("../references/2_Gene_list7.csv",header = TRUE) %>%
+  #remove genes from this list that are not relevant here: SLC3
+    # SLC3A2 = amino acid transporter, not even mentioned in the Bhattacharya paper
+    # consider removing:
+      # SLC4 = very important, but mostly for calcification (also SLC26, another bicarbonate transporter)
+      # ABCC6 = not mentioned in the Bhattacharya paper
+  filter(!grepl("^SLC3A2$|^SLC4|^SLC26|^ABCC6", Name.HS,ignore.case = TRUE))
 
 for (sp in species){
   bltabl <- read.csv(paste0("../references/annotation/",sp,"_channels_BLAST_out.tab"), sep = '\t', header = FALSE)
@@ -377,7 +383,8 @@ channel_list <- tibble::tribble(
   "calcium",       "calcium ion transport",       "BiologicalProcess",
   "ER_calcium", "endoplasmic reticulum calcium ion homeostasis",       "BiologicalProcess",
   "Golgi_calcium", "Golgi calcium ion",       "BiologicalProcess",
-  "SLC",           "Solute carrier",              "ProteinNames",
+  "SLC24",           "solute carrier family 24",              "ProteinNames",
+  "SLC25",           "uncoupl",              "ProteinNames",
   "PMCA", "plasma membrane calcium", "ProteinNames",
   "Sodium_calcium_exchanger", "Sodium/calcium exchanger", "ProteinNames"
 )

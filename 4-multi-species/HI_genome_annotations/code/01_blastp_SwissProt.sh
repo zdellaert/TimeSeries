@@ -12,15 +12,15 @@
 module load blast-plus/2.14.1
 
 cd ../references/
-mkdir -p annotation
+mkdir -p ../annotation
 
 for fasta in *.pep.faa; do
     base=$(basename "$fasta" .pep.faa)
 
     blastp \
     -query "$fasta" \
-    -db blast_dbs/uniprot_sprot_r2025_10_08 \
-    -out "annotation/${base}_SwissProt_out.tab" \
+    -db blast_dbs/uniprot_sprot_r2024_10_02 \
+    -out "../annotation/${base}_SwissProt_out.tab" \
     -evalue 1E-05 \
     -num_threads 48 \
     -max_target_seqs 1 \
