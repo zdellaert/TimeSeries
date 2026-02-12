@@ -112,6 +112,40 @@ time_colors <- colorRampPalette(c("#ffffcc","#0c2c84"))(7)
 names(time_colors) <- c("0", "1", "3", "12", "24", "72", "120")
 ```
 
+## Genome annotations
+
+I have a [central
+repository](https://github.com/zdellaert/HI_genome_annotations.git) for
+the genome annotations for the three species I have been studying
+throughout my dissertation. My annotation files are stored there, and
+this code is written so you clone this repository in the same folder as
+the TimeSeries repository. If you clone the repo, you should be all set!
+All annotation code is available in that repository as well.
+
+``` r
+getwd()
+```
+
+``` bash
+#If you are in the working directory of this Rmd file (TimeSeries/4-multi-species/code), you need to move out three levels:
+
+cd ../../../
+ls *
+
+# one of the directories should be "TimeSeries"
+
+git clone https://github.com/zdellaert/HI_genome_annotations.git
+#ssh: git clone git@github.com:zdellaert/HI_genome_annotations.git
+
+ls *
+
+# now there should be both "TimeSeries" and "HI_genome_annotations" directories.
+```
+
+``` r
+annotdir <- "../../../HI_genome_annotations/annotation/"
+```
+
 ## *Pocillopora acuta*
 
 ### Preproccessing
@@ -130,7 +164,7 @@ counts_raw <- read.csv("../output_RNA/count_matrices/POC_PacutaV2_gene_count_mat
 samples <- colnames(counts_raw)
 
 # read in SwissProt annotation
-SwissProt <- read.delim("../references/annotation/Pocillopora_acuta_HIv2_Swissprot_GO.tsv")
+SwissProt <- read.delim(paste0(annotdir,"Pocillopora_acuta_HIv2_Swissprot_GO.tsv"))
 ```
 
 #### 2. Extract metadata from sample names
@@ -257,7 +291,7 @@ pheatmap(sampleDistMatrix,
          col=colorRampPalette( rev(brewer.pal(9, "Blues")) )(255))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
 
 #### 5. PCA
 
@@ -297,7 +331,7 @@ pheatmap(assay(vsd)[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
 
 ``` r
 pheatmap(assay(vsd)[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
@@ -307,12 +341,12 @@ pheatmap(assay(vsd)[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-11-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-14-2.png)<!-- -->
 
 ### Heat stress genes
 
 ``` r
-HeatStressGenes <- read_csv(paste0("/project/pi_hputnam_uri_edu/zdellaert/snRNA_analysis/multi-sp-snRNA/reference_genes/genes_of_interest/HeatStressGenes_", species ,".csv")) %>% dplyr::select(-1) %>% dplyr::rename(query = paste0(species,"_gene")) %>% dplyr::select(query,everything()) #%>% filter(ref_first_author =="Majerova")
+HeatStressGenes <- read_csv(paste0(annotdir,"heatstress/HeatStressGenes_", species ,".csv")) %>% dplyr::select(-1) %>% dplyr::rename(query = paste0(species,"_gene")) %>% dplyr::select(query,everything()) #%>% filter(ref_first_author =="Majerova")
 
 HeatStressGenes_unique <- HeatStressGenes %>% group_by(query) %>%
   summarize(gene_id = paste(unique(gene_id), collapse = ","),
@@ -339,7 +373,7 @@ plot_df %>% ggplot(aes(x=time, y=expression, color=gene_id, group=gene_id)) +
   labs(y="VST expression", x="Timepoint")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
 
 ``` r
 plot_df %>% filter(grepl("Type1", response_type)) %>%
@@ -355,7 +389,7 @@ plot_df %>% filter(grepl("Type1", response_type)) %>%
   labs(y="VST expression", x="Timepoint", title = "Type 1 Expressed Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-12-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-15-2.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "All_Type1")
@@ -373,7 +407,7 @@ plot_df %>% filter(grepl("Type2", response_type)) %>%
   labs(y="VST expression", x="Timepoint", title = "Type 2 Expressed Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-12-3.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-15-3.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "All_Type2")
@@ -387,7 +421,7 @@ plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_
   labs(y="VST expression", x="Timepoint")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-12-4.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-15-4.png)<!-- -->
 
 #### DESeq LRT Test
 
@@ -417,7 +451,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
 
 ``` r
 pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
@@ -427,7 +461,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-13-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-2.png)<!-- -->
 
 ``` r
 top_500_DE_genes <- DE_05 %>% arrange(log2FoldChange) %>% head(500) %>% rownames()
@@ -440,7 +474,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-13-3.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-3.png)<!-- -->
 
 ``` r
 pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
@@ -450,7 +484,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-13-4.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-4.png)<!-- -->
 
 ``` r
 top_500_DE_genes <- DE_05 %>% arrange(desc(log2FoldChange)) %>% head(500) %>% rownames()
@@ -463,7 +497,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-13-5.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-5.png)<!-- -->
 
 ``` r
 pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
@@ -473,7 +507,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-13-6.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-6.png)<!-- -->
 
 #### DE Heat stress genes
 
@@ -493,7 +527,7 @@ plot_df %>% ggplot(aes(x=time, y=expression, color=gene_id, group=gene_id)) +
   labs(y="VST expression", x="Timepoint")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
 
 ``` r
 plot_df %>% filter(grepl("Type1", response_type)) %>%
@@ -509,7 +543,7 @@ plot_df %>% filter(grepl("Type1", response_type)) %>%
   labs(y="VST expression", x="Timepoint", title = "Type 1 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-14-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-17-2.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "DE_Type1")
@@ -527,7 +561,7 @@ plot_df %>% filter(grepl("Type2", response_type)) %>%
   labs(y="VST expression", x="Timepoint", title = "Type 2 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-14-3.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-17-3.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "DE_Type2")
@@ -541,7 +575,7 @@ plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_
   labs(y="VST expression", x="Timepoint", title = "Selected Type 1 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-14-4.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-17-4.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "highlighted_DE_Type1")
@@ -559,7 +593,7 @@ plot_df_norm %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",
   labs(y="VST expression", x="Timepoint", title = "Norm to control -- Selected Type 1 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-14-5.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-17-5.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "highlighted_DE_Type1_norm_control")
@@ -580,7 +614,7 @@ plot_df_norm %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",
   labs(y="VST expression", x="Timepoint", title = "Norm to T0 -- Selected Type 1 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-14-6.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-17-6.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "highlighted_DE_Type1_norm_T0")
@@ -594,7 +628,7 @@ plot_df %>% filter(grepl("GDH",gene_id)|grepl("GS",gene_id)|grepl("AMT1",gene_id
   labs(y="VST expression", x="Timepoint", title = "Selected Type 2 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-14-7.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-17-7.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "highlighted_DE_Type2")
@@ -608,7 +642,7 @@ plot_df %>% filter(grepl("DNaj",gene_id)|grepl("ALOX",gene_id)|grepl("AMT1",gene
   labs(y="VST expression", x="Timepoint", title = "Type 1 & 2 DE (LRT) Response genes also DE in Oral Epidermis by LCM")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-14-8.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-17-8.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "highlighted_tissue_DE")
@@ -664,13 +698,12 @@ for (genelist in names(list)){
 }
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-15-2.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-15-3.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-15-4.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-15-5.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-15-6.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-15-7.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-15-8.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-18-2.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-18-3.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-18-4.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-18-5.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-18-6.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-18-7.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-18-8.png)<!-- -->
 
 #### Mechanosensing and other channels
 
 ``` r
-membrane_channels <- read_csv(paste0("../references/annotation/",species,"_membrane_channels.csv"))
-
+membrane_channels <- read_csv(paste0(annotdir,"calcium_membrane_transport/",species,"_membrane_channels.csv"))
 membrane_channels <- membrane_channels %>% filter(query %in% rownames(vsd_mat))
 
 plot_df <- as.data.frame(t(vsd_mat)) %>%
@@ -679,7 +712,7 @@ plot_df <- as.data.frame(t(vsd_mat)) %>%
   pivot_longer(cols = all_of(rownames(vsd_mat)), names_to="query", values_to="expression") %>%
   mutate(is_DE = query %in% rownames(DE_05)) %>% right_join(membrane_channels)
 
-membrane_list <- c("aquaporin","TRP",  "Mechanosensory" ,"calcium",  "ER_calcium" ,"Golgi_calcium" , "SLC",  "PMCA",  "Sodium_calcium_exchanger","Bhattacharya2016")
+membrane_list <- c("aquaporin","TRP",  "Mechanosensory" ,"calcium",  "ER_calcium" ,"Golgi_calcium" , "SLC24", "SLC25", "PMCA",  "Sodium_calcium_exchanger","Bhattacharya2016")
 
 for (genelist in membrane_list){
   plot <- plot_df %>% filter(grepl(genelist,gene_set)) %>% filter(is_DE == FALSE) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
@@ -694,7 +727,7 @@ for (genelist in membrane_list){
 }
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-2.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-3.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-4.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-5.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-6.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-7.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-8.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-9.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-10.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-19-2.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-19-3.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-19-4.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-19-5.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-19-6.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-19-7.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-19-8.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-19-9.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-19-10.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-19-11.png)<!-- -->
 
 ``` r
 for (genelist in membrane_list){
@@ -713,7 +746,7 @@ for (genelist in membrane_list){
 }
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-11.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-12.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-13.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-14.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-15.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-16.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-17.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-18.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-16-19.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-19-12.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-19-13.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-19-14.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-19-15.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-19-16.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-19-17.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-19-18.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-19-19.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-19-20.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-19-21.png)<!-- -->
 
 ### ImpulseDE2
 
@@ -883,13 +916,13 @@ lsHeatmaps <- plotHeatmap(
 draw(lsHeatmaps$complexHeatmapRaw) 
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-21-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-24-1.png)<!-- -->
 
 ``` r
 draw(lsHeatmaps$complexHeatmapFit) 
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-21-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-24-2.png)<!-- -->
 
 ``` r
 lsHeatmaps <- plotHeatmap(
@@ -900,13 +933,13 @@ lsHeatmaps <- plotHeatmap(
 draw(lsHeatmaps$complexHeatmapRaw) 
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-21-3.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-24-3.png)<!-- -->
 
 ``` r
 draw(lsHeatmaps$complexHeatmapFit) 
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-21-4.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-24-4.png)<!-- -->
 
 ``` r
 lsHeatmaps <- plotHeatmap(
@@ -917,13 +950,13 @@ lsHeatmaps <- plotHeatmap(
 draw(lsHeatmaps$complexHeatmapRaw) 
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-21-5.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-24-5.png)<!-- -->
 
 ``` r
 draw(lsHeatmaps$complexHeatmapFit) 
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-21-6.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-24-6.png)<!-- -->
 
 ``` r
 png(paste0(outdir,"/ImpulseDE/ImpulseDE2_heatmap.png"), width = 2000, height = 2400, res = 300)
@@ -1212,7 +1245,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-24-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-27-1.png)<!-- -->
 
 ``` r
 pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
@@ -1222,14 +1255,13 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-24-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-27-2.png)<!-- -->
 
 #### 7.5. Heatmap of membrane channel genes
 
 ``` r
 membrane_DE_genes <- impulse_results %>%
   right_join(membrane_channels, join_by("Gene"=="query")) %>% 
-  filter(gene_set != "SLC") %>%
   filter(padj < 0.05) %>% 
   column_to_rownames("Gene")
 
@@ -1239,12 +1271,13 @@ plot_df <- as.data.frame(t(vsd_mat)) %>%
   pivot_longer(cols = all_of(rownames(vsd_mat)), names_to="query", values_to="expression") %>%
   mutate(is_DE = query %in% rownames(DE_05)) %>% right_join(membrane_DE_genes %>% rownames_to_column("query"))
 
-membrane_list <- c("aquaporin","TRP",  "Mechanosensory" ,"calcium",  "ER_calcium" ,"Golgi_calcium" , "SLC",  "PMCA",  "Sodium_calcium_exchanger","Bhattacharya2016")
+membrane_list <- c("aquaporin","TRP",  "Mechanosensory" ,"calcium",  "ER_calcium" ,"Golgi_calcium" , "SLC24", "SLC25", "PMCA",  "Sodium_calcium_exchanger","Bhattacharya2016")
 
-pdf(paste0(outdir,"/ImpulseDE/membrane_sig_plots.pdf"), width = 14, height = 14)
+pdf(paste0(outdir,"/ImpulseDE/membrane_sig_plots.pdf"), width = 8, height = 10)
 
 pheatmap(assay(vsd)[rownames(membrane_DE_genes), ], cluster_rows=TRUE, show_rownames=TRUE,
          cluster_cols=FALSE,
+         fontsize = 5,
          labels_row=membrane_DE_genes$short_name,
          annotation_row = membrane_DE_genes %>% dplyr::select(gene_set),
          annotation_col= meta[,c("treatment","time")],
@@ -1252,7 +1285,7 @@ pheatmap(assay(vsd)[rownames(membrane_DE_genes), ], cluster_rows=TRUE, show_rown
                                   "time" = time_colors))
 
 pheatmap(assay(vsd)[rownames(membrane_DE_genes), ], cluster_rows=TRUE, show_rownames=TRUE,
-          cluster_cols=TRUE, cutree_cols = 2,
+         cluster_cols=TRUE,cutree_cols = 3,
          fontsize = 5,
          labels_row=membrane_DE_genes$short_name,
          annotation_row = membrane_DE_genes %>% dplyr::select(gene_set),
@@ -1603,7 +1636,7 @@ dev.off()
     ## png 
     ##   2
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-29-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-32-1.png)<!-- -->
 
 ``` r
 cluster2 <- plotGenes(
@@ -1691,12 +1724,12 @@ print(cluster_peaks)
 ```
 
     ##   cluster peak_time
-    ## 1       1         0
+    ## 1       1         3
     ## 2       2         3
-    ## 3       3         3
+    ## 3       3       120
     ## 4       4         0
-    ## 5       5         3
-    ## 6       6        72
+    ## 5       5         0
+    ## 6       6         3
 
 ##### View clustered genes of interest
 
@@ -1709,7 +1742,7 @@ cluster_assignments %>% filter(gene %in% HSPS)
     ##                                                                                gene
     ## Pocillopora_acuta_HIv2___RNAseq.g23086.t1 Pocillopora_acuta_HIv2___RNAseq.g23086.t1
     ##                                           cluster membership
-    ## Pocillopora_acuta_HIv2___RNAseq.g23086.t1       2  0.9050613
+    ## Pocillopora_acuta_HIv2___RNAseq.g23086.t1       2  0.7488025
 
 ``` r
 heat_clustered <- HeatStressGenes_unique %>% left_join(cluster_assignments, by = join_by(query==gene)) %>%
@@ -1722,11 +1755,10 @@ heat_clustered %>% filter(!is.na(cluster)) %>% ggplot(aes(y=reorder(gene_id, clu
   labs(x="Mfuzz Cluster", y="Gene ID", title="Heat stress genes clustered by temporal expression pattern")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-34-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-37-1.png)<!-- -->
 
 ``` r
 channel_clustered <- membrane_channels  %>% unique() %>% 
-  filter(gene_set != "SLC") %>%
   left_join(cluster_assignments, by = join_by(query==gene)) %>%
   arrange(cluster)  %>%
   filter(!is.na(cluster)) 
@@ -1734,13 +1766,13 @@ channel_clustered <- membrane_channels  %>% unique() %>%
 cat("Total membrane channel genes:", nrow(membrane_channels), "\n")
 ```
 
-    ## Total membrane channel genes: 630
+    ## Total membrane channel genes: 256
 
 ``` r
 cat("Found in ImpulseDE/Mfuzz data:", nrow(channel_clustered), "\n")
 ```
 
-    ## Found in ImpulseDE/Mfuzz data: 39
+    ## Found in ImpulseDE/Mfuzz data: 40
 
 ``` r
 channel_clustered %>%
@@ -1757,7 +1789,7 @@ channel_clustered %>%
                         " genes significantly DE"))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-35-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-38-1.png)<!-- -->
 
 ``` r
 heat_eset_membrane <- heat_eset[channel_clustered$query, ]
@@ -1791,7 +1823,7 @@ plot_df <- as.data.frame(t(vsd_mat)) %>%
   pivot_longer(cols = all_of(rownames(vsd_mat)), names_to="query", values_to="expression") %>%
   mutate(is_DE = query %in% rownames(DE_05)) %>% right_join(membrane_DE_genes %>% rownames_to_column("query"))
 
-pdf(paste0(outdir,"/ImpulseDE/membrane_sig_plots_clustered.pdf"), width = 14, height = 14)
+pdf(paste0(outdir,"/ImpulseDE/membrane_sig_plots_clustered.pdf"), width = 8, height = 10)
 
 for (cl in c(0,unique(channel_clustered$cluster))){
   plot_df_filtered <- plot_df %>% left_join(channel_clustered) %>% filter(!is.na(cluster))
@@ -1829,7 +1861,7 @@ dev.off()
     ## png 
     ##   2
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-35-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-38-2.png)<!-- -->
 
 ## *Montipora capitata*
 
@@ -1849,7 +1881,7 @@ counts_raw <- read.csv("../output_RNA/count_matrices/MON_MCapV3_gene_count_matri
 samples <- colnames(counts_raw)
 
 # read in SwissProt annotation
-SwissProt <- read.delim("../references/annotation/Montipora_capitata_HIv3_Swissprot_GO.tsv")
+SwissProt <- read.delim(paste0(annotdir,"Montipora_capitata_HIv3_Swissprot_GO.tsv"))
 ```
 
 #### 2. Extract metadata from sample names
@@ -1987,7 +2019,7 @@ pheatmap(sampleDistMatrix,
          col=colorRampPalette( rev(brewer.pal(9, "Blues")) )(255))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-45-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-48-1.png)<!-- -->
 
 #### 5. PCA
 
@@ -2027,7 +2059,7 @@ pheatmap(assay(vsd)[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-47-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-50-1.png)<!-- -->
 
 ``` r
 pheatmap(assay(vsd)[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
@@ -2037,12 +2069,12 @@ pheatmap(assay(vsd)[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-47-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-50-2.png)<!-- -->
 
 ### Heat stress genes
 
 ``` r
-HeatStressGenes <- read_csv(paste0("/project/pi_hputnam_uri_edu/zdellaert/snRNA_analysis/multi-sp-snRNA/reference_genes/genes_of_interest/HeatStressGenes_", species ,".csv")) %>% dplyr::select(-1) %>% dplyr::rename(query = paste0(species,"_gene")) %>% dplyr::select(query,everything()) #%>% filter(ref_first_author =="Majerova")
+HeatStressGenes <- read_csv(paste0(annotdir,"heatstress/HeatStressGenes_", species ,".csv")) %>% dplyr::select(-1) %>% dplyr::rename(query = paste0(species,"_gene")) %>% dplyr::select(query,everything()) #%>% filter(ref_first_author =="Majerova")
 
 HeatStressGenes_unique <- HeatStressGenes %>% group_by(query) %>%
   summarize(gene_id = paste(unique(gene_id), collapse = ","),
@@ -2069,7 +2101,7 @@ plot_df %>% ggplot(aes(x=time, y=expression, color=gene_id, group=gene_id)) +
   labs(y="VST expression", x="Timepoint")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-48-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-51-1.png)<!-- -->
 
 ``` r
 plot_df %>% filter(grepl("Type1", response_type)) %>%
@@ -2085,7 +2117,7 @@ plot_df %>% filter(grepl("Type1", response_type)) %>%
   labs(y="VST expression", x="Timepoint", title = "Type 1 Expressed Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-48-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-51-2.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "All_Type1")
@@ -2103,7 +2135,7 @@ plot_df %>% filter(grepl("Type2", response_type)) %>%
   labs(y="VST expression", x="Timepoint", title = "Type 2 Expressed Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-48-3.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-51-3.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "All_Type2")
@@ -2117,7 +2149,7 @@ plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_
   labs(y="VST expression", x="Timepoint")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-48-4.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-51-4.png)<!-- -->
 
 #### DESeq LRT Test
 
@@ -2147,7 +2179,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-49-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-52-1.png)<!-- -->
 
 ``` r
 pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
@@ -2157,7 +2189,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-49-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-52-2.png)<!-- -->
 
 ``` r
 top_500_DE_genes <- DE_05 %>% arrange(log2FoldChange) %>% head(500) %>% rownames()
@@ -2170,7 +2202,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-49-3.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-52-3.png)<!-- -->
 
 ``` r
 pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
@@ -2180,7 +2212,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-49-4.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-52-4.png)<!-- -->
 
 ``` r
 top_500_DE_genes <- DE_05 %>% arrange(desc(log2FoldChange)) %>% head(500) %>% rownames()
@@ -2193,7 +2225,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-49-5.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-52-5.png)<!-- -->
 
 ``` r
 pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
@@ -2203,7 +2235,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-49-6.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-52-6.png)<!-- -->
 
 #### DE Heat stress genes
 
@@ -2223,7 +2255,7 @@ plot_df %>% ggplot(aes(x=time, y=expression, color=gene_id, group=gene_id)) +
   labs(y="VST expression", x="Timepoint")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-50-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-53-1.png)<!-- -->
 
 ``` r
 plot_df %>% filter(grepl("Type1", response_type)) %>%
@@ -2239,7 +2271,7 @@ plot_df %>% filter(grepl("Type1", response_type)) %>%
   labs(y="VST expression", x="Timepoint", title = "Type 1 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-50-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-53-2.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "DE_Type1")
@@ -2257,7 +2289,7 @@ plot_df %>% filter(grepl("Type2", response_type)) %>%
   labs(y="VST expression", x="Timepoint", title = "Type 2 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-50-3.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-53-3.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "DE_Type2")
@@ -2271,7 +2303,7 @@ plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_
   labs(y="VST expression", x="Timepoint", title = "Selected Type 1 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-50-4.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-53-4.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "highlighted_DE_Type1")
@@ -2289,7 +2321,7 @@ plot_df_norm %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",
   labs(y="VST expression", x="Timepoint", title = "Norm to control -- Selected Type 1 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-50-5.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-53-5.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "highlighted_DE_Type1_norm_control")
@@ -2310,7 +2342,7 @@ plot_df_norm %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",
   labs(y="VST expression", x="Timepoint", title = "Norm to T0 -- Selected Type 1 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-50-6.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-53-6.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "highlighted_DE_Type1_norm_T0")
@@ -2324,7 +2356,7 @@ plot_df %>% filter(grepl("GDH",gene_id)|grepl("GS",gene_id)|grepl("AMT1",gene_id
   labs(y="VST expression", x="Timepoint", title = "Selected Type 2 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-50-7.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-53-7.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "highlighted_DE_Type2")
@@ -2333,8 +2365,7 @@ save_ggplot(last_plot(), "highlighted_DE_Type2")
 #### Mechanosensing and other channels
 
 ``` r
-membrane_channels <- read_csv(paste0("../references/annotation/",species,"_membrane_channels.csv"))
-
+membrane_channels <- read_csv(paste0(annotdir,"calcium_membrane_transport/",species,"_membrane_channels.csv"))
 membrane_channels <- membrane_channels %>% filter(query %in% rownames(vsd_mat))
 
 plot_df <- as.data.frame(t(vsd_mat)) %>%
@@ -2343,7 +2374,7 @@ plot_df <- as.data.frame(t(vsd_mat)) %>%
   pivot_longer(cols = all_of(rownames(vsd_mat)), names_to="query", values_to="expression") %>%
   mutate(is_DE = query %in% rownames(DE_05)) %>% right_join(membrane_channels)
 
-membrane_list <- c("aquaporin","TRP",  "Mechanosensory" ,"calcium",  "ER_calcium" ,"Golgi_calcium" , "SLC",  "PMCA",  "Sodium_calcium_exchanger","Bhattacharya2016")
+membrane_list <- c("aquaporin","TRP",  "Mechanosensory" ,"calcium",  "ER_calcium" ,"Golgi_calcium" , "SLC24", "SLC25", "PMCA",  "Sodium_calcium_exchanger","Bhattacharya2016")
 
 for (genelist in membrane_list){
   plot_df_filtered <- plot_df %>% filter(grepl(genelist,gene_set)) %>% filter(is_DE == FALSE)
@@ -2361,7 +2392,7 @@ for (genelist in membrane_list){
 }
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-51-1.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-51-2.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-51-3.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-51-4.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-51-5.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-51-6.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-51-7.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-51-8.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-51-9.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-51-10.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-54-1.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-54-2.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-54-3.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-54-4.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-54-5.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-54-6.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-54-7.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-54-8.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-54-9.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-54-10.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-54-11.png)<!-- -->
 
 ``` r
 for (genelist in membrane_list){
@@ -2380,7 +2411,7 @@ for (genelist in membrane_list){
 }
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-51-11.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-51-12.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-51-13.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-51-14.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-51-15.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-51-16.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-51-17.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-51-18.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-51-19.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-51-20.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-54-12.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-54-13.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-54-14.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-54-15.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-54-16.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-54-17.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-54-18.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-54-19.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-54-20.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-54-21.png)<!-- -->
 
 ### ImpulseDE2
 
@@ -2550,13 +2581,13 @@ lsHeatmaps <- plotHeatmap(
 draw(lsHeatmaps$complexHeatmapRaw) 
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-56-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-59-1.png)<!-- -->
 
 ``` r
 draw(lsHeatmaps$complexHeatmapFit) 
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-56-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-59-2.png)<!-- -->
 
 ``` r
 lsHeatmaps <- plotHeatmap(
@@ -2567,13 +2598,13 @@ lsHeatmaps <- plotHeatmap(
 draw(lsHeatmaps$complexHeatmapRaw) 
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-56-3.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-59-3.png)<!-- -->
 
 ``` r
 draw(lsHeatmaps$complexHeatmapFit) 
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-56-4.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-59-4.png)<!-- -->
 
 ``` r
 lsHeatmaps <- plotHeatmap(
@@ -2584,13 +2615,13 @@ lsHeatmaps <- plotHeatmap(
 draw(lsHeatmaps$complexHeatmapRaw) 
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-56-5.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-59-5.png)<!-- -->
 
 ``` r
 draw(lsHeatmaps$complexHeatmapFit) 
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-56-6.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-59-6.png)<!-- -->
 
 ``` r
 png(paste0(outdir,"/ImpulseDE/ImpulseDE2_heatmap.png"), width = 2000, height = 2400, res = 300)
@@ -2887,7 +2918,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-59-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-62-1.png)<!-- -->
 
 ``` r
 pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
@@ -2897,14 +2928,13 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-59-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-62-2.png)<!-- -->
 
 #### 7.5. Heatmap of membrane channel genes
 
 ``` r
 membrane_DE_genes <- impulse_results %>%
   right_join(membrane_channels, join_by("Gene"=="query")) %>% 
-  filter(gene_set != "SLC") %>%
   filter(padj < 0.05) %>% 
   column_to_rownames("Gene")
 
@@ -2914,12 +2944,13 @@ plot_df <- as.data.frame(t(vsd_mat)) %>%
   pivot_longer(cols = all_of(rownames(vsd_mat)), names_to="query", values_to="expression") %>%
   mutate(is_DE = query %in% rownames(DE_05)) %>% right_join(membrane_DE_genes %>% rownames_to_column("query"))
 
-membrane_list <- c("aquaporin","TRP",  "Mechanosensory" ,"calcium",  "ER_calcium" ,"Golgi_calcium" , "SLC",  "PMCA",  "Sodium_calcium_exchanger","Bhattacharya2016")
+membrane_list <- c("aquaporin","TRP",  "Mechanosensory" ,"calcium",  "ER_calcium" ,"Golgi_calcium" , "SLC24", "SLC25", "PMCA",  "Sodium_calcium_exchanger","Bhattacharya2016")
 
-pdf(paste0(outdir,"/ImpulseDE/membrane_sig_plots.pdf"), width = 14, height = 14)
+pdf(paste0(outdir,"/ImpulseDE/membrane_sig_plots.pdf"), width = 8, height = 10)
 
 pheatmap(assay(vsd)[rownames(membrane_DE_genes), ], cluster_rows=TRUE, show_rownames=TRUE,
          cluster_cols=FALSE,
+         fontsize = 5,
          labels_row=membrane_DE_genes$short_name,
          annotation_row = membrane_DE_genes %>% dplyr::select(gene_set),
          annotation_col= meta[,c("treatment","time")],
@@ -2927,7 +2958,7 @@ pheatmap(assay(vsd)[rownames(membrane_DE_genes), ], cluster_rows=TRUE, show_rown
                                   "time" = time_colors))
 
 pheatmap(assay(vsd)[rownames(membrane_DE_genes), ], cluster_rows=TRUE, show_rownames=TRUE,
-          cluster_cols=TRUE, cutree_cols = 2,
+          cluster_cols=TRUE, cutree_cols = 3,
          fontsize = 5,
          labels_row=membrane_DE_genes$short_name,
          annotation_row = membrane_DE_genes %>% dplyr::select(gene_set),
@@ -3178,7 +3209,7 @@ dev.off()
     ## png 
     ##   2
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-64-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-67-1.png)<!-- -->
 
 ``` r
 cluster1 <- plotGenes(
@@ -3267,11 +3298,11 @@ print(cluster_peaks)
 
     ##   cluster peak_time
     ## 1       1         0
-    ## 2       2         3
-    ## 3       3         0
-    ## 4       4         3
+    ## 2       2         0
+    ## 3       3         3
+    ## 4       4        24
     ## 5       5         0
-    ## 6       6         0
+    ## 6       6         3
 
 ##### View clustered genes of interest
 
@@ -3295,11 +3326,10 @@ heat_clustered %>% filter(!is.na(cluster)) %>% ggplot(aes(y=reorder(gene_id, clu
   labs(x="Mfuzz Cluster", y="Gene ID", title="Heat stress genes clustered by temporal expression pattern")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-69-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-72-1.png)<!-- -->
 
 ``` r
 channel_clustered <- membrane_channels  %>% unique() %>% 
-  filter(gene_set != "SLC") %>%
   left_join(cluster_assignments, by = join_by(query==gene)) %>%
   arrange(cluster)  %>%
   filter(!is.na(cluster)) 
@@ -3307,13 +3337,13 @@ channel_clustered <- membrane_channels  %>% unique() %>%
 cat("Total membrane channel genes:", nrow(membrane_channels), "\n")
 ```
 
-    ## Total membrane channel genes: 673
+    ## Total membrane channel genes: 318
 
 ``` r
 cat("Found in ImpulseDE/Mfuzz data:", nrow(channel_clustered), "\n")
 ```
 
-    ## Found in ImpulseDE/Mfuzz data: 17
+    ## Found in ImpulseDE/Mfuzz data: 18
 
 ``` r
 channel_clustered %>%
@@ -3330,7 +3360,7 @@ channel_clustered %>%
                         " genes significantly DE"))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-70-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-73-1.png)<!-- -->
 
 ``` r
 heat_eset_membrane <- heat_eset[channel_clustered$query, ]
@@ -3364,7 +3394,7 @@ plot_df <- as.data.frame(t(vsd_mat)) %>%
   pivot_longer(cols = all_of(rownames(vsd_mat)), names_to="query", values_to="expression") %>%
   mutate(is_DE = query %in% rownames(DE_05)) %>% right_join(membrane_DE_genes %>% rownames_to_column("query"))
 
-pdf(paste0(outdir,"/ImpulseDE/membrane_sig_plots_clustered.pdf"), width = 14, height = 14)
+pdf(paste0(outdir,"/ImpulseDE/membrane_sig_plots_clustered.pdf"), width = 8, height = 10)
 
 for (cl in c(0,unique(channel_clustered$cluster))){
   plot_df_filtered <- plot_df %>% left_join(channel_clustered) %>% filter(!is.na(cluster))
@@ -3402,7 +3432,7 @@ dev.off()
     ## png 
     ##   2
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-70-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-73-2.png)<!-- -->
 
 ## *Porites compressa*
 
@@ -3422,7 +3452,7 @@ counts_raw <- read.csv("../output_RNA/count_matrices/POR_Pcomp_gene_count_matrix
 samples <- colnames(counts_raw)
 
 # read in SwissProt annotation
-SwissProt <- read.delim("../references/annotation/Porites_compressa_HIv1_Swissprot_GO.tsv")
+SwissProt <- read.delim(paste0(annotdir,"Porites_compressa_HIv1_Swissprot_GO.tsv"))
 ```
 
 #### 2. Extract metadata from sample names
@@ -3560,7 +3590,7 @@ pheatmap(sampleDistMatrix,
          col=colorRampPalette( rev(brewer.pal(9, "Blues")) )(255))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-80-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-83-1.png)<!-- -->
 
 #### 5. PCA
 
@@ -3620,7 +3650,7 @@ pheatmap(assay(vsd)[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-82-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-85-1.png)<!-- -->
 
 ``` r
 pheatmap(assay(vsd)[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
@@ -3630,12 +3660,12 @@ pheatmap(assay(vsd)[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-82-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-85-2.png)<!-- -->
 
 ### Heat stress genes
 
 ``` r
-HeatStressGenes <- read_csv(paste0("/project/pi_hputnam_uri_edu/zdellaert/snRNA_analysis/multi-sp-snRNA/reference_genes/genes_of_interest/HeatStressGenes_", species ,".csv")) %>% dplyr::select(-1) %>% dplyr::rename(query = paste0(species,"_gene")) %>% dplyr::select(query,everything()) #%>% filter(ref_first_author =="Majerova")
+HeatStressGenes <- read_csv(paste0(annotdir,"heatstress/HeatStressGenes_", species ,".csv")) %>% dplyr::select(-1) %>% dplyr::rename(query = paste0(species,"_gene")) %>% dplyr::select(query,everything()) #%>% filter(ref_first_author =="Majerova")
 
 HeatStressGenes_unique <- HeatStressGenes %>% group_by(query) %>%
   summarize(gene_id = paste(unique(gene_id), collapse = ","),
@@ -3662,7 +3692,7 @@ plot_df %>% ggplot(aes(x=time, y=expression, color=gene_id, group=gene_id)) +
   labs(y="VST expression", x="Timepoint")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-83-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-86-1.png)<!-- -->
 
 ``` r
 plot_df %>% filter(grepl("Type1", response_type)) %>%
@@ -3678,7 +3708,7 @@ plot_df %>% filter(grepl("Type1", response_type)) %>%
   labs(y="VST expression", x="Timepoint", title = "Type 1 Expressed Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-83-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-86-2.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "All_Type1")
@@ -3696,7 +3726,7 @@ plot_df %>% filter(grepl("Type2", response_type)) %>%
   labs(y="VST expression", x="Timepoint", title = "Type 2 Expressed Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-83-3.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-86-3.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "All_Type2")
@@ -3710,7 +3740,7 @@ plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_
   labs(y="VST expression", x="Timepoint")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-83-4.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-86-4.png)<!-- -->
 
 #### DESeq LRT Test
 
@@ -3740,7 +3770,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-84-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-87-1.png)<!-- -->
 
 ``` r
 pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
@@ -3750,7 +3780,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-84-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-87-2.png)<!-- -->
 
 ``` r
 top_500_DE_genes <- DE_05 %>% arrange(log2FoldChange) %>% head(500) %>% rownames()
@@ -3763,7 +3793,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-84-3.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-87-3.png)<!-- -->
 
 ``` r
 pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
@@ -3773,7 +3803,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-84-4.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-87-4.png)<!-- -->
 
 ``` r
 top_500_DE_genes <- DE_05 %>% arrange(desc(log2FoldChange)) %>% head(500) %>% rownames()
@@ -3786,7 +3816,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-84-5.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-87-5.png)<!-- -->
 
 ``` r
 pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
@@ -3796,7 +3826,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-84-6.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-87-6.png)<!-- -->
 
 #### DE Heat stress genes
 
@@ -3816,7 +3846,7 @@ plot_df %>% ggplot(aes(x=time, y=expression, color=gene_id, group=gene_id)) +
   labs(y="VST expression", x="Timepoint")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-85-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-88-1.png)<!-- -->
 
 ``` r
 plot_df %>% filter(grepl("Type1", response_type)) %>%
@@ -3832,7 +3862,7 @@ plot_df %>% filter(grepl("Type1", response_type)) %>%
   labs(y="VST expression", x="Timepoint", title = "Type 1 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-85-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-88-2.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "DE_Type1")
@@ -3850,7 +3880,7 @@ plot_df %>% filter(grepl("Type2", response_type)) %>%
   labs(y="VST expression", x="Timepoint", title = "Type 2 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-85-3.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-88-3.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "DE_Type2")
@@ -3864,7 +3894,7 @@ plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_
   labs(y="VST expression", x="Timepoint", title = "Selected Type 1 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-85-4.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-88-4.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "highlighted_DE_Type1")
@@ -3882,7 +3912,7 @@ plot_df_norm %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",
   labs(y="VST expression", x="Timepoint", title = "Norm to control -- Selected Type 1 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-85-5.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-88-5.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "highlighted_DE_Type1_norm_control")
@@ -3903,7 +3933,7 @@ plot_df_norm %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",
   labs(y="VST expression", x="Timepoint", title = "Norm to T0 -- Selected Type 1 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-85-6.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-88-6.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "highlighted_DE_Type1_norm_T0")
@@ -3917,7 +3947,7 @@ plot_df %>% filter(grepl("GDH",gene_id)|grepl("GS",gene_id)|grepl("AMT1",gene_id
   labs(y="VST expression", x="Timepoint", title = "Selected Type 2 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-85-7.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-88-7.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "highlighted_DE_Type2")
@@ -3926,8 +3956,7 @@ save_ggplot(last_plot(), "highlighted_DE_Type2")
 #### Mechanosensing and other channels
 
 ``` r
-membrane_channels <- read_csv(paste0("../references/annotation/",species,"_membrane_channels.csv"))
-
+membrane_channels <- read_csv(paste0(annotdir,"calcium_membrane_transport/",species,"_membrane_channels.csv"))
 membrane_channels <- membrane_channels %>% filter(query %in% rownames(vsd_mat))
 
 plot_df <- as.data.frame(t(vsd_mat)) %>%
@@ -3936,7 +3965,7 @@ plot_df <- as.data.frame(t(vsd_mat)) %>%
   pivot_longer(cols = all_of(rownames(vsd_mat)), names_to="query", values_to="expression") %>%
   mutate(is_DE = query %in% rownames(DE_05)) %>% right_join(membrane_channels)
 
-membrane_list <- c("aquaporin","TRP",  "Mechanosensory" ,"calcium",  "ER_calcium" ,"Golgi_calcium" , "SLC",  "PMCA",  "Sodium_calcium_exchanger","Bhattacharya2016")
+membrane_list <- c("aquaporin","TRP",  "Mechanosensory" ,"calcium",  "ER_calcium" ,"Golgi_calcium" , "SLC24", "SLC25", "PMCA",  "Sodium_calcium_exchanger","Bhattacharya2016")
 
 for (genelist in membrane_list){
   plot_df_filtered <- plot_df %>% filter(grepl(genelist,gene_set)) %>% filter(is_DE == FALSE)
@@ -3954,7 +3983,7 @@ for (genelist in membrane_list){
 }
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-86-1.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-86-2.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-86-3.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-86-4.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-86-5.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-86-6.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-86-7.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-86-8.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-86-9.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-86-10.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-89-1.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-89-2.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-89-3.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-89-4.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-89-5.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-89-6.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-89-7.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-89-8.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-89-9.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-89-10.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-89-11.png)<!-- -->
 
 ``` r
 for (genelist in membrane_list){
@@ -3973,7 +4002,7 @@ for (genelist in membrane_list){
 }
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-86-11.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-86-12.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-86-13.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-86-14.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-86-15.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-86-16.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-86-17.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-86-18.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-86-19.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-86-20.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-89-12.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-89-13.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-89-14.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-89-15.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-89-16.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-89-17.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-89-18.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-89-19.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-89-20.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-89-21.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-89-22.png)<!-- -->
 
 ### ImpulseDE2
 
@@ -4143,13 +4172,13 @@ lsHeatmaps <- plotHeatmap(
 draw(lsHeatmaps$complexHeatmapRaw) 
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-91-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-94-1.png)<!-- -->
 
 ``` r
 draw(lsHeatmaps$complexHeatmapFit) 
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-91-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-94-2.png)<!-- -->
 
 ``` r
 lsHeatmaps <- plotHeatmap(
@@ -4160,13 +4189,13 @@ lsHeatmaps <- plotHeatmap(
 draw(lsHeatmaps$complexHeatmapRaw) 
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-91-3.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-94-3.png)<!-- -->
 
 ``` r
 draw(lsHeatmaps$complexHeatmapFit) 
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-91-4.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-94-4.png)<!-- -->
 
 ``` r
 lsHeatmaps <- plotHeatmap(
@@ -4177,13 +4206,13 @@ lsHeatmaps <- plotHeatmap(
 draw(lsHeatmaps$complexHeatmapRaw) 
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-91-5.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-94-5.png)<!-- -->
 
 ``` r
 draw(lsHeatmaps$complexHeatmapFit) 
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-91-6.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-94-6.png)<!-- -->
 
 ``` r
 png(paste0(outdir,"/ImpulseDE/ImpulseDE2_heatmap.png"), width = 2000, height = 2400, res = 300)
@@ -4475,7 +4504,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-94-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-97-1.png)<!-- -->
 
 ``` r
 pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
@@ -4485,14 +4514,13 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-94-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-97-2.png)<!-- -->
 
 #### 7.5. Heatmap of membrane channel genes
 
 ``` r
 membrane_DE_genes <- impulse_results %>%
   right_join(membrane_channels, join_by("Gene"=="query")) %>% 
-  filter(gene_set != "SLC") %>%
   filter(padj < 0.05) %>% 
   column_to_rownames("Gene")
 
@@ -4502,12 +4530,13 @@ plot_df <- as.data.frame(t(vsd_mat)) %>%
   pivot_longer(cols = all_of(rownames(vsd_mat)), names_to="query", values_to="expression") %>%
   mutate(is_DE = query %in% rownames(DE_05)) %>% right_join(membrane_DE_genes %>% rownames_to_column("query"))
 
-membrane_list <- c("aquaporin","TRP",  "Mechanosensory" ,"calcium",  "ER_calcium" ,"Golgi_calcium" , "SLC",  "PMCA",  "Sodium_calcium_exchanger","Bhattacharya2016")
+membrane_list <- c("aquaporin","TRP",  "Mechanosensory" ,"calcium",  "ER_calcium" ,"Golgi_calcium" , "SLC24", "SLC25", "PMCA",  "Sodium_calcium_exchanger","Bhattacharya2016")
 
-pdf(paste0(outdir,"/ImpulseDE/membrane_sig_plots.pdf"), width = 14, height = 14)
+pdf(paste0(outdir,"/ImpulseDE/membrane_sig_plots.pdf"), width = 8, height = 10)
 
 pheatmap(assay(vsd)[rownames(membrane_DE_genes), ], cluster_rows=TRUE, show_rownames=TRUE,
          cluster_cols=FALSE,
+         fontsize = 5,
          labels_row=membrane_DE_genes$short_name,
          annotation_row = membrane_DE_genes %>% dplyr::select(gene_set),
          annotation_col= meta[,c("treatment","time")],
@@ -4515,7 +4544,7 @@ pheatmap(assay(vsd)[rownames(membrane_DE_genes), ], cluster_rows=TRUE, show_rown
                                   "time" = time_colors))
 
 pheatmap(assay(vsd)[rownames(membrane_DE_genes), ], cluster_rows=TRUE, show_rownames=TRUE,
-          cluster_cols=TRUE, cutree_cols = 2,
+          cluster_cols=TRUE, cutree_cols = 3,
          fontsize = 5,
          labels_row=membrane_DE_genes$short_name,
          annotation_row = membrane_DE_genes %>% dplyr::select(gene_set),
@@ -4660,7 +4689,7 @@ dev.off()
     ## png 
     ##   2
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-99-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-102-1.png)<!-- -->
 
 ``` r
 cluster2 <- plotGenes(
@@ -4749,9 +4778,9 @@ print(cluster_peaks)
 
     ##   cluster peak_time
     ## 1       1         3
-    ## 2       2         0
-    ## 3       3         3
-    ## 4       4         3
+    ## 2       2         3
+    ## 3       3         0
+    ## 4       4         0
     ## 5       5         0
     ## 6       6         0
 
@@ -4766,7 +4795,7 @@ cluster_assignments %>% filter(gene %in% HSPS)
     ##                                                                                gene
     ## Porites_compressa_HIv1___RNAseq.g10172.t1 Porites_compressa_HIv1___RNAseq.g10172.t1
     ##                                           cluster membership
-    ## Porites_compressa_HIv1___RNAseq.g10172.t1       1  0.5709746
+    ## Porites_compressa_HIv1___RNAseq.g10172.t1       2  0.8745835
 
 ``` r
 heat_clustered <- HeatStressGenes_unique %>% left_join(cluster_assignments, by = join_by(query==gene)) %>%
@@ -4779,11 +4808,10 @@ heat_clustered %>% filter(!is.na(cluster)) %>% ggplot(aes(y=reorder(gene_id, clu
   labs(x="Mfuzz Cluster", y="Gene ID", title="Heat stress genes clustered by temporal expression pattern")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-104-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-107-1.png)<!-- -->
 
 ``` r
 channel_clustered <- membrane_channels  %>% unique() %>% 
-  filter(gene_set != "SLC") %>%
   left_join(cluster_assignments, by = join_by(query==gene)) %>%
   arrange(cluster)  %>%
   filter(!is.na(cluster)) 
@@ -4791,7 +4819,7 @@ channel_clustered <- membrane_channels  %>% unique() %>%
 cat("Total membrane channel genes:", nrow(membrane_channels), "\n")
 ```
 
-    ## Total membrane channel genes: 718
+    ## Total membrane channel genes: 296
 
 ``` r
 cat("Found in ImpulseDE/Mfuzz data:", nrow(channel_clustered), "\n")
@@ -4814,7 +4842,7 @@ channel_clustered %>%
                         " genes significantly DE"))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-105-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-108-1.png)<!-- -->
 
 ``` r
 heat_eset_membrane <- heat_eset[channel_clustered$query, ]
@@ -4848,7 +4876,7 @@ plot_df <- as.data.frame(t(vsd_mat)) %>%
   pivot_longer(cols = all_of(rownames(vsd_mat)), names_to="query", values_to="expression") %>%
   mutate(is_DE = query %in% rownames(DE_05)) %>% right_join(membrane_DE_genes %>% rownames_to_column("query"))
 
-pdf(paste0(outdir,"/ImpulseDE/membrane_sig_plots_clustered.pdf"), width = 14, height = 14)
+pdf(paste0(outdir,"/ImpulseDE/membrane_sig_plots_clustered.pdf"), width = 8, height = 10)
 
 for (cl in c(0,unique(channel_clustered$cluster))){
   plot_df_filtered <- plot_df %>% left_join(channel_clustered) %>% filter(!is.na(cluster))
@@ -4886,4 +4914,4 @@ dev.off()
     ## png 
     ##   2
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-105-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-108-2.png)<!-- -->

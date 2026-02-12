@@ -51,6 +51,34 @@ time_colors <- colorRampPalette(c("#ffffcc","#0c2c84"))(7)
 names(time_colors) <- c("0", "1", "3", "12", "24", "72", "120")
 ```
 
+## Genome annotations
+
+I have a [central repository](https://github.com/zdellaert/HI_genome_annotations.git) for the genome annotations for the three species I have been studying throughout my dissertation. My annotation files are stored there, and this code is written so you clone this repository in the same folder as the TimeSeries repository. If you clone the repo, you should be all set! All annotation code is available in that repository as well.
+
+```{r, eval=FALSE}
+getwd()
+```
+
+```{bash, eval=FALSE}
+#If you are in the working directory of this Rmd file (TimeSeries/4-multi-species/code), you need to move out three levels:
+
+cd ../../../
+ls *
+
+# one of the directories should be "TimeSeries"
+
+git clone https://github.com/zdellaert/HI_genome_annotations.git
+#ssh: git clone git@github.com:zdellaert/HI_genome_annotations.git
+
+ls *
+
+# now there should be both "TimeSeries" and "HI_genome_annotations" directories.
+```
+
+```{r}
+annotdir <- "../../../HI_genome_annotations/annotation/"
+```
+
 ## *Pocillopora acuta*
 
 ### Preproccessing
@@ -69,7 +97,7 @@ counts_raw <- read.csv("../output_RNA/count_matrices/POC_PacutaV2_gene_count_mat
 samples <- colnames(counts_raw)
 
 # read in SwissProt annotation
-SwissProt <- read.delim("../references/annotation/Pocillopora_acuta_HIv2_Swissprot_GO.tsv")
+SwissProt <- read.delim(paste0(annotdir,"Pocillopora_acuta_HIv2_Swissprot_GO.tsv"))
 ```
 
 #### 2. Extract metadata from sample names
@@ -214,7 +242,7 @@ pheatmap(assay(vsd)[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
 ### Heat stress genes
 
 ```{r}
-HeatStressGenes <- read_csv(paste0("/project/pi_hputnam_uri_edu/zdellaert/snRNA_analysis/multi-sp-snRNA/reference_genes/genes_of_interest/HeatStressGenes_", species ,".csv")) %>% dplyr::select(-1) %>% dplyr::rename(query = paste0(species,"_gene")) %>% dplyr::select(query,everything()) #%>% filter(ref_first_author =="Majerova")
+HeatStressGenes <- read_csv(paste0(annotdir,"heatstress/HeatStressGenes_", species ,".csv")) %>% dplyr::select(-1) %>% dplyr::rename(query = paste0(species,"_gene")) %>% dplyr::select(query,everything()) #%>% filter(ref_first_author =="Majerova")
 
 HeatStressGenes_unique <- HeatStressGenes %>% group_by(query) %>%
   summarize(gene_id = paste(unique(gene_id), collapse = ","),
@@ -507,8 +535,7 @@ for (genelist in names(list)){
 #### Mechanosensing and other channels
 
 ```{r}
-membrane_channels <- read_csv(paste0("../references/annotation/",species,"_membrane_channels.csv"))
-
+membrane_channels <- read_csv(paste0(annotdir,"calcium_membrane_transport/",species,"_membrane_channels.csv"))
 membrane_channels <- membrane_channels %>% filter(query %in% rownames(vsd_mat))
 
 plot_df <- as.data.frame(t(vsd_mat)) %>%
@@ -517,7 +544,7 @@ plot_df <- as.data.frame(t(vsd_mat)) %>%
   pivot_longer(cols = all_of(rownames(vsd_mat)), names_to="query", values_to="expression") %>%
   mutate(is_DE = query %in% rownames(DE_05)) %>% right_join(membrane_channels)
 
-membrane_list <- c("aquaporin","TRP",  "Mechanosensory" ,"calcium",  "ER_calcium" ,"Golgi_calcium" , "SLC",  "PMCA",  "Sodium_calcium_exchanger","Bhattacharya2016")
+membrane_list <- c("aquaporin","TRP",  "Mechanosensory" ,"calcium",  "ER_calcium" ,"Golgi_calcium" , "SLC24", "SLC25", "PMCA",  "Sodium_calcium_exchanger","Bhattacharya2016")
 
 for (genelist in membrane_list){
   plot <- plot_df %>% filter(grepl(genelist,gene_set)) %>% filter(is_DE == FALSE) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
@@ -735,7 +762,6 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
 ```{r}
 membrane_DE_genes <- impulse_results %>%
   right_join(membrane_channels, join_by("Gene"=="query")) %>% 
-  filter(gene_set != "SLC") %>%
   filter(padj < 0.05) %>% 
   column_to_rownames("Gene")
 
@@ -745,12 +771,13 @@ plot_df <- as.data.frame(t(vsd_mat)) %>%
   pivot_longer(cols = all_of(rownames(vsd_mat)), names_to="query", values_to="expression") %>%
   mutate(is_DE = query %in% rownames(DE_05)) %>% right_join(membrane_DE_genes %>% rownames_to_column("query"))
 
-membrane_list <- c("aquaporin","TRP",  "Mechanosensory" ,"calcium",  "ER_calcium" ,"Golgi_calcium" , "SLC",  "PMCA",  "Sodium_calcium_exchanger","Bhattacharya2016")
+membrane_list <- c("aquaporin","TRP",  "Mechanosensory" ,"calcium",  "ER_calcium" ,"Golgi_calcium" , "SLC24", "SLC25", "PMCA",  "Sodium_calcium_exchanger","Bhattacharya2016")
 
-pdf(paste0(outdir,"/ImpulseDE/membrane_sig_plots.pdf"), width = 14, height = 14)
+pdf(paste0(outdir,"/ImpulseDE/membrane_sig_plots.pdf"), width = 8, height = 10)
 
 pheatmap(assay(vsd)[rownames(membrane_DE_genes), ], cluster_rows=TRUE, show_rownames=TRUE,
          cluster_cols=FALSE,
+         fontsize = 5,
          labels_row=membrane_DE_genes$short_name,
          annotation_row = membrane_DE_genes %>% dplyr::select(gene_set),
          annotation_col= meta[,c("treatment","time")],
@@ -758,7 +785,7 @@ pheatmap(assay(vsd)[rownames(membrane_DE_genes), ], cluster_rows=TRUE, show_rown
                                   "time" = time_colors))
 
 pheatmap(assay(vsd)[rownames(membrane_DE_genes), ], cluster_rows=TRUE, show_rownames=TRUE,
-          cluster_cols=TRUE, cutree_cols = 2,
+         cluster_cols=TRUE,cutree_cols = 3,
          fontsize = 5,
          labels_row=membrane_DE_genes$short_name,
          annotation_row = membrane_DE_genes %>% dplyr::select(gene_set),
@@ -929,7 +956,6 @@ heat_clustered %>% filter(!is.na(cluster)) %>% ggplot(aes(y=reorder(gene_id, clu
 
 ```{r}
 channel_clustered <- membrane_channels  %>% unique() %>% 
-  filter(gene_set != "SLC") %>%
   left_join(cluster_assignments, by = join_by(query==gene)) %>%
   arrange(cluster)  %>%
   filter(!is.na(cluster)) 
@@ -976,7 +1002,7 @@ plot_df <- as.data.frame(t(vsd_mat)) %>%
   pivot_longer(cols = all_of(rownames(vsd_mat)), names_to="query", values_to="expression") %>%
   mutate(is_DE = query %in% rownames(DE_05)) %>% right_join(membrane_DE_genes %>% rownames_to_column("query"))
 
-pdf(paste0(outdir,"/ImpulseDE/membrane_sig_plots_clustered.pdf"), width = 14, height = 14)
+pdf(paste0(outdir,"/ImpulseDE/membrane_sig_plots_clustered.pdf"), width = 8, height = 10)
 
 for (cl in c(0,unique(channel_clustered$cluster))){
   plot_df_filtered <- plot_df %>% left_join(channel_clustered) %>% filter(!is.na(cluster))
@@ -1031,7 +1057,7 @@ counts_raw <- read.csv("../output_RNA/count_matrices/MON_MCapV3_gene_count_matri
 samples <- colnames(counts_raw)
 
 # read in SwissProt annotation
-SwissProt <- read.delim("../references/annotation/Montipora_capitata_HIv3_Swissprot_GO.tsv")
+SwissProt <- read.delim(paste0(annotdir,"Montipora_capitata_HIv3_Swissprot_GO.tsv"))
 ```
 
 #### 2. Extract metadata from sample names
@@ -1185,7 +1211,7 @@ pheatmap(assay(vsd)[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
 ### Heat stress genes
 
 ```{r}
-HeatStressGenes <- read_csv(paste0("/project/pi_hputnam_uri_edu/zdellaert/snRNA_analysis/multi-sp-snRNA/reference_genes/genes_of_interest/HeatStressGenes_", species ,".csv")) %>% dplyr::select(-1) %>% dplyr::rename(query = paste0(species,"_gene")) %>% dplyr::select(query,everything()) #%>% filter(ref_first_author =="Majerova")
+HeatStressGenes <- read_csv(paste0(annotdir,"heatstress/HeatStressGenes_", species ,".csv")) %>% dplyr::select(-1) %>% dplyr::rename(query = paste0(species,"_gene")) %>% dplyr::select(query,everything()) #%>% filter(ref_first_author =="Majerova")
 
 HeatStressGenes_unique <- HeatStressGenes %>% group_by(query) %>%
   summarize(gene_id = paste(unique(gene_id), collapse = ","),
@@ -1412,8 +1438,7 @@ save_ggplot(last_plot(), "highlighted_DE_Type2")
 #### Mechanosensing and other channels
 
 ```{r}
-membrane_channels <- read_csv(paste0("../references/annotation/",species,"_membrane_channels.csv"))
-
+membrane_channels <- read_csv(paste0(annotdir,"calcium_membrane_transport/",species,"_membrane_channels.csv"))
 membrane_channels <- membrane_channels %>% filter(query %in% rownames(vsd_mat))
 
 plot_df <- as.data.frame(t(vsd_mat)) %>%
@@ -1422,7 +1447,7 @@ plot_df <- as.data.frame(t(vsd_mat)) %>%
   pivot_longer(cols = all_of(rownames(vsd_mat)), names_to="query", values_to="expression") %>%
   mutate(is_DE = query %in% rownames(DE_05)) %>% right_join(membrane_channels)
 
-membrane_list <- c("aquaporin","TRP",  "Mechanosensory" ,"calcium",  "ER_calcium" ,"Golgi_calcium" , "SLC",  "PMCA",  "Sodium_calcium_exchanger","Bhattacharya2016")
+membrane_list <- c("aquaporin","TRP",  "Mechanosensory" ,"calcium",  "ER_calcium" ,"Golgi_calcium" , "SLC24", "SLC25", "PMCA",  "Sodium_calcium_exchanger","Bhattacharya2016")
 
 for (genelist in membrane_list){
   plot_df_filtered <- plot_df %>% filter(grepl(genelist,gene_set)) %>% filter(is_DE == FALSE)
@@ -1643,7 +1668,6 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
 ```{r}
 membrane_DE_genes <- impulse_results %>%
   right_join(membrane_channels, join_by("Gene"=="query")) %>% 
-  filter(gene_set != "SLC") %>%
   filter(padj < 0.05) %>% 
   column_to_rownames("Gene")
 
@@ -1653,12 +1677,13 @@ plot_df <- as.data.frame(t(vsd_mat)) %>%
   pivot_longer(cols = all_of(rownames(vsd_mat)), names_to="query", values_to="expression") %>%
   mutate(is_DE = query %in% rownames(DE_05)) %>% right_join(membrane_DE_genes %>% rownames_to_column("query"))
 
-membrane_list <- c("aquaporin","TRP",  "Mechanosensory" ,"calcium",  "ER_calcium" ,"Golgi_calcium" , "SLC",  "PMCA",  "Sodium_calcium_exchanger","Bhattacharya2016")
+membrane_list <- c("aquaporin","TRP",  "Mechanosensory" ,"calcium",  "ER_calcium" ,"Golgi_calcium" , "SLC24", "SLC25", "PMCA",  "Sodium_calcium_exchanger","Bhattacharya2016")
 
-pdf(paste0(outdir,"/ImpulseDE/membrane_sig_plots.pdf"), width = 14, height = 14)
+pdf(paste0(outdir,"/ImpulseDE/membrane_sig_plots.pdf"), width = 8, height = 10)
 
 pheatmap(assay(vsd)[rownames(membrane_DE_genes), ], cluster_rows=TRUE, show_rownames=TRUE,
          cluster_cols=FALSE,
+         fontsize = 5,
          labels_row=membrane_DE_genes$short_name,
          annotation_row = membrane_DE_genes %>% dplyr::select(gene_set),
          annotation_col= meta[,c("treatment","time")],
@@ -1666,7 +1691,7 @@ pheatmap(assay(vsd)[rownames(membrane_DE_genes), ], cluster_rows=TRUE, show_rown
                                   "time" = time_colors))
 
 pheatmap(assay(vsd)[rownames(membrane_DE_genes), ], cluster_rows=TRUE, show_rownames=TRUE,
-          cluster_cols=TRUE, cutree_cols = 2,
+          cluster_cols=TRUE, cutree_cols = 3,
          fontsize = 5,
          labels_row=membrane_DE_genes$short_name,
          annotation_row = membrane_DE_genes %>% dplyr::select(gene_set),
@@ -1837,7 +1862,6 @@ heat_clustered %>% filter(!is.na(cluster)) %>% ggplot(aes(y=reorder(gene_id, clu
 
 ```{r}
 channel_clustered <- membrane_channels  %>% unique() %>% 
-  filter(gene_set != "SLC") %>%
   left_join(cluster_assignments, by = join_by(query==gene)) %>%
   arrange(cluster)  %>%
   filter(!is.na(cluster)) 
@@ -1884,7 +1908,7 @@ plot_df <- as.data.frame(t(vsd_mat)) %>%
   pivot_longer(cols = all_of(rownames(vsd_mat)), names_to="query", values_to="expression") %>%
   mutate(is_DE = query %in% rownames(DE_05)) %>% right_join(membrane_DE_genes %>% rownames_to_column("query"))
 
-pdf(paste0(outdir,"/ImpulseDE/membrane_sig_plots_clustered.pdf"), width = 14, height = 14)
+pdf(paste0(outdir,"/ImpulseDE/membrane_sig_plots_clustered.pdf"), width = 8, height = 10)
 
 for (cl in c(0,unique(channel_clustered$cluster))){
   plot_df_filtered <- plot_df %>% left_join(channel_clustered) %>% filter(!is.na(cluster))
@@ -1938,7 +1962,7 @@ counts_raw <- read.csv("../output_RNA/count_matrices/POR_Pcomp_gene_count_matrix
 samples <- colnames(counts_raw)
 
 # read in SwissProt annotation
-SwissProt <- read.delim("../references/annotation/Porites_compressa_HIv1_Swissprot_GO.tsv")
+SwissProt <- read.delim(paste0(annotdir,"Porites_compressa_HIv1_Swissprot_GO.tsv"))
 ```
 
 #### 2. Extract metadata from sample names
@@ -2112,7 +2136,7 @@ pheatmap(assay(vsd)[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
 ### Heat stress genes
 
 ```{r}
-HeatStressGenes <- read_csv(paste0("/project/pi_hputnam_uri_edu/zdellaert/snRNA_analysis/multi-sp-snRNA/reference_genes/genes_of_interest/HeatStressGenes_", species ,".csv")) %>% dplyr::select(-1) %>% dplyr::rename(query = paste0(species,"_gene")) %>% dplyr::select(query,everything()) #%>% filter(ref_first_author =="Majerova")
+HeatStressGenes <- read_csv(paste0(annotdir,"heatstress/HeatStressGenes_", species ,".csv")) %>% dplyr::select(-1) %>% dplyr::rename(query = paste0(species,"_gene")) %>% dplyr::select(query,everything()) #%>% filter(ref_first_author =="Majerova")
 
 HeatStressGenes_unique <- HeatStressGenes %>% group_by(query) %>%
   summarize(gene_id = paste(unique(gene_id), collapse = ","),
@@ -2339,8 +2363,7 @@ save_ggplot(last_plot(), "highlighted_DE_Type2")
 #### Mechanosensing and other channels
 
 ```{r}
-membrane_channels <- read_csv(paste0("../references/annotation/",species,"_membrane_channels.csv"))
-
+membrane_channels <- read_csv(paste0(annotdir,"calcium_membrane_transport/",species,"_membrane_channels.csv"))
 membrane_channels <- membrane_channels %>% filter(query %in% rownames(vsd_mat))
 
 plot_df <- as.data.frame(t(vsd_mat)) %>%
@@ -2349,7 +2372,7 @@ plot_df <- as.data.frame(t(vsd_mat)) %>%
   pivot_longer(cols = all_of(rownames(vsd_mat)), names_to="query", values_to="expression") %>%
   mutate(is_DE = query %in% rownames(DE_05)) %>% right_join(membrane_channels)
 
-membrane_list <- c("aquaporin","TRP",  "Mechanosensory" ,"calcium",  "ER_calcium" ,"Golgi_calcium" , "SLC",  "PMCA",  "Sodium_calcium_exchanger","Bhattacharya2016")
+membrane_list <- c("aquaporin","TRP",  "Mechanosensory" ,"calcium",  "ER_calcium" ,"Golgi_calcium" , "SLC24", "SLC25", "PMCA",  "Sodium_calcium_exchanger","Bhattacharya2016")
 
 for (genelist in membrane_list){
   plot_df_filtered <- plot_df %>% filter(grepl(genelist,gene_set)) %>% filter(is_DE == FALSE)
@@ -2570,7 +2593,6 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
 ```{r}
 membrane_DE_genes <- impulse_results %>%
   right_join(membrane_channels, join_by("Gene"=="query")) %>% 
-  filter(gene_set != "SLC") %>%
   filter(padj < 0.05) %>% 
   column_to_rownames("Gene")
 
@@ -2580,12 +2602,13 @@ plot_df <- as.data.frame(t(vsd_mat)) %>%
   pivot_longer(cols = all_of(rownames(vsd_mat)), names_to="query", values_to="expression") %>%
   mutate(is_DE = query %in% rownames(DE_05)) %>% right_join(membrane_DE_genes %>% rownames_to_column("query"))
 
-membrane_list <- c("aquaporin","TRP",  "Mechanosensory" ,"calcium",  "ER_calcium" ,"Golgi_calcium" , "SLC",  "PMCA",  "Sodium_calcium_exchanger","Bhattacharya2016")
+membrane_list <- c("aquaporin","TRP",  "Mechanosensory" ,"calcium",  "ER_calcium" ,"Golgi_calcium" , "SLC24", "SLC25", "PMCA",  "Sodium_calcium_exchanger","Bhattacharya2016")
 
-pdf(paste0(outdir,"/ImpulseDE/membrane_sig_plots.pdf"), width = 14, height = 14)
+pdf(paste0(outdir,"/ImpulseDE/membrane_sig_plots.pdf"), width = 8, height = 10)
 
 pheatmap(assay(vsd)[rownames(membrane_DE_genes), ], cluster_rows=TRUE, show_rownames=TRUE,
          cluster_cols=FALSE,
+         fontsize = 5,
          labels_row=membrane_DE_genes$short_name,
          annotation_row = membrane_DE_genes %>% dplyr::select(gene_set),
          annotation_col= meta[,c("treatment","time")],
@@ -2593,7 +2616,7 @@ pheatmap(assay(vsd)[rownames(membrane_DE_genes), ], cluster_rows=TRUE, show_rown
                                   "time" = time_colors))
 
 pheatmap(assay(vsd)[rownames(membrane_DE_genes), ], cluster_rows=TRUE, show_rownames=TRUE,
-          cluster_cols=TRUE, cutree_cols = 2,
+          cluster_cols=TRUE, cutree_cols = 3,
          fontsize = 5,
          labels_row=membrane_DE_genes$short_name,
          annotation_row = membrane_DE_genes %>% dplyr::select(gene_set),
@@ -2764,7 +2787,6 @@ heat_clustered %>% filter(!is.na(cluster)) %>% ggplot(aes(y=reorder(gene_id, clu
 
 ```{r}
 channel_clustered <- membrane_channels  %>% unique() %>% 
-  filter(gene_set != "SLC") %>%
   left_join(cluster_assignments, by = join_by(query==gene)) %>%
   arrange(cluster)  %>%
   filter(!is.na(cluster)) 
@@ -2811,7 +2833,7 @@ plot_df <- as.data.frame(t(vsd_mat)) %>%
   pivot_longer(cols = all_of(rownames(vsd_mat)), names_to="query", values_to="expression") %>%
   mutate(is_DE = query %in% rownames(DE_05)) %>% right_join(membrane_DE_genes %>% rownames_to_column("query"))
 
-pdf(paste0(outdir,"/ImpulseDE/membrane_sig_plots_clustered.pdf"), width = 14, height = 14)
+pdf(paste0(outdir,"/ImpulseDE/membrane_sig_plots_clustered.pdf"), width = 8, height = 10)
 
 for (cl in c(0,unique(channel_clustered$cluster))){
   plot_df_filtered <- plot_df %>% left_join(channel_clustered) %>% filter(!is.na(cluster))
