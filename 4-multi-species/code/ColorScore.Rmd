@@ -12,7 +12,9 @@ output:
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 ```
 
-Basing this on [Emma Strand's script](https://github.com/emmastrand/Ploidy_methylation/blob/main/scripts/07-Colorscore.Rmd)
+Basing this on [Emma Strand's script](https://github.com/emmastrand/EmmaStrand_Notebook/blob/master/Dani_colorscore/Colorscore.md)
+
+Look at the Hackerott et al repo [here](https://github.com/eelabfiu/CoralColorScore) for further analysis ideas
 
 ### Load libraries 
 
@@ -24,6 +26,8 @@ library(ggplot2)
 library(vegan)
 library(Rmisc)
 library(ggpubr)
+library(factoextra)
+library(MASS)
 ```
 
 ```{r}
@@ -66,7 +70,230 @@ proc <- raw %>% mutate(
     Green.Norm.Coral = Green.Coral/Green.Standard,
     Blue.Norm.Coral = Blue.Coral/Blue.Standard
 )
+
+rownames(proc) <- proc$Sample
 ```
+
+### Color Score Hackerott
+
+#### Run PCA
+```{r}
+proc_out_rm <- proc %>% filter(Sample!="POC_PAM_1059")
+Color.PCA<-prcomp(proc_out_rm[,c("Red.Norm.Coral","Green.Norm.Coral","Blue.Norm.Coral")], scale.=TRUE) 
+
+#Initial plot
+fviz_pca_ind(Color.PCA)
+
+#Check Variance Explained by Components
+summary(Color.PCA)
+
+#Visualize the importance of each principal component
+fviz_eig(Color.PCA, addlabels = TRUE) 
+```
+
+PC1 Explains 83.1% of the variance in the color data.
+
+```{r}
+##Extract % Variance PC 1
+PCA.PC1<-sprintf("%1.2f",get_eigenvalue(Color.PCA)$variance.percent[1])
+PCA.PC1
+
+##Extract % Variance PC 2
+PCA.PC2<-sprintf("%1.2f",get_eigenvalue(Color.PCA)$variance.percent[2])
+PCA.PC2
+
+##Extract Individual Sample Scores
+Color.PCA.scores <- as.data.frame(Color.PCA$x)
+Color.PCA.scores$Sample<-rownames(Color.PCA.scores)
+
+#Prepare for Plotting
+Color.PCA.scores<-left_join(proc_out_rm, Color.PCA.scores, by = "Sample") 
+```
+
+#### Plot PCA 
+```{r}
+#Plot PCA
+ggplot(data = Color.PCA.scores, aes(x = PC1, y = PC2)) + 
+  geom_point(aes(colour = Treatment),  alpha = 0.8) + 
+  scale_colour_manual(values =treat_colors)+
+  theme_classic()+
+  scale_x_continuous(limits = c(-3, 5.5))+
+  scale_y_continuous(limits = c(-4.25, 4.25))+
+  labs(x=paste0('PC 1 (',PCA.PC1,"%)"), y=paste0('PC 2 (',PCA.PC2,"%)"))+
+  ggtitle("Color Score PCA")
+```
+
+#### LDA on PCA Scores
+```{r}
+##LDA on PCA Scores
+Color.LDA_PCA<-lda(Treatment~PC1+PC2+PC3, data=Color.PCA.scores)
+
+##Predict
+Color.pLDA_PCA<-predict(object=Color.LDA_PCA, newdata=Color.PCA.scores)
+
+##Save LD1 Scores
+Color.LDA_PCA.scores<-data.frame(Sample=Color.PCA.scores$Sample, LD1=Color.pLDA_PCA$x)
+
+#Prepare for Plotting
+ColorData<-left_join(proc_out_rm, Color.LDA_PCA.scores, by = "Sample") 
+
+# make time and treatment factors
+ColorData$Timepoint <- factor(ColorData$Timepoint, levels = as.character(sort(unique(as.numeric(ColorData$Timepoint)))))
+ColorData$Treatment <- factor(ColorData$Treatment)
+```
+
+#### LD1 Density Plot
+
+```{r}
+ggplot(data = ColorData, aes(x = LD1)) + 
+  geom_density(aes(fill = Treatment), alpha = 0.6) + 
+  scale_fill_manual(values =treat_colors)+
+  theme_classic()+
+  scale_x_continuous(limits = c(-3, 5.5))+
+  labs(x="LD1", y= "Density")+
+  ggtitle("Full Dataset")
+```
+
+#### Extract Color Score
+```{r}
+##Invert signs for Control > Heated
+ColorData$LD1<-ColorData$LD1*(-1)
+
+#Adding 10 to make all score values positive 
+#ColorData$LD1<- ColorData$LD1 +10
+
+ColorData %>%
+  ggplot(., aes(x=Timepoint, y=LD1, color=Treatment)) +
+  geom_jitter(alpha=0.25, size=1.5, width = 0.22) + 
+  theme_minimal() + labs(x = "Timepoint",y = "Color Score") +
+  scale_color_manual(values = treat_colors) +
+  geom_point(stat = "summary", fun = mean, aes(group = Treatment), size=3) +
+  stat_summary(fun.data = mean_se, geom = "errorbar", width = 0.2, aes(group = Treatment)) +
+  geom_line(stat = "summary", fun = mean, size = 1.2, aes(group = Treatment)) +
+  stat_compare_means(aes(group = Treatment),method = "anova",label = "p.format",size = 3)
+
+save_ggplot(last_plot(), "Pacu_Hackerott")
+
+ColorData_Full <- ColorData
+```
+
+
+
+#### by timepoint
+
+```{r}
+for (timepoint in unique(raw$Timepoint)){
+  proc_timepoint <- proc %>% filter(Timepoint == timepoint)
+  
+  proc_out_rm <- proc_timepoint #%>% filter(Sample!="POC_PAM_1059")
+  Color.PCA<-prcomp(proc_out_rm[,c("Red.Norm.Coral","Green.Norm.Coral","Blue.Norm.Coral")], scale.=TRUE) 
+
+  ##Extract % Variance PC 1 & 2
+  PCA.PC1<-sprintf("%1.2f",get_eigenvalue(Color.PCA)$variance.percent[1])
+  PCA.PC2<-sprintf("%1.2f",get_eigenvalue(Color.PCA)$variance.percent[2])
+
+  ##Extract Individual Sample Scores
+  Color.PCA.scores <- as.data.frame(Color.PCA$x)
+  Color.PCA.scores$Sample<-rownames(Color.PCA.scores)
+  
+  #Prepare for Plotting
+  Color.PCA.scores<-left_join(proc_out_rm, Color.PCA.scores, by = "Sample") 
+  
+  timepoint_pca <- ggplot(data = Color.PCA.scores, aes(x = PC1, y = PC2)) + 
+    geom_point(aes(colour = Treatment),  alpha = 0.8) + 
+    scale_colour_manual(values =treat_colors)+
+    theme_classic()+
+    scale_x_continuous(limits = c(-3, 5.5))+
+    scale_y_continuous(limits = c(-4.25, 4.25))+
+    labs(x=paste0('PC 1 (',PCA.PC1,"%)"), y=paste0('PC 2 (',PCA.PC2,"%)"))+
+    ggtitle(paste0("Color Score PCA: ",timepoint,"hrs"))
+  
+  print(timepoint_pca)
+  
+  ##LDA on PCA Scores
+  Color.LDA_PCA<-lda(Treatment~PC1+PC2+PC3, data=Color.PCA.scores)
+  
+  ##Predict
+  Color.pLDA_PCA<-predict(object=Color.LDA_PCA, newdata=Color.PCA.scores)
+  
+  ##Save LD1 Scores
+  Color.LDA_PCA.scores<-data.frame(Sample=Color.PCA.scores$Sample, LD1=Color.pLDA_PCA$x)
+  
+  #Prepare for Plotting
+  ColorData<-left_join(proc_out_rm, Color.LDA_PCA.scores, by = "Sample") 
+  
+  # make time and treatment factors
+  ColorData$Timepoint <- factor(ColorData$Timepoint, levels = as.character(sort(unique(as.numeric(ColorData$Timepoint)))))
+  ColorData$Treatment <- factor(ColorData$Treatment)
+  
+  timepoint_density <- ggplot(data = ColorData, aes(x = LD1)) + 
+  geom_density(aes(fill = Treatment), alpha = 0.6) + 
+  scale_fill_manual(values =treat_colors)+
+  theme_classic()+
+  scale_x_continuous(limits = c(-3, 5.5))+
+  labs(x="LD1", y= "Density") +
+    ggtitle(paste0("Density plot: ",timepoint,"hrs"))
+  
+  print(timepoint_density)
+
+  ##Invert signs for Control > Heated
+  ColorData$LD1<-ColorData$LD1*(-1)
+  
+  #Adding 10 to make all score values positive 
+  #ColorData$LD1<- ColorData$LD1 +10
+
+  plot <- ColorData %>%
+    ggplot(., aes(x=Timepoint, y=LD1, color=Treatment)) +
+    geom_jitter(alpha=0.25, size=1.5, width = 0.22) + 
+    theme_minimal() + labs(x = "Timepoint",y = "Color Score") +
+    scale_color_manual(values = treat_colors) +
+    geom_point(stat = "summary", fun = mean, aes(group = Treatment), size=3) +
+    stat_summary(fun.data = mean_se, geom = "errorbar", width = 0.2, aes(group = Treatment)) +
+    geom_line(stat = "summary", fun = mean, size = 1.2, aes(group = Treatment)) +
+    stat_compare_means(aes(group = Treatment),method = "anova",label = "p.format",size = 3)
+  
+  print(plot)
+  
+  assign(paste0("ColorData_TP_",timepoint),ColorData)
+}
+
+```
+#### combine full and by timepoint data
+```{r}
+paste0("ColorData_TP_",unique(raw$Timepoint))
+
+##Combine results from individual timepoints
+ColorData.TP<-dplyr::bind_rows(mget(paste0("ColorData_TP_", unique(raw$Timepoint))))
+
+##Retain PC1 as Color Score
+ColorData.TP$Score_TP<-ColorData.TP$LD1
+
+##Initial Visual Check
+ggplot(ColorData.TP, aes(x=Timepoint, y=Score_TP, color=Treatment)) + 
+  geom_boxplot(alpha=0.5, shape=2, outlier.shape = NA)+
+  geom_jitter(shape=16, position=position_jitter(0.1))+
+  theme(axis.text.x = element_text(angle = 90))
+
+##Plot by Treatment
+ggplot(ColorData.TP, aes(x=Treatment, y=Score_TP)) + 
+  geom_boxplot(alpha=0.5, shape=2, outlier.shape = NA)+
+  geom_jitter(shape=16, position=position_jitter(0.1))+
+  theme(axis.text.x = element_text(angle = 90))
+
+##Merge with Color Data
+names(ColorData.TP)
+ColorData<-merge(ColorData_Full, ColorData.TP[,c("Sample", "Score_TP")])
+ColorData <- ColorData %>% dplyr::rename(Score_Full=LD1)
+```
+
+#### Correlation
+```{r}
+cor.test(ColorData$Score_Full, ColorData$Score_TP, method="spearman")
+plot(ColorData$Score_Full, ColorData$Score_TP)
+```
+
+
+### color score default
 
 ```{r}
 proc_matrix <- as.matrix(cbind(proc$Red.Norm.Coral,
@@ -101,7 +328,7 @@ range(final$ColorScore)
 hist(final$ColorScore)
 ```
 
-## Plot
+### Plot
 
 ```{r}
 final %>%
@@ -160,7 +387,113 @@ proc <- raw %>% mutate(
     Green.Norm.Coral = Green.Coral/Green.Standard,
     Blue.Norm.Coral = Blue.Coral/Blue.Standard
 )
+
+rownames(proc) <- proc$Sample
 ```
+
+### Color Score Hackerott
+
+#### Run PCA
+```{r}
+proc_out_rm <- proc %>% filter(Sample!="POC_PAM_1059")
+Color.PCA<-prcomp(proc_out_rm[,c("Red.Norm.Coral","Green.Norm.Coral","Blue.Norm.Coral")], scale.=TRUE) 
+
+#Initial plot
+fviz_pca_ind(Color.PCA)
+
+#Check Variance Explained by Components
+summary(Color.PCA)
+
+#Visualize the importance of each principal component
+fviz_eig(Color.PCA, addlabels = TRUE) 
+```
+
+PC1 Explains 83.1% of the variance in the color data.
+
+```{r}
+##Extract % Variance PC 1
+PCA.PC1<-sprintf("%1.2f",get_eigenvalue(Color.PCA)$variance.percent[1])
+PCA.PC1
+
+##Extract % Variance PC 2
+PCA.PC2<-sprintf("%1.2f",get_eigenvalue(Color.PCA)$variance.percent[2])
+PCA.PC2
+
+##Extract Individual Sample Scores
+Color.PCA.scores <- as.data.frame(Color.PCA$x)
+Color.PCA.scores$Sample<-rownames(Color.PCA.scores)
+
+#Prepare for Plotting
+Color.PCA.scores<-left_join(proc_out_rm, Color.PCA.scores, by = "Sample") 
+```
+
+#### Plot PCA 
+```{r}
+#Plot PCA
+ggplot(data = Color.PCA.scores, aes(x = PC1, y = PC2)) + 
+  geom_point(aes(colour = Treatment),  alpha = 0.8) + 
+  scale_colour_manual(values =treat_colors)+
+  theme_classic()+
+  scale_x_continuous(limits = c(-3, 5.5))+
+  scale_y_continuous(limits = c(-4.25, 4.25))+
+  labs(x=paste0('PC 1 (',PCA.PC1,"%)"), y=paste0('PC 2 (',PCA.PC2,"%)"))+
+  ggtitle("Color Score PCA")
+```
+
+#### LDA on PCA Scores
+```{r}
+##LDA on PCA Scores
+Color.LDA_PCA<-lda(Treatment~PC1+PC2+PC3, data=Color.PCA.scores)
+
+##Predict
+Color.pLDA_PCA<-predict(object=Color.LDA_PCA, newdata=Color.PCA.scores)
+
+##Save LD1 Scores
+Color.LDA_PCA.scores<-data.frame(Sample=Color.PCA.scores$Sample, LD1=Color.pLDA_PCA$x)
+
+#Prepare for Plotting
+ColorData<-left_join(proc_out_rm, Color.LDA_PCA.scores, by = "Sample") 
+
+# make time and treatment factors
+ColorData$Timepoint <- factor(ColorData$Timepoint, levels = as.character(sort(unique(as.numeric(ColorData$Timepoint)))))
+ColorData$Treatment <- factor(ColorData$Treatment)
+```
+
+#### LD1 Density Plot
+
+```{r}
+ggplot(data = ColorData, aes(x = LD1)) + 
+  geom_density(aes(fill = Treatment), alpha = 0.6) + 
+  scale_fill_manual(values =treat_colors)+
+  theme_classic()+
+  scale_x_continuous(limits = c(-3, 5.5))+
+  labs(x="LD1", y= "Density")+
+  ggtitle("Full Dataset")
+```
+
+#### Extract Color Score
+```{r}
+##Invert signs for Control > Heated
+ColorData$LD1<-ColorData$LD1*(-1)
+
+#Adding 10 to make all score values positive 
+#ColorData$LD1<- ColorData$LD1 +10
+
+ColorData %>%
+  ggplot(., aes(x=Timepoint, y=LD1, color=Treatment)) +
+  geom_jitter(alpha=0.25, size=1.5, width = 0.22) + 
+  theme_minimal() + labs(x = "Timepoint",y = "Color Score") +
+  scale_color_manual(values = treat_colors) +
+  geom_point(stat = "summary", fun = mean, aes(group = Treatment), size=3) +
+  stat_summary(fun.data = mean_se, geom = "errorbar", width = 0.2, aes(group = Treatment)) +
+  geom_line(stat = "summary", fun = mean, size = 1.2, aes(group = Treatment)) +
+  stat_compare_means(aes(group = Treatment),method = "anova",label = "p.format",size = 3)
+
+save_ggplot(last_plot(), "Pcom_Hackerott")
+
+ColorData_Full <- ColorData
+```
+
 
 ```{r}
 proc_matrix <- as.matrix(cbind(proc$Red.Norm.Coral,
@@ -195,7 +528,7 @@ range(final$ColorScore)
 hist(final$ColorScore)
 ```
 
-## Plot
+### Plot
 
 ```{r}
 final %>%
@@ -232,6 +565,6 @@ final %>%
   stat_summary(fun = mean, geom = "line", aes(group = Treatment), size = 1.2) +
   stat_compare_means(aes(group = Treatment),method = "anova",label = "p.format",size = 3)
 
-save_ggplot(last_plot(), "Pacu_tank_means")
+save_ggplot(last_plot(), "Pcom_tank_means")
 ```
 
