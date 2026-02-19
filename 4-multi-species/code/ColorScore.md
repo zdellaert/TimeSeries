@@ -1,0 +1,240 @@
+ColorScore
+================
+Zoe Dellaert
+2026-02-18
+
+## Color Score Analysis of Time Series Image Data
+
+Basing this on [Emma Strand’s
+script](https://github.com/emmastrand/Ploidy_methylation/blob/main/scripts/07-Colorscore.Rmd)
+
+### Load libraries
+
+``` r
+library(plyr)
+library(dplyr)
+library(tidyverse)
+library(ggplot2)
+library(vegan)
+library(Rmisc)
+library(ggpubr)
+```
+
+``` r
+save_ggplot <- function(plot, filename, width = 10, height = 7, units = "in", dpi = 300,bg=NULL) {
+  png_path <- file.path(outdir, paste0(filename, ".png"))
+  pdf_dir <- file.path(outdir, "pdf_figs")
+  pdf_path <- file.path(pdf_dir, paste0(filename, ".pdf"))
+  
+  # Ensure the pdf_figs directory exists
+  if (!dir.exists(pdf_dir)) dir.create(pdf_dir, recursive = TRUE)
+  
+  # Save plots
+  ggsave(filename = png_path, plot = plot, width = width, height = height, units = units, dpi = dpi,bg = bg)
+  ggsave(filename = pdf_path, plot = plot, width = width, height = height, units = units, dpi = dpi,bg = bg)
+}
+
+treat_colors <- c("Control" = "lightblue4", "Heat" = "#D55E00")
+outdir <- "../output/ColorScore"
+```
+
+## *Pocillopora acuta*
+
+### Read in datafiles
+
+``` r
+raw <- read.csv("../../3-Pacu/data/Images/ColorScore.csv", colClasses=c("Date"="character", 
+                                                                               "Timepoint"="character",
+                                                                               "Plug"="character",
+                                                                               "PhotoDate"="character"))  %>%
+  dplyr::rename(Sample=FileName)
+
+raw <- raw %>% mutate(Treatment=str_replace(Treatment,"heat","Heat"),
+                      Treatment=str_replace(Treatment,"control","Control"))
+```
+
+Calculate normalized coral color values based on standard color values
+for that image.
+
+``` r
+proc <- raw %>% mutate(
+    Red.Norm.Coral = Red.Coral/Red.Standard,
+    Green.Norm.Coral = Green.Coral/Green.Standard,
+    Blue.Norm.Coral = Blue.Coral/Blue.Standard
+)
+```
+
+``` r
+proc_matrix <- as.matrix(cbind(proc$Red.Norm.Coral,
+                                   proc$Green.Norm.Coral,
+                                   proc$Blue.Norm.Coral)) #create matrix
+
+rownames(proc_matrix) <- proc$Sample #name columns in dataframe
+
+dist <- vegdist(proc_matrix, method="euclidean") 
+
+PCA <- princomp(dist)
+```
+
+``` r
+#extract PC1 as color score
+colorscore <- as.data.frame(-PCA$scores[,1]) #extract PC1
+colorscore$Sample <- rownames(proc_matrix)
+
+colorscore <- colorscore %>% dplyr::rename(., ColorScore = `-PCA$scores[, 1]`)
+
+final <- left_join(proc, colorscore, by = "Sample") 
+
+# make time and treatment factors
+final$Timepoint <- factor(final$Timepoint, levels = as.character(sort(unique(as.numeric(final$Timepoint)))))
+final$Treatment <- factor(final$Treatment)
+```
+
+### Analyze
+
+``` r
+range(final$ColorScore)
+```
+
+    ## [1] -3.406309  0.918298
+
+``` r
+hist(final$ColorScore)
+```
+
+![](ColorScore_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+
+## Plot
+
+``` r
+final %>%
+  ggplot(., aes(x=Timepoint, y=ColorScore, color=Treatment)) +
+  geom_jitter(alpha=0.25, size=1.5, width = 0.22) + 
+  theme_minimal() + labs(x = "Timepoint",y = "Color Score") +
+  scale_color_manual(values = treat_colors) +
+  geom_point(stat = "summary", fun = mean, aes(group = Treatment), size=3) +
+  stat_summary(fun.data = mean_se, geom = "errorbar", width = 0.2, aes(group = Treatment)) +
+  geom_line(stat = "summary", fun = mean, size = 1.2, aes(group = Treatment)) +
+  stat_compare_means(aes(group = Treatment),method = "anova",label = "p.format",size = 3)
+```
+
+![](ColorScore_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+
+``` r
+save_ggplot(last_plot(), "Pacu")
+
+final %>%
+  ggplot(., aes(x=Timepoint, y=ColorScore, color=Treatment, shape=Tank_ID)) +
+  geom_jitter(alpha=0.25, size=1.5, width = 0.22) + 
+  theme_minimal() + labs(x = "Timepoint",y = "Color Score") +
+  scale_color_manual(values = treat_colors) +
+  geom_point(stat = "summary", fun = mean, aes(group = Tank_ID), size=3) +
+  stat_summary(fun.data = mean_se, geom = "errorbar", width = 0.1, size = 0.4, aes(group = Tank_ID)) +
+  geom_line(stat = "summary", fun = mean, size = 0.4, aes(group = Tank_ID)) +
+  stat_compare_means(aes(group = Treatment),method = "anova",label = "p.format",size = 3)
+```
+
+![](ColorScore_files/figure-gfm/unnamed-chunk-8-2.png)<!-- -->
+
+``` r
+save_ggplot(last_plot(), "Pacu_by_tank")
+```
+
+## *Porites compressa*
+
+### Read in datafiles
+
+``` r
+raw <- read.csv("../../1-Pcom/data/Images/ColorScore.csv", colClasses=c("Date"="character", 
+                                                                               "Timepoint"="character",
+                                                                               "Plug"="character",
+                                                                               "PhotoDate"="character"))  %>%
+  dplyr::rename(Sample=FileName)
+```
+
+Calculate normalized coral color values based on standard color values
+for that image.
+
+``` r
+proc <- raw %>% mutate(
+    Red.Norm.Coral = Red.Coral/Red.Standard,
+    Green.Norm.Coral = Green.Coral/Green.Standard,
+    Blue.Norm.Coral = Blue.Coral/Blue.Standard
+)
+```
+
+``` r
+proc_matrix <- as.matrix(cbind(proc$Red.Norm.Coral,
+                                   proc$Green.Norm.Coral,
+                                   proc$Blue.Norm.Coral)) #create matrix
+
+rownames(proc_matrix) <- proc$Sample #name columns in dataframe
+
+dist <- vegdist(proc_matrix, method="euclidean") 
+
+PCA <- princomp(dist)
+```
+
+``` r
+#extract PC1 as color score
+colorscore <- as.data.frame(-PCA$scores[,1]) #extract PC1
+colorscore$Sample <- rownames(proc_matrix)
+
+colorscore <- colorscore %>% dplyr::rename(., ColorScore = `-PCA$scores[, 1]`)
+
+final <- left_join(proc, colorscore, by = "Sample") 
+
+# make time and treatment factors
+final$Timepoint <- factor(final$Timepoint, levels = as.character(sort(unique(as.numeric(final$Timepoint)))))
+final$Treatment <- factor(final$Treatment)
+```
+
+### Analyze
+
+``` r
+range(final$ColorScore)
+```
+
+    ## [1] -4.768232  1.150231
+
+``` r
+hist(final$ColorScore)
+```
+
+![](ColorScore_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+
+## Plot
+
+``` r
+final %>%
+  ggplot(., aes(x=Timepoint, y=ColorScore, color=Treatment)) +
+  geom_jitter(alpha=0.25, size=1.5, width = 0.22) + 
+  theme_minimal() + labs(x = "Timepoint",y = "Color Score") +
+  scale_color_manual(values = treat_colors) +
+  geom_point(stat = "summary", fun = mean, aes(group = Treatment), size=3) +
+  stat_summary(fun.data = mean_se, geom = "errorbar", width = 0.2, aes(group = Treatment)) +
+  geom_line(stat = "summary", fun = mean, size = 1.2, aes(group = Treatment)) +
+  stat_compare_means(aes(group = Treatment),method = "anova",label = "p.format",size = 3)
+```
+
+![](ColorScore_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+
+``` r
+save_ggplot(last_plot(), "Pcom")
+
+final %>%
+  ggplot(., aes(x=Timepoint, y=ColorScore, color=Treatment, shape=Tank_ID)) +
+  geom_jitter(alpha=0.25, size=1.5, width = 0.22) + 
+  theme_minimal() + labs(x = "Timepoint",y = "Color Score") +
+  scale_color_manual(values = treat_colors) +
+  geom_point(stat = "summary", fun = mean, aes(group = Tank_ID), size=3) +
+  stat_summary(fun.data = mean_se, geom = "errorbar", width = 0.1, size = 0.4, aes(group = Tank_ID)) +
+  geom_line(stat = "summary", fun = mean, size = 0.4, aes(group = Tank_ID)) +
+  stat_compare_means(aes(group = Treatment),method = "anova",label = "p.format",size = 3)
+```
+
+![](ColorScore_files/figure-gfm/unnamed-chunk-14-2.png)<!-- -->
+
+``` r
+save_ggplot(last_plot(), "Pcom_by_tank")
+```
