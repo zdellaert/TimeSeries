@@ -138,6 +138,22 @@ final %>%
 
 ``` r
 save_ggplot(last_plot(), "Pacu_by_tank")
+
+final %>%
+  ggplot(., aes(x=Timepoint, y=ColorScore, color=Treatment, shape=Tank_ID)) +
+  theme_minimal() + labs(x = "Timepoint",y = "Color Score") +
+  scale_color_manual(values = treat_colors) +
+  stat_summary(fun.data = mean_se, geom = "errorbar", position = position_dodge(width = 0.5), width = 0.2, alpha = 0.5) +
+  stat_summary(fun.data = mean_se, geom = "point", position = position_dodge(width = 0.5), alpha = 0.5,size=2.5) +
+  stat_summary(fun = mean, geom = "point", aes(group = Treatment), size = 2.5) +
+  stat_summary(fun = mean, geom = "line", aes(group = Treatment), size = 1.2) +
+  stat_compare_means(aes(group = Treatment),method = "anova",label = "p.format",size = 3)
+```
+
+![](ColorScore_files/figure-gfm/unnamed-chunk-8-3.png)<!-- -->
+
+``` r
+save_ggplot(last_plot(), "Pacu_tank_means")
 ```
 
 ## *Porites compressa*
@@ -237,4 +253,20 @@ final %>%
 
 ``` r
 save_ggplot(last_plot(), "Pcom_by_tank")
+
+final %>%
+  ggplot(., aes(x=Timepoint, y=ColorScore, color=Treatment, shape=Tank_ID)) +
+  theme_minimal() + labs(x = "Timepoint",y = "Color Score") +
+  scale_color_manual(values = treat_colors) +
+  stat_summary(fun.data = mean_se, geom = "errorbar", position = position_dodge(width = 0.5), width = 0.2, alpha = 0.5) +
+  stat_summary(fun.data = mean_se, geom = "point", position = position_dodge(width = 0.5), alpha = 0.5,size=2.5) +
+  stat_summary(fun = mean, geom = "point", aes(group = Treatment), size = 2.5) +
+  stat_summary(fun = mean, geom = "line", aes(group = Treatment), size = 1.2) +
+  stat_compare_means(aes(group = Treatment),method = "anova",label = "p.format",size = 3)
+```
+
+![](ColorScore_files/figure-gfm/unnamed-chunk-14-3.png)<!-- -->
+
+``` r
+save_ggplot(last_plot(), "Pacu_tank_means")
 ```
