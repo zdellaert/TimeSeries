@@ -1,0 +1,286 @@
+biosample_accession	library_ID	title	library_strategy	library_source	library_selection	library_layout	platform	instrument_model	design_description	filetype	filename	filename2	filename3	filename4	filename5	filename6	assembly	fasta_file
+SAMN56252319	POC_R0_C1	RNA-seq of Pocillopora acuta	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POC_R0_C1_S104_R1_001.fastq.gz	POC_R0_C1_S104_R2_001.fastq.gz	run-2-POC_R0_C1_S38_R1_001.fastq.gz	run-2-POC_R0_C1_S38_R2_001.fastq.gz				
+SAMN56252320	POC_R0_C2	RNA-seq of Pocillopora acuta	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POC_R0_C2_S37_R1_001.fastq.gz	POC_R0_C2_S37_R2_001.fastq.gz	run-2-POC_R0_C2_S27_R1_001.fastq.gz	run-2-POC_R0_C2_S27_R2_001.fastq.gz				
+SAMN56252321	POC_R0_C3	RNA-seq of Pocillopora acuta	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POC_R0_C3_S1_R1_001.fastq.gz	POC_R0_C3_S1_R2_001.fastq.gz	run-2-POC_R0_C3_S12_R1_001.fastq.gz	run-2-POC_R0_C3_S12_R2_001.fastq.gz				
+SAMN56252322	POC_R0_H1	RNA-seq of Pocillopora acuta	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POC_R0_H1_S102_R1_001.fastq.gz	POC_R0_H1_S102_R2_001.fastq.gz	run-2-POC_R0_H1_S36_R1_001.fastq.gz	run-2-POC_R0_H1_S36_R2_001.fastq.gz				
+SAMN56252323	POC_R0_H2	RNA-seq of Pocillopora acuta	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POC_R0_H2_S52_R1_001.fastq.gz	POC_R0_H2_S52_R2_001.fastq.gz						
+SAMN56252324	POC_R0_H3	RNA-seq of Pocillopora acuta	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POC_R0_H3_S64_R1_001.fastq.gz	POC_R0_H3_S64_R2_001.fastq.gz						
+SAMN56252325	POC_R1_C1	RNA-seq of Pocillopora acuta	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POC_R1_C1_S29_R1_001.fastq.gz	POC_R1_C1_S29_R2_001.fastq.gz	run-2-POC_R1_C1_S22_R1_001.fastq.gz	run-2-POC_R1_C1_S22_R2_001.fastq.gz				
+SAMN56252326	POC_R1_C2	RNA-seq of Pocillopora acuta	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POC_R1_C2_S117_R1_001.fastq.gz	POC_R1_C2_S117_R2_001.fastq.gz	run-2-POC_R1_C2_S63_R1_001.fastq.gz	run-2-POC_R1_C2_S63_R2_001.fastq.gz				
+SAMN56252327	POC_R1_C3	RNA-seq of Pocillopora acuta	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POC_R1_C3_S49_R1_001.fastq.gz	POC_R1_C3_S49_R2_001.fastq.gz						
+SAMN56252328	POC_R1_H1	RNA-seq of Pocillopora acuta	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POC_R1_H1_S45_R1_001.fastq.gz	POC_R1_H1_S45_R2_001.fastq.gz	run-2-POC_R1_H1_S29_R1_001.fastq.gz	run-2-POC_R1_H1_S29_R2_001.fastq.gz	run-3_POC_R1_H1_S5_R1_001.fastq.gz	run-3_POC_R1_H1_S5_R2_001.fastq.gz		
+SAMN56252329	POC_R1_H2	RNA-seq of Pocillopora acuta	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POC_R1_H2_S70_R1_001.fastq.gz	POC_R1_H2_S70_R2_001.fastq.gz						
+SAMN56252330	POC_R1_H3	RNA-seq of Pocillopora acuta	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POC_R1_H3_S93_R1_001.fastq.gz	POC_R1_H3_S93_R2_001.fastq.gz						
+SAMN56252331	POC_R3_C1	RNA-seq of Pocillopora acuta	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POC_R3_C1_S125_R1_001.fastq.gz	POC_R3_C1_S125_R2_001.fastq.gz	run-2-POC_R3_C1_S64_R1_001.fastq.gz	run-2-POC_R3_C1_S64_R2_001.fastq.gz				
+SAMN56252332	POC_R3_C2	RNA-seq of Pocillopora acuta	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POC_R3_C2_S28_R1_001.fastq.gz	POC_R3_C2_S28_R2_001.fastq.gz	run-2-POC_R3_C2_S21_R1_001.fastq.gz	run-2-POC_R3_C2_S21_R2_001.fastq.gz				
+SAMN56252333	POC_R3_C3	RNA-seq of Pocillopora acuta	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POC_R3_C3_S74_R1_001.fastq.gz	POC_R3_C3_S74_R2_001.fastq.gz						
+SAMN56252334	POC_R3_H1	RNA-seq of Pocillopora acuta	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POC_R3_H1_S106_R1_001.fastq.gz	POC_R3_H1_S106_R2_001.fastq.gz	run-2-POC_R3_H1_S39_R1_001.fastq.gz	run-2-POC_R3_H1_S39_R2_001.fastq.gz				
+SAMN56252335	POC_R3_H2	RNA-seq of Pocillopora acuta	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POC_R3_H2_S57_R1_001.fastq.gz	POC_R3_H2_S57_R2_001.fastq.gz	run-2-POC_R3_H2_S59_R1_001.fastq.gz	run-2-POC_R3_H2_S59_R2_001.fastq.gz	run-3_POC_R3_H2_S11_R1_001.fastq.gz	run-3_POC_R3_H2_S11_R2_001.fastq.gz		
+SAMN56252336	POC_R3_H3	RNA-seq of Pocillopora acuta	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POC_R3_H3_S59_R1_001.fastq.gz	POC_R3_H3_S59_R2_001.fastq.gz						
+SAMN56252337	POC_R12_C1	RNA-seq of Pocillopora acuta	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POC_R12_C1_S18_R1_001.fastq.gz	POC_R12_C1_S18_R2_001.fastq.gz						
+SAMN56252338	POC_R12_C2	RNA-seq of Pocillopora acuta	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POC_R12_C2_S83_R1_001.fastq.gz	POC_R12_C2_S83_R2_001.fastq.gz						
+SAMN56252339	POC_R12_C3	RNA-seq of Pocillopora acuta	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POC_R12_C3_S103_R1_001.fastq.gz	POC_R12_C3_S103_R2_001.fastq.gz	run-2-POC_R12_C3_S37_R1_001.fastq.gz	run-2-POC_R12_C3_S37_R2_001.fastq.gz	run-3_POC_R12_C3_S6_R1_001.fastq.gz	run-3_POC_R12_C3_S6_R2_001.fastq.gz		
+SAMN56252340	POC_R12_H1	RNA-seq of Pocillopora acuta	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POC_R12_H1_S85_R1_001.fastq.gz	POC_R12_H1_S85_R2_001.fastq.gz						
+SAMN56252341	POC_R12_H2	RNA-seq of Pocillopora acuta	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POC_R12_H2_S14_R1_001.fastq.gz	POC_R12_H2_S14_R2_001.fastq.gz						
+SAMN56252342	POC_R12_H3	RNA-seq of Pocillopora acuta	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POC_R12_H3_S124_R1_001.fastq.gz	POC_R12_H3_S124_R2_001.fastq.gz	run-2-POC_R12_H3_S53_R1_001.fastq.gz	run-2-POC_R12_H3_S53_R2_001.fastq.gz				
+SAMN56252343	POC_R24_C1	RNA-seq of Pocillopora acuta	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POC_R24_C1_S81_R1_001.fastq.gz	POC_R24_C1_S81_R2_001.fastq.gz						
+SAMN56252344	POC_R24_C2	RNA-seq of Pocillopora acuta	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POC_R24_C2_S9_R1_001.fastq.gz	POC_R24_C2_S9_R2_001.fastq.gz						
+SAMN56252345	POC_R24_C3	RNA-seq of Pocillopora acuta	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POC_R24_C3_S63_R1_001.fastq.gz	POC_R24_C3_S63_R2_001.fastq.gz						
+SAMN56252346	POC_R24_H1	RNA-seq of Pocillopora acuta	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POC_R24_H1_S53_R1_001.fastq.gz	POC_R24_H1_S53_R2_001.fastq.gz	run-2-POC_R24_H1_S30_R1_001.fastq.gz	run-2-POC_R24_H1_S30_R2_001.fastq.gz				
+SAMN56252347	POC_R24_H2	RNA-seq of Pocillopora acuta	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POC_R24_H2_S78_R1_001.fastq.gz	POC_R24_H2_S78_R2_001.fastq.gz						
+SAMN56252348	POC_R24_H3	RNA-seq of Pocillopora acuta	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POC_R24_H3_S56_R1_001.fastq.gz	POC_R24_H3_S56_R2_001.fastq.gz						
+SAMN56252349	POC_R72_C1	RNA-seq of Pocillopora acuta	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POC_R72_C1_S112_R1_001.fastq.gz	POC_R72_C1_S112_R2_001.fastq.gz	run-2-POC_R72_C1_S45_R1_001.fastq.gz	run-2-POC_R72_C1_S45_R2_001.fastq.gz				
+SAMN56252350	POC_R72_C2	RNA-seq of Pocillopora acuta	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POC_R72_C2_S8_R1_001.fastq.gz	POC_R72_C2_S8_R2_001.fastq.gz						
+SAMN56252351	POC_R72_C3	RNA-seq of Pocillopora acuta	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POC_R72_C3_S39_R1_001.fastq.gz	POC_R72_C3_S39_R2_001.fastq.gz						
+SAMN56252352	POC_R72_H1	RNA-seq of Pocillopora acuta	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POC_R72_H1_S48_R1_001.fastq.gz	POC_R72_H1_S48_R2_001.fastq.gz						
+SAMN56252353	POC_R72_H2	RNA-seq of Pocillopora acuta	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POC_R72_H2_S75_R1_001.fastq.gz	POC_R72_H2_S75_R2_001.fastq.gz						
+SAMN56252354	POC_R72_H3	RNA-seq of Pocillopora acuta	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POC_R72_H3_S91_R1_001.fastq.gz	POC_R72_H3_S91_R2_001.fastq.gz						
+SAMN56252355	POC_R120_C1	RNA-seq of Pocillopora acuta	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POC_R120_C1_S19_R1_001.fastq.gz	POC_R120_C1_S19_R2_001.fastq.gz	run-2-POC_R120_C1_S18_R1_001.fastq.gz	run-2-POC_R120_C1_S18_R2_001.fastq.gz	run-3_POC_R120_C1_S4_R1_001.fastq.gz	run-3_POC_R120_C1_S4_R2_001.fastq.gz		
+SAMN56252356	POC_R120_C2	RNA-seq of Pocillopora acuta	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POC_R120_C2_S111_R1_001.fastq.gz	POC_R120_C2_S111_R2_001.fastq.gz	run-2-POC_R120_C2_S44_R1_001.fastq.gz	run-2-POC_R120_C2_S44_R2_001.fastq.gz				
+SAMN56252357	POC_R120_C3	RNA-seq of Pocillopora acuta	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POC_R120_C3_S120_R1_001.fastq.gz	POC_R120_C3_S120_R2_001.fastq.gz	run-2-POC_R120_C3_S50_R1_001.fastq.gz	run-2-POC_R120_C3_S50_R2_001.fastq.gz				
+SAMN56252358	POC_R120_H1	RNA-seq of Pocillopora acuta	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POC_R120_H1_S122_R1_001.fastq.gz	POC_R120_H1_S122_R2_001.fastq.gz	run-2-POC_R120_H1_S51_R1_001.fastq.gz	run-2-POC_R120_H1_S51_R2_001.fastq.gz				
+SAMN56252359	POC_R120_H2	RNA-seq of Pocillopora acuta	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POC_R120_H2_S92_R1_001.fastq.gz	POC_R120_H2_S92_R2_001.fastq.gz	run-2-POC_R120_H2_S55_R1_001.fastq.gz	run-2-POC_R120_H2_S55_R2_001.fastq.gz				
+SAMN56252360	POC_R120_H3	RNA-seq of Pocillopora acuta	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POC_R120_H3_S17_R1_001.fastq.gz	POC_R120_H3_S17_R2_001.fastq.gz	run-2-POC_R120_H3_S17_R1_001.fastq.gz	run-2-POC_R120_H3_S17_R2_001.fastq.gz				
+SAMN56252361	MON_R0_C1	RNA-seq of Montipora capitata	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	MON_R0_C1_S96_R1_001.fastq.gz	MON_R0_C1_S96_R2_001.fastq.gz						
+SAMN56252362	MON_R0_C2	RNA-seq of Montipora capitata	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	MON_R0_C2_S118_R1_001.fastq.gz	MON_R0_C2_S118_R2_001.fastq.gz	run-2-MON_R0_C2_S48_R1_001.fastq.gz	run-2-MON_R0_C2_S48_R2_001.fastq.gz				
+SAMN56252363	MON_R0_C3	RNA-seq of Montipora capitata	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	MON_R0_C3_S107_R1_001.fastq.gz	MON_R0_C3_S107_R2_001.fastq.gz	run-2-MON_R0_C3_S40_R1_001.fastq.gz	run-2-MON_R0_C3_S40_R2_001.fastq.gz				
+SAMN56252364	MON_R0_H1	RNA-seq of Montipora capitata	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	MON_R0_H1_S89_R1_001.fastq.gz	MON_R0_H1_S89_R2_001.fastq.gz						
+SAMN56252365	MON_R0_H2	RNA-seq of Montipora capitata	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	MON_R0_H2_S110_R1_001.fastq.gz	MON_R0_H2_S110_R2_001.fastq.gz	run-2-MON_R0_H2_S43_R1_001.fastq.gz	run-2-MON_R0_H2_S43_R2_001.fastq.gz	run-3_MON_R0_H2_S7_R1_001.fastq.gz	run-3_MON_R0_H2_S7_R2_001.fastq.gz		
+SAMN56252366	MON_R0_H3	RNA-seq of Montipora capitata	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	MON_R0_H3_S27_R1_001.fastq.gz	MON_R0_H3_S27_R2_001.fastq.gz						
+SAMN56252367	MON_R1_C1	RNA-seq of Montipora capitata	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	MON_R1_C1_S41_R1_001.fastq.gz	MON_R1_C1_S41_R2_001.fastq.gz						
+SAMN56252368	MON_R1_C2	RNA-seq of Montipora capitata	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	MON_R1_C2_S67_R1_001.fastq.gz	MON_R1_C2_S67_R2_001.fastq.gz						
+SAMN56252369	MON_R1_C3	RNA-seq of Montipora capitata	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	MON_R1_C3_S24_R1_001.fastq.gz	MON_R1_C3_S24_R2_001.fastq.gz						
+SAMN56252370	MON_R1_H1	RNA-seq of Montipora capitata	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	MON_R1_H1_S13_R1_001.fastq.gz	MON_R1_H1_S13_R2_001.fastq.gz						
+SAMN56252371	MON_R1_H2	RNA-seq of Montipora capitata	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	MON_R1_H2_S38_R1_001.fastq.gz	MON_R1_H2_S38_R2_001.fastq.gz						
+SAMN56252372	MON_R1_H3	RNA-seq of Montipora capitata	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	MON_R1_H3_S101_R1_001.fastq.gz	MON_R1_H3_S101_R2_001.fastq.gz	run-2-MON_R1_H3_S35_R1_001.fastq.gz	run-2-MON_R1_H3_S35_R2_001.fastq.gz				
+SAMN56252373	MON_R3_C1	RNA-seq of Montipora capitata	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	MON_R3_C1_S76_R1_001.fastq.gz	MON_R3_C1_S76_R2_001.fastq.gz						
+SAMN56252374	MON_R3_C2	RNA-seq of Montipora capitata	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	MON_R3_C2_S99_R1_001.fastq.gz	MON_R3_C2_S99_R2_001.fastq.gz						
+SAMN56252375	MON_R3_C3	RNA-seq of Montipora capitata	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	MON_R3_C3_S31_R1_001.fastq.gz	MON_R3_C3_S31_R2_001.fastq.gz	run-2-MON_R3_C3_S23_R1_001.fastq.gz	run-2-MON_R3_C3_S23_R2_001.fastq.gz				
+SAMN56252376	MON_R3_H1	RNA-seq of Montipora capitata	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	MON_R3_H1_S21_R1_001.fastq.gz	MON_R3_H1_S21_R2_001.fastq.gz	run-2-MON_R3_H1_S19_R1_001.fastq.gz	run-2-MON_R3_H1_S19_R2_001.fastq.gz				
+SAMN56252377	MON_R3_H2	RNA-seq of Montipora capitata	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	MON_R3_H2_S94_R1_001.fastq.gz	MON_R3_H2_S94_R2_001.fastq.gz	run-2-MON_R3_H2_S62_R1_001.fastq.gz	run-2-MON_R3_H2_S62_R2_001.fastq.gz	run-3_MON_R3_H2_S12_R1_001.fastq.gz	run-3_MON_R3_H2_S12_R2_001.fastq.gz		
+SAMN56252378	MON_R3_H3	RNA-seq of Montipora capitata	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	MON_R3_H3_S97_R1_001.fastq.gz	MON_R3_H3_S97_R2_001.fastq.gz						
+SAMN56252379	MON_R12_C1	RNA-seq of Montipora capitata	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	MON_R12_C1_S121_R1_001.fastq.gz	MON_R12_C1_S121_R2_001.fastq.gz						
+SAMN56252380	MON_R12_C2	RNA-seq of Montipora capitata	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	MON_R12_C2_S26_R1_001.fastq.gz	MON_R12_C2_S26_R2_001.fastq.gz						
+SAMN56252381	MON_R12_C3	RNA-seq of Montipora capitata	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	MON_R12_C3_S16_R1_001.fastq.gz	MON_R12_C3_S16_R2_001.fastq.gz						
+SAMN56252382	MON_R12_H1	RNA-seq of Montipora capitata	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	MON_R12_H1_S36_R1_001.fastq.gz	MON_R12_H1_S36_R2_001.fastq.gz	run-2-MON_R12_H1_S26_R1_001.fastq.gz	run-2-MON_R12_H1_S26_R2_001.fastq.gz				
+SAMN56252383	MON_R12_H2	RNA-seq of Montipora capitata	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	MON_R12_H2_S11_R1_001.fastq.gz	MON_R12_H2_S11_R2_001.fastq.gz						
+SAMN56252384	MON_R12_H3	RNA-seq of Montipora capitata	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	MON_R12_H3_S43_R1_001.fastq.gz	MON_R12_H3_S43_R2_001.fastq.gz						
+SAMN56252385	MON_R24_C1	RNA-seq of Montipora capitata	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	MON_R24_C1_S50_R1_001.fastq.gz	MON_R24_C1_S50_R2_001.fastq.gz						
+SAMN56252386	MON_R24_C2	RNA-seq of Montipora capitata	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	MON_R24_C2_S25_R1_001.fastq.gz	MON_R24_C2_S25_R2_001.fastq.gz						
+SAMN56252387	MON_R24_C3	RNA-seq of Montipora capitata	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	MON_R24_C3_S35_R1_001.fastq.gz	MON_R24_C3_S35_R2_001.fastq.gz	run-2-MON_R24_C3_S25_R1_001.fastq.gz	run-2-MON_R24_C3_S25_R2_001.fastq.gz				
+SAMN56252388	MON_R24_H1	RNA-seq of Montipora capitata	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	MON_R24_H1_S69_R1_001.fastq.gz	MON_R24_H1_S69_R2_001.fastq.gz						
+SAMN56252389	MON_R24_H2	RNA-seq of Montipora capitata	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	MON_R24_H2_S98_R1_001.fastq.gz	MON_R24_H2_S98_R2_001.fastq.gz						
+SAMN56252390	MON_R24_H3	RNA-seq of Montipora capitata	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	MON_R24_H3_S79_R1_001.fastq.gz	MON_R24_H3_S79_R2_001.fastq.gz						
+SAMN56252391	MON_R72_C1	RNA-seq of Montipora capitata	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	MON_R72_C1_S22_R1_001.fastq.gz	MON_R72_C1_S22_R2_001.fastq.gz	run-2-MON_R72_C1_S20_R1_001.fastq.gz	run-2-MON_R72_C1_S20_R2_001.fastq.gz				
+SAMN56252392	MON_R72_C2	RNA-seq of Montipora capitata	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	MON_R72_C2_S68_R1_001.fastq.gz	MON_R72_C2_S68_R2_001.fastq.gz	run-2-MON_R72_C2_S33_R1_001.fastq.gz	run-2-MON_R72_C2_S33_R2_001.fastq.gz				
+SAMN56252393	MON_R72_C3	RNA-seq of Montipora capitata	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	MON_R72_C3_S34_R1_001.fastq.gz	MON_R72_C3_S34_R2_001.fastq.gz	run-2-MON_R72_C3_S56_R1_001.fastq.gz	run-2-MON_R72_C3_S56_R2_001.fastq.gz				
+SAMN56252394	MON_R72_H1	RNA-seq of Montipora capitata	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	MON_R72_H1_S3_R1_001.fastq.gz	MON_R72_H1_S3_R2_001.fastq.gz						
+SAMN56252395	MON_R72_H2	RNA-seq of Montipora capitata	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	MON_R72_H2_S4_R1_001.fastq.gz	MON_R72_H2_S4_R2_001.fastq.gz	run-2-MON_R72_H2_S14_R1_001.fastq.gz	run-2-MON_R72_H2_S14_R2_001.fastq.gz				
+SAMN56252396	MON_R72_H3	RNA-seq of Montipora capitata	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	MON_R72_H3_S44_R1_001.fastq.gz	MON_R72_H3_S44_R2_001.fastq.gz	run-2-MON_R72_H3_S28_R1_001.fastq.gz	run-2-MON_R72_H3_S28_R2_001.fastq.gz				
+SAMN56252397	MON_R120_C1	RNA-seq of Montipora capitata	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	MON_R120_C1_S72_R1_001.fastq.gz	MON_R120_C1_S72_R2_001.fastq.gz						
+SAMN56252398	MON_R120_C2	RNA-seq of Montipora capitata	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	MON_R120_C2_S115_R1_001.fastq.gz	MON_R120_C2_S115_R2_001.fastq.gz						
+SAMN56252399	MON_R120_C3	RNA-seq of Montipora capitata	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	MON_R120_C3_S84_R1_001.fastq.gz	MON_R120_C3_S84_R2_001.fastq.gz	run-2-MON_R120_C3_S61_R1_001.fastq.gz	run-2-MON_R120_C3_S61_R2_001.fastq.gz	run-3_MON_R120_C3_S10_R1_001.fastq.gz	run-3_MON_R120_C3_S10_R2_001.fastq.gz		
+SAMN56252400	MON_R120_H1	RNA-seq of Montipora capitata	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	MON_R120_H1_S7_R1_001.fastq.gz	MON_R120_H1_S7_R2_001.fastq.gz						
+SAMN56252401	MON_R120_H2	RNA-seq of Montipora capitata	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	MON_R120_H2_S90_R1_001.fastq.gz	MON_R120_H2_S90_R2_001.fastq.gz						
+SAMN56252402	MON_R120_H3	RNA-seq of Montipora capitata	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	MON_R120_H3_S113_R1_001.fastq.gz	MON_R120_H3_S113_R2_001.fastq.gz	run-2-MON_R120_H3_S46_R1_001.fastq.gz	run-2-MON_R120_H3_S46_R2_001.fastq.gz				
+SAMN56252403	POR_R0_C1	RNA-seq of Porites compressa	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POR_R0_C1_S77_R1_001.fastq.gz	POR_R0_C1_S77_R2_001.fastq.gz	run-2-POR_R0_C1_S65_R1_001.fastq.gz	run-2-POR_R0_C1_S65_R2_001.fastq.gz				
+SAMN56252404	POR_R0_C2	RNA-seq of Porites compressa	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POR_R0_C2_S32_R1_001.fastq.gz	POR_R0_C2_S32_R2_001.fastq.gz						
+SAMN56252405	POR_R0_C3	RNA-seq of Porites compressa	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POR_R0_C3_S54_R1_001.fastq.gz	POR_R0_C3_S54_R2_001.fastq.gz	run-2-POR_R0_C3_S31_R1_001.fastq.gz	run-2-POR_R0_C3_S31_R2_001.fastq.gz				
+SAMN56252406	POR_R0_H1	RNA-seq of Porites compressa	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POR_R0_H1_S23_R1_001.fastq.gz	POR_R0_H1_S23_R2_001.fastq.gz						
+SAMN56252407	POR_R0_H2	RNA-seq of Porites compressa	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POR_R0_H2_S6_R1_001.fastq.gz	POR_R0_H2_S6_R2_001.fastq.gz	run-2-POR_R0_H2_S15_R1_001.fastq.gz	run-2-POR_R0_H2_S15_R2_001.fastq.gz				
+SAMN56252408	POR_R0_H3	RNA-seq of Porites compressa	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POR_R0_H3_S60_R1_001.fastq.gz	POR_R0_H3_S60_R2_001.fastq.gz						
+SAMN56252409	POR_R1_C1	RNA-seq of Porites compressa	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POR_R1_C1_S66_R1_001.fastq.gz	POR_R1_C1_S66_R2_001.fastq.gz	run-2-POR_R1_C1_S32_R1_001.fastq.gz	run-2-POR_R1_C1_S32_R2_001.fastq.gz				
+SAMN56252410	POR_R1_C2	RNA-seq of Porites compressa	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POR_R1_C2_S116_R1_001.fastq.gz	POR_R1_C2_S116_R2_001.fastq.gz	run-2-POR_R1_C2_S47_R1_001.fastq.gz	run-2-POR_R1_C2_S47_R2_001.fastq.gz				
+SAMN56252411	POR_R1_C3	RNA-seq of Porites compressa	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POR_R1_C3_S12_R1_001.fastq.gz	POR_R1_C3_S12_R2_001.fastq.gz	run-2-POR_R1_C3_S16_R1_001.fastq.gz	run-2-POR_R1_C3_S16_R2_001.fastq.gz				
+SAMN56252412	POR_R1_H1	RNA-seq of Porites compressa	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POR_R1_H1_S73_R1_001.fastq.gz	POR_R1_H1_S73_R2_001.fastq.gz						
+SAMN56252413	POR_R1_H2	RNA-seq of Porites compressa	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POR_R1_H2_S62_R1_001.fastq.gz	POR_R1_H2_S62_R2_001.fastq.gz						
+SAMN56252414	POR_R1_H3	RNA-seq of Porites compressa	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POR_R1_H3_S86_R1_001.fastq.gz	POR_R1_H3_S86_R2_001.fastq.gz						
+SAMN56252415	POR_R3_C1	RNA-seq of Porites compressa	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POR_R3_C1_S30_R1_001.fastq.gz	POR_R3_C1_S30_R2_001.fastq.gz						
+SAMN56252416	POR_R3_C2	RNA-seq of Porites compressa	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POR_R3_C2_S61_R1_001.fastq.gz	POR_R3_C2_S61_R2_001.fastq.gz	run-2-POR_R3_C2_S60_R1_001.fastq.gz	run-2-POR_R3_C2_S60_R2_001.fastq.gz	run-3_POR_R3_C2_S9_R1_001.fastq.gz	run-3_POR_R3_C2_S9_R2_001.fastq.gz		
+SAMN56252417	POR_R3_C3	RNA-seq of Porites compressa	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POR_R3_C3_S58_R1_001.fastq.gz	POR_R3_C3_S58_R2_001.fastq.gz						
+SAMN56252418	POR_R3_H1	RNA-seq of Porites compressa	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POR_R3_H1_S108_R1_001.fastq.gz	POR_R3_H1_S108_R2_001.fastq.gz	run-2-POR_R3_H1_S41_R1_001.fastq.gz	run-2-POR_R3_H1_S41_R2_001.fastq.gz	run-3_POR_R3_H1_S8_R1_001.fastq.gz	run-3_POR_R3_H1_S8_R2_001.fastq.gz		
+SAMN56252419	POR_R3_H2	RNA-seq of Porites compressa	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POR_R3_H2_S82_R1_001.fastq.gz	POR_R3_H2_S82_R2_001.fastq.gz						
+SAMN56252420	POR_R3_H3	RNA-seq of Porites compressa	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POR_R3_H3_S33_R1_001.fastq.gz	POR_R3_H3_S33_R2_001.fastq.gz	run-2-POR_R3_H3_S24_R1_001.fastq.gz	run-2-POR_R3_H3_S24_R2_001.fastq.gz				
+SAMN56252421	POR_R12_C1	RNA-seq of Porites compressa	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POR_R12_C1_S109_R1_001.fastq.gz	POR_R12_C1_S109_R2_001.fastq.gz	run-2-POR_R12_C1_S42_R1_001.fastq.gz	run-2-POR_R12_C1_S42_R2_001.fastq.gz				
+SAMN56252422	POR_R12_C2	RNA-seq of Porites compressa	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POR_R12_C2_S105_R1_001.fastq.gz	POR_R12_C2_S105_R2_001.fastq.gz						
+SAMN56252423	POR_R12_C3	RNA-seq of Porites compressa	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POR_R12_C3_S114_R1_001.fastq.gz	POR_R12_C3_S114_R2_001.fastq.gz						
+SAMN56252424	POR_R12_H1	RNA-seq of Porites compressa	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POR_R12_H1_S2_R1_001.fastq.gz	POR_R12_H1_S2_R2_001.fastq.gz	run-2-POR_R12_H1_S13_R1_001.fastq.gz	run-2-POR_R12_H1_S13_R2_001.fastq.gz				
+SAMN56252425	POR_R12_H2	RNA-seq of Porites compressa	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POR_R12_H2_S88_R1_001.fastq.gz	POR_R12_H2_S88_R2_001.fastq.gz						
+SAMN56252426	POR_R12_H3	RNA-seq of Porites compressa	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POR_R12_H3_S42_R1_001.fastq.gz	POR_R12_H3_S42_R2_001.fastq.gz						
+SAMN56252427	POR_R24_C1	RNA-seq of Porites compressa	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POR_R24_C1_S65_R1_001.fastq.gz	POR_R24_C1_S65_R2_001.fastq.gz						
+SAMN56252428	POR_R24_C2	RNA-seq of Porites compressa	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POR_R24_C2_S15_R1_001.fastq.gz	POR_R24_C2_S15_R2_001.fastq.gz						
+SAMN56252429	POR_R24_C3	RNA-seq of Porites compressa	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POR_R24_C3_S40_R1_001.fastq.gz	POR_R24_C3_S40_R2_001.fastq.gz	run-2-POR_R24_C3_S57_R1_001.fastq.gz	run-2-POR_R24_C3_S57_R2_001.fastq.gz	run-3_POR_R24_C3_S124_R1_001.fastq.gz	run-3_POR_R24_C3_S124_R2_001.fastq.gz		
+SAMN56252430	POR_R24_H1	RNA-seq of Porites compressa	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POR_R24_H1_S119_R1_001.fastq.gz	POR_R24_H1_S119_R2_001.fastq.gz	run-2-POR_R24_H1_S49_R1_001.fastq.gz	run-2-POR_R24_H1_S49_R2_001.fastq.gz				
+SAMN56252431	POR_R24_H2	RNA-seq of Porites compressa	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POR_R24_H2_S20_R1_001.fastq.gz	POR_R24_H2_S20_R2_001.fastq.gz						
+SAMN56252432	POR_R24_H3	RNA-seq of Porites compressa	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POR_R24_H3_S95_R1_001.fastq.gz	POR_R24_H3_S95_R2_001.fastq.gz						
+SAMN56252433	POR_R72_C1	RNA-seq of Porites compressa	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POR_R72_C1_S5_R1_001.fastq.gz	POR_R72_C1_S5_R2_001.fastq.gz						
+SAMN56252434	POR_R72_C2	RNA-seq of Porites compressa	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POR_R72_C2_S71_R1_001.fastq.gz	POR_R72_C2_S71_R2_001.fastq.gz						
+SAMN56252435	POR_R72_C3	RNA-seq of Porites compressa	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POR_R72_C3_S55_R1_001.fastq.gz	POR_R72_C3_S55_R2_001.fastq.gz						
+SAMN56252436	POR_R72_H1	RNA-seq of Porites compressa	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POR_R72_H1_S100_R1_001.fastq.gz	POR_R72_H1_S100_R2_001.fastq.gz	run-2-POR_R72_H1_S34_R1_001.fastq.gz	run-2-POR_R72_H1_S34_R2_001.fastq.gz				
+SAMN56252437	POR_R72_H2	RNA-seq of Porites compressa	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POR_R72_H2_S51_R1_001.fastq.gz	POR_R72_H2_S51_R2_001.fastq.gz						
+SAMN56252438	POR_R72_H3	RNA-seq of Porites compressa	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POR_R72_H3_S10_R1_001.fastq.gz	POR_R72_H3_S10_R2_001.fastq.gz						
+SAMN56252439	POR_R120_C1	RNA-seq of Porites compressa	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POR_R120_C1_S126_R1_001.fastq.gz	POR_R120_C1_S126_R2_001.fastq.gz	run-2-POR_R120_C1_S54_R1_001.fastq.gz	run-2-POR_R120_C1_S54_R2_001.fastq.gz	run-3_POR_R120_C1_S123_R1_001.fastq.gz	run-3_POR_R120_C1_S123_R2_001.fastq.gz		
+SAMN56252440	POR_R120_C2	RNA-seq of Porites compressa	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POR_R120_C2_S87_R1_001.fastq.gz	POR_R120_C2_S87_R2_001.fastq.gz						
+SAMN56252441	POR_R120_C3	RNA-seq of Porites compressa	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POR_R120_C3_S80_R1_001.fastq.gz	POR_R120_C3_S80_R2_001.fastq.gz						
+SAMN56252442	POR_R120_H1	RNA-seq of Porites compressa	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POR_R120_H1_S47_R1_001.fastq.gz	POR_R120_H1_S47_R2_001.fastq.gz	run-2-POR_R120_H1_S58_R1_001.fastq.gz	run-2-POR_R120_H1_S58_R2_001.fastq.gz	run-3_POR_R120_H1_S13_R1_001.fastq.gz	run-3_POR_R120_H1_S13_R2_001.fastq.gz		
+SAMN56252443	POR_R120_H2	RNA-seq of Porites compressa	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POR_R120_H2_S46_R1_001.fastq.gz	POR_R120_H2_S46_R2_001.fastq.gz						
+SAMN56252444	POR_R120_H3	RNA-seq of Porites compressa	RNA-Seq	TRANSCRIPTOMIC	PolyA	paired	ILLUMINA	Illumina NovaSeq X Plus	Libraries were prepped using the Watchmaker Genomics mRNA kit	fastq	POR_R120_H3_S123_R1_001.fastq.gz	POR_R120_H3_S123_R2_001.fastq.gz	run-2-POR_R120_H3_S52_R1_001.fastq.gz	run-2-POR_R120_H3_S52_R2_001.fastq.gz				
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
+																		
