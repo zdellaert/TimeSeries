@@ -67,4 +67,4 @@ In case of any glare on the coral tissue like shown below, deselect the area usi
 
 8. On the histogram window, click through the "RGB" options to record the mean red, blue, and green color concentration.
 
-![Color Data](https://github.com/ppednekar25/Pednekar_Putnam_Lab_Notebook/blob/d99cad122c4dd59f7e5886b726d2f70c0425bfef/images/color_value_histogram.png?raw=TRUE)
+![Color Data](https://github.com/ppednekar25/Pednekar_Putnam_Lab_Notebook/blob/6bf873bdb3691af4503d1a2bd902f819510dd356/images/color_value_histogram.png?raw=TRUE)
