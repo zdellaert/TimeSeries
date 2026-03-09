@@ -80,3 +80,5 @@ In case of any glare on the coral tissue like shown below, deselect the area usi
 ## Things to be careful about while analysis in Photoshop.
 
 1. Since the Standard Color card and the ruler with taped standard colors are present in the same image frame, be careful when selecting **STD. COLOR RED**. If you use the Magic Wand Tool to select Standard Color Red from the card, the red tape on the ruler may also be selected.
+
+![](https://github.com/ppednekar25/Pednekar_Putnam_Lab_Notebook/blob/fd912791a7d8b958c8502e2ef10e3761c9c14b46/images/Red_color_disfunction.jpg?raw=TRUE)
