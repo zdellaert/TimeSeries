@@ -26,11 +26,12 @@ code.Rproj
 4-multi-species/output_RNA/multiWGCNA/*/*.RDS
 4-multi-species/code/POC_multiWGCNA_TOM/*.RData
 4-multi-species/output_RNA/differential_expression/POC_PacutaV2/DESeq_SwissProt_annotation.csv
-4-multi-species/references/annotation/SwissProt-Annot*
-4-multi-species/references/blast_dbs/*
 
 # plentiful qc files
 4-multi-species/output_RNA/alignment_qc/*/**
 !4-multi-species/output_RNA/alignment_qc/*/multiqc_report.html
 !4-multi-species/output_RNA/alignment_qc/*/multiqc_data/
 !4-multi-species/output_RNA/alignment_qc/*/multiqc_data/**
+
+# in progress
+4-multi-species/code/in_progress_notes/*
