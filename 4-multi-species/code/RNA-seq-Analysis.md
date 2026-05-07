@@ -83,7 +83,7 @@ sessionInfo() #provides list of loaded packages and version of R.
     ## [34] httr_1.4.7              tzdb_0.5.0              DBI_1.2.3              
     ## [37] cachem_1.1.0            splines_4.5.1           parallel_4.5.1         
     ## [40] AnnotationDbi_1.72.0    XVector_0.50.0          vctrs_0.7.0            
-    ## [43] Matrix_1.7-3            jsonlite_2.0.0          hms_1.1.4              
+    ## [43] Matrix_1.6-4            jsonlite_2.0.0          hms_1.1.4              
     ## [46] bit64_4.6.0-1           locfit_1.5-9.12         annotate_1.86.1        
     ## [49] glue_1.8.0              codetools_0.2-20        stringi_1.8.7          
     ## [52] gtable_0.3.6            GenomeInfoDb_1.44.3     UCSC.utils_1.4.0       
@@ -748,6 +748,54 @@ for (genelist in membrane_list){
 
 ![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-19-12.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-19-13.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-19-14.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-19-15.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-19-16.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-19-17.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-19-18.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-19-19.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-19-20.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-19-21.png)<!-- -->
 
+#### Stress Transcription Factor Binding Sites
+
+``` r
+Stress_TFs <- read.delim(paste0(annotdir,"promoters/fimo_output/", species ,"_stress_TFs/fimo.tsv"), comment.char = "#")
+all_tfs <- unique(Stress_TFs$motif_alt_id)
+
+Stress_TFs_quantification <- Stress_TFs %>%# filter(motif_alt_id =="HSF1") %>%
+  group_by(motif_alt_id,sequence_name) %>%
+  summarize(count=n())
+
+Foxo3_quantification <- Stress_TFs %>% filter(motif_alt_id =="FOXO3") %>%
+  group_by(motif_alt_id,sequence_name) %>%
+  summarize(count=n()) %>% left_join(SwissProt, by = join_by("sequence_name"=="query")) 
+Hsf1_quantification <- Stress_TFs %>% filter(motif_alt_id =="HSF1") %>%
+  group_by(motif_alt_id,sequence_name) %>%
+  summarize(count=n()) %>% left_join(SwissProt, by = join_by("sequence_name"=="query")) 
+Nrf2_quantification <- Stress_TFs %>% filter(motif_alt_id =="NFE2L2") %>%
+  group_by(motif_alt_id,sequence_name) %>%
+  summarize(count=n()) %>% left_join(SwissProt, by = join_by("sequence_name"=="query")) 
+```
+
+``` r
+Stress_TFs_all <- crossing((lrt_res %>% rownames_to_column(var="sequence_name")), all_tfs) %>%
+  dplyr::rename("motif_alt_id"=`all_tfs`) %>%
+  left_join(Stress_TFs_quantification,
+            by = c("sequence_name", "motif_alt_id")) %>%
+  mutate(count = replace_na(count, 0))
+
+ggplot(Stress_TFs_all %>% filter(motif_alt_id=="FOXO3"),aes(log2FoldChange,color=as.factor(count))) + 
+  geom_density() + facet_grid(~motif_alt_id)
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-21-1.png)<!-- -->
+
+``` r
+ggplot(Stress_TFs_all %>% filter(motif_alt_id=="HSF1"),aes(log2FoldChange,color=as.factor(count))) + 
+  geom_density() + facet_grid(~motif_alt_id)
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-21-2.png)<!-- -->
+
+``` r
+ggplot(Stress_TFs_all %>% filter(motif_alt_id=="NFE2L2"),aes(log2FoldChange,color=as.factor(count))) + 
+  geom_density() + facet_grid(~motif_alt_id)
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-21-3.png)<!-- -->
+
 ### ImpulseDE2
 
 #### Background info
@@ -916,13 +964,13 @@ lsHeatmaps <- plotHeatmap(
 draw(lsHeatmaps$complexHeatmapRaw) 
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-24-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-26-1.png)<!-- -->
 
 ``` r
 draw(lsHeatmaps$complexHeatmapFit) 
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-24-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-26-2.png)<!-- -->
 
 ``` r
 lsHeatmaps <- plotHeatmap(
@@ -933,13 +981,13 @@ lsHeatmaps <- plotHeatmap(
 draw(lsHeatmaps$complexHeatmapRaw) 
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-24-3.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-26-3.png)<!-- -->
 
 ``` r
 draw(lsHeatmaps$complexHeatmapFit) 
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-24-4.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-26-4.png)<!-- -->
 
 ``` r
 lsHeatmaps <- plotHeatmap(
@@ -950,13 +998,13 @@ lsHeatmaps <- plotHeatmap(
 draw(lsHeatmaps$complexHeatmapRaw) 
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-24-5.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-26-5.png)<!-- -->
 
 ``` r
 draw(lsHeatmaps$complexHeatmapFit) 
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-24-6.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-26-6.png)<!-- -->
 
 ``` r
 png(paste0(outdir,"/ImpulseDE/ImpulseDE2_heatmap.png"), width = 2000, height = 2400, res = 300)
@@ -1034,6 +1082,66 @@ lsgplotsGenes
 
     ## 
     ## [[10]]
+
+``` r
+# HIF_genes
+hif_genes <- SwissProt %>% filter(grepl("HIF-1-",ProteinNames))%>% pull(query)
+
+impulse_results %>% filter(Gene %in% hif_genes) %>% arrange(padj) %>% left_join(SwissProt, by = join_by(Gene==query)) 
+```
+
+    ##                                        Gene           p       padj loglik_full
+    ## 1  Pocillopora_acuta_HIv2___RNAseq.g3039.t1 0.009606872 0.03270194   -410.1755
+    ## 2 Pocillopora_acuta_HIv2___RNAseq.g14850.t1 0.957699728 1.00000000   -306.5285
+    ##   loglik_red df_full df_red      mean converge_combined converge_case
+    ## 1  -417.7671      17     12 21650.277                 0             0
+    ## 2  -307.0578      17     12  5012.413                 0             0
+    ##   converge_control converge_sigmoid impulseTOsigmoid_p impulseTOsigmoid_padj
+    ## 1                0                0       0.0008984424           0.003504135
+    ## 2                0                0       0.0056714265           0.017600375
+    ##   sigmoidTOconst_p sigmoidTOconst_padj isTransient isMonotonous allZero
+    ## 1     3.848029e-09        4.296467e-08       FALSE         TRUE   FALSE
+    ## 2     6.026247e-01        9.197539e-01       FALSE        FALSE   FALSE
+    ##   blast_hit    evalue
+    ## 1    Q0PGG7  4.93e-90
+    ## 2    P27540 1.14e-151
+    ##                                                                                                                                                                                                           ProteinNames
+    ## 1                                                                                                                                                          Hypoxia-inducible factor 1-alpha (HIF-1-alpha) (HIF1-alpha)
+    ## 2 Aryl hydrocarbon receptor nuclear translocator (ARNT protein) (Class E basic helix-loop-helix protein 2) (bHLHe2) (Dioxin receptor, nuclear translocator) (Hypoxia-inducible factor 1-beta) (HIF-1-beta) (HIF1-beta)
+    ##                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      BiologicalProcess
+    ## 1                                                                                                                                                                                      axonal transport of mitochondrion [GO:0019896]; cellular response to hypoxia [GO:0071456]; intracellular glucose homeostasis [GO:0001678]; positive regulation of cytokine production involved in inflammatory response [GO:1900017]; positive regulation of DNA-templated transcription [GO:0045893]; positive regulation of transcription by RNA polymerase II [GO:0045944]; positive regulation of vascular endothelial growth factor production [GO:0010575]; regulation of gene expression [GO:0010468]; regulation of glycolytic process [GO:0006110]; regulation of protein neddylation [GO:2000434]; response to hypoxia [GO:0001666]; response to reactive oxygen species [GO:0000302]
+    ## 2 cell differentiation [GO:0030154]; cellular response to oxidative stress [GO:0034599]; embryonic placenta development [GO:0001892]; negative regulation of inflammatory response [GO:0050728]; positive regulation of endothelial cell proliferation [GO:0001938]; positive regulation of erythrocyte differentiation [GO:0045648]; positive regulation of glycolytic process [GO:0045821]; positive regulation of hormone biosynthetic process [GO:0046886]; positive regulation of protein sumoylation [GO:0033235]; positive regulation of transcription by RNA polymerase II [GO:0045944]; positive regulation of vascular endothelial growth factor production [GO:0010575]; positive regulation of vascular endothelial growth factor receptor signaling pathway [GO:0030949]; regulation of transcription by RNA polymerase II [GO:0006357]; response to hypoxia [GO:0001666]
+    ##                                                                                                                                                                                                                                                                                                                                                                                              GeneOntologyIDs
+    ## 1                                                                                                                                     GO:0000302; GO:0000977; GO:0000981; GO:0001223; GO:0001666; GO:0001678; GO:0003700; GO:0005634; GO:0005829; GO:0006110; GO:0010468; GO:0010575; GO:0016607; GO:0019896; GO:0043565; GO:0045893; GO:0045944; GO:0046982; GO:0071456; GO:1900017; GO:1904115; GO:2000434
+    ## 2 GO:0000785; GO:0000978; GO:0000981; GO:0000987; GO:0001666; GO:0001892; GO:0001938; GO:0003700; GO:0004879; GO:0005634; GO:0005654; GO:0005737; GO:0006357; GO:0010575; GO:0016604; GO:0017162; GO:0030154; GO:0030949; GO:0033235; GO:0034599; GO:0034751; GO:0034753; GO:0042803; GO:0043565; GO:0045648; GO:0045821; GO:0045944; GO:0046886; GO:0046982; GO:0050728; GO:0061629; GO:0090575; GO:1990837
+    ##                                                                                                                                                                                                                                                                                   CellularComponent
+    ## 1                                                                                                                                                                                               axon cytoplasm [GO:1904115]; cytosol [GO:0005829]; nuclear speck [GO:0016607]; nucleus [GO:0005634]
+    ## 2 aryl hydrocarbon receptor complex [GO:0034751]; chromatin [GO:0000785]; cytoplasm [GO:0005737]; nuclear aryl hydrocarbon receptor complex [GO:0034753]; nuclear body [GO:0016604]; nucleoplasm [GO:0005654]; nucleus [GO:0005634]; RNA polymerase II transcription regulator complex [GO:0090575]
+    ##                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      MolecularFunction
+    ## 1                                                                                                                                                                                                                                                                                               DNA-binding transcription factor activity [GO:0003700]; DNA-binding transcription factor activity, RNA polymerase II-specific [GO:0000981]; protein heterodimerization activity [GO:0046982]; RNA polymerase II transcription regulatory region sequence-specific DNA binding [GO:0000977]; sequence-specific DNA binding [GO:0043565]; transcription coactivator binding [GO:0001223]
+    ## 2 aryl hydrocarbon receptor binding [GO:0017162]; cis-regulatory region sequence-specific DNA binding [GO:0000987]; DNA-binding transcription factor activity [GO:0003700]; DNA-binding transcription factor activity, RNA polymerase II-specific [GO:0000981]; nuclear receptor activity [GO:0004879]; protein heterodimerization activity [GO:0046982]; protein homodimerization activity [GO:0042803]; RNA polymerase II cis-regulatory region sequence-specific DNA binding [GO:0000978]; RNA polymerase II-specific DNA-binding transcription factor binding [GO:0061629]; sequence-specific DNA binding [GO:0043565]; sequence-specific double-stranded DNA binding [GO:1990837]
+
+``` r
+HIFalphabeta <- plotGenes(
+  vecGeneIDs       = hif_genes,
+  objectImpulseDE2 = objectImpulseDE2,
+  boolSimplePlot = TRUE,   boolCaseCtrl     = TRUE,
+  dirOut           = paste0(outdir,"/ImpulseDE/"),
+  strFileName = "HIF-alphabeta.pdf",
+  boolMultiplePlotsPerPage = FALSE,
+  strNameRefMethod = NULL)
+```
+
+    ## [1] "Creating ../output_RNA/differential_expression/POC_PacutaV2/ImpulseDE/HIF-alphabeta.pdf"
+
+``` r
+HIFalphabeta
+```
+
+    ## [[1]]
+
+    ## 
+    ## [[2]]
 
 ``` r
 # Majerova 2021 key qPCR genes
@@ -1245,7 +1353,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-27-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-29-1.png)<!-- -->
 
 ``` r
 pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
@@ -1255,7 +1363,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-27-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-29-2.png)<!-- -->
 
 #### 7.5. Heatmap of membrane channel genes
 
@@ -1636,7 +1744,7 @@ dev.off()
     ## png 
     ##   2
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-32-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-34-1.png)<!-- -->
 
 ``` r
 cluster2 <- plotGenes(
@@ -1724,11 +1832,11 @@ print(cluster_peaks)
 ```
 
     ##   cluster peak_time
-    ## 1       1         3
-    ## 2       2         3
-    ## 3       3       120
-    ## 4       4         0
-    ## 5       5         0
+    ## 1       1         0
+    ## 2       2        72
+    ## 3       3         0
+    ## 4       4         3
+    ## 5       5         3
     ## 6       6         3
 
 ##### View clustered genes of interest
@@ -1742,7 +1850,7 @@ cluster_assignments %>% filter(gene %in% HSPS)
     ##                                                                                gene
     ## Pocillopora_acuta_HIv2___RNAseq.g23086.t1 Pocillopora_acuta_HIv2___RNAseq.g23086.t1
     ##                                           cluster membership
-    ## Pocillopora_acuta_HIv2___RNAseq.g23086.t1       2  0.7488025
+    ## Pocillopora_acuta_HIv2___RNAseq.g23086.t1       6  0.9050584
 
 ``` r
 heat_clustered <- HeatStressGenes_unique %>% left_join(cluster_assignments, by = join_by(query==gene)) %>%
@@ -1755,7 +1863,7 @@ heat_clustered %>% filter(!is.na(cluster)) %>% ggplot(aes(y=reorder(gene_id, clu
   labs(x="Mfuzz Cluster", y="Gene ID", title="Heat stress genes clustered by temporal expression pattern")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-37-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-39-1.png)<!-- -->
 
 ``` r
 channel_clustered <- membrane_channels  %>% unique() %>% 
@@ -1789,7 +1897,7 @@ channel_clustered %>%
                         " genes significantly DE"))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-38-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-40-1.png)<!-- -->
 
 ``` r
 heat_eset_membrane <- heat_eset[channel_clustered$query, ]
@@ -1861,7 +1969,7 @@ dev.off()
     ## png 
     ##   2
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-38-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-40-2.png)<!-- -->
 
 ## *Montipora capitata*
 
@@ -2019,7 +2127,7 @@ pheatmap(sampleDistMatrix,
          col=colorRampPalette( rev(brewer.pal(9, "Blues")) )(255))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-48-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-50-1.png)<!-- -->
 
 #### 5. PCA
 
@@ -2059,7 +2167,7 @@ pheatmap(assay(vsd)[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-50-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-52-1.png)<!-- -->
 
 ``` r
 pheatmap(assay(vsd)[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
@@ -2069,7 +2177,7 @@ pheatmap(assay(vsd)[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-50-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-52-2.png)<!-- -->
 
 ### Heat stress genes
 
@@ -2101,7 +2209,7 @@ plot_df %>% ggplot(aes(x=time, y=expression, color=gene_id, group=gene_id)) +
   labs(y="VST expression", x="Timepoint")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-51-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-53-1.png)<!-- -->
 
 ``` r
 plot_df %>% filter(grepl("Type1", response_type)) %>%
@@ -2117,7 +2225,7 @@ plot_df %>% filter(grepl("Type1", response_type)) %>%
   labs(y="VST expression", x="Timepoint", title = "Type 1 Expressed Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-51-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-53-2.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "All_Type1")
@@ -2135,7 +2243,7 @@ plot_df %>% filter(grepl("Type2", response_type)) %>%
   labs(y="VST expression", x="Timepoint", title = "Type 2 Expressed Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-51-3.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-53-3.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "All_Type2")
@@ -2149,7 +2257,7 @@ plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_
   labs(y="VST expression", x="Timepoint")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-51-4.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-53-4.png)<!-- -->
 
 #### DESeq LRT Test
 
@@ -2179,7 +2287,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-52-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-54-1.png)<!-- -->
 
 ``` r
 pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
@@ -2189,7 +2297,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-52-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-54-2.png)<!-- -->
 
 ``` r
 top_500_DE_genes <- DE_05 %>% arrange(log2FoldChange) %>% head(500) %>% rownames()
@@ -2202,7 +2310,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-52-3.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-54-3.png)<!-- -->
 
 ``` r
 pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
@@ -2212,7 +2320,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-52-4.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-54-4.png)<!-- -->
 
 ``` r
 top_500_DE_genes <- DE_05 %>% arrange(desc(log2FoldChange)) %>% head(500) %>% rownames()
@@ -2225,7 +2333,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-52-5.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-54-5.png)<!-- -->
 
 ``` r
 pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
@@ -2235,7 +2343,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-52-6.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-54-6.png)<!-- -->
 
 #### DE Heat stress genes
 
@@ -2255,7 +2363,7 @@ plot_df %>% ggplot(aes(x=time, y=expression, color=gene_id, group=gene_id)) +
   labs(y="VST expression", x="Timepoint")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-53-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-55-1.png)<!-- -->
 
 ``` r
 plot_df %>% filter(grepl("Type1", response_type)) %>%
@@ -2271,7 +2379,7 @@ plot_df %>% filter(grepl("Type1", response_type)) %>%
   labs(y="VST expression", x="Timepoint", title = "Type 1 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-53-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-55-2.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "DE_Type1")
@@ -2289,7 +2397,7 @@ plot_df %>% filter(grepl("Type2", response_type)) %>%
   labs(y="VST expression", x="Timepoint", title = "Type 2 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-53-3.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-55-3.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "DE_Type2")
@@ -2303,7 +2411,7 @@ plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_
   labs(y="VST expression", x="Timepoint", title = "Selected Type 1 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-53-4.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-55-4.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "highlighted_DE_Type1")
@@ -2321,7 +2429,7 @@ plot_df_norm %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",
   labs(y="VST expression", x="Timepoint", title = "Norm to control -- Selected Type 1 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-53-5.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-55-5.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "highlighted_DE_Type1_norm_control")
@@ -2342,7 +2450,7 @@ plot_df_norm %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",
   labs(y="VST expression", x="Timepoint", title = "Norm to T0 -- Selected Type 1 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-53-6.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-55-6.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "highlighted_DE_Type1_norm_T0")
@@ -2356,7 +2464,7 @@ plot_df %>% filter(grepl("GDH",gene_id)|grepl("GS",gene_id)|grepl("AMT1",gene_id
   labs(y="VST expression", x="Timepoint", title = "Selected Type 2 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-53-7.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-55-7.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "highlighted_DE_Type2")
@@ -2392,7 +2500,7 @@ for (genelist in membrane_list){
 }
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-54-1.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-54-2.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-54-3.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-54-4.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-54-5.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-54-6.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-54-7.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-54-8.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-54-9.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-54-10.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-54-11.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-56-1.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-56-2.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-56-3.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-56-4.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-56-5.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-56-6.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-56-7.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-56-8.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-56-9.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-56-10.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-56-11.png)<!-- -->
 
 ``` r
 for (genelist in membrane_list){
@@ -2411,7 +2519,55 @@ for (genelist in membrane_list){
 }
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-54-12.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-54-13.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-54-14.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-54-15.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-54-16.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-54-17.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-54-18.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-54-19.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-54-20.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-54-21.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-56-12.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-56-13.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-56-14.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-56-15.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-56-16.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-56-17.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-56-18.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-56-19.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-56-20.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-56-21.png)<!-- -->
+
+#### Stress Transcription Factor Binding Sites
+
+``` r
+Stress_TFs <- read.delim(paste0(annotdir,"promoters/fimo_output/", species ,"_stress_TFs/fimo.tsv"), comment.char = "#")
+all_tfs <- unique(Stress_TFs$motif_alt_id)
+
+Stress_TFs_quantification <- Stress_TFs %>%
+  group_by(motif_alt_id,sequence_name) %>%
+  summarize(count=n())
+
+Foxo3_quantification <- Stress_TFs %>% filter(motif_alt_id =="FOXO3") %>%
+  group_by(motif_alt_id,sequence_name) %>%
+  summarize(count=n()) %>% left_join(SwissProt, by = join_by("sequence_name"=="query")) 
+Hsf1_quantification <- Stress_TFs %>% filter(motif_alt_id =="HSF1") %>%
+  group_by(motif_alt_id,sequence_name) %>%
+  summarize(count=n()) %>% left_join(SwissProt, by = join_by("sequence_name"=="query")) 
+Nrf2_quantification <- Stress_TFs %>% filter(motif_alt_id =="NFE2L2") %>%
+  group_by(motif_alt_id,sequence_name) %>%
+  summarize(count=n()) %>% left_join(SwissProt, by = join_by("sequence_name"=="query")) 
+```
+
+``` r
+Stress_TFs_all <- crossing((lrt_res %>% rownames_to_column(var="sequence_name")), all_tfs) %>%
+  dplyr::rename("motif_alt_id"=`all_tfs`) %>%
+  left_join(Stress_TFs_quantification,
+            by = c("sequence_name", "motif_alt_id")) %>%
+  mutate(count = replace_na(count, 0))
+
+ggplot(Stress_TFs_all %>% filter(motif_alt_id=="FOXO3"),aes(log2FoldChange,color=as.factor(count))) + 
+  geom_density() + facet_grid(~motif_alt_id)
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-58-1.png)<!-- -->
+
+``` r
+ggplot(Stress_TFs_all %>% filter(motif_alt_id=="HSF1"),aes(log2FoldChange,color=as.factor(count))) + 
+  geom_density() + facet_grid(~motif_alt_id)
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-58-2.png)<!-- -->
+
+``` r
+ggplot(Stress_TFs_all %>% filter(motif_alt_id=="NFE2L2"),aes(log2FoldChange,color=as.factor(count))) + 
+  geom_density() + facet_grid(~motif_alt_id)
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-58-3.png)<!-- -->
 
 ### ImpulseDE2
 
@@ -2581,13 +2737,13 @@ lsHeatmaps <- plotHeatmap(
 draw(lsHeatmaps$complexHeatmapRaw) 
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-59-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-63-1.png)<!-- -->
 
 ``` r
 draw(lsHeatmaps$complexHeatmapFit) 
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-59-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-63-2.png)<!-- -->
 
 ``` r
 lsHeatmaps <- plotHeatmap(
@@ -2598,13 +2754,13 @@ lsHeatmaps <- plotHeatmap(
 draw(lsHeatmaps$complexHeatmapRaw) 
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-59-3.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-63-3.png)<!-- -->
 
 ``` r
 draw(lsHeatmaps$complexHeatmapFit) 
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-59-4.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-63-4.png)<!-- -->
 
 ``` r
 lsHeatmaps <- plotHeatmap(
@@ -2615,13 +2771,13 @@ lsHeatmaps <- plotHeatmap(
 draw(lsHeatmaps$complexHeatmapRaw) 
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-59-5.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-63-5.png)<!-- -->
 
 ``` r
 draw(lsHeatmaps$complexHeatmapFit) 
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-59-6.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-63-6.png)<!-- -->
 
 ``` r
 png(paste0(outdir,"/ImpulseDE/ImpulseDE2_heatmap.png"), width = 2000, height = 2400, res = 300)
@@ -2918,7 +3074,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-62-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-66-1.png)<!-- -->
 
 ``` r
 pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
@@ -2928,7 +3084,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-62-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-66-2.png)<!-- -->
 
 #### 7.5. Heatmap of membrane channel genes
 
@@ -3209,7 +3365,7 @@ dev.off()
     ## png 
     ##   2
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-67-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-71-1.png)<!-- -->
 
 ``` r
 cluster1 <- plotGenes(
@@ -3297,12 +3453,12 @@ print(cluster_peaks)
 ```
 
     ##   cluster peak_time
-    ## 1       1         0
+    ## 1       1         3
     ## 2       2         0
-    ## 3       3         3
-    ## 4       4        24
+    ## 3       3         0
+    ## 4       4         3
     ## 5       5         0
-    ## 6       6         3
+    ## 6       6         0
 
 ##### View clustered genes of interest
 
@@ -3326,7 +3482,7 @@ heat_clustered %>% filter(!is.na(cluster)) %>% ggplot(aes(y=reorder(gene_id, clu
   labs(x="Mfuzz Cluster", y="Gene ID", title="Heat stress genes clustered by temporal expression pattern")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-72-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-76-1.png)<!-- -->
 
 ``` r
 channel_clustered <- membrane_channels  %>% unique() %>% 
@@ -3360,7 +3516,7 @@ channel_clustered %>%
                         " genes significantly DE"))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-73-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-77-1.png)<!-- -->
 
 ``` r
 heat_eset_membrane <- heat_eset[channel_clustered$query, ]
@@ -3432,7 +3588,7 @@ dev.off()
     ## png 
     ##   2
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-73-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-77-2.png)<!-- -->
 
 ## *Porites compressa*
 
@@ -3590,7 +3746,7 @@ pheatmap(sampleDistMatrix,
          col=colorRampPalette( rev(brewer.pal(9, "Blues")) )(255))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-83-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-87-1.png)<!-- -->
 
 #### 5. PCA
 
@@ -3650,7 +3806,7 @@ pheatmap(assay(vsd)[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-85-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-89-1.png)<!-- -->
 
 ``` r
 pheatmap(assay(vsd)[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
@@ -3660,7 +3816,7 @@ pheatmap(assay(vsd)[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-85-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-89-2.png)<!-- -->
 
 ### Heat stress genes
 
@@ -3692,7 +3848,7 @@ plot_df %>% ggplot(aes(x=time, y=expression, color=gene_id, group=gene_id)) +
   labs(y="VST expression", x="Timepoint")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-86-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-90-1.png)<!-- -->
 
 ``` r
 plot_df %>% filter(grepl("Type1", response_type)) %>%
@@ -3708,7 +3864,7 @@ plot_df %>% filter(grepl("Type1", response_type)) %>%
   labs(y="VST expression", x="Timepoint", title = "Type 1 Expressed Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-86-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-90-2.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "All_Type1")
@@ -3726,7 +3882,7 @@ plot_df %>% filter(grepl("Type2", response_type)) %>%
   labs(y="VST expression", x="Timepoint", title = "Type 2 Expressed Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-86-3.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-90-3.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "All_Type2")
@@ -3740,7 +3896,7 @@ plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_
   labs(y="VST expression", x="Timepoint")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-86-4.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-90-4.png)<!-- -->
 
 #### DESeq LRT Test
 
@@ -3770,7 +3926,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-87-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-91-1.png)<!-- -->
 
 ``` r
 pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
@@ -3780,7 +3936,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-87-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-91-2.png)<!-- -->
 
 ``` r
 top_500_DE_genes <- DE_05 %>% arrange(log2FoldChange) %>% head(500) %>% rownames()
@@ -3793,7 +3949,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-87-3.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-91-3.png)<!-- -->
 
 ``` r
 pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
@@ -3803,7 +3959,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-87-4.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-91-4.png)<!-- -->
 
 ``` r
 top_500_DE_genes <- DE_05 %>% arrange(desc(log2FoldChange)) %>% head(500) %>% rownames()
@@ -3816,7 +3972,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-87-5.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-91-5.png)<!-- -->
 
 ``` r
 pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
@@ -3826,7 +3982,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-87-6.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-91-6.png)<!-- -->
 
 #### DE Heat stress genes
 
@@ -3846,7 +4002,7 @@ plot_df %>% ggplot(aes(x=time, y=expression, color=gene_id, group=gene_id)) +
   labs(y="VST expression", x="Timepoint")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-88-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-92-1.png)<!-- -->
 
 ``` r
 plot_df %>% filter(grepl("Type1", response_type)) %>%
@@ -3862,7 +4018,7 @@ plot_df %>% filter(grepl("Type1", response_type)) %>%
   labs(y="VST expression", x="Timepoint", title = "Type 1 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-88-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-92-2.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "DE_Type1")
@@ -3880,7 +4036,7 @@ plot_df %>% filter(grepl("Type2", response_type)) %>%
   labs(y="VST expression", x="Timepoint", title = "Type 2 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-88-3.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-92-3.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "DE_Type2")
@@ -3894,7 +4050,7 @@ plot_df %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",gene_
   labs(y="VST expression", x="Timepoint", title = "Selected Type 1 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-88-4.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-92-4.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "highlighted_DE_Type1")
@@ -3912,7 +4068,7 @@ plot_df_norm %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",
   labs(y="VST expression", x="Timepoint", title = "Norm to control -- Selected Type 1 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-88-5.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-92-5.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "highlighted_DE_Type1_norm_control")
@@ -3933,7 +4089,7 @@ plot_df_norm %>% filter(grepl("HSP",gene_id)|grepl("Nrf2",gene_id)|grepl("HSF1",
   labs(y="VST expression", x="Timepoint", title = "Norm to T0 -- Selected Type 1 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-88-6.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-92-6.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "highlighted_DE_Type1_norm_T0")
@@ -3947,7 +4103,7 @@ plot_df %>% filter(grepl("GDH",gene_id)|grepl("GS",gene_id)|grepl("AMT1",gene_id
   labs(y="VST expression", x="Timepoint", title = "Selected Type 2 DE (LRT) Response genes")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-88-7.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-92-7.png)<!-- -->
 
 ``` r
 save_ggplot(last_plot(), "highlighted_DE_Type2")
@@ -3983,7 +4139,7 @@ for (genelist in membrane_list){
 }
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-89-1.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-89-2.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-89-3.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-89-4.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-89-5.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-89-6.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-89-7.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-89-8.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-89-9.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-89-10.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-89-11.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-93-1.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-93-2.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-93-3.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-93-4.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-93-5.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-93-6.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-93-7.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-93-8.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-93-9.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-93-10.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-93-11.png)<!-- -->
 
 ``` r
 for (genelist in membrane_list){
@@ -4002,7 +4158,55 @@ for (genelist in membrane_list){
 }
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-89-12.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-89-13.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-89-14.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-89-15.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-89-16.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-89-17.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-89-18.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-89-19.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-89-20.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-89-21.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-89-22.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-93-12.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-93-13.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-93-14.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-93-15.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-93-16.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-93-17.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-93-18.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-93-19.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-93-20.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-93-21.png)<!-- -->![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-93-22.png)<!-- -->
+
+#### Stress Transcription Factor Binding Sites
+
+``` r
+Stress_TFs <- read.delim(paste0(annotdir,"promoters/fimo_output/", species ,"_stress_TFs/fimo.tsv"), comment.char = "#")
+all_tfs <- unique(Stress_TFs$motif_alt_id)
+
+Stress_TFs_quantification <- Stress_TFs %>%
+  group_by(motif_alt_id,sequence_name) %>%
+  summarize(count=n())
+
+Foxo3_quantification <- Stress_TFs %>% filter(motif_alt_id =="FOXO3") %>%
+  group_by(motif_alt_id,sequence_name) %>%
+  summarize(count=n()) %>% left_join(SwissProt, by = join_by("sequence_name"=="query")) 
+Hsf1_quantification <- Stress_TFs %>% filter(motif_alt_id =="HSF1") %>%
+  group_by(motif_alt_id,sequence_name) %>%
+  summarize(count=n()) %>% left_join(SwissProt, by = join_by("sequence_name"=="query")) 
+Nrf2_quantification <- Stress_TFs %>% filter(motif_alt_id =="NFE2L2") %>%
+  group_by(motif_alt_id,sequence_name) %>%
+  summarize(count=n()) %>% left_join(SwissProt, by = join_by("sequence_name"=="query")) 
+```
+
+``` r
+Stress_TFs_all <- crossing((lrt_res %>% rownames_to_column(var="sequence_name")), all_tfs) %>%
+  dplyr::rename("motif_alt_id"=`all_tfs`) %>%
+  left_join(Stress_TFs_quantification,
+            by = c("sequence_name", "motif_alt_id")) %>%
+  mutate(count = replace_na(count, 0))
+
+ggplot(Stress_TFs_all %>% filter(motif_alt_id=="FOXO3"),aes(log2FoldChange,color=as.factor(count))) + 
+  geom_density() + facet_grid(~motif_alt_id)
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-95-1.png)<!-- -->
+
+``` r
+ggplot(Stress_TFs_all %>% filter(motif_alt_id=="HSF1"),aes(log2FoldChange,color=as.factor(count))) + 
+  geom_density() + facet_grid(~motif_alt_id)
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-95-2.png)<!-- -->
+
+``` r
+ggplot(Stress_TFs_all %>% filter(motif_alt_id=="NFE2L2"),aes(log2FoldChange,color=as.factor(count))) + 
+  geom_density() + facet_grid(~motif_alt_id)
+```
+
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-95-3.png)<!-- -->
 
 ### ImpulseDE2
 
@@ -4172,13 +4376,13 @@ lsHeatmaps <- plotHeatmap(
 draw(lsHeatmaps$complexHeatmapRaw) 
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-94-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-100-1.png)<!-- -->
 
 ``` r
 draw(lsHeatmaps$complexHeatmapFit) 
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-94-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-100-2.png)<!-- -->
 
 ``` r
 lsHeatmaps <- plotHeatmap(
@@ -4189,13 +4393,13 @@ lsHeatmaps <- plotHeatmap(
 draw(lsHeatmaps$complexHeatmapRaw) 
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-94-3.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-100-3.png)<!-- -->
 
 ``` r
 draw(lsHeatmaps$complexHeatmapFit) 
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-94-4.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-100-4.png)<!-- -->
 
 ``` r
 lsHeatmaps <- plotHeatmap(
@@ -4206,13 +4410,13 @@ lsHeatmaps <- plotHeatmap(
 draw(lsHeatmaps$complexHeatmapRaw) 
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-94-5.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-100-5.png)<!-- -->
 
 ``` r
 draw(lsHeatmaps$complexHeatmapFit) 
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-94-6.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-100-6.png)<!-- -->
 
 ``` r
 png(paste0(outdir,"/ImpulseDE/ImpulseDE2_heatmap.png"), width = 2000, height = 2400, res = 300)
@@ -4504,7 +4708,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-97-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-103-1.png)<!-- -->
 
 ``` r
 pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
@@ -4514,7 +4718,7 @@ pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE,
                                   "time" = time_colors))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-97-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-103-2.png)<!-- -->
 
 #### 7.5. Heatmap of membrane channel genes
 
@@ -4689,7 +4893,7 @@ dev.off()
     ## png 
     ##   2
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-102-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-108-1.png)<!-- -->
 
 ``` r
 cluster2 <- plotGenes(
@@ -4777,12 +4981,12 @@ print(cluster_peaks)
 ```
 
     ##   cluster peak_time
-    ## 1       1         3
+    ## 1       1         0
     ## 2       2         3
     ## 3       3         0
-    ## 4       4         0
+    ## 4       4         3
     ## 5       5         0
-    ## 6       6         0
+    ## 6       6         3
 
 ##### View clustered genes of interest
 
@@ -4795,7 +4999,7 @@ cluster_assignments %>% filter(gene %in% HSPS)
     ##                                                                                gene
     ## Porites_compressa_HIv1___RNAseq.g10172.t1 Porites_compressa_HIv1___RNAseq.g10172.t1
     ##                                           cluster membership
-    ## Porites_compressa_HIv1___RNAseq.g10172.t1       2  0.8745835
+    ## Porites_compressa_HIv1___RNAseq.g10172.t1       2  0.5711561
 
 ``` r
 heat_clustered <- HeatStressGenes_unique %>% left_join(cluster_assignments, by = join_by(query==gene)) %>%
@@ -4808,7 +5012,7 @@ heat_clustered %>% filter(!is.na(cluster)) %>% ggplot(aes(y=reorder(gene_id, clu
   labs(x="Mfuzz Cluster", y="Gene ID", title="Heat stress genes clustered by temporal expression pattern")
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-107-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-113-1.png)<!-- -->
 
 ``` r
 channel_clustered <- membrane_channels  %>% unique() %>% 
@@ -4842,7 +5046,7 @@ channel_clustered %>%
                         " genes significantly DE"))
 ```
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-108-1.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-114-1.png)<!-- -->
 
 ``` r
 heat_eset_membrane <- heat_eset[channel_clustered$query, ]
@@ -4914,4 +5118,4 @@ dev.off()
     ## png 
     ##   2
 
-![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-108-2.png)<!-- -->
+![](RNA-seq-Analysis_files/figure-gfm/unnamed-chunk-114-2.png)<!-- -->

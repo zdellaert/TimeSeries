@@ -574,6 +574,42 @@ for (genelist in membrane_list){
 }
 ```
 
+#### Stress Transcription Factor Binding Sites
+
+```{r}
+Stress_TFs <- read.delim(paste0(annotdir,"promoters/fimo_output/", species ,"_stress_TFs/fimo.tsv"), comment.char = "#")
+all_tfs <- unique(Stress_TFs$motif_alt_id)
+
+Stress_TFs_quantification <- Stress_TFs %>%# filter(motif_alt_id =="HSF1") %>%
+  group_by(motif_alt_id,sequence_name) %>%
+  summarize(count=n())
+
+Foxo3_quantification <- Stress_TFs %>% filter(motif_alt_id =="FOXO3") %>%
+  group_by(motif_alt_id,sequence_name) %>%
+  summarize(count=n()) %>% left_join(SwissProt, by = join_by("sequence_name"=="query")) 
+Hsf1_quantification <- Stress_TFs %>% filter(motif_alt_id =="HSF1") %>%
+  group_by(motif_alt_id,sequence_name) %>%
+  summarize(count=n()) %>% left_join(SwissProt, by = join_by("sequence_name"=="query")) 
+Nrf2_quantification <- Stress_TFs %>% filter(motif_alt_id =="NFE2L2") %>%
+  group_by(motif_alt_id,sequence_name) %>%
+  summarize(count=n()) %>% left_join(SwissProt, by = join_by("sequence_name"=="query")) 
+```
+
+```{r}
+Stress_TFs_all <- crossing((lrt_res %>% rownames_to_column(var="sequence_name")), all_tfs) %>%
+  dplyr::rename("motif_alt_id"=`all_tfs`) %>%
+  left_join(Stress_TFs_quantification,
+            by = c("sequence_name", "motif_alt_id")) %>%
+  mutate(count = replace_na(count, 0))
+
+ggplot(Stress_TFs_all %>% filter(motif_alt_id=="FOXO3"),aes(log2FoldChange,color=as.factor(count))) + 
+  geom_density() + facet_grid(~motif_alt_id)
+ggplot(Stress_TFs_all %>% filter(motif_alt_id=="HSF1"),aes(log2FoldChange,color=as.factor(count))) + 
+  geom_density() + facet_grid(~motif_alt_id)
+ggplot(Stress_TFs_all %>% filter(motif_alt_id=="NFE2L2"),aes(log2FoldChange,color=as.factor(count))) + 
+  geom_density() + facet_grid(~motif_alt_id)
+```
+
 ### ImpulseDE2
 
 #### Background info
@@ -705,6 +741,22 @@ lsgplotsGenes
 ```
 
 ```{r}
+# HIF_genes
+hif_genes <- SwissProt %>% filter(grepl("HIF-1-",ProteinNames))%>% pull(query)
+
+impulse_results %>% filter(Gene %in% hif_genes) %>% arrange(padj) %>% left_join(SwissProt, by = join_by(Gene==query)) 
+
+HIFalphabeta <- plotGenes(
+  vecGeneIDs       = hif_genes,
+  objectImpulseDE2 = objectImpulseDE2,
+  boolSimplePlot = TRUE,   boolCaseCtrl     = TRUE,
+  dirOut           = paste0(outdir,"/ImpulseDE/"),
+  strFileName = "HIF-alphabeta.pdf",
+  boolMultiplePlotsPerPage = FALSE,
+  strNameRefMethod = NULL)
+
+HIFalphabeta
+
 # Majerova 2021 key qPCR genes
 majerova_genes <- HeatStressGenes %>% filter(ref_first_author =="Majerova")
 stress_genes_ids <- unique(majerova_genes$query)
@@ -1478,6 +1530,42 @@ for (genelist in membrane_list){
     print(plot)
   }
 }
+```
+
+#### Stress Transcription Factor Binding Sites
+
+```{r}
+Stress_TFs <- read.delim(paste0(annotdir,"promoters/fimo_output/", species ,"_stress_TFs/fimo.tsv"), comment.char = "#")
+all_tfs <- unique(Stress_TFs$motif_alt_id)
+
+Stress_TFs_quantification <- Stress_TFs %>%
+  group_by(motif_alt_id,sequence_name) %>%
+  summarize(count=n())
+
+Foxo3_quantification <- Stress_TFs %>% filter(motif_alt_id =="FOXO3") %>%
+  group_by(motif_alt_id,sequence_name) %>%
+  summarize(count=n()) %>% left_join(SwissProt, by = join_by("sequence_name"=="query")) 
+Hsf1_quantification <- Stress_TFs %>% filter(motif_alt_id =="HSF1") %>%
+  group_by(motif_alt_id,sequence_name) %>%
+  summarize(count=n()) %>% left_join(SwissProt, by = join_by("sequence_name"=="query")) 
+Nrf2_quantification <- Stress_TFs %>% filter(motif_alt_id =="NFE2L2") %>%
+  group_by(motif_alt_id,sequence_name) %>%
+  summarize(count=n()) %>% left_join(SwissProt, by = join_by("sequence_name"=="query")) 
+```
+
+```{r}
+Stress_TFs_all <- crossing((lrt_res %>% rownames_to_column(var="sequence_name")), all_tfs) %>%
+  dplyr::rename("motif_alt_id"=`all_tfs`) %>%
+  left_join(Stress_TFs_quantification,
+            by = c("sequence_name", "motif_alt_id")) %>%
+  mutate(count = replace_na(count, 0))
+
+ggplot(Stress_TFs_all %>% filter(motif_alt_id=="FOXO3"),aes(log2FoldChange,color=as.factor(count))) + 
+  geom_density() + facet_grid(~motif_alt_id)
+ggplot(Stress_TFs_all %>% filter(motif_alt_id=="HSF1"),aes(log2FoldChange,color=as.factor(count))) + 
+  geom_density() + facet_grid(~motif_alt_id)
+ggplot(Stress_TFs_all %>% filter(motif_alt_id=="NFE2L2"),aes(log2FoldChange,color=as.factor(count))) + 
+  geom_density() + facet_grid(~motif_alt_id)
 ```
 
 ### ImpulseDE2
@@ -2403,6 +2491,42 @@ for (genelist in membrane_list){
     print(plot)
   }
 }
+```
+
+#### Stress Transcription Factor Binding Sites
+
+```{r}
+Stress_TFs <- read.delim(paste0(annotdir,"promoters/fimo_output/", species ,"_stress_TFs/fimo.tsv"), comment.char = "#")
+all_tfs <- unique(Stress_TFs$motif_alt_id)
+
+Stress_TFs_quantification <- Stress_TFs %>%
+  group_by(motif_alt_id,sequence_name) %>%
+  summarize(count=n())
+
+Foxo3_quantification <- Stress_TFs %>% filter(motif_alt_id =="FOXO3") %>%
+  group_by(motif_alt_id,sequence_name) %>%
+  summarize(count=n()) %>% left_join(SwissProt, by = join_by("sequence_name"=="query")) 
+Hsf1_quantification <- Stress_TFs %>% filter(motif_alt_id =="HSF1") %>%
+  group_by(motif_alt_id,sequence_name) %>%
+  summarize(count=n()) %>% left_join(SwissProt, by = join_by("sequence_name"=="query")) 
+Nrf2_quantification <- Stress_TFs %>% filter(motif_alt_id =="NFE2L2") %>%
+  group_by(motif_alt_id,sequence_name) %>%
+  summarize(count=n()) %>% left_join(SwissProt, by = join_by("sequence_name"=="query")) 
+```
+
+```{r}
+Stress_TFs_all <- crossing((lrt_res %>% rownames_to_column(var="sequence_name")), all_tfs) %>%
+  dplyr::rename("motif_alt_id"=`all_tfs`) %>%
+  left_join(Stress_TFs_quantification,
+            by = c("sequence_name", "motif_alt_id")) %>%
+  mutate(count = replace_na(count, 0))
+
+ggplot(Stress_TFs_all %>% filter(motif_alt_id=="FOXO3"),aes(log2FoldChange,color=as.factor(count))) + 
+  geom_density() + facet_grid(~motif_alt_id)
+ggplot(Stress_TFs_all %>% filter(motif_alt_id=="HSF1"),aes(log2FoldChange,color=as.factor(count))) + 
+  geom_density() + facet_grid(~motif_alt_id)
+ggplot(Stress_TFs_all %>% filter(motif_alt_id=="NFE2L2"),aes(log2FoldChange,color=as.factor(count))) + 
+  geom_density() + facet_grid(~motif_alt_id)
 ```
 
 ### ImpulseDE2
