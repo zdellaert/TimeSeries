@@ -36,9 +36,9 @@ species_order <- c("Porites compressa","Montipora capitata","Pocillopora acuta")
 ## Load data 
 
 ```{r}
-Pcomp <- read.csv("../../1-Pcom/output/DMs_Processed.csv")
-Mcap <- read.csv("../../2-Mcap/output/DMs_Processed.csv")
-Pacu <- read.csv("../../3-Pacu/output/DMs_Processed.csv")
+Pcomp <- read.csv("../../1-Pcom/output_experimental/DMs_Processed.csv")
+Mcap <- read.csv("../../2-Mcap/output_experimental/DMs_Processed.csv")
+Pacu <- read.csv("../../3-Pacu/output_experimental/DMs_Processed.csv")
 
 Pcomp$species <- "Porites compressa"
 Mcap$species <- "Montipora capitata"
@@ -102,8 +102,8 @@ daily_tank<-pHSlope.long %>%
   theme(text = element_text(size = 14)); daily_tank
 
 # Save plot 
-ggsave("../output/pdf_figs/Daily_Measurements_Exp.pdf", daily_tank, width = 10, height = 10, units = c("in"))
-ggsave("../output/Daily_Measurements_Exp.png", daily_tank, width = 10, height = 10, units = c("in"), bg = "white")
+ggsave("../output_experimental/pdf_figs/Daily_Measurements_Exp.pdf", daily_tank, width = 10, height = 10, units = c("in"))
+ggsave("../output_experimental/Daily_Measurements_Exp.png", daily_tank, width = 10, height = 10, units = c("in"), bg = "white")
 ```
 
 ```{r}
@@ -122,16 +122,16 @@ daily_tank<-pHSlope.long %>%
   theme(text = element_text(size = 14)); daily_tank
 
 # Save plot 
-ggsave("../output/pdf_figs/Daily_Measurements_Exp_byTreatment.pdf", daily_tank, width = 10, height = 10, units = c("in"))
-ggsave("../output/Daily_Measurements_Exp_byTreatment.png", daily_tank, width = 10, height = 10, units = c("in"), bg = "white")
+ggsave("../output_experimental/pdf_figs/Daily_Measurements_Exp_byTreatment.pdf", daily_tank, width = 10, height = 10, units = c("in"))
+ggsave("../output_experimental/Daily_Measurements_Exp_byTreatment.png", daily_tank, width = 10, height = 10, units = c("in"), bg = "white")
 ```
 
 ## HOBO Temps, based on [Jill's Script](https://github.com/JillAshey/Astrangia_repo/blob/0041652d5b2a01145c1c049f10dbc53a8513cb86/scripts/Hobo_Temps.Rmd#L27)
 
 ```{r}
-Pcomp <- read.csv("../../1-Pcom/output/Experimental_Tank_HoboTempLight_data.csv")
-Mcap <- read.csv("../../2-Mcap/output/Experimental_Tank_HoboTempLight_data.csv")
-Pacu <- read.csv("../../3-Pacu/output/Experimental_Tank_HoboTempLight_data.csv")
+Pcomp <- read.csv("../../1-Pcom/output_experimental/Experimental_Tank_HoboTempLight_data.csv")
+Mcap <- read.csv("../../2-Mcap/output_experimental/Experimental_Tank_HoboTempLight_data.csv")
+Pacu <- read.csv("../../3-Pacu/output_experimental/Experimental_Tank_HoboTempLight_data.csv")
 
 Pcomp$species <- "Porites compressa"
 Mcap$species <- "Montipora capitata"
@@ -153,8 +153,8 @@ Temps <- tank_df_Exp %>% ggplot(aes(x=TimeHours, y=TempC)) +
   facet_grid(~species+Treatment, scales = "free_x")+
   xlab("Time (hours from start)") +ylab("Temperature (°C)") +theme_minimal()
 Temps
-ggsave("../output/pdf_figs/Experimental_Tank_HoboTemp.pdf", plot = last_plot(), width = 8, height = 4)
-ggsave("../output/Experimental_Tank_HoboTemp.png", plot = last_plot(), width = 8, height = 4, bg = "white")
+ggsave("../output_experimental/pdf_figs/Experimental_Tank_HoboTemp.pdf", plot = last_plot(), width = 8, height = 4)
+ggsave("../output_experimental/Experimental_Tank_HoboTemp.png", plot = last_plot(), width = 8, height = 4, bg = "white")
 
 Light <- tank_df_Exp %>% ggplot(aes(x=TimeHours, y=IntensityLux)) +
   geom_line(aes(color = Tank), size = 0.5) +
@@ -162,8 +162,8 @@ Light <- tank_df_Exp %>% ggplot(aes(x=TimeHours, y=IntensityLux)) +
   xlab("Time (hours from start)") +ylab("Light (Lux)") +theme_minimal()
 
 Light
-ggsave("../output/pdf_figs/Experimental_Tank_HoboLight.pdf", plot = last_plot(), width = 8, height = 4)
-ggsave("../output/Experimental_Tank_HoboLight.png", plot = last_plot(), width = 8, height = 4, bg = "white")
+ggsave("../output_experimental/pdf_figs/Experimental_Tank_HoboLight.pdf", plot = last_plot(), width = 8, height = 4)
+ggsave("../output_experimental/Experimental_Tank_HoboLight.png", plot = last_plot(), width = 8, height = 4, bg = "white")
 ```
 
 ## Plot temp and light by treatment
@@ -174,15 +174,15 @@ Temps <- tank_df_Exp %>% ggplot(aes(x=TimeHours, y=TempC)) +
   facet_grid(~species, scales = "free_x")+
   xlab("Time (hours from start)") +ylab("Temperature (°C)") + scale_color_manual(values = custom_colors) +theme_minimal()
 Temps
-ggsave("../output/pdf_figs/Experimental_Tank_HoboTemp_byTreatment.pdf", plot = last_plot(), width = 8, height = 4)
-ggsave("../output/Experimental_Tank_HoboTemp_byTreatment.png", plot = last_plot(), width = 8, height = 4, bg = "white")
+ggsave("../output_experimental/pdf_figs/Experimental_Tank_HoboTemp_byTreatment.pdf", plot = last_plot(), width = 8, height = 4)
+ggsave("../output_experimental/Experimental_Tank_HoboTemp_byTreatment.png", plot = last_plot(), width = 8, height = 4, bg = "white")
 
 Light <- tank_df_Exp %>% ggplot(aes(x=TimeHours, y=IntensityLux)) +
   geom_line(aes(color = Treatment), size = 0.5,alpha=0.75) +
   facet_grid(~species, scales = "free_x")+
   xlab("Time (hours from start)") +ylab("Light (Lux)") + scale_color_manual(values = custom_colors) +theme_minimal()
 Light
-ggsave("../output/pdf_figs/Experimental_Tank_HoboLight_byTreatment.pdf", plot = last_plot(), width = 8, height = 4)
-ggsave("../output/Experimental_Tank_HoboLight_byTreatment.png", plot = last_plot(), width = 8, height = 4, bg = "white")
+ggsave("../output_experimental/pdf_figs/Experimental_Tank_HoboLight_byTreatment.pdf", plot = last_plot(), width = 8, height = 4)
+ggsave("../output_experimental/Experimental_Tank_HoboLight_byTreatment.png", plot = last_plot(), width = 8, height = 4, bg = "white")
 ```
 

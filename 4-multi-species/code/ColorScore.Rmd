@@ -57,7 +57,7 @@ save_ggplot <- function(plot, filename, width = 10, height = 7, units = "in", dp
 treat_colors <- c("Control" = "lightblue4", "Heat" = "#D55E00")
 time_colors <- colorRampPalette(c("#ffffcc","#0c2c84"))(7)
 names(time_colors) <- c("0", "1", "3", "12", "24", "72", "120")
-outdir <- "../output/ColorScore"
+outdir <- "../output_experimental/ColorScore"
 ```
 
 ## *Pocillopora acuta* 
