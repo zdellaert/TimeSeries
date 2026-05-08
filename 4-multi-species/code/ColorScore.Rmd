@@ -6,6 +6,16 @@ output:
   github_document: default
 ---
 
+## NOTES:
+
+- POC Outlier Images:
+  - IMG_4656 --> IMG_4657 
+  - IMG_4573 --> reanalyze
+  - IMG_4598 --> reanalyze
+  - IMG_4755 --> check with Pooja what area she selected -- in picture much of the tissue has sloughed off
+    - POC_PAM_1059 was identified as a PAM outlier at 120hrs, which is also when it was photographed for color score
+  - IMG_4749 --> reanalyze
+
 ## Color Score Analysis of Time Series Image Data
 
 ```{r setup, include=FALSE}
@@ -45,24 +55,49 @@ save_ggplot <- function(plot, filename, width = 10, height = 7, units = "in", dp
 }
 
 treat_colors <- c("Control" = "lightblue4", "Heat" = "#D55E00")
+time_colors <- colorRampPalette(c("#ffffcc","#0c2c84"))(7)
+names(time_colors) <- c("0", "1", "3", "12", "24", "72", "120")
 outdir <- "../output/ColorScore"
 ```
 
 ## *Pocillopora acuta* 
-### Read in datafiles 
+
+### Read in data
 
 ```{r}
-raw <- read.csv("../../3-Pacu/data/Images/ColorScore.csv", colClasses=c("Date"="character", 
-                                                                               "Timepoint"="character",
-                                                                               "Plug"="character",
-                                                                               "PhotoDate"="character"))  %>%
+raw <- read.csv("../../3-Pacu/data/Images/ColorScore.csv",
+                colClasses=c("Date"="character",
+                             "Timepoint"="character",
+                             "Plug"="character",
+                             "Date"="character"))  %>%
   dplyr::rename(Sample=FileName)
 
 raw <- raw %>% mutate(Treatment=str_replace(Treatment,"heat","Heat"),
                       Treatment=str_replace(Treatment,"control","Control"))
 ```
 
-Calculate normalized coral color values based on standard color values for that image.
+### Check raw values
+
+Identify any outliers in the standard values -- any red flags in the pictures/analysis?
+
+These don't get removed here, we remove outliers after they have been normalized to their picture standard values. But outliers here might mean taking a second look at the picture.
+
+```{r}
+for (column in c("Red.Standard", "Green.Standard","Blue.Standard")){
+  # IQR method 
+  Q1 <- quantile(raw[[column]], 0.25)
+  Q3 <- quantile(raw[[column]], 0.75)
+  IQR_val <- Q3 - Q1
+  
+  lower_bound <- Q1 - 1.5 * IQR_val
+  upper_bound <- Q3 + 1.5 * IQR_val
+  outliers <- raw[raw[[column]] < lower_bound | raw[[column]] > upper_bound, ]
+  print(paste0(column,": IQR = ", Q1,"-",Q3,"; ",nrow(outliers)," outliers"))
+  print(outliers)
+}
+```
+
+### Normalize data
 
 ```{r}
 proc <- raw %>% mutate(
@@ -72,14 +107,164 @@ proc <- raw %>% mutate(
 )
 
 rownames(proc) <- proc$Sample
-proc_out_rm <- proc %>% filter(Sample!="POC_PAM_1059")
+```
+
+#### Identify outliers via IQR
+
+Identify outliers within treatment. Because we do not expect the distributions of the heat and control colors to be the same, we look for outliers separately in these treatments.
+
+```{r}
+norm_outliers <- c()
+
+for (column in c("Red.Norm.Coral","Green.Norm.Coral", "Blue.Norm.Coral")){
+    stats_temp <- proc %>%
+        group_by(across(all_of(c("Treatment")))) %>%
+        mutate(Q1 = quantile(get(column), 0.25),
+               Q3 = quantile(get(column), 0.75),
+               IQR_val = Q3 - Q1,
+               lower_bound = Q1 - 1.5 * IQR_val,
+               upper_bound = Q3 + 1.5 * IQR_val,
+               is_outlier = get(column) < lower_bound | get(column) > upper_bound) %>%
+        ungroup()
+    
+    outliers_heat <- stats_temp %>% filter(Treatment =="Heat" & is_outlier==TRUE)
+    outliers_control <- stats_temp %>% filter(Treatment =="Control" & is_outlier==TRUE)
+    
+    print(paste0(column,", Heat Samples: IQR = ", round(outliers_heat$Q1,2),"-",round(outliers_heat$Q3,2),"; ",nrow(outliers_heat)," outlier(s)"))
+    print(outliers_heat %>% dplyr::select(c(FileName_Orig,Sample,Timepoint,Treatment,Notes,column,lower_bound,upper_bound)))
+    
+    print(paste0(column,", Control Samples: IQR = ", round(outliers_control$Q1,2),"-",round(outliers_control$Q3,2),"; ",nrow(outliers_control)," outlier(s)"))
+    print(outliers_control %>% dplyr::select(c(FileName_Orig,Sample,Timepoint,Treatment,Notes,column,lower_bound,upper_bound)))
+
+    norm_outliers <- c(norm_outliers,outliers_heat$Sample,outliers_control$Sample)
+}
+
+unique(norm_outliers)
+```
+
+#### Remove outliers
+
+Go back and assess the images. Why are these flagging as outliers? 
+
+```{r}
+proc_out_rm <- proc %>% filter(!(Sample %in% unique(norm_outliers)))
+proc <- proc_out_rm
+```
+
+### Calculate color Score
+
+```{r}
+#create matrix with rownames as the samples
+proc_matrix <- as.matrix(cbind(proc$Red.Norm.Coral,
+                                   proc$Green.Norm.Coral,
+                                   proc$Blue.Norm.Coral))
+
+rownames(proc_matrix) <- proc$Sample
+
+#calculate distance
+dist <- vegdist(proc_matrix, method="euclidean") 
+
+#calculate PCA
+PCA <- princomp(dist)
+```
+
+```{r}
+#extract PC1 as color score
+colorscore <- as.data.frame(-PCA$scores[,1]) #extract PC1
+colorscore$Sample <- rownames(proc_matrix)
+
+colorscore <- colorscore %>% dplyr::rename(., ColorScore = `-PCA$scores[, 1]`)
+
+final <- left_join(proc, colorscore, by = "Sample") 
+
+# make time and treatment factors
+final$Timepoint <- factor(final$Timepoint, levels = as.character(sort(unique(as.numeric(final$Timepoint)))))
+final$Treatment <- factor(final$Treatment)
+
+range(final$ColorScore)
+```
+
+#### Identify outliers via IQR
+
+At this point, there should not be outliers in the color score values if the normalized values had ouliers removed. But check if there are and examine the data.
+
+```{r}
+final <- final %>%
+    group_by(across(all_of(c("Treatment")))) %>%
+    mutate(Q1 = quantile(ColorScore, 0.25),
+           Q3 = quantile(ColorScore, 0.75),
+           IQR_val = Q3 - Q1,
+           lower_bound = Q1 - 1.5 * IQR_val,
+           upper_bound = Q3 + 1.5 * IQR_val,
+           is_outlier = ColorScore < lower_bound | ColorScore > upper_bound) %>%
+    ungroup()
+
+outliers_heat <- final %>% filter(Treatment =="Heat" & is_outlier==TRUE)
+outliers_control <- final %>% filter(Treatment =="Control" & is_outlier==TRUE)
+
+print(paste0("ColorScore, Heat Samples: IQR = ", round(outliers_heat$Q1,2),"-",round(outliers_heat$Q3,2),"; ",nrow(outliers_heat)," outlier(s)"))
+print(outliers_heat %>% dplyr::select(c(FileName_Orig,Sample,Timepoint,Treatment,Notes,ColorScore,lower_bound,upper_bound)))
+
+print(paste0("ColorScore, Control Samples: IQR = ", round(outliers_control$Q1,2),"-",round(outliers_control$Q3,2),"; ",nrow(outliers_control)," outlier(s)"))
+print(outliers_control %>% dplyr::select(c(FileName_Orig,Sample,Timepoint,Treatment,Notes,ColorScore,lower_bound,upper_bound)))
+
+color_outliers <- c(outliers_heat$Sample,outliers_control$Sample)
+```
+
+#### Remove outliers
+
+See note above. Ideally there are no outliers at this stage.
+
+```{r}
+final_filtered_IQR <- final %>% filter(!(Sample %in% unique(color_outliers)))
+final <- final_filtered_IQR
+```
+
+### Plot
+
+```{r}
+final %>%
+  ggplot(., aes(x=Timepoint, y=ColorScore, color=Treatment)) +
+  geom_jitter(alpha=0.25, size=1.5, width = 0.22) + 
+  theme_minimal() + labs(x = "Timepoint",y = "Color Score") +
+  scale_color_manual(values = treat_colors) +
+  geom_point(stat = "summary", fun = mean, aes(group = Treatment), size=3) +
+  stat_summary(fun.data = mean_se, geom = "errorbar", width = 0.2, aes(group = Treatment)) +
+  geom_line(stat = "summary", fun = mean, size = 1.2, aes(group = Treatment)) +
+  stat_compare_means(aes(group = Treatment),method = "anova",label = "p.format",size = 3)
+
+save_ggplot(last_plot(), "Pacu")
+
+final %>%
+  ggplot(., aes(x=Timepoint, y=ColorScore, color=Treatment, shape=Tank_ID)) +
+  geom_jitter(alpha=0.25, size=1.5, width = 0.22) + 
+  theme_minimal() + labs(x = "Timepoint",y = "Color Score") +
+  scale_color_manual(values = treat_colors) +
+  geom_point(stat = "summary", fun = mean, aes(group = Tank_ID), size=3) +
+  stat_summary(fun.data = mean_se, geom = "errorbar", width = 0.1, size = 0.4, aes(group = Tank_ID)) +
+  geom_line(stat = "summary", fun = mean, size = 0.4, aes(group = Tank_ID)) +
+  stat_compare_means(aes(group = Treatment),method = "anova",label = "p.format",size = 3)
+
+save_ggplot(last_plot(), "Pacu_by_tank")
+
+final %>%
+  ggplot(., aes(x=Timepoint, y=ColorScore, color=Treatment, shape=Tank_ID)) +
+  theme_minimal() + labs(x = "Timepoint",y = "Color Score") +
+  scale_color_manual(values = treat_colors) +
+  stat_summary(fun.data = mean_se, geom = "errorbar", position = position_dodge(width = 0.5), width = 0.2, alpha = 0.5) +
+  stat_summary(fun.data = mean_se, geom = "point", position = position_dodge(width = 0.5), alpha = 0.5,size=2.5) +
+  stat_summary(fun = mean, geom = "point", aes(group = Treatment), size = 2.5) +
+  stat_summary(fun = mean, geom = "line", aes(group = Treatment), size = 1.2) +
+  stat_compare_means(aes(group = Treatment),method = "anova",label = "p.format",size = 3)
+
+save_ggplot(last_plot(), "Pacu_tank_means")
 ```
 
 ### Color Score Hackerott
 
 #### Run PCA
 ```{r}
-Color.PCA<-prcomp(proc_out_rm[,c("Red.Norm.Coral","Green.Norm.Coral","Blue.Norm.Coral")], scale.=TRUE) 
+Color.PCA<-prcomp(proc[,c("Red.Norm.Coral","Green.Norm.Coral","Blue.Norm.Coral")], scale.=TRUE) 
 
 #Initial plot
 fviz_pca_ind(Color.PCA)
@@ -91,7 +276,7 @@ summary(Color.PCA)
 fviz_eig(Color.PCA, addlabels = TRUE) 
 ```
 
-PC1 Explains 83.1% of the variance in the color data.
+PC1 Explains 81% of the variance in the color data.
 
 ```{r}
 ##Extract % Variance PC 1
@@ -107,7 +292,9 @@ Color.PCA.scores <- as.data.frame(Color.PCA$x)
 Color.PCA.scores$Sample<-rownames(Color.PCA.scores)
 
 #Prepare for Plotting
-Color.PCA.scores<-left_join(proc_out_rm, Color.PCA.scores, by = "Sample") 
+Color.PCA.scores<-left_join(proc, Color.PCA.scores, by = "Sample") 
+
+Color.PCA.scores$Timepoint <- factor(Color.PCA.scores$Timepoint, levels = as.character(sort(unique(as.numeric(Color.PCA.scores$Timepoint)))))
 ```
 
 #### Plot PCA 
@@ -116,6 +303,16 @@ Color.PCA.scores<-left_join(proc_out_rm, Color.PCA.scores, by = "Sample")
 ggplot(data = Color.PCA.scores, aes(x = PC1, y = PC2)) + 
   geom_point(aes(colour = Treatment),  alpha = 0.8) + 
   scale_colour_manual(values =treat_colors)+
+  theme_classic()+
+  scale_x_continuous(limits = c(-3, 5.5))+
+  scale_y_continuous(limits = c(-4.25, 4.25))+
+  labs(x=paste0('PC 1 (',PCA.PC1,"%)"), y=paste0('PC 2 (',PCA.PC2,"%)"))+
+  ggtitle("Color Score PCA")
+
+#Plot PCA
+ggplot(data = Color.PCA.scores, aes(x = PC1, y = PC2)) + 
+  geom_point(aes(colour = Timepoint),  alpha = 0.8) + 
+  scale_colour_manual(values =time_colors)+
   theme_classic()+
   scale_x_continuous(limits = c(-3, 5.5))+
   scale_y_continuous(limits = c(-4.25, 4.25))+
@@ -135,7 +332,7 @@ Color.pLDA_PCA<-predict(object=Color.LDA_PCA, newdata=Color.PCA.scores)
 Color.LDA_PCA.scores<-data.frame(Sample=Color.PCA.scores$Sample, LD1=Color.pLDA_PCA$x)
 
 #Prepare for Plotting
-ColorData<-left_join(proc_out_rm, Color.LDA_PCA.scores, by = "Sample") 
+ColorData<-left_join(proc, Color.LDA_PCA.scores, by = "Sample") 
 
 # make time and treatment factors
 ColorData$Timepoint <- factor(ColorData$Timepoint, levels = as.character(sort(unique(as.numeric(ColorData$Timepoint)))))
@@ -148,6 +345,14 @@ ColorData$Treatment <- factor(ColorData$Treatment)
 ggplot(data = ColorData, aes(x = LD1)) + 
   geom_density(aes(fill = Treatment), alpha = 0.6) + 
   scale_fill_manual(values =treat_colors)+
+  theme_classic()+
+  scale_x_continuous(limits = c(-3, 5.5))+
+  labs(x="LD1", y= "Density")+
+  ggtitle("Full Dataset")
+
+ggplot(data = ColorData, aes(x = LD1)) + 
+  geom_density(aes(fill = Timepoint), alpha = 0.6) + 
+  scale_fill_manual(values =time_colors)+
   theme_classic()+
   scale_x_continuous(limits = c(-3, 5.5))+
   labs(x="LD1", y= "Density")+
@@ -185,8 +390,8 @@ ColorData_Full <- ColorData
 for (timepoint in unique(raw$Timepoint)){
   proc_timepoint <- proc %>% filter(Timepoint == timepoint)
   
-  proc_out_rm_tp <- proc_timepoint #%>% filter(Sample!="POC_PAM_1059")
-  Color.PCA<-prcomp(proc_out_rm_tp[,c("Red.Norm.Coral","Green.Norm.Coral","Blue.Norm.Coral")], scale.=TRUE) 
+  proc_tp <- proc_timepoint #%>% filter(Sample!="POC_PAM_1059")
+  Color.PCA<-prcomp(proc_tp[,c("Red.Norm.Coral","Green.Norm.Coral","Blue.Norm.Coral")], scale.=TRUE) 
 
   ##Extract % Variance PC 1 & 2
   PCA.PC1<-sprintf("%1.2f",get_eigenvalue(Color.PCA)$variance.percent[1])
@@ -197,7 +402,7 @@ for (timepoint in unique(raw$Timepoint)){
   Color.PCA.scores$Sample<-rownames(Color.PCA.scores)
   
   #Prepare for Plotting
-  Color.PCA.scores<-left_join(proc_out_rm_tp, Color.PCA.scores, by = "Sample") 
+  Color.PCA.scores<-left_join(proc_tp, Color.PCA.scores, by = "Sample") 
   
   timepoint_pca <- ggplot(data = Color.PCA.scores, aes(x = PC1, y = PC2)) + 
     geom_point(aes(colour = Treatment),  alpha = 0.8) + 
@@ -220,7 +425,7 @@ for (timepoint in unique(raw$Timepoint)){
   Color.LDA_PCA.scores<-data.frame(Sample=Color.PCA.scores$Sample, LD1=Color.pLDA_PCA$x)
   
   #Prepare for Plotting
-  ColorData<-left_join(proc_out_rm_tp, Color.LDA_PCA.scores, by = "Sample") 
+  ColorData<-left_join(proc_tp, Color.LDA_PCA.scores, by = "Sample") 
   
   # make time and treatment factors
   ColorData$Timepoint <- factor(ColorData$Timepoint, levels = as.character(sort(unique(as.numeric(ColorData$Timepoint)))))
@@ -292,82 +497,6 @@ cor.test(ColorData$Score_Full, ColorData$Score_TP, method="spearman")
 plot(ColorData$Score_Full, ColorData$Score_TP)
 ```
 
-
-### color score default
-
-```{r}
-proc_matrix <- as.matrix(cbind(proc_out_rm$Red.Norm.Coral,
-                                   proc_out_rm$Green.Norm.Coral,
-                                   proc_out_rm$Blue.Norm.Coral)) #create matrix
-
-rownames(proc_matrix) <- proc_out_rm$Sample #name columns in dataframe
-
-dist <- vegdist(proc_matrix, method="euclidean") 
-
-PCA <- princomp(dist)
-```
-
-```{r}
-#extract PC1 as color score
-colorscore <- as.data.frame(-PCA$scores[,1]) #extract PC1
-colorscore$Sample <- rownames(proc_matrix)
-
-colorscore <- colorscore %>% dplyr::rename(., ColorScore = `-PCA$scores[, 1]`)
-
-final <- left_join(proc, colorscore, by = "Sample") 
-
-# make time and treatment factors
-final$Timepoint <- factor(final$Timepoint, levels = as.character(sort(unique(as.numeric(final$Timepoint)))))
-final$Treatment <- factor(final$Treatment)
-```
-
-
-### Analyze
-```{r}
-range(final$ColorScore)
-hist(final$ColorScore)
-```
-
-### Plot
-
-```{r}
-final %>%
-  ggplot(., aes(x=Timepoint, y=ColorScore, color=Treatment)) +
-  geom_jitter(alpha=0.25, size=1.5, width = 0.22) + 
-  theme_minimal() + labs(x = "Timepoint",y = "Color Score") +
-  scale_color_manual(values = treat_colors) +
-  geom_point(stat = "summary", fun = mean, aes(group = Treatment), size=3) +
-  stat_summary(fun.data = mean_se, geom = "errorbar", width = 0.2, aes(group = Treatment)) +
-  geom_line(stat = "summary", fun = mean, size = 1.2, aes(group = Treatment)) +
-  stat_compare_means(aes(group = Treatment),method = "anova",label = "p.format",size = 3)
-
-save_ggplot(last_plot(), "Pacu")
-
-final %>%
-  ggplot(., aes(x=Timepoint, y=ColorScore, color=Treatment, shape=Tank_ID)) +
-  geom_jitter(alpha=0.25, size=1.5, width = 0.22) + 
-  theme_minimal() + labs(x = "Timepoint",y = "Color Score") +
-  scale_color_manual(values = treat_colors) +
-  geom_point(stat = "summary", fun = mean, aes(group = Tank_ID), size=3) +
-  stat_summary(fun.data = mean_se, geom = "errorbar", width = 0.1, size = 0.4, aes(group = Tank_ID)) +
-  geom_line(stat = "summary", fun = mean, size = 0.4, aes(group = Tank_ID)) +
-  stat_compare_means(aes(group = Treatment),method = "anova",label = "p.format",size = 3)
-
-save_ggplot(last_plot(), "Pacu_by_tank")
-
-final %>%
-  ggplot(., aes(x=Timepoint, y=ColorScore, color=Treatment, shape=Tank_ID)) +
-  theme_minimal() + labs(x = "Timepoint",y = "Color Score") +
-  scale_color_manual(values = treat_colors) +
-  stat_summary(fun.data = mean_se, geom = "errorbar", position = position_dodge(width = 0.5), width = 0.2, alpha = 0.5) +
-  stat_summary(fun.data = mean_se, geom = "point", position = position_dodge(width = 0.5), alpha = 0.5,size=2.5) +
-  stat_summary(fun = mean, geom = "point", aes(group = Treatment), size = 2.5) +
-  stat_summary(fun = mean, geom = "line", aes(group = Treatment), size = 1.2) +
-  stat_compare_means(aes(group = Treatment),method = "anova",label = "p.format",size = 3)
-
-save_ggplot(last_plot(), "Pacu_tank_means")
-```
-
 ## *Porites compressa* 
 ### Read in datafiles 
 
@@ -375,11 +504,32 @@ save_ggplot(last_plot(), "Pacu_tank_means")
 raw <- read.csv("../../1-Pcom/data/Images/ColorScore.csv", colClasses=c("Date"="character", 
                                                                                "Timepoint"="character",
                                                                                "Plug"="character",
-                                                                               "PhotoDate"="character"))  %>%
+                                                                               "Date"="character"))  %>%
   dplyr::rename(Sample=FileName)
 ```
 
-Calculate normalized coral color values based on standard color values for that image.
+### Check raw values
+
+Identify any outliers in the standard values -- any red flags in the pictures/analysis?
+
+These don't get removed here, we remove outliers after they have been normalized to their picture standard values. But outliers here might mean taking a second look at the picture.
+
+```{r}
+for (column in c("Red.Standard", "Green.Standard","Blue.Standard")){
+  # IQR method 
+  Q1 <- quantile(raw[[column]], 0.25)
+  Q3 <- quantile(raw[[column]], 0.75)
+  IQR_val <- Q3 - Q1
+  
+  lower_bound <- Q1 - 1.5 * IQR_val
+  upper_bound <- Q3 + 1.5 * IQR_val
+  outliers <- raw[raw[[column]] < lower_bound | raw[[column]] > upper_bound, ]
+  print(paste0(column,": IQR = ", Q1,"-",Q3,"; ",nrow(outliers)," outliers"))
+  print(outliers)
+}
+```
+
+### Normalize data
 
 ```{r}
 proc <- raw %>% mutate(
@@ -389,123 +539,64 @@ proc <- raw %>% mutate(
 )
 
 rownames(proc) <- proc$Sample
-proc_out_rm <- proc #%>% filter(Sample!="POC_PAM_1059")
 ```
 
-### Color Score Hackerott
+#### Identify outliers via IQR
 
-#### Run PCA
+Identify outliers within treatment. Because we do not expect the distributions of the heat and control colors to be the same, we look for outliers separately in these treatments.
+
 ```{r}
-Color.PCA<-prcomp(proc_out_rm[,c("Red.Norm.Coral","Green.Norm.Coral","Blue.Norm.Coral")], scale.=TRUE) 
+norm_outliers <- c()
 
-#Initial plot
-fviz_pca_ind(Color.PCA)
+for (column in c("Red.Norm.Coral","Green.Norm.Coral", "Blue.Norm.Coral")){
+    stats_temp <- proc %>%
+        group_by(across(all_of(c("Treatment")))) %>%
+        mutate(Q1 = quantile(get(column), 0.25),
+               Q3 = quantile(get(column), 0.75),
+               IQR_val = Q3 - Q1,
+               lower_bound = Q1 - 1.5 * IQR_val,
+               upper_bound = Q3 + 1.5 * IQR_val,
+               is_outlier = get(column) < lower_bound | get(column) > upper_bound) %>%
+        ungroup()
+    
+    outliers_heat <- stats_temp %>% filter(Treatment =="Heat" & is_outlier==TRUE)
+    outliers_control <- stats_temp %>% filter(Treatment =="Control" & is_outlier==TRUE)
+    
+    print(paste0(column,", Heat Samples: IQR = ", round(outliers_heat$Q1,2),"-",round(outliers_heat$Q3,2),"; ",nrow(outliers_heat)," outlier(s)"))
+    print(outliers_heat %>% dplyr::select(c(FileName_Orig,Sample,Timepoint,Treatment,Notes,column,lower_bound,upper_bound)))
+    
+    print(paste0(column,", Control Samples: IQR = ", round(outliers_control$Q1,2),"-",round(outliers_control$Q3,2),"; ",nrow(outliers_control)," outlier(s)"))
+    print(outliers_control %>% dplyr::select(c(FileName_Orig,Sample,Timepoint,Treatment,Notes,column,lower_bound,upper_bound)))
 
-#Check Variance Explained by Components
-summary(Color.PCA)
+    norm_outliers <- c(norm_outliers,outliers_heat$Sample,outliers_control$Sample)
+}
 
-#Visualize the importance of each principal component
-fviz_eig(Color.PCA, addlabels = TRUE) 
+unique(norm_outliers)
 ```
 
-PC1 Explains 83.1% of the variance in the color data.
+#### Remove outliers
+
+Go back and assess the images. Why are these flagging as outliers? 
 
 ```{r}
-##Extract % Variance PC 1
-PCA.PC1<-sprintf("%1.2f",get_eigenvalue(Color.PCA)$variance.percent[1])
-PCA.PC1
-
-##Extract % Variance PC 2
-PCA.PC2<-sprintf("%1.2f",get_eigenvalue(Color.PCA)$variance.percent[2])
-PCA.PC2
-
-##Extract Individual Sample Scores
-Color.PCA.scores <- as.data.frame(Color.PCA$x)
-Color.PCA.scores$Sample<-rownames(Color.PCA.scores)
-
-#Prepare for Plotting
-Color.PCA.scores<-left_join(proc_out_rm, Color.PCA.scores, by = "Sample") 
+proc_out_rm <- proc %>% filter(!(Sample %in% unique(norm_outliers)))
+proc <- proc_out_rm
 ```
 
-#### Plot PCA 
-```{r}
-#Plot PCA
-ggplot(data = Color.PCA.scores, aes(x = PC1, y = PC2)) + 
-  geom_point(aes(colour = Treatment),  alpha = 0.8) + 
-  scale_colour_manual(values =treat_colors)+
-  theme_classic()+
-  scale_x_continuous(limits = c(-3, 5.5))+
-  scale_y_continuous(limits = c(-4.25, 4.25))+
-  labs(x=paste0('PC 1 (',PCA.PC1,"%)"), y=paste0('PC 2 (',PCA.PC2,"%)"))+
-  ggtitle("Color Score PCA")
-```
-
-#### LDA on PCA Scores
-```{r}
-##LDA on PCA Scores
-Color.LDA_PCA<-lda(Treatment~PC1+PC2+PC3, data=Color.PCA.scores)
-
-##Predict
-Color.pLDA_PCA<-predict(object=Color.LDA_PCA, newdata=Color.PCA.scores)
-
-##Save LD1 Scores
-Color.LDA_PCA.scores<-data.frame(Sample=Color.PCA.scores$Sample, LD1=Color.pLDA_PCA$x)
-
-#Prepare for Plotting
-ColorData<-left_join(proc_out_rm, Color.LDA_PCA.scores, by = "Sample") 
-
-# make time and treatment factors
-ColorData$Timepoint <- factor(ColorData$Timepoint, levels = as.character(sort(unique(as.numeric(ColorData$Timepoint)))))
-ColorData$Treatment <- factor(ColorData$Treatment)
-```
-
-#### LD1 Density Plot
+### Calculate color Score
 
 ```{r}
-ggplot(data = ColorData, aes(x = LD1)) + 
-  geom_density(aes(fill = Treatment), alpha = 0.6) + 
-  scale_fill_manual(values =treat_colors)+
-  theme_classic()+
-  scale_x_continuous(limits = c(-3, 5.5))+
-  labs(x="LD1", y= "Density")+
-  ggtitle("Full Dataset")
-```
+#create matrix with rownames as the samples
+proc_matrix <- as.matrix(cbind(proc$Red.Norm.Coral,
+                                   proc$Green.Norm.Coral,
+                                   proc$Blue.Norm.Coral))
 
-#### Extract Color Score
-```{r}
-##Invert signs for Control > Heated
-ColorData$LD1<-ColorData$LD1*(-1)
+rownames(proc_matrix) <- proc$Sample
 
-#Adding 10 to make all score values positive 
-#ColorData$LD1<- ColorData$LD1 +10
-
-ColorData %>%
-  ggplot(., aes(x=Timepoint, y=LD1, color=Treatment)) +
-  geom_jitter(alpha=0.25, size=1.5, width = 0.22) + 
-  theme_minimal() + labs(x = "Timepoint",y = "Color Score") +
-  scale_color_manual(values = treat_colors) +
-  geom_point(stat = "summary", fun = mean, aes(group = Treatment), size=3) +
-  stat_summary(fun.data = mean_se, geom = "errorbar", width = 0.2, aes(group = Treatment)) +
-  geom_line(stat = "summary", fun = mean, size = 1.2, aes(group = Treatment)) +
-  stat_compare_means(aes(group = Treatment),method = "anova",label = "p.format",size = 3)
-
-save_ggplot(last_plot(), "Pcom_Hackerott")
-
-ColorData_Full <- ColorData
-```
-
-
-### color score default
-
-```{r}
-proc_matrix <- as.matrix(cbind(proc_out_rm$Red.Norm.Coral,
-                                   proc_out_rm$Green.Norm.Coral,
-                                   proc_out_rm$Blue.Norm.Coral)) #create matrix
-
-rownames(proc_matrix) <- proc_out_rm$Sample #name columns in dataframe
-
+#calculate distance
 dist <- vegdist(proc_matrix, method="euclidean") 
 
+#calculate PCA
 PCA <- princomp(dist)
 ```
 
@@ -521,13 +612,44 @@ final <- left_join(proc, colorscore, by = "Sample")
 # make time and treatment factors
 final$Timepoint <- factor(final$Timepoint, levels = as.character(sort(unique(as.numeric(final$Timepoint)))))
 final$Treatment <- factor(final$Treatment)
+
+range(final$ColorScore)
 ```
 
+#### Identify outliers via IQR
 
-### Analyze
+At this point, there should not be outliers in the color score values if the normalized values had ouliers removed. But check if there are and examine the data.
+
 ```{r}
-range(final$ColorScore)
-hist(final$ColorScore)
+final <- final %>%
+    group_by(across(all_of(c("Treatment")))) %>%
+    mutate(Q1 = quantile(ColorScore, 0.25),
+           Q3 = quantile(ColorScore, 0.75),
+           IQR_val = Q3 - Q1,
+           lower_bound = Q1 - 1.5 * IQR_val,
+           upper_bound = Q3 + 1.5 * IQR_val,
+           is_outlier = ColorScore < lower_bound | ColorScore > upper_bound) %>%
+    ungroup()
+
+outliers_heat <- final %>% filter(Treatment =="Heat" & is_outlier==TRUE)
+outliers_control <- final %>% filter(Treatment =="Control" & is_outlier==TRUE)
+
+print(paste0("ColorScore, Heat Samples: IQR = ", round(outliers_heat$Q1,2),"-",round(outliers_heat$Q3,2),"; ",nrow(outliers_heat)," outlier(s)"))
+print(outliers_heat %>% dplyr::select(c(FileName_Orig,Sample,Timepoint,Treatment,Notes,ColorScore,lower_bound,upper_bound)))
+
+print(paste0("ColorScore, Control Samples: IQR = ", round(outliers_control$Q1,2),"-",round(outliers_control$Q3,2),"; ",nrow(outliers_control)," outlier(s)"))
+print(outliers_control %>% dplyr::select(c(FileName_Orig,Sample,Timepoint,Treatment,Notes,ColorScore,lower_bound,upper_bound)))
+
+color_outliers <- c(outliers_heat$Sample,outliers_control$Sample)
+```
+
+#### Remove outliers
+
+See note above. Ideally there are no outliers at this stage.
+
+```{r}
+final_filtered_IQR <- final %>% filter(!(Sample %in% unique(color_outliers)))
+final <- final_filtered_IQR
 ```
 
 ### Plot
@@ -570,6 +692,7 @@ final %>%
 save_ggplot(last_plot(), "Pcom_tank_means")
 ```
 
+
 ## *Montipora capitata* 
 ### Read in datafiles 
 
@@ -577,14 +700,35 @@ save_ggplot(last_plot(), "Pcom_tank_means")
 raw <- read.csv("../../2-Mcap/data/Images/ColorScore.csv", colClasses=c("Date"="character", 
                                                                                "Timepoint"="character",
                                                                                "Plug"="character",
-                                                                               "PhotoDate"="character"))  %>%
+                                                                               "Date"="character"))  %>%
   dplyr::rename(Sample=FileName)
 
 raw <- raw %>% mutate(Treatment=str_replace(Treatment,"heat","Heat"),
                       Treatment=str_replace(Treatment,"control","Control"))
 ```
 
-Calculate normalized coral color values based on standard color values for that image.
+### Check raw values
+
+Identify any outliers in the standard values -- any red flags in the pictures/analysis?
+
+These don't get removed here, we remove outliers after they have been normalized to their picture standard values. But outliers here might mean taking a second look at the picture.
+
+```{r}
+for (column in c("Red.Standard", "Green.Standard","Blue.Standard")){
+  # IQR method 
+  Q1 <- quantile(raw[[column]], 0.25)
+  Q3 <- quantile(raw[[column]], 0.75)
+  IQR_val <- Q3 - Q1
+  
+  lower_bound <- Q1 - 1.5 * IQR_val
+  upper_bound <- Q3 + 1.5 * IQR_val
+  outliers <- raw[raw[[column]] < lower_bound | raw[[column]] > upper_bound, ]
+  print(paste0(column,": IQR = ", Q1,"-",Q3,"; ",nrow(outliers)," outliers"))
+  print(outliers)
+}
+```
+
+### Normalize data
 
 ```{r}
 proc <- raw %>% mutate(
@@ -594,123 +738,64 @@ proc <- raw %>% mutate(
 )
 
 rownames(proc) <- proc$Sample
-proc_out_rm <- proc %>% filter(Sample!="MON_P12_C2")
 ```
 
-### Color Score Hackerott
+#### Identify outliers via IQR
 
-#### Run PCA
+Identify outliers within treatment. Because we do not expect the distributions of the heat and control colors to be the same, we look for outliers separately in these treatments.
+
 ```{r}
-Color.PCA<-prcomp(proc_out_rm[,c("Red.Norm.Coral","Green.Norm.Coral","Blue.Norm.Coral")], scale.=TRUE) 
+norm_outliers <- c()
 
-#Initial plot
-fviz_pca_ind(Color.PCA)
+for (column in c("Red.Norm.Coral","Green.Norm.Coral", "Blue.Norm.Coral")){
+    stats_temp <- proc %>%
+        group_by(across(all_of(c("Treatment")))) %>%
+        mutate(Q1 = quantile(get(column), 0.25),
+               Q3 = quantile(get(column), 0.75),
+               IQR_val = Q3 - Q1,
+               lower_bound = Q1 - 1.5 * IQR_val,
+               upper_bound = Q3 + 1.5 * IQR_val,
+               is_outlier = get(column) < lower_bound | get(column) > upper_bound) %>%
+        ungroup()
+    
+    outliers_heat <- stats_temp %>% filter(Treatment =="Heat" & is_outlier==TRUE)
+    outliers_control <- stats_temp %>% filter(Treatment =="Control" & is_outlier==TRUE)
+    
+    print(paste0(column,", Heat Samples: IQR = ", round(outliers_heat$Q1,2),"-",round(outliers_heat$Q3,2),"; ",nrow(outliers_heat)," outlier(s)"))
+    print(outliers_heat %>% dplyr::select(c(FileName_Orig,Sample,Timepoint,Treatment,Notes,column,lower_bound,upper_bound)))
+    
+    print(paste0(column,", Control Samples: IQR = ", round(outliers_control$Q1,2),"-",round(outliers_control$Q3,2),"; ",nrow(outliers_control)," outlier(s)"))
+    print(outliers_control %>% dplyr::select(c(FileName_Orig,Sample,Timepoint,Treatment,Notes,column,lower_bound,upper_bound)))
 
-#Check Variance Explained by Components
-summary(Color.PCA)
+    norm_outliers <- c(norm_outliers,outliers_heat$Sample,outliers_control$Sample)
+}
 
-#Visualize the importance of each principal component
-fviz_eig(Color.PCA, addlabels = TRUE) 
+unique(norm_outliers)
 ```
 
-PC1 Explains 92.9% of the variance in the color data with outlier removed
+#### Remove outliers
+
+Go back and assess the images. Why are these flagging as outliers? 
 
 ```{r}
-##Extract % Variance PC 1
-PCA.PC1<-sprintf("%1.2f",get_eigenvalue(Color.PCA)$variance.percent[1])
-PCA.PC1
-
-##Extract % Variance PC 2
-PCA.PC2<-sprintf("%1.2f",get_eigenvalue(Color.PCA)$variance.percent[2])
-PCA.PC2
-
-##Extract Individual Sample Scores
-Color.PCA.scores <- as.data.frame(Color.PCA$x)
-Color.PCA.scores$Sample<-rownames(Color.PCA.scores)
-
-#Prepare for Plotting
-Color.PCA.scores<-left_join(proc_out_rm, Color.PCA.scores, by = "Sample") 
+proc_out_rm <- proc %>% filter(!(Sample %in% unique(norm_outliers)))
+proc <- proc_out_rm
 ```
 
-#### Plot PCA 
-```{r}
-#Plot PCA
-ggplot(data = Color.PCA.scores, aes(x = PC1, y = PC2)) + 
-  geom_point(aes(colour = Treatment),  alpha = 0.8) + 
-  scale_colour_manual(values =treat_colors)+
-  theme_classic()+
-  scale_x_continuous(limits = c(-3, 5.5))+
-  scale_y_continuous(limits = c(-4.25, 4.25))+
-  labs(x=paste0('PC 1 (',PCA.PC1,"%)"), y=paste0('PC 2 (',PCA.PC2,"%)"))+
-  ggtitle("Color Score PCA")
-```
-
-#### LDA on PCA Scores
-```{r}
-##LDA on PCA Scores
-Color.LDA_PCA<-lda(Treatment~PC1+PC2+PC3, data=Color.PCA.scores)
-
-##Predict
-Color.pLDA_PCA<-predict(object=Color.LDA_PCA, newdata=Color.PCA.scores)
-
-##Save LD1 Scores
-Color.LDA_PCA.scores<-data.frame(Sample=Color.PCA.scores$Sample, LD1=Color.pLDA_PCA$x)
-
-#Prepare for Plotting
-ColorData<-left_join(proc_out_rm, Color.LDA_PCA.scores, by = "Sample") 
-
-# make time and treatment factors
-ColorData$Timepoint <- factor(ColorData$Timepoint, levels = as.character(sort(unique(as.numeric(ColorData$Timepoint)))))
-ColorData$Treatment <- factor(ColorData$Treatment)
-```
-
-#### LD1 Density Plot
+### Calculate color Score
 
 ```{r}
-ggplot(data = ColorData, aes(x = LD1)) + 
-  geom_density(aes(fill = Treatment), alpha = 0.6) + 
-  scale_fill_manual(values =treat_colors)+
-  theme_classic()+
-  scale_x_continuous(limits = c(-3, 5.5))+
-  labs(x="LD1", y= "Density")+
-  ggtitle("Full Dataset")
-```
+#create matrix with rownames as the samples
+proc_matrix <- as.matrix(cbind(proc$Red.Norm.Coral,
+                                   proc$Green.Norm.Coral,
+                                   proc$Blue.Norm.Coral))
 
-#### Extract Color Score
-```{r}
-##Invert signs for Control > Heated
-ColorData$LD1<-ColorData$LD1*(-1)
+rownames(proc_matrix) <- proc$Sample
 
-#Adding 10 to make all score values positive 
-#ColorData$LD1<- ColorData$LD1 +10
-
-ColorData %>%
-  ggplot(., aes(x=Timepoint, y=LD1, color=Treatment)) +
-  geom_jitter(alpha=0.25, size=1.5, width = 0.22) + 
-  theme_minimal() + labs(x = "Timepoint",y = "Color Score") +
-  scale_color_manual(values = treat_colors) +
-  geom_point(stat = "summary", fun = mean, aes(group = Treatment), size=3) +
-  stat_summary(fun.data = mean_se, geom = "errorbar", width = 0.2, aes(group = Treatment)) +
-  geom_line(stat = "summary", fun = mean, size = 1.2, aes(group = Treatment)) +
-  stat_compare_means(aes(group = Treatment),method = "anova",label = "p.format",size = 3)
-
-save_ggplot(last_plot(), "Mcap_Hackerott")
-
-ColorData_Full <- ColorData
-```
-
-
-### color score default
-
-```{r}
-proc_matrix <- as.matrix(cbind(proc_out_rm$Red.Norm.Coral,
-                                   proc_out_rm$Green.Norm.Coral,
-                                   proc_out_rm$Blue.Norm.Coral)) #create matrix
-
-rownames(proc_matrix) <- proc_out_rm$Sample #name columns in dataframe
-
+#calculate distance
 dist <- vegdist(proc_matrix, method="euclidean") 
 
+#calculate PCA
 PCA <- princomp(dist)
 ```
 
@@ -726,13 +811,44 @@ final <- left_join(proc, colorscore, by = "Sample")
 # make time and treatment factors
 final$Timepoint <- factor(final$Timepoint, levels = as.character(sort(unique(as.numeric(final$Timepoint)))))
 final$Treatment <- factor(final$Treatment)
+
+range(final$ColorScore)
 ```
 
+#### Identify outliers via IQR
 
-### Analyze
+At this point, there should not be outliers in the color score values if the normalized values had ouliers removed. But check if there are and examine the data.
+
 ```{r}
-range(final$ColorScore)
-hist(final$ColorScore)
+final <- final %>%
+    group_by(across(all_of(c("Treatment")))) %>%
+    mutate(Q1 = quantile(ColorScore, 0.25),
+           Q3 = quantile(ColorScore, 0.75),
+           IQR_val = Q3 - Q1,
+           lower_bound = Q1 - 1.5 * IQR_val,
+           upper_bound = Q3 + 1.5 * IQR_val,
+           is_outlier = ColorScore < lower_bound | ColorScore > upper_bound) %>%
+    ungroup()
+
+outliers_heat <- final %>% filter(Treatment =="Heat" & is_outlier==TRUE)
+outliers_control <- final %>% filter(Treatment =="Control" & is_outlier==TRUE)
+
+print(paste0("ColorScore, Heat Samples: IQR = ", round(outliers_heat$Q1,2),"-",round(outliers_heat$Q3,2),"; ",nrow(outliers_heat)," outlier(s)"))
+print(outliers_heat %>% dplyr::select(c(FileName_Orig,Sample,Timepoint,Treatment,Notes,ColorScore,lower_bound,upper_bound)))
+
+print(paste0("ColorScore, Control Samples: IQR = ", round(outliers_control$Q1,2),"-",round(outliers_control$Q3,2),"; ",nrow(outliers_control)," outlier(s)"))
+print(outliers_control %>% dplyr::select(c(FileName_Orig,Sample,Timepoint,Treatment,Notes,ColorScore,lower_bound,upper_bound)))
+
+color_outliers <- c(outliers_heat$Sample,outliers_control$Sample)
+```
+
+#### Remove outliers
+
+See note above. Ideally there are no outliers at this stage.
+
+```{r}
+final_filtered_IQR <- final %>% filter(!(Sample %in% unique(color_outliers)))
+final <- final_filtered_IQR
 ```
 
 ### Plot
