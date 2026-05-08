@@ -23,3 +23,40 @@ git clone https://github.com/zdellaert/HI_genome_annotations.git
 ls
 # now there should be both "TimeSeries" and "HI_genome_annotations" directories.
 ```
+
+## QC Decisions
+
+### Sample Exclusions
+
+Samples were excluded based on:
+- Hierarchical clustering (outlier branches)
+- Low mapping rates (<10%)
+- High rRNA/bacterial contamination
+- Visual confirmation of mortality
+
+#### *Pocillopora acuta* (POC)
+
+No samples excluded.
+
+#### *Porites compressa* (POR)
+
+- see [bioinformatic processing doc](https://github.com/zdellaert/TimeSeries/blob/main/4-multi-species/scripts/README.md) for rRNA contamination screen
+
+| Sample | Mapping % | rRNA % | Reason | Color Score Image |
+|--------|-----------|--------|--------|-------------------|
+| POR_R24_H1 | 7.7% | 82% | High rRNA | ![](https://github.com/zdellaert/TimeSeries/blob/main/1-Pcom/data/Images/20250626/IMG_4309.jpeg) |
+| POR_R72_H1 | 6.4% | 84% | Visible mortality, High rRNA | ![](https://github.com/zdellaert/TimeSeries/blob/main/1-Pcom/data/Images/20250628/IMG_4330.jpeg) |
+| POR_R72_H2 | 8.8% | 81% | Visible mortality, High rRNA | ![](https://github.com/zdellaert/TimeSeries/blob/main/1-Pcom/data/Images/20250628/IMG_4333.jpeg) |
+
+**Impact:** R24 heat n=2, R72 heat n=1
+
+#### *Montipora capitata* (MON)
+
+- see [bioinformatic processing doc](https://github.com/zdellaert/TimeSeries/blob/main/4-multi-species/scripts/README.md) for bacterial contamination screen
+
+| Sample | Mapping % | Bacterial % | Reason | Color Score Image |
+|--------|-----------|-------------|--------|-------------------|
+| MON_R72_H1 | 0.5% | 10.6% | Visible mortality, bacterial contamination | ![](https://github.com/zdellaert/TimeSeries/blob/main/2-Mcap/data/Images/20250705/IMG_4516.jpeg) |
+| MON_R72_H2 | 0.5% | 32.0% | Visible mortality, bacterial contamination | ![](https://github.com/zdellaert/TimeSeries/blob/main/2-Mcap/data/Images/20250705/IMG_4480.jpeg) |
+
+**Impact:** R72 heat n=1

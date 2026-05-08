@@ -33,6 +33,7 @@ Zoe Dellaert
 # Preproccessing of bulk RNA-seq data
 
 ``` r
+# set up file paths so that Rmd outputs can be viewed using github markdown
 knitr::opts_knit$set(base.dir = normalizePath(paste0("../../output_RNA/reports/", params$species, "/")), base.url = "./")
 
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE,fig.width = 10, fig.height = 8,
@@ -134,7 +135,7 @@ print_config(species)
 
     ## Species: Mcap
     ## Count matrix: MON_MCapV3_gene_count_matrix.csv
-    ## Outliers: None
+    ## Outliers: MON_R72_H1, MON_R72_H2
     ## WGCNA power: 10
     ## Mfuzz clusters: 6
     ## 
@@ -232,7 +233,7 @@ filtered_counts <- counts_raw[counts_filt_poa,] #keep only rows that passed filt
 paste0("Number of genes after filtering: ", sum(counts_filt_poa))
 ```
 
-    ## [1] "Number of genes after filtering: 30090"
+    ## [1] "Number of genes after filtering: 30089"
 
 ``` r
 paste0("% of genes kept: ", round(100*(sum(counts_filt_poa)/nrow(counts_raw)),digits=2),"%")
@@ -261,20 +262,20 @@ SF.dds <- estimateSizeFactors(dds)
 print(sort(sizeFactors(SF.dds))) #View size factors
 ```
 
-    ##  MON_R72_H1  MON_R72_H2   MON_R1_H1   MON_R3_C2  MON_R12_C1  MON_R72_C2 
-    ##  0.00504097  0.01364042  0.99129161  1.03353721  1.03798525  1.04622998 
-    ##  MON_R12_C2   MON_R3_C1   MON_R3_H3   MON_R1_H3   MON_R0_C2   MON_R1_H2 
-    ##  1.05053789  1.05204229  1.06381166  1.10063991  1.10186762  1.11020600 
-    ##   MON_R0_C3  MON_R24_C2 MON_R120_C2 MON_R120_C3   MON_R3_C3  MON_R72_H3 
-    ##  1.12164399  1.12468074  1.12716635  1.14000227  1.15247505  1.15965767 
-    ##   MON_R1_C1  MON_R12_C3  MON_R24_H2  MON_R24_C1   MON_R1_C2  MON_R12_H3 
-    ##  1.16082146  1.16511426  1.18153188  1.19281258  1.20543301  1.21867393 
-    ##   MON_R0_H3  MON_R24_C3  MON_R72_C1 MON_R120_H1 MON_R120_C1   MON_R3_H1 
-    ##  1.22222496  1.22578195  1.24287976  1.28877217  1.29205396  1.29720697 
-    ##   MON_R1_C3  MON_R24_H1  MON_R72_C3 MON_R120_H3  MON_R12_H2   MON_R0_H1 
-    ##  1.32758770  1.40769888  1.41848018  1.43098855  1.45583276  1.52290690 
-    ##  MON_R12_H1  MON_R24_H3   MON_R0_H2   MON_R3_H2 MON_R120_H2   MON_R0_C1 
-    ##  1.56263648  1.82686056  1.89770672  1.97826935  2.03408904  2.41872778
+    ##  MON_R12_H1   MON_R3_H1  MON_R24_H3   MON_R3_H3   MON_R1_H1  MON_R12_H3 
+    ##   0.6356368   0.6966089   0.6973926   0.7107221   0.7527752   0.8089286 
+    ##  MON_R24_H2   MON_R3_C2   MON_R1_H2  MON_R72_H3  MON_R12_H2   MON_R1_H3 
+    ##   0.8861458   0.8939502   0.9017303   0.9064791   0.9103193   0.9159839 
+    ##  MON_R12_C1   MON_R0_C2 MON_R120_H1  MON_R12_C2  MON_R72_C1  MON_R72_C2 
+    ##   0.9459142   0.9463374   0.9501645   0.9588396   0.9598847   0.9675785 
+    ## MON_R120_H3  MON_R24_C1   MON_R3_C3  MON_R24_C2 MON_R120_C2   MON_R1_C1 
+    ##   0.9679888   0.9927572   1.0031709   1.0112260   1.0167688   1.0357805 
+    ##   MON_R3_C1   MON_R0_C3   MON_R1_C2   MON_R0_H3  MON_R24_H1  MON_R12_C3 
+    ##   1.0601390   1.0690971   1.0829338   1.0888544   1.0996072   1.1063628 
+    ##  MON_R24_C3 MON_R120_C3 MON_R120_C1   MON_R3_H2   MON_R1_C3   MON_R0_H1 
+    ##   1.1280895   1.1313671   1.1648070   1.1896652   1.2185597   1.3170480 
+    ##  MON_R72_C3 MON_R120_H2   MON_R0_H2   MON_R0_C1 
+    ##   1.3366416   1.4756437   1.5587529   2.1094335
 
 ``` r
 # if all are less than 4 we can use the VST transformation
@@ -374,15 +375,17 @@ abline(h = 100, col = "red", lty = 2)
 
     ##   Initial genes: 54384
 
-    ##   Initial samples: 42
+    ##   Initial samples: 40
 
     ## Filtering
 
     ## ----------------------------------------
 
-    ##   Outliers removed: 0
+    ##   Outliers removed: 2
 
-    ##   Low-expression genes removed: 24294
+    ##      MON_R72_H1, MON_R72_H2
+
+    ##   Low-expression genes removed: 24295
 
     ##   pOverA filter: >= 10 counts in >= 7 % of samples
 
@@ -390,9 +393,9 @@ abline(h = 100, col = "red", lty = 2)
 
     ## ----------------------------------------
 
-    ##   Final genes: 30090
+    ##   Final genes: 30089
 
-    ##   Final samples: 42
+    ##   Final samples: 40
 
     ##   Output directory: ../../output_RNA/counts_filt_norm/Mcap
 
@@ -400,13 +403,13 @@ abline(h = 100, col = "red", lty = 2)
 
     ## ----------------------------------------
 
-    ##   Size factors range: 0.01 - 2.42
+    ##   Size factors range: 0.64 - 2.11
 
     ##   VST appropriate: Yes
 
-    ##   PC1 variance: 48 %
+    ##   PC1 variance: 37 %
 
-    ##   PC2 variance: 13 %
+    ##   PC2 variance: 19 %
 
 ``` r
 sessionInfo()

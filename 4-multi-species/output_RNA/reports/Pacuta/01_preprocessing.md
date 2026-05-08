@@ -33,6 +33,7 @@ Zoe Dellaert
 # Preproccessing of bulk RNA-seq data
 
 ``` r
+# set up file paths so that Rmd outputs can be viewed using github markdown
 knitr::opts_knit$set(base.dir = normalizePath(paste0("../../output_RNA/reports/", params$species, "/")), base.url = "./")
 
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE,fig.width = 10, fig.height = 8,

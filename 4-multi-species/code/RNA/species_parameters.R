@@ -44,8 +44,10 @@ species_params <- list(
         count_matrix = "MON_MCapV3_gene_count_matrix.csv",
         SwissProt = "Montipora_capitata_HIv3_Swissprot_GO.tsv",
 
-        outlier_samples = c(),
-        #outlier_samples = c("MON_R72_H1", "MON_R72_H2"),
+        # the following outliers were removed due to showing as clear outliers in hierarchical clustering
+        # color score images pre-sampling show very bleached and possibly dead fragments for all two outliers
+        # Kraken contamination screen shows high bacterial contamination in these two samples.
+        outlier_samples = c("MON_R72_H1", "MON_R72_H2"),
 
         #for wgcna
         soft_power = 10,
@@ -59,7 +61,9 @@ species_params <- list(
         count_matrix = "POR_Pcomp_gene_count_matrix.csv",
         SwissProt = "Porites_compressa_HIv1_Swissprot_GO.tsv",
 
-        outlier_samples = c(),
+        # the following outliers were removed due to showing as clear outliers in hierarchical clustering
+        # for the 72 hour samples, color score images pre-sampling show very bleached and possibly dead fragments
+        outlier_samples = c("POR_R72_H1", "POR_R72_H2", "POR_R24_H1"),
 
         #for wgcna
         soft_power = 8,

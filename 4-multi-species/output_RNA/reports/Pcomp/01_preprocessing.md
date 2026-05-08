@@ -135,7 +135,7 @@ print_config(species)
 
     ## Species: Pcomp
     ## Count matrix: POR_Pcomp_gene_count_matrix.csv
-    ## Outliers: None
+    ## Outliers: POR_R72_H1, POR_R72_H2, POR_R24_H1
     ## WGCNA power: 8
     ## Mfuzz clusters: 6
     ## 
@@ -233,13 +233,13 @@ filtered_counts <- counts_raw[counts_filt_poa,] #keep only rows that passed filt
 paste0("Number of genes after filtering: ", sum(counts_filt_poa))
 ```
 
-    ## [1] "Number of genes after filtering: 27533"
+    ## [1] "Number of genes after filtering: 27492"
 
 ``` r
 paste0("% of genes kept: ", round(100*(sum(counts_filt_poa)/nrow(counts_raw)),digits=2),"%")
 ```
 
-    ## [1] "% of genes kept: 62.39%"
+    ## [1] "% of genes kept: 62.3%"
 
 ``` r
 write.csv(filtered_counts, file = file.path(outdir, "filtered_counts.csv"))
@@ -262,20 +262,20 @@ SF.dds <- estimateSizeFactors(dds)
 print(sort(sizeFactors(SF.dds))) #View size factors
 ```
 
-    ##  POR_R72_H1  POR_R72_H2  POR_R24_H1 POR_R120_C3  POR_R12_C1   POR_R1_H2 
-    ##   0.1915412   0.2704780   0.2788869   0.3622529   0.3981970   0.4029134 
-    ##   POR_R1_C1   POR_R1_H1  POR_R12_C3   POR_R3_C3   POR_R0_H1 POR_R120_H3 
-    ##   0.4150671   0.4640600   0.5738960   0.6649097   0.6777339   0.7298652 
-    ##  POR_R24_C3  POR_R72_C3  POR_R72_C1  POR_R24_C2   POR_R0_H2 POR_R120_C1 
-    ##   0.7411381   0.7425228   0.7770175   0.7805666   0.8281278   0.8354057 
-    ##   POR_R0_C2   POR_R1_C3   POR_R3_H3   POR_R0_C1   POR_R0_H3   POR_R1_C2 
-    ##   0.8719468   0.9875187   1.0852146   1.1064526   1.1440124   1.1759630 
-    ##   POR_R1_H3   POR_R3_C2  POR_R72_C2   POR_R3_C1   POR_R0_C3  POR_R12_H3 
-    ##   1.2567150   1.2841829   1.4041362   1.4963637   1.6057443   1.7302729 
-    ## POR_R120_C2  POR_R72_H3  POR_R24_H2  POR_R12_C2   POR_R3_H1   POR_R3_H2 
-    ##   1.8182241   1.8744531   1.8799754   1.9697598   2.0347063   2.0586128 
-    ##  POR_R24_C1  POR_R12_H1  POR_R24_H3  POR_R12_H2 POR_R120_H2 POR_R120_H1 
-    ##   2.1137645   2.3125857   2.3502852   2.6778535   3.3817337   3.8086275
+    ##  POR_R12_C1 POR_R120_C3   POR_R1_H2   POR_R1_C1   POR_R1_H1  POR_R12_C3 
+    ##   0.3261723   0.3505368   0.3787834   0.4125180   0.4390233   0.5440971 
+    ##  POR_R24_C3   POR_R0_H1   POR_R3_C3 POR_R120_H3   POR_R0_C2  POR_R72_C3 
+    ##   0.6317648   0.6349231   0.6367453   0.6428541   0.7312940   0.7463064 
+    ##  POR_R24_C2  POR_R72_C1   POR_R0_H2   POR_R1_C3 POR_R120_C1   POR_R3_H3 
+    ##   0.7507718   0.7557128   0.7910232   0.8204148   0.8242397   0.8863441 
+    ##   POR_R0_C1   POR_R0_H3   POR_R3_C2   POR_R1_C2   POR_R1_H3  POR_R12_H3 
+    ##   0.9436057   1.0619299   1.0964813   1.1494741   1.2062284   1.3180353 
+    ##  POR_R72_C2   POR_R0_C3   POR_R3_C1  POR_R24_H2   POR_R3_H1  POR_R72_H3 
+    ##   1.4015234   1.4077285   1.4626289   1.6148504   1.6569470   1.6651926 
+    ##   POR_R3_H2  POR_R12_C2 POR_R120_C2  POR_R12_H1  POR_R24_H3  POR_R24_C1 
+    ##   1.6931237   1.7537687   1.8108391   1.8299722   1.9486318   2.0596268 
+    ##  POR_R12_H2 POR_R120_H2 POR_R120_H1 
+    ##   2.0768756   2.9911963   3.5047915
 
 ``` r
 # if all are less than 4 we can use the VST transformation
@@ -375,15 +375,17 @@ abline(h = 100, col = "red", lty = 2)
 
     ##   Initial genes: 44130
 
-    ##   Initial samples: 42
+    ##   Initial samples: 39
 
     ## Filtering
 
     ## ----------------------------------------
 
-    ##   Outliers removed: 0
+    ##   Outliers removed: 3
 
-    ##   Low-expression genes removed: 16597
+    ##      POR_R72_H1, POR_R72_H2, POR_R24_H1
+
+    ##   Low-expression genes removed: 16638
 
     ##   pOverA filter: >= 10 counts in >= 7 % of samples
 
@@ -391,9 +393,9 @@ abline(h = 100, col = "red", lty = 2)
 
     ## ----------------------------------------
 
-    ##   Final genes: 27533
+    ##   Final genes: 27492
 
-    ##   Final samples: 42
+    ##   Final samples: 39
 
     ##   Output directory: ../../output_RNA/counts_filt_norm/Pcomp
 
@@ -401,13 +403,13 @@ abline(h = 100, col = "red", lty = 2)
 
     ## ----------------------------------------
 
-    ##   Size factors range: 0.19 - 3.81
+    ##   Size factors range: 0.33 - 3.5
 
     ##   VST appropriate: Yes
 
     ##   PC1 variance: 44 %
 
-    ##   PC2 variance: 13 %
+    ##   PC2 variance: 16 %
 
 ``` r
 sessionInfo()
