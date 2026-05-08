@@ -206,15 +206,15 @@ abline(h = 100, col = "red", lty = 2)
 ## Final summary
 
 ```{r final, echo=FALSE}
-cat("PREPROCESSING SUMMARY:", species, "\n")
+cat("Preprocessing Summary:", species, "\n")
 
-cat("INPUT\n")
+cat("Input\n")
 cat(strrep("-", 40), "\n")
 cat("  Count matrix:", config$count_matrix, "\n")
 cat("  Initial genes:", nrow(counts_raw), "\n")
 cat("  Initial samples:", ncol(counts_raw), "\n\n")
 
-cat("FILTERING\n")
+cat("Filtering\n")
 cat(strrep("-", 40), "\n")
 cat("  Outliers removed:", length(config$outlier_samples), "\n")
 if (length(config$outlier_samples) > 0) {
@@ -224,13 +224,13 @@ cat("  Low-expression genes removed:", sum(!counts_filt_poa), "\n")
 cat("  pOverA filter: >=", global_params$pOverA_counts, "counts in >=", 
     global_params$pOverA_proportion * 100, "% of samples\n\n")
 
-cat("OUTPUT\n")
+cat("Output\n")
 cat(strrep("-", 40), "\n")
 cat("  Final genes:", nrow(vsd_mat), "\n")
 cat("  Final samples:", ncol(vsd_mat), "\n")
 cat("  Output directory:", outdir, "\n\n")
 
-cat("QC NOTES\n")
+cat("QC Notes\n")
 cat(strrep("-", 40), "\n")
 cat("  Size factors range:", round(min(sizeFactors(SF.dds)), 2), "-", round(max(sizeFactors(SF.dds)), 2), "\n")
 cat("  VST appropriate:", ifelse(all(sizeFactors(SF.dds) < 4), "Yes", "No - consider rlog"), "\n")

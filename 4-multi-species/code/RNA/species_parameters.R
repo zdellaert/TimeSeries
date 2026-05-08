@@ -72,11 +72,7 @@ get_params <- function(species) {species_params[[species]]}
 
 print_config <- function(species) {
   config <- get_params(species)
-  
-  cat("\n", strrep("=", 50), "\n", sep = "")
   cat("Species: ", species, "\n", sep = "")
-  cat(strrep("=", 50), "\n\n", sep = "")
-  
   cat("Count matrix: ", config$count_matrix, "\n", sep = "")
   cat("Outliers: ", 
       ifelse(length(config$outlier_samples) == 0, "None", 

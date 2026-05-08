@@ -16,5 +16,5 @@ for (sp in species_list) {
   render("01_preprocessing.Rmd",
          params = list(species = sp),
          output_format = "github_document",
-         output_file = paste0(output_dir,"/01_normalization.md"))
+         output_file = paste0(output_dir,"/01_preprocessing.md"))
 }
