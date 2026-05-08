@@ -82,6 +82,5 @@ print_config <- function(species) {
       ifelse(length(config$outlier_samples) == 0, "None", 
              paste(config$outlier_samples, collapse = ", ")), "\n", sep = "")
   cat("WGCNA power: ", config$soft_power, "\n", sep = "")
-  cat("Mfuzz clusters: ", config$n_clusters, "\n", sep = "")
-  cat("\nOutput: ", file.path("../../output_RNA", species), "\n", sep = "")
+  cat("Mfuzz clusters: ", config$n_clusters, sep = "")
 }
