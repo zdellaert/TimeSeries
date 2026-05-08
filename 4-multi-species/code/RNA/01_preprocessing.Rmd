@@ -3,7 +3,7 @@ title: "RNA-seq Preprocessing and Normalization"
 author: "Zoe Dellaert"
 date: "`r Sys.Date()`"
 params:
-  species: "Pacuta"
+  species: "Pacuta" # default for interactive use
 output:
   github_document:
     toc: true
@@ -13,7 +13,11 @@ output:
 # Preproccessing of bulk RNA-seq data
 
 ```{r setup}
-knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE,fig.width = 10, fig.height = 8)
+# set up file paths so that Rmd outputs can be viewed using github markdown
+knitr::opts_knit$set(base.dir = normalizePath(paste0("../../output_RNA/reports/", params$species, "/")), base.url = "./")
+
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE,fig.width = 10, fig.height = 8,
+                      fig.path = "01_preprocessing_files/figure-gfm/")
 
 #load packages
 library(tidyverse)
@@ -22,10 +26,14 @@ library(pheatmap)
 library(RColorBrewer)
 library(genefilter)
 library(ggnewscale)
+library(BiocParallel)
 
 #load in parameters and functions
 source("species_parameters.R")
 source("utils.R")
+
+# set number of cores to use for parallel DESeq2 processing
+register(MulticoreParam(workers = global_params$n_cores))
 
 sessionInfo() #provides list of loaded packages and version of R
 ```
@@ -43,6 +51,9 @@ print_config(species)
 # set up necessary output directories if they don't exist
 outdir <- file.path("../../output_RNA/counts_filt_norm", species)
 if (!dir.exists(outdir)) dir.create(outdir, recursive = TRUE)
+
+reportdir <- file.path("../../output_RNA/reports", params$species, "01_preprocessing_files/figure-gfm/")
+if (!dir.exists(reportdir)) dir.create(reportdir, recursive = TRUE)
 ```
 
 ## 1. Read in raw count data
@@ -129,7 +140,7 @@ dds <- DESeqDataSetFromMatrix(countData = filtered_counts,
                               colData = meta,
                               design= ~ treatment + time + treatment:time)
 
-dds <- DESeq(dds)
+dds <- DESeq(dds, parallel = TRUE)
 
 # Estimate size factors to determine if we can use VST
 SF.dds <- estimateSizeFactors(dds) 
@@ -181,6 +192,7 @@ save_ggplot(PCA, "PCA")
 PCA_simple <- ggplot(data = pcaData, aes(x=PC1, y=PC2, color=treatment, shape=time)) +
   geom_point(size=4) +
   scale_color_manual(values= c("C"= "#4292C6", "H" = "#D94801"), labels = c("Control", "Heat")) +
+  scale_shape_manual(values = c(16, 17, 15, 18, 0, 1, 2)) +
   xlab(paste0("PC1: ",percentVar[1],"% variance")) +
   ylab(paste0("PC2: ",percentVar[2],"% variance")) + 
   labs(color = "Treatment", shape = "Time (h)") +

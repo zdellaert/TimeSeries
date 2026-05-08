@@ -2,7 +2,7 @@
 setwd(dirname(rstudioapi::getSourceEditorContext()$path))
 library(rmarkdown)
 
-species_list <- c("Pacuta")#, "Mcap", "Pcomp")
+species_list <- c("Pacuta", "Mcap", "Pcomp")
 
 # Create output directories
 for (sp in species_list) {
@@ -16,5 +16,5 @@ for (sp in species_list) {
   render("01_preprocessing.Rmd",
          params = list(species = sp),
          output_format = "github_document",
-         output_file = paste0(output_dir,"/01_preprocessing.md"))
+         output_dir = output_dir)
 }

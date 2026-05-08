@@ -33,19 +33,197 @@ Zoe Dellaert
 # Preproccessing of bulk RNA-seq data
 
 ``` r
-knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE,fig.width = 10, fig.height = 8)
+knitr::opts_knit$set(base.dir = normalizePath(paste0("../../output_RNA/reports/", params$species, "/")), base.url = "./")
+
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE,fig.width = 10, fig.height = 8,
+                      fig.path = "01_preprocessing_files/figure-gfm/")
 
 #load packages
 library(tidyverse)
+```
+
+    ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+    ## ✔ dplyr     1.1.4     ✔ readr     2.1.6
+    ## ✔ forcats   1.0.0     ✔ stringr   1.6.0
+    ## ✔ ggplot2   4.0.1     ✔ tibble    3.3.0
+    ## ✔ lubridate 1.9.4     ✔ tidyr     1.3.1
+    ## ✔ purrr     1.2.1     
+    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+    ## ✖ dplyr::filter() masks stats::filter()
+    ## ✖ dplyr::lag()    masks stats::lag()
+    ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+
+``` r
 library(DESeq2)
+```
+
+    ## Loading required package: S4Vectors
+    ## Loading required package: stats4
+    ## Loading required package: BiocGenerics
+    ## Loading required package: generics
+    ## 
+    ## Attaching package: 'generics'
+    ## 
+    ## The following object is masked from 'package:lubridate':
+    ## 
+    ##     as.difftime
+    ## 
+    ## The following object is masked from 'package:dplyr':
+    ## 
+    ##     explain
+    ## 
+    ## The following objects are masked from 'package:base':
+    ## 
+    ##     as.difftime, as.factor, as.ordered, intersect, is.element, setdiff,
+    ##     setequal, union
+    ## 
+    ## 
+    ## Attaching package: 'BiocGenerics'
+    ## 
+    ## The following object is masked from 'package:dplyr':
+    ## 
+    ##     combine
+    ## 
+    ## The following objects are masked from 'package:stats':
+    ## 
+    ##     IQR, mad, sd, var, xtabs
+    ## 
+    ## The following objects are masked from 'package:base':
+    ## 
+    ##     anyDuplicated, aperm, append, as.data.frame, basename, cbind,
+    ##     colnames, dirname, do.call, duplicated, eval, evalq, Filter, Find,
+    ##     get, grep, grepl, is.unsorted, lapply, Map, mapply, match, mget,
+    ##     order, paste, pmax, pmax.int, pmin, pmin.int, Position, rank,
+    ##     rbind, Reduce, rownames, sapply, saveRDS, table, tapply, unique,
+    ##     unsplit, which.max, which.min
+    ## 
+    ## 
+    ## Attaching package: 'S4Vectors'
+    ## 
+    ## The following objects are masked from 'package:lubridate':
+    ## 
+    ##     second, second<-
+    ## 
+    ## The following objects are masked from 'package:dplyr':
+    ## 
+    ##     first, rename
+    ## 
+    ## The following object is masked from 'package:tidyr':
+    ## 
+    ##     expand
+    ## 
+    ## The following object is masked from 'package:utils':
+    ## 
+    ##     findMatches
+    ## 
+    ## The following objects are masked from 'package:base':
+    ## 
+    ##     expand.grid, I, unname
+    ## 
+    ## Loading required package: IRanges
+    ## 
+    ## Attaching package: 'IRanges'
+    ## 
+    ## The following object is masked from 'package:lubridate':
+    ## 
+    ##     %within%
+    ## 
+    ## The following objects are masked from 'package:dplyr':
+    ## 
+    ##     collapse, desc, slice
+    ## 
+    ## The following object is masked from 'package:purrr':
+    ## 
+    ##     reduce
+    ## 
+    ## Loading required package: GenomicRanges
+    ## Loading required package: Seqinfo
+    ## Loading required package: SummarizedExperiment
+    ## Loading required package: MatrixGenerics
+    ## Loading required package: matrixStats
+    ## 
+    ## Attaching package: 'matrixStats'
+    ## 
+    ## The following object is masked from 'package:dplyr':
+    ## 
+    ##     count
+    ## 
+    ## 
+    ## Attaching package: 'MatrixGenerics'
+    ## 
+    ## The following objects are masked from 'package:matrixStats':
+    ## 
+    ##     colAlls, colAnyNAs, colAnys, colAvgsPerRowSet, colCollapse,
+    ##     colCounts, colCummaxs, colCummins, colCumprods, colCumsums,
+    ##     colDiffs, colIQRDiffs, colIQRs, colLogSumExps, colMadDiffs,
+    ##     colMads, colMaxs, colMeans2, colMedians, colMins, colOrderStats,
+    ##     colProds, colQuantiles, colRanges, colRanks, colSdDiffs, colSds,
+    ##     colSums2, colTabulates, colVarDiffs, colVars, colWeightedMads,
+    ##     colWeightedMeans, colWeightedMedians, colWeightedSds,
+    ##     colWeightedVars, rowAlls, rowAnyNAs, rowAnys, rowAvgsPerColSet,
+    ##     rowCollapse, rowCounts, rowCummaxs, rowCummins, rowCumprods,
+    ##     rowCumsums, rowDiffs, rowIQRDiffs, rowIQRs, rowLogSumExps,
+    ##     rowMadDiffs, rowMads, rowMaxs, rowMeans2, rowMedians, rowMins,
+    ##     rowOrderStats, rowProds, rowQuantiles, rowRanges, rowRanks,
+    ##     rowSdDiffs, rowSds, rowSums2, rowTabulates, rowVarDiffs, rowVars,
+    ##     rowWeightedMads, rowWeightedMeans, rowWeightedMedians,
+    ##     rowWeightedSds, rowWeightedVars
+    ## 
+    ## Loading required package: Biobase
+    ## Welcome to Bioconductor
+    ## 
+    ##     Vignettes contain introductory material; view with
+    ##     'browseVignettes()'. To cite Bioconductor, see
+    ##     'citation("Biobase")', and for packages 'citation("pkgname")'.
+    ## 
+    ## 
+    ## Attaching package: 'Biobase'
+    ## 
+    ## The following object is masked from 'package:MatrixGenerics':
+    ## 
+    ##     rowMedians
+    ## 
+    ## The following objects are masked from 'package:matrixStats':
+    ## 
+    ##     anyMissing, rowMedians
+
+``` r
 library(pheatmap)
 library(RColorBrewer)
 library(genefilter)
+```
+
+    ## Registered S3 methods overwritten by 'GenomeInfoDb':
+    ##   method                from   
+    ##   as.data.frame.Seqinfo Seqinfo
+    ##   merge.Seqinfo         Seqinfo
+    ##   summary.Seqinfo       Seqinfo
+    ##   update.Seqinfo        Seqinfo
+    ## 
+    ## Attaching package: 'genefilter'
+    ## 
+    ## The following objects are masked from 'package:MatrixGenerics':
+    ## 
+    ##     rowSds, rowVars
+    ## 
+    ## The following objects are masked from 'package:matrixStats':
+    ## 
+    ##     rowSds, rowVars
+    ## 
+    ## The following object is masked from 'package:readr':
+    ## 
+    ##     spec
+
+``` r
 library(ggnewscale)
+library(BiocParallel)
 
 #load in parameters and functions
 source("species_parameters.R")
 source("utils.R")
+
+# set number of cores to use for parallel DESeq2 processing
+register(MulticoreParam(workers = global_params$n_cores))
 
 sessionInfo() #provides list of loaded packages and version of R
 ```
@@ -59,40 +237,59 @@ sessionInfo() #provides list of loaded packages and version of R
     ## LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.26.so;  LAPACK version 3.12.0
     ## 
     ## locale:
-    ##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C               LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
-    ##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8    LC_PAPER=en_US.UTF-8       LC_NAME=C                 
-    ##  [9] LC_ADDRESS=C               LC_TELEPHONE=C             LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+    ##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+    ##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+    ##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+    ##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+    ##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+    ## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
     ## 
     ## time zone: Etc/UTC
     ## tzcode source: system (glibc)
     ## 
     ## attached base packages:
-    ## [1] stats4    stats     graphics  grDevices utils     datasets  methods   base     
+    ## [1] stats4    stats     graphics  grDevices utils     datasets  methods  
+    ## [8] base     
     ## 
     ## other attached packages:
-    ##  [1] ggnewscale_0.5.2            genefilter_1.90.0           RColorBrewer_1.1-3          pheatmap_1.0.13            
-    ##  [5] DESeq2_1.50.2               SummarizedExperiment_1.40.0 Biobase_2.70.0              MatrixGenerics_1.22.0      
-    ##  [9] matrixStats_1.5.0           GenomicRanges_1.62.0        Seqinfo_1.0.0               IRanges_2.44.0             
-    ## [13] S4Vectors_0.48.0            BiocGenerics_0.56.0         generics_0.1.4              lubridate_1.9.4            
-    ## [17] forcats_1.0.0               stringr_1.6.0               dplyr_1.1.4                 purrr_1.2.1                
-    ## [21] readr_2.1.6                 tidyr_1.3.1                 tibble_3.3.0                ggplot2_4.0.1              
-    ## [25] tidyverse_2.0.0             rmarkdown_2.30             
+    ##  [1] BiocParallel_1.44.0         ggnewscale_0.5.2           
+    ##  [3] genefilter_1.90.0           RColorBrewer_1.1-3         
+    ##  [5] pheatmap_1.0.13             DESeq2_1.50.2              
+    ##  [7] SummarizedExperiment_1.40.0 Biobase_2.70.0             
+    ##  [9] MatrixGenerics_1.22.0       matrixStats_1.5.0          
+    ## [11] GenomicRanges_1.62.0        Seqinfo_1.0.0              
+    ## [13] IRanges_2.44.0              S4Vectors_0.48.0           
+    ## [15] BiocGenerics_0.56.0         generics_0.1.4             
+    ## [17] lubridate_1.9.4             forcats_1.0.0              
+    ## [19] stringr_1.6.0               dplyr_1.1.4                
+    ## [21] purrr_1.2.1                 readr_2.1.6                
+    ## [23] tidyr_1.3.1                 tibble_3.3.0               
+    ## [25] ggplot2_4.0.1               tidyverse_2.0.0            
+    ## [27] rmarkdown_2.30             
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] tidyselect_1.2.1        farver_2.1.2            blob_1.2.4              Biostrings_2.78.0       S7_0.2.1               
-    ##  [6] fastmap_1.2.0           XML_3.99-0.18           digest_0.6.39           timechange_0.3.0        lifecycle_1.0.5        
-    ## [11] survival_3.8-3          KEGGREST_1.50.0         RSQLite_2.4.5           magrittr_2.0.4          compiler_4.5.1         
-    ## [16] rlang_1.1.7             tools_4.5.1             yaml_2.3.12             knitr_1.50              labeling_0.4.3         
-    ## [21] S4Arrays_1.10.0         bit_4.6.0               DelayedArray_0.36.0     rsconnect_1.4.2         abind_1.4-8            
-    ## [26] BiocParallel_1.44.0     withr_3.0.2             grid_4.5.1              xtable_1.8-4            scales_1.4.0           
-    ## [31] dichromat_2.0-0.1       cli_3.6.5               crayon_1.5.3            ragg_1.5.0              rstudioapi_0.17.1      
-    ## [36] httr_1.4.7              tzdb_0.5.0              DBI_1.2.3               cachem_1.1.0            splines_4.5.1          
-    ## [41] parallel_4.5.1          AnnotationDbi_1.72.0    XVector_0.50.0          vctrs_0.7.0             Matrix_1.6-4           
-    ## [46] jsonlite_2.0.0          hms_1.1.4               bit64_4.6.0-1           systemfonts_1.3.1       locfit_1.5-9.12        
-    ## [51] annotate_1.86.1         glue_1.8.0              codetools_0.2-20        stringi_1.8.7           gtable_0.3.6           
-    ## [56] GenomeInfoDb_1.44.3     UCSC.utils_1.4.0        pillar_1.11.1           htmltools_0.5.9         GenomeInfoDbData_1.2.14
-    ## [61] R6_2.6.1                textshaping_1.0.4       evaluate_1.0.5          lattice_0.22-7          png_0.1-8              
-    ## [66] memoise_2.0.1           Rcpp_1.1.1              SparseArray_1.10.2      xfun_0.56               pkgconfig_2.0.3
+    ##  [1] tidyselect_1.2.1        farver_2.1.2            blob_1.2.4             
+    ##  [4] Biostrings_2.78.0       S7_0.2.1                fastmap_1.2.0          
+    ##  [7] XML_3.99-0.18           digest_0.6.39           timechange_0.3.0       
+    ## [10] lifecycle_1.0.5         survival_3.8-3          KEGGREST_1.50.0        
+    ## [13] RSQLite_2.4.5           magrittr_2.0.4          compiler_4.5.1         
+    ## [16] rlang_1.1.7             tools_4.5.1             yaml_2.3.12            
+    ## [19] knitr_1.50              S4Arrays_1.10.0         bit_4.6.0              
+    ## [22] DelayedArray_0.36.0     abind_1.4-8             withr_3.0.2            
+    ## [25] grid_4.5.1              xtable_1.8-4            scales_1.4.0           
+    ## [28] dichromat_2.0-0.1       cli_3.6.5               crayon_1.5.3           
+    ## [31] rstudioapi_0.17.1       httr_1.4.7              tzdb_0.5.0             
+    ## [34] DBI_1.2.3               cachem_1.1.0            splines_4.5.1          
+    ## [37] parallel_4.5.1          AnnotationDbi_1.72.0    XVector_0.50.0         
+    ## [40] vctrs_0.7.0             Matrix_1.6-4            jsonlite_2.0.0         
+    ## [43] hms_1.1.4               bit64_4.6.0-1           locfit_1.5-9.12        
+    ## [46] annotate_1.86.1         glue_1.8.0              codetools_0.2-20       
+    ## [49] stringi_1.8.7           gtable_0.3.6            GenomeInfoDb_1.44.3    
+    ## [52] UCSC.utils_1.4.0        pillar_1.11.1           htmltools_0.5.9        
+    ## [55] GenomeInfoDbData_1.2.14 R6_2.6.1                evaluate_1.0.5         
+    ## [58] lattice_0.22-7          png_0.1-8               memoise_2.0.1          
+    ## [61] Rcpp_1.1.1              SparseArray_1.10.2      xfun_0.56              
+    ## [64] pkgconfig_2.0.3
 
 ## 0. Setup species-specific parameters
 
@@ -117,6 +314,9 @@ print_config(species)
 # set up necessary output directories if they don't exist
 outdir <- file.path("../../output_RNA/counts_filt_norm", species)
 if (!dir.exists(outdir)) dir.create(outdir, recursive = TRUE)
+
+reportdir <- file.path("../../output_RNA/reports", params$species, "01_preprocessing_files/figure-gfm/")
+if (!dir.exists(reportdir)) dir.create(reportdir, recursive = TRUE)
 ```
 
 ## 1. Read in raw count data
@@ -224,23 +424,27 @@ dds <- DESeqDataSetFromMatrix(countData = filtered_counts,
                               colData = meta,
                               design= ~ treatment + time + treatment:time)
 
-dds <- DESeq(dds)
+dds <- DESeq(dds, parallel = TRUE)
 
 # Estimate size factors to determine if we can use VST
 SF.dds <- estimateSizeFactors(dds) 
 print(sort(sizeFactors(SF.dds))) #View size factors
 ```
 
-    ##   POC_R3_H1   POC_R3_H3  POC_R12_H3  POC_R72_H3  POC_R24_C2  POC_R12_C1 POC_R120_C2  POC_R72_H2 POC_R120_H1  POC_R24_H2 
-    ##   0.6441244   0.6671524   0.7792660   0.7824193   0.8702174   0.8762806   0.8836445   0.8865256   0.8877139   0.8999134 
-    ##  POC_R12_H1 POC_R120_H3   POC_R0_C2   POC_R3_C2  POC_R24_H3  POC_R72_C1   POC_R0_H2  POC_R72_C3   POC_R1_H3 POC_R120_C3 
-    ##   0.9102299   0.9313091   0.9397061   0.9561270   0.9638295   0.9669207   0.9679379   0.9700146   0.9768898   0.9880893 
-    ##   POC_R3_C1   POC_R0_H1  POC_R24_H1  POC_R12_H2   POC_R0_C3   POC_R3_H2   POC_R1_C1   POC_R0_C1   POC_R1_C3   POC_R1_H2 
-    ##   0.9923358   0.9967210   0.9971496   0.9996347   1.0037728   1.0328153   1.0634877   1.0660151   1.0982417   1.1232481 
-    ##  POC_R24_C1  POC_R12_C2   POC_R0_H3   POC_R3_C3   POC_R1_H1  POC_R72_H1 POC_R120_H2 POC_R120_C1  POC_R24_C3  POC_R72_C2 
-    ##   1.1446236   1.1544485   1.1556707   1.1572729   1.1864185   1.2201376   1.2278940   1.2534718   1.2568407   1.3217117 
-    ##   POC_R1_C2  POC_R12_C3 
-    ##   1.3406688   1.4840731
+    ##   POC_R3_H1   POC_R3_H3  POC_R12_H3  POC_R72_H3  POC_R24_C2  POC_R12_C1 
+    ##   0.6441244   0.6671524   0.7792660   0.7824193   0.8702174   0.8762806 
+    ## POC_R120_C2  POC_R72_H2 POC_R120_H1  POC_R24_H2  POC_R12_H1 POC_R120_H3 
+    ##   0.8836445   0.8865256   0.8877139   0.8999134   0.9102299   0.9313091 
+    ##   POC_R0_C2   POC_R3_C2  POC_R24_H3  POC_R72_C1   POC_R0_H2  POC_R72_C3 
+    ##   0.9397061   0.9561270   0.9638295   0.9669207   0.9679379   0.9700146 
+    ##   POC_R1_H3 POC_R120_C3   POC_R3_C1   POC_R0_H1  POC_R24_H1  POC_R12_H2 
+    ##   0.9768898   0.9880893   0.9923358   0.9967210   0.9971496   0.9996347 
+    ##   POC_R0_C3   POC_R3_H2   POC_R1_C1   POC_R0_C1   POC_R1_C3   POC_R1_H2 
+    ##   1.0037728   1.0328153   1.0634877   1.0660151   1.0982417   1.1232481 
+    ##  POC_R24_C1  POC_R12_C2   POC_R0_H3   POC_R3_C3   POC_R1_H1  POC_R72_H1 
+    ##   1.1446236   1.1544485   1.1556707   1.1572729   1.1864185   1.2201376 
+    ## POC_R120_H2 POC_R120_C1  POC_R24_C3  POC_R72_C2   POC_R1_C2  POC_R12_C3 
+    ##   1.2278940   1.2534718   1.2568407   1.3217117   1.3406688   1.4840731
 
 ``` r
 # if all are less than 4 we can use the VST transformation
@@ -290,7 +494,7 @@ PCA <- ggplot() +
 print(PCA)
 ```
 
-![](/project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/reports/Pacuta/01_preprocessing_files/figure-gfm/pca-1.png)<!-- -->
+![](./01_preprocessing_files/figure-gfm/pca-1.png)<!-- -->
 
 ``` r
 save_ggplot(PCA, "PCA")
@@ -298,6 +502,7 @@ save_ggplot(PCA, "PCA")
 PCA_simple <- ggplot(data = pcaData, aes(x=PC1, y=PC2, color=treatment, shape=time)) +
   geom_point(size=4) +
   scale_color_manual(values= c("C"= "#4292C6", "H" = "#D94801"), labels = c("Control", "Heat")) +
+  scale_shape_manual(values = c(16, 17, 15, 18, 0, 1, 2)) +
   xlab(paste0("PC1: ",percentVar[1],"% variance")) +
   ylab(paste0("PC2: ",percentVar[2],"% variance")) + 
   labs(color = "Treatment", shape = "Time (h)") +
@@ -306,7 +511,7 @@ PCA_simple <- ggplot(data = pcaData, aes(x=PC1, y=PC2, color=treatment, shape=ti
 print(PCA_simple)
 ```
 
-![](/project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/reports/Pacuta/01_preprocessing_files/figure-gfm/pca-2.png)<!-- -->
+![](./01_preprocessing_files/figure-gfm/pca-2.png)<!-- -->
 
 ``` r
 save_ggplot(PCA_simple, "PCA_simple", width = 8, height = 6)
@@ -323,7 +528,7 @@ plot(sampleTree,
 abline(h = 100, col = "red", lty = 2)
 ```
 
-![](/project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/reports/Pacuta/01_preprocessing_files/figure-gfm/cluster-1.png)<!-- -->
+![](./01_preprocessing_files/figure-gfm/cluster-1.png)<!-- -->
 
 ### Note: If outliers are identified, add them to species_parameters.R for this species.
 
@@ -386,37 +591,57 @@ sessionInfo()
     ## LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.26.so;  LAPACK version 3.12.0
     ## 
     ## locale:
-    ##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C               LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
-    ##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8    LC_PAPER=en_US.UTF-8       LC_NAME=C                 
-    ##  [9] LC_ADDRESS=C               LC_TELEPHONE=C             LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+    ##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+    ##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+    ##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+    ##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+    ##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+    ## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
     ## 
     ## time zone: Etc/UTC
     ## tzcode source: system (glibc)
     ## 
     ## attached base packages:
-    ## [1] stats4    stats     graphics  grDevices utils     datasets  methods   base     
+    ## [1] stats4    stats     graphics  grDevices utils     datasets  methods  
+    ## [8] base     
     ## 
     ## other attached packages:
-    ##  [1] ggnewscale_0.5.2            genefilter_1.90.0           RColorBrewer_1.1-3          pheatmap_1.0.13            
-    ##  [5] DESeq2_1.50.2               SummarizedExperiment_1.40.0 Biobase_2.70.0              MatrixGenerics_1.22.0      
-    ##  [9] matrixStats_1.5.0           GenomicRanges_1.62.0        Seqinfo_1.0.0               IRanges_2.44.0             
-    ## [13] S4Vectors_0.48.0            BiocGenerics_0.56.0         generics_0.1.4              lubridate_1.9.4            
-    ## [17] forcats_1.0.0               stringr_1.6.0               dplyr_1.1.4                 purrr_1.2.1                
-    ## [21] readr_2.1.6                 tidyr_1.3.1                 tibble_3.3.0                ggplot2_4.0.1              
-    ## [25] tidyverse_2.0.0             rmarkdown_2.30             
+    ##  [1] BiocParallel_1.44.0         ggnewscale_0.5.2           
+    ##  [3] genefilter_1.90.0           RColorBrewer_1.1-3         
+    ##  [5] pheatmap_1.0.13             DESeq2_1.50.2              
+    ##  [7] SummarizedExperiment_1.40.0 Biobase_2.70.0             
+    ##  [9] MatrixGenerics_1.22.0       matrixStats_1.5.0          
+    ## [11] GenomicRanges_1.62.0        Seqinfo_1.0.0              
+    ## [13] IRanges_2.44.0              S4Vectors_0.48.0           
+    ## [15] BiocGenerics_0.56.0         generics_0.1.4             
+    ## [17] lubridate_1.9.4             forcats_1.0.0              
+    ## [19] stringr_1.6.0               dplyr_1.1.4                
+    ## [21] purrr_1.2.1                 readr_2.1.6                
+    ## [23] tidyr_1.3.1                 tibble_3.3.0               
+    ## [25] ggplot2_4.0.1               tidyverse_2.0.0            
+    ## [27] rmarkdown_2.30             
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] tidyselect_1.2.1        farver_2.1.2            blob_1.2.4              Biostrings_2.78.0       S7_0.2.1               
-    ##  [6] fastmap_1.2.0           XML_3.99-0.18           digest_0.6.39           timechange_0.3.0        lifecycle_1.0.5        
-    ## [11] survival_3.8-3          KEGGREST_1.50.0         RSQLite_2.4.5           magrittr_2.0.4          compiler_4.5.1         
-    ## [16] rlang_1.1.7             tools_4.5.1             yaml_2.3.12             knitr_1.50              labeling_0.4.3         
-    ## [21] S4Arrays_1.10.0         bit_4.6.0               DelayedArray_0.36.0     rsconnect_1.4.2         abind_1.4-8            
-    ## [26] BiocParallel_1.44.0     withr_3.0.2             grid_4.5.1              xtable_1.8-4            scales_1.4.0           
-    ## [31] dichromat_2.0-0.1       cli_3.6.5               crayon_1.5.3            ragg_1.5.0              rstudioapi_0.17.1      
-    ## [36] httr_1.4.7              tzdb_0.5.0              DBI_1.2.3               cachem_1.1.0            splines_4.5.1          
-    ## [41] parallel_4.5.1          AnnotationDbi_1.72.0    XVector_0.50.0          vctrs_0.7.0             Matrix_1.6-4           
-    ## [46] jsonlite_2.0.0          hms_1.1.4               bit64_4.6.0-1           systemfonts_1.3.1       locfit_1.5-9.12        
-    ## [51] annotate_1.86.1         glue_1.8.0              codetools_0.2-20        stringi_1.8.7           gtable_0.3.6           
-    ## [56] GenomeInfoDb_1.44.3     UCSC.utils_1.4.0        pillar_1.11.1           htmltools_0.5.9         GenomeInfoDbData_1.2.14
-    ## [61] R6_2.6.1                textshaping_1.0.4       evaluate_1.0.5          lattice_0.22-7          png_0.1-8              
-    ## [66] memoise_2.0.1           Rcpp_1.1.1              SparseArray_1.10.2      xfun_0.56               pkgconfig_2.0.3
+    ##  [1] tidyselect_1.2.1        farver_2.1.2            blob_1.2.4             
+    ##  [4] Biostrings_2.78.0       S7_0.2.1                fastmap_1.2.0          
+    ##  [7] XML_3.99-0.18           digest_0.6.39           timechange_0.3.0       
+    ## [10] lifecycle_1.0.5         survival_3.8-3          KEGGREST_1.50.0        
+    ## [13] RSQLite_2.4.5           magrittr_2.0.4          compiler_4.5.1         
+    ## [16] rlang_1.1.7             tools_4.5.1             yaml_2.3.12            
+    ## [19] knitr_1.50              labeling_0.4.3          S4Arrays_1.10.0        
+    ## [22] bit_4.6.0               DelayedArray_0.36.0     abind_1.4-8            
+    ## [25] withr_3.0.2             grid_4.5.1              xtable_1.8-4           
+    ## [28] scales_1.4.0            dichromat_2.0-0.1       cli_3.6.5              
+    ## [31] crayon_1.5.3            ragg_1.5.0              rstudioapi_0.17.1      
+    ## [34] httr_1.4.7              tzdb_0.5.0              DBI_1.2.3              
+    ## [37] cachem_1.1.0            splines_4.5.1           parallel_4.5.1         
+    ## [40] AnnotationDbi_1.72.0    XVector_0.50.0          vctrs_0.7.0            
+    ## [43] Matrix_1.6-4            jsonlite_2.0.0          hms_1.1.4              
+    ## [46] bit64_4.6.0-1           systemfonts_1.3.1       locfit_1.5-9.12        
+    ## [49] annotate_1.86.1         glue_1.8.0              codetools_0.2-20       
+    ## [52] stringi_1.8.7           gtable_0.3.6            GenomeInfoDb_1.44.3    
+    ## [55] UCSC.utils_1.4.0        pillar_1.11.1           htmltools_0.5.9        
+    ## [58] GenomeInfoDbData_1.2.14 R6_2.6.1                textshaping_1.0.4      
+    ## [61] evaluate_1.0.5          lattice_0.22-7          png_0.1-8              
+    ## [64] memoise_2.0.1           Rcpp_1.1.1              SparseArray_1.10.2     
+    ## [67] xfun_0.56               pkgconfig_2.0.3

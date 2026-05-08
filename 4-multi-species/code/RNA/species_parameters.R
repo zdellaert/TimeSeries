@@ -8,7 +8,7 @@ annot_dir <- "../../../../HI_genome_annotations/annotation"
 
 global_params <- list(
     seed = 42, 
-    n_proc = 16,
+    n_cores = 8,
     padj_threshold = 0.05,
     
     # pOverA filtering
