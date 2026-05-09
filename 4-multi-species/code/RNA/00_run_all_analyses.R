@@ -12,14 +12,14 @@ for (sp in species_list) {
 for (sp in species_list) {
   output_dir <- normalizePath(paste0("../../output_RNA/reports/", sp))
   
-# Run each analysis script for this species
-  # render("01_preprocessing.Rmd",
-  #        params = list(species = sp),
-  #        output_format = "github_document",
-  #        output_dir = output_dir)
+#Run each analysis script for this species
+  render("01_preprocessing.Rmd",
+       params = list(species = sp),
+       output_format = "github_document",
+       output_dir = output_dir)
   
   render("02_ImpulseDE.Rmd",
-         params = list(species = sp),
+         params = list(species = sp, run_ImpulseDE2 = FALSE),
          output_format = "github_document",
          output_dir = output_dir)
 }

@@ -1,27 +1,58 @@
 ImpulseDE2 Temporal Analysis
 ================
 Zoe Dellaert
-2026-05-08
+2026-05-09
 
-- [ImpulseDE2 Temporal Analysis](#impulsede2-temporal-analysis)
-  - [Background info](#background-info)
-  - [0. Setup species-specific
-    parameters](#0-setup-species-specific-parameters)
-  - [1. Read in raw count data, vst-transformed counts, and
-    metadata](#1-read-in-raw-count-data-vst-transformed-counts-and-metadata)
-  - [2. Metadata formatting](#2-metadata-formatting)
-  - [3. Then, run ImpulseDE2](#3-then-run-impulsede2)
+- [Background info](#background-info)
+  - [ImpulseDE2](#impulsede2)
+  - [Mfuzz: clustering of temporal
+    trajectories](#mfuzz-clustering-of-temporal-trajectories)
+- [Setup](#setup)
+  - [Load packages and functions](#load-packages-and-functions)
+  - [Species-specific parameters](#species-specific-parameters)
+  - [Load data](#load-data)
+- [ImpulseDE2 Analysis](#impulsede2-analysis)
+  - [1. Metadata formatting](#1-metadata-formatting)
+  - [1. Run ImpulseDE2](#1-run-impulsede2)
+  - [3. Extract ImpulseDE2 results](#3-extract-impulsede2-results)
+    - [All genes](#all-genes)
+    - [Significant genes](#significant-genes)
+    - [Quick summary](#quick-summary)
+  - [4. Visualize ImpulseDE2 Results](#4-visualize-impulsede2-results)
+    - [Heatmap of significant genes](#heatmap-of-significant-genes)
+    - [Top gene trajectories](#top-gene-trajectories)
+- [Mfuzz: Cluster ImpulseDE2-significant genes by
+  trajectory](#mfuzz-cluster-impulsede2-significant-genes-by-trajectory)
+  - [1. Preparing expression data](#1-preparing-expression-data)
+  - [2. Determine Mfuzz parameters](#2-determine-mfuzz-parameters)
+  - [3. Run MFuzz](#3-run-mfuzz)
+  - [4. Characterize Clusters](#4-characterize-clusters)
+    - [Visualize all significant genes in their
+      clusters](#visualize-all-significant-genes-in-their-clusters)
+- [Exploring genes of interest](#exploring-genes-of-interest)
+  - [Manually-curated heat stress genes by
+    cluster](#manually-curated-heat-stress-genes-by-cluster)
 
-# ImpulseDE2 Temporal Analysis
+# Background info
 
-## Background info
+## ImpulseDE2
 
-Based on [this
-paper](https://academic.oup.com/bib/article/20/1/288/4364840#130283262),
-this is the best package to use other than comparing each time point
-against each other individually.
+- Based on [this
+  paper](https://academic.oup.com/bib/article/20/1/288/4364840#130283262),
+  this is the best package to use other than comparing each time point
+  against each other individually.
+- Repo here: <https://github.com/YosefLab/ImpulseDE2>
+- Tutorial here:
+  <http://bioconductor.statistik.tu-dortmund.de/packages/3.11/bioc/vignettes/ImpulseDE2/inst/doc/ImpulseDE2_Tutorial.html>
+  , I followed closely with the section “Case-control differential
+  expression analysis”
+- Read the ImpulseDE2 paper
+  [here](https://academic.oup.com/nar/article/46/20/e119/5068248)
 
-Repo here: <https://github.com/YosefLab/ImpulseDE2>
+*David S Fischer, Fabian J Theis, Nir Yosef, Impulse model-based
+differential expression analysis of time course sequencing data, Nucleic
+Acids Research, Volume 46, Issue 20, 16 November 2018, Page e119,
+<https://doi.org/10.1093/nar/gky675>*
 
 To install the package
 
@@ -30,18 +61,24 @@ library(devtools)
 install_github("YosefLab/ImpulseDE2")
 ```
 
-Tutorial here:
-<http://bioconductor.statistik.tu-dortmund.de/packages/3.11/bioc/vignettes/ImpulseDE2/inst/doc/ImpulseDE2_Tutorial.html>
-, I followed closely with the section “Case-control differential
-expression analysis”
+## Mfuzz: clustering of temporal trajectories
 
-Read the ImpulseDE2 paper
-[here](https://academic.oup.com/nar/article/46/20/e119/5068248)
+For this we will use the package
+[Mfuzz](https://bioconductor.org/packages/release/bioc/html/Mfuzz.html),
+[vignette
+here](https://bioconductor.org/packages/release/bioc/vignettes/Mfuzz/inst/doc/Mfuzz.pdf).
 
-David S Fischer, Fabian J Theis, Nir Yosef, Impulse model-based
-differential expression analysis of time course sequencing data, Nucleic
-Acids Research, Volume 46, Issue 20, 16 November 2018, Page e119,
-<https://doi.org/10.1093/nar/gky675>
+To install the package
+
+``` r
+BiocManager::install("Mfuzz")
+```
+
+------------------------------------------------------------------------
+
+# Setup
+
+## Load packages and functions
 
 ``` r
 # set up file paths so that Rmd outputs can be viewed using github markdown
@@ -100,39 +137,42 @@ sessionInfo() #provides list of loaded packages and version of R
     ##  [3] S7_0.2.1                    fastmap_1.2.0              
     ##  [5] digest_0.6.39               timechange_0.3.0           
     ##  [7] lifecycle_1.0.5             cluster_2.1.8.1            
-    ##  [9] magrittr_2.0.4              compiler_4.5.1             
-    ## [11] tkWidgets_1.86.0            rlang_1.1.7                
-    ## [13] tools_4.5.1                 yaml_2.3.12                
-    ## [15] knitr_1.50                  S4Arrays_1.10.0            
-    ## [17] DelayedArray_0.36.0         RColorBrewer_1.1-3         
-    ## [19] abind_1.4-8                 BiocParallel_1.44.0        
-    ## [21] withr_3.0.2                 stats4_4.5.1               
-    ## [23] colorspace_2.1-2            scales_1.4.0               
-    ## [25] iterators_1.0.14            dichromat_2.0-0.1          
-    ## [27] SummarizedExperiment_1.40.0 cli_3.6.5                  
-    ## [29] crayon_1.5.3                rstudioapi_0.17.1          
-    ## [31] tzdb_0.5.0                  rjson_0.2.23               
-    ## [33] proxy_0.4-27                parallel_4.5.1             
-    ## [35] XVector_0.50.0              matrixStats_1.5.0          
-    ## [37] vctrs_0.7.0                 Matrix_1.6-4               
-    ## [39] IRanges_2.44.0              GetoptLong_1.1.0           
-    ## [41] hms_1.1.4                   S4Vectors_0.48.0           
-    ## [43] clue_0.3-66                 locfit_1.5-9.12            
-    ## [45] foreach_1.5.2               glue_1.8.0                 
-    ## [47] codetools_0.2-20            cowplot_1.2.0              
-    ## [49] stringi_1.8.7               shape_1.4.6.1              
-    ## [51] gtable_0.3.6                GenomicRanges_1.62.0       
-    ## [53] pillar_1.11.1               htmltools_0.5.9            
-    ## [55] Seqinfo_1.0.0               circlize_0.4.17            
-    ## [57] R6_2.6.1                    doParallel_1.0.17          
-    ## [59] evaluate_1.0.5              lattice_0.22-7             
-    ## [61] png_0.1-8                   class_7.3-23               
-    ## [63] Rcpp_1.1.1                  SparseArray_1.10.2         
-    ## [65] DESeq2_1.50.2               xfun_0.56                  
-    ## [67] MatrixGenerics_1.22.0       pkgconfig_2.0.3            
-    ## [69] GlobalOptions_0.1.3
+    ##  [9] Cairo_1.7-0                 magrittr_2.0.4             
+    ## [11] compiler_4.5.1              tkWidgets_1.86.0           
+    ## [13] rlang_1.1.7                 tools_4.5.1                
+    ## [15] yaml_2.3.12                 knitr_1.50                 
+    ## [17] labeling_0.4.3              S4Arrays_1.10.0            
+    ## [19] bit_4.6.0                   DelayedArray_0.36.0        
+    ## [21] RColorBrewer_1.1-3          abind_1.4-8                
+    ## [23] BiocParallel_1.44.0         withr_3.0.2                
+    ## [25] stats4_4.5.1                colorspace_2.1-2           
+    ## [27] scales_1.4.0                iterators_1.0.14           
+    ## [29] dichromat_2.0-0.1           SummarizedExperiment_1.40.0
+    ## [31] cli_3.6.5                   crayon_1.5.3               
+    ## [33] rstudioapi_0.17.1           tzdb_0.5.0                 
+    ## [35] rjson_0.2.23                proxy_0.4-27               
+    ## [37] parallel_4.5.1              XVector_0.50.0             
+    ## [39] matrixStats_1.5.0           vctrs_0.7.0                
+    ## [41] Matrix_1.6-4                IRanges_2.44.0             
+    ## [43] GetoptLong_1.1.0            hms_1.1.4                  
+    ## [45] S4Vectors_0.48.0            bit64_4.6.0-1              
+    ## [47] clue_0.3-66                 magick_2.9.0               
+    ## [49] locfit_1.5-9.12             foreach_1.5.2              
+    ## [51] glue_1.8.0                  codetools_0.2-20           
+    ## [53] cowplot_1.2.0               stringi_1.8.7              
+    ## [55] shape_1.4.6.1               gtable_0.3.6               
+    ## [57] GenomicRanges_1.62.0        pillar_1.11.1              
+    ## [59] htmltools_0.5.9             Seqinfo_1.0.0              
+    ## [61] circlize_0.4.17             R6_2.6.1                   
+    ## [63] doParallel_1.0.17           vroom_1.6.7                
+    ## [65] evaluate_1.0.5              lattice_0.22-7             
+    ## [67] png_0.1-8                   class_7.3-23               
+    ## [69] Rcpp_1.1.1                  SparseArray_1.10.2         
+    ## [71] DESeq2_1.50.2               xfun_0.56                  
+    ## [73] MatrixGenerics_1.22.0       pkgconfig_2.0.3            
+    ## [75] GlobalOptions_0.1.3
 
-## 0. Setup species-specific parameters
+## Species-specific parameters
 
 ``` r
 # get species
@@ -156,14 +196,21 @@ input_dir <- file.path("../../output_RNA/counts_filt_norm", species)
 # set up necessary output directories if they don't exist
 outdir <- file.path("../../output_RNA/ImpulseDE2", species)
 outdir_mfuzz <- file.path(outdir,"Mfuzz")
+outdir_plots <- file.path(outdir,"plots")
 if (!dir.exists(outdir)) dir.create(outdir, recursive = TRUE)
 if (!dir.exists(outdir_mfuzz)) dir.create(outdir_mfuzz, recursive = TRUE)
+if (!dir.exists(outdir_plots)) dir.create(outdir_plots, recursive = TRUE)
 
 reportdir <- file.path("../../output_RNA/reports", params$species, "02_ImpulseDE_files/figure-gfm/")
 if (!dir.exists(reportdir)) dir.create(reportdir, recursive = TRUE)
 ```
 
-## 1. Read in raw count data, vst-transformed counts, and metadata
+## Load data
+
+- Raw counts
+- VST-transformed counts
+- Metadata
+- Gene annotations
 
 ``` r
 # load in raw counts data
@@ -196,7 +243,19 @@ all(rownames(meta) == colnames(vst))
 
     ## [1] TRUE
 
-## 2. Metadata formatting
+``` r
+# read in SwissProt annotation
+SwissProt <- read.delim(file.path(annot_dir,config$SwissProt))
+cat("Annotations:", nrow(SwissProt), "Swissprot-annotated genes")
+```
+
+    ## Annotations: 22471 Swissprot-annotated genes
+
+------------------------------------------------------------------------
+
+# ImpulseDE2 Analysis
+
+## 1. Metadata formatting
 
 First, reformat our metadata table to match the column names used in the
 ImpulseDE2 vignette.
@@ -211,22 +270,34 @@ meta_impulse <- meta %>%
   select(-c(species,treatment))
 ```
 
-## 3. Then, run ImpulseDE2
+## 1. Run ImpulseDE2
 
 This takes a ton of time and memory, so I run it once then save as an
 RDS.
 
 ``` r
-objectImpulseDE2 <- runImpulseDE2(
-  matCountData    = as.matrix(counts_raw), #or use filtered_counts 
-  dfAnnotation    = meta_impulse,
-  boolCaseCtrl    = TRUE,
-  vecConfounders  = c("Batch"), #only use if you want to try to control for batch effects
-  boolIdentifyTransients = TRUE, #use if you want to ID transiently- vs permanently-regulated genes
-  scaNProc        = 18 )
+if(params$run_ImpulseDE2 == TRUE) {
+  objectImpulseDE2 <- runImpulseDE2(
+    matCountData    = as.matrix(counts_raw), #or use filtered_counts 
+    dfAnnotation    = meta_impulse,
+    boolCaseCtrl    = TRUE,
+    vecConfounders  = c("Batch"), #only use if you want to try to control for batch effects
+    boolIdentifyTransients = TRUE, #use if you want to ID transiently- vs permanently-regulated genes
+    scaNProc        = 18 )
+  
+  saveRDS(objectImpulseDE2, file.path(outdir, "objectImpulseDE2.rds"))
+} else {
+  objectImpulseDE2 <- readRDS(file.path(outdir, "objectImpulseDE2.rds"))
+}
 ```
 
-    ## Processing Details:
+``` r
+# Print processing report
+cat(objectImpulseDE2@strReport)
+```
+
+    ## ImpulseDE2 for count data, v0.99.10
+    ## # Process inputProcessing Details:
     ## ImpulseDE2 runs in case-ctrl mode.
     ## Found time points: 0,1,3,12,24,72,120
     ## Case: Found the samples at time point 0: MON_R0_H1,MON_R0_H2,MON_R0_H3
@@ -252,697 +323,535 @@ objectImpulseDE2 <- runImpulseDE2(
     ## Input contained 54384 genes/regions.
     ## WARNING: 7046 out of 54384 genes do not have obserserved non-zero counts and are excluded.
     ## Selected 47338 genes/regions for analysis.
+    ## # Run DESeq2: Using dispersion factorscomputed by DESeq2.
+    ## Consumed time: 1.48 min.
+    ## # Compute size factors
+    ## # Fitting null and alternative model to the genes
+    ## Consumed time: 33.44 min.
+    ## # Fitting sigmoid model to case condition
+    ## Consumed time: 2.64 min.
+    ## # Differentially expression analysis based on model fits
+    ## Finished running ImpulseDE2.
+    ## TOTAL consumed time: 37.76 min.
 
-    ## [1] "Corrected 281 DESEq2 dispersion estimates which to avoid variance overestimation and loss of discriminatory power for model selection."
+## 3. Extract ImpulseDE2 results
+
+### All genes
+
+Extract and save results for all non-zero genes
 
 ``` r
-saveRDS(objectImpulseDE2, file.path(outdir, "objectImpulseDE2.rds"))
+impulse_results <- objectImpulseDE2$dfImpulseDE2Results
+impulse_results <- impulse_results %>% filter(allZero==FALSE) #remove genes with zero counts
+
+impulse_results_annot <- impulse_results %>%
+  left_join(SwissProt %>% select(query,ProteinNames,BiologicalProcess), by = join_by("Gene"=="query"))
+
+write.csv(impulse_results, file.path(outdir, "ImpulseDE2_results.csv"), row.names = FALSE)
 ```
 
-<!-- ## 4. View and save results -->
+### Significant genes
+
+Extract genes with significant treatment effect on temporal trajectory,
+classify them as transiently or monotonously regulated, and save results
+
+``` r
+impulse_sig <- impulse_results %>%
+  filter(padj < global_params$padj_threshold) %>%
+  mutate(response_type = case_when(
+    isTransient & !is.na(isTransient) ~ "Transient",
+    isMonotonous & !is.na(isMonotonous) ~ "Monotonous",
+    .default = "Other"
+  ))
+
+write.csv(impulse_sig, file.path(outdir, "ImpulseDE2_significant.csv"), row.names = FALSE)
+
+#preview top DE genes and annotations
+impulse_sig %>% arrange(padj) %>% head(20) %>% dplyr::select(Gene,padj,loglik_red,response_type) %>%
+  left_join(SwissProt %>% select(query,ProteinNames,BiologicalProcess), by = join_by("Gene"=="query"))
+```
+
+    ##                                          Gene          padj loglik_red
+    ## 1  Montipora_capitata_HIv3___RNAseq.g49833.t1 4.946119e-129  -636.4767
+    ## 2  Montipora_capitata_HIv3___RNAseq.g49832.t1  2.358715e-56  -496.9401
+    ## 3   Montipora_capitata_HIv3___RNAseq.g7282.t1  7.252313e-39  -408.1378
+    ## 4        Montipora_capitata_HIv3___TS.g637.t1  2.106458e-38  -406.4213
+    ## 5  Montipora_capitata_HIv3___RNAseq.g40931.t1  1.630232e-33  -322.2649
+    ## 6    Montipora_capitata_HIv3___RNAseq.g984.t1  2.103994e-32  -346.5058
+    ## 7  Montipora_capitata_HIv3___RNAseq.g26806.t1  3.935841e-29  -406.0243
+    ## 8      Montipora_capitata_HIv3___TS.g49643.t1  2.631676e-27  -257.0443
+    ## 9  Montipora_capitata_HIv3___RNAseq.g37139.t1  4.068099e-26  -308.8533
+    ## 10 Montipora_capitata_HIv3___RNAseq.g26807.t1  1.782517e-25  -368.9546
+    ## 11 Montipora_capitata_HIv3___RNAseq.g41225.t1  3.135229e-25  -385.5945
+    ## 12  Montipora_capitata_HIv3___RNAseq.g6371.t1  1.627923e-24  -212.8498
+    ## 13  Montipora_capitata_HIv3___RNAseq.g7502.t1  5.175321e-24  -325.3604
+    ## 14 Montipora_capitata_HIv3___RNAseq.g20397.t1  8.426103e-24  -340.4130
+    ## 15      Montipora_capitata_HIv3___TS.g6919.t1  9.107913e-24  -336.1755
+    ## 16 Montipora_capitata_HIv3___RNAseq.g22408.t1  1.088974e-23  -334.7124
+    ## 17 Montipora_capitata_HIv3___RNAseq.g15259.t1  1.407835e-23  -329.0971
+    ## 18 Montipora_capitata_HIv3___RNAseq.g11828.t1  1.626968e-23  -319.9689
+    ## 19 Montipora_capitata_HIv3___RNAseq.g18448.t1  7.184670e-23  -330.7640
+    ## 20  Montipora_capitata_HIv3___RNAseq.g9317.t1  2.208527e-22  -266.1987
+    ##    response_type
+    ## 1      Transient
+    ## 2      Transient
+    ## 3      Transient
+    ## 4      Transient
+    ## 5     Monotonous
+    ## 6     Monotonous
+    ## 7      Transient
+    ## 8      Transient
+    ## 9      Transient
+    ## 10     Transient
+    ## 11     Transient
+    ## 12    Monotonous
+    ## 13    Monotonous
+    ## 14     Transient
+    ## 15    Monotonous
+    ## 16     Transient
+    ## 17    Monotonous
+    ## 18    Monotonous
+    ## 19    Monotonous
+    ## 20    Monotonous
+    ##                                                                                                                                                                                                                                                     ProteinNames
+    ## 1                                                                                                                                                                                                                             Glycine-rich RNA-binding protein 1
+    ## 2                                                            Glycine-rich RNA-binding protein 4, mitochondrial (AtGR-RBP4) (AtRBG4) (Glycine-rich protein 4) (AtGRP4) (Mitochondrial RNA-binding protein 1b) (At-mRBP1b) (Small RNA binding protein 4) (AtSRBP4)
+    ## 3                                                                                                                                                                               Serine/arginine-rich splicing factor 4 (Splicing factor, arginine/serine-rich 4)
+    ## 4                                                                                                                                                                                                                        Cytochrome P450 10 (EC 1.14.-.-) (CYPX)
+    ## 5                                                                                                                                                                                Prominin-1 (Antigen AC133 homolog) (Prominin-like protein 1) (CD antigen CD133)
+    ## 6                                                                                                                                                                                                                                                      Galaxin-2
+    ## 7                                                                                                                                                                                                                  DNA-binding protein MNB1B (HMG1-like protein)
+    ## 8                                                                                                                                                                                                                                                           <NA>
+    ## 9  Methylcrotonoyl-CoA carboxylase subunit alpha, mitochondrial (MCCase subunit alpha) (EC 6.4.1.4) (3-methylcrotonyl-CoA carboxylase 1) (3-methylcrotonyl-CoA carboxylase biotin-containing subunit) (3-methylcrotonyl-CoA:carbon dioxide ligase subunit alpha)
+    ## 10                                                                                                                                                                                                                 Zinc finger MYND domain-containing protein 10
+    ## 11                                                                                                          Heterogeneous nuclear ribonucleoproteins A1 homolog (hnRNP A1) (Helix-destabilizing protein) (Single-strand-binding protein) (hnRNP core protein A1)
+    ## 12                                                                                                                                  ATP-binding cassette subfamily C member 4 (EC 7.6.2.-) (EC 7.6.2.2) (EC 7.6.2.3) (Multidrug resistance-associated protein 4)
+    ## 13                                                                                                                                                                                                                                         Meteorin-like protein
+    ## 14                                                                                                                      Cleavage stimulation factor subunit 3 (CF-1 77 kDa subunit) (Cleavage stimulation factor 77 kDa subunit) (CSTF 77 kDa subunit) (CstF-77)
+    ## 15                                                                                                                                                                                                                                  ZP domain-containing protein
+    ## 16                                                                                                                                  Endoplasmic reticulum-Golgi intermediate compartment protein 1 (ER-Golgi intermediate compartment 32 kDa protein) (ERGIC-32)
+    ## 17                                                                                                                                                            Protein-glucosylgalactosylhydroxylysine glucosidase (EC 3.2.1.107) (Acid trehalase-like protein 1)
+    ## 18                                                                                                                                                                                                                                    Transcription factor SOX-4
+    ## 19                                                                                                                                                                                                                                                          <NA>
+    ## 20                                                                                                                                                                                                                                                          <NA>
+    ##                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  BiologicalProcess
+    ## 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      mRNA transport [GO:0051028]
+    ## 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      extracellular transport [GO:0006858]; miRNA transport [GO:1990428]; mitochondrial RNA modification [GO:1900864]; regulation of defense response to virus [GO:0050688]; response to cold [GO:0009409]; response to osmotic stress [GO:0006970]; response to salt stress [GO:0009651]; response to water deprivation [GO:0009414]; RNA transport [GO:0050658]
+    ## 3                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          hematopoietic progenitor cell differentiation [GO:0002244]; mRNA processing [GO:0006397]; negative regulation of mRNA splicing, via spliceosome [GO:0048025]; RNA splicing [GO:0008380]
+    ## 4                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+    ## 5                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             camera-type eye photoreceptor cell differentiation [GO:0060219]; retina layer formation [GO:0010842]
+    ## 6                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+    ## 7                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           regulation of DNA-templated transcription [GO:0006355]
+    ## 8                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             <NA>
+    ## 9                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         L-leucine catabolic process [GO:0006552]
+    ## 10                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 inner dynein arm assembly [GO:0036159]; motile cilium assembly [GO:0044458]; outer dynein arm assembly [GO:0036158]; positive regulation of motile cilium assembly [GO:1905505]
+    ## 11                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     mRNA splicing, via spliceosome [GO:0000398]
+    ## 12                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    bile acid and bile salt transport [GO:0015721]; cAMP transport [GO:0070730]; cilium assembly [GO:0060271]; export across plasma membrane [GO:0140115]; leukotriene transport [GO:0071716]; positive regulation of smooth muscle cell proliferation [GO:0048661]; prostaglandin secretion [GO:0032310]; prostaglandin transport [GO:0015732]; response to tetrachloromethane [GO:1904772]; transmembrane transport [GO:0055085]; urate transport [GO:0015747]
+    ## 13                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            brown fat cell differentiation [GO:0050873]; energy homeostasis [GO:0097009]; negative regulation of inflammatory response [GO:0050728]; positive regulation of brown fat cell differentiation [GO:0090336]; response to cold [GO:0009409]; response to muscle activity [GO:0014850]
+    ## 14                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    co-transcriptional mRNA 3'-end processing, cleavage and polyadenylation pathway [GO:0180010]
+    ## 15                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+    ## 16                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      endoplasmic reticulum to Golgi vesicle-mediated transport [GO:0006888]; retrograde vesicle-mediated transport, Golgi to endoplasmic reticulum [GO:0006890]
+    ## 17                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     carbohydrate metabolic process [GO:0005975]
+    ## 18 ascending aorta morphogenesis [GO:0035910]; atrial septum primum morphogenesis [GO:0003289]; cardiac right ventricle morphogenesis [GO:0003215]; cellular response to glucose stimulus [GO:0071333]; endocrine pancreas development [GO:0031018]; gene expression [GO:0010467]; glial cell development [GO:0021782]; glial cell proliferation [GO:0014009]; glucose homeostasis [GO:0042593]; heart development [GO:0007507]; hematopoietic stem cell homeostasis [GO:0061484]; kidney morphogenesis [GO:0060993]; mesenchyme development [GO:0060485]; mitral valve morphogenesis [GO:0003183]; negative regulation of myoblast differentiation [GO:0045662]; negative regulation of transcription by RNA polymerase II [GO:0000122]; nervous system development [GO:0007399]; neuroepithelial cell differentiation [GO:0060563]; noradrenergic neuron differentiation [GO:0003357]; positive regulation of apoptotic process [GO:0043065]; positive regulation of canonical Wnt signaling pathway [GO:0090263]; positive regulation of cell population proliferation [GO:0008284]; positive regulation of DNA-templated transcription [GO:0045893]; positive regulation of gamma-delta T cell differentiation [GO:0045588]; positive regulation of insulin secretion [GO:0032024]; positive regulation of myoblast differentiation [GO:0045663]; positive regulation of transcription by RNA polymerase II [GO:0045944]; pro-B cell differentiation [GO:0002328]; protein stabilization [GO:0050821]; regulation of DNA damage response, signal transduction by p53 class mediator [GO:0043516]; regulation of DNA-templated transcription [GO:0006355]; somatic stem cell population maintenance [GO:0035019]; spinal cord development [GO:0021510]; sympathetic nervous system development [GO:0048485]; T cell differentiation [GO:0030217]; ventricular septum morphogenesis [GO:0060412]
+    ## 19                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <NA>
+    ## 20                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <NA>
 
-<!-- ```{r} -->
+### Quick summary
 
-<!-- objectImpulseDE2 <- readRDS(file.path(outdir, "objectImpulseDE2.rds")) -->
+    ## Total significant genes: 5885
 
-<!-- impulse_results <- objectImpulseDE2$dfImpulseDE2Results -->
+    ## Response patterns:
 
-<!-- impulse_results_annot <- impulse_results %>% left_join(SwissProt, by = join_by("Gene"=="query")) %>% filter(!is.na(Gene)) -->
+    ## Transient: 1704
 
-<!-- write.table(impulse_results,file.path(outdir, "ImpulseDE2_Results.txt"),row.names=F,quote=F,sep="\t") -->
+    ## Monotonous: 2355
 
-<!-- # Genes with significant treatment effect on temporal trajectory -->
+    ## Other: 1826
 
-<!-- impulse_sig_genes <- impulse_results %>% filter(padj < 0.05)  -->
+## 4. Visualize ImpulseDE2 Results
 
-<!-- #preview top DE genes  -->
+### Heatmap of significant genes
 
-<!-- impulse_sig_genes %>% arrange(padj) %>% head(5) %>% dplyr::select(!contains("converge")) -->
+``` r
+lsHeatmaps <- plotHeatmap(
+  objectImpulseDE2       = objectImpulseDE2,
+  strCondition           = "case",
+  boolIdentifyTransients = TRUE, #set to true if true above
+  scaQThres              = global_params$padj_threshold)
 
-<!-- cat("\nTotal significant genes:", nrow(impulse_sig_genes), "\n") -->
+# complexHeatmapRaw = Heatmap of raw data by time point: Average of the size factor (and batch factor) normalised counts per time point and gene.
+draw(lsHeatmaps$complexHeatmapRaw)
+```
 
-<!-- cat("\nResponse patterns:\n") -->
+![](./02_ImpulseDE_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
 
-<!-- cat("Transient:", sum(impulse_sig_genes$isTransient), "\n") -->
+``` r
+# complexHeatmapFit = Heatmap of impulse-fitted data by time point.
+draw(lsHeatmaps$complexHeatmapFit)
+```
 
-<!-- cat("Monotonous:", sum(impulse_sig_genes$isMonotonous), "\n") -->
+![](./02_ImpulseDE_files/figure-gfm/unnamed-chunk-10-2.png)<!-- -->
 
-<!-- cat("Complex:", sum(!impulse_sig_genes$isTransient & !impulse_sig_genes$isMonotonous), "\n") -->
+``` r
+png(file.path(outdir_plots,"ImpulseDE2_heatmap_case_fit.png"), width = 2000, height = 2400, res = 300)
+draw(lsHeatmaps$complexHeatmapFit)
+dev.off()
+```
 
-<!-- ``` -->
+    ## png 
+    ##   2
 
-<!-- ## 5. Heatmap of transient and non-transiently heat-affected genes -->
+``` r
+pdf(file.path(outdir_plots,"ImpulseDE2_heatmap_case_fit.pdf"), width = 10, height = 12)
+draw(lsHeatmaps$complexHeatmapFit)
+dev.off()
+```
 
-<!-- ```{r} -->
+    ## png 
+    ##   2
 
-<!-- lsHeatmaps <- plotHeatmap( -->
+``` r
+png(file.path(outdir_plots,"ImpulseDE2_heatmap_case.png"), width = 2000, height = 2400, res = 300)
+draw(lsHeatmaps$complexHeatmapRaw)
+dev.off()
+```
 
-<!--   objectImpulseDE2       = objectImpulseDE2, -->
+    ## png 
+    ##   2
 
-<!--   strCondition           = "control", -->
+``` r
+pdf(file.path(outdir_plots, "ImpulseDE2_heatmap_case.pdf"), width = 10, height = 12)
+draw(lsHeatmaps$complexHeatmapRaw)
+dev.off()
+```
 
-<!--   boolIdentifyTransients = TRUE, #set to true if true above -->
+    ## png 
+    ##   2
 
-<!--   scaQThres              = 0.05) -->
+### Top gene trajectories
 
-<!-- draw(lsHeatmaps$complexHeatmapRaw)  -->
+``` r
+# Plot top 10 differentially expressed (by q-value) genes
+top_genes <- impulse_sig %>% arrange(padj) %>% head(10) %>% pull(Gene)
 
-<!-- draw(lsHeatmaps$complexHeatmapFit)  -->
+plotGenes(
+  vecGeneIDs = top_genes,
+  objectImpulseDE2 = objectImpulseDE2,
+  boolSimplePlot = TRUE,
+  boolCaseCtrl     = TRUE,
+  dirOut = outdir_plots,
+  strFileName = "/top10_DE_genes.pdf",
+  boolMultiplePlotsPerPage = FALSE)
+```
 
-<!-- lsHeatmaps <- plotHeatmap( -->
+    ## [1] "Creating ../../output_RNA/ImpulseDE2/Mcap/plots/top10_DE_genes.pdf"
 
-<!--   objectImpulseDE2       = objectImpulseDE2, -->
+    ## [[1]]
 
-<!--   strCondition           = "combined", -->
+    ## 
+    ## [[2]]
 
-<!--   boolIdentifyTransients = TRUE, #set to true if true above -->
+    ## 
+    ## [[3]]
 
-<!--   scaQThres              = 0.05) -->
+    ## 
+    ## [[4]]
 
-<!-- draw(lsHeatmaps$complexHeatmapRaw)  -->
+    ## 
+    ## [[5]]
 
-<!-- draw(lsHeatmaps$complexHeatmapFit)  -->
+    ## 
+    ## [[6]]
 
-<!-- lsHeatmaps <- plotHeatmap( -->
+    ## 
+    ## [[7]]
 
-<!--   objectImpulseDE2       = objectImpulseDE2, -->
+    ## 
+    ## [[8]]
 
-<!--   strCondition           = "case", -->
+    ## 
+    ## [[9]]
 
-<!--   boolIdentifyTransients = TRUE, #set to true if true above -->
+    ## 
+    ## [[10]]
 
-<!--   scaQThres              = 0.05) -->
+------------------------------------------------------------------------
 
-<!-- draw(lsHeatmaps$complexHeatmapRaw)  -->
+# Mfuzz: Cluster ImpulseDE2-significant genes by trajectory
 
-<!-- draw(lsHeatmaps$complexHeatmapFit)  -->
+## 1. Preparing expression data
 
-<!-- png(paste0(outdir,"/ImpulseDE/ImpulseDE2_heatmap.png"), width = 2000, height = 2400, res = 300) -->
+Filter vst transformed counts to keep significant genes and only
+heat-samples
 
-<!-- draw(lsHeatmaps$complexHeatmapRaw) -->
+``` r
+sig_genes <- impulse_sig %>% filter(Gene %in% rownames(vst)) %>% pull(Gene)
 
-<!-- dev.off() -->
+# Get VST expression for case (heat) samples only for sig genes
+heat_samples <- meta %>% filter(treatment == "H") %>% pull(sample)
+heat_vsd <- vst[sig_genes, heat_samples]
+```
 
-<!-- png(paste0(outdir,"/ImpulseDE/ImpulseDE2_heatmap_fit.png"), width = 2000, height = 2400, res = 300) -->
+Average across replicates per timepoint, heat samples only
 
-<!-- draw(lsHeatmaps$complexHeatmapFit) -->
+``` r
+heat_avg <- vst[sig_genes, heat_samples] %>%
+  as.data.frame() %>%
+  rownames_to_column("Gene") %>%
+  pivot_longer(-Gene, names_to = "sample", values_to = "expr") %>%
+  left_join(meta %>% select(sample, time), by = "sample") %>%
+  group_by(Gene, time) %>%
+  summarize(mean_expr = mean(expr), .groups = "drop") %>%
+  pivot_wider(names_from = time, values_from = mean_expr) %>%
+  column_to_rownames("Gene")
 
-<!-- dev.off() -->
+# Reorder columns by time
+heat_avg <- heat_avg[, order(as.numeric(colnames(heat_avg)))]
+colnames(heat_avg) <- paste0("R", colnames(heat_avg))
+```
 
-<!-- str(lsHeatmaps$lsvecGeneGroups) -->
+Prepare data in eset format
 
-<!-- ``` -->
+``` r
+# Create ExpressionSet
+heat_eset <- ExpressionSet(assayData = as.matrix(heat_avg))
+heat_eset <- standardise(heat_eset)
+```
 
-<!-- ## 6. Plot trajectories of top impulseDE genes and specific genes of interest -->
+## 2. Determine Mfuzz parameters
 
-<!-- ```{r} -->
+For fuzzy c-means clustering, the fuzzifier m and the number of clusters
+c has to be chosen in advance
 
-<!-- # Plot top 10 differentially expressed (by q-value) genes -->
+``` r
+# Estimate fuzzifier
+m <- mestimate(heat_eset)
+cat("Estimated fuzzifier m:", round(m, 2), "\n")
+```
 
-<!-- lsgplotsGenes <- plotGenes( -->
+    ## Estimated fuzzifier m: 1.55
 
-<!--   vecGeneIDs       = NULL, -->
+``` r
+# Choose optimal cluster number based on elbow plot (do this once and add to species_parameters.R script)
+Dmin(heat_eset, m = m, crange = seq(2, 12, 1), repeats = 3)
 
-<!--   scaNTopIDs       = 10, -->
+# adjust below to test what different numbers of clusters reveal in the data -- don't over-cluster
+for (k in c(4,6,8)) {
+  set.seed(global_params$seed)
+  result <- mfuzz(heat_eset, c = k, m = m)
+  mfuzz.plot(heat_eset, cl = result, mfrow = c(2, ceiling(k/2)), 
+             new.window =FALSE,, time.labels =  c(0,1,3,12,24,72,120))
+}
+```
 
-<!--   objectImpulseDE2 = objectImpulseDE2, -->
+## 3. Run MFuzz
 
-<!--   boolSimplePlot = TRUE,   boolCaseCtrl     = TRUE, -->
+Run clustering with species-specific cluster number
 
-<!--   dirOut           = paste0(outdir,"/ImpulseDE/"), -->
+``` r
+k <-  config$n_clusters
+set.seed(global_params$seed)
+mfuzz_clusters <- mfuzz(heat_eset, c = k, m = m)
+```
 
-<!--   boolMultiplePlotsPerPage = FALSE, -->
+Extract cluster assignments and save results
 
-<!--   strNameRefMethod = NULL) -->
+``` r
+cluster_assignments <- data.frame(
+  Gene = names(mfuzz_clusters$cluster),
+  cluster = mfuzz_clusters$cluster,
+  membership = apply(mfuzz_clusters$membership, 1, max)) %>%
+  left_join(impulse_sig %>% select(Gene, response_type), by = "Gene") # join to impulseDE results
 
-<!-- lsgplotsGenes -->
+table(cluster_assignments$cluster, cluster_assignments$response_type)
+```
 
-<!-- ``` -->
+    ##    
+    ##     Monotonous Other Transient
+    ##   1        656   411       105
+    ##   2         86   321       436
+    ##   3        151   186       526
+    ##   4         70   344       494
+    ##   5        597   250       102
+    ##   6        795   310        41
 
-<!-- ```{r} -->
+``` r
+# Save mfuzz objects and cluster assignments
+saveRDS(mfuzz_clusters, file.path(outdir_mfuzz, "mfuzz_result.rds"))
+saveRDS(heat_eset, file.path(outdir_mfuzz, "mfuzz_input_eset.rds"))
+write.csv(cluster_assignments, file.path(outdir_mfuzz, "cluster_assignments.csv"), row.names = FALSE)
+write.csv(as.data.frame(mfuzz_clusters$centers), file.path(outdir_mfuzz, "cluster_centers.csv"))
+```
 
-<!-- # HIF_genes -->
+## 4. Characterize Clusters
 
-<!-- hif_genes <- SwissProt %>% filter(grepl("HIF-1-",ProteinNames))%>% pull(query) -->
+``` r
+# Get cluster centers (average trajectory)
+cluster_centers <- mfuzz_clusters$centers
 
-<!-- impulse_results %>% filter(Gene %in% hif_genes) %>% arrange(padj) %>% left_join(SwissProt, by = join_by(Gene==query))  -->
+# Identify peak and trough timepoint for each cluster
+timepoints <- c(0, 1, 3, 12, 24, 72, 120)
+peak_times <- timepoints[apply(cluster_centers, 1, which.max)]
+trough_times <- timepoints[apply(cluster_centers, 1, which.min)]
 
-<!-- HIFalphabeta <- plotGenes( -->
-
-<!--   vecGeneIDs       = hif_genes, -->
-
-<!--   objectImpulseDE2 = objectImpulseDE2, -->
-
-<!--   boolSimplePlot = TRUE,   boolCaseCtrl     = TRUE, -->
-
-<!--   dirOut           = paste0(outdir,"/ImpulseDE/"), -->
-
-<!--   strFileName = "HIF-alphabeta.pdf", -->
-
-<!--   boolMultiplePlotsPerPage = FALSE, -->
-
-<!--   strNameRefMethod = NULL) -->
-
-<!-- HIFalphabeta -->
-
-<!-- # Majerova 2021 key qPCR genes -->
-
-<!-- majerova_genes <- HeatStressGenes %>% filter(ref_first_author =="Majerova") -->
-
-<!-- stress_genes_ids <- unique(majerova_genes$query) -->
-
-<!-- plot_stress_genes <- stress_genes_ids[stress_genes_ids %in% rownames(objectImpulseDE2@matCountDataProc)]  -->
-
-<!-- impulse_results %>% filter(Gene %in% stress_genes_ids) %>% arrange(padj) %>% left_join(HeatStressGenes_unique, by = join_by(Gene==query)) -->
-
-<!-- heatgenes <- plotGenes( -->
-
-<!--   vecGeneIDs       = plot_stress_genes, -->
-
-<!--   objectImpulseDE2 = objectImpulseDE2, -->
-
-<!--   boolSimplePlot = TRUE,   boolCaseCtrl     = TRUE, -->
-
-<!--   dirOut           = paste0(outdir,"/ImpulseDE/"), -->
-
-<!--   strFileName = "stress_genes_Majerova.pdf", -->
-
-<!--   boolMultiplePlotsPerPage = FALSE, -->
-
-<!--   strNameRefMethod = NULL) -->
-
-<!-- heatgenes -->
-
-<!-- # HSP genes -->
-
-<!-- HSPS <- impulse_results %>% filter(Gene %in% stress_genes_ids) %>% arrange(padj) %>% left_join(HeatStressGenes_unique, by = join_by(Gene==query)) %>% filter(grepl("HSP",gene_id)) %>% pull(Gene) -->
-
-<!-- HSPs <- plotGenes( -->
-
-<!--   vecGeneIDs       = HSPS, -->
-
-<!--   objectImpulseDE2 = objectImpulseDE2, -->
-
-<!--   boolSimplePlot = TRUE, -->
-
-<!--   boolCaseCtrl     = TRUE, -->
-
-<!--   dirOut           = paste0(outdir,"/ImpulseDE/"), -->
-
-<!--   strFileName = "HSPs.pdf", -->
-
-<!--   boolMultiplePlotsPerPage = FALSE, -->
-
-<!--   strNameRefMethod = NULL) -->
-
-<!-- HSPs -->
-
-<!-- ``` -->
-
-<!-- ## 7. Heatmap of top 500 impulseDE genes -->
-
-<!-- ```{r} -->
-
-<!-- top_500_DE_genes <- impulse_results %>% arrange(padj) %>% head(500) %>% rownames() -->
-
-<!-- pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE, -->
-
-<!--          cluster_cols=FALSE, -->
-
-<!--          annotation_col= meta[,c("treatment","time")], -->
-
-<!--          annotation_colors = list("treatment" = treat_colors, -->
-
-<!--                                   "time" = time_colors)) -->
-
-<!-- pheatmap(assay(vsd)[top_500_DE_genes, ], cluster_rows=TRUE, show_rownames=FALSE, -->
-
-<!--          cluster_cols=TRUE, cutree_cols = 2, -->
-
-<!--          annotation_col= meta[,c("treatment","time")], -->
-
-<!--          annotation_colors = list("treatment" = treat_colors, -->
-
-<!--                                   "time" = time_colors)) -->
-
-<!-- ``` -->
-
-<!-- ## 7.5. Heatmap of membrane channel genes -->
-
-<!-- ```{r} -->
-
-<!-- membrane_DE_genes <- impulse_results %>% -->
-
-<!--   right_join(membrane_channels, join_by("Gene"=="query")) %>%  -->
-
-<!--   filter(padj < 0.05) %>%  -->
-
-<!--   column_to_rownames("Gene") -->
-
-<!-- plot_df <- as.data.frame(t(vsd_mat)) %>% -->
-
-<!--   rownames_to_column(var="sample") %>% -->
-
-<!--   left_join(meta, by=c("sample"="sample")) %>%  -->
-
-<!--   pivot_longer(cols = all_of(rownames(vsd_mat)), names_to="query", values_to="expression") %>% -->
-
-<!--   mutate(is_DE = query %in% rownames(DE_05)) %>% right_join(membrane_DE_genes %>% rownames_to_column("query")) -->
-
-<!-- membrane_list <- c("aquaporin","TRP",  "Mechanosensory" ,"calcium",  "ER_calcium" ,"Golgi_calcium" , "SLC24", "SLC25", "PMCA",  "Sodium_calcium_exchanger","Bhattacharya2016") -->
-
-<!-- pdf(paste0(outdir,"/ImpulseDE/membrane_sig_plots.pdf"), width = 8, height = 10) -->
-
-<!-- pheatmap(assay(vsd)[rownames(membrane_DE_genes), ], cluster_rows=TRUE, show_rownames=TRUE, -->
-
-<!--          cluster_cols=FALSE, -->
-
-<!--          fontsize = 5, -->
-
-<!--          labels_row=membrane_DE_genes$short_name, -->
-
-<!--          annotation_row = membrane_DE_genes %>% dplyr::select(gene_set), -->
-
-<!--          annotation_col= meta[,c("treatment","time")], -->
-
-<!--          annotation_colors = list("treatment" = treat_colors, -->
-
-<!--                                   "time" = time_colors)) -->
-
-<!-- pheatmap(assay(vsd)[rownames(membrane_DE_genes), ], cluster_rows=TRUE, show_rownames=TRUE, -->
-
-<!--          cluster_cols=TRUE,cutree_cols = 3, -->
-
-<!--          fontsize = 5, -->
-
-<!--          labels_row=membrane_DE_genes$short_name, -->
-
-<!--          annotation_row = membrane_DE_genes %>% dplyr::select(gene_set), -->
-
-<!--          annotation_col= meta[,c("treatment","time")], -->
-
-<!--          annotation_colors = list("treatment" = treat_colors, -->
-
-<!--                                   "time" = time_colors)) -->
-
-<!-- for (genelist in unique(plot_df$gene_set)){ -->
-
-<!--   plot_df_filtered <- plot_df %>% filter(grepl(genelist,gene_set))# %>% filter(is_DE == TRUE) -->
-
-<!--   if (nrow(plot_df_filtered)>1){ -->
-
-<!--     plot <- plot_df_filtered  %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) + -->
-
-<!--     stat_summary(fun="mean", geom="line") + -->
-
-<!--     scale_color_manual(values = treat_colors) + -->
-
-<!--     stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) + -->
-
-<!--     facet_wrap(short_name~query,scales="free_y") + -->
-
-<!--     theme_bw() + -->
-
-<!--     theme(strip.text = element_text(size = 6)) + -->
-
-<!--     labs(y="VST expression", x="Timepoint",title=paste(genelist)) -->
-
-<!--     print(plot) -->
-
-<!--   } -->
-
-<!-- } -->
-
-<!-- dev.off() -->
-
-<!-- ``` -->
-
-<!-- ## 8. Cluster ImpulseDE2-significant genes by trajectory -->
-
-<!-- For this we will use the package [Mfuzz](https://bioconductor.org/packages/release/bioc/html/Mfuzz.html), [vignette here](https://bioconductor.org/packages/release/bioc/vignettes/Mfuzz/inst/doc/Mfuzz.pdf). -->
-
-<!-- ```{r} -->
-
-<!-- #BiocManager::install("Mfuzz") -->
-
-<!-- library(Mfuzz) -->
-
-<!-- ``` -->
-
-<!-- ```{r} -->
-
-<!-- # analyze which of our ImpulseDE2 significant genes are in our vsd matrix -->
-
-<!-- sum(impulse_sig_genes$Gene %in% rownames(vsd_mat)) -->
-
-<!-- length(impulse_sig_genes$Gene) -->
-
-<!-- # which ones are missing?  -->
-
-<!-- missing_genes <- impulse_sig_genes$Gene[!(impulse_sig_genes$Gene %in% rownames(vsd_mat))] -->
-
-<!-- # 8 are missing and it is because they were filtered out during pOverA filtering -- as seen with rowSums below, each has fewer than 3 samples with a count >10 -->
-
-<!-- counts_raw[missing_genes,] -->
-
-<!-- impulse_sig_genes[missing_genes,] -->
-
-<!-- rowSums(counts_raw[missing_genes,] > 10) -->
-
-<!-- ``` -->
-
-<!-- ```{r} -->
-
-<!-- impulse_sig_genes_transient <- impulse_sig_genes %>% filter(isTransient==TRUE) -->
-
-<!-- impulse_sig_genes_mat <- vsd_mat[rownames(vsd_mat) %in% impulse_sig_genes_transient$Gene,] -->
-
-<!-- heat <- impulse_sig_genes_mat %>% as.data.frame %>% select(contains("_H")) -->
-
-<!-- # average values together across replicates -->
-
-<!-- heat_avg <- heat %>% -->
-
-<!--   rowwise() %>% -->
-
-<!--   mutate( -->
-
-<!--     R0 = mean(c_across(starts_with("POC_R0"))), -->
-
-<!--     R1 = mean(c_across(starts_with("POC_R1"))), -->
-
-<!--     R3 = mean(c_across(starts_with("POC_R3"))), -->
-
-<!--     R12 = mean(c_across(starts_with("POC_R12"))), -->
-
-<!--     R24 = mean(c_across(starts_with("POC_R24"))), -->
-
-<!--     R72 = mean(c_across(starts_with("POC_R72"))), -->
-
-<!--     R120 = mean(c_across(starts_with("POC_R120"))) -->
-
-<!--   ) %>% -->
-
-<!--   select(R0, R1, R3, R12, R24, R72, R120) -->
-
-<!-- rownames(heat_avg) <- rownames(heat) -->
-
-<!-- heat_eset <- ExpressionSet(assayData = as.matrix(heat_avg)) -->
-
-<!-- heat_eset <- standardise(heat_eset)  -->
-
-<!-- ``` -->
-
-<!-- For fuzzy c-means clustering, the fuzzifier m and the number of clusters c has to be chosen in advance -->
-
-<!-- ```{r} -->
-
-<!-- # Determine fuzzifier -->
-
-<!-- m <- mestimate(heat_eset) -->
-
-<!-- # Choose optimal cluster number -->
-
-<!-- #Dmin(heat_eset, m = m, repeats = 3) -->
-
-<!-- optimal_c <- 6 -->
-
-<!-- # Run Mfuzz clustering -->
-
-<!-- mfuzz_clusters <- mfuzz(heat_eset, c = optimal_c, m = m) -->
-
-<!-- mfuzz.plot(heat_eset, cl = mfuzz_clusters, new.window =FALSE, mfrow = c(3,3), time.labels =  c(0,1,3,12,24,72,120)) -->
-
-<!-- # Visualize clusters -->
-
-<!-- pdf(paste0(outdir,"/temporal_clusters.pdf"), width = 12, height = 10) -->
-
-<!-- mfuzz.plot2(heat_eset, cl = mfuzz_clusters, mfrow = c(3, 4),  -->
-
-<!--             time.labels = c("0", "1", "3", "12", "24", "72", "120"), -->
-
-<!--             xlab = "Time (hours)",x11=FALSE) -->
-
-<!-- dev.off() -->
-
-<!-- ``` -->
-
-<!-- ```{r} -->
-
-<!-- cluster2 <- plotGenes( -->
-
-<!--   vecGeneIDs       = head(names(mfuzz_clusters$cluster)[mfuzz_clusters$cluster==2],5), -->
-
-<!--   objectImpulseDE2 = objectImpulseDE2, -->
-
-<!--   boolSimplePlot = TRUE, -->
-
-<!--   boolCaseCtrl     = TRUE, -->
-
-<!--   dirOut           = paste0(outdir,"/ImpulseDE/"), -->
-
-<!--   strFileName = "cluster2.pdf", -->
-
-<!--   boolMultiplePlotsPerPage = FALSE, -->
-
-<!--   strNameRefMethod = NULL) -->
-
-<!-- cluster2 -->
-
-<!-- ``` -->
-
-<!-- ```{r} -->
-
-<!-- cluster3 <- plotGenes( -->
-
-<!--   vecGeneIDs       = head(names(mfuzz_clusters$cluster)[mfuzz_clusters$cluster==3],5), -->
-
-<!--   objectImpulseDE2 = objectImpulseDE2, -->
-
-<!--   boolSimplePlot = TRUE, -->
-
-<!--   boolCaseCtrl     = TRUE, -->
-
-<!--   dirOut           = paste0(outdir,"/ImpulseDE/"), -->
-
-<!--   strFileName = "cluster3.pdf", -->
-
-<!--   boolMultiplePlotsPerPage = FALSE, -->
-
-<!--   strNameRefMethod = NULL) -->
-
-<!-- cluster3 -->
-
-<!-- ``` -->
-
-<!-- ```{r} -->
-
-<!-- # Extract cluster assignments -->
-
-<!-- cluster_assignments <- data.frame( -->
-
-<!--   gene = names(mfuzz_clusters$cluster), -->
-
-<!--   cluster = mfuzz_clusters$cluster, -->
-
-<!--   membership = apply(mfuzz_clusters$membership, 1, max) -->
-
-<!-- ) -->
-
-<!-- # Get cluster centers (average trajectory) -->
-
-<!-- cluster_centers <- mfuzz_clusters$centers -->
-
-<!-- # Identify peak timepoint for each cluster -->
-
-<!-- peak_times <- apply(cluster_centers, 1, which.max) -->
-
-<!-- timepoints <- c(0, 1, 3, 12, 24, 72, 120) -->
-
-<!-- cluster_peaks <- data.frame( -->
-
-<!--   cluster = 1:optimal_c, -->
-
-<!--   peak_time = timepoints[peak_times]) -->
-
-<!-- print(cluster_peaks) -->
-
-<!-- ``` -->
-
-<!-- ### View clustered genes of interest -->
-
-<!-- ```{r} -->
-
-<!-- HSPS <- impulse_results %>% filter(Gene %in% stress_genes_ids) %>% arrange(padj) %>% left_join(HeatStressGenes_unique, by = join_by(Gene==query)) %>% filter(grepl("HSP",gene_id)) %>% pull(Gene) -->
-
-<!-- cluster_assignments %>% filter(gene %in% HSPS) -->
-
-<!-- ``` -->
-
-<!-- ```{r} -->
-
-<!-- heat_clustered <- HeatStressGenes_unique %>% left_join(cluster_assignments, by = join_by(query==gene)) %>% -->
-
-<!--   arrange(cluster, desc(cluster)) -->
-
-<!-- # plot this to show which genes are in which cluster -->
-
-<!-- heat_clustered %>% filter(!is.na(cluster)) %>% ggplot(aes(y=reorder(gene_id, cluster), x=factor(cluster), fill=cluster)) + -->
-
-<!--   geom_tile() + -->
-
-<!--   theme_bw() + -->
-
-<!--   labs(x="Mfuzz Cluster", y="Gene ID", title="Heat stress genes clustered by temporal expression pattern") -->
-
-<!-- ``` -->
-
-<!-- ```{r} -->
-
-<!-- channel_clustered <- membrane_channels  %>% unique() %>%  -->
-
-<!--   left_join(cluster_assignments, by = join_by(query==gene)) %>% -->
-
-<!--   arrange(cluster)  %>% -->
-
-<!--   filter(!is.na(cluster))  -->
-
-<!-- cat("Total membrane channel genes:", nrow(membrane_channels), "\n") -->
-
-<!-- cat("Found in ImpulseDE/Mfuzz data:", nrow(channel_clustered), "\n") -->
-
-<!-- channel_clustered %>% -->
-
-<!--     ggplot(aes(x = factor(cluster), y = reorder(short_name, cluster), fill = gene_set)) + -->
-
-<!--   geom_tile(color = "white") + -->
-
-<!--   geom_text(aes(label = cluster), size = 2) + -->
-
-<!--   theme_bw() + -->
-
-<!--   theme(axis.text.y = element_text(size = 6)) + -->
-
-<!--   labs(x = "Mfuzz Cluster",  -->
-
-<!--        y = "Gene ID",  -->
-
-<!--        fill = "Channel Type", -->
-
-<!--        title = "Membrane Channel Genes - Cluster Assignment", -->
-
-<!--        subtitle = paste0(sum(!is.na(channel_clustered$cluster)),  -->
-
-<!--                         " genes significantly DE")) -->
-
-<!-- heat_eset_membrane <- heat_eset[channel_clustered$query, ] -->
-
-<!-- mfuzz_clusters_membrane <- mfuzz_clusters -->
-
-<!-- mfuzz_clusters_membrane$membership <- mfuzz_clusters$membership[channel_clustered$query, ] -->
-
-<!-- mfuzz_clusters_membrane$cluster <- mfuzz_clusters$cluster[channel_clustered$query] -->
-
-<!-- mfuzz.plot( -->
-
-<!--   heat_eset_membrane, -->
-
-<!--   cl = mfuzz_clusters_membrane, -->
-
-<!--   new.window = FALSE, -->
-
-<!--   mfrow = c(3,3), -->
-
-<!--   time.labels = c(0,1,3,12,24,72,120) -->
-
-<!-- ) -->
-
-<!-- # Visualize clusters -->
-
-<!-- pdf(paste0(outdir,"/membrane_temporal_clusters.pdf"), width = 12, height = 10) -->
-
-<!-- mfuzz.plot2(heat_eset_membrane, cl = mfuzz_clusters_membrane, mfrow = c(3, 4),  -->
-
-<!--             time.labels = c("0", "1", "3", "12", "24", "72", "120"), -->
-
-<!--             xlab = "Time (hours)",x11=FALSE) -->
-
-<!-- dev.off() -->
-
-<!-- plot_df <- as.data.frame(t(vsd_mat)) %>% -->
-
-<!--   rownames_to_column(var="sample") %>% -->
-
-<!--   left_join(meta, by=c("sample"="sample")) %>%  -->
-
-<!--   pivot_longer(cols = all_of(rownames(vsd_mat)), names_to="query", values_to="expression") %>% -->
-
-<!--   mutate(is_DE = query %in% rownames(DE_05)) %>% right_join(membrane_DE_genes %>% rownames_to_column("query")) -->
-
-<!-- pdf(paste0(outdir,"/ImpulseDE/membrane_sig_plots_clustered.pdf"), width = 8, height = 10) -->
-
-<!-- for (cl in c(0,unique(channel_clustered$cluster))){ -->
-
-<!--   plot_df_filtered <- plot_df %>% left_join(channel_clustered) %>% filter(!is.na(cluster)) -->
-
-<!--   if (cl ==0){ -->
-
-<!--     plot_df_low_membership <- plot_df_filtered %>% filter(membership<0.5) -->
-
-<!--     plot <- plot_df_low_membership  %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) + -->
-
-<!--     stat_summary(fun="mean", geom="line") + -->
-
-<!--     scale_color_manual(values = treat_colors) + -->
-
-<!--     stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) + -->
-
-<!--     facet_wrap(short_name~query,scales="free_y") + -->
-
-<!--     theme_bw() + -->
-
-<!--     theme(strip.text = element_text(size = 6)) + -->
-
-<!--     labs(y="VST expression", x="Timepoint",title=paste("Membership < 0.5")) -->
-
-<!--     print(plot) -->
-
-<!--   } else{ -->
-
-<!--     plot_df_cluster <- plot_df_filtered %>% filter(cluster==cl) -->
-
-<!--       if (nrow(plot_df_cluster)>1){ -->
-
-<!--     plot <- plot_df_cluster  %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) + -->
-
-<!--     stat_summary(fun="mean", geom="line") + -->
-
-<!--     scale_color_manual(values = treat_colors) + -->
-
-<!--     stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) + -->
-
-<!--     facet_wrap(short_name~query,scales="free_y") + -->
-
-<!--     theme_bw() + -->
-
-<!--     theme(strip.text = element_text(size = 6)) + -->
-
-<!--     labs(y="VST expression", x="Timepoint",title=paste("Cluster ",cl)) -->
-
-<!--     print(plot) -->
-
-<!--   } -->
-
-<!--   } -->
-
-<!-- } -->
-
-<!-- dev.off() -->
-
-<!-- ``` -->
-
-<!-- ```{r} -->
-
-<!-- sessionInfo() -->
-
-<!-- ``` -->
+cluster_info <- data.frame(
+  cluster = 1:k,
+  peak_time = peak_times,
+  trough_time = trough_times,
+  n_genes = as.numeric(table(mfuzz_clusters$cluster)))
+
+print(cluster_info)
+```
+
+    ##   cluster peak_time trough_time n_genes
+    ## 1       1         3         120    1172
+    ## 2       2       120           3     843
+    ## 3       3         3           0     863
+    ## 4       4         0          12     908
+    ## 5       5        12           0     949
+    ## 6       6         0          12    1146
+
+``` r
+write.csv(cluster_info, file.path(outdir_mfuzz, "cluster_info.csv"), row.names = FALSE)
+```
+
+### Visualize all significant genes in their clusters
+
+``` r
+mfuzz.plot(heat_eset, cl = mfuzz_clusters, new.window =FALSE, mfrow = c(2,k/2), time.labels =  c(0,1,3,12,24,72,120))
+```
+
+![](./02_ImpulseDE_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
+
+``` r
+# Visualize clusters
+pdf(paste0(outdir,"/temporal_clusters.pdf"), width = 12, height = 10)
+mfuzz.plot2(heat_eset, cl = mfuzz_clusters, mfrow = c(2,k/2),
+            time.labels = c("0", "1", "3", "12", "24", "72", "120"),
+            xlab = "Time (hours)",x11=FALSE)
+dev.off()
+```
+
+    ## png 
+    ##   2
+
+------------------------------------------------------------------------
+
+# Exploring genes of interest
+
+## Manually-curated heat stress genes by cluster
+
+``` r
+# read in Manual heat stress genes annotation
+HeatStressGenes <- read_csv(paste0(annot_dir,"/heatstress/HeatStressGenes_", species ,".csv")) %>%
+  dplyr::select(-1) %>% dplyr::rename(query = paste0(species,"_gene")) %>% dplyr::select(query,everything())
+
+HeatStressGenes_unique <- HeatStressGenes %>% group_by(query) %>%
+  summarize(gene_id = paste(unique(gene_id), collapse = ","),
+            response_type = paste(unique(response_type), collapse = ","),
+            category = paste(unique(category), collapse = ",")) 
+
+HeatStressGenes_unique <- HeatStressGenes_unique %>% filter(query %in% rownames(vst))
+ 
+stress_genes_ids <- unique(HeatStressGenes_unique$query) 
+```
+
+``` r
+HSPS <- impulse_results %>% filter(Gene %in% stress_genes_ids) %>% arrange(padj) %>% left_join(HeatStressGenes_unique, by = join_by(Gene==query)) %>% filter(grepl("HSP",gene_id)) %>% pull(Gene)
+
+cluster_assignments %>% filter(Gene %in% HSPS)
+```
+
+    ##                                         Gene cluster membership response_type
+    ## 1 Montipora_capitata_HIv3___RNAseq.g15043.t1       3  0.7063881     Transient
+    ## 2 Montipora_capitata_HIv3___RNAseq.g18811.t1       3  0.7067597     Transient
+    ## 3     Montipora_capitata_HIv3___TS.g35289.t2       3  0.8656548     Transient
+
+``` r
+heat_clustered <- HeatStressGenes_unique %>% left_join(cluster_assignments, by = join_by(query==Gene)) %>%
+  arrange(cluster, desc(cluster))
+
+# plot this to show which genes are in which cluster
+heat_clustered %>% filter(!is.na(cluster)) %>% ggplot(aes(y=reorder(gene_id, cluster), x=factor(cluster), fill=cluster)) +
+  geom_tile() +
+  theme_bw() +
+  labs(x="Mfuzz Cluster", y="Gene ID", title="Heat stress genes clustered by temporal expression pattern")
+```
+
+![](./02_ImpulseDE_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->
+
+``` r
+sessionInfo()
+```
+
+    ## R version 4.5.1 (2025-06-13)
+    ## Platform: x86_64-pc-linux-gnu
+    ## Running under: Ubuntu 24.04.1 LTS
+    ## 
+    ## Matrix products: default
+    ## BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 
+    ## LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.26.so;  LAPACK version 3.12.0
+    ## 
+    ## locale:
+    ##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+    ##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+    ##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+    ##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+    ##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+    ## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+    ## 
+    ## time zone: Etc/UTC
+    ## tzcode source: system (glibc)
+    ## 
+    ## attached base packages:
+    ## [1] tcltk     grid      stats     graphics  grDevices utils     datasets 
+    ## [8] methods   base     
+    ## 
+    ## other attached packages:
+    ##  [1] Mfuzz_2.68.0          DynDoc_1.86.0         widgetTools_1.86.0   
+    ##  [4] e1071_1.7-16          Biobase_2.70.0        BiocGenerics_0.56.0  
+    ##  [7] generics_0.1.4        ComplexHeatmap_2.26.0 lubridate_1.9.4      
+    ## [10] forcats_1.0.0         stringr_1.6.0         dplyr_1.1.4          
+    ## [13] purrr_1.2.1           readr_2.1.6           tidyr_1.3.1          
+    ## [16] tibble_3.3.0          ggplot2_4.0.1         tidyverse_2.0.0      
+    ## [19] ImpulseDE2_0.99.10    rmarkdown_2.30       
+    ## 
+    ## loaded via a namespace (and not attached):
+    ##  [1] tidyselect_1.2.1            farver_2.1.2               
+    ##  [3] S7_0.2.1                    fastmap_1.2.0              
+    ##  [5] digest_0.6.39               timechange_0.3.0           
+    ##  [7] lifecycle_1.0.5             cluster_2.1.8.1            
+    ##  [9] Cairo_1.7-0                 magrittr_2.0.4             
+    ## [11] compiler_4.5.1              tkWidgets_1.86.0           
+    ## [13] rlang_1.1.7                 tools_4.5.1                
+    ## [15] yaml_2.3.12                 knitr_1.50                 
+    ## [17] labeling_0.4.3              S4Arrays_1.10.0            
+    ## [19] bit_4.6.0                   DelayedArray_0.36.0        
+    ## [21] RColorBrewer_1.1-3          abind_1.4-8                
+    ## [23] BiocParallel_1.44.0         withr_3.0.2                
+    ## [25] stats4_4.5.1                colorspace_2.1-2           
+    ## [27] scales_1.4.0                iterators_1.0.14           
+    ## [29] dichromat_2.0-0.1           SummarizedExperiment_1.40.0
+    ## [31] cli_3.6.5                   crayon_1.5.3               
+    ## [33] rstudioapi_0.17.1           tzdb_0.5.0                 
+    ## [35] rjson_0.2.23                proxy_0.4-27               
+    ## [37] parallel_4.5.1              XVector_0.50.0             
+    ## [39] matrixStats_1.5.0           vctrs_0.7.0                
+    ## [41] Matrix_1.6-4                IRanges_2.44.0             
+    ## [43] GetoptLong_1.1.0            hms_1.1.4                  
+    ## [45] S4Vectors_0.48.0            bit64_4.6.0-1              
+    ## [47] clue_0.3-66                 magick_2.9.0               
+    ## [49] locfit_1.5-9.12             foreach_1.5.2              
+    ## [51] glue_1.8.0                  codetools_0.2-20           
+    ## [53] cowplot_1.2.0               stringi_1.8.7              
+    ## [55] shape_1.4.6.1               gtable_0.3.6               
+    ## [57] GenomicRanges_1.62.0        pillar_1.11.1              
+    ## [59] htmltools_0.5.9             Seqinfo_1.0.0              
+    ## [61] circlize_0.4.17             R6_2.6.1                   
+    ## [63] doParallel_1.0.17           vroom_1.6.7                
+    ## [65] evaluate_1.0.5              lattice_0.22-7             
+    ## [67] png_0.1-8                   class_7.3-23               
+    ## [69] Rcpp_1.1.1                  SparseArray_1.10.2         
+    ## [71] DESeq2_1.50.2               xfun_0.56                  
+    ## [73] MatrixGenerics_1.22.0       pkgconfig_2.0.3            
+    ## [75] GlobalOptions_0.1.3

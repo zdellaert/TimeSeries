@@ -1,7 +1,7 @@
 RNA-seq Preprocessing and Normalization
 ================
 Zoe Dellaert
-2026-05-08
+2026-05-09
 
 - [Preproccessing of bulk RNA-seq
   data](#preproccessing-of-bulk-rna-seq-data)
@@ -29,6 +29,8 @@ Zoe Dellaert
       species_parameters.R for this
       species.](#note-if-outliers-are-identified-add-them-to-species_parametersr-for-this-species)
   - [Final summary](#final-summary)
+    - [Heatmap of variable genes](#heatmap-of-variable-genes)
+    - [Text summary](#text-summary)
 
 # Preproccessing of bulk RNA-seq data
 
@@ -308,8 +310,6 @@ print_config(species)
     ## Outliers: None
     ## WGCNA power: 12
     ## Mfuzz clusters: 6
-    ## 
-    ## Output: ../../output_RNA/Pacuta
 
 ``` r
 # set up necessary output directories if they don't exist
@@ -534,6 +534,32 @@ abline(h = 100, col = "red", lty = 2)
 ### Note: If outliers are identified, add them to species_parameters.R for this species.
 
 ## Final summary
+
+### Heatmap of variable genes
+
+``` r
+topVarGenes <- head(order(rowVars(vsd_mat), decreasing=TRUE), 500)
+
+pheatmap(vsd_mat[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
+         cluster_cols=FALSE, 
+         annotation_col= meta[,c("treatment","time")],
+         annotation_colors = list("treatment" = treat_colors,
+                                  "time" = time_colors))
+```
+
+![](./01_preprocessing_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
+
+``` r
+pheatmap(vsd_mat[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
+         cluster_cols=TRUE, cutree_cols = 2,
+         annotation_col= meta[,c("treatment","time")],
+         annotation_colors = list("treatment" = treat_colors,
+                                  "time" = time_colors))
+```
+
+![](./01_preprocessing_files/figure-gfm/unnamed-chunk-1-2.png)<!-- -->
+
+### Text summary
 
     ## Preprocessing Summary: Pacuta
 

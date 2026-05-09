@@ -217,6 +217,26 @@ abline(h = 100, col = "red", lty = 2)
 
 ## Final summary
 
+### Heatmap of variable genes
+
+```{r}
+topVarGenes <- head(order(rowVars(vsd_mat), decreasing=TRUE), 500)
+
+pheatmap(vsd_mat[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
+         cluster_cols=FALSE, 
+         annotation_col= meta[,c("treatment","time")],
+         annotation_colors = list("treatment" = treat_colors,
+                                  "time" = time_colors))
+
+pheatmap(vsd_mat[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
+         cluster_cols=TRUE, cutree_cols = 2,
+         annotation_col= meta[,c("treatment","time")],
+         annotation_colors = list("treatment" = treat_colors,
+                                  "time" = time_colors))
+```
+
+### Text summary
+
 ```{r final, echo=FALSE}
 cat("Preprocessing Summary:", species, "\n")
 
