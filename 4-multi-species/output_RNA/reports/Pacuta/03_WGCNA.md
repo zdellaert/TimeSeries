@@ -19,18 +19,20 @@ Zoe Dellaert
   - [7. WGCNA: One-step module
     detection](#7-wgcna-one-step-module-detection)
     - [Load saved WGCNA results](#load-saved-wgcna-results)
+    - [Extract module eigengenes and save module information for each
+      gene](#extract-module-eigengenes-and-save-module-information-for-each-gene)
     - [Visualize the network](#visualize-the-network)
   - [8. Treatment and Time Module
     Correlation](#8-treatment-and-time-module-correlation)
     - [Correlation Heatmaps](#correlation-heatmaps)
-    - [Identify peak times based on
-      correlation](#identify-peak-times-based-on-correlation)
     - [Run linear model on each module
       vs. treatment](#run-linear-model-on-each-module-vs-treatment)
     - [Plot example module over time](#plot-example-module-over-time)
     - [Trajectory plots for all
       modules](#trajectory-plots-for-all-modules)
     - [Individual module heatmaps](#individual-module-heatmaps)
+  - [9. Module Membership (kME) and Hub
+    Genes](#9-module-membership-kme-and-hub-genes)
 
 # Network analysis of Time Series bulk RNA-seq data
 
@@ -426,50 +428,7 @@ if(params$TestParams == TRUE) {
 } else {
   soft_power = config$soft_power
 }
-```
 
-    ## pickSoftThreshold: will use block size 1793.
-    ##  pickSoftThreshold: calculating connectivity for given powers...
-    ##    ..working on genes 1 through 1793 of 24941
-    ##    ..working on genes 1794 through 3586 of 24941
-    ##    ..working on genes 3587 through 5379 of 24941
-    ##    ..working on genes 5380 through 7172 of 24941
-    ##    ..working on genes 7173 through 8965 of 24941
-    ##    ..working on genes 8966 through 10758 of 24941
-    ##    ..working on genes 10759 through 12551 of 24941
-    ##    ..working on genes 12552 through 14344 of 24941
-    ##    ..working on genes 14345 through 16137 of 24941
-    ##    ..working on genes 16138 through 17930 of 24941
-    ##    ..working on genes 17931 through 19723 of 24941
-    ##    ..working on genes 19724 through 21516 of 24941
-    ##    ..working on genes 21517 through 23309 of 24941
-    ##    ..working on genes 23310 through 24941 of 24941
-    ##    Power SFT.R.sq  slope truncated.R.sq  mean.k. median.k. max.k.
-    ## 1      1   0.0222   4.62          0.866 12500.00  12500.00  12900
-    ## 2      2   0.4750 -11.60          0.871  6810.00   6740.00   7920
-    ## 3      3   0.4510  -5.29          0.929  3960.00   3880.00   5370
-    ## 4      4   0.4770  -3.38          0.935  2440.00   2350.00   3860
-    ## 5      5   0.5110  -2.52          0.918  1570.00   1490.00   2900
-    ## 6      6   0.5720  -2.04          0.919  1050.00    971.00   2250
-    ## 7      7   0.6570  -1.76          0.948   728.00    652.00   1780
-    ## 8      8   0.7050  -1.75          0.950   520.00    448.00   1480
-    ## 9      9   0.7390  -1.79          0.951   381.00    314.00   1260
-    ## 10    10   0.7540  -1.85          0.946   285.00    225.00   1090
-    ## 11    11   0.7840  -1.86          0.957   218.00    163.00    951
-    ## 12    12   0.8000  -1.88          0.960   170.00    120.00    839
-    ## 13    14   0.8110  -1.93          0.959   107.00     67.60    669
-    ## 14    16   0.8400  -1.92          0.969    71.40     39.80    546
-    ## 15    18   0.8580  -1.91          0.976    49.50     24.20    454
-    ## 16    20   0.8600  -1.92          0.974    35.40     15.10    384
-    ## 17    22   0.8710  -1.90          0.978    26.10      9.66    329
-    ## 18    24   0.8820  -1.87          0.982    19.70      6.34    284
-    ## 19    26   0.8840  -1.86          0.981    15.10      4.25    248
-    ## 20    28   0.8890  -1.84          0.980    11.90      2.88    218
-    ## 21    30   0.8980  -1.81          0.985     9.42      2.00    193
-
-![](./03_WGCNA_files/figure-gfm/determine-params-1.png)<!-- -->![](./03_WGCNA_files/figure-gfm/determine-params-2.png)<!-- -->
-
-``` r
 cat("Soft Power for WGCNA:", soft_power)
 ```
 
@@ -511,162 +470,6 @@ if(params$run_WGCNA == TRUE) {
 }
 ```
 
-    ##  Calculating module eigengenes block-wise from all genes
-    ##    Flagging genes and samples with too many missing values...
-    ##     ..step 1
-    ##  ..Working on block 1 .
-    ##     TOM calculation: adjacency..
-    ##     ..will use 18 parallel threads.
-    ##      Fraction of slow calculations: 0.000000
-    ##     ..connectivity..
-    ##     ..matrix multiplication (system BLAS)..
-    ##     ..normalization..
-    ##     ..done.
-    ##    ..saving TOM for block 1 into file ../../output_RNA/WGCNA/Pacuta/blockwiseTOM-block.1.RData
-    ##  ....clustering..
-    ##  ....detecting modules..
-    ##  ....calculating module eigengenes..
-    ##  ....checking kME in modules..
-
-    ## Warning in bicor(structure(c(6.89786248449005, 6.72775437493347,
-    ## 7.21706639185292, : bicor: zero MAD in variable 'x'. Pearson correlation was
-    ## used for individual columns with zero (or missing) MAD.
-
-    ##      ..removing 1139 genes from module 1 because their KME is too low.
-
-    ## Warning in bicor(structure(c(6.23462234996607, 6.51031737773723,
-    ## 5.87018976267548, : bicor: zero MAD in variable 'x'. Pearson correlation was
-    ## used for individual columns with zero (or missing) MAD.
-
-    ##      ..removing 681 genes from module 2 because their KME is too low.
-
-    ## Warning in bicor(structure(c(5.87018976267548, 6.72775437493347,
-    ## 6.39974934735654, : bicor: zero MAD in variable 'x'. Pearson correlation was
-    ## used for individual columns with zero (or missing) MAD.
-
-    ##      ..removing 700 genes from module 3 because their KME is too low.
-
-    ## Warning in bicor(structure(c(5.87018976267548, 5.87018976267548,
-    ## 6.32943929195301, : bicor: zero MAD in variable 'x'. Pearson correlation was
-    ## used for individual columns with zero (or missing) MAD.
-
-    ##      ..removing 365 genes from module 4 because their KME is too low.
-
-    ## Warning in bicor(structure(c(5.87018976267548, 6.53829324410924,
-    ## 5.87018976267548, : bicor: zero MAD in variable 'x'. Pearson correlation was
-    ## used for individual columns with zero (or missing) MAD.
-
-    ##      ..removing 37 genes from module 5 because their KME is too low.
-
-    ## Warning in bicor(structure(c(5.87018976267548, 5.87018976267548,
-    ## 5.87018976267548, : bicor: zero MAD in variable 'x'. Pearson correlation was
-    ## used for individual columns with zero (or missing) MAD.
-
-    ##      ..removing 251 genes from module 6 because their KME is too low.
-
-    ## Warning in bicor(structure(c(6.49811692753967, 6.45005722239549,
-    ## 6.51698204427436, : bicor: zero MAD in variable 'x'. Pearson correlation was
-    ## used for individual columns with zero (or missing) MAD.
-
-    ##      ..removing 20 genes from module 7 because their KME is too low.
-
-    ## Warning in bicor(structure(c(5.87018976267548, 5.87018976267548,
-    ## 6.6150121865324, : bicor: zero MAD in variable 'x'. Pearson correlation was
-    ## used for individual columns with zero (or missing) MAD.
-
-    ##      ..removing 3 genes from module 8 because their KME is too low.
-
-    ## Warning in bicor(structure(c(5.87018976267548, 6.20647267759897,
-    ## 5.87018976267548, : bicor: zero MAD in variable 'x'. Pearson correlation was
-    ## used for individual columns with zero (or missing) MAD.
-
-    ##      ..removing 96 genes from module 9 because their KME is too low.
-
-    ## Warning in bicor(structure(c(9.89913656233978, 9.75899622919795,
-    ## 9.72822338316293, : bicor: zero MAD in variable 'x'. Pearson correlation was
-    ## used for individual columns with zero (or missing) MAD.
-
-    ##      ..removing 24 genes from module 10 because their KME is too low.
-    ##      ..removing 2 genes from module 11 because their KME is too low.
-
-    ## Warning in bicor(structure(c(11.217917644948, 11.5587835491806,
-    ## 11.4561514194923, : bicor: zero MAD in variable 'x'. Pearson correlation was
-    ## used for individual columns with zero (or missing) MAD.
-
-    ##      ..removing 1 genes from module 12 because their KME is too low.
-
-    ## Warning in bicor(structure(c(11.1056360043832, 10.7937267638293,
-    ## 10.9499926949883, : bicor: zero MAD in variable 'x'. Pearson correlation was
-    ## used for individual columns with zero (or missing) MAD.
-
-    ## Warning in bicor(structure(c(11.2247237501652, 11.2398483246975,
-    ## 11.1849796113271, : bicor: zero MAD in variable 'x'. Pearson correlation was
-    ## used for individual columns with zero (or missing) MAD.
-
-    ## Warning in bicor(structure(c(9.79591507866115, 10.0683399331565,
-    ## 9.96032236601772, : bicor: zero MAD in variable 'x'. Pearson correlation was
-    ## used for individual columns with zero (or missing) MAD.
-
-    ##      ..removing 5 genes from module 16 because their KME is too low.
-    ##      ..removing 4 genes from module 17 because their KME is too low.
-    ##      ..removing 4 genes from module 18 because their KME is too low.
-
-    ## Warning in bicor(structure(c(7.92869413362598, 7.52868207027952,
-    ## 7.90823963455669, : bicor: zero MAD in variable 'x'. Pearson correlation was
-    ## used for individual columns with zero (or missing) MAD.
-
-    ## Warning in bicor(structure(c(6.83593305991491, 6.80695308189276,
-    ## 6.83068620705663, : bicor: zero MAD in variable 'x'. Pearson correlation was
-    ## used for individual columns with zero (or missing) MAD.
-
-    ##      ..removing 5 genes from module 22 because their KME is too low.
-
-    ## Warning in bicor(structure(c(5.87018976267548, 5.87018976267548,
-    ## 5.87018976267548, : bicor: zero MAD in variable 'x'. Pearson correlation was
-    ## used for individual columns with zero (or missing) MAD.
-
-    ## Warning in bicor(structure(c(6.27736915302863, 6.34470124784093,
-    ## 6.32943929195301, : bicor: zero MAD in variable 'x'. Pearson correlation was
-    ## used for individual columns with zero (or missing) MAD.
-
-    ## Warning in bicor(structure(c(10.0768598900852, 9.65949185011529,
-    ## 9.87686560320412, : bicor: zero MAD in variable 'x'. Pearson correlation was
-    ## used for individual columns with zero (or missing) MAD.
-
-    ## Warning in bicor(structure(c(10.1226219509607, 10.0335000029061,
-    ## 9.87225443560679, : bicor: zero MAD in variable 'x'. Pearson correlation was
-    ## used for individual columns with zero (or missing) MAD.
-
-    ##      ..removing 1 genes from module 31 because their KME is too low.
-    ##      ..removing 1 genes from module 34 because their KME is too low.
-
-    ## Warning in (function (x, y = NULL, robustX = TRUE, robustY = TRUE, use =
-    ## "all.obs", : bicor: zero MAD in variable 'x'. Pearson correlation was used for
-    ## individual columns with zero (or missing) MAD.
-
-    ##   ..reassigning 130 genes from module 1 to modules with higher KME.
-    ##   ..reassigning 32 genes from module 2 to modules with higher KME.
-    ##   ..reassigning 9 genes from module 3 to modules with higher KME.
-    ##   ..reassigning 2 genes from module 4 to modules with higher KME.
-    ##   ..reassigning 25 genes from module 5 to modules with higher KME.
-    ##   ..reassigning 9 genes from module 6 to modules with higher KME.
-    ##   ..reassigning 14 genes from module 8 to modules with higher KME.
-    ##   ..reassigning 3 genes from module 9 to modules with higher KME.
-    ##   ..reassigning 6 genes from module 10 to modules with higher KME.
-    ##   ..reassigning 3 genes from module 11 to modules with higher KME.
-    ##   ..reassigning 1 genes from module 12 to modules with higher KME.
-    ##   ..reassigning 2 genes from module 13 to modules with higher KME.
-    ##   ..reassigning 6 genes from module 14 to modules with higher KME.
-    ##   ..reassigning 1 genes from module 19 to modules with higher KME.
-    ##   ..reassigning 2 genes from module 21 to modules with higher KME.
-    ##   ..reassigning 9 genes from module 22 to modules with higher KME.
-    ##   ..reassigning 1 genes from module 24 to modules with higher KME.
-    ##   ..reassigning 1 genes from module 25 to modules with higher KME.
-    ##   ..reassigning 1 genes from module 31 to modules with higher KME.
-    ##  ..merging modules that are too close..
-    ##      mergeCloseModules: Merging modules whose distance is less than 0.25
-    ##        Calculating new MEs...
-
 ### Load saved WGCNA results
 
 ``` r
@@ -706,6 +509,34 @@ table(moduleLabels)
 moduleColors <- labels2colors(moduleLabels)
 ```
 
+### Extract module eigengenes and save module information for each gene
+
+``` r
+# save the module information for each gene as a dataframe
+gene_module_df <- data.frame(
+  gene_id = names(netwk$colors),
+  module = paste0("ME", netwk$colors),
+  color = labels2colors(netwk$colors)
+)
+
+#save as csv file
+write.csv(gene_module_df, file.path(outdir, "gene_modules.csv"), row.names = FALSE)
+
+# extract the module eigengenes - average expression of that module for each sample
+module_eigengenes <- netwk$MEs
+
+# confirm that the sample metadata and sample labels for the module eigengenes are matching
+all.equal(meta$sample, rownames(module_eigengenes))
+```
+
+    ## [1] TRUE
+
+``` r
+# save the module eigengenes as a csv file
+write.csv(module_eigengenes %>% rownames_to_column("sample"), 
+          file.path(outdir, "module_eigengenes.csv"), row.names = FALSE)
+```
+
 ### Visualize the network
 
 ``` r
@@ -721,25 +552,6 @@ plotDendroAndColors(
 ```
 
 ![](./03_WGCNA_files/figure-gfm/wgcna-dendro-1.png)<!-- -->
-
-``` r
-# save the module information for each gene as a dataframe and txt file
-gene_module_df <- data.frame(
-  gene_id = names(netwk$colors),
-  module = paste0("ME", netwk$colors),
-  color = labels2colors(netwk$colors)
-)
-
-write_delim(gene_module_df, file = file.path(outdir,"gene_modules.txt"), delim = "\t")
-
-# extract the module eigengenes - average expression of that module for each sample
-module_eigengenes <- netwk$MEs
-
-# confirm that the sample metadata and sample labels for the module eigengenes are matching
-all.equal(meta$sample, rownames(module_eigengenes))
-```
-
-    ## [1] TRUE
 
 ## 8. Treatment and Time Module Correlation
 
@@ -823,6 +635,10 @@ mmCor = moduleTraitCor %>% as.data.frame() %>% rownames_to_column("module") %>%
     module = factor(module, levels = rev(module_order)),
     treatment_time = factor(treatment_time, levels = unique(module_eigengenes_ordered$treatment_time)))
 
+# save module trait correlation csv
+write.csv(mmCor, file.path(outdir, "module_trait_correlations.csv"), row.names = FALSE)
+
+# plot module trait correlation heatmap
 ggplot(mmCor, aes(x=treatment_time, y=module, fill=correlation)) +
   geom_tile(color = "white", linewidth = 0.3) +
   geom_text(aes(label = label), size = 3, color = "black") +
@@ -838,39 +654,14 @@ ggplot(mmCor, aes(x=treatment_time, y=module, fill=correlation)) +
     axis.text.x = element_text(angle = 45, hjust = 1),
     panel.grid = element_blank(),
     axis.ticks = element_blank()
-  ) +coord_fixed(ratio = 0.7)
+  ) #+coord_fixed(ratio = 0.7)
 ```
 
-![](./03_WGCNA_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+![](./03_WGCNA_files/figure-gfm/ggplot-correlation-1.png)<!-- -->
 
 ``` r
 save_ggplot(plot = last_plot(), filename = "all_heatmap_ggplot", width = 8, height = 8)
 ```
-
-### Identify peak times based on correlation
-
-``` r
-module_peak_times <- mmCor %>%
-  filter(pvalue < 0.05, grepl("Heat",treatment_time)) %>%
-  group_by(treatment_time) %>%
-  summarize(
-    n_modules = n(),
-    mean_abs_cor = mean(abs(correlation))
-  ) %>%
-  extract(treatment_time, "time", "([0-9]+)hr", convert = TRUE)
-
-module_peak_times
-```
-
-    ## # A tibble: 6 × 3
-    ##    time n_modules mean_abs_cor
-    ##   <int>     <int>        <dbl>
-    ## 1     1         4        0.368
-    ## 2     3        18        0.505
-    ## 3    12        13        0.417
-    ## 4    24         6        0.374
-    ## 5    72        11        0.423
-    ## 6   120         8        0.430
 
 ### Run linear model on each module vs. treatment
 
@@ -957,6 +748,11 @@ cat("Top 5 modules significant by the interaction term:", paste(top5_interaction
 
     ## Top 5 modules significant by the interaction term: ME1, ME0, ME2, ME12, ME3
 
+``` r
+# save interaction model stats
+write.csv(stats_interaction, file.path(outdir, "module_interaction_stats.csv"), row.names = FALSE)
+```
+
 ### Plot example module over time
 
 ``` r
@@ -969,8 +765,10 @@ eigengenes_treatment_df <- module_eigengenes %>%
 toplot <- top5_interaction[1]
 
 eigenplot <- ggplot(eigengenes_treatment_df, aes(x = factor(time), y = get(toplot),color = treatment)) +
-  geom_boxplot(outlier.shape = NA) +
-  ggforce::geom_sina(size=1, alpha = 0.5) +
+  geom_point(alpha = 0.4, size = 2.5) +
+  stat_summary(fun = mean, geom = "line", aes(group = treatment), linewidth = 0.8) +
+  stat_summary(fun = mean, geom = "point", size = 3.5) +
+  stat_summary(fun.data = mean_se, geom = "errorbar", width = 0.2) +
   scale_color_manual(values = treat_colors) +
   theme_classic() +
   labs(x = "Time (hours)", y = "Module Eigengene",
@@ -980,7 +778,7 @@ eigenplot <- ggplot(eigengenes_treatment_df, aes(x = factor(time), y = get(toplo
 print(eigenplot)
 ```
 
-![](./03_WGCNA_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+![](./03_WGCNA_files/figure-gfm/module-example-1.png)<!-- -->
 
 ### Trajectory plots for all modules
 
@@ -993,23 +791,6 @@ eigengenes_treatment_df_long <- eigengenes_treatment_df %>%
   mutate(module_label = ifelse(module %in% top_mod_sig_interaction,
                                 paste0("*",module),
                                 as.character(module)))
-
-ggplot(eigengenes_treatment_df_long, aes(x = factor(time), y = eigengene_value,color = treatment)) +
-  geom_boxplot(outlier.shape = NA) +
-  ggforce::geom_sina(size=1, alpha = 0.5) +
-  scale_color_manual(values = treat_colors) +
-  facet_wrap(~module_label, ncol = 5) +
-  theme_classic() + theme(
-    strip.text = element_text(size = 8, face = "bold"),
-    axis.text = element_text(size = 7),
-    legend.position = "bottom") +
-  labs(x = "Time (hours)", y = "Module Eigengene")
-```
-
-![](./03_WGCNA_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
-
-``` r
-save_ggplot(plot = last_plot(), filename = "all_modules", width = 14, height = 12)
 
 eigengenes_summary <- eigengenes_treatment_df_long %>%
   group_by(module, module_label, time, treatment) %>%
@@ -1030,7 +811,7 @@ ggplot(eigengenes_summary, aes(x = factor(time), y = mean_value, color = treatme
   labs(x = "Time (hours)", y = "Module Eigengene")
 ```
 
-![](./03_WGCNA_files/figure-gfm/unnamed-chunk-9-2.png)<!-- -->
+![](./03_WGCNA_files/figure-gfm/boxplots-all-1.png)<!-- -->
 
 ``` r
 save_ggplot(plot = last_plot(), filename = "all_modules_lines", width = 14, height = 12)
@@ -1057,4 +838,52 @@ for (module in top5_interaction){
     ## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
     ## generated.
 
-![](./03_WGCNA_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->![](./03_WGCNA_files/figure-gfm/unnamed-chunk-10-2.png)<!-- -->![](./03_WGCNA_files/figure-gfm/unnamed-chunk-10-3.png)<!-- -->![](./03_WGCNA_files/figure-gfm/unnamed-chunk-10-4.png)<!-- -->![](./03_WGCNA_files/figure-gfm/unnamed-chunk-10-5.png)<!-- -->
+![](./03_WGCNA_files/figure-gfm/module-heatmaps-1.png)<!-- -->![](./03_WGCNA_files/figure-gfm/module-heatmaps-2.png)<!-- -->![](./03_WGCNA_files/figure-gfm/module-heatmaps-3.png)<!-- -->![](./03_WGCNA_files/figure-gfm/module-heatmaps-4.png)<!-- -->![](./03_WGCNA_files/figure-gfm/module-heatmaps-5.png)<!-- -->
+
+## 9. Module Membership (kME) and Hub Genes
+
+``` r
+# Calculate module membership (kME) - correlation of each gene with each module eigengene
+kME <- signedKME(normalized_counts, module_eigengenes)
+colnames(kME) <- str_replace(colnames(kME),"kME", "kME_")
+
+# Add kME to gene_module_df
+gene_module_df <- gene_module_df %>%
+  bind_cols(kME) %>%
+  rowwise() %>%
+  # KME_own = the module membership for that gene in the module it was assigned to by WGCNA
+  mutate(kME_own = get(paste0("kME_", str_remove(module,"ME")))) %>%
+  ungroup() %>% select(gene_id, module, color, kME_own, everything())
+
+# Identify hub genes: top 10% in each module by kME
+hub_genes <- gene_module_df %>%
+  group_by(module) %>%
+  slice_max(kME_own, prop = 0.1) %>%
+  ungroup()
+
+cat("Hub genes per module:\n")
+```
+
+    ## Hub genes per module:
+
+``` r
+print(table(hub_genes$module))
+```
+
+    ## 
+    ##  ME0  ME1 ME10 ME11 ME12 ME13 ME14 ME15 ME16 ME17 ME18 ME19  ME2 ME20 ME21 ME22 
+    ##  333  346   71   67   57   54   34   24   21   19   19   17  338   17   14   13 
+    ## ME23 ME24  ME3  ME4  ME5  ME6  ME7  ME8  ME9 
+    ##   12   10  230  175  164  154  132   88   74
+
+``` r
+cat("\nTotal hub genes:", nrow(hub_genes), "\n")
+```
+
+    ## 
+    ## Total hub genes: 2483
+
+``` r
+#save hub genes as csv
+write.csv(hub_genes, file.path(outdir, "hub_genes.csv"), row.names = FALSE)
+```

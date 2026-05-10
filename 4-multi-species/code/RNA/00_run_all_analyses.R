@@ -1,5 +1,5 @@
 # Run analysis pipeline for all species
-setwd(dirname(rstudioapi::getSourceEditorContext()$path))
+#setwd(dirname(rstudioapi::getSourceEditorContext()$path))
 library(rmarkdown)
 
 species_list <- c("Pacuta", "Mcap", "Pcomp")
@@ -24,7 +24,7 @@ for (sp in species_list) {
          output_dir = output_dir)
   
   render("03_WGCNA.Rmd",
-         params = list(species = sp, TestParams = TRUE, run_WGCNA = TRUE),
+         params = list(species = sp, TestParams = FALSE, run_WGCNA = FALSE),
          output_format = "github_document",
          output_dir = output_dir)
 }
