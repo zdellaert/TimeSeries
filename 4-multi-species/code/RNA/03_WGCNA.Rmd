@@ -35,8 +35,6 @@ BiocManager::install("WGCNA",force = TRUE)
 
 ---
 
-# Setup
-
 ## 1. Load packages and functions
 
 ```{r setup}
@@ -198,7 +196,7 @@ cat("Input data:", nrow(vst), "genes x", ncol(vst), "samples")
 
 Ideally these were removed during 01_preprocessing.Rmd. See line above to confirm the number of samples matches what you expect after outlier removal. But confirm by clustering the samples and view as a tree.
 
-```{r}
+```{r sample-tree}
 sampleTree = hclust(dist(normalized_counts), method = "average")
 plot(sampleTree, main = paste(species, "- Sample Clustering"), 
      xlab = "", sub = "", cex = 0.6)
@@ -208,16 +206,16 @@ plot(sampleTree, main = paste(species, "- Sample Clustering"),
 
 The below takes a long time to run, so it is only run if TestParams is set to TRUE. Otherwise, the pre-determined parameters for this species dataset are loaded in from the species_parameters.R script. This should be redone for any changes in data filtering and outlier removal.
 
-```{r}
+```{r determine-params}
 if(params$TestParams == TRUE) {
   sft <- pickSoftThreshold(normalized_counts,
                            networkType = "signed",
                            RsquaredCut = 0.8,
-                           powerVector = c(seq(1, 12, by = 1), seq(14, 20, by = 2)),
+                           powerVector = c(seq(1, 12, by = 1), seq(14, 30, by = 2)),
                            verbose=3)
   sft_df <- data.frame(sft$fitIndices) %>% dplyr::mutate(model_fit = -sign(slope) * SFT.R.sq)
   
-  ggplot(sft_df, aes(x = Power, y = model_fit, label = Power)) +
+  fit_plot <- ggplot(sft_df, aes(x = Power, y = model_fit, label = Power)) +
     geom_point() +
     geom_text(nudge_y = 0.1) +
     # We will plot what WGCNA recommends as an R^2 cutoff
@@ -228,7 +226,9 @@ if(params$TestParams == TRUE) {
     ggtitle("Scale independence") +
     theme_classic()
   
-  ggplot(sft_df, aes(x = Power, y = mean.k., label = Power)) +
+  print(fit_plot)
+  
+  mean_plot <- ggplot(sft_df, aes(x = Power, y = mean.k., label = Power)) +
     geom_point() +
     geom_text(nudge_y = 500) +
     xlab("Soft Threshold (power)") +
@@ -236,15 +236,19 @@ if(params$TestParams == TRUE) {
     ggtitle("Mean Connectivity") +
     theme_classic()
   
+  print(mean_plot)
+  
   soft_power = sft$powerEstimate
   
   if (is.na(sft$powerEstimate)) {
-    warning(cat("Manual selection needed"))
-            }
+    stop("Soft power could not be automatically determined. Potenitally test a greater range of powers.")
+}
+  
   if (soft_power != config$soft_power) {
     warning(paste0(" Calculated power (" , sft$powerEstimate, 
                   ") differs from config value (", config$soft_power,"). Consider updating species_parameters.R with new value. Examine graph and confirm if the calculated power matches visual examination of the data."))
-    }
+  }
+  
 } else {
   soft_power = config$soft_power
 }
@@ -290,7 +294,7 @@ if(params$run_WGCNA == TRUE) {
 
 ### Load saved WGCNA results
 
-```{r}
+```{r load-wgcna}
 netwk <- readRDS(file.path(outdir, "wgcna_network.rds"))
 
 # what is stored in this object?
@@ -309,7 +313,9 @@ table(moduleLabels)
 moduleColors <- labels2colors(moduleLabels)
 ```
 
-```{r}
+### Visualize the network
+
+```{r wgcna-dendro}
 # Plot the dendrogram and the module colors underneath
 plotDendroAndColors(
   netwk$dendrograms[[1]],

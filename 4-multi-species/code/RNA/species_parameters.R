@@ -66,7 +66,7 @@ species_params <- list(
         outlier_samples = c("POR_R72_H1", "POR_R72_H2", "POR_R24_H1"),
 
         #for wgcna
-        soft_power = 8,
+        soft_power = 28,
 
         #for mfuzz
         n_clusters = 6)
