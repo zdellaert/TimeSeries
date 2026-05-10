@@ -276,7 +276,7 @@ sessionInfo() #provides list of loaded packages and version of R
     ##  [7] XML_3.99-0.18           digest_0.6.39           timechange_0.3.0       
     ## [10] lifecycle_1.0.5         survival_3.8-3          KEGGREST_1.50.0        
     ## [13] RSQLite_2.4.5           magrittr_2.0.4          compiler_4.5.1         
-    ## [16] rlang_1.1.7             tools_4.5.1             yaml_2.3.12            
+    ## [16] rlang_1.2.0             tools_4.5.1             yaml_2.3.12            
     ## [19] knitr_1.50              S4Arrays_1.10.0         bit_4.6.0              
     ## [22] DelayedArray_0.36.0     abind_1.4-8             withr_3.0.2            
     ## [25] grid_4.5.1              xtable_1.8-4            scales_1.4.0           
@@ -314,7 +314,9 @@ print_config(species)
 ``` r
 # set up necessary output directories if they don't exist
 outdir <- file.path("../../output_RNA/counts_filt_norm", species)
+outdir_plots <- file.path(outdir,"plots")
 if (!dir.exists(outdir)) dir.create(outdir, recursive = TRUE)
+if (!dir.exists(outdir_plots)) dir.create(outdir_plots, recursive = TRUE)
 
 reportdir <- file.path("../../output_RNA/reports", params$species, "01_preprocessing_files/figure-gfm/")
 if (!dir.exists(reportdir)) dir.create(reportdir, recursive = TRUE)
@@ -654,7 +656,7 @@ sessionInfo()
     ##  [7] XML_3.99-0.18           digest_0.6.39           timechange_0.3.0       
     ## [10] lifecycle_1.0.5         survival_3.8-3          KEGGREST_1.50.0        
     ## [13] RSQLite_2.4.5           magrittr_2.0.4          compiler_4.5.1         
-    ## [16] rlang_1.1.7             tools_4.5.1             yaml_2.3.12            
+    ## [16] rlang_1.2.0             tools_4.5.1             yaml_2.3.12            
     ## [19] knitr_1.50              labeling_0.4.3          S4Arrays_1.10.0        
     ## [22] bit_4.6.0               DelayedArray_0.36.0     abind_1.4-8            
     ## [25] withr_3.0.2             grid_4.5.1              xtable_1.8-4           

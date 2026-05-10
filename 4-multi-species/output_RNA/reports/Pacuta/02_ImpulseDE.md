@@ -218,7 +218,7 @@ sessionInfo() #provides list of loaded packages and version of R
     ## [33] rmarkdown_2.30             
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] DBI_1.2.3               rlang_1.1.7             magrittr_2.0.4         
+    ##  [1] DBI_1.2.3               rlang_1.2.0             magrittr_2.0.4         
     ##  [4] clue_0.3-66             GetoptLong_1.1.0        compiler_4.5.1         
     ##  [7] RSQLite_2.4.5           png_0.1-8               systemfonts_1.3.1      
     ## [10] vctrs_0.7.0             shape_1.4.6.1           pkgconfig_2.0.3        
@@ -897,7 +897,7 @@ sessionInfo()
     ## [33] rmarkdown_2.30             
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] DBI_1.2.3               rlang_1.1.7             magrittr_2.0.4         
+    ##  [1] DBI_1.2.3               rlang_1.2.0             magrittr_2.0.4         
     ##  [4] clue_0.3-66             GetoptLong_1.1.0        compiler_4.5.1         
     ##  [7] RSQLite_2.4.5           png_0.1-8               systemfonts_1.3.1      
     ## [10] vctrs_0.7.0             shape_1.4.6.1           pkgconfig_2.0.3        

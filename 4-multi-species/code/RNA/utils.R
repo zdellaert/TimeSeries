@@ -1,6 +1,6 @@
 save_ggplot <- function(plot, filename, width = 10, height = 7, units = "in", dpi = 300,bg=NULL) {
-  png_path <- file.path(outdir, paste0(filename, ".png"))
-  pdf_dir <- file.path(outdir, "pdf_figs")
+  png_path <- file.path(outdir_plots, paste0(filename, ".png"))
+  pdf_dir <- file.path(outdir_plots, "pdf_figs")
   pdf_path <- file.path(pdf_dir, paste0(filename, ".pdf"))
   
   # Ensure the pdf_figs directory exists

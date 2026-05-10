@@ -20,6 +20,17 @@ Zoe Dellaert
     detection](#7-wgcna-one-step-module-detection)
     - [Load saved WGCNA results](#load-saved-wgcna-results)
     - [Visualize the network](#visualize-the-network)
+  - [8. Treatment and Time Module
+    Correlation](#8-treatment-and-time-module-correlation)
+    - [Correlation Heatmaps](#correlation-heatmaps)
+    - [Identify peak times based on
+      correlation](#identify-peak-times-based-on-correlation)
+    - [Run linear model on each module
+      vs. treatment](#run-linear-model-on-each-module-vs-treatment)
+    - [Plot example module over time](#plot-example-module-over-time)
+    - [Trajectory plots for all
+      modules](#trajectory-plots-for-all-modules)
+    - [Individual module heatmaps](#individual-module-heatmaps)
 
 # Network analysis of Time Series bulk RNA-seq data
 
@@ -125,29 +136,31 @@ sessionInfo() #provides list of loaded packages and version of R
     ##  [25] fastmap_1.2.0           GenomeInfoDbData_1.2.14 clue_0.3-66            
     ##  [28] digest_0.6.39           colorspace_2.1-2        AnnotationDbi_1.72.0   
     ##  [31] textshaping_1.0.4       Hmisc_5.2-5             RSQLite_2.4.5          
-    ##  [34] labeling_0.4.3          timechange_0.3.0        httr_1.4.7             
-    ##  [37] abind_1.4-8             compiler_4.5.1          proxy_0.4-27           
-    ##  [40] bit64_4.6.0-1           withr_3.0.2             doParallel_1.0.17      
-    ##  [43] backports_1.5.0         htmlTable_2.4.3         S7_0.2.1               
-    ##  [46] DBI_1.2.3               tkWidgets_1.86.0        DelayedArray_0.36.0    
-    ##  [49] rjson_0.2.23            tools_4.5.1             foreign_0.8-90         
-    ##  [52] nnet_7.3-20             glue_1.8.0              checkmate_2.3.3        
-    ##  [55] cluster_2.1.8.1         gtable_0.3.6            tzdb_0.5.0             
-    ##  [58] preprocessCore_1.72.0   class_7.3-23            data.table_1.18.0      
-    ##  [61] hms_1.1.4               XVector_0.50.0          foreach_1.5.2          
-    ##  [64] pillar_1.11.1           vroom_1.6.7             circlize_0.4.17        
-    ##  [67] splines_4.5.1           lattice_0.22-7          survival_3.8-3         
-    ##  [70] bit_4.6.0               annotate_1.86.1         tidyselect_1.2.1       
-    ##  [73] GO.db_3.22.0            locfit_1.5-9.12         Biostrings_2.78.0      
-    ##  [76] knitr_1.50              gridExtra_2.3           xfun_0.56              
-    ##  [79] stringi_1.8.7           UCSC.utils_1.4.0        yaml_2.3.12            
-    ##  [82] evaluate_1.0.5          codetools_0.2-20        cli_3.6.5              
-    ##  [85] rpart_4.1.24            xtable_1.8-4            systemfonts_1.3.1      
-    ##  [88] dichromat_2.0-0.1       Rcpp_1.1.1              GenomeInfoDb_1.44.3    
-    ##  [91] png_0.1-8               XML_3.99-0.18           parallel_4.5.1         
-    ##  [94] blob_1.2.4              scales_1.4.0            crayon_1.5.3           
-    ##  [97] GetoptLong_1.1.0        rlang_1.1.7             cowplot_1.2.0          
-    ## [100] KEGGREST_1.50.0
+    ##  [34] labeling_0.4.3          timechange_0.3.0        polyclip_1.10-7        
+    ##  [37] httr_1.4.7              abind_1.4-8             compiler_4.5.1         
+    ##  [40] proxy_0.4-27            bit64_4.6.0-1           withr_3.0.2            
+    ##  [43] doParallel_1.0.17       backports_1.5.0         htmlTable_2.4.3        
+    ##  [46] S7_0.2.1                DBI_1.2.3               ggforce_0.5.0          
+    ##  [49] MASS_7.3-65             tkWidgets_1.86.0        DelayedArray_0.36.0    
+    ##  [52] rjson_0.2.23            tools_4.5.1             foreign_0.8-90         
+    ##  [55] nnet_7.3-20             glue_1.8.0              checkmate_2.3.3        
+    ##  [58] cluster_2.1.8.1         gtable_0.3.6            tzdb_0.5.0             
+    ##  [61] preprocessCore_1.72.0   class_7.3-23            data.table_1.18.0      
+    ##  [64] hms_1.1.4               XVector_0.50.0          foreach_1.5.2          
+    ##  [67] pillar_1.11.1           limma_3.64.3            vroom_1.6.7            
+    ##  [70] circlize_0.4.17         splines_4.5.1           tweenr_2.0.3           
+    ##  [73] lattice_0.22-7          survival_3.8-3          bit_4.6.0              
+    ##  [76] annotate_1.86.1         tidyselect_1.2.1        GO.db_3.22.0           
+    ##  [79] locfit_1.5-9.12         Biostrings_2.78.0       knitr_1.50             
+    ##  [82] gridExtra_2.3           xfun_0.56               statmod_1.5.1          
+    ##  [85] stringi_1.8.7           UCSC.utils_1.4.0        yaml_2.3.12            
+    ##  [88] evaluate_1.0.5          codetools_0.2-20        cli_3.6.5              
+    ##  [91] rpart_4.1.24            xtable_1.8-4            systemfonts_1.3.1      
+    ##  [94] dichromat_2.0-0.1       Rcpp_1.1.1              GenomeInfoDb_1.44.3    
+    ##  [97] png_0.1-8               XML_3.99-0.18           parallel_4.5.1         
+    ## [100] blob_1.2.4              scales_1.4.0            crayon_1.5.3           
+    ## [103] GetoptLong_1.1.0        rlang_1.2.0             cowplot_1.2.0          
+    ## [106] KEGGREST_1.50.0
 
 ## 2. Setup species-specific parameters
 
@@ -163,7 +176,7 @@ print_config(species)
     ## Species: Pcomp
     ## Count matrix: POR_Pcomp_gene_count_matrix.csv
     ## Outliers: POR_R72_H1, POR_R72_H2, POR_R24_H1
-    ## WGCNA power: 22
+    ## WGCNA power: 28
     ## Mfuzz clusters: 6
 
 ``` r
@@ -197,7 +210,7 @@ Create Heatmap function based heavily off of the following tutorial:
 make_module_heatmap <- function(module_name,
                                 expression_mat = normalized_counts,
                                 metadata_df = meta,
-                                gene_module_key_df = module_df,
+                                gene_module_key_df = gene_module_df,
                                 module_eigengenes_df = module_eigengenes) {
   # Create a summary heatmap of a given module.
   # based on https://alexslemonade.github.io/refinebio-examples/04-advanced-topics/network-analysis_rnaseq_01_wgcna.html#46_Determine_parameters_for_WGCNA
@@ -294,6 +307,25 @@ normalized_counts <- t(vst)
 meta <- read.csv(paste0("../../output_RNA/",species,"_RNA_seq_metadata.csv"))
 meta <- meta %>% column_to_rownames(var = "X") %>% select(-c(species, replicate))
 
+# remove outliers that are still in metadata file but were removed prior to the vst transformation
+outlier_samples <- config$outlier_samples
+
+if(length(outlier_samples) > 0) {
+    meta <- meta[!rownames(meta) %in% outlier_samples, ]
+}
+
+all(rownames(meta) %in% colnames(vst))
+```
+
+    ## [1] TRUE
+
+``` r
+all(rownames(meta) == colnames(vst))
+```
+
+    ## [1] TRUE
+
+``` r
 cat("Input data:", nrow(vst), "genes x", ncol(vst), "samples")
 ```
 
@@ -411,10 +443,6 @@ if(params$TestParams == TRUE) {
     ## 21    30  0.82100 -1.930          0.973     6.65      1.37    117
 
 ![](./03_WGCNA_files/figure-gfm/determine-params-1.png)<!-- -->![](./03_WGCNA_files/figure-gfm/determine-params-2.png)<!-- -->
-
-    ## Warning: Calculated power (28) differs from config value (22). Consider
-    ## updating species_parameters.R with new value. Examine graph and confirm if the
-    ## calculated power matches visual examination of the data.
 
 ``` r
 cat("Soft Power for WGCNA:", soft_power)
@@ -790,384 +818,326 @@ plotDendroAndColors(
 
 ![](./03_WGCNA_files/figure-gfm/wgcna-dendro-1.png)<!-- -->
 
-<!-- ### Treatment and Time Module Correlation -->
-
-<!-- ```{r} -->
-
-<!-- # save the module info as a dataframe and txt file -->
-
-<!-- module_df <- data.frame( -->
-
-<!--   gene_id = names(netwk$colors), -->
-
-<!--   module = paste0("ME", netwk$colors), -->
-
-<!--   color = labels2colors(netwk$colors) -->
-
-<!-- ) -->
-
-<!-- head(module_df) -->
-
-<!-- write_delim(module_df, file = paste0(outdir,"gene_modules.txt"), delim = "\t") -->
-
-<!-- # get the module eigengenes -->
-
-<!-- module_eigengenes <- netwk$MEs -->
-
-<!-- head(module_eigengenes) -->
-
-<!-- # get a list of all the genes in a module -->
-
-<!-- gene_module_key <- tibble::enframe(netwk$colors, name = "gene", value = "module") %>% -->
-
-<!--   # Let's add the `ME` part so its more clear what these numbers are and it matches elsewhere -->
-
-<!--   dplyr::mutate(module = paste0("ME", module)) -->
-
-<!-- # confirm that the sample metadata and sample labels for the module eigengenes are matching -->
-
-<!-- all.equal(meta$sample, rownames(module_eigengenes)) -->
-
-<!-- ``` -->
-
-<!-- #### Time+Treatment-Module Correlation Heatmaps -->
-
-<!-- ```{r} -->
-
-<!-- nSamples = nrow(normalized_counts) -->
-
-<!-- time_treat_factorial <- meta %>% -->
-
-<!--   mutate(group = paste0(time, "hr-", ifelse(treatment == "C", "Control", "Heat"))) %>% -->
-
-<!--   select(sample, group) %>%  -->
-
-<!--   mutate(value = 1) %>%  -->
-
-<!--   tidyr::pivot_wider(names_from = group, values_from = value, values_fill = 0) %>% -->
-
-<!--   column_to_rownames(var = "sample") %>% -->
-
-<!--   relocate(contains("Control"), contains("Heat")) %>% -->
-
-<!--    mutate(across(everything(), as.factor)) -->
-
-<!-- # Reorder modules so similar modules are next to each other -->
-
-<!-- module_eigengenes_ordered <- orderMEs(module_eigengenes) -->
-
-<!-- module_order = names(module_eigengenes_ordered)  -->
-
-<!-- moduleTraitCor =  WGCNA::cor(module_eigengenes_ordered, time_treat_factorial, use = "p"); -->
-
-<!-- moduleTraitPvalue = corPvalueStudent(moduleTraitCor, nSamples); -->
-
-<!-- textMatrix <- ifelse(moduleTraitPvalue < 0.05, -->
-
-<!--                      paste0(signif(moduleTraitCor, 2), "\n(", -->
-
-<!--                             signif(moduleTraitPvalue, 2), ")"),"") -->
-
-<!-- pdf(paste0(outdir,"/all_heatmap.pdf"),width=8, height=8) -->
-
-<!-- # Will display correlations and their p-values -->
-
-<!-- par(mar = c(4, 3, 2, 2)) -->
-
-<!-- labeledHeatmap(Matrix = moduleTraitCor, -->
-
-<!--                textMatrix = textMatrix, -->
-
-<!--                xLabels = names(time_treat_factorial), -->
-
-<!--                yLabels = names(module_eigengenes_ordered), -->
-
-<!--                ySymbols = names(module_eigengenes_ordered), -->
-
-<!--                colorLabels = TRUE, -->
-
-<!--                colors = blueWhiteRed(100), -->
-
-<!--                setStdMargins = FALSE, -->
-
-<!--                cex.text = 0.5, -->
-
-<!--                cex.lab = 0.7, -->
-
-<!--                cex.colorLabels = 0.7, -->
-
-<!--                zlim = c(-1,1), -->
-
-<!--                main = paste("Module-trait relationships - all")) -->
-
-<!-- dev.off() -->
-
-<!-- ``` -->
-
-<!-- ##### ggplot version -->
-
-<!-- ```{r} -->
-
-<!-- # Add treatment names -->
-
-<!-- module_eigengenes_ordered$treatment_time = paste0(meta$time,"hr","-",ifelse(meta$treatment == "C", "Control", "Heat")) -->
-
-<!-- module_eigengenes_ordered$treatment = meta$treatment -->
-
-<!-- module_eigengenes_ordered <- module_eigengenes_ordered %>% arrange(treatment) -->
-
-<!-- mmPval = moduleTraitPvalue %>% as.data.frame() %>% rownames_to_column("module") %>% -->
-
-<!--   pivot_longer(-module, names_to = "treatment_time", values_to = "pvalue") -->
-
-<!-- mmCor = moduleTraitCor %>% as.data.frame() %>% rownames_to_column("module") %>% -->
-
-<!--   pivot_longer(-module, names_to = "treatment_time", values_to = "correlation") %>% -->
-
-<!--   left_join(mmPval, by = c("module", "treatment_time")) %>% -->
-
-<!--   mutate( -->
-
-<!--     label = ifelse(pvalue < 0.05, -->
-
-<!--                    paste0(signif(correlation, 2)), ""), -->
-
-<!--     # use this if you want the p-value also plotted -->
-
-<!--     #label = ifelse(pvalue < 0.05, -->
-
-<!--     #               paste0(signif(correlation, 2), "\n(", signif(pvalue, 2), ")"), ""), -->
-
-<!--     module = factor(module, levels = rev(module_order)), -->
-
-<!--     treatment_time = factor(treatment_time, levels = unique(module_eigengenes_ordered$treatment_time))) -->
-
-<!-- ggplot(mmCor, aes(x=treatment_time, y=module, fill=correlation)) + -->
-
-<!--   geom_tile(color = "white", linewidth = 0.3) + -->
-
-<!--   geom_text(aes(label = label), size = 3, color = "black") + -->
-
-<!--   theme_minimal(base_size = 12) + -->
-
-<!--   scale_fill_gradient2( -->
-
-<!--     low = "#4575B4", -->
-
-<!--     high = "#D73027", -->
-
-<!--     mid = "white", -->
-
-<!--     midpoint = 0, -->
-
-<!--     limits = c(-1, 1)) + -->
-
-<!--   labs(title = "Module-trait Relationships", y = "Modules", fill="Correlation")+  -->
-
-<!--   theme( -->
-
-<!--     axis.text.x = element_text(angle = 45, hjust = 1), -->
-
-<!--     panel.grid = element_blank(), -->
-
-<!--     axis.ticks = element_blank() -->
-
-<!--   ) +coord_fixed(ratio = 0.7)  -->
-
-<!-- save_ggplot(plot = last_plot(), filename = "all_heatmap_ggplot", width = 8, height = 8) -->
-
-<!-- ``` -->
-
-<!-- ##### ID peak times based on correlation -->
-
-<!-- ```{r} -->
-
-<!-- module_peak_times <- mmCor %>% -->
-
-<!--   filter(pvalue < 0.05, grepl("Heat",treatment_time)) %>% -->
-
-<!--   group_by(treatment_time) %>% -->
-
-<!--   summarize( -->
-
-<!--     n_modules = n(), -->
-
-<!--     mean_abs_cor = mean(abs(correlation)) -->
-
-<!--   ) %>% -->
-
-<!--   extract(treatment_time, "time", "([0-9]+)hr", convert = TRUE) -->
-
-<!-- ``` -->
-
-<!-- #### Run linear model on each module vs. treatment -->
-
-<!-- ```{r} -->
-
-<!-- # Create the design matrix for full (with interaction) models, use factor for time since non-evenly spaced intervals -->
-
-<!-- meta$time_factor <- factor(meta$time) -->
-
-<!-- des_mat_full <- model.matrix(~ treatment*time_factor, data = meta) -->
-
-<!-- head(des_mat_full) -->
-
-<!-- ``` -->
-
-<!-- ```{r} -->
-
-<!-- # lmFit() needs a transposed version of the matrix -->
-
-<!-- fit_full <- limma::lmFit(t(module_eigengenes), design = des_mat_full) -->
-
-<!-- # Apply empirical Bayes to smooth standard errors -->
-
-<!-- fit_full <- limma::eBayes(fit_full) -->
-
-<!-- # Apply multiple testing correction and obtain stats -->
-
-<!-- ## interaction <- treatment effect differs by time -->
-
-<!-- interaction_coefs <- grep("treatment.*:time", colnames(des_mat_full), value = TRUE) -->
-
-<!-- stats_interaction <- limma::topTable(fit_full, coef = interaction_coefs, number = ncol(module_eigengenes)) %>% -->
-
-<!--   tibble::rownames_to_column("module") -->
-
-<!-- stats_df_full <- limma::topTable(fit_full, number = ncol(module_eigengenes)) %>% -->
-
-<!--   tibble::rownames_to_column("module") -->
-
-<!-- # we care most about the interaction, the full model will pull out modules that vary in both treatments by time also (like a circadian rhythm 0hr vs 12hr difference) -->
-
-<!-- # almost all of our modules significant by this model: -->
-
-<!-- stats_interaction %>% filter(adj.P.Val < 0.05)  %>% nrow() -->
-
-<!-- #save these as a vector -->
-
-<!-- top_mod_sig_interaction <- stats_interaction %>% filter(adj.P.Val < 0.05)  %>% pull(module) -->
-
-<!-- # print the top 5: -->
-
-<!-- stats_interaction %>% filter(adj.P.Val < 0.05)  %>% head(5) -->
-
-<!-- ``` -->
-
-<!-- Module 1 is the most differentially expressed across treatments + in the full model. -->
-
-<!-- #### Plot example module over time -->
-
-<!-- ```{r} -->
-
-<!-- eigengenes_treatment_df <- module_eigengenes %>% -->
-
-<!--   tibble::rownames_to_column("sample") %>% -->
-
-<!--   dplyr::inner_join(meta %>% -->
-
-<!--     dplyr::select(sample, treatment,time), -->
-
-<!--   by = c("sample" = "sample")) -->
-
-<!-- ggplot(eigengenes_treatment_df, aes(x = factor(time), y = ME1,color = treatment)) + -->
-
-<!--   geom_boxplot(outlier.shape = NA) + -->
-
-<!--   ggforce::geom_sina(size=1, alpha = 0.5) + -->
-
-<!--   scale_color_manual(values = treat_colors) + -->
-
-<!--   theme_classic() -->
-
-<!-- ``` -->
-
-<!-- #### Trajectory plots for all modules -->
-
-<!-- ```{r} -->
-
-<!-- eigengenes_treatment_df_long <- eigengenes_treatment_df %>% -->
-
-<!--   pivot_longer(cols = starts_with("ME"), -->
-
-<!--                names_to = "module", -->
-
-<!--                values_to = "eigengene_value") %>% -->
-
-<!--   mutate(module = factor(module, levels = module_order)) %>% -->
-
-<!--   mutate(module_label = ifelse(module %in% top_mod_sig_interaction,  -->
-
-<!--                                 paste0("*",module),  -->
-
-<!--                                 as.character(module))) -->
-
-<!-- ggplot(eigengenes_treatment_df_long, aes(x = factor(time), y = eigengene_value,color = treatment)) + -->
-
-<!--   geom_boxplot(outlier.shape = NA) + -->
-
-<!--   ggforce::geom_sina(size=1, alpha = 0.5) + -->
-
-<!--   scale_color_manual(values = treat_colors) + -->
-
-<!--   facet_wrap(~module_label, ncol = 5) + -->
-
-<!--   theme_classic() + theme( -->
-
-<!--     strip.text = element_text(size = 8, face = "bold"), -->
-
-<!--     axis.text = element_text(size = 7), -->
-
-<!--     legend.position = "bottom") + -->
-
-<!--   labs(x = "Time (hours)", y = "Module Eigengene") -->
-
-<!-- save_ggplot(plot = last_plot(), filename = "all_modules", width = 14, height = 12) -->
-
-<!-- eigengenes_summary <- eigengenes_treatment_df_long %>% -->
-
-<!--   group_by(module, module_label, time, treatment) %>% -->
-
-<!--   summarize(mean_value = mean(eigengene_value), -->
-
-<!--             se = sd(eigengene_value) / sqrt(n()), -->
-
-<!--             .groups = "drop") -->
-
-<!-- ggplot(eigengenes_summary, aes(x = factor(time), y = mean_value, color = treatment, group = treatment)) + -->
-
-<!--   geom_line(linewidth = 0.5) + -->
-
-<!--   geom_errorbar(aes(ymin = mean_value - se, ymax = mean_value + se), width = 0.2) + -->
-
-<!--   scale_color_manual(values = treat_colors) + -->
-
-<!--   facet_wrap(~module_label, ncol = 5, scales = "free_y") + -->
-
-<!--   theme_classic() + -->
-
-<!--   theme( -->
-
-<!--     strip.text = element_text(size = 8, face = "bold"), -->
-
-<!--     axis.text = element_text(size = 7), -->
-
-<!--     legend.position = "bottom") + -->
-
-<!--   labs(x = "Time (hours)", y = "Module Eigengene") -->
-
-<!-- save_ggplot(plot = last_plot(), filename = "all_modules_lines", width = 14, height = 12) -->
-
-<!-- ``` -->
-
-<!-- #### Individual module heatmaps -->
-
-<!-- ```{r} -->
-
-<!-- make_module_heatmap(module_name = "ME1") -->
-
-<!-- make_module_heatmap(module_name = "ME0") -->
-
-<!-- make_module_heatmap(module_name = "ME3") -->
-
-<!-- ``` -->
+``` r
+# save the module information for each gene as a dataframe and txt file
+gene_module_df <- data.frame(
+  gene_id = names(netwk$colors),
+  module = paste0("ME", netwk$colors),
+  color = labels2colors(netwk$colors)
+)
+
+write_delim(gene_module_df, file = file.path(outdir,"gene_modules.txt"), delim = "\t")
+
+# extract the module eigengenes - average expression of that module for each sample
+module_eigengenes <- netwk$MEs
+
+# confirm that the sample metadata and sample labels for the module eigengenes are matching
+all.equal(meta$sample, rownames(module_eigengenes))
+```
+
+    ## [1] TRUE
+
+## 8. Treatment and Time Module Correlation
+
+### Correlation Heatmaps
+
+``` r
+nSamples = nrow(normalized_counts)
+
+time_treat_factorial <- meta %>%
+  mutate(group = paste0(time, "hr-", ifelse(treatment == "C", "Control", "Heat"))) %>%
+  select(sample, group) %>%
+  mutate(value = 1) %>%
+  tidyr::pivot_wider(names_from = group, values_from = value, values_fill = 0) %>%
+  column_to_rownames(var = "sample") %>%
+  relocate(contains("Control"), contains("Heat")) %>%
+   mutate(across(everything(), as.factor))
+
+# Reorder modules so similar modules are next to each other
+module_eigengenes_ordered <- orderMEs(module_eigengenes)
+module_order = names(module_eigengenes_ordered)
+
+moduleTraitCor =  WGCNA::cor(module_eigengenes_ordered, time_treat_factorial, use = "p");
+moduleTraitPvalue = corPvalueStudent(moduleTraitCor, nSamples);
+
+textMatrix <- ifelse(moduleTraitPvalue < 0.05,
+                     paste0(signif(moduleTraitCor, 2), "\n(",
+                            signif(moduleTraitPvalue, 2), ")"),"")
+
+pdf(file.path(outdir_plots,"all_heatmap.pdf"),width=8, height=8)
+# Will display correlations and their p-values
+
+par(mar = c(4, 3, 2, 2))
+labeledHeatmap(Matrix = moduleTraitCor,
+               textMatrix = textMatrix,
+               xLabels = names(time_treat_factorial),
+               yLabels = names(module_eigengenes_ordered),
+               ySymbols = names(module_eigengenes_ordered),
+               colorLabels = TRUE,
+               colors = blueWhiteRed(100),
+               setStdMargins = FALSE,
+               cex.text = 0.5,
+               cex.lab = 0.7,
+               cex.colorLabels = 0.7,
+               zlim = c(-1,1),
+               main = paste(species, "- Module-trait relationships - all"))
+```
+
+    ## Warning in plot.window(xlim, ylim, log = log, ...): "cex.colorLabels" is not a
+    ## graphical parameter
+
+    ## Warning in title(main = main, sub = sub, xlab = xlab, ylab = ylab, ...):
+    ## "cex.colorLabels" is not a graphical parameter
+
+``` r
+dev.off()
+```
+
+    ## png 
+    ##   2
+
+#### ggplot version
+
+``` r
+# Add treatment names
+module_eigengenes_ordered$treatment_time = paste0(meta$time,"hr","-",ifelse(meta$treatment == "C", "Control", "Heat"))
+module_eigengenes_ordered$treatment = meta$treatment
+module_eigengenes_ordered <- module_eigengenes_ordered %>% arrange(treatment)
+
+mmPval = moduleTraitPvalue %>% as.data.frame() %>% rownames_to_column("module") %>%
+  pivot_longer(-module, names_to = "treatment_time", values_to = "pvalue")
+
+mmCor = moduleTraitCor %>% as.data.frame() %>% rownames_to_column("module") %>%
+  pivot_longer(-module, names_to = "treatment_time", values_to = "correlation") %>%
+  left_join(mmPval, by = c("module", "treatment_time")) %>%
+  mutate(
+    label = ifelse(pvalue < 0.05,
+                   paste0(signif(correlation, 2)), ""),
+    # use this if you want the p-value also plotted
+    #label = ifelse(pvalue < 0.05,
+    #               paste0(signif(correlation, 2), "\n(", signif(pvalue, 2), ")"), ""),
+    module = factor(module, levels = rev(module_order)),
+    treatment_time = factor(treatment_time, levels = unique(module_eigengenes_ordered$treatment_time)))
+
+ggplot(mmCor, aes(x=treatment_time, y=module, fill=correlation)) +
+  geom_tile(color = "white", linewidth = 0.3) +
+  geom_text(aes(label = label), size = 3, color = "black") +
+  theme_minimal(base_size = 12) +
+  scale_fill_gradient2(
+    low = "#4575B4",
+    high = "#D73027",
+    mid = "white",
+    midpoint = 0,
+    limits = c(-1, 1)) +
+  labs(title = "Module-trait Relationships", y = "Modules", fill="Correlation")+
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    panel.grid = element_blank(),
+    axis.ticks = element_blank()
+  ) +coord_fixed(ratio = 0.7)
+```
+
+![](./03_WGCNA_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+
+``` r
+save_ggplot(plot = last_plot(), filename = "all_heatmap_ggplot", width = 8, height = 8)
+```
+
+### Identify peak times based on correlation
+
+``` r
+module_peak_times <- mmCor %>%
+  filter(pvalue < 0.05, grepl("Heat",treatment_time)) %>%
+  group_by(treatment_time) %>%
+  summarize(
+    n_modules = n(),
+    mean_abs_cor = mean(abs(correlation))
+  ) %>%
+  extract(treatment_time, "time", "([0-9]+)hr", convert = TRUE)
+
+module_peak_times
+```
+
+    ## # A tibble: 6 × 3
+    ##    time n_modules mean_abs_cor
+    ##   <int>     <int>        <dbl>
+    ## 1     0         3        0.374
+    ## 2     1        11        0.411
+    ## 3     3         4        0.406
+    ## 4    12         5        0.459
+    ## 5    24         2        0.345
+    ## 6   120        12        0.414
+
+### Run linear model on each module vs. treatment
+
+``` r
+# Create the design matrix for full (with interaction) models, use factor for time since non-evenly spaced intervals
+
+meta$time_factor <- factor(meta$time)
+des_mat_full <- model.matrix(~ treatment*time_factor, data = meta)
+head(des_mat_full)
+```
+
+    ##           (Intercept) treatmentH time_factor1 time_factor3 time_factor12
+    ## POR_R0_C1           1          0            0            0             0
+    ## POR_R0_C2           1          0            0            0             0
+    ## POR_R0_C3           1          0            0            0             0
+    ## POR_R0_H1           1          1            0            0             0
+    ## POR_R0_H2           1          1            0            0             0
+    ## POR_R0_H3           1          1            0            0             0
+    ##           time_factor24 time_factor72 time_factor120 treatmentH:time_factor1
+    ## POR_R0_C1             0             0              0                       0
+    ## POR_R0_C2             0             0              0                       0
+    ## POR_R0_C3             0             0              0                       0
+    ## POR_R0_H1             0             0              0                       0
+    ## POR_R0_H2             0             0              0                       0
+    ## POR_R0_H3             0             0              0                       0
+    ##           treatmentH:time_factor3 treatmentH:time_factor12
+    ## POR_R0_C1                       0                        0
+    ## POR_R0_C2                       0                        0
+    ## POR_R0_C3                       0                        0
+    ## POR_R0_H1                       0                        0
+    ## POR_R0_H2                       0                        0
+    ## POR_R0_H3                       0                        0
+    ##           treatmentH:time_factor24 treatmentH:time_factor72
+    ## POR_R0_C1                        0                        0
+    ## POR_R0_C2                        0                        0
+    ## POR_R0_C3                        0                        0
+    ## POR_R0_H1                        0                        0
+    ## POR_R0_H2                        0                        0
+    ## POR_R0_H3                        0                        0
+    ##           treatmentH:time_factor120
+    ## POR_R0_C1                         0
+    ## POR_R0_C2                         0
+    ## POR_R0_C3                         0
+    ## POR_R0_H1                         0
+    ## POR_R0_H2                         0
+    ## POR_R0_H3                         0
+
+``` r
+# lmFit() needs a transposed version of the matrix
+fit_full <- limma::lmFit(t(module_eigengenes), design = des_mat_full)
+
+# Apply empirical Bayes to smooth standard errors
+fit_full <- limma::eBayes(fit_full)
+
+# Apply multiple testing correction and obtain stats
+stats_df_full <- limma::topTable(fit_full,
+                                 number = ncol(module_eigengenes)) %>%
+  tibble::rownames_to_column("module")
+
+## interaction <- treatment effect differs by time
+## we care most about the interaction, the full model will pull out modules that vary in both treatments by time also (like a circadian rhythm 0hr vs 12hr difference)
+
+interaction_coefs <- grep("treatment.*:time", colnames(des_mat_full), value = TRUE)
+
+stats_interaction <- limma::topTable(fit_full,
+                                     coef = interaction_coefs,
+                                     number = ncol(module_eigengenes)) %>%
+  tibble::rownames_to_column("module")
+
+## which modules are significant by the interaction term
+top_mod_sig_interaction <- stats_interaction %>% filter(adj.P.Val < 0.05)  %>% pull(module)
+
+cat(length(top_mod_sig_interaction), "modules are significant for the interaction term (treatment*time).\n")
+```
+
+    ## 7 modules are significant for the interaction term (treatment*time).
+
+``` r
+# save the top 5 for further plotting:
+top5_interaction <- stats_interaction %>% arrange(adj.P.Val)  %>% head(5) %>% pull(module)
+
+cat("Top 5 modules significant by the interaction term:", paste(top5_interaction, collapse = ", "))
+```
+
+    ## Top 5 modules significant by the interaction term: ME12, ME4, ME19, ME1, ME2
+
+### Plot example module over time
+
+``` r
+eigengenes_treatment_df <- module_eigengenes %>%
+  tibble::rownames_to_column("sample") %>%
+  dplyr::inner_join(meta %>%
+    dplyr::select(sample, treatment,time),
+  by = c("sample" = "sample"))
+
+toplot <- top5_interaction[1]
+
+eigenplot <- ggplot(eigengenes_treatment_df, aes(x = factor(time), y = get(toplot),color = treatment)) +
+  geom_boxplot(outlier.shape = NA) +
+  ggforce::geom_sina(size=1, alpha = 0.5) +
+  scale_color_manual(values = treat_colors) +
+  theme_classic() +
+  labs(x = "Time (hours)", y = "Module Eigengene",
+       title = paste(species, "-", toplot),
+       subtitle = paste("Adj p-value for time*treatment interaction:", signif(stats_interaction %>% filter(module == toplot) %>% pull(adj.P.Val), 3))) 
+
+print(eigenplot)
+```
+
+![](./03_WGCNA_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+
+### Trajectory plots for all modules
+
+``` r
+eigengenes_treatment_df_long <- eigengenes_treatment_df %>%
+  pivot_longer(cols = starts_with("ME"),
+               names_to = "module",
+               values_to = "eigengene_value") %>%
+  mutate(module = factor(module, levels = module_order)) %>%
+  mutate(module_label = ifelse(module %in% top_mod_sig_interaction,
+                                paste0("*",module),
+                                as.character(module)))
+
+ggplot(eigengenes_treatment_df_long, aes(x = factor(time), y = eigengene_value,color = treatment)) +
+  geom_boxplot(outlier.shape = NA) +
+  ggforce::geom_sina(size=1, alpha = 0.5) +
+  scale_color_manual(values = treat_colors) +
+  facet_wrap(~module_label, ncol = 5) +
+  theme_classic() + theme(
+    strip.text = element_text(size = 8, face = "bold"),
+    axis.text = element_text(size = 7),
+    legend.position = "bottom") +
+  labs(x = "Time (hours)", y = "Module Eigengene")
+```
+
+![](./03_WGCNA_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+
+``` r
+save_ggplot(plot = last_plot(), filename = "all_modules", width = 14, height = 12)
+
+eigengenes_summary <- eigengenes_treatment_df_long %>%
+  group_by(module, module_label, time, treatment) %>%
+  summarize(mean_value = mean(eigengene_value),
+            se = sd(eigengene_value) / sqrt(n()),
+            .groups = "drop")
+
+ggplot(eigengenes_summary, aes(x = factor(time), y = mean_value, color = treatment, group = treatment)) +
+  geom_line(linewidth = 0.5) +
+  geom_errorbar(aes(ymin = mean_value - se, ymax = mean_value + se), width = 0.2) +
+  scale_color_manual(values = treat_colors) +
+  facet_wrap(~module_label, ncol = 5, scales = "free_y") +
+  theme_classic() +
+  theme(
+    strip.text = element_text(size = 8, face = "bold"),
+    axis.text = element_text(size = 7),
+    legend.position = "bottom") +
+  labs(x = "Time (hours)", y = "Module Eigengene")
+```
+
+![](./03_WGCNA_files/figure-gfm/unnamed-chunk-9-2.png)<!-- -->
+
+``` r
+save_ggplot(plot = last_plot(), filename = "all_modules_lines", width = 14, height = 12)
+```
+
+### Individual module heatmaps
+
+``` r
+for (module in top5_interaction){
+  print(make_module_heatmap(module_name = module))
+}
+```
+
+![](./03_WGCNA_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->![](./03_WGCNA_files/figure-gfm/unnamed-chunk-10-2.png)<!-- -->![](./03_WGCNA_files/figure-gfm/unnamed-chunk-10-3.png)<!-- -->![](./03_WGCNA_files/figure-gfm/unnamed-chunk-10-4.png)<!-- -->![](./03_WGCNA_files/figure-gfm/unnamed-chunk-10-5.png)<!-- -->
