@@ -11,9 +11,11 @@ output:
     html_preview: false
 ---
 
-# Background info
+# Bulk RNA-seq Time Course Trajectory Analysis and Clustering
 
-## ImpulseDE2
+## Introduction to packages
+
+### ImpulseDE2
 
  - Based on [this paper](https://academic.oup.com/bib/article/20/1/288/4364840#130283262), this is the best package to use other than comparing each time point against each other individually.
  - Repo here: https://github.com/YosefLab/ImpulseDE2
@@ -29,7 +31,7 @@ library(devtools)
 install_github("YosefLab/ImpulseDE2")
 ```
 
-## Mfuzz: clustering of temporal trajectories
+### Mfuzz: clustering of temporal trajectories
 
 For this we will use the package [Mfuzz](https://bioconductor.org/packages/release/bioc/html/Mfuzz.html), [vignette here](https://bioconductor.org/packages/release/bioc/vignettes/Mfuzz/inst/doc/Mfuzz.pdf).
 
@@ -43,7 +45,7 @@ BiocManager::install("Mfuzz")
 
 # Setup
 
-## Load packages and functions
+## 1. Load packages and functions
 
 ```{r setup}
 # set up file paths so that Rmd outputs can be viewed using github markdown
@@ -65,7 +67,7 @@ source("utils.R")
 sessionInfo() #provides list of loaded packages and version of R
 ```
 
-## Species-specific parameters
+## 2. Setup species-specific parameters
 
 ```{r get-species}
 # get species
@@ -90,12 +92,7 @@ reportdir <- file.path("../../output_RNA/reports", params$species, "02_ImpulseDE
 if (!dir.exists(reportdir)) dir.create(reportdir, recursive = TRUE)
 ```
 
-## Load data
-
-- Raw counts
-- VST-transformed counts
-- Metadata
-- Gene annotations
+## 3. Load in raw counts, transformed counts, metadata, and annotations
 
 ```{r load-counts}
 # load in raw counts data
@@ -386,7 +383,7 @@ write.csv(cluster_info, file.path(outdir_mfuzz, "cluster_info.csv"), row.names =
 mfuzz.plot(heat_eset, cl = mfuzz_clusters, new.window =FALSE, mfrow = c(2,k/2), time.labels =  c(0,1,3,12,24,72,120))
 
 # Visualize clusters
-pdf(paste0(outdir,"/temporal_clusters.pdf"), width = 12, height = 10)
+pdf(paste0(outdir_plots,"/temporal_clusters.pdf"), width = 12, height = 10)
 mfuzz.plot2(heat_eset, cl = mfuzz_clusters, mfrow = c(2,k/2),
             time.labels = c("0", "1", "3", "12", "24", "72", "120"),
             xlab = "Time (hours)",x11=FALSE)

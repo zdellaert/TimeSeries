@@ -8,7 +8,7 @@ annot_dir <- "../../../../HI_genome_annotations/annotation"
 
 global_params <- list(
     seed = 42, 
-    n_cores = 8,
+    n_cores = 18,
     padj_threshold = 0.05,
     
     # pOverA filtering
@@ -50,7 +50,7 @@ species_params <- list(
         outlier_samples = c("MON_R72_H1", "MON_R72_H2"),
 
         #for wgcna
-        soft_power = 10,
+        soft_power = 12,
 
         #for mfuzz
         n_clusters = 6

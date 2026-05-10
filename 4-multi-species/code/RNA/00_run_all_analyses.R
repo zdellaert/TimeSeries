@@ -22,4 +22,9 @@ for (sp in species_list) {
          params = list(species = sp, run_ImpulseDE2 = FALSE),
          output_format = "github_document",
          output_dir = output_dir)
+  
+  render("03_WGCNA.Rmd",
+         params = list(species = sp, TestParams = TRUE, run_WGCNA = TRUE),
+         output_format = "github_document",
+         output_dir = output_dir)
 }

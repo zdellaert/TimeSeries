@@ -8,17 +8,17 @@ All 3 species had good clustering definition with 6 clusters based on elbow plot
 
 ## Cross-species cluster comparison
 
-| Pattern              | Pacuta | Mcap | Pcomp | Conserved?     |
+| Pattern              | Pacuta | Mcap | Pcomp |   Species      |
 |----------------------|--------|------|-------|----------------|
-| Early Peak (3h)      | 1      | 3    | 1     | Yes            |
+| Early Peak (3h)      | 1      | 3    | 1     | All 3          |
 | Early Dip (3h)       | 2      | 2    | -     | Pacuta & Mcap  |
 | U-shaped Dip (12h)   | -      | 4    | 2     | Mcap & Pcomp   |
 | Sustained Up (3h)    | 4      | -    | 6     | Pacuta & Pcomp |
-| Sustained Up (12h)   | 6      | 5    | 3     | Yes            |
-| Sustained Down (12h) | 5      | 6    | 5     | Yes            |
-| Gradual Down         | 3      | 1    | 4     | Yes            |
+| Sustained Up (12h)   | 6      | 5    | 3     | All 3          |
+| Sustained Down (12h) | 5      | 6    | 5     | All 3          |
+| Gradual Down         | 3      | 1    | 4     | All 3          |
 
-**4 patterns conserved across all species; 3 patterns shared by 2 species.**
+**4 patterns present in all species; 3 patterns shared by 2 species.**
 
 ## Pattern Descriptions
 
