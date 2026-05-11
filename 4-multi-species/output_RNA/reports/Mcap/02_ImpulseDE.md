@@ -72,7 +72,8 @@ install_github("YosefLab/ImpulseDE2")
 For this we will use the package
 [Mfuzz](https://bioconductor.org/packages/release/bioc/html/Mfuzz.html),
 [vignette
-here](https://bioconductor.org/packages/release/bioc/vignettes/Mfuzz/inst/doc/Mfuzz.pdf).
+here](https://bioconductor.org/packages/release/bioc/vignettes/Mfuzz/inst/doc/Mfuzz.pdf)
+and more documentation [here](http://mfuzz.sysbiolab.eu/).
 
 To install the package
 
@@ -210,9 +211,11 @@ input_dir <- file.path("../../output_RNA/counts_filt_norm", species)
 outdir <- file.path("../../output_RNA/ImpulseDE2", species)
 outdir_mfuzz <- file.path(outdir,"Mfuzz")
 outdir_plots <- file.path(outdir,"plots")
+outdir_plots_pdf <- file.path(outdir_plots,"pdf_figs")
 if (!dir.exists(outdir)) dir.create(outdir, recursive = TRUE)
 if (!dir.exists(outdir_mfuzz)) dir.create(outdir_mfuzz, recursive = TRUE)
 if (!dir.exists(outdir_plots)) dir.create(outdir_plots, recursive = TRUE)
+if (!dir.exists(outdir_plots_pdf)) dir.create(outdir_plots_pdf, recursive = TRUE)
 
 reportdir <- file.path("../../output_RNA/reports", params$species, "02_ImpulseDE_files/figure-gfm/")
 if (!dir.exists(reportdir)) dir.create(reportdir, recursive = TRUE)
@@ -286,7 +289,7 @@ RDS.
 ``` r
 if(params$run_ImpulseDE2 == TRUE) {
   objectImpulseDE2 <- runImpulseDE2(
-    matCountData    = as.matrix(counts_raw), #or use filtered_counts 
+    matCountData    = as.matrix(counts_raw), #or use filtered_counts  
     dfAnnotation    = meta_impulse,
     boolCaseCtrl    = TRUE,
     vecConfounders  = c("Batch"), #only use if you want to try to control for batch effects
@@ -510,7 +513,7 @@ dev.off()
     ##   2
 
 ``` r
-pdf(file.path(outdir_plots,"ImpulseDE2_heatmap_case_fit.pdf"), width = 10, height = 12)
+pdf(file.path(outdir_plots,"pdf_figs/ImpulseDE2_heatmap_case_fit.pdf"), width = 10, height = 12)
 draw(lsHeatmaps$complexHeatmapFit)
 dev.off()
 ```
@@ -528,7 +531,7 @@ dev.off()
     ##   2
 
 ``` r
-pdf(file.path(outdir_plots, "ImpulseDE2_heatmap_case.pdf"), width = 10, height = 12)
+pdf(file.path(outdir_plots, "pdf_figs/ImpulseDE2_heatmap_case.pdf"), width = 10, height = 12)
 draw(lsHeatmaps$complexHeatmapRaw)
 dev.off()
 ```
@@ -732,9 +735,50 @@ mfuzz.plot(heat_eset, cl = mfuzz_clusters, new.window =FALSE, mfrow = c(2,k/2), 
 ![](./02_ImpulseDE_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
 
 ``` r
+mfuzz.plot(heat_eset, cl = mfuzz_clusters, new.window =FALSE, mfrow = c(2,k/2), time.labels =  c(0,1,3,12,24,72,120), min.mem = 0.5)
+```
+
+![](./02_ImpulseDE_files/figure-gfm/unnamed-chunk-17-2.png)<!-- -->
+
+``` r
 # Visualize clusters
-pdf(paste0(outdir_plots,"/temporal_clusters.pdf"), width = 12, height = 10)
+png(paste0(outdir_mfuzz,"/temporal_clusters.png"), width = 12, height = 10, units = "in", res = 300)
 mfuzz.plot2(heat_eset, cl = mfuzz_clusters, mfrow = c(2,k/2),
+            time.labels = c("0", "1", "3", "12", "24", "72", "120"),
+            xlab = "Time (hours)",x11=FALSE)
+dev.off()
+```
+
+    ## png 
+    ##   2
+
+``` r
+pdf(paste0(outdir_plots,"/pdf_figs/temporal_clusters.pdf"), width = 12, height = 10)
+mfuzz.plot2(heat_eset, cl = mfuzz_clusters, mfrow = c(2,k/2),
+            time.labels = c("0", "1", "3", "12", "24", "72", "120"),
+            xlab = "Time (hours)",x11=FALSE)
+dev.off()
+```
+
+    ## png 
+    ##   2
+
+``` r
+png(paste0(outdir_plots,"/temporal_clusters_membership50.png"), width = 12, height = 10, units = "in", res = 300)
+mfuzz.plot2(heat_eset, cl = mfuzz_clusters, mfrow = c(2,k/2),
+            min.mem = 0.5,
+            time.labels = c("0", "1", "3", "12", "24", "72", "120"),
+            xlab = "Time (hours)",x11=FALSE)
+dev.off()
+```
+
+    ## png 
+    ##   2
+
+``` r
+pdf(paste0(outdir_plots,"/pdf_figs/temporal_clusters_membership50.pdf"), width = 12, height = 10)
+mfuzz.plot2(heat_eset, cl = mfuzz_clusters, mfrow = c(2,k/2),
+            min.mem = 0.5,
             time.labels = c("0", "1", "3", "12", "24", "72", "120"),
             xlab = "Time (hours)",x11=FALSE)
 dev.off()

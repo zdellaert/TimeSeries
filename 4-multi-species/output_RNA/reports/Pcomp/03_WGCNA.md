@@ -552,10 +552,10 @@ textMatrix <- ifelse(moduleTraitPvalue < 0.05,
                      paste0(signif(moduleTraitCor, 2), "\n(",
                             signif(moduleTraitPvalue, 2), ")"),"")
 
-pdf(file.path(outdir_plots,"all_heatmap.pdf"),width=8, height=8)
+#pdf(file.path(outdir_plots,"all_heatmap.pdf"),width=8, height=8)
 # Will display correlations and their p-values
 
-par(mar = c(4, 3, 2, 2))
+#par(mar = c(4, 3, 2, 2))
 labeledHeatmap(Matrix = moduleTraitCor,
                textMatrix = textMatrix,
                xLabels = names(time_treat_factorial),
@@ -577,12 +577,11 @@ labeledHeatmap(Matrix = moduleTraitCor,
     ## Warning in title(main = main, sub = sub, xlab = xlab, ylab = ylab, ...):
     ## "cex.colorLabels" is not a graphical parameter
 
-``` r
-dev.off()
-```
+![](./03_WGCNA_files/figure-gfm/correlation-1.png)<!-- -->
 
-    ## png 
-    ##   2
+``` r
+#dev.off()
+```
 
 #### ggplot version
 
