@@ -1,7 +1,7 @@
 ImpulseDE2 Temporal Analysis
 ================
 Zoe Dellaert
-2026-05-10
+2026-05-11
 
 - [Bulk RNA-seq Time Course Trajectory Analysis and
   Clustering](#bulk-rna-seq-time-course-trajectory-analysis-and-clustering)
@@ -227,6 +227,9 @@ if (!dir.exists(reportdir)) dir.create(reportdir, recursive = TRUE)
 # load in raw counts data
 counts_raw <- read.csv(file.path("../../output_RNA/count_matrices", config$count_matrix), row.names = 1)
 
+# load in filtered counts data
+filtered_counts <- read.csv(file.path(input_dir, "filtered_counts.csv"), row.names = 1)
+
 # load in vst-transformed counts
 vst <- read.csv(file.path(input_dir, "vsd_expression_matrix.csv"))
 vst <- vst %>% column_to_rownames(var = "X")
@@ -289,7 +292,7 @@ RDS.
 ``` r
 if(params$run_ImpulseDE2 == TRUE) {
   objectImpulseDE2 <- runImpulseDE2(
-    matCountData    = as.matrix(counts_raw), #or use filtered_counts  
+    matCountData    = as.matrix(filtered_counts), #or use filtered_counts  
     dfAnnotation    = meta_impulse,
     boolCaseCtrl    = TRUE,
     vecConfounders  = c("Batch"), #only use if you want to try to control for batch effects
@@ -301,6 +304,34 @@ if(params$run_ImpulseDE2 == TRUE) {
   objectImpulseDE2 <- readRDS(file.path(outdir, "objectImpulseDE2.rds"))
 }
 ```
+
+    ## Processing Details:
+    ## ImpulseDE2 runs in case-ctrl mode.
+    ## Found time points: 0,1,3,12,24,72,120
+    ## Case: Found the samples at time point 0: MON_R0_H1,MON_R0_H2,MON_R0_H3
+    ## Case: Found the samples at time point 1: MON_R1_H1,MON_R1_H2,MON_R1_H3
+    ## Case: Found the samples at time point 3: MON_R3_H1,MON_R3_H2,MON_R3_H3
+    ## Case: Found the samples at time point 12: MON_R12_H1,MON_R12_H2,MON_R12_H3
+    ## Case: Found the samples at time point 24: MON_R24_H1,MON_R24_H2,MON_R24_H3
+    ## Case: Found the samples at time point 72: MON_R72_H3
+    ## Case: Found the samples at time point 120: MON_R120_H1,MON_R120_H2,MON_R120_H3
+    ## Control: Found the following samples at time point 0:MON_R0_C1,MON_R0_C2,MON_R0_C3
+    ## Control: Found the following samples at time point 1:MON_R1_C1,MON_R1_C2,MON_R1_C3
+    ## Control: Found the following samples at time point 3:MON_R3_C1,MON_R3_C2,MON_R3_C3
+    ## Control: Found the following samples at time point 12:MON_R12_C1,MON_R12_C2,MON_R12_C3
+    ## Control: Found the following samples at time point 24:MON_R24_C1,MON_R24_C2,MON_R24_C3
+    ## Control: Found the following samples at time point 72:MON_R72_C1,MON_R72_C2,MON_R72_C3
+    ## Control: Found the following samples at time point 120:MON_R120_C1,MON_R120_C2,MON_R120_C3
+    ## Found the following samples for confounder Batch and batch C1: MON_R0_C1,MON_R1_C1,MON_R3_C1,MON_R12_C1,MON_R24_C1,MON_R72_C1,MON_R120_C1
+    ## Found the following samples for confounder Batch and batch C2: MON_R0_C2,MON_R1_C2,MON_R3_C2,MON_R12_C2,MON_R24_C2,MON_R72_C2,MON_R120_C2
+    ## Found the following samples for confounder Batch and batch C3: MON_R0_C3,MON_R1_C3,MON_R3_C3,MON_R12_C3,MON_R24_C3,MON_R72_C3,MON_R120_C3
+    ## Found the following samples for confounder Batch and batch H1: MON_R0_H1,MON_R1_H1,MON_R3_H1,MON_R12_H1,MON_R24_H1,MON_R120_H1
+    ## Found the following samples for confounder Batch and batch H2: MON_R0_H2,MON_R1_H2,MON_R3_H2,MON_R12_H2,MON_R24_H2,MON_R120_H2
+    ## Found the following samples for confounder Batch and batch H3: MON_R0_H3,MON_R1_H3,MON_R3_H3,MON_R12_H3,MON_R24_H3,MON_R72_H3,MON_R120_H3
+    ## Input contained 30089 genes/regions.
+    ## Selected 30089 genes/regions for analysis.
+
+    ## [1] "Corrected 202 DESEq2 dispersion estimates which to avoid variance overestimation and loss of discriminatory power for model selection."
 
 ``` r
 # Print processing report
@@ -331,19 +362,18 @@ cat(objectImpulseDE2@strReport)
     ## Found the following samples for confounder Batch and batch H1: MON_R0_H1,MON_R1_H1,MON_R3_H1,MON_R12_H1,MON_R24_H1,MON_R120_H1
     ## Found the following samples for confounder Batch and batch H2: MON_R0_H2,MON_R1_H2,MON_R3_H2,MON_R12_H2,MON_R24_H2,MON_R120_H2
     ## Found the following samples for confounder Batch and batch H3: MON_R0_H3,MON_R1_H3,MON_R3_H3,MON_R12_H3,MON_R24_H3,MON_R72_H3,MON_R120_H3
-    ## Input contained 54384 genes/regions.
-    ## WARNING: 7046 out of 54384 genes do not have obserserved non-zero counts and are excluded.
-    ## Selected 47338 genes/regions for analysis.
+    ## Input contained 30089 genes/regions.
+    ## Selected 30089 genes/regions for analysis.
     ## # Run DESeq2: Using dispersion factorscomputed by DESeq2.
-    ## Consumed time: 1.48 min.
+    ## Consumed time: 1.05 min.
     ## # Compute size factors
     ## # Fitting null and alternative model to the genes
-    ## Consumed time: 33.44 min.
+    ## Consumed time: 11.84 min.
     ## # Fitting sigmoid model to case condition
-    ## Consumed time: 2.64 min.
+    ## Consumed time: 1.18 min.
     ## # Differentially expression analysis based on model fits
     ## Finished running ImpulseDE2.
-    ## TOTAL consumed time: 37.76 min.
+    ## TOTAL consumed time: 14.21 min.
 
 ## 3. Extract ImpulseDE2 results
 
@@ -383,26 +413,26 @@ impulse_sig %>% arrange(padj) %>% head(20) %>% dplyr::select(Gene,padj,loglik_re
 ```
 
     ##                                          Gene          padj loglik_red
-    ## 1  Montipora_capitata_HIv3___RNAseq.g49833.t1 4.946119e-129  -636.4767
-    ## 2  Montipora_capitata_HIv3___RNAseq.g49832.t1  2.358715e-56  -496.9401
-    ## 3   Montipora_capitata_HIv3___RNAseq.g7282.t1  7.252313e-39  -408.1378
-    ## 4        Montipora_capitata_HIv3___TS.g637.t1  2.106458e-38  -406.4213
-    ## 5  Montipora_capitata_HIv3___RNAseq.g40931.t1  1.630232e-33  -322.2649
-    ## 6    Montipora_capitata_HIv3___RNAseq.g984.t1  2.103994e-32  -346.5058
-    ## 7  Montipora_capitata_HIv3___RNAseq.g26806.t1  3.935841e-29  -406.0243
-    ## 8      Montipora_capitata_HIv3___TS.g49643.t1  2.631676e-27  -257.0443
-    ## 9  Montipora_capitata_HIv3___RNAseq.g37139.t1  4.068099e-26  -308.8533
-    ## 10 Montipora_capitata_HIv3___RNAseq.g26807.t1  1.782517e-25  -368.9546
-    ## 11 Montipora_capitata_HIv3___RNAseq.g41225.t1  3.135229e-25  -385.5945
-    ## 12  Montipora_capitata_HIv3___RNAseq.g6371.t1  1.627923e-24  -212.8498
-    ## 13  Montipora_capitata_HIv3___RNAseq.g7502.t1  5.175321e-24  -325.3604
-    ## 14 Montipora_capitata_HIv3___RNAseq.g20397.t1  8.426103e-24  -340.4130
-    ## 15      Montipora_capitata_HIv3___TS.g6919.t1  9.107913e-24  -336.1755
-    ## 16 Montipora_capitata_HIv3___RNAseq.g22408.t1  1.088974e-23  -334.7124
-    ## 17 Montipora_capitata_HIv3___RNAseq.g15259.t1  1.407835e-23  -329.0971
-    ## 18 Montipora_capitata_HIv3___RNAseq.g11828.t1  1.626968e-23  -319.9689
-    ## 19 Montipora_capitata_HIv3___RNAseq.g18448.t1  7.184670e-23  -330.7640
-    ## 20  Montipora_capitata_HIv3___RNAseq.g9317.t1  2.208527e-22  -266.1987
+    ## 1  Montipora_capitata_HIv3___RNAseq.g49833.t1 1.260194e-130  -639.8092
+    ## 2  Montipora_capitata_HIv3___RNAseq.g49832.t1  2.895595e-57  -498.7410
+    ## 3   Montipora_capitata_HIv3___RNAseq.g7282.t1  1.380504e-39  -409.3506
+    ## 4        Montipora_capitata_HIv3___TS.g637.t1  4.147187e-36  -400.5779
+    ## 5  Montipora_capitata_HIv3___RNAseq.g40931.t1  8.557425e-34  -322.4355
+    ## 6    Montipora_capitata_HIv3___RNAseq.g984.t1  9.781209e-33  -346.8036
+    ## 7  Montipora_capitata_HIv3___RNAseq.g26806.t1  1.011798e-29  -406.8376
+    ## 8      Montipora_capitata_HIv3___TS.g49643.t1  3.967573e-27  -256.2814
+    ## 9  Montipora_capitata_HIv3___RNAseq.g37139.t1  1.869750e-26  -309.2054
+    ## 10 Montipora_capitata_HIv3___RNAseq.g26807.t1  5.080430e-26  -369.5454
+    ## 11 Montipora_capitata_HIv3___RNAseq.g41225.t1  6.791640e-26  -386.6196
+    ## 12  Montipora_capitata_HIv3___RNAseq.g6371.t1  2.491826e-24  -211.9523
+    ## 13  Montipora_capitata_HIv3___RNAseq.g7502.t1  2.491826e-24  -325.6822
+    ## 14 Montipora_capitata_HIv3___RNAseq.g20397.t1  2.491826e-24  -341.2884
+    ## 15      Montipora_capitata_HIv3___TS.g6919.t1  4.279707e-24  -336.4517
+    ## 16 Montipora_capitata_HIv3___RNAseq.g22408.t1  4.689950e-24  -335.2139
+    ## 17 Montipora_capitata_HIv3___RNAseq.g15259.t1  7.687494e-24  -329.2330
+    ## 18 Montipora_capitata_HIv3___RNAseq.g11828.t1  1.401850e-23  -319.6805
+    ## 19 Montipora_capitata_HIv3___RNAseq.g18448.t1  3.725846e-23  -330.9515
+    ## 20     Montipora_capitata_HIv3___TS.g48780.t1  1.032917e-22  -370.2430
     ##    response_type
     ## 1      Transient
     ## 2      Transient
@@ -469,15 +499,15 @@ impulse_sig %>% arrange(padj) %>% head(20) %>% dplyr::select(Gene,padj,loglik_re
 
 ### Quick summary
 
-    ## Total significant genes: 5885
+    ## Total significant genes: 6631
 
     ## Response patterns:
 
-    ## Transient: 1704
+    ## Transient: 1989
 
-    ## Monotonous: 2355
+    ## Monotonous: 2486
 
-    ## Other: 1826
+    ## Other: 2156
 
 ## 4. Visualize ImpulseDE2 Results
 
@@ -679,12 +709,12 @@ table(cluster_assignments$cluster, cluster_assignments$response_type)
 
     ##    
     ##     Monotonous Other Transient
-    ##   1        656   411       105
-    ##   2         86   321       436
-    ##   3        151   186       526
-    ##   4         70   344       494
-    ##   5        597   250       102
-    ##   6        795   310        41
+    ##   1        847   371        52
+    ##   2        635   328       133
+    ##   3        152   211       600
+    ##   4         90   384       491
+    ##   5         65   386       592
+    ##   6        697   476       121
 
 ``` r
 # Save mfuzz objects and cluster assignments
@@ -715,12 +745,12 @@ print(cluster_info)
 ```
 
     ##   cluster peak_time trough_time n_genes
-    ## 1       1         3         120    1172
-    ## 2       2       120           3     843
-    ## 3       3         3           0     863
-    ## 4       4         0          12     908
-    ## 5       5        12           0     949
-    ## 6       6         0          12    1146
+    ## 1       1         0          12    1270
+    ## 2       2        12           0    1096
+    ## 3       3         3           0     963
+    ## 4       4       120           3     965
+    ## 5       5         0          12    1043
+    ## 6       6         3         120    1294
 
 ``` r
 write.csv(cluster_info, file.path(outdir_mfuzz, "cluster_info.csv"), row.names = FALSE)
@@ -742,7 +772,7 @@ mfuzz.plot(heat_eset, cl = mfuzz_clusters, new.window =FALSE, mfrow = c(2,k/2), 
 
 ``` r
 # Visualize clusters
-png(paste0(outdir_mfuzz,"/temporal_clusters.png"), width = 12, height = 10, units = "in", res = 300)
+png(paste0(outdir_plots,"/temporal_clusters.png"), width = 12, height = 10, units = "in", res = 300)
 mfuzz.plot2(heat_eset, cl = mfuzz_clusters, mfrow = c(2,k/2),
             time.labels = c("0", "1", "3", "12", "24", "72", "120"),
             xlab = "Time (hours)",x11=FALSE)
@@ -815,9 +845,9 @@ cluster_assignments %>% filter(Gene %in% HSPS)
 ```
 
     ##                                         Gene cluster membership response_type
-    ## 1 Montipora_capitata_HIv3___RNAseq.g15043.t1       3  0.7063881     Transient
-    ## 2 Montipora_capitata_HIv3___RNAseq.g18811.t1       3  0.7067597     Transient
-    ## 3     Montipora_capitata_HIv3___TS.g35289.t2       3  0.8656548     Transient
+    ## 1 Montipora_capitata_HIv3___RNAseq.g15043.t1       3  0.7169819     Transient
+    ## 2 Montipora_capitata_HIv3___RNAseq.g18811.t1       3  0.7176118     Transient
+    ## 3     Montipora_capitata_HIv3___TS.g35289.t2       3  0.8739001     Transient
 
 ``` r
 heat_clustered <- HeatStressGenes_unique %>% left_join(cluster_assignments, by = join_by(query==Gene)) %>%

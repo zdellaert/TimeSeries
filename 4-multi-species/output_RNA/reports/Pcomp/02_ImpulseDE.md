@@ -1,7 +1,7 @@
 ImpulseDE2 Temporal Analysis
 ================
 Zoe Dellaert
-2026-05-10
+2026-05-11
 
 - [Bulk RNA-seq Time Course Trajectory Analysis and
   Clustering](#bulk-rna-seq-time-course-trajectory-analysis-and-clustering)
@@ -227,6 +227,9 @@ if (!dir.exists(reportdir)) dir.create(reportdir, recursive = TRUE)
 # load in raw counts data
 counts_raw <- read.csv(file.path("../../output_RNA/count_matrices", config$count_matrix), row.names = 1)
 
+# load in filtered counts data
+filtered_counts <- read.csv(file.path(input_dir, "filtered_counts.csv"), row.names = 1)
+
 # load in vst-transformed counts
 vst <- read.csv(file.path(input_dir, "vsd_expression_matrix.csv"))
 vst <- vst %>% column_to_rownames(var = "X")
@@ -289,7 +292,7 @@ RDS.
 ``` r
 if(params$run_ImpulseDE2 == TRUE) {
   objectImpulseDE2 <- runImpulseDE2(
-    matCountData    = as.matrix(counts_raw), #or use filtered_counts  
+    matCountData    = as.matrix(filtered_counts), #or use filtered_counts  
     dfAnnotation    = meta_impulse,
     boolCaseCtrl    = TRUE,
     vecConfounders  = c("Batch"), #only use if you want to try to control for batch effects
@@ -301,6 +304,34 @@ if(params$run_ImpulseDE2 == TRUE) {
   objectImpulseDE2 <- readRDS(file.path(outdir, "objectImpulseDE2.rds"))
 }
 ```
+
+    ## Processing Details:
+    ## ImpulseDE2 runs in case-ctrl mode.
+    ## Found time points: 0,1,3,12,24,72,120
+    ## Case: Found the samples at time point 0: POR_R0_H1,POR_R0_H2,POR_R0_H3
+    ## Case: Found the samples at time point 1: POR_R1_H1,POR_R1_H2,POR_R1_H3
+    ## Case: Found the samples at time point 3: POR_R3_H1,POR_R3_H2,POR_R3_H3
+    ## Case: Found the samples at time point 12: POR_R12_H1,POR_R12_H2,POR_R12_H3
+    ## Case: Found the samples at time point 24: POR_R24_H2,POR_R24_H3
+    ## Case: Found the samples at time point 72: POR_R72_H3
+    ## Case: Found the samples at time point 120: POR_R120_H1,POR_R120_H2,POR_R120_H3
+    ## Control: Found the following samples at time point 0:POR_R0_C1,POR_R0_C2,POR_R0_C3
+    ## Control: Found the following samples at time point 1:POR_R1_C1,POR_R1_C2,POR_R1_C3
+    ## Control: Found the following samples at time point 3:POR_R3_C1,POR_R3_C2,POR_R3_C3
+    ## Control: Found the following samples at time point 12:POR_R12_C1,POR_R12_C2,POR_R12_C3
+    ## Control: Found the following samples at time point 24:POR_R24_C1,POR_R24_C2,POR_R24_C3
+    ## Control: Found the following samples at time point 72:POR_R72_C1,POR_R72_C2,POR_R72_C3
+    ## Control: Found the following samples at time point 120:POR_R120_C1,POR_R120_C2,POR_R120_C3
+    ## Found the following samples for confounder Batch and batch C1: POR_R0_C1,POR_R1_C1,POR_R3_C1,POR_R12_C1,POR_R24_C1,POR_R72_C1,POR_R120_C1
+    ## Found the following samples for confounder Batch and batch C2: POR_R0_C2,POR_R1_C2,POR_R3_C2,POR_R12_C2,POR_R24_C2,POR_R72_C2,POR_R120_C2
+    ## Found the following samples for confounder Batch and batch C3: POR_R0_C3,POR_R1_C3,POR_R3_C3,POR_R12_C3,POR_R24_C3,POR_R72_C3,POR_R120_C3
+    ## Found the following samples for confounder Batch and batch H1: POR_R0_H1,POR_R1_H1,POR_R3_H1,POR_R12_H1,POR_R120_H1
+    ## Found the following samples for confounder Batch and batch H2: POR_R0_H2,POR_R1_H2,POR_R3_H2,POR_R12_H2,POR_R24_H2,POR_R120_H2
+    ## Found the following samples for confounder Batch and batch H3: POR_R0_H3,POR_R1_H3,POR_R3_H3,POR_R12_H3,POR_R24_H3,POR_R72_H3,POR_R120_H3
+    ## Input contained 27492 genes/regions.
+    ## Selected 27492 genes/regions for analysis.
+
+    ## [1] "Corrected 200 DESEq2 dispersion estimates which to avoid variance overestimation and loss of discriminatory power for model selection."
 
 ``` r
 # Print processing report
@@ -331,19 +362,18 @@ cat(objectImpulseDE2@strReport)
     ## Found the following samples for confounder Batch and batch H1: POR_R0_H1,POR_R1_H1,POR_R3_H1,POR_R12_H1,POR_R120_H1
     ## Found the following samples for confounder Batch and batch H2: POR_R0_H2,POR_R1_H2,POR_R3_H2,POR_R12_H2,POR_R24_H2,POR_R120_H2
     ## Found the following samples for confounder Batch and batch H3: POR_R0_H3,POR_R1_H3,POR_R3_H3,POR_R12_H3,POR_R24_H3,POR_R72_H3,POR_R120_H3
-    ## Input contained 44130 genes/regions.
-    ## WARNING: 5776 out of 44130 genes do not have obserserved non-zero counts and are excluded.
-    ## Selected 38354 genes/regions for analysis.
+    ## Input contained 27492 genes/regions.
+    ## Selected 27492 genes/regions for analysis.
     ## # Run DESeq2: Using dispersion factorscomputed by DESeq2.
-    ## Consumed time: 1.63 min.
+    ## Consumed time: 1.3 min.
     ## # Compute size factors
     ## # Fitting null and alternative model to the genes
-    ## Consumed time: 28.67 min.
+    ## Consumed time: 12.2 min.
     ## # Fitting sigmoid model to case condition
-    ## Consumed time: 2.42 min.
+    ## Consumed time: 1.14 min.
     ## # Differentially expression analysis based on model fits
     ## Finished running ImpulseDE2.
-    ## TOTAL consumed time: 32.9 min.
+    ## TOTAL consumed time: 14.8 min.
 
 ## 3. Extract ImpulseDE2 results
 
@@ -383,26 +413,26 @@ impulse_sig %>% arrange(padj) %>% head(20) %>% dplyr::select(Gene,padj,loglik_re
 ```
 
     ##                                         Gene         padj loglik_red
-    ## 1  Porites_compressa_HIv1___RNAseq.g40862.t1 6.448671e-51  -463.8084
-    ## 2  Porites_compressa_HIv1___RNAseq.g11463.t1 8.005024e-46  -376.5959
-    ## 3  Porites_compressa_HIv1___RNAseq.g19794.t1 4.979267e-40  -269.2257
-    ## 4  Porites_compressa_HIv1___RNAseq.g23528.t1 8.639819e-35  -338.0569
-    ## 5   Porites_compressa_HIv1___RNAseq.g5937.t1 3.485959e-32  -284.7749
-    ## 6      Porites_compressa_HIv1___TS.g22192.t1 3.168895e-31  -295.3226
-    ## 7  Porites_compressa_HIv1___RNAseq.g36355.t1 2.792656e-30  -355.8908
-    ## 8  Porites_compressa_HIv1___RNAseq.g40324.t1 1.729689e-29  -365.6212
-    ## 9  Porites_compressa_HIv1___RNAseq.g41296.t1 4.476921e-28  -265.3658
-    ## 10   Porites_compressa_HIv1___RNAseq.g915.t1 5.144502e-27  -317.9925
-    ## 11 Porites_compressa_HIv1___RNAseq.g40327.t1 9.510376e-27  -385.4519
-    ## 12   Porites_compressa_HIv1___RNAseq.12682_t 4.122450e-26  -279.7010
-    ## 13     Porites_compressa_HIv1___TS.g27105.t1 1.692367e-25  -274.1565
-    ## 14 Porites_compressa_HIv1___RNAseq.g30626.t1 2.335325e-25  -312.7430
-    ## 15 Porites_compressa_HIv1___RNAseq.g34309.t1 1.689484e-23  -267.7805
-    ## 16 Porites_compressa_HIv1___RNAseq.g34311.t1 2.501624e-23  -264.4673
-    ## 17 Porites_compressa_HIv1___RNAseq.g10466.t1 3.660104e-23  -365.3109
-    ## 18  Porites_compressa_HIv1___RNAseq.g7115.t2 4.862915e-23  -288.1152
-    ## 19 Porites_compressa_HIv1___RNAseq.g41254.t1 1.348830e-22  -292.7314
-    ## 20 Porites_compressa_HIv1___RNAseq.g22671.t1 1.476461e-22  -299.8971
+    ## 1  Porites_compressa_HIv1___RNAseq.g40862.t1 1.196780e-51  -465.1336
+    ## 2  Porites_compressa_HIv1___RNAseq.g11463.t1 3.629366e-46  -377.0231
+    ## 3  Porites_compressa_HIv1___RNAseq.g19794.t1 1.285642e-39  -268.0140
+    ## 4  Porites_compressa_HIv1___RNAseq.g23528.t1 4.352686e-35  -338.3881
+    ## 5   Porites_compressa_HIv1___RNAseq.g5937.t1 3.202255e-32  -284.5357
+    ## 6      Porites_compressa_HIv1___TS.g22192.t1 2.758836e-31  -295.1459
+    ## 7  Porites_compressa_HIv1___RNAseq.g36355.t1 1.615223e-30  -356.1101
+    ## 8  Porites_compressa_HIv1___RNAseq.g40324.t1 7.805573e-30  -366.0583
+    ## 9  Porites_compressa_HIv1___RNAseq.g41296.t1 5.539682e-28  -264.8514
+    ## 10   Porites_compressa_HIv1___RNAseq.g915.t1 2.461376e-27  -318.3641
+    ## 11 Porites_compressa_HIv1___RNAseq.g40327.t1 4.192663e-27  -385.8910
+    ## 12   Porites_compressa_HIv1___RNAseq.12682_t 2.864996e-26  -279.6759
+    ## 13     Porites_compressa_HIv1___TS.g27105.t1 1.094858e-25  -274.2507
+    ## 14 Porites_compressa_HIv1___RNAseq.g30626.t1 1.472416e-25  -312.8647
+    ## 15 Porites_compressa_HIv1___RNAseq.g34309.t1 1.643385e-23  -267.5069
+    ## 16 Porites_compressa_HIv1___RNAseq.g10466.t1 1.835991e-23  -365.6882
+    ## 17 Porites_compressa_HIv1___RNAseq.g34311.t1 2.339750e-23  -264.1778
+    ## 18  Porites_compressa_HIv1___RNAseq.g7115.t2 3.753693e-23  -288.0491
+    ## 19 Porites_compressa_HIv1___RNAseq.g22671.t1 8.085354e-23  -300.1998
+    ## 20 Porites_compressa_HIv1___RNAseq.g41254.t1 9.808238e-23  -292.6734
     ##    response_type
     ## 1     Monotonous
     ## 2      Transient
@@ -422,8 +452,8 @@ impulse_sig %>% arrange(padj) %>% head(20) %>% dplyr::select(Gene,padj,loglik_re
     ## 16    Monotonous
     ## 17    Monotonous
     ## 18     Transient
-    ## 19     Transient
-    ## 20    Monotonous
+    ## 19    Monotonous
+    ## 20     Transient
     ##                                                                                                                                                                                                                                                  ProteinNames
     ## 1                                                                                                                                                                                                 Dermatopontin (Tyrosine-rich acidic matrix protein) (TRAMP)
     ## 2                                                                                                                                                                            Serine/arginine-rich splicing factor 4 (Splicing factor, arginine/serine-rich 4)
@@ -440,11 +470,11 @@ impulse_sig %>% arrange(padj) %>% head(20) %>% dplyr::select(Gene,padj,loglik_re
     ## 13                                                                                                                                                                     Mu-theraphotoxin-Cg2a 3 (Mu-TRTX-Cg2a) (Jingzhaotoxin-IV) (JZTX-IV) (Peptide F1-23.73)
     ## 14                                                                                                                                           A disintegrin and metalloproteinase with thrombospondin motifs 6 (ADAM-TS 6) (ADAM-TS6) (ADAMTS-6) (EC 3.4.24.-)
     ## 15                                                                                                                                                                                                          Collagen triple helix repeat-containing protein 1
-    ## 16                                                                                                                                                                                                          Collagen triple helix repeat-containing protein 1
-    ## 17                                                                                                                                                                                                                                        Myc protein (c-myc)
+    ## 16                                                                                                                                                                                                                                        Myc protein (c-myc)
+    ## 17                                                                                                                                                                                                          Collagen triple helix repeat-containing protein 1
     ## 18                                                                                                                                                                                                          Ribonucleoprotein PTB-binding 1 (Protein raver-1)
-    ## 19                                                                                                               Serine/arginine-rich splicing factor 2 (Splicing component, 35 kDa) (Splicing factor SC35) (SC-35) (Splicing factor, arginine/serine-rich 2)
-    ## 20                                                                                                                                                                                                                               ZP domain-containing protein
+    ## 19                                                                                                                                                                                                                               ZP domain-containing protein
+    ## 20                                                                                                               Serine/arginine-rich splicing factor 2 (Splicing component, 35 kDa) (Splicing factor SC35) (SC-35) (Splicing factor, arginine/serine-rich 2)
     ##                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  BiologicalProcess
     ## 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cell adhesion [GO:0007155]; collagen fibril organization [GO:0030199]
     ## 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                          hematopoietic progenitor cell differentiation [GO:0002244]; mRNA processing [GO:0006397]; negative regulation of mRNA splicing, via spliceosome [GO:0048025]; RNA splicing [GO:0008380]
@@ -461,23 +491,23 @@ impulse_sig %>% arrange(padj) %>% head(20) %>% dplyr::select(Gene,padj,loglik_re
     ## 13                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
     ## 14                                                                                                                                                                                                                                                                                                                                                                                                                               aorta development [GO:0035904]; cardiac septum development [GO:0003279]; coronary vasculature development [GO:0060976]; extracellular matrix organization [GO:0030198]; kidney development [GO:0001822]; proteolysis [GO:0006508]
     ## 15 cell migration [GO:0016477]; cochlea morphogenesis [GO:0090103]; cyclooxygenase pathway [GO:0019371]; establishment of planar polarity involved in neural tube closure [GO:0090177]; inner ear receptor cell stereocilium organization [GO:0060122]; negative regulation of canonical Wnt signaling pathway [GO:0090090]; ossification involved in bone remodeling [GO:0043932]; osteoblast differentiation [GO:0001649]; osteoblast proliferation [GO:0033687]; positive regulation of osteoblast differentiation [GO:0045669]; positive regulation of osteoblast proliferation [GO:0033690]; Wnt signaling pathway, planar cell polarity pathway [GO:0060071]
-    ## 16 cell migration [GO:0016477]; cochlea morphogenesis [GO:0090103]; cyclooxygenase pathway [GO:0019371]; establishment of planar polarity involved in neural tube closure [GO:0090177]; inner ear receptor cell stereocilium organization [GO:0060122]; negative regulation of canonical Wnt signaling pathway [GO:0090090]; ossification involved in bone remodeling [GO:0043932]; osteoblast differentiation [GO:0001649]; osteoblast proliferation [GO:0033687]; positive regulation of osteoblast differentiation [GO:0045669]; positive regulation of osteoblast proliferation [GO:0033690]; Wnt signaling pathway, planar cell polarity pathway [GO:0060071]
-    ## 17                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+    ## 16                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+    ## 17 cell migration [GO:0016477]; cochlea morphogenesis [GO:0090103]; cyclooxygenase pathway [GO:0019371]; establishment of planar polarity involved in neural tube closure [GO:0090177]; inner ear receptor cell stereocilium organization [GO:0060122]; negative regulation of canonical Wnt signaling pathway [GO:0090090]; ossification involved in bone remodeling [GO:0043932]; osteoblast differentiation [GO:0001649]; osteoblast proliferation [GO:0033687]; positive regulation of osteoblast differentiation [GO:0045669]; positive regulation of osteoblast proliferation [GO:0033690]; Wnt signaling pathway, planar cell polarity pathway [GO:0060071]
     ## 18                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
-    ## 19                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         mRNA processing [GO:0006397]; RNA splicing [GO:0008380]
-    ## 20
+    ## 19                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+    ## 20                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         mRNA processing [GO:0006397]; RNA splicing [GO:0008380]
 
 ### Quick summary
 
-    ## Total significant genes: 5742
+    ## Total significant genes: 6233
 
     ## Response patterns:
 
-    ## Transient: 1392
+    ## Transient: 1534
 
-    ## Monotonous: 2144
+    ## Monotonous: 2243
 
-    ## Other: 2206
+    ## Other: 2456
 
 ## 4. Visualize ImpulseDE2 Results
 
@@ -679,12 +709,12 @@ table(cluster_assignments$cluster, cluster_assignments$response_type)
 
     ##    
     ##     Monotonous Other Transient
-    ##   1         33   231       490
-    ##   2         44   408       502
-    ##   3        268   336        30
-    ##   4        685   305        35
-    ##   5        934   467        70
-    ##   6        180   458       265
+    ##   1        385   324        75
+    ##   2       1071   325        20
+    ##   3        246   495       283
+    ##   4         37   287       351
+    ##   5        127   423       710
+    ##   6        377   602        95
 
 ``` r
 # Save mfuzz objects and cluster assignments
@@ -715,12 +745,12 @@ print(cluster_info)
 ```
 
     ##   cluster peak_time trough_time n_genes
-    ## 1       1         3           1     754
-    ## 2       2         0          12     954
-    ## 3       3       120           1     634
-    ## 4       4         3         120    1025
-    ## 5       5         1          12    1471
-    ## 6       6        12           1     903
+    ## 1       1         3         120     784
+    ## 2       2         1         120    1416
+    ## 3       3         1          12    1024
+    ## 4       4         0           3     675
+    ## 5       5         3           1    1260
+    ## 6       6        12           1    1074
 
 ``` r
 write.csv(cluster_info, file.path(outdir_mfuzz, "cluster_info.csv"), row.names = FALSE)
@@ -742,7 +772,7 @@ mfuzz.plot(heat_eset, cl = mfuzz_clusters, new.window =FALSE, mfrow = c(2,k/2), 
 
 ``` r
 # Visualize clusters
-png(paste0(outdir_mfuzz,"/temporal_clusters.png"), width = 12, height = 10, units = "in", res = 300)
+png(paste0(outdir_plots,"/temporal_clusters.png"), width = 12, height = 10, units = "in", res = 300)
 mfuzz.plot2(heat_eset, cl = mfuzz_clusters, mfrow = c(2,k/2),
             time.labels = c("0", "1", "3", "12", "24", "72", "120"),
             xlab = "Time (hours)",x11=FALSE)
@@ -815,8 +845,8 @@ cluster_assignments %>% filter(Gene %in% HSPS)
 ```
 
     ##                                        Gene cluster membership response_type
-    ## 1 Porites_compressa_HIv1___RNAseq.g10172.t1       1  0.5696644     Transient
-    ## 2  Porites_compressa_HIv1___RNAseq.g1475.t1       1  0.6518457     Transient
+    ## 1 Porites_compressa_HIv1___RNAseq.g10172.t1       5  0.8621075     Transient
+    ## 2  Porites_compressa_HIv1___RNAseq.g1475.t1       5  0.9220535     Transient
 
 ``` r
 heat_clustered <- HeatStressGenes_unique %>% left_join(cluster_assignments, by = join_by(query==Gene)) %>%

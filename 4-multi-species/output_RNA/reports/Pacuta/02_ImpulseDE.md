@@ -1,7 +1,7 @@
 ImpulseDE2 Temporal Analysis
 ================
 Zoe Dellaert
-2026-05-10
+2026-05-11
 
 - [Bulk RNA-seq Time Course Trajectory Analysis and
   Clustering](#bulk-rna-seq-time-course-trajectory-analysis-and-clustering)
@@ -289,6 +289,9 @@ if (!dir.exists(reportdir)) dir.create(reportdir, recursive = TRUE)
 # load in raw counts data
 counts_raw <- read.csv(file.path("../../output_RNA/count_matrices", config$count_matrix), row.names = 1)
 
+# load in filtered counts data
+filtered_counts <- read.csv(file.path(input_dir, "filtered_counts.csv"), row.names = 1)
+
 # load in vst-transformed counts
 vst <- read.csv(file.path(input_dir, "vsd_expression_matrix.csv"))
 vst <- vst %>% column_to_rownames(var = "X")
@@ -351,7 +354,7 @@ RDS.
 ``` r
 if(params$run_ImpulseDE2 == TRUE) {
   objectImpulseDE2 <- runImpulseDE2(
-    matCountData    = as.matrix(counts_raw), #or use filtered_counts  
+    matCountData    = as.matrix(filtered_counts), #or use filtered_counts  
     dfAnnotation    = meta_impulse,
     boolCaseCtrl    = TRUE,
     vecConfounders  = c("Batch"), #only use if you want to try to control for batch effects
@@ -363,6 +366,34 @@ if(params$run_ImpulseDE2 == TRUE) {
   objectImpulseDE2 <- readRDS(file.path(outdir, "objectImpulseDE2.rds"))
 }
 ```
+
+    ## Processing Details:
+    ## ImpulseDE2 runs in case-ctrl mode.
+    ## Found time points: 0,1,3,12,24,72,120
+    ## Case: Found the samples at time point 0: POC_R0_H1,POC_R0_H2,POC_R0_H3
+    ## Case: Found the samples at time point 1: POC_R1_H1,POC_R1_H2,POC_R1_H3
+    ## Case: Found the samples at time point 3: POC_R3_H1,POC_R3_H2,POC_R3_H3
+    ## Case: Found the samples at time point 12: POC_R12_H1,POC_R12_H2,POC_R12_H3
+    ## Case: Found the samples at time point 24: POC_R24_H1,POC_R24_H2,POC_R24_H3
+    ## Case: Found the samples at time point 72: POC_R72_H1,POC_R72_H2,POC_R72_H3
+    ## Case: Found the samples at time point 120: POC_R120_H1,POC_R120_H2,POC_R120_H3
+    ## Control: Found the following samples at time point 0:POC_R0_C1,POC_R0_C2,POC_R0_C3
+    ## Control: Found the following samples at time point 1:POC_R1_C1,POC_R1_C2,POC_R1_C3
+    ## Control: Found the following samples at time point 3:POC_R3_C1,POC_R3_C2,POC_R3_C3
+    ## Control: Found the following samples at time point 12:POC_R12_C1,POC_R12_C2,POC_R12_C3
+    ## Control: Found the following samples at time point 24:POC_R24_C1,POC_R24_C2,POC_R24_C3
+    ## Control: Found the following samples at time point 72:POC_R72_C1,POC_R72_C2,POC_R72_C3
+    ## Control: Found the following samples at time point 120:POC_R120_C1,POC_R120_C2,POC_R120_C3
+    ## Found the following samples for confounder Batch and batch C1: POC_R0_C1,POC_R1_C1,POC_R3_C1,POC_R12_C1,POC_R24_C1,POC_R72_C1,POC_R120_C1
+    ## Found the following samples for confounder Batch and batch C2: POC_R0_C2,POC_R1_C2,POC_R3_C2,POC_R12_C2,POC_R24_C2,POC_R72_C2,POC_R120_C2
+    ## Found the following samples for confounder Batch and batch C3: POC_R0_C3,POC_R1_C3,POC_R3_C3,POC_R12_C3,POC_R24_C3,POC_R72_C3,POC_R120_C3
+    ## Found the following samples for confounder Batch and batch H1: POC_R0_H1,POC_R1_H1,POC_R3_H1,POC_R12_H1,POC_R24_H1,POC_R72_H1,POC_R120_H1
+    ## Found the following samples for confounder Batch and batch H2: POC_R0_H2,POC_R1_H2,POC_R3_H2,POC_R12_H2,POC_R24_H2,POC_R72_H2,POC_R120_H2
+    ## Found the following samples for confounder Batch and batch H3: POC_R0_H3,POC_R1_H3,POC_R3_H3,POC_R12_H3,POC_R24_H3,POC_R72_H3,POC_R120_H3
+    ## Input contained 24941 genes/regions.
+    ## Selected 24941 genes/regions for analysis.
+
+    ## [1] "Corrected 121 DESEq2 dispersion estimates which to avoid variance overestimation and loss of discriminatory power for model selection."
 
 ``` r
 # Print processing report
@@ -393,19 +424,18 @@ cat(objectImpulseDE2@strReport)
     ## Found the following samples for confounder Batch and batch H1: POC_R0_H1,POC_R1_H1,POC_R3_H1,POC_R12_H1,POC_R24_H1,POC_R72_H1,POC_R120_H1
     ## Found the following samples for confounder Batch and batch H2: POC_R0_H2,POC_R1_H2,POC_R3_H2,POC_R12_H2,POC_R24_H2,POC_R72_H2,POC_R120_H2
     ## Found the following samples for confounder Batch and batch H3: POC_R0_H3,POC_R1_H3,POC_R3_H3,POC_R12_H3,POC_R24_H3,POC_R72_H3,POC_R120_H3
-    ## Input contained 33730 genes/regions.
-    ## WARNING: 3550 out of 33730 genes do not have obserserved non-zero counts and are excluded.
-    ## Selected 30180 genes/regions for analysis.
+    ## Input contained 24941 genes/regions.
+    ## Selected 24941 genes/regions for analysis.
     ## # Run DESeq2: Using dispersion factorscomputed by DESeq2.
-    ## Consumed time: 0.62 min.
+    ## Consumed time: 0.47 min.
     ## # Compute size factors
     ## # Fitting null and alternative model to the genes
-    ## Consumed time: 18.08 min.
+    ## Consumed time: 9.5 min.
     ## # Fitting sigmoid model to case condition
-    ## Consumed time: 1.52 min.
+    ## Consumed time: 0.82 min.
     ## # Differentially expression analysis based on model fits
     ## Finished running ImpulseDE2.
-    ## TOTAL consumed time: 20.38 min.
+    ## TOTAL consumed time: 10.92 min.
 
 ## 3. Extract ImpulseDE2 results
 
@@ -445,26 +475,26 @@ impulse_sig %>% arrange(padj) %>% head(20) %>% dplyr::select(Gene,padj,loglik_re
 ```
 
     ##                                         Gene         padj loglik_red
-    ## 1        Pocillopora_acuta_HIv2___TS.g798.t2 5.388799e-87  -545.5883
-    ## 2  Pocillopora_acuta_HIv2___RNAseq.g26418.t1 1.216997e-83  -580.5737
-    ## 3   Pocillopora_acuta_HIv2___RNAseq.g5165.t1 4.706705e-78  -430.2411
-    ## 4  Pocillopora_acuta_HIv2___RNAseq.g22728.t1 1.161678e-77  -485.7291
-    ## 5  Pocillopora_acuta_HIv2___RNAseq.g26847.t1 2.195764e-77  -505.4094
-    ## 6      Pocillopora_acuta_HIv2___TS.g28751.t1 1.248234e-75  -531.3431
-    ## 7  Pocillopora_acuta_HIv2___RNAseq.g18469.t1 1.248234e-75  -503.2633
-    ## 8   Pocillopora_acuta_HIv2___RNAseq.g5323.t1 9.453677e-72  -435.0774
-    ## 9      Pocillopora_acuta_HIv2___TS.g10636.t2 1.796412e-67  -536.4996
-    ## 10     Pocillopora_acuta_HIv2___TS.g22830.t2 8.272431e-66  -482.8667
-    ## 11 Pocillopora_acuta_HIv2___RNAseq.g17840.t1 2.464486e-64  -505.7045
-    ## 12  Pocillopora_acuta_HIv2___RNAseq.g4038.t1 5.479979e-63  -663.2676
-    ## 13 Pocillopora_acuta_HIv2___RNAseq.g10587.t1 1.501894e-62  -466.3320
-    ## 14 Pocillopora_acuta_HIv2___RNAseq.g25282.t1 1.406535e-60  -527.9165
-    ## 15   Pocillopora_acuta_HIv2___RNAseq.g329.t1 2.841430e-60  -485.0607
-    ## 16 Pocillopora_acuta_HIv2___RNAseq.g29669.t2 4.439158e-59  -410.9084
-    ## 17 Pocillopora_acuta_HIv2___RNAseq.g25560.t1 2.294178e-57  -460.7206
-    ## 18 Pocillopora_acuta_HIv2___RNAseq.g25279.t1 5.082204e-57  -420.9505
-    ## 19  Pocillopora_acuta_HIv2___RNAseq.g7178.t1 1.232054e-52  -371.5217
-    ## 20 Pocillopora_acuta_HIv2___RNAseq.g10431.t1 3.245953e-51  -334.3966
+    ## 1        Pocillopora_acuta_HIv2___TS.g798.t2 4.864568e-86  -543.0060
+    ## 2  Pocillopora_acuta_HIv2___RNAseq.g26418.t1 2.091409e-81  -573.9914
+    ## 3  Pocillopora_acuta_HIv2___RNAseq.g22728.t1 9.622771e-77  -483.6033
+    ## 4   Pocillopora_acuta_HIv2___RNAseq.g5165.t1 1.666631e-76  -426.5356
+    ## 5  Pocillopora_acuta_HIv2___RNAseq.g26847.t1 7.212073e-76  -501.2349
+    ## 6      Pocillopora_acuta_HIv2___TS.g28751.t1 1.114493e-74  -529.0168
+    ## 7  Pocillopora_acuta_HIv2___RNAseq.g18469.t1 9.918224e-73  -496.2235
+    ## 8   Pocillopora_acuta_HIv2___RNAseq.g5323.t1 4.831944e-72  -435.5869
+    ## 9      Pocillopora_acuta_HIv2___TS.g10636.t2 3.304548e-66  -533.4396
+    ## 10     Pocillopora_acuta_HIv2___TS.g22830.t2 1.821444e-64  -479.4756
+    ## 11 Pocillopora_acuta_HIv2___RNAseq.g17840.t1 1.045136e-63  -503.6525
+    ## 12  Pocillopora_acuta_HIv2___RNAseq.g4038.t1 3.629458e-62  -659.4300
+    ## 13 Pocillopora_acuta_HIv2___RNAseq.g10587.t1 7.044123e-62  -464.5672
+    ## 14   Pocillopora_acuta_HIv2___RNAseq.g329.t1 3.704162e-60  -484.6696
+    ## 15 Pocillopora_acuta_HIv2___RNAseq.g25282.t1 9.420407e-60  -525.7125
+    ## 16 Pocillopora_acuta_HIv2___RNAseq.g29669.t2 7.944234e-57  -405.8635
+    ## 17 Pocillopora_acuta_HIv2___RNAseq.g25560.t1 1.242913e-56  -458.6385
+    ## 18 Pocillopora_acuta_HIv2___RNAseq.g25279.t1 1.806282e-56  -419.4400
+    ## 19  Pocillopora_acuta_HIv2___RNAseq.g7178.t1 6.237239e-52  -369.6026
+    ## 20 Pocillopora_acuta_HIv2___RNAseq.g10431.t1 1.046803e-50  -334.6034
     ##    response_type
     ## 1     Monotonous
     ## 2      Transient
@@ -479,18 +509,18 @@ impulse_sig %>% arrange(padj) %>% head(20) %>% dplyr::select(Gene,padj,loglik_re
     ## 11    Monotonous
     ## 12     Transient
     ## 13     Transient
-    ## 14     Transient
-    ## 15    Monotonous
+    ## 14    Monotonous
+    ## 15     Transient
     ## 16     Transient
     ## 17    Monotonous
     ## 18    Monotonous
-    ## 19     Transient
+    ## 19    Monotonous
     ## 20    Monotonous
     ##                                                                                                                                                                                                                        ProteinNames
     ## 1                                                                                                                                                                                                                              <NA>
     ## 2                                                                                      Splicing factor, suppressor of white-apricot homolog (Splicing factor, arginine/serine-rich 8) (Suppressor of white apricot protein homolog)
-    ## 3                                                                                                                                               BTB/POZ domain-containing protein 8 (AP2-interacting clathrin-endocytosis) (APache)
-    ## 4                                                                                                                                                                                                                              <NA>
+    ## 3                                                                                                                                                                                                                              <NA>
+    ## 4                                                                                                                                               BTB/POZ domain-containing protein 8 (AP2-interacting clathrin-endocytosis) (APache)
     ## 5                                                                                                                                                                                            Interferon regulatory factor 2 (IRF-2)
     ## 6                                                                                                                                                                                                                              <NA>
     ## 7                                                                                                                       Serine-arginine protein 55 (SRP55) (52 kDa bracketing protein) (B52 protein) (Protein enhancer of deformed)
@@ -510,8 +540,8 @@ impulse_sig %>% arrange(padj) %>% head(20) %>% dplyr::select(Gene,padj,loglik_re
     ##                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               BiologicalProcess
     ## 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          <NA>
     ## 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     alternative mRNA splicing, via spliceosome [GO:0000380]; mRNA 5'-splice site recognition [GO:0000395]; negative regulation of mRNA splicing, via spliceosome [GO:0048025]
-    ## 3                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                synaptic vesicle budding from endosome [GO:0016182]; synaptic vesicle endocytosis [GO:0048488]
-    ## 4                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          <NA>
+    ## 3                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          <NA>
+    ## 4                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                synaptic vesicle budding from endosome [GO:0016182]; synaptic vesicle endocytosis [GO:0048488]
     ## 5                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             immune system process [GO:0002376]; regulation of transcription by RNA polymerase II [GO:0006357]
     ## 6                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          <NA>
     ## 7                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    defense response to virus [GO:0051607]; mitotic cell cycle [GO:0000278]; mitotic G1/S transition checkpoint signaling [GO:0044819]; mRNA splicing, via spliceosome [GO:0000398]; regulation of alternative mRNA splicing, via spliceosome [GO:0000381]; regulation of gene expression [GO:0010468]; regulation of mRNA 3'-end processing [GO:0031440]; regulation of mRNA splicing, via spliceosome [GO:0048024]; regulation of transcriptional start site selection at RNA polymerase II promoter [GO:0001178]; RNA splicing [GO:0008380]
@@ -531,15 +561,15 @@ impulse_sig %>% arrange(padj) %>% head(20) %>% dplyr::select(Gene,padj,loglik_re
 
 ### Quick summary
 
-    ## Total significant genes: 9712
+    ## Total significant genes: 10064
 
     ## Response patterns:
 
-    ## Transient: 5093
+    ## Transient: 5241
 
-    ## Monotonous: 3060
+    ## Monotonous: 3129
 
-    ## Other: 1559
+    ## Other: 1694
 
 ## 4. Visualize ImpulseDE2 Results
 
@@ -741,12 +771,12 @@ table(cluster_assignments$cluster, cluster_assignments$response_type)
 
     ##    
     ##     Monotonous Other Transient
-    ##   1         37   203      1401
-    ##   2         77   182      1572
-    ##   3        993   367       296
-    ##   4        569   277       700
-    ##   5        666   225       631
-    ##   6        718   298       492
+    ##   1         79   197      1624
+    ##   2         41   238      1405
+    ##   3        658   246       670
+    ##   4        554   296       760
+    ##   5       1051   390       292
+    ##   6        746   327       490
 
 ``` r
 # Save mfuzz objects and cluster assignments
@@ -777,12 +807,12 @@ print(cluster_info)
 ```
 
     ##   cluster peak_time trough_time n_genes
-    ## 1       1         3           0    1641
-    ## 2       2         0           3    1831
-    ## 3       3         1         120    1656
-    ## 4       4         3           1    1546
-    ## 5       5         1          12    1522
-    ## 6       6        24           3    1508
+    ## 1       1         0           3    1900
+    ## 2       2         3           0    1684
+    ## 3       3         0          12    1574
+    ## 4       4         3           1    1610
+    ## 5       5         1         120    1733
+    ## 6       6        24           3    1563
 
 ``` r
 write.csv(cluster_info, file.path(outdir_mfuzz, "cluster_info.csv"), row.names = FALSE)
@@ -804,7 +834,7 @@ mfuzz.plot(heat_eset, cl = mfuzz_clusters, new.window =FALSE, mfrow = c(2,k/2), 
 
 ``` r
 # Visualize clusters
-png(paste0(outdir_mfuzz,"/temporal_clusters.png"), width = 12, height = 10, units = "in", res = 300)
+png(paste0(outdir_plots,"/temporal_clusters.png"), width = 12, height = 10, units = "in", res = 300)
 mfuzz.plot2(heat_eset, cl = mfuzz_clusters, mfrow = c(2,k/2),
             time.labels = c("0", "1", "3", "12", "24", "72", "120"),
             xlab = "Time (hours)",x11=FALSE)
@@ -877,9 +907,9 @@ cluster_assignments %>% filter(Gene %in% HSPS)
 ```
 
     ##                                        Gene cluster membership response_type
-    ## 1 Pocillopora_acuta_HIv2___RNAseq.g10659.t1       1  0.8566405     Transient
-    ## 2 Pocillopora_acuta_HIv2___RNAseq.g13981.t1       1  0.7252894     Transient
-    ## 3 Pocillopora_acuta_HIv2___RNAseq.g23086.t1       3  0.5500434     Transient
+    ## 1 Pocillopora_acuta_HIv2___RNAseq.g10659.t1       2  0.8537251     Transient
+    ## 2 Pocillopora_acuta_HIv2___RNAseq.g13981.t1       2  0.7207062     Transient
+    ## 3 Pocillopora_acuta_HIv2___RNAseq.g23086.t1       5  0.5336564     Transient
 
 ``` r
 heat_clustered <- HeatStressGenes_unique %>% left_join(cluster_assignments, by = join_by(query==Gene)) %>%

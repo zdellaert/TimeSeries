@@ -8,15 +8,16 @@ All 3 species had good clustering definition with 6 clusters based on elbow plot
 
 ## Cross-species cluster comparison
 
-| Pattern              | Pacuta | Mcap | Pcomp |   Species      |
-|----------------------|--------|------|-------|----------------|
-| Early Peak (3h)      | 1      | 3    | 1     | All 3          |
-| Early Dip (3h)       | 2      | 2    | -     | Pacuta & Mcap  |
-| U-shaped Dip (12h)   | -      | 4    | 2     | Mcap & Pcomp   |
-| Sustained Up (3h)    | 4      | -    | 6     | Pacuta & Pcomp |
-| Sustained Up (12h)   | 6      | 5    | 3     | All 3          |
-| Sustained Down (12h) | 5      | 6    | 5     | All 3          |
-| Gradual Down         | 3      | 1    | 4     | All 3          |
+| Pattern               | Pacuta | Mcap | Pcomp | Species       |
+|-----------------------|--------|------|-------|---------------|
+| Early Peak (3h)       | 2      | 3    | 5     | All 3         |
+| Early Dip (3h)        | 1      | 4    | -     | Pacuta & Mcap |
+| U-shaped Dip (12h)    | -      | 5    | 4     | Mcap & Pcomp  |
+| Sustained Up (3h)     | 4      | -    | -     | Pacuta        |
+| Sustained Up (12h)    | 6      | 2    | 6     | All 3         |
+| *Sustained Down (3h*) | -      | -    | 3     | Pcomp         |
+| Sustained Down (12h)  | 3      | 1    | 2     | All 3         |
+| Gradual Down          | 5      | 6    | 1     | All 3         |
 
 **4 patterns present in all species; 3 patterns shared by 2 species.**
 
@@ -34,33 +35,33 @@ All 3 species had good clustering definition with 6 clusters based on elbow plot
 
 ## Pacuta
 
-| Cluster | Pattern               | Peak | Trough | n_genes | Dominant ImpulseDE Response Type |
-|---------|-----------------------|------|--------|---------|----------------------------------|
-| 1       | Early Peak (3h)       | 3h   | 0h     | 1641    | Transient (1401)                 |
-| 2       | Early Dip (3h)        | 0h   | 3h     | 1831    | Transient (1572)                 |
-| 3       | Gradual Down          | 1h   | 120h   | 1656    | Monotonous (993)                 |
-| 4       | Sustained Up (3h)     | 3h   | 1h     | 1546    | Transient (700)                  |
-| 5       | Sustained Down (12h)  | 1h   | 12h    | 1522    | Monotonous (666)                 |
-| 6       | Sustained Up (12h) | 24h  | 3h     | 1508    | Monotonous (718)                 |
+| Cluster | Pattern              | Peak | Trough | n_genes | Dominant ImpulseDE Response Type |
+|---------|----------------------|------|--------|---------|----------------------------------|
+| 1       | Early Dip (3h)       | 0h   | 3h     | 1900    | Transient (1624)                 |
+| 2       | Early Peak (3h)      | 3h   | 0h     | 1684    | Transient (1405)                 |
+| 3       | Sustained Down (12h) | 0h   | 12h    | 1574    | Transient (670)                  |
+| 4       | Sustained Up (3h)    | 3h   | 1h     | 1610    | Transient (760)                  |
+| 5       | Gradual Down         | 1h   | 120h   | 1733    | Monotonous (1051)                |
+| 6       | Sustained Up (12h)   | 24h  | 3h     | 1563    | Monotonous (746)                 |
 
 ## Mcap
 
-| Cluster | Pattern               | Peak | Trough | n_genes | Dominant Type    |
-|---------|-----------------------|------|--------|---------|------------------|
-| 1       | Gradual Down          | 3h   | 120h   | 1172    | Monotonous (656) |
-| 2       | Early Dip (3h)        | 120h | 3h     | 843     | Transient (436)  |
-| 3       | Early Peak (3h)       | 3h   | 0h     | 863     | Transient (526)  |
-| 4       | U-shaped Dip (12h)    | 0h   | 12h    | 908     | Transient (494)  |
-| 5       | Sustained Up (12h) | 12h  | 0h     | 949     | Monotonous (597) |
-| 6       | Sustained Down (12h)  | 0h   | 12h    | 1146    | Monotonous (795) |
+| Cluster | Pattern              | Peak | Trough | n_genes | Dominant Type    |
+|---------|----------------------|------|--------|---------|------------------|
+| 1       | Sustained Down (12h) | 0h   | 12h    | 1270    | Monotonous (847) |
+| 2       | Sustained Up (12h)   | 12h  | 0h     | 1096    | Monotonous (635) |
+| 3       | Early Peak (3h)      | 3h   | 0h     | 963     | Transient (600)  |
+| 4       | Early Dip (3h)       | 120h | 3h     | 965     | Transient (491)  |
+| 5       | U-shaped Dip (12h)   | 0h   | 12h    | 1043    | Transient (592)  |
+| 6       | Gradual Down         | 3h   | 120h   | 1294    | Monotonous (697) |
 
 ## Pcomp
 
-| Cluster | Pattern               | Peak | Trough | n_genes | Dominant Type    |
-|---------|-----------------------|------|--------|---------|------------------|
-| 1       | Early Peak (3h)       | 3h   | 1h     | 754     | Transient (490)  |
-| 2       | U-shaped Dip (12h)    | 0h   | 12h    | 954     | Transient (502)  |
-| 3       | Sustained Up (12h) | 120h | 1h     | 634     | Other (336)      |
-| 4       | Gradual Down          | 3h   | 120h   | 1025    | Monotonous (685) |
-| 5       | Sustained Down (12h)  | 1h   | 12h    | 1471    | Monotonous (934) |
-| 6       | Sustained Up (3h)     | 12h  | 1h     | 903     | Other (458)      |
+| Cluster | Pattern                      | Peak | Trough | n_genes | Dominant Type     |
+|---------|------------------------------|------|--------|---------|-------------------|
+| 1       | Gradual Down                 | 3h   | 120h   | 784     | Monotonous (385)  |
+| 2       | Sustained Down (12h)         | 1h   | 120h   | 1416    | Monotonous (1071) |
+| 3       | *Sustained Down (3h)*?       | 1h   | 12h    | 1024    | Other (495)       |
+| 4       | U-shaped Dip (12h)           | 0h   | 3h     | 675     | Transient (351)   |
+| 5       | Early Peak/Sustained Up (3h) | 3h   | 1h     | 1260    | Transient (710)   |
+| 6       | Sustained Up (12h)           | 12h  | 1h     | 1074    | Other (602)       |

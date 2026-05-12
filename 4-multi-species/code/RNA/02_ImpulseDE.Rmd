@@ -100,6 +100,9 @@ if (!dir.exists(reportdir)) dir.create(reportdir, recursive = TRUE)
 # load in raw counts data
 counts_raw <- read.csv(file.path("../../output_RNA/count_matrices", config$count_matrix), row.names = 1)
 
+# load in filtered counts data
+filtered_counts <- read.csv(file.path(input_dir, "filtered_counts.csv"), row.names = 1)
+
 # load in vst-transformed counts
 vst <- read.csv(file.path(input_dir, "vsd_expression_matrix.csv"))
 vst <- vst %>% column_to_rownames(var = "X")
@@ -151,7 +154,7 @@ This takes a ton of time and memory, so I run it once then save as an RDS.
 ```{r} 
 if(params$run_ImpulseDE2 == TRUE) {
   objectImpulseDE2 <- runImpulseDE2(
-    matCountData    = as.matrix(counts_raw), #or use filtered_counts  
+    matCountData    = as.matrix(filtered_counts), #or use filtered_counts  
     dfAnnotation    = meta_impulse,
     boolCaseCtrl    = TRUE,
     vecConfounders  = c("Batch"), #only use if you want to try to control for batch effects
@@ -409,6 +412,16 @@ dev.off()
 pdf(paste0(outdir_plots,"/pdf_figs/temporal_clusters_membership50.pdf"), width = 12, height = 10)
 mfuzz.plot2(heat_eset, cl = mfuzz_clusters, mfrow = c(2,k/2),
             min.mem = 0.5,
+            time.labels = c("0", "1", "3", "12", "24", "72", "120"),
+            xlab = "Time (hours)",x11=FALSE)
+dev.off()
+```
+
+
+```{r}
+png(paste0(outdir_plots,"/TEST_temporal_clusters.png"), width = 12, height = 10, units = "in", res = 300)
+mfuzz.plot2(heat_eset, cl = mfuzz_clusters, mfrow = c(2,k/2),
+            #time.points = c(0, 1, 3, 12, 24, 72, 120),
             time.labels = c("0", "1", "3", "12", "24", "72", "120"),
             xlab = "Time (hours)",x11=FALSE)
 dev.off()
