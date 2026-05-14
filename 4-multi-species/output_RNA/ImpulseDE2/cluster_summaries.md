@@ -4,6 +4,10 @@
 
 All 3 species had good clustering definition with 6 clusters based on elbow plots. This was set for each species in species_parameters.R
 
+**See detailed version with images [here](https://github.com/zdellaert/TimeSeries/blob/main/4-multi-species/output_RNA/ImpulseDE2/cluster_summaries_images.pdf)**
+
+![example](./cluster_summaries.png)
+
 ---
 
 ## Cross-species cluster comparison
