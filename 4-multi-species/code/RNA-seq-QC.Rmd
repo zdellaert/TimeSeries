@@ -65,12 +65,79 @@ paste(nrow(QC_trim_summarized %>% arrange(total_Mseq) %>% filter(total_Mseq < 15
 write.csv(QC_trim_summarized %>% arrange(total_Mseq) , "../output_RNA/trimmed_qc/multiqc_data/concatenated_runs_nreads_post_trim.csv")
 ```
 
+### mapping rates
+
+```{r}
+POR_map <- read.delim("../output_RNA/alignment_qc/POR_Pcomp/multiqc_data/multiqc_star.txt", header = TRUE) %>% mutate(species="POR")
+MON_map <- read.delim("../output_RNA/alignment_qc/MON_MCapV3/multiqc_data/multiqc_star.txt", header = TRUE) %>% mutate(species="MON")
+POC_map <- read.delim("../output_RNA/alignment_qc/POC_PacutaV2/multiqc_data/multiqc_star.txt", header = TRUE) %>% mutate(species="POC")
+
+mapping_all <- bind_rows(POC_map,MON_map,POR_map)
+```
+
+```{r}
+for (sp in c("POC","MON","POR")){
+  df <- mapping_all %>% filter(species ==sp)
+  
+  # IQR method 
+  Q1 <- quantile(df$uniquely_mapped_percent, 0.25)
+  Q3 <- quantile(df$uniquely_mapped_percent, 0.75)
+  IQR_val <- Q3 - Q1
+  
+  lower_bound <- Q1 - 1.5 * IQR_val
+  upper_bound <- Q3 + 1.5 * IQR_val
+  outliers <- df[df$uniquely_mapped_percent < lower_bound | df$uniquely_mapped_percent > upper_bound, ]
+  print(paste0(sp,": IQR = ", Q1,"-",Q3,"; 1.5 x IQR = ",lower_bound,"-",upper_bound,"; ",nrow(outliers)," outliers"))
+  print(outliers)
+}
+```
+
+
+### kraken contamination and mapping comparison
+
+```{r}
+kraken <- read.csv("../output_RNA/contam_screen/contamination_kraken.csv") %>% mutate(species = substr(sample,1,3))
+
+kraken %>% ggplot(aes(x=sample,y = percent_reads,fill=classification)) +geom_bar(stat="identity") + facet_grid(~species,scales="free_x") + theme(axis.text.x = element_text(angle=45)) + theme_classic() + scale_fill_brewer(palette = "Set2")
+```
+
+```{r}
+for (sp in c("POC","MON","POR")){
+  df <- kraken %>% filter(species ==sp & classification=="Bacteria")
+  
+  # IQR method 
+  Q1 <- quantile(df$percent_reads, 0.25)
+  Q3 <- quantile(df$percent_reads, 0.75)
+  IQR_val <- Q3 - Q1
+  
+  lower_bound <- Q1 - 1.5 * IQR_val
+  upper_bound <- Q3 + 1.5 * IQR_val
+  outliers <- df[df$percent_reads < lower_bound | df$percent_reads > upper_bound, ]
+  print(paste0(sp,": IQR = ", Q1,"-",Q3,"; 1.5 x IQR = ",lower_bound,"-",upper_bound,"; ",nrow(outliers)," outliers"))
+  print(outliers)
+}
+```
+
+
+```{r}
+kraken_map <- kraken %>% 
+  filter(classification=="Bacteria") %>%
+  left_join(mapping_all %>% select(Sample,total_reads, uniquely_mapped, uniquely_mapped_percent), by = join_by(sample==Sample))
+
+ggplot(kraken_map) + 
+  geom_point(aes(x = percent_reads, y =uniquely_mapped_percent, color=classification)) +
+  theme_bw() + facet_grid(~species)#,scales="free_x")
+
+```
+
+
+
 ### rRNA contamination and mapping comparison
 
 
 ```{r}
 # load in multiqc data of mapping data
-POR_map <- read.delim("../output_RNA/alignment_qc/POR_Pcomp/multiqc_data/multiqc_star.txt", header = TRUE)
+POR_map <- mapping_all %>% filter(species == "POR")
 POR_rRNA <- read.csv("../output_RNA/rRNA_screen/rRNA_contamination_bbduk_POR.csv") %>% select(-total_reads)
 POR_rRNA_Fede <- read.csv("../output_RNA/rRNA_screen/rRNA_contamination_bbduk_POR_Federica.csv") %>% select(-total_reads)
 ```
@@ -122,12 +189,13 @@ POR_rRNA_summary %>% pivot_longer(cols = contains("_"),
 
 write_csv(POR_rRNA_summary, "../output_RNA/differential_expression/POR_Pcomp/rRNA_and_mapping_metadata.csv")
 ```
+
 ### POR mRNA-decontaminated rarefaction analysis
 
 
 ```{r}
 # Directory containing all rarefaction CSV outputs
-resdir <- "/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_rarefaction/"
+resdir <- "/scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_rarefaction/"
 
 # Load all CSVs
 csv_files <- list.files(resdir, pattern = "_rarefaction.csv$", recursive = TRUE, full.names = TRUE)
@@ -249,7 +317,7 @@ ggplot(POR_combined, aes(x = depth, y = genes_detected, group=sample, color = un
 
 ```{r}
 # Load and prepare metadata
-metadata <- read.csv("../data/completed_bulk_RNA_extractions_3species.csv") %>%
+metadata <- read.csv("../data_RNA/completed_bulk_RNA_extractions_3species.csv") %>%
   select(fragment_name, t_hours, treatment, Tank, Extraction_Date, 
          RNA_QBIT_AVG, RNA_Gel_quality_score, ng_RNA_total) %>%
   mutate(across(c(t_hours, treatment, Tank, Extraction_Date), factor),

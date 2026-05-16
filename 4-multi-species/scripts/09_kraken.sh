@@ -13,28 +13,26 @@
 module load kraken2/2.1.2
 
 # make and enter output directory
-data_dir="/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed"
-out_dir="/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/kraken"
+scratch_dir="/scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries"
+data_dir="${scratch_dir}/trimmed/combined_files/"
+out_dir="${scratch_dir}/kraken"
 
 mkdir -p "${out_dir}"
 
-samples=(
-  "MON_R72_H1_S3"
-  "MON_R72_H2_S4"
-  "run-2-MON_R72_H2_S14"
-  "MON_R72_H3_S44"
-  "run-2-MON_R72_H3_S28"
-)
+trimmed=( "${data_dir}"*"R1_trim.fastq.gz" )
 
-for s in "${samples[@]}"; do
-    R1="${data_dir}/${s}_R1_trim.fastq.gz"
-    R2="${data_dir}/${s}_R2_trim.fastq.gz"
+for R1_file in "${trimmed[@]}"; do
+  # extract sample name
+  sample_name=$(basename "${R1_file}" "_R1_trim.fastq.gz")
 
-    kraken2 \
-      --db /datasets/bio/kraken2/kraken2-db/ \
-      --threads 16 \
-      --paired "$R1" "$R2" \
-      --use-names \
-      --report "${out_dir}/${s}.report.txt" \
-      --output "${out_dir}/${s}.kraken"
+  # define R2 file
+  R2_file="${data_dir}${sample_name}_R2_trim.fastq.gz"
+
+  kraken2 \
+    --db /datasets/bio/kraken2/kraken2-db/ \
+    --threads 16 \
+    --paired "$R1_file" "$R2_file" \
+    --use-names \
+    --report "${out_dir}/${sample_name}.report.txt" \
+    --output "${out_dir}/${sample_name}.kraken"
 done

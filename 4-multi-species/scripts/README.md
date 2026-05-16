@@ -908,6 +908,35 @@ for s in "${samples[@]}"; do
 done
 ```
 
+Then, compile the results:
+
+```
+mkdir /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/contam_screen/
+echo "sample,classification,percent_reads" > /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/contam_screen/contamination_kraken.csv
+
+cd /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/kraken/
+
+for f in *.report.txt; do
+    sample=$(basename "$f" .report.txt)
+
+    # Print percent in first row and first column
+    top_percent=$(awk 'NR==1 {print $1}' "$f")
+
+    # Print classification of the top contaminant (almost always unclassified) in first row and first column
+    top_class=$(awk 'NR==1 {print $6}' "$f")
+
+    echo "${sample},${top_class},${top_percent}" >> /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/contam_screen/contamination_kraken.csv
+
+    # Print percent in fourth row and first column
+    bac_percent=$(awk 'NR==4 {print $1}' "$f")
+
+    # Print classification of the second top contaminant (almost always Bacteria) in fourth row and first column
+    bac_class=$(awk 'NR==4 {print $5}' "$f")
+
+    echo "${sample},${bac_class},${bac_percent}" >> /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/contam_screen/contamination_kraken.csv
+done
+```
+
 ### Contamination screen results
 
 Coral reads will show up as unclassified, because they are not in the kraken database. Samples H1 and H2 showed 10-30% bacterial contamination, which is extremely high compared to the 2% seen in a sample that mapped well.
