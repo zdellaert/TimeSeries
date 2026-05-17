@@ -32,4 +32,10 @@ for (sp in species_list) {
          params = list(species = sp),
          output_format = "github_document",
          output_dir = output_dir)
+
+  render("05_Integration.Rmd",
+         params = list(species = sp),
+         output_format = "github_document",
+         output_dir = output_dir)
+}
 }

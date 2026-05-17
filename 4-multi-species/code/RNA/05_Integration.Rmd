@@ -1,0 +1,132 @@
+---
+title: "Integrate across analyses"
+author: "Zoe Dellaert"
+date: "`r Sys.Date()`"
+params:
+  species: "Pacuta" # default for interactive use
+output:
+  github_document:
+    toc: true
+    html_preview: false
+---
+
+# Analysis of Time Series bulk RNA-seq data: Combine results from all analyses
+
+---
+
+## 1. Load packages and functions
+
+```{r setup}
+# set up file paths so that Rmd outputs can be viewed using github markdown
+knitr::opts_knit$set(base.dir = normalizePath(paste0("../../output_RNA/reports/", params$species, "/")), base.url = "./")
+
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, fig.width = 10, fig.height = 8,
+                      fig.path = "05_Integration_files/figure-gfm/")
+
+#load packages
+library(tidyverse)
+
+#load in parameters and functions
+source("species_parameters.R")
+source("utils.R")
+
+sessionInfo() #provides list of loaded packages and version of R
+```
+
+## 2. Setup species-specific parameters and define directories
+
+```{r get-species}
+# get species
+species <- params$species
+
+# get parameters for this species
+config <- get_params(species)
+print_config(species)
+
+# define preprocessing and analysis output directories (from 01_preprocessing.Rmd, 02_ImpulseDE2.Rmd, 03_WGCNA.Rmd, & 04_TFBS.Rmd)
+input_dir <- file.path("../../output_RNA/counts_filt_norm", species)
+impulse_dir <- file.path("../../output_RNA/ImpulseDE2", species)
+mfuzz_dir <- file.path(impulse_dir, "Mfuzz")
+wgcna_dir <- file.path("../../output_RNA/WGCNA", species)
+tfbs_dir <- file.path("../../output_RNA/TFBS", species)
+
+# set up necessary output directories if they don't exist
+outdir <- file.path("../../output_RNA/analysis_integration", species)
+outdir_plots <- file.path(outdir,"plots")
+if (!dir.exists(outdir)) dir.create(outdir, recursive = TRUE)
+if (!dir.exists(outdir_plots)) dir.create(outdir_plots, recursive = TRUE)
+
+reportdir <- file.path("../../output_RNA/reports", params$species, "05_Integration_files/figure-gfm/")
+if (!dir.exists(reportdir)) dir.create(reportdir, recursive = TRUE)
+```
+
+## 3. Load in filtered counts and expression results (ImpuseDE, Mfuzz, WGCNA, TFBS) and SwissProt annotations
+
+```{r}
+# load in filtered counts data
+filtered_counts <- read.csv(file.path(input_dir, "filtered_counts.csv"), row.names = 1)
+all_genes <- rownames(filtered_counts)
+
+# ImpulseDE2 results
+impulse_results <- read.csv(file.path(impulse_dir, "ImpulseDE2_results.csv"))
+impulse_sig <- impulse_results %>%
+  filter(padj < global_params$padj_threshold)
+
+# Mfuzz cluster assignments
+mfuzz_clusters <- read.csv(file.path(mfuzz_dir, "cluster_assignments.csv"))
+mfuzz_clusters_mem50 <- mfuzz_clusters %>% filter(membership > 0.5)
+
+# WGCNA module assignments
+wgcna_modules <- read.csv(file.path(wgcna_dir, "gene_modules.csv"))
+
+# Module interaction stats (to ID significant modules)
+module_stats <- read.csv(file.path(wgcna_dir, "module_interaction_stats.csv"))
+sig_modules <- module_stats %>% filter(adj.P.Val < 0.05) %>% pull(module)
+hub_genes <- read.csv(file.path(wgcna_dir, "hub_genes.csv"))
+
+# TFBS Count data
+tfbs <- read.csv(file.path(tfbs_dir, "TFBS_counts.csv"))
+
+cat("Number of genes after filtering: ", nrow(filtered_counts), "\n")
+cat("ImpulseDE2 significant genes:", nrow(impulse_sig), "\n")
+cat("Mfuzz clustered genes:", nrow(mfuzz_clusters), "\n")
+cat("Mfuzz clustered genes with membership > 0.5:", nrow(mfuzz_clusters_mem50), "\n")
+cat("WGCNA modules:", n_distinct(wgcna_modules$module), "\n")
+cat("Significant modules (treatment*time):", length(sig_modules), "\n")
+cat("Genes with putative HSF1, FOXO3, or NRF2 transcription factor binding sites:", nrow(tfbs), "\n")
+```
+
+```{r}
+# SwissProt annotations
+SwissProt <- read.delim(file.path(annot_dir,config$SwissProt))
+cat("Annotations:", nrow(SwissProt), "Swissprot-annotated genes")
+```
+
+## 4. Combine results across analyses
+
+```{r}
+# combine impulseDE results, Mfuzz clusters, WGCNA modules, and TFBS quantification into one master dataframe for downstream analysis and visualization
+
+master_table <- data.frame(gene_id=all_genes) %>%
+  left_join(impulse_results %>% select(Gene, padj, response_type), by = join_by(gene_id == Gene)) %>%
+  left_join(mfuzz_clusters %>% select(Gene, cluster, membership), by = join_by(gene_id == Gene)) %>%
+  left_join(wgcna_modules %>% select(gene_id, module,kME_own), by = "gene_id") %>%
+  mutate(is_hub = gene_id %in% hub_genes$gene_id) %>% 
+  left_join(tfbs, by = join_by(gene_id == sequence_name)) %>%
+  left_join(SwissProt, by = join_by(gene_id == query)) %>%
+  dplyr::rename(ImpulseDE2_padj = padj,
+         ImpulseDE2_response_type = response_type,
+         Mfuzz_cluster = cluster,
+         Mfuzz_membership = membership,
+         WGCNA_module = module)
+
+write.csv(master_table, file.path(outdir,"master_gene_table.csv"))
+
+# results  in the table below are only included for significant Impulse results, genes that have a membership of > 0.5 in their Mfuzz clusters, but all genes are included in the table
+
+#master_table_sig <- 
+```
+
+
+
+

@@ -1,7 +1,7 @@
 WGCNA Analysis
 ================
 Zoe Dellaert
-2026-05-10
+2026-05-17
 
 - [Network analysis of Time Series bulk RNA-seq
   data](#network-analysis-of-time-series-bulk-rna-seq-data)
@@ -33,6 +33,7 @@ Zoe Dellaert
     - [Individual module heatmaps](#individual-module-heatmaps)
   - [9. Module Membership (kME) and Hub
     Genes](#9-module-membership-kme-and-hub-genes)
+  - [10. Save outputs](#10-save-outputs)
 
 # Network analysis of Time Series bulk RNA-seq data
 
@@ -74,33 +75,36 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, fig.width = 10, fig.height =
 
 #load packages
 library(tidyverse)
+```
+
+    ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+    ## ✔ dplyr     1.1.4     ✔ readr     2.1.6
+    ## ✔ forcats   1.0.0     ✔ stringr   1.6.0
+    ## ✔ ggplot2   4.0.1     ✔ tibble    3.3.0
+    ## ✔ lubridate 1.9.4     ✔ tidyr     1.3.1
+    ## ✔ purrr     1.2.1     
+    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+    ## ✖ dplyr::filter() masks stats::filter()
+    ## ✖ dplyr::lag()    masks stats::lag()
+    ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+
+``` r
 library(WGCNA)
 ```
 
     ## Loading required package: dynamicTreeCut
-
     ## Loading required package: fastcluster
-
     ## 
     ## Attaching package: 'fastcluster'
-
+    ## 
     ## The following object is masked from 'package:stats':
     ## 
     ##     hclust
-
     ## 
-
+    ## 
     ## 
     ## Attaching package: 'WGCNA'
-
-    ## The following object is masked from 'package:IRanges':
     ## 
-    ##     cor
-
-    ## The following object is masked from 'package:S4Vectors':
-    ## 
-    ##     cor
-
     ## The following object is masked from 'package:stats':
     ## 
     ##     cor
@@ -133,64 +137,43 @@ sessionInfo() #provides list of loaded packages and version of R
     ## tzcode source: system (glibc)
     ## 
     ## attached base packages:
-    ##  [1] tcltk     grid      stats4    stats     graphics  grDevices utils    
-    ##  [8] datasets  methods   base     
+    ## [1] stats     graphics  grDevices utils     datasets  methods   base     
     ## 
     ## other attached packages:
-    ##  [1] WGCNA_1.73                  fastcluster_1.3.0          
-    ##  [3] dynamicTreeCut_1.63-1       Mfuzz_2.68.0               
-    ##  [5] DynDoc_1.86.0               widgetTools_1.86.0         
-    ##  [7] e1071_1.7-16                ComplexHeatmap_2.26.0      
-    ##  [9] ImpulseDE2_0.99.10          BiocParallel_1.44.0        
-    ## [11] ggnewscale_0.5.2            genefilter_1.90.0          
-    ## [13] RColorBrewer_1.1-3          pheatmap_1.0.13            
-    ## [15] DESeq2_1.50.2               SummarizedExperiment_1.40.0
-    ## [17] Biobase_2.70.0              MatrixGenerics_1.22.0      
-    ## [19] matrixStats_1.5.0           GenomicRanges_1.62.0       
-    ## [21] Seqinfo_1.0.0               IRanges_2.44.0             
-    ## [23] S4Vectors_0.48.0            BiocGenerics_0.56.0        
-    ## [25] generics_0.1.4              lubridate_1.9.4            
-    ## [27] forcats_1.0.0               stringr_1.6.0              
-    ## [29] dplyr_1.1.4                 purrr_1.2.1                
-    ## [31] readr_2.1.6                 tidyr_1.3.1                
-    ## [33] tibble_3.3.0                ggplot2_4.0.1              
-    ## [35] tidyverse_2.0.0             rmarkdown_2.30             
+    ##  [1] WGCNA_1.73            fastcluster_1.3.0     dynamicTreeCut_1.63-1
+    ##  [4] lubridate_1.9.4       forcats_1.0.0         stringr_1.6.0        
+    ##  [7] dplyr_1.1.4           purrr_1.2.1           readr_2.1.6          
+    ## [10] tidyr_1.3.1           tibble_3.3.0          ggplot2_4.0.1        
+    ## [13] tidyverse_2.0.0       rmarkdown_2.30       
     ## 
     ## loaded via a namespace (and not attached):
-    ##   [1] rstudioapi_0.17.1       jsonlite_2.0.0          shape_1.4.6.1          
-    ##   [4] magrittr_2.0.4          magick_2.9.0            farver_2.1.2           
-    ##   [7] GlobalOptions_0.1.3     ragg_1.5.0              vctrs_0.7.0            
-    ##  [10] memoise_2.0.1           Cairo_1.7-0             base64enc_0.1-3        
-    ##  [13] htmltools_0.5.9         S4Arrays_1.10.0         SparseArray_1.10.2     
-    ##  [16] Formula_1.2-5           htmlwidgets_1.6.4       impute_1.84.0          
-    ##  [19] cachem_1.1.0            lifecycle_1.0.5         iterators_1.0.14       
-    ##  [22] pkgconfig_2.0.3         Matrix_1.6-4            R6_2.6.1               
-    ##  [25] fastmap_1.2.0           GenomeInfoDbData_1.2.14 clue_0.3-66            
-    ##  [28] digest_0.6.39           colorspace_2.1-2        AnnotationDbi_1.72.0   
-    ##  [31] textshaping_1.0.4       Hmisc_5.2-5             RSQLite_2.4.5          
-    ##  [34] labeling_0.4.3          timechange_0.3.0        httr_1.4.7             
-    ##  [37] abind_1.4-8             compiler_4.5.1          proxy_0.4-27           
-    ##  [40] bit64_4.6.0-1           withr_3.0.2             doParallel_1.0.17      
-    ##  [43] backports_1.5.0         htmlTable_2.4.3         S7_0.2.1               
-    ##  [46] DBI_1.2.3               tkWidgets_1.86.0        DelayedArray_0.36.0    
-    ##  [49] rjson_0.2.23            tools_4.5.1             foreign_0.8-90         
-    ##  [52] nnet_7.3-20             glue_1.8.0              checkmate_2.3.3        
-    ##  [55] cluster_2.1.8.1         gtable_0.3.6            tzdb_0.5.0             
-    ##  [58] preprocessCore_1.72.0   class_7.3-23            data.table_1.18.0      
-    ##  [61] hms_1.1.4               XVector_0.50.0          foreach_1.5.2          
-    ##  [64] pillar_1.11.1           vroom_1.6.7             circlize_0.4.17        
-    ##  [67] splines_4.5.1           lattice_0.22-7          survival_3.8-3         
-    ##  [70] bit_4.6.0               annotate_1.86.1         tidyselect_1.2.1       
-    ##  [73] GO.db_3.22.0            locfit_1.5-9.12         Biostrings_2.78.0      
-    ##  [76] knitr_1.50              gridExtra_2.3           xfun_0.56              
-    ##  [79] stringi_1.8.7           UCSC.utils_1.4.0        yaml_2.3.12            
-    ##  [82] evaluate_1.0.5          codetools_0.2-20        cli_3.6.5              
-    ##  [85] rpart_4.1.24            xtable_1.8-4            systemfonts_1.3.1      
-    ##  [88] dichromat_2.0-0.1       Rcpp_1.1.1              GenomeInfoDb_1.44.3    
-    ##  [91] png_0.1-8               XML_3.99-0.18           parallel_4.5.1         
-    ##  [94] blob_1.2.4              scales_1.4.0            crayon_1.5.3           
-    ##  [97] GetoptLong_1.1.0        rlang_1.2.0             cowplot_1.2.0          
-    ## [100] KEGGREST_1.50.0
+    ##  [1] tidyselect_1.2.1      farver_2.1.2          blob_1.2.4           
+    ##  [4] Biostrings_2.78.0     S7_0.2.1              fastmap_1.2.0        
+    ##  [7] digest_0.6.39         rpart_4.1.24          timechange_0.3.0     
+    ## [10] lifecycle_1.0.5       cluster_2.1.8.1       survival_3.8-3       
+    ## [13] KEGGREST_1.50.0       RSQLite_2.4.5         magrittr_2.0.4       
+    ## [16] compiler_4.5.1        rlang_1.2.0           Hmisc_5.2-5          
+    ## [19] tools_4.5.1           yaml_2.3.12           data.table_1.18.0    
+    ## [22] knitr_1.50            htmlwidgets_1.6.4     bit_4.6.0            
+    ## [25] RColorBrewer_1.1-3    withr_3.0.2           foreign_0.8-90       
+    ## [28] BiocGenerics_0.56.0   nnet_7.3-20           grid_4.5.1           
+    ## [31] stats4_4.5.1          preprocessCore_1.72.0 colorspace_2.1-2     
+    ## [34] GO.db_3.22.0          scales_1.4.0          iterators_1.0.14     
+    ## [37] dichromat_2.0-0.1     cli_3.6.5             crayon_1.5.3         
+    ## [40] generics_0.1.4        rstudioapi_0.17.1     httr_1.4.7           
+    ## [43] tzdb_0.5.0            DBI_1.2.3             cachem_1.1.0         
+    ## [46] splines_4.5.1         parallel_4.5.1        impute_1.84.0        
+    ## [49] AnnotationDbi_1.72.0  XVector_0.50.0        matrixStats_1.5.0    
+    ## [52] base64enc_0.1-3       vctrs_0.7.0           Matrix_1.6-4         
+    ## [55] IRanges_2.44.0        hms_1.1.4             S4Vectors_0.48.0     
+    ## [58] bit64_4.6.0-1         htmlTable_2.4.3       Formula_1.2-5        
+    ## [61] foreach_1.5.2         glue_1.8.0            codetools_0.2-20     
+    ## [64] stringi_1.8.7         gtable_0.3.6          pillar_1.11.1        
+    ## [67] htmltools_0.5.9       Seqinfo_1.0.0         R6_2.6.1             
+    ## [70] doParallel_1.0.17     evaluate_1.0.5        Biobase_2.70.0       
+    ## [73] lattice_0.22-7        backports_1.5.0       png_0.1-8            
+    ## [76] memoise_2.0.1         Rcpp_1.1.1            checkmate_2.3.3      
+    ## [79] gridExtra_2.3         xfun_0.56             pkgconfig_2.0.3
 
 ## 2. Setup species-specific parameters
 
@@ -519,9 +502,6 @@ gene_module_df <- data.frame(
   color = labels2colors(netwk$colors)
 )
 
-#save as csv file
-write.csv(gene_module_df, file.path(outdir, "gene_modules.csv"), row.names = FALSE)
-
 # extract the module eigengenes - average expression of that module for each sample
 module_eigengenes <- netwk$MEs
 
@@ -530,12 +510,6 @@ all.equal(meta$sample, rownames(module_eigengenes))
 ```
 
     ## [1] TRUE
-
-``` r
-# save the module eigengenes as a csv file
-write.csv(module_eigengenes %>% rownames_to_column("sample"), 
-          file.path(outdir, "module_eigengenes.csv"), row.names = FALSE)
-```
 
 ### Visualize the network
 
@@ -882,7 +856,16 @@ cat("\nTotal hub genes:", nrow(hub_genes), "\n")
     ## 
     ## Total hub genes: 2483
 
+## 10. Save outputs
+
 ``` r
+#save modules and KME table as csv file
+write.csv(gene_module_df, file.path(outdir, "gene_modules.csv"), row.names = FALSE)
+
+# save the module eigengenes as a csv file
+write.csv(module_eigengenes %>% rownames_to_column("sample"), 
+          file.path(outdir, "module_eigengenes.csv"), row.names = FALSE)
+
 #save hub genes as csv
 write.csv(hub_genes, file.path(outdir, "hub_genes.csv"), row.names = FALSE)
 ```

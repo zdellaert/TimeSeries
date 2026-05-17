@@ -333,18 +333,11 @@ gene_module_df <- data.frame(
   color = labels2colors(netwk$colors)
 )
 
-#save as csv file
-write.csv(gene_module_df, file.path(outdir, "gene_modules.csv"), row.names = FALSE)
-
 # extract the module eigengenes - average expression of that module for each sample
 module_eigengenes <- netwk$MEs
 
 # confirm that the sample metadata and sample labels for the module eigengenes are matching
 all.equal(meta$sample, rownames(module_eigengenes))
-
-# save the module eigengenes as a csv file
-write.csv(module_eigengenes %>% rownames_to_column("sample"), 
-          file.path(outdir, "module_eigengenes.csv"), row.names = FALSE)
 ```
 
 ### Visualize the network
@@ -592,6 +585,17 @@ hub_genes <- gene_module_df %>%
 cat("Hub genes per module:\n")
 print(table(hub_genes$module))
 cat("\nTotal hub genes:", nrow(hub_genes), "\n")
+```
+
+## 10. Save outputs
+
+```{r save}
+#save modules and KME table as csv file
+write.csv(gene_module_df, file.path(outdir, "gene_modules.csv"), row.names = FALSE)
+
+# save the module eigengenes as a csv file
+write.csv(module_eigengenes %>% rownames_to_column("sample"), 
+          file.path(outdir, "module_eigengenes.csv"), row.names = FALSE)
 
 #save hub genes as csv
 write.csv(hub_genes, file.path(outdir, "hub_genes.csv"), row.names = FALSE)
