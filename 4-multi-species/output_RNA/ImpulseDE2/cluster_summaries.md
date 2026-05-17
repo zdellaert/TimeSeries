@@ -71,3 +71,33 @@ All 3 species had good clustering definition with 6 clusters based on elbow plot
 | 4       | U-shaped Dip (12h)   | 0h   | 3h     | 675     | Transient (351)   |
 | 5       | Sustained Up (3h)    | 3h   | 1h     | 1260    | Transient (710)   |
 | 6       | Sustained Up (12h)   | 12h  | 1h     | 1074    | Other (602)       |
+
+## Translate this qualitative assesment of the patterns for R
+
+```
+nano output_RNA/ImpulseDE2/cluster_patterns.R
+```
+
+```
+pattern_mapping <- tribble(
+  ~species, ~cluster, ~pattern,
+  "Pacuta", 1, "Early Dip (3h)",
+  "Pacuta", 2, "Early Peak (3h)",
+  "Pacuta", 3, "Sustained Down (3h)",
+  "Pacuta", 4, "Sustained Up (3h)",
+  "Pacuta", 5, "Gradual Down",
+  "Pacuta", 6, "Sustained Up (12h)",
+  "Mcap", 1, "Sustained Down (12h)",
+  "Mcap", 2, "Sustained Up (12h)",
+  "Mcap", 3, "Sustained Up (3h)",
+  "Mcap", 4, "Early Dip (3h)",
+  "Mcap", 5, "U-shaped Dip (12h)",
+  "Mcap", 6, "Gradual Down",
+  "Pcomp", 1, "Gradual Down",
+  "Pcomp", 2, "Sustained Down (12h)",
+  "Pcomp", 3, "Sustained Down (3h)",
+  "Pcomp", 4, "U-shaped Dip (12h)",
+  "Pcomp", 5, "Sustained Up (3h)",
+  "Pcomp", 6, "Sustained Up (12h)",
+)
+```

@@ -24,6 +24,7 @@ global_params <- list(
 )
 
 # Species specific parameters
+species_list <- c("Pacuta", "Mcap", "Pcomp")
 species_params <- list(
     Pacuta = list(
         full_name = "Pocillopora acuta",

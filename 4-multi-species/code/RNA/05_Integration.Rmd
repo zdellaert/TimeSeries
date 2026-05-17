@@ -25,6 +25,7 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, fig.width = 10, fig.height =
 
 #load packages
 library(tidyverse)
+library(knitr)
 
 #load in parameters and functions
 source("species_parameters.R")
@@ -78,11 +79,11 @@ mfuzz_clusters_mem50 <- mfuzz_clusters %>% filter(membership > 0.5)
 
 # WGCNA module assignments
 wgcna_modules <- read.csv(file.path(wgcna_dir, "gene_modules.csv"))
+hub_genes <- read.csv(file.path(wgcna_dir, "hub_genes.csv"))
 
 # Module interaction stats (to ID significant modules)
 module_stats <- read.csv(file.path(wgcna_dir, "module_interaction_stats.csv"))
 sig_modules <- module_stats %>% filter(adj.P.Val < 0.05) %>% pull(module)
-hub_genes <- read.csv(file.path(wgcna_dir, "hub_genes.csv"))
 
 # TFBS Count data
 tfbs <- read.csv(file.path(tfbs_dir, "TFBS_counts.csv"))
@@ -102,6 +103,15 @@ SwissProt <- read.delim(file.path(annot_dir,config$SwissProt))
 cat("Annotations:", nrow(SwissProt), "Swissprot-annotated genes")
 ```
 
+```{r}
+#loads the pattern mapping assessed by me after running ImpulseDE2 and comparing across species (see ../../output_RNA/ImpulseDE2/cluster_patterns.md)
+
+Mfuzz_pattern_mapping <- NULL
+source("../../output_RNA/ImpulseDE2/cluster_patterns.R")
+
+Mfuzz_pattern_mapping <- pattern_mapping %>% filter(species ==  params$species) %>% dplyr::select(-species)
+```
+
 ## 4. Combine results across analyses
 
 ```{r}
@@ -109,22 +119,66 @@ cat("Annotations:", nrow(SwissProt), "Swissprot-annotated genes")
 
 master_table <- data.frame(gene_id=all_genes) %>%
   left_join(impulse_results %>% select(Gene, padj, response_type), by = join_by(gene_id == Gene)) %>%
+  mutate(is_DE = padj < 0.05) %>%
   left_join(mfuzz_clusters %>% select(Gene, cluster, membership), by = join_by(gene_id == Gene)) %>%
+  mutate(Mfuzz_highconf = membership > 0.5) %>%
+  left_join(Mfuzz_pattern_mapping, by = "cluster") %>%
   left_join(wgcna_modules %>% select(gene_id, module,kME_own), by = "gene_id") %>%
   mutate(is_hub = gene_id %in% hub_genes$gene_id) %>% 
   left_join(tfbs, by = join_by(gene_id == sequence_name)) %>%
+  mutate(across(starts_with("count_"), ~ replace_na(.x, 0))) %>%
+  mutate(has_HSF1 = count_HSF1 > 0, has_FOXO3 = count_FOXO3 > 0, has_NFE2L2 = count_NFE2L2 > 0) %>% 
   left_join(SwissProt, by = join_by(gene_id == query)) %>%
   dplyr::rename(ImpulseDE2_padj = padj,
          ImpulseDE2_response_type = response_type,
          Mfuzz_cluster = cluster,
          Mfuzz_membership = membership,
-         WGCNA_module = module)
+         Mfuzz_pattern = pattern,
+         WGCNA_module = module,
+         SwissProt_BlastHit = blast_hit,
+         SwissProt_BlastEval = evalue,
+         SwissProt_ProteinName = ProteinNames)
+```
 
-write.csv(master_table, file.path(outdir,"master_gene_table.csv"))
+## 5. Visualize comparisons and overlaps across analyses
 
-# results  in the table below are only included for significant Impulse results, genes that have a membership of > 0.5 in their Mfuzz clusters, but all genes are included in the table
+```{r}
+summary_stats <- tibble(
+  metric = c(
+    "Total genes",
+    "DE genes (padj < 0.05)",
+    "Mfuzz clustered",
+    "Mfuzz high confidence (membership > 0.5)",
+    "WGCNA assigned",
+    "Hub genes",
+    "Genes with HSF1 TFBS",
+    "Genes with FOXO3 TFBS",
+    "Genes with NFE2L2 TFBS",
+    "DE + Mfuzz clustered",
+    "DE + Hub gene"
+  ),
+  count = c(
+    nrow(master_table),
+    sum(master_table$is_DE, na.rm = TRUE),
+    sum(!is.na(master_table$Mfuzz_cluster)),
+    sum(master_table$Mfuzz_highconf, na.rm = TRUE),
+    sum(!is.na(master_table$WGCNA_module)),
+    sum(master_table$is_hub),
+    sum(master_table$has_HSF1),
+    sum(master_table$has_FOXO3),
+    sum(master_table$has_NFE2L2),
+    sum(master_table$is_DE & !is.na(master_table$Mfuzz_cluster), na.rm = TRUE),
+    sum(master_table$is_DE & master_table$is_hub, na.rm = TRUE)
+  )
+)
 
-#master_table_sig <- 
+summary_stats %>% kable(format = "markdown")
+```
+
+## 6. Save results
+
+```{r}
+write.csv(master_table, file.path(outdir,"master_gene_table.csv"),row.names = FALSE)
 ```
 
 

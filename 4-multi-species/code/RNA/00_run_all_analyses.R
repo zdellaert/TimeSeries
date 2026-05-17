@@ -38,4 +38,7 @@ for (sp in species_list) {
          output_format = "github_document",
          output_dir = output_dir)
 }
-}
+# All species analyses
+
+ render("06_CrossSpecies.Rmd",
+        output_dir = "../../output_RNA/reports")

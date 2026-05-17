@@ -13,6 +13,9 @@ Zoe Dellaert
     annotations](#3-load-in-filtered-counts-and-expression-results-impusede-mfuzz-wgcna-tfbs-and-swissprot-annotations)
   - [4. Combine results across
     analyses](#4-combine-results-across-analyses)
+  - [5. Visualize comparisons and overlaps across
+    analyses](#5-visualize-comparisons-and-overlaps-across-analyses)
+  - [6. Save results](#6-save-results)
 
 # Analysis of Time Series bulk RNA-seq data: Combine results from all analyses
 
@@ -29,6 +32,7 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, fig.width = 10, fig.height =
 
 #load packages
 library(tidyverse)
+library(knitr)
 
 #load in parameters and functions
 source("species_parameters.R")
@@ -60,20 +64,19 @@ sessionInfo() #provides list of loaded packages and version of R
     ## [1] stats     graphics  grDevices utils     datasets  methods   base     
     ## 
     ## other attached packages:
-    ##  [1] lubridate_1.9.4 forcats_1.0.0   stringr_1.6.0   dplyr_1.1.4    
-    ##  [5] purrr_1.2.1     readr_2.1.6     tidyr_1.3.1     tibble_3.3.0   
-    ##  [9] ggplot2_4.0.1   tidyverse_2.0.0 rmarkdown_2.30 
+    ##  [1] knitr_1.50      lubridate_1.9.4 forcats_1.0.0   stringr_1.6.0  
+    ##  [5] dplyr_1.1.4     purrr_1.2.1     readr_2.1.6     tidyr_1.3.1    
+    ##  [9] tibble_3.3.0    ggplot2_4.0.1   tidyverse_2.0.0 rmarkdown_2.30 
     ## 
     ## loaded via a namespace (and not attached):
     ##  [1] gtable_0.3.6       compiler_4.5.1     tidyselect_1.2.1   dichromat_2.0-0.1 
     ##  [5] scales_1.4.0       yaml_2.3.12        fastmap_1.2.0      R6_2.6.1          
-    ##  [9] generics_0.1.4     knitr_1.50         pillar_1.11.1      RColorBrewer_1.1-3
-    ## [13] tzdb_0.5.0         rlang_1.2.0        stringi_1.8.7      xfun_0.56         
-    ## [17] S7_0.2.1           timechange_0.3.0   cli_3.6.5          withr_3.0.2       
-    ## [21] magrittr_2.0.4     digest_0.6.39      grid_4.5.1         rstudioapi_0.17.1 
-    ## [25] hms_1.1.4          lifecycle_1.0.5    vctrs_0.7.0        evaluate_1.0.5    
-    ## [29] glue_1.8.0         farver_2.1.2       tools_4.5.1        pkgconfig_2.0.3   
-    ## [33] htmltools_0.5.9
+    ##  [9] generics_0.1.4     pillar_1.11.1      RColorBrewer_1.1-3 tzdb_0.5.0        
+    ## [13] rlang_1.2.0        stringi_1.8.7      xfun_0.56          S7_0.2.1          
+    ## [17] timechange_0.3.0   cli_3.6.5          withr_3.0.2        magrittr_2.0.4    
+    ## [21] digest_0.6.39      grid_4.5.1         rstudioapi_0.17.1  hms_1.1.4         
+    ## [25] lifecycle_1.0.5    vctrs_0.7.0        evaluate_1.0.5     glue_1.8.0        
+    ## [29] farver_2.1.2       tools_4.5.1        pkgconfig_2.0.3    htmltools_0.5.9
 
 ## 2. Setup species-specific parameters and define directories
 
@@ -128,11 +131,11 @@ mfuzz_clusters_mem50 <- mfuzz_clusters %>% filter(membership > 0.5)
 
 # WGCNA module assignments
 wgcna_modules <- read.csv(file.path(wgcna_dir, "gene_modules.csv"))
+hub_genes <- read.csv(file.path(wgcna_dir, "hub_genes.csv"))
 
 # Module interaction stats (to ID significant modules)
 module_stats <- read.csv(file.path(wgcna_dir, "module_interaction_stats.csv"))
 sig_modules <- module_stats %>% filter(adj.P.Val < 0.05) %>% pull(module)
-hub_genes <- read.csv(file.path(wgcna_dir, "hub_genes.csv"))
 
 # TFBS Count data
 tfbs <- read.csv(file.path(tfbs_dir, "TFBS_counts.csv"))
@@ -186,6 +189,15 @@ cat("Annotations:", nrow(SwissProt), "Swissprot-annotated genes")
 
     ## Annotations: 22929 Swissprot-annotated genes
 
+``` r
+#loads the pattern mapping assessed by me after running ImpulseDE2 and comparing across species (see ../../output_RNA/ImpulseDE2/cluster_patterns.md)
+
+Mfuzz_pattern_mapping <- NULL
+source("../../output_RNA/ImpulseDE2/cluster_patterns.R")
+
+Mfuzz_pattern_mapping <- pattern_mapping %>% filter(species ==  params$species) %>% dplyr::select(-species)
+```
+
 ## 4. Combine results across analyses
 
 ``` r
@@ -193,20 +205,78 @@ cat("Annotations:", nrow(SwissProt), "Swissprot-annotated genes")
 
 master_table <- data.frame(gene_id=all_genes) %>%
   left_join(impulse_results %>% select(Gene, padj, response_type), by = join_by(gene_id == Gene)) %>%
+  mutate(is_DE = padj < 0.05) %>%
   left_join(mfuzz_clusters %>% select(Gene, cluster, membership), by = join_by(gene_id == Gene)) %>%
+  mutate(Mfuzz_highconf = membership > 0.5) %>%
+  left_join(Mfuzz_pattern_mapping, by = "cluster") %>%
   left_join(wgcna_modules %>% select(gene_id, module,kME_own), by = "gene_id") %>%
   mutate(is_hub = gene_id %in% hub_genes$gene_id) %>% 
   left_join(tfbs, by = join_by(gene_id == sequence_name)) %>%
+  mutate(across(starts_with("count_"), ~ replace_na(.x, 0))) %>%
+  mutate(has_HSF1 = count_HSF1 > 0, has_FOXO3 = count_FOXO3 > 0, has_NFE2L2 = count_NFE2L2 > 0) %>% 
   left_join(SwissProt, by = join_by(gene_id == query)) %>%
   dplyr::rename(ImpulseDE2_padj = padj,
          ImpulseDE2_response_type = response_type,
          Mfuzz_cluster = cluster,
          Mfuzz_membership = membership,
-         WGCNA_module = module)
+         Mfuzz_pattern = pattern,
+         WGCNA_module = module,
+         SwissProt_BlastHit = blast_hit,
+         SwissProt_BlastEval = evalue,
+         SwissProt_ProteinName = ProteinNames)
+```
 
-write.csv(master_table, file.path(outdir,"master_gene_table.csv"))
+## 5. Visualize comparisons and overlaps across analyses
 
-# results  in the table below are only included for significant Impulse results, genes that have a membership of > 0.5 in their Mfuzz clusters, but all genes are included in the table
+``` r
+summary_stats <- tibble(
+  metric = c(
+    "Total genes",
+    "DE genes (padj < 0.05)",
+    "Mfuzz clustered",
+    "Mfuzz high confidence (membership > 0.5)",
+    "WGCNA assigned",
+    "Hub genes",
+    "Genes with HSF1 TFBS",
+    "Genes with FOXO3 TFBS",
+    "Genes with NFE2L2 TFBS",
+    "DE + Mfuzz clustered",
+    "DE + Hub gene"
+  ),
+  count = c(
+    nrow(master_table),
+    sum(master_table$is_DE, na.rm = TRUE),
+    sum(!is.na(master_table$Mfuzz_cluster)),
+    sum(master_table$Mfuzz_highconf, na.rm = TRUE),
+    sum(!is.na(master_table$WGCNA_module)),
+    sum(master_table$is_hub),
+    sum(master_table$has_HSF1),
+    sum(master_table$has_FOXO3),
+    sum(master_table$has_NFE2L2),
+    sum(master_table$is_DE & !is.na(master_table$Mfuzz_cluster), na.rm = TRUE),
+    sum(master_table$is_DE & master_table$is_hub, na.rm = TRUE)
+  )
+)
 
-#master_table_sig <- 
+summary_stats %>% kable(format = "markdown")
+```
+
+| metric                                    | count |
+|:------------------------------------------|------:|
+| Total genes                               | 27492 |
+| DE genes (padj \< 0.05)                   |  6233 |
+| Mfuzz clustered                           |  6233 |
+| Mfuzz high confidence (membership \> 0.5) |  5323 |
+| WGCNA assigned                            | 27492 |
+| Hub genes                                 |  2735 |
+| Genes with HSF1 TFBS                      |  3048 |
+| Genes with FOXO3 TFBS                     |  4549 |
+| Genes with NFE2L2 TFBS                    |  2452 |
+| DE + Mfuzz clustered                      |  6233 |
+| DE + Hub gene                             |  1069 |
+
+## 6. Save results
+
+``` r
+write.csv(master_table, file.path(outdir,"master_gene_table.csv"),row.names = FALSE)
 ```
