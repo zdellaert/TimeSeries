@@ -13,14 +13,10 @@ Zoe Dellaert
   - [1. Load packages and functions](#1-load-packages-and-functions)
   - [2. Setup species-specific parameters and define
     directories](#2-setup-species-specific-parameters-and-define-directories)
-  - [3. Load in expression results (ImpuseDE, Mfuzz, WGCNA) and
-    SwissProt
-    annotations](#3-load-in-expression-results-impusede-mfuzz-wgcna-and-swissprot-annotations)
+  - [3. Load in filtered counts and SwissProt
+    annotations](#3-load-in-filtered-counts-and-swissprot-annotations)
   - [4. Load in Stress Transcription Factor Binding Site
     Data](#4-load-in-stress-transcription-factor-binding-site-data)
-  - [5. Visualize relationship between TFBS count and gene expression
-    results](#5-visualize-relationship-between-tfbs-count-and-gene-expression-results)
-  - [6. Save outputs](#6-save-outputs)
 
 # Analysis of Time Series bulk RNA-seq data: Transcription Factor Binding Sites (TFBS) Analysis
 
@@ -134,12 +130,12 @@ sessionInfo() #provides list of loaded packages and version of R
     ##  [1] gtable_0.3.6       compiler_4.5.1     tidyselect_1.2.1   dichromat_2.0-0.1 
     ##  [5] scales_1.4.0       yaml_2.3.12        fastmap_1.2.0      R6_2.6.1          
     ##  [9] generics_0.1.4     knitr_1.50         pillar_1.11.1      RColorBrewer_1.1-3
-    ## [13] tzdb_0.5.0         rlang_1.2.0        stringi_1.8.7      xfun_0.56         
-    ## [17] S7_0.2.1           timechange_0.3.0   cli_3.6.5          withr_3.0.2       
-    ## [21] magrittr_2.0.4     digest_0.6.39      grid_4.5.1         rstudioapi_0.17.1 
-    ## [25] hms_1.1.4          lifecycle_1.0.5    vctrs_0.7.0        evaluate_1.0.5    
-    ## [29] glue_1.8.0         farver_2.1.2       tools_4.5.1        pkgconfig_2.0.3   
-    ## [33] htmltools_0.5.9
+    ## [13] tzdb_0.5.0         rlang_1.2.0        utf8_1.2.6         stringi_1.8.7     
+    ## [17] xfun_0.56          S7_0.2.1           timechange_0.3.0   cli_3.6.5         
+    ## [21] withr_3.0.2        magrittr_2.0.4     digest_0.6.39      grid_4.5.1        
+    ## [25] rstudioapi_0.17.1  hms_1.1.4          lifecycle_1.0.5    vctrs_0.7.0       
+    ## [29] evaluate_1.0.5     glue_1.8.0         farver_2.1.2       tools_4.5.1       
+    ## [33] pkgconfig_2.0.3    htmltools_0.5.9
 
 ## 2. Setup species-specific parameters and define directories
 
@@ -159,10 +155,8 @@ print_config(species)
     ## Mfuzz clusters: 6
 
 ``` r
-# define preprocessing output directory (from 02_ImpulseDE2.Rmd & 03_WGCNA.Rmd)
-impulse_dir <- file.path("../../output_RNA/ImpulseDE2", species)
-mfuzz_dir <- file.path(impulse_dir, "Mfuzz")
-wgcna_dir <- file.path("../../output_RNA/WGCNA", species)
+# define preprocessing output directory (from 01_preprocessing.Rmd)
+input_dir <- file.path("../../output_RNA/counts_filt_norm", species)
 
 # FIMO path (from annotation repo)
 fimo_path <- file.path(annot_dir, "promoters/fimo_output", paste0(species, "_stress_TFs"))
@@ -183,51 +177,12 @@ reportdir <- file.path("../../output_RNA/reports", params$species, "04_TFBS_file
 if (!dir.exists(reportdir)) dir.create(reportdir, recursive = TRUE)
 ```
 
-## 3. Load in expression results (ImpuseDE, Mfuzz, WGCNA) and SwissProt annotations
+## 3. Load in filtered counts and SwissProt annotations
 
 ``` r
-# ImpulseDE2 results
-impulse_results <- read.csv(file.path(impulse_dir, "ImpulseDE2_results.csv"))
-impulse_sig <- read.csv(file.path(impulse_dir, "ImpulseDE2_significant.csv"))
+# load in filtered counts data
+filtered_counts <- read.csv(file.path(input_dir, "filtered_counts.csv"), row.names = 1)
 
-# Mfuzz cluster assignments
-mfuzz_clusters <- read.csv(file.path(mfuzz_dir, "cluster_assignments.csv"))
-mfuzz_clusters_mem50 <- mfuzz_clusters %>% filter(membership > 0.5)
-
-# WGCNA module assignments
-wgcna_modules <- read.csv(file.path(wgcna_dir, "gene_modules.csv"))
-
-# Module interaction stats (to ID significant modules)
-module_stats <- read.csv(file.path(wgcna_dir, "module_interaction_stats.csv"))
-sig_modules <- module_stats %>% filter(adj.P.Val < 0.05) %>% pull(module)
-
-# Combine all analyzed genes across analysis
-all_genes <- unique(c(impulse_results$Gene, wgcna_modules$gene_id))
-
-cat("ImpulseDE2 significant genes:", nrow(impulse_sig), "\n")
-```
-
-    ## ImpulseDE2 significant genes: 6233
-
-``` r
-cat("Mfuzz clustered genes:", nrow(mfuzz_clusters), "\n")
-```
-
-    ## Mfuzz clustered genes: 6233
-
-``` r
-cat("WGCNA modules:", n_distinct(wgcna_modules$module), "\n")
-```
-
-    ## WGCNA modules: 29
-
-``` r
-cat("Significant modules (treatment*time):", length(sig_modules), "\n")
-```
-
-    ## Significant modules (treatment*time): 7
-
-``` r
 # SwissProt annotations
 SwissProt <- read.delim(file.path(annot_dir,config$SwissProt))
 cat("Annotations:", nrow(SwissProt), "Swissprot-annotated genes")
@@ -240,6 +195,9 @@ cat("Annotations:", nrow(SwissProt), "Swissprot-annotated genes")
 ``` r
 Stress_TFs <- read.delim(file.path(fimo_path,"fimo.tsv"), comment.char = "#")
 
+# only keep genes in the filtered dataset
+Stress_TFs <- Stress_TFs %>% filter(sequence_name %in% rownames(filtered_counts))
+  
 #get list of motifs/TFs present in the data
 all_tfs <- unique(Stress_TFs$motif_alt_id)
 cat("Transcription factor binding sites found for:", paste(unique(Stress_TFs$motif_alt_id), collapse = ", "), "\n")
@@ -260,7 +218,7 @@ cat("Transcription Factor", "FOXO3:", nrow(Foxo3_quantification), "genes with pu
     Foxo3_quantification %>% filter(count == max(count)) %>% pull(sequence_name), "( Best Annotation:", Foxo3_quantification %>% filter(count == max(count)) %>% arrange(evalue) %>% head(1) %>% pull(ProteinNames)  %>% word(1:4), ") with", max(Foxo3_quantification$count), "binding sites.\n\n")
 ```
 
-    ## Transcription Factor FOXO3: 6938 genes with putative binding sites.
+    ## Transcription Factor FOXO3: 4549 genes with putative binding sites.
     ## Gene(s) with most binding sites: Porites_compressa_HIv1___RNAseq.g1626.t1 ( Best Annotation: KICSTOR complex protein kaptin ) with 10 binding sites.
 
 ``` r
@@ -268,7 +226,7 @@ cat("Transcription Factor", "HSF1:", nrow(Hsf1_quantification), "genes with puta
     Hsf1_quantification %>% filter(count == max(count)) %>% pull(sequence_name), "( Best Annotation:", Hsf1_quantification %>% filter(count == max(count)) %>% arrange(evalue) %>% head(1) %>% pull(ProteinNames)  %>% word(1:4), ") with", max(Hsf1_quantification$count), "binding sites.\n\n")
 ```
 
-    ## Transcription Factor HSF1: 4836 genes with putative binding sites.
+    ## Transcription Factor HSF1: 3048 genes with putative binding sites.
     ## Gene(s) with most binding sites: Porites_compressa_HIv1___RNAseq.g40644.t1 Porites_compressa_HIv1___RNAseq.g40645.t1 Porites_compressa_HIv1___RNAseq.g6784.t1 ( Best Annotation: DnaJ protein homolog 1 ) with 9 binding sites.
 
 ``` r
@@ -276,49 +234,30 @@ cat("Transcription Factor", "NFE2L2:", nrow(Nrf2_quantification), "genes with pu
     Nrf2_quantification %>% filter(count == max(count)) %>% pull(sequence_name), "( Best Annotation:", Nrf2_quantification %>% filter(count == max(count)) %>% arrange(evalue) %>% head(1) %>% pull(ProteinNames)  %>% word(1:4), ") with", max(Nrf2_quantification$count), "binding sites.")
 ```
 
-    ## Transcription Factor NFE2L2: 3852 genes with putative binding sites.
-    ## Gene(s) with most binding sites: Porites_compressa_HIv1___RNAseq.g11008.t1 Porites_compressa_HIv1___RNAseq.g12436.t1 Porites_compressa_HIv1___RNAseq.g12443.t1 Porites_compressa_HIv1___RNAseq.g13954.t1 Porites_compressa_HIv1___RNAseq.g17385.t1 Porites_compressa_HIv1___RNAseq.g23067.t1 Porites_compressa_HIv1___RNAseq.g25958.t1 Porites_compressa_HIv1___RNAseq.g26488.t1a Porites_compressa_HIv1___RNAseq.g28799.t1 Porites_compressa_HIv1___RNAseq.g32006.t1 Porites_compressa_HIv1___RNAseq.g38400.t1 Porites_compressa_HIv1___RNAseq.g4592.t1 Porites_compressa_HIv1___RNAseq.g8963.t1 Porites_compressa_HIv1___TS.g31353.t1b Porites_compressa_HIv1___TS.g5091.t1 ( Best Annotation: WD repeat-containing protein 3 ) with 3 binding sites.
+    ## Transcription Factor NFE2L2: 2452 genes with putative binding sites.
+    ## Gene(s) with most binding sites: Porites_compressa_HIv1___RNAseq.g12436.t1 Porites_compressa_HIv1___RNAseq.g12443.t1 Porites_compressa_HIv1___RNAseq.g23067.t1 Porites_compressa_HIv1___RNAseq.g32006.t1 Porites_compressa_HIv1___RNAseq.g4592.t1 Porites_compressa_HIv1___RNAseq.g8963.t1 Porites_compressa_HIv1___TS.g31353.t1b ( Best Annotation: WD repeat-containing protein 3 ) with 3 binding sites.
 
 Make dataframe that collapses genes with sites from more than one TF in
 Stress_TFs_quantification so that there is only one row per gene.
 
 ``` r
-TFBS_by_gene_orig <- Stress_TFs_quantification %>%
-  pivot_wider(names_from = motif_alt_id, values_from = count, values_fill = 0, names_prefix = "count_")
+TFBS_by_gene <- Stress_TFs_quantification %>%
+  pivot_wider(names_from = motif_alt_id, values_from = count, values_fill = 0, names_prefix = "count_") 
 
-# the above dataframe only has the genes that have at least 1 binding site for at least one of the three TFs, but I want to make sure to include all genes in my dataset in the downstream analysis, so I will add rows for genes that don't have any binding sites for these TFs with counts of 0. This also removes any genes from the TFBS dataset that aren't in our filtered gene set.
-
-TFBS_by_gene <- data.frame(gene_id = all_genes) %>%
-  left_join(TFBS_by_gene_orig, by = join_by(gene_id == sequence_name)) %>%
-  replace_na(list(count_FOXO3 = 0, count_HSF1 = 0, count_NFE2L2 = 0))
-
-TFBS_by_gene_min1BS <- TFBS_by_gene[rowSums(TFBS_by_gene %>% select(-gene_id)) > 0,]
+head(TFBS_by_gene %>% mutate(total_motifs=(`count_FOXO3` + `count_HSF1` + `count_NFE2L2`)) %>% arrange(desc(total_motifs)) %>% left_join(SwissProt %>% dplyr::select(query,ProteinNames,blast_hit), by = join_by("sequence_name"=="query")) )
 ```
 
-## 5. Visualize relationship between TFBS count and gene expression results
+    ## # A tibble: 6 × 7
+    ##   sequence_name    count_FOXO3 count_HSF1 count_NFE2L2 total_motifs ProteinNames
+    ##   <chr>                  <int>      <int>        <int>        <int> <chr>       
+    ## 1 Porites_compres…          10          0            0           10 KICSTOR com…
+    ## 2 Porites_compres…           0          9            0            9 DnaJ protei…
+    ## 3 Porites_compres…           0          9            0            9 BAG domain-…
+    ## 4 Porites_compres…           0          9            0            9 Protein fem…
+    ## 5 Porites_compres…           0          8            0            8 Ryncolin-1  
+    ## 6 Porites_compres…           0          7            0            7 <NA>        
+    ## # ℹ 1 more variable: blast_hit <chr>
 
 ``` r
-# combine impulseDE results, Mfuzz clusters, WGCNA modules, and TFBS quantification into one master dataframe for downstream analysis and visualization
-# results are only included for significant Impulse results, genes that have a membership of > 0.5 in their Mfuzz clusters, but all genes are included in the table
-
-master_table <- TFBS_by_gene %>%
-  left_join(impulse_sig %>% select(Gene, padj, response_type), by = join_by(gene_id == Gene)) %>%
-  left_join(mfuzz_clusters_mem50 %>% select(Gene, cluster, membership), by = join_by(gene_id == Gene)) %>%
-  left_join(wgcna_modules %>% select(gene_id, module), by = "gene_id") %>%
-  dplyr::rename(ImpulseDE2_padj = padj,
-         ImpulseDE2_response_type = response_type,
-         Mfuzz_cluster = cluster,
-         Mfuzz_membership = membership,
-         WGCNA_module = module)
-```
-
-``` r
-master_table_min1BS <- master_table %>% filter(gene_id %in% TFBS_by_gene_orig$sequence_name)
-```
-
-## 6. Save outputs
-
-``` r
-write.csv(master_table, file.path(outdir, "all_genes_combined_results.csv"), row.names = FALSE)
-write.csv(master_table_min1BS, file.path(outdir, "genes_withTFBS_combined_results.csv"), row.names = FALSE)
+write.csv(TFBS_by_gene, file.path(outdir, "TFBS_counts.csv"), row.names = FALSE)
 ```
