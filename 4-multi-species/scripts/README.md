@@ -881,30 +881,28 @@ nano 09_kraken.sh
 module load kraken2/2.1.2
 
 # make and enter output directory
-data_dir="/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed"
-out_dir="/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/kraken"
+scratch_dir="/scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries"
+data_dir="${scratch_dir}/trimmed/combined_files/"
+out_dir="${scratch_dir}/kraken"
 
 mkdir -p "${out_dir}"
 
-samples=(
-  "MON_R72_H1_S3"
-  "MON_R72_H2_S4"
-  "run-2-MON_R72_H2_S14"
-  "MON_R72_H3_S44"
-  "run-2-MON_R72_H3_S28"
-)
+trimmed=( "${data_dir}"*"R1_trim.fastq.gz" )
 
-for s in "${samples[@]}"; do
-    R1="${data_dir}/${s}_R1_trim.fastq.gz"
-    R2="${data_dir}/${s}_R2_trim.fastq.gz"
+for R1_file in "${trimmed[@]}"; do
+  # extract sample name
+  sample_name=$(basename "${R1_file}" "_R1_trim.fastq.gz")
 
-    kraken2 \
-      --db /datasets/bio/kraken2/kraken2-db/ \
-      --threads 16 \
-      --paired "$R1" "$R2" \
-      --use-names \
-      --report "${out_dir}/${s}.report.txt" \
-      --output "${out_dir}/${s}.kraken" 
+  # define R2 file
+  R2_file="${data_dir}${sample_name}_R2_trim.fastq.gz"
+
+  kraken2 \
+    --db /datasets/bio/kraken2/kraken2-db/ \
+    --threads 16 \
+    --paired "$R1_file" "$R2_file" \
+    --use-names \
+    --report "${out_dir}/${sample_name}.report.txt" \
+    --output "${out_dir}/${sample_name}.kraken"
 done
 ```
 
@@ -980,65 +978,6 @@ I am running these samples in particular because they showed 0.5% mapping, while
 - **2.3% bacterial**  
   - 0.74% Terrabacteria  
   - 0.40% Bacillota
-
-## Alternative alignment: *Pseudoalignment* using kallisto
-
-[kallisto]() is a pseudoaligner. Since the POR reads are multi-mapping so much, I want to try alignment with kallisto to see if this helps
-
-
-```
-cd /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/scripts
-nano 010_kallisto.sh
-
-#enter text in next code chunk
-```
-
-#### Script: 010_kallisto_index.sh
-
-```
-#!/usr/bin/env bash
-#SBATCH --export=NONE
-#SBATCH --ntasks=1 --cpus-per-task=20
-#SBATCH --mem=100GB
-#SBATCH -t 03:59:00 --qos=short
-#SBATCH --error=../scripts/outs_errs/%x_error.%j #if your job fails, the error report will be put in this file
-#SBATCH --output=../scripts/outs_errs/%x_output.%j #once your job is completed, any final job report comments will be put in this file
-#SBATCH --mail-type=END,FAIL,TIME_LIMIT_80
-#SBATCH --no-requeue
-
-data_dir="/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed"
-out_dir="/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/kallisto/POR_Pcomp"
-
-mkdir -p "${out_dir}"
-cd "${out_dir}"
-
-# load modules 
-module load kallisto/0.50.1
-module load gffread/0.12.7
-
-# Extract transcriptome from your genome + GFF
-#gffread -w transcripts.fa -g /work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.assembly.fasta /work/pi_hputnam_uri_edu/#HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf
-
-# Build kallisto index
-#kallisto index -i kallisto_index transcripts.fa
-
-# Quantify
-kallisto quant -i kallisto_index \
-               -o POR_R120_H2_kallisto \
-               -t 10 \
-               -b 100 \
-               "${data_dir}"/POR_R120_H2_S46_R1_trim.fastq.gz \
-               "${data_dir}"/POR_R120_H2_S46_R2_trim.fastq.gz
-
-# Check the mapping rate
-echo "Mapping rate:"
-cat POR_R120_H2_kallisto/run_info.json | grep "p_pseudoaligned"
-echo ""
-echo "Number of reads processed:"s
-cat POR_R120_H2_kallisto/run_info.json | grep "n_processed"
-```
-
-Unfortunately this yielded really similar results to STAR. Worked poorly on the same samples that STAR failed on. 
 
 ## rRNA contamination screen
 

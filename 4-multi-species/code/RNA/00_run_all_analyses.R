@@ -17,14 +17,19 @@ for (sp in species_list) {
        params = list(species = sp),
        output_format = "github_document",
        output_dir = output_dir)
-  
+
   render("02_ImpulseDE.Rmd",
          params = list(species = sp, run_ImpulseDE2 = FALSE),
          output_format = "github_document",
          output_dir = output_dir)
-  
+
   render("03_WGCNA.Rmd",
          params = list(species = sp, TestParams = FALSE, run_WGCNA = FALSE),
+         output_format = "github_document",
+         output_dir = output_dir)
+
+  render("04_TFBS.Rmd",
+         params = list(species = sp),
          output_format = "github_document",
          output_dir = output_dir)
 }
