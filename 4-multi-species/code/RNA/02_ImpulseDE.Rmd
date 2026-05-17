@@ -182,6 +182,14 @@ Extract and save results for all non-zero genes
 impulse_results <- objectImpulseDE2$dfImpulseDE2Results
 impulse_results <- impulse_results %>% filter(allZero==FALSE) #remove genes with zero counts
 
+# classify genes as transiently or monotonously regulated if impulseDE gave them one of those labels
+impulse_results <- impulse_results %>%
+  mutate(response_type = case_when(
+    isTransient & !is.na(isTransient) ~ "Transient",
+    isMonotonous & !is.na(isMonotonous) ~ "Monotonous",
+    .default = "Other"
+  ))
+
 impulse_results_annot <- impulse_results %>%
   left_join(SwissProt %>% select(query,ProteinNames,BiologicalProcess), by = join_by("Gene"=="query"))
 
@@ -190,16 +198,11 @@ write.csv(impulse_results, file.path(outdir, "ImpulseDE2_results.csv"), row.name
 
 ### Significant genes 
 
-Extract genes with significant treatment effect on temporal trajectory, classify them as transiently or monotonously regulated, and save results
+Extract genes with significant treatment effect on temporal trajectory and save results
 
 ```{r}
 impulse_sig <- impulse_results %>%
-  filter(padj < global_params$padj_threshold) %>%
-  mutate(response_type = case_when(
-    isTransient & !is.na(isTransient) ~ "Transient",
-    isMonotonous & !is.na(isMonotonous) ~ "Monotonous",
-    .default = "Other"
-  ))
+  filter(padj < global_params$padj_threshold)
 
 write.csv(impulse_sig, file.path(outdir, "ImpulseDE2_significant.csv"), row.names = FALSE)
 
@@ -419,9 +422,9 @@ dev.off()
 
 
 ```{r}
-png(paste0(outdir_plots,"/TEST_temporal_clusters.png"), width = 12, height = 10, units = "in", res = 300)
+png(paste0(outdir_plots,"/temporal_clusters_scaled.png"), width = 12, height = 10, units = "in", res = 300)
 mfuzz.plot2(heat_eset, cl = mfuzz_clusters, mfrow = c(2,k/2),
-            #time.points = c(0, 1, 3, 12, 24, 72, 120),
+            time.points = c(0, 1, 3, 12, 24, 72, 120),
             time.labels = c("0", "1", "3", "12", "24", "72", "120"),
             xlab = "Time (hours)",x11=FALSE)
 dev.off()
