@@ -323,11 +323,11 @@ module load parallel/20240822
 module load fastp/0.23.4
 
 # make and define directories needed
-mkdir -p /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/
+mkdir -p /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/
 mkdir -p /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/trimmed_qc/
 
 data_dir="/project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/data_RNA/"
-out_dir="/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/"
+out_dir="/scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/"
 qc_dir="/project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/trimmed_qc/"
 
 # create an list of fastq files to process
@@ -433,7 +433,7 @@ nano 04_combine_files.sh
 #SBATCH --output=../scripts/outs_errs/%x_output.%j #once your job is completed, any final job report comments will be put in this file
 
 # enter trimmed data directory
-cd /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/
+cd /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/
 
 # make a directory to move combined files (and files from samples with only one run) into
 mkdir -p combined_files
@@ -999,7 +999,7 @@ I identified the following sequences to screen for *Porites* rRNA sequences, bas
 Combine these sequences:
 
 ```
-cd /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/
+cd /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/references/
 nano Plutea_rRNA.txt
 ```
 
@@ -1047,9 +1047,9 @@ nano 011_bbduk_rRNA.sh
 #SBATCH --mail-type=END,FAIL,TIME_LIMIT_80
 #SBATCH --no-requeue
 
-data_dir="/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files"
-out_dir="/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp"
-rrna_ref="/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta"
+data_dir="/scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files"
+out_dir="/scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp"
+rrna_ref="/scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/references/Plutea_rRNA.fasta"
 
 mkdir -p "${out_dir}"
 cd "${out_dir}"
@@ -1087,7 +1087,7 @@ Then, compile the results:
 ```
 mkdir /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/rRNA_screen/
 
-cd /scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp
+cd /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp
 
 echo "sample,total_reads,matched_reads,percent_rrna" > /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/rRNA_screen/rRNA_contamination_bbduk_POR.csv
 
@@ -1160,7 +1160,6 @@ Unfortunately there is very clear rRNA contamination in our polyA selected libra
 
 ### POR rRNA-mRNA diversity rarefaction analysis
 
-
 ```
 cd /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/scripts
 nano 012_rarefaction_analysis_POR_rRNA.sh
@@ -1183,11 +1182,11 @@ nano 012_rarefaction_analysis_POR_rRNA.sh
 #SBATCH --no-requeue
 
 ## Set up directory paths for whole script
-data_dir="/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/trimmed/combined_files"
-cleaned_dir="/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired"
-out_dir="/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_rarefaction"
-rrna_ref="/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/references/Plutea_rRNA.fasta"
-kallisto_dir="/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/kallisto/POR_Pcomp"
+data_dir="/scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files"
+cleaned_dir="/scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_paired"
+out_dir="/scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_rarefaction"
+rrna_ref="/scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/references/Plutea_rRNA.fasta"
+kallisto_dir="/scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/kallisto/POR_Pcomp"
 
 mkdir -p "${cleaned_dir}"
 mkdir -p "${out_dir}"
@@ -1337,8 +1336,8 @@ nano 012_rarefaction_analysis_POR_rRNA_stats.sh
 #SBATCH --mail-type=END,FAIL,TIME_LIMIT_80
 #SBATCH --no-requeue
 
-cleaned_dir="/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_decomp_paired"
-out_dir="/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries/rRNA_rarefaction"
+cleaned_dir="/scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_paired"
+out_dir="/scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_rarefaction"
 
 cd "${cleaned_dir}"
 
@@ -1373,3 +1372,138 @@ done
 echo "Finished sample ${sample_base}"
 echo "Results written to: ${results_csv}"
 ```
+
+## POC rRNA contamination screen
+
+I identified the following sequences to screen for *Pocilloporid* rRNA sequences, based on BLAST results from overrepresented sequences in FastQC
+
+- CTGCCAGTTCTAAGTTCGCCGTTCGTCGCCTCCCGATCTGACCCGAGGGT
+- AAGGATTTATCTCCGGAAACGTTCGAGTTGGCTATCGGTAGTGCAACGGG
+- ATGTGCGCGAGTCTTTGGGTGAGAGAAACCCCGAGGCGCAATGAAAGTGA
+- TGCCAGTTCTAAGTTCGCCGTTCGTCGCCTCCCGATCTGACCCGAGGGTC
+- GTCATATGCTTGTCTCAAAGATTAAGCCATGCATGTCTAAGTATAAGCAC
+
+- PREDICTED: Stylophora pistillata uncharacterized LOC111334680 (LOC111334680), misc_RNA
+  - NCBI Reference Sequence: XR_002695259.1
+- PREDICTED: Pocillopora verrucosa large subunit ribosomal RNA (LOC136279283), rRNA
+  - NCBI Reference Sequence: XR_010716805.1
+- PREDICTED: Pocillopora verrucosa large subunit ribosomal RNA (LOC131790787), rRNA
+  - NCBI Reference Sequence: XR_009340716.2
+- Pocillopora damicornis 28S large subunit ribosomal RNA gene, partial sequence
+  - GenBank: EU262867.1
+- Pocillopora meandrina 28S large subunit ribosomal RNA gene, partial sequence
+  - GenBank: EU262803.1
+- Pocillopora damicornis clone PD18 small subunit ribosomal RNA gene, partial sequence
+  - GenBank: PQ434685.1
+
+## MON rRNA contamination screen
+
+There were no overrepresented sequences in any of the Montipora samples, but I compiled the following list of *Montipora* rRNA sequences to test.
+
+- PREDICTED: Montipora foliosa large subunit ribosomal RNA (LOC138009140), rRNA
+  - NCBI Reference Sequence: XR_011124347.1
+
+
+## species agnostic rRNA screen
+
+Downloading reference rRNA fasta files from [SILVA](https://www.arb-silva.de/documentation/release-1382). 
+
+Chuvochina M, Gerken J, Frentrup M, Sandikci Y, Goldmann R, Freese HM, Göker M, Sikorski J, Yarza P, Quast C, Peplies J, Glöckner FO, Reimer LC (2026) SILVA in 2026: a global core biodata resource for rRNA within the DSMZ digital diversity. Nucleic Acids Research, gkaf1247.
+
+
+First, download the files and confirm via md5s that they were downloaded 
+
+```
+cd /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/references/
+wget https://www.arb-silva.de/fileadmin/silva_databases/current/Exports/SILVA_138.2_LSURef_NR99_tax_silva_trunc.fasta.gz
+wget https://www.arb-silva.de/fileadmin/silva_databases/current/Exports/SILVA_138.2_LSURef_NR99_tax_silva_trunc.fasta.gz.md5
+wget https://www.arb-silva.de/fileadmin/silva_databases/current/Exports/SILVA_138.2_SSURef_NR99_tax_silva_trunc.fasta.gz
+wget https://www.arb-silva.de/fileadmin/silva_databases/current/Exports/SILVA_138.2_SSURef_NR99_tax_silva_trunc.fasta.gz.md5
+
+md5sum SILVA_138.2_SSURef_NR99_tax_silva_trunc.fasta.gz
+# 4fec6131012e9ad4ff0cdcbbb7405379  SILVA_138.2_SSURef_NR99_tax_silva_trunc.fasta.gz
+
+md5sum SILVA_138.2_LSURef_NR99_tax_silva_trunc.fasta.gz
+# 97bb7c30f48dcedb4ec33f1b50542426  SILVA_138.2_LSURef_NR99_tax_silva_trunc.fasta.gz
+
+cat SILVA_138.2_SSURef_NR99_tax_silva_trunc.fasta.gz.md5 
+# 4fec6131012e9ad4ff0cdcbbb7405379  SILVA_138.2_SSURef_NR99_tax_silva_trunc.fasta.gz
+
+cat SILVA_138.2_LSURef_NR99_tax_silva_trunc.fasta.gz.md5 
+# 97bb7c30f48dcedb4ec33f1b50542426  SILVA_138.2_LSURef_NR99_tax_silva_trunc.fasta.gz
+```
+
+```
+cd /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/scripts
+nano 11_bbduk_rRNA_SILVA.sh
+
+#enter text in next code chunk
+```
+
+### Script: 11_bbduk_rRNA_SILVA.sh
+
+```
+#!/usr/bin/env bash
+#SBATCH --export=NONE
+#SBATCH --ntasks=1 --cpus-per-task=4
+#SBATCH --mem=160GB
+#SBATCH -t 6:00:00
+#SBATCH --array=0-125
+#SBATCH --error=../scripts/outs_errs/%x_%a.error
+#SBATCH --output=../scripts/outs_errs/%x_%a.output
+#SBATCH --mail-type=END,FAIL,TIME_LIMIT_80
+#SBATCH --no-requeue
+
+data_dir="/scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files"
+out_dir="/scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA"
+rrna_ref="/scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/references"
+
+mkdir -p "${out_dir}"
+cd "${out_dir}"
+
+module load bbmap/39.01
+
+# Get array of sample files
+samples=(${data_dir}/*R1_trim.fastq.gz)
+R1_file="${samples[$SLURM_ARRAY_TASK_ID]}"
+sample_name=$(basename "${R1_file}" _R1_trim.fastq.gz)
+R2_file="${data_dir}/${sample_name}_R2_trim.fastq.gz"
+
+echo "Processing ${sample_name}..."
+echo "R1: ${R1_file}"
+echo "R2: ${R2_file}"
+
+# Run BBDuk to match against rRNA Large Subunit Database
+
+bbduk.sh -Xmx136g in1="${R1_file}" \
+         in2="${R2_file}" \
+         ref="${rrna_ref}/SILVA_138.2_LSURef_NR99_tax_silva_trunc.fasta.gz" \
+         outm="${sample_name}_rRNA_LSU.fq.gz" \
+         outu="${sample_name}_clean_LSU.fq.gz" \
+         stats="${sample_name}_stats_LSU.txt" \
+         k=31 \
+         hdist=1 \
+         threads=4 \
+         overwrite=t
+
+# Run BBDuk to match against rRNA Small Subunit Database against file cleaned in above code
+
+bbduk.sh -Xmx136g in="${sample_name}_clean_LSU.fq.gz" \
+         ref="${rrna_ref}/SILVA_138.2_SSURef_NR99_tax_silva_trunc.fasta.gz" \
+         outm="${sample_name}_rRNA_SSU.fq.gz" \
+         outu="${sample_name}_clean.fq.gz" \
+         stats="${sample_name}_stats_SSU.txt" \
+         k=31 hdist=1 rskip=2 threads=4 overwrite=t
+
+# Combine fastq and stats files
+cat "${sample_name}_rRNA_LSU.fq.gz" "${sample_name}_rRNA_SSU.fq.gz" > "${sample_name}_rRNA.fq.gz"
+cat "${sample_name}_stats_LSU.txt" "${sample_name}_stats_SSU.txt" > "${sample_name}_stats.txt"
+
+# Cleanup
+rm "${sample_name}"*_[LS]SU.fq.gz
+
+echo "Completed ${sample_name}"
+```
+
+## Symbiont genomes
+
