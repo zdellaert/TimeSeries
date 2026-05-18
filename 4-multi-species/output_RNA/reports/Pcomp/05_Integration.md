@@ -250,55 +250,52 @@ master_table <- data.frame(gene_id=all_genes) %>%
 ``` r
 summary_stats <- tibble(
   metric = c(
-    "Total genes",
-    "Annotated genes",
-    "DE genes (padj < 0.05)",
-    "Mfuzz clustered",
-    "Mfuzz high confidence (membership > 0.5)",
+    "Total genes (post-filtering)",
+    "SwissProt-annotated genes",
+    "Differentially expressed (ImpulseDE2, padj < 0.05)",
+    "DE genes temporally clustered (Mfuzz, membership > 0.5)",
     "WGCNA assigned",
     "WGCNA modules",
     "WGCNA modules Sig. by Time*Treatment",
-    "Hub genes",
-    "Genes with HSF1 TFBS",
-    "Genes with FOXO3 TFBS",
-    "Genes with NFE2L2 TFBS",
-    "DE + Hub gene"
+    "Hub genes (WGCNA, top 10% kME)",
+    "Hub genes also differentially expressed (ImpulseDE2)",
+    "Genes with HSF1 binding sites",
+    "Genes with FOXO3 binding sites",
+    "Genes with NRF2/NFE2L2 binding sites"
   ),
   count = c(
     nrow(master_table),
     sum(!is.na(master_table$SwissProt_ProteinName)),
     sum(master_table$is_DE, na.rm = TRUE),
-    sum(!is.na(master_table$Mfuzz_cluster)),
     sum(master_table$Mfuzz_highconf, na.rm = TRUE),
     sum(!is.na(master_table$WGCNA_module)),
     length(unique(master_table$WGCNA_module)),
     sum(unique(master_table$WGCNA_module) %in% sig_modules),
     sum(master_table$is_hub),
+    sum(master_table$is_DE & master_table$is_hub, na.rm = TRUE),
     sum(master_table$has_HSF1),
     sum(master_table$has_FOXO3),
-    sum(master_table$has_NFE2L2),
-    sum(master_table$is_DE & master_table$is_hub, na.rm = TRUE)
+    sum(master_table$has_NFE2L2)
   )
 )
 
 summary_stats %>% kable(format = "markdown")
 ```
 
-| metric                                    | count |
-|:------------------------------------------|------:|
-| Total genes                               | 27492 |
-| Annotated genes                           | 19098 |
-| DE genes (padj \< 0.05)                   |  6233 |
-| Mfuzz clustered                           |  6233 |
-| Mfuzz high confidence (membership \> 0.5) |  5323 |
-| WGCNA assigned                            | 27492 |
-| WGCNA modules                             |    29 |
-| WGCNA modules Sig. by Time\*Treatment     |     7 |
-| Hub genes                                 |  2735 |
-| Genes with HSF1 TFBS                      |  3048 |
-| Genes with FOXO3 TFBS                     |  4549 |
-| Genes with NFE2L2 TFBS                    |  2452 |
-| DE + Hub gene                             |  1069 |
+| metric                                                   | count |
+|:---------------------------------------------------------|------:|
+| Total genes (post-filtering)                             | 27492 |
+| SwissProt-annotated genes                                | 19098 |
+| Differentially expressed (ImpulseDE2, padj \< 0.05)      |  6233 |
+| DE genes temporally clustered (Mfuzz, membership \> 0.5) |  5323 |
+| WGCNA assigned                                           | 27492 |
+| WGCNA modules                                            |    29 |
+| WGCNA modules Sig. by Time\*Treatment                    |     7 |
+| Hub genes (WGCNA, top 10% kME)                           |  2735 |
+| Hub genes also differentially expressed (ImpulseDE2)     |  1069 |
+| Genes with HSF1 binding sites                            |  3048 |
+| Genes with FOXO3 binding sites                           |  4549 |
+| Genes with NRF2/NFE2L2 binding sites                     |  2452 |
 
 ### Visualize overlaps with upset plot
 
@@ -363,8 +360,144 @@ UpSet(m,
 
 ![](./05_Integration_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
+``` r
+# Fisher's exact test: DE vs TF binding
+contingency_DE_TF <- table(
+  DE = overlap_matrix$is_DE,
+  TF = overlap_matrix$Has_TF_binding)
+
+fisher.test(contingency_DE_TF)
+```
+
+    ## 
+    ##  Fisher's Exact Test for Count Data
+    ## 
+    ## data:  contingency_DE_TF
+    ## p-value = 0.02406
+    ## alternative hypothesis: true odds ratio is not equal to 1
+    ## 95 percent confidence interval:
+    ##  1.009047 1.138240
+    ## sample estimates:
+    ## odds ratio 
+    ##    1.07179
+
+``` r
+# DE vs Hub genes  
+contingency_DE_Hub <- table(
+  DE = overlap_matrix$is_DE,
+  Hub = overlap_matrix$is_hub)
+
+fisher.test(contingency_DE_Hub)
+```
+
+    ## 
+    ##  Fisher's Exact Test for Count Data
+    ## 
+    ## data:  contingency_DE_Hub
+    ## p-value < 2.2e-16
+    ## alternative hypothesis: true odds ratio is not equal to 1
+    ## 95 percent confidence interval:
+    ##  2.238837 2.646236
+    ## sample estimates:
+    ## odds ratio 
+    ##   2.434449
+
+``` r
+# DE vs Significant module
+contingency_DE_SigMod <- table(
+  DE = overlap_matrix$is_DE,
+  SigModule = overlap_matrix$WGCNA_sig_module)
+
+fisher.test(contingency_DE_SigMod)
+```
+
+    ## 
+    ##  Fisher's Exact Test for Count Data
+    ## 
+    ## data:  contingency_DE_SigMod
+    ## p-value < 2.2e-16
+    ## alternative hypothesis: true odds ratio is not equal to 1
+    ## 95 percent confidence interval:
+    ##  7.510153 8.569664
+    ## sample estimates:
+    ## odds ratio 
+    ##    8.02042
+
+``` r
+# TF binding vs Hub genes
+contingency_TF_Hub <- table(
+  TF = overlap_matrix$Has_TF_binding,
+  Hub = overlap_matrix$is_hub)
+
+fisher.test(contingency_TF_Hub)
+```
+
+    ## 
+    ##  Fisher's Exact Test for Count Data
+    ## 
+    ## data:  contingency_TF_Hub
+    ## p-value = 0.3905
+    ## alternative hypothesis: true odds ratio is not equal to 1
+    ## 95 percent confidence interval:
+    ##  0.8834689 1.0483056
+    ## sample estimates:
+    ## odds ratio 
+    ##  0.9626241
+
 ## 6. Save results
 
 ``` r
+# Most important: master gene table, one row per gene with all info
 write.csv(master_table, file.path(outdir,"master_gene_table.csv"),row.names = FALSE)
+
+# Also helpful: make lists of gene ids that may be useful downstream
+
+gene_sets <- list(
+  all_genes = master_table$gene_id,
+  
+  # ImpulseDE
+  DE_all = master_table %>% filter(is_DE) %>% pull(gene_id),
+  DE_transient = master_table %>% filter(is_DE, ImpulseDE2_response_type == "Transient") %>% pull(gene_id),
+  
+  # Mfuzz patterns (high membership)
+  early_response = master_table %>% 
+    filter(grepl("early", Mfuzz_pattern,ignore.case = TRUE), Mfuzz_membership > 0.5) %>% 
+    pull(gene_id),
+  sustained_response = master_table %>% 
+    filter(grepl("sustained", Mfuzz_pattern,ignore.case = TRUE), Mfuzz_membership > 0.5) %>% 
+    pull(gene_id),
+  cluster_1 = master_table %>% 
+    filter(Mfuzz_cluster=="1", Mfuzz_membership > 0.5) %>% pull(gene_id),
+  cluster_2 = master_table %>% 
+    filter(Mfuzz_cluster=="2", Mfuzz_membership > 0.5) %>% pull(gene_id),
+  cluster_3 = master_table %>% 
+    filter(Mfuzz_cluster=="3", Mfuzz_membership > 0.5) %>% pull(gene_id),
+  cluster_4 = master_table %>% 
+    filter(Mfuzz_cluster=="4", Mfuzz_membership > 0.5) %>% pull(gene_id),
+  cluster_5 = master_table %>% 
+    filter(Mfuzz_cluster=="5", Mfuzz_membership > 0.5) %>% pull(gene_id),
+  cluster_6 = master_table %>% 
+    filter(Mfuzz_cluster=="6", Mfuzz_membership > 0.5) %>% pull(gene_id),
+  
+  # WGCNA genes
+  hub_genes = master_table %>% filter(is_hub) %>% pull(gene_id),
+  sig_module_genes = master_table %>% filter(WGCNA_module %in% sig_modules) %>% pull(gene_id),
+  
+  # TFBS analysis
+  HSF1_targets = master_table %>% filter(has_HSF1) %>% pull(gene_id),
+  FOXO3_targets = master_table %>% filter(has_FOXO3) %>% pull(gene_id),
+  NFE2L2_targets = master_table %>% filter(has_NFE2L2) %>% pull(gene_id),
+  
+  # Combined interesting sets
+  DE_hub = master_table %>% filter(is_DE, is_hub) %>% pull(gene_id),
+  DE_with_TF = master_table %>% 
+    filter(is_DE, has_HSF1 | has_FOXO3 | has_NFE2L2) %>% 
+    pull(gene_id),
+  hub_with_TF = master_table %>% 
+    filter(is_hub, has_HSF1 | has_FOXO3 | has_NFE2L2) %>% 
+    pull(gene_id)
+)
+
+# Save gene sets
+saveRDS(gene_sets, file.path(outdir, "gene_sets.rds"))
 ```
