@@ -26,6 +26,7 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, fig.width = 10, fig.height =
 #load packages
 library(tidyverse)
 library(knitr)
+library(ComplexHeatmap)
 
 #load in parameters and functions
 source("species_parameters.R")
@@ -142,37 +143,90 @@ master_table <- data.frame(gene_id=all_genes) %>%
 
 ## 5. Visualize comparisons and overlaps across analyses
 
+### Summary table
+
 ```{r}
 summary_stats <- tibble(
   metric = c(
     "Total genes",
+    "Annotated genes",
     "DE genes (padj < 0.05)",
     "Mfuzz clustered",
     "Mfuzz high confidence (membership > 0.5)",
     "WGCNA assigned",
+    "WGCNA modules",
+    "WGCNA modules Sig. by Time*Treatment",
     "Hub genes",
     "Genes with HSF1 TFBS",
     "Genes with FOXO3 TFBS",
     "Genes with NFE2L2 TFBS",
-    "DE + Mfuzz clustered",
     "DE + Hub gene"
   ),
   count = c(
     nrow(master_table),
+    sum(!is.na(master_table$SwissProt_ProteinName)),
     sum(master_table$is_DE, na.rm = TRUE),
     sum(!is.na(master_table$Mfuzz_cluster)),
     sum(master_table$Mfuzz_highconf, na.rm = TRUE),
     sum(!is.na(master_table$WGCNA_module)),
+    length(unique(master_table$WGCNA_module)),
+    sum(unique(master_table$WGCNA_module) %in% sig_modules),
     sum(master_table$is_hub),
     sum(master_table$has_HSF1),
     sum(master_table$has_FOXO3),
     sum(master_table$has_NFE2L2),
-    sum(master_table$is_DE & !is.na(master_table$Mfuzz_cluster), na.rm = TRUE),
     sum(master_table$is_DE & master_table$is_hub, na.rm = TRUE)
   )
 )
 
 summary_stats %>% kable(format = "markdown")
+```
+
+### Visualize overlaps with upset plot
+
+First make a true/false matrix for columns of interest
+
+- is_DE = is differentially expressed (padj < 0.05) by ImpulseDE2
+- Mfuzz_highconf = of the DE genes, these had a membership of > 0.5 in their Mfuzz cluster 
+- WGCNA_sig_module = member of a WGCNA module that was signfiicant for the interaction between temperature and timepoint by limma
+- is_hub = is a hub gene for its module
+- Has_TF_binding = has at least one match for the searched transcription factor bindinf motifs (HSF1, FOXO3, or NFE2L2/NRF2)
+- SwissProt_annot = has a Swissprot annotation match
+
+```{r}
+overlap_matrix <- master_table %>%
+  mutate(Mfuzz_highconf = replace_na(Mfuzz_highconf, FALSE),
+         WGCNA_sig_module = WGCNA_module %in% sig_modules,
+         Has_TF_binding = has_HSF1 | has_FOXO3 | has_NFE2L2,
+         SwissProt_annot = !is.na(SwissProt_BlastHit)) %>%
+  select(gene_id, is_DE, Mfuzz_highconf,
+         WGCNA_sig_module, is_hub,
+         Has_TF_binding, SwissProt_annot) 
+```
+
+Upset plot from ComplexHeatmap package, documentation [here](https://github.com/jokergoo/ComplexHeatmap-reference/blob/master/book/08-upset.md)
+
+```{r}
+m <- make_comb_mat(as.matrix(overlap_matrix[,-1]))
+
+pdf(file.path(outdir_plots, "analysis_overlap_upset.pdf"), width=12, height=6)
+UpSet(m, 
+      top_annotation = upset_top_annotation(m, add_numbers = TRUE),
+      right_annotation = upset_right_annotation(m, add_numbers = TRUE),
+      comb_order = order(comb_size(m), decreasing = TRUE))
+dev.off()
+
+png(file.path(outdir_plots, "analysis_overlap_upset.png"),width = 3000, height = 1500, res = 300)
+UpSet(m, 
+      top_annotation = upset_top_annotation(m, add_numbers = TRUE),
+      right_annotation = upset_right_annotation(m, add_numbers = TRUE),
+      comb_order = order(comb_size(m), decreasing = TRUE))
+dev.off()
+
+UpSet(m, 
+      top_annotation = upset_top_annotation(m, add_numbers = TRUE),
+      right_annotation = upset_right_annotation(m, add_numbers = TRUE),
+      comb_order = order(comb_size(m), decreasing = TRUE))
 ```
 
 ## 6. Save results

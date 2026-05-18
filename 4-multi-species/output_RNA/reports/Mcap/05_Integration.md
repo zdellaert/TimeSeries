@@ -1,7 +1,7 @@
 Integrate across analyses
 ================
 Zoe Dellaert
-2026-05-17
+2026-05-18
 
 - [Analysis of Time Series bulk RNA-seq data: Combine results from all
   analyses](#analysis-of-time-series-bulk-rna-seq-data-combine-results-from-all-analyses)
@@ -15,6 +15,9 @@ Zoe Dellaert
     analyses](#4-combine-results-across-analyses)
   - [5. Visualize comparisons and overlaps across
     analyses](#5-visualize-comparisons-and-overlaps-across-analyses)
+    - [Summary table](#summary-table)
+    - [Visualize overlaps with upset
+      plot](#visualize-overlaps-with-upset-plot)
   - [6. Save results](#6-save-results)
 
 # Analysis of Time Series bulk RNA-seq data: Combine results from all analyses
@@ -33,6 +36,7 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, fig.width = 10, fig.height =
 #load packages
 library(tidyverse)
 library(knitr)
+library(ComplexHeatmap)
 
 #load in parameters and functions
 source("species_parameters.R")
@@ -61,22 +65,35 @@ sessionInfo() #provides list of loaded packages and version of R
     ## tzcode source: system (glibc)
     ## 
     ## attached base packages:
-    ## [1] stats     graphics  grDevices utils     datasets  methods   base     
+    ## [1] grid      stats     graphics  grDevices utils     datasets  methods  
+    ## [8] base     
     ## 
     ## other attached packages:
-    ##  [1] knitr_1.50      lubridate_1.9.4 forcats_1.0.0   stringr_1.6.0  
-    ##  [5] dplyr_1.1.4     purrr_1.2.1     readr_2.1.6     tidyr_1.3.1    
-    ##  [9] tibble_3.3.0    ggplot2_4.0.1   tidyverse_2.0.0 rmarkdown_2.30 
+    ##  [1] ComplexHeatmap_2.26.0 knitr_1.50            lubridate_1.9.4      
+    ##  [4] forcats_1.0.0         stringr_1.6.0         dplyr_1.1.4          
+    ##  [7] purrr_1.2.1           readr_2.1.6           tidyr_1.3.1          
+    ## [10] tibble_3.3.0          ggplot2_4.0.1         tidyverse_2.0.0      
+    ## [13] rmarkdown_2.30       
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] gtable_0.3.6       compiler_4.5.1     tidyselect_1.2.1   dichromat_2.0-0.1 
-    ##  [5] scales_1.4.0       yaml_2.3.12        fastmap_1.2.0      R6_2.6.1          
-    ##  [9] generics_0.1.4     pillar_1.11.1      RColorBrewer_1.1-3 tzdb_0.5.0        
-    ## [13] rlang_1.2.0        stringi_1.8.7      xfun_0.56          S7_0.2.1          
-    ## [17] timechange_0.3.0   cli_3.6.5          withr_3.0.2        magrittr_2.0.4    
-    ## [21] digest_0.6.39      grid_4.5.1         rstudioapi_0.17.1  hms_1.1.4         
-    ## [25] lifecycle_1.0.5    vctrs_0.7.0        evaluate_1.0.5     glue_1.8.0        
-    ## [29] farver_2.1.2       tools_4.5.1        pkgconfig_2.0.3    htmltools_0.5.9
+    ##  [1] generics_0.1.4      shape_1.4.6.1       stringi_1.8.7      
+    ##  [4] hms_1.1.4           digest_0.6.39       magrittr_2.0.4     
+    ##  [7] evaluate_1.0.5      timechange_0.3.0    RColorBrewer_1.1-3 
+    ## [10] iterators_1.0.14    circlize_0.4.17     fastmap_1.2.0      
+    ## [13] foreach_1.5.2       doParallel_1.0.17   GlobalOptions_0.1.3
+    ## [16] scales_1.4.0        codetools_0.2-20    cli_3.6.5          
+    ## [19] rlang_1.2.0         crayon_1.5.3        withr_3.0.2        
+    ## [22] yaml_2.3.12         tools_4.5.1         parallel_4.5.1     
+    ## [25] tzdb_0.5.0          colorspace_2.1-2    BiocGenerics_0.56.0
+    ## [28] GetoptLong_1.1.0    vctrs_0.7.0         R6_2.6.1           
+    ## [31] png_0.1-8           magick_2.9.0        stats4_4.5.1       
+    ## [34] matrixStats_1.5.0   lifecycle_1.0.5     S4Vectors_0.48.0   
+    ## [37] IRanges_2.44.0      clue_0.3-66         cluster_2.1.8.1    
+    ## [40] pkgconfig_2.0.3     pillar_1.11.1       gtable_0.3.6       
+    ## [43] Rcpp_1.1.1          glue_1.8.0          xfun_0.56          
+    ## [46] tidyselect_1.2.1    rstudioapi_0.17.1   dichromat_2.0-0.1  
+    ## [49] rjson_0.2.23        farver_2.1.2        htmltools_0.5.9    
+    ## [52] Cairo_1.7-0         compiler_4.5.1      S7_0.2.1
 
 ## 2. Setup species-specific parameters and define directories
 
@@ -228,32 +245,38 @@ master_table <- data.frame(gene_id=all_genes) %>%
 
 ## 5. Visualize comparisons and overlaps across analyses
 
+### Summary table
+
 ``` r
 summary_stats <- tibble(
   metric = c(
     "Total genes",
+    "Annotated genes",
     "DE genes (padj < 0.05)",
     "Mfuzz clustered",
     "Mfuzz high confidence (membership > 0.5)",
     "WGCNA assigned",
+    "WGCNA modules",
+    "WGCNA modules Sig. by Time*Treatment",
     "Hub genes",
     "Genes with HSF1 TFBS",
     "Genes with FOXO3 TFBS",
     "Genes with NFE2L2 TFBS",
-    "DE + Mfuzz clustered",
     "DE + Hub gene"
   ),
   count = c(
     nrow(master_table),
+    sum(!is.na(master_table$SwissProt_ProteinName)),
     sum(master_table$is_DE, na.rm = TRUE),
     sum(!is.na(master_table$Mfuzz_cluster)),
     sum(master_table$Mfuzz_highconf, na.rm = TRUE),
     sum(!is.na(master_table$WGCNA_module)),
+    length(unique(master_table$WGCNA_module)),
+    sum(unique(master_table$WGCNA_module) %in% sig_modules),
     sum(master_table$is_hub),
     sum(master_table$has_HSF1),
     sum(master_table$has_FOXO3),
     sum(master_table$has_NFE2L2),
-    sum(master_table$is_DE & !is.na(master_table$Mfuzz_cluster), na.rm = TRUE),
     sum(master_table$is_DE & master_table$is_hub, na.rm = TRUE)
   )
 )
@@ -264,16 +287,81 @@ summary_stats %>% kable(format = "markdown")
 | metric                                    | count |
 |:------------------------------------------|------:|
 | Total genes                               | 30089 |
+| Annotated genes                           | 18703 |
 | DE genes (padj \< 0.05)                   |  6631 |
 | Mfuzz clustered                           |  6631 |
 | Mfuzz high confidence (membership \> 0.5) |  5724 |
 | WGCNA assigned                            | 30089 |
+| WGCNA modules                             |    32 |
+| WGCNA modules Sig. by Time\*Treatment     |    12 |
 | Hub genes                                 |  2995 |
 | Genes with HSF1 TFBS                      |  3114 |
 | Genes with FOXO3 TFBS                     |  4712 |
 | Genes with NFE2L2 TFBS                    |  2660 |
-| DE + Mfuzz clustered                      |  6631 |
 | DE + Hub gene                             |  1226 |
+
+### Visualize overlaps with upset plot
+
+First make a true/false matrix for columns of interest
+
+- is_DE = is differentially expressed (padj \< 0.05) by ImpulseDE2
+- Mfuzz_highconf = of the DE genes, these had a membership of \> 0.5 in
+  their Mfuzz cluster
+- WGCNA_sig_module = member of a WGCNA module that was signfiicant for
+  the interaction between temperature and timepoint by limma
+- is_hub = is a hub gene for its module
+- Has_TF_binding = has at least one match for the searched transcription
+  factor bindinf motifs (HSF1, FOXO3, or NFE2L2/NRF2)
+- SwissProt_annot = has a Swissprot annotation match
+
+``` r
+overlap_matrix <- master_table %>%
+  mutate(Mfuzz_highconf = replace_na(Mfuzz_highconf, FALSE),
+         WGCNA_sig_module = WGCNA_module %in% sig_modules,
+         Has_TF_binding = has_HSF1 | has_FOXO3 | has_NFE2L2,
+         SwissProt_annot = !is.na(SwissProt_BlastHit)) %>%
+  select(gene_id, is_DE, Mfuzz_highconf,
+         WGCNA_sig_module, is_hub,
+         Has_TF_binding, SwissProt_annot) 
+```
+
+Upset plot from ComplexHeatmap package, documentation
+[here](https://github.com/jokergoo/ComplexHeatmap-reference/blob/master/book/08-upset.md)
+
+``` r
+m <- make_comb_mat(as.matrix(overlap_matrix[,-1]))
+
+pdf(file.path(outdir_plots, "analysis_overlap_upset.pdf"), width=12, height=6)
+UpSet(m, 
+      top_annotation = upset_top_annotation(m, add_numbers = TRUE),
+      right_annotation = upset_right_annotation(m, add_numbers = TRUE),
+      comb_order = order(comb_size(m), decreasing = TRUE))
+dev.off()
+```
+
+    ## png 
+    ##   2
+
+``` r
+png(file.path(outdir_plots, "analysis_overlap_upset.png"),width = 3000, height = 1500, res = 300)
+UpSet(m, 
+      top_annotation = upset_top_annotation(m, add_numbers = TRUE),
+      right_annotation = upset_right_annotation(m, add_numbers = TRUE),
+      comb_order = order(comb_size(m), decreasing = TRUE))
+dev.off()
+```
+
+    ## png 
+    ##   2
+
+``` r
+UpSet(m, 
+      top_annotation = upset_top_annotation(m, add_numbers = TRUE),
+      right_annotation = upset_right_annotation(m, add_numbers = TRUE),
+      comb_order = order(comb_size(m), decreasing = TRUE))
+```
+
+![](./05_Integration_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
 ## 6. Save results
 
