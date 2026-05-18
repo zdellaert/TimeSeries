@@ -1,7 +1,7 @@
 Cross Species Analysis
 ================
 Zoe Dellaert
-2026-05-17
+2026-05-18
 
 - [Analysis of Time Series bulk RNA-seq data: Cross-Species
   Analysis](#analysis-of-time-series-bulk-rna-seq-data-cross-species-analysis)
@@ -84,22 +84,35 @@ sessionInfo() #provides list of loaded packages and version of R
     ## tzcode source: system (glibc)
     ## 
     ## attached base packages:
-    ## [1] stats     graphics  grDevices utils     datasets  methods   base     
+    ## [1] grid      stats     graphics  grDevices utils     datasets  methods  
+    ## [8] base     
     ## 
     ## other attached packages:
-    ##  [1] knitr_1.50      lubridate_1.9.4 forcats_1.0.0   stringr_1.6.0  
-    ##  [5] dplyr_1.1.4     purrr_1.2.1     readr_2.1.6     tidyr_1.3.1    
-    ##  [9] tibble_3.3.0    ggplot2_4.0.1   tidyverse_2.0.0 rmarkdown_2.30 
+    ##  [1] ComplexHeatmap_2.26.0 knitr_1.50            lubridate_1.9.4      
+    ##  [4] forcats_1.0.0         stringr_1.6.0         dplyr_1.1.4          
+    ##  [7] purrr_1.2.1           readr_2.1.6           tidyr_1.3.1          
+    ## [10] tibble_3.3.0          ggplot2_4.0.1         tidyverse_2.0.0      
+    ## [13] rmarkdown_2.30       
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] gtable_0.3.6       compiler_4.5.1     tidyselect_1.2.1   dichromat_2.0-0.1 
-    ##  [5] scales_1.4.0       yaml_2.3.12        fastmap_1.2.0      R6_2.6.1          
-    ##  [9] generics_0.1.4     pillar_1.11.1      RColorBrewer_1.1-3 tzdb_0.5.0        
-    ## [13] rlang_1.2.0        stringi_1.8.7      xfun_0.56          S7_0.2.1          
-    ## [17] timechange_0.3.0   cli_3.6.5          withr_3.0.2        magrittr_2.0.4    
-    ## [21] digest_0.6.39      grid_4.5.1         rstudioapi_0.17.1  hms_1.1.4         
-    ## [25] lifecycle_1.0.5    vctrs_0.7.0        evaluate_1.0.5     glue_1.8.0        
-    ## [29] farver_2.1.2       tools_4.5.1        pkgconfig_2.0.3    htmltools_0.5.9
+    ##  [1] generics_0.1.4      shape_1.4.6.1       stringi_1.8.7      
+    ##  [4] hms_1.1.4           digest_0.6.39       magrittr_2.0.4     
+    ##  [7] evaluate_1.0.5      timechange_0.3.0    RColorBrewer_1.1-3 
+    ## [10] iterators_1.0.14    circlize_0.4.17     fastmap_1.2.0      
+    ## [13] foreach_1.5.2       doParallel_1.0.17   GlobalOptions_0.1.3
+    ## [16] scales_1.4.0        codetools_0.2-20    cli_3.6.5          
+    ## [19] rlang_1.2.0         crayon_1.5.3        withr_3.0.2        
+    ## [22] yaml_2.3.12         tools_4.5.1         parallel_4.5.1     
+    ## [25] tzdb_0.5.0          colorspace_2.1-2    BiocGenerics_0.56.0
+    ## [28] GetoptLong_1.1.0    vctrs_0.7.0         R6_2.6.1           
+    ## [31] png_0.1-8           magick_2.9.0        stats4_4.5.1       
+    ## [34] matrixStats_1.5.0   lifecycle_1.0.5     S4Vectors_0.48.0   
+    ## [37] IRanges_2.44.0      clue_0.3-66         cluster_2.1.8.1    
+    ## [40] pkgconfig_2.0.3     pillar_1.11.1       gtable_0.3.6       
+    ## [43] Rcpp_1.1.1          glue_1.8.0          xfun_0.56          
+    ## [46] tidyselect_1.2.1    rstudioapi_0.17.1   dichromat_2.0-0.1  
+    ## [49] rjson_0.2.23        farver_2.1.2        htmltools_0.5.9    
+    ## [52] Cairo_1.7-0         compiler_4.5.1      S7_0.2.1
 
 ## 2. Define directories
 
@@ -133,9 +146,9 @@ orthologs %>%
 
 | species | n_genes | n_in_all_3 | pct_in_all_3 | n_1to1to1 | pct_1to1to1 |
 |:--------|--------:|-----------:|-------------:|----------:|------------:|
-| Mcap    |   43030 |      32767 |     76.14920 |      8877 |    20.62979 |
-| Pacuta  |   27546 |      23018 |     83.56204 |      8877 |    32.22609 |
-| Pcomp   |   35131 |      26683 |     75.95286 |      8877 |    25.26828 |
+| Mcap    |   42992 |      32767 |     76.21651 |      8889 |    20.67594 |
+| Pacuta  |   27568 |      23038 |     83.56790 |      8889 |    32.24391 |
+| Pcomp   |   35140 |      26674 |     75.90780 |      8889 |    25.29596 |
 
 ## 4. Load in integrated expression results for all three species
 
@@ -207,9 +220,9 @@ cross_species %>%
 
 | species | n_genes | n_in_OG | pct_in_OG | n_in_all_3 | pct_in_all_3 | n_1to1to1 | pct_1to1to1 |
 |:--------|--------:|--------:|----------:|-----------:|-------------:|----------:|------------:|
-| Mcap    |   30089 |   26102 |  86.74931 |      21825 |     83.61428 |      8694 |    33.30779 |
-| Pacuta  |   24941 |   21389 |  85.75839 |      18268 |     85.40839 |      8683 |    40.59563 |
-| Pcomp   |   27492 |   23869 |  86.82162 |      19397 |     81.26440 |      8551 |    35.82471 |
+| Mcap    |   30089 |   26066 |  86.62967 |      21813 |     83.68373 |      8703 |    33.38832 |
+| Pacuta  |   24941 |   21380 |  85.72230 |      18235 |     85.28999 |      8693 |    40.65949 |
+| Pcomp   |   27492 |   23885 |  86.87982 |      19387 |     81.16810 |      8562 |    35.84677 |
 
 ## 6. Filter to complete 1:1:1 ortholog groups
 
@@ -237,7 +250,7 @@ write_csv(complete_1to1_ogs, file.path(outdir, "filtered_orthogroups_1to1to1.csv
 
 ``` r
 # quick summary
-complete_1to1_ogs %>%
+complete_1to1_ogs_summary <- complete_1to1_ogs %>%
   group_by(species) %>%
   summarise(
     n_genes = n(),
@@ -246,11 +259,13 @@ complete_1to1_ogs %>%
     n_in_clusters = sum(Mfuzz_highconf, na.rm = TRUE),
     n_hubs = sum(is_hub, na.rm = TRUE),
     .groups = 'drop'
-  ) %>% kable(format = "markdown")
+  )
+
+kable(complete_1to1_ogs_summary,format = "markdown")
 ```
 
 | species | n_genes | n_DE |   pct_DE | n_in_clusters | n_hubs |
 |:--------|--------:|-----:|---------:|--------------:|-------:|
-| Mcap    |    8460 | 2849 | 33.67612 |          2496 |    903 |
-| Pacuta  |    8460 | 4022 | 47.54137 |          3301 |    955 |
-| Pcomp   |    8460 | 2447 | 28.92435 |          2124 |    779 |
+| Mcap    |    8471 | 2851 | 33.65600 |          2498 |    904 |
+| Pacuta  |    8471 | 4028 | 47.55047 |          3304 |    954 |
+| Pcomp   |    8471 | 2452 | 28.94582 |          2129 |    782 |
