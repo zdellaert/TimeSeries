@@ -155,12 +155,12 @@ all(sizeFactors(SF.dds)) < 4
 ## 6. VST-Transforming count data for visualization 
 
 ```{r vst-transform}
-vsd <- vst(dds, blind=FALSE)
+vst <- vst(dds, blind=FALSE)
 
-#save the vsd transformation
-vsd_mat <- assay(vsd)
-write.csv(vsd_mat, file = file.path(outdir, "vsd_expression_matrix.csv"))
-cat("VST matrix saved to:", file.path(outdir, "vsd_expression_matrix.csv"))
+#save the vst transformation
+vst_mat <- assay(vst)
+write.csv(vst_mat, file = file.path(outdir, "vst_expression_matrix.csv"))
+cat("VST matrix saved to:", file.path(outdir, "vst_expression_matrix.csv"))
 ```
 
 ## 7. Two tools to identiy potential outliers:
@@ -168,7 +168,7 @@ cat("VST matrix saved to:", file.path(outdir, "vsd_expression_matrix.csv"))
 ### PCA
 
 ```{r pca}
-pcaData <- plotPCA(vsd, intgroup=c("time", "treatment"), returnData=TRUE)
+pcaData <- plotPCA(vst, intgroup=c("time", "treatment"), returnData=TRUE)
 percentVar <- round(100 * attr(pcaData, "percentVar"))
 
 PCA <- ggplot() +
@@ -207,7 +207,7 @@ save_ggplot(PCA_simple, "PCA_simple", width = 8, height = 6)
 ### Hierarchical Clustering
 
 ```{r cluster}
-sampleTree <- hclust(dist(t(vsd_mat)), method = "average")
+sampleTree <- hclust(dist(t(vst_mat)), method = "average")
 
 par(mar = c(8, 4, 2, 2))
 plot(sampleTree, 
@@ -222,15 +222,15 @@ abline(h = 100, col = "red", lty = 2)
 ### Heatmap of variable genes
 
 ```{r}
-topVarGenes <- head(order(rowVars(vsd_mat), decreasing=TRUE), 500)
+topVarGenes <- head(order(rowVars(vst_mat), decreasing=TRUE), 500)
 
-pheatmap(vsd_mat[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
+pheatmap(vst_mat[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
          cluster_cols=FALSE, 
          annotation_col= meta[,c("treatment","time")],
          annotation_colors = list("treatment" = treat_colors,
                                   "time" = time_colors))
 
-pheatmap(vsd_mat[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
+pheatmap(vst_mat[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
          cluster_cols=TRUE, cutree_cols = 2,
          annotation_col= meta[,c("treatment","time")],
          annotation_colors = list("treatment" = treat_colors,
@@ -260,8 +260,8 @@ cat("  pOverA filter: >=", global_params$pOverA_counts, "counts in >=",
 
 cat("Output\n")
 cat(strrep("-", 40), "\n")
-cat("  Final genes:", nrow(vsd_mat), "\n")
-cat("  Final samples:", ncol(vsd_mat), "\n")
+cat("  Final genes:", nrow(vst_mat), "\n")
+cat("  Final samples:", ncol(vst_mat), "\n")
 cat("  Output directory:", outdir, "\n\n")
 
 cat("QC Notes\n")

@@ -35,6 +35,7 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, fig.width = 10, fig.height =
 #load packages
 library(tidyverse)
 library(knitr)
+library(ComplexHeatmap)
 
 #load in parameters and functions
 source("species_parameters.R")
@@ -149,7 +150,7 @@ write_csv(complete_1to1_ogs, file.path(outdir, "filtered_orthogroups_1to1to1.csv
 
 ```{r}
 # quick summary
-complete_1to1_ogs_summary <- complete_1to1_ogs %>%
+sp_summary_1to1_ogs <- complete_1to1_ogs %>%
   group_by(species) %>%
   summarise(
     n_genes = n(),
@@ -160,10 +161,137 @@ complete_1to1_ogs_summary <- complete_1to1_ogs %>%
     .groups = 'drop'
   )
 
-kable(complete_1to1_ogs_summary,format = "markdown")
+kable(sp_summary_1to1_ogs,format = "markdown")
 ```
 
-## 7. Conserved responses?
+#### Upset plot: 1:1:1 orthologs DE across species
+
+Upset plot from ComplexHeatmap package, documentation [here](https://github.com/jokergoo/ComplexHeatmap-reference/blob/master/book/08-upset.md)
+
+```{r}
+de_matrix <- complete_1to1_ogs %>%
+  select(OG, species, is_DE) %>%
+  mutate(is_DE = replace_na(is_DE, FALSE)) %>%
+  pivot_wider(names_from = species, values_from = is_DE, values_fill = FALSE) %>%
+  column_to_rownames("OG") %>%
+  as.matrix()
+
+m <- make_comb_mat(de_matrix)
+plot <- UpSet(m, pt_size = unit(5, "mm"), lwd = 3,
+      top_annotation = upset_top_annotation(m, add_numbers = TRUE),
+      right_annotation = upset_right_annotation(m, add_numbers = TRUE),
+      comb_col = c("gray","#00A087","#4DBBD5","#E64B35")[comb_degree(m)+1],
+      column_title = "Differential Expression of 1:1:1 Orthologs")
+
+print(plot)
+
+pdf(file.path(outdir_plots, "DE_overlap_upset.pdf"), width=10, height=6)
+  print(plot)
+dev.off()
+
+png(file.path(outdir_plots, "DE_overlap_upset.png"), width=10, height=6, units="in", res=300)
+  print(plot)
+dev.off()
+```
+
+## 7. Core response in 1:1:1 orthologs
+
+This does not include any genes that have more than one paralog in a species.
+
+```{r}
+complete_1to1_ogs_summary <- complete_1to1_ogs %>%
+  group_by(OG) %>%
+  arrange(SwissProt_BlastEval, .by_group = TRUE) %>% 
+  summarise(
+    # how many of the which 1:1:1 orthologs are differentially expressed in all three species
+    n_DE_species = sum(is_DE, na.rm = TRUE),
+    all_species_DE = n_DE_species == 3,
+    
+    # what mfuzz patterns are represented
+    Mfuzz_patterns = paste(sort(unique(na.omit(Mfuzz_pattern))), collapse = " | "),
+    Mfuzz_patterns_unique = length(unique(na.omit(Mfuzz_pattern))),
+    
+    # get annotation info (we pre-sorted by evalue above, so the best annotation will be chosen)
+    annotation = first(na.omit(SwissProt_ProteinName)),
+    annotation_evalue = first(na.omit(SwissProt_BlastEval)),
+    has_annotation = !all(is.na(SwissProt_ProteinName)),
+    
+    # list the gene for each species (again, these are only OGs where there is exactly one gene per species)
+    gene_Pacuta = gene_id[species == "Pacuta"],
+    gene_Mcap = gene_id[species == "Mcap"],
+    gene_Pcomp = gene_id[species == "Pcomp"],
+    
+    # and also gather details for each species to go along with the summary info above
+    # actual impulseDE2 p-values
+    padj_Pacuta = ImpulseDE2_padj[species == "Pacuta"],
+    padj_Mcap = ImpulseDE2_padj[species == "Mcap"],
+    padj_Pcomp = ImpulseDE2_padj[species == "Pcomp"],
+    
+    # Mfuzz membership
+    MfuzzM_Pacuta = Mfuzz_membership[species == "Pacuta"],
+    MfuzzM_Mcap = Mfuzz_membership[species == "Mcap"],
+    MfuzzM_Pcomp = Mfuzz_membership[species == "Pcomp"],
+    
+    # are any members of the 1:1:1 OG hub genes of their WGCNA module
+    n_species_hub = sum(is_hub, na.rm = TRUE),
+    hub_in_any = n_species_hub > 0,
+    hub_in_all = n_species_hub == 3,
+    
+    # do any of the 1:1:1 OG genes have TF binding sites and are they conserved across species?
+    n_species_HSF1 = sum(has_HSF1, na.rm = TRUE),
+    n_species_FOXO3 = sum(has_FOXO3, na.rm = TRUE),
+    n_species_NFE2L2 = sum(has_NFE2L2, na.rm = TRUE),
+    HSF1_conserved = n_species_HSF1 == 3,
+    FOXO3_conserved = n_species_FOXO3 == 3,
+    NFE2L2_conserved = n_species_NFE2L2 == 3,
+    any_TF_conserved = HSF1_conserved | FOXO3_conserved | NFE2L2_conserved,
+    
+    .groups = 'drop'
+  ) %>%
+  #finally, sort by some columns of interest so that the top rows will show 1:1:1 orthologs which are all DE, share an Mfuzz pattern, and show potential transcription factor binding site conservation
+  arrange(desc(all_species_DE), Mfuzz_patterns_unique, desc(any_TF_conserved))
+
+kable(head(complete_1to1_ogs_summary),format = "markdown")
+```
+
+### Define response categories for 1:1:1 orthologs
+
+```{r}
+# Core conserved: DE in all 3, same Mfuzz pattern
+core_conserved_response <- complete_1to1_ogs_summary %>%
+  filter(all_species_DE, Mfuzz_patterns_unique == 1) 
+
+# Core divergent: DE in all 3, different Mfuzz patterns  
+core_divergent_response <- complete_1to1_ogs_summary %>%
+  filter(all_species_DE, Mfuzz_patterns_unique > 1)
+
+# Variable response: DE in 1-2 species only
+variable_response <- complete_1to1_ogs_summary %>%
+  filter(!all_species_DE, n_DE_species >= 1)
+
+# Not responsive
+not_responsive <- complete_1to1_ogs_summary %>%
+  filter(n_DE_species == 0)
+
+cat("1:1:1 Ortholog Response Categories:\n")
+cat("  Core conserved (DE in 3 species, same Mfuzz pattern):", nrow(core_conserved_response), "\n")
+cat("  Core divergent (DE in 3 species, different Mfuzz patterns):", nrow(core_divergent_response), "\n")
+cat("  Variable response (DE in 1-2 species):", nrow(variable_response), "\n")
+cat("  Not responsive:", nrow(not_responsive), "\n\n")
+```
+
+### Are TFBS conserved across DE 1:1:1 orthologs?
+
+```{r}
+core_conserved_response %>% filter(HSF1_conserved == TRUE) %>% kable(format = "markdown")
+
+core_conserved_response %>% filter(FOXO3_conserved == TRUE) %>% kable(format = "markdown")
+
+core_conserved_response %>% filter(NFE2L2_conserved == TRUE) %>% kable(format = "markdown")
+```
+
+
+## 8. Non 1:1:1 conserved responses?
 
 ```{r}
 sus_up_3hr <- cross_species %>% filter(Mfuzz_pattern == "Sustained Up (3h)")
@@ -178,7 +306,7 @@ sus_up_3hr %>% group_by(species) %>%
     pct_in_all_3 = 100*mean(OG_in_all_3, na.rm = TRUE),
     n_1to1to1 = sum(OG_1to1to1, na.rm = TRUE),
     pct_1to1to1 = 100*mean(OG_1to1to1, na.rm = TRUE)
-  )# %>% kable(format = "markdown")
+  ) %>% kable(format = "markdown")
 
 sus_up_3hr %>% group_by(species) %>%
     summarise(
@@ -195,7 +323,7 @@ sus_up_3hr %>% group_by(species) %>%
     has_FOXO3 = sum(has_FOXO3, na.rm = TRUE),
     has_NFE2L2 = sum(has_NFE2L2, na.rm = TRUE),
     .groups = 'drop'
-  )# %>% kable(format = "markdown")
+  ) %>% kable(format = "markdown")
 ```
 
 ```{r}
@@ -264,7 +392,7 @@ grad_down %>% group_by(species) %>%
   )# %>% kable(format = "markdown")
 ```
 
-## 8. Heat stress genes
+## 9. Manually-curated heat stress genes
 
 ```{r}
 for (species in species_list){

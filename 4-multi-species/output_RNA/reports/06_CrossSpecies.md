@@ -20,8 +20,15 @@ Zoe Dellaert
     groups](#6-filter-to-complete-111-ortholog-groups)
     - [Species-level summaries of 1:1:1
       orthogroups:](#species-level-summaries-of-111-orthogroups)
-  - [7. Conserved responses?](#7-conserved-responses)
-  - [8. Heat stress genes](#8-heat-stress-genes)
+  - [7. Core response in 1:1:1
+    orthologs](#7-core-response-in-111-orthologs)
+    - [Define response categories for 1:1:1
+      orthologs](#define-response-categories-for-111-orthologs)
+    - [Are TFBS conserved across DE 1:1:1
+      orthologs?](#are-tfbs-conserved-across-de-111-orthologs)
+  - [8. Non 1:1:1 conserved responses?](#8-non-111-conserved-responses)
+  - [9. Manually-curated heat stress
+    genes](#9-manually-curated-heat-stress-genes)
 
 # Analysis of Time Series bulk RNA-seq data: Cross-Species Analysis
 
@@ -58,6 +65,7 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, fig.width = 10, fig.height =
 #load packages
 library(tidyverse)
 library(knitr)
+library(ComplexHeatmap)
 
 #load in parameters and functions
 source("species_parameters.R")
@@ -86,38 +94,59 @@ sessionInfo() #provides list of loaded packages and version of R
     ## tzcode source: system (glibc)
     ## 
     ## attached base packages:
-    ## [1] grid      stats     graphics  grDevices utils     datasets  methods  
-    ## [8] base     
+    ## [1] tcltk     grid      stats     graphics  grDevices utils     datasets 
+    ## [8] methods   base     
     ## 
     ## other attached packages:
-    ##  [1] ComplexHeatmap_2.26.0 knitr_1.50            lubridate_1.9.4      
-    ##  [4] forcats_1.0.0         stringr_1.6.0         dplyr_1.1.4          
-    ##  [7] purrr_1.2.1           readr_2.1.6           tidyr_1.3.1          
-    ## [10] tibble_3.3.0          ggplot2_4.0.1         tidyverse_2.0.0      
-    ## [13] rmarkdown_2.30       
+    ##  [1] knitr_1.50            Mfuzz_2.68.0          DynDoc_1.86.0        
+    ##  [4] widgetTools_1.86.0    e1071_1.7-16          Biobase_2.70.0       
+    ##  [7] BiocGenerics_0.56.0   generics_0.1.4        pheatmap_1.0.13      
+    ## [10] ComplexHeatmap_2.26.0 lubridate_1.9.4       forcats_1.0.0        
+    ## [13] stringr_1.6.0         dplyr_1.1.4           purrr_1.2.1          
+    ## [16] readr_2.1.6           tidyr_1.3.1           tibble_3.3.0         
+    ## [19] ggplot2_4.0.1         tidyverse_2.0.0       ImpulseDE2_0.99.10   
+    ## [22] rmarkdown_2.30       
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] gtable_0.3.6        circlize_0.4.17     shape_1.4.6.1      
-    ##  [4] rjson_0.2.23        xfun_0.56           GlobalOptions_0.1.3
-    ##  [7] tzdb_0.5.0          Cairo_1.7-0         vctrs_0.7.0        
-    ## [10] tools_4.5.1         generics_0.1.4      stats4_4.5.1       
-    ## [13] parallel_4.5.1      cluster_2.1.8.1     pkgconfig_2.0.3    
-    ## [16] RColorBrewer_1.1-3  S7_0.2.1            S4Vectors_0.48.0   
-    ## [19] lifecycle_1.0.5     compiler_4.5.1      farver_2.1.2       
-    ## [22] textshaping_1.0.4   codetools_0.2-20    clue_0.3-66        
-    ## [25] htmltools_0.5.9     yaml_2.3.12         pillar_1.11.1      
-    ## [28] crayon_1.5.3        magick_2.9.0        iterators_1.0.14   
-    ## [31] foreach_1.5.2       tidyselect_1.2.1    digest_0.6.39      
-    ## [34] stringi_1.8.7       labeling_0.4.3      fastmap_1.2.0      
-    ## [37] colorspace_2.1-2    cli_3.6.5           magrittr_2.0.4     
-    ## [40] dichromat_2.0-0.1   withr_3.0.2         scales_1.4.0       
-    ## [43] bit64_4.6.0-1       timechange_0.3.0    matrixStats_1.5.0  
-    ## [46] bit_4.6.0           ragg_1.5.0          png_0.1-8          
-    ## [49] GetoptLong_1.1.0    hms_1.1.4           evaluate_1.0.5     
-    ## [52] IRanges_2.44.0      doParallel_1.0.17   rlang_1.2.0        
-    ## [55] Rcpp_1.1.1          glue_1.8.0          BiocGenerics_0.56.0
-    ## [58] rstudioapi_0.17.1   vroom_1.6.7         R6_2.6.1           
-    ## [61] systemfonts_1.3.1
+    ##  [1] tidyselect_1.2.1            farver_2.1.2               
+    ##  [3] S7_0.2.1                    fastmap_1.2.0              
+    ##  [5] digest_0.6.39               timechange_0.3.0           
+    ##  [7] lifecycle_1.0.5             cluster_2.1.8.1            
+    ##  [9] Cairo_1.7-0                 magrittr_2.0.4             
+    ## [11] compiler_4.5.1              tkWidgets_1.86.0           
+    ## [13] rlang_1.2.0                 tools_4.5.1                
+    ## [15] yaml_2.3.12                 labeling_0.4.3             
+    ## [17] S4Arrays_1.10.0             bit_4.6.0                  
+    ## [19] DelayedArray_0.36.0         RColorBrewer_1.1-3         
+    ## [21] abind_1.4-8                 BiocParallel_1.44.0        
+    ## [23] withr_3.0.2                 stats4_4.5.1               
+    ## [25] colorspace_2.1-2            scales_1.4.0               
+    ## [27] iterators_1.0.14            dichromat_2.0-0.1          
+    ## [29] SummarizedExperiment_1.40.0 cli_3.6.5                  
+    ## [31] crayon_1.5.3                ragg_1.5.0                 
+    ## [33] rstudioapi_0.17.1           tzdb_0.5.0                 
+    ## [35] rjson_0.2.23                proxy_0.4-27               
+    ## [37] parallel_4.5.1              XVector_0.50.0             
+    ## [39] matrixStats_1.5.0           vctrs_0.7.0                
+    ## [41] Matrix_1.6-4                IRanges_2.44.0             
+    ## [43] GetoptLong_1.1.0            hms_1.1.4                  
+    ## [45] S4Vectors_0.48.0            bit64_4.6.0-1              
+    ## [47] clue_0.3-66                 systemfonts_1.3.1          
+    ## [49] magick_2.9.0                locfit_1.5-9.12            
+    ## [51] foreach_1.5.2               glue_1.8.0                 
+    ## [53] codetools_0.2-20            cowplot_1.2.0              
+    ## [55] stringi_1.8.7               shape_1.4.6.1              
+    ## [57] gtable_0.3.6                GenomicRanges_1.62.0       
+    ## [59] pillar_1.11.1               htmltools_0.5.9            
+    ## [61] Seqinfo_1.0.0               circlize_0.4.17            
+    ## [63] R6_2.6.1                    textshaping_1.0.4          
+    ## [65] doParallel_1.0.17           vroom_1.6.7                
+    ## [67] evaluate_1.0.5              lattice_0.22-7             
+    ## [69] png_0.1-8                   class_7.3-23               
+    ## [71] Rcpp_1.1.1                  SparseArray_1.10.2         
+    ## [73] DESeq2_1.50.2               xfun_0.56                  
+    ## [75] MatrixGenerics_1.22.0       pkgconfig_2.0.3            
+    ## [77] GlobalOptions_0.1.3
 
 ## 2. Define directories
 
@@ -255,7 +284,7 @@ write_csv(complete_1to1_ogs, file.path(outdir, "filtered_orthogroups_1to1to1.csv
 
 ``` r
 # quick summary
-complete_1to1_ogs_summary <- complete_1to1_ogs %>%
+sp_summary_1to1_ogs <- complete_1to1_ogs %>%
   group_by(species) %>%
   summarise(
     n_genes = n(),
@@ -266,7 +295,7 @@ complete_1to1_ogs_summary <- complete_1to1_ogs %>%
     .groups = 'drop'
   )
 
-kable(complete_1to1_ogs_summary,format = "markdown")
+kable(sp_summary_1to1_ogs,format = "markdown")
 ```
 
 | species | n_genes | n_DE |   pct_DE | n_in_clusters | n_hubs |
@@ -275,7 +304,194 @@ kable(complete_1to1_ogs_summary,format = "markdown")
 | Pacuta  |    8471 | 4028 | 47.55047 |          3304 |    954 |
 | Pcomp   |    8471 | 2452 | 28.94582 |          2129 |    782 |
 
-## 7. Conserved responses?
+#### Upset plot: 1:1:1 orthologs DE across species
+
+Upset plot from ComplexHeatmap package, documentation
+[here](https://github.com/jokergoo/ComplexHeatmap-reference/blob/master/book/08-upset.md)
+
+``` r
+de_matrix <- complete_1to1_ogs %>%
+  select(OG, species, is_DE) %>%
+  mutate(is_DE = replace_na(is_DE, FALSE)) %>%
+  pivot_wider(names_from = species, values_from = is_DE, values_fill = FALSE) %>%
+  column_to_rownames("OG") %>%
+  as.matrix()
+
+m <- make_comb_mat(de_matrix)
+plot <- UpSet(m, pt_size = unit(5, "mm"), lwd = 3,
+      top_annotation = upset_top_annotation(m, add_numbers = TRUE),
+      right_annotation = upset_right_annotation(m, add_numbers = TRUE),
+      comb_col = c("gray","#00A087","#4DBBD5","#E64B35")[comb_degree(m)+1],
+      column_title = "Differential Expression of 1:1:1 Orthologs")
+
+print(plot)
+```
+
+![](./06_CrossSpecies_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+
+``` r
+pdf(file.path(outdir_plots, "DE_overlap_upset.pdf"), width=10, height=6)
+  print(plot)
+dev.off()
+```
+
+    ## png 
+    ##   2
+
+``` r
+png(file.path(outdir_plots, "DE_overlap_upset.png"), width=10, height=6, units="in", res=300)
+  print(plot)
+dev.off()
+```
+
+    ## png 
+    ##   2
+
+## 7. Core response in 1:1:1 orthologs
+
+This does not include any genes that have more than one paralog in a
+species.
+
+``` r
+complete_1to1_ogs_summary <- complete_1to1_ogs %>%
+  group_by(OG) %>%
+  arrange(SwissProt_BlastEval, .by_group = TRUE) %>% 
+  summarise(
+    # how many of the which 1:1:1 orthologs are differentially expressed in all three species
+    n_DE_species = sum(is_DE, na.rm = TRUE),
+    all_species_DE = n_DE_species == 3,
+    
+    # what mfuzz patterns are represented
+    Mfuzz_patterns = paste(sort(unique(na.omit(Mfuzz_pattern))), collapse = " | "),
+    Mfuzz_patterns_unique = length(unique(na.omit(Mfuzz_pattern))),
+    
+    # get annotation info (we pre-sorted by evalue above, so the best annotation will be chosen)
+    annotation = first(na.omit(SwissProt_ProteinName)),
+    annotation_evalue = first(na.omit(SwissProt_BlastEval)),
+    has_annotation = !all(is.na(SwissProt_ProteinName)),
+    
+    # list the gene for each species (again, these are only OGs where there is exactly one gene per species)
+    gene_Pacuta = gene_id[species == "Pacuta"],
+    gene_Mcap = gene_id[species == "Mcap"],
+    gene_Pcomp = gene_id[species == "Pcomp"],
+    
+    # and also gather details for each species to go along with the summary info above
+    # actual impulseDE2 p-values
+    padj_Pacuta = ImpulseDE2_padj[species == "Pacuta"],
+    padj_Mcap = ImpulseDE2_padj[species == "Mcap"],
+    padj_Pcomp = ImpulseDE2_padj[species == "Pcomp"],
+    
+    # Mfuzz membership
+    MfuzzM_Pacuta = Mfuzz_membership[species == "Pacuta"],
+    MfuzzM_Mcap = Mfuzz_membership[species == "Mcap"],
+    MfuzzM_Pcomp = Mfuzz_membership[species == "Pcomp"],
+    
+    # are any members of the 1:1:1 OG hub genes of their WGCNA module
+    n_species_hub = sum(is_hub, na.rm = TRUE),
+    hub_in_any = n_species_hub > 0,
+    hub_in_all = n_species_hub == 3,
+    
+    # do any of the 1:1:1 OG genes have TF binding sites and are they conserved across species?
+    n_species_HSF1 = sum(has_HSF1, na.rm = TRUE),
+    n_species_FOXO3 = sum(has_FOXO3, na.rm = TRUE),
+    n_species_NFE2L2 = sum(has_NFE2L2, na.rm = TRUE),
+    HSF1_conserved = n_species_HSF1 == 3,
+    FOXO3_conserved = n_species_FOXO3 == 3,
+    NFE2L2_conserved = n_species_NFE2L2 == 3,
+    any_TF_conserved = HSF1_conserved | FOXO3_conserved | NFE2L2_conserved,
+    
+    .groups = 'drop'
+  ) %>%
+  #finally, sort by some columns of interest so that the top rows will show 1:1:1 orthologs which are all DE, share an Mfuzz pattern, and show potential transcription factor binding site conservation
+  arrange(desc(all_species_DE), Mfuzz_patterns_unique, desc(any_TF_conserved))
+
+kable(head(complete_1to1_ogs_summary),format = "markdown")
+```
+
+| OG | n_DE_species | all_species_DE | Mfuzz_patterns | Mfuzz_patterns_unique | annotation | annotation_evalue | has_annotation | gene_Pacuta | gene_Mcap | gene_Pcomp | padj_Pacuta | padj_Mcap | padj_Pcomp | MfuzzM_Pacuta | MfuzzM_Mcap | MfuzzM_Pcomp | n_species_hub | hub_in_any | hub_in_all | n_species_HSF1 | n_species_FOXO3 | n_species_NFE2L2 | HSF1_conserved | FOXO3_conserved | NFE2L2_conserved | any_TF_conserved |
+|:---|---:|:---|:---|---:|:---|---:|:---|:---|:---|:---|---:|---:|---:|---:|---:|---:|---:|:---|:---|---:|---:|---:|:---|:---|:---|:---|
+| OG_12811 | 3 | TRUE | Gradual Down | 1 | NA | NA | FALSE | Pocillopora_acuta_HIv2\_\_\_RNAseq.g11037.t1 | Montipora_capitata_HIv3\_\_\_RNAseq.g20746.t1 | Porites_compressa_HIv1\_\_\_RNAseq.g3627.t1 | 0.0000001 | 0.0000206 | 0.0000000 | 0.4061767 | 0.9833159 | 0.9527887 | 2 | TRUE | FALSE | 0 | 3 | 0 | FALSE | TRUE | FALSE | TRUE |
+| OG_3443 | 3 | TRUE | Sustained Up (3h) | 1 | Protein DDI1 homolog 2 (EC 3.4.23.-) | 0 | TRUE | Pocillopora_acuta_HIv2\_\_\_RNAseq.g30800.t1 | Montipora_capitata_HIv3\_\_\_RNAseq.g30166.t1 | Porites_compressa_HIv1\_\_\_RNAseq.g624.t1 | 0.0000000 | 0.0060282 | 0.0033115 | 0.6787366 | 0.8643735 | 0.9568157 | 3 | TRUE | TRUE | 1 | 0 | 3 | FALSE | FALSE | TRUE | TRUE |
+| OG_7584 | 3 | TRUE | Sustained Up (3h) | 1 | Eukaryotic translation initiation factor 2-alpha kinase 3 (EC 2.7.11.1) (PRKR-like endoplasmic reticulum kinase) (Pancreatic eIF2-alpha kinase) (HsPEK) (Protein tyrosine kinase EIF2AK3) (EC 2.7.10.2) | 0 | TRUE | Pocillopora_acuta_HIv2\_\_\_RNAseq.g24155.t1 | Montipora_capitata_HIv3\_\_\_RNAseq.g23342.t1 | Porites_compressa_HIv1\_\_\_RNAseq.g14248.t1 | 0.0000000 | 0.0000000 | 0.0005182 | 0.7288276 | 0.9882804 | 0.5299947 | 2 | TRUE | FALSE | 3 | 0 | 0 | TRUE | FALSE | FALSE | TRUE |
+| OG_1019 | 3 | TRUE | Gradual Down | 1 | Beta-glucuronidase (EC 3.2.1.31) | 0 | TRUE | Pocillopora_acuta_HIv2\_\_\_RNAseq.g17111.t1 | Montipora_capitata_HIv3\_\_\_TS.g42393.t1 | Porites_compressa_HIv1\_\_\_RNAseq.g10924.t1 | 0.0013432 | 0.0004659 | 0.0261287 | 0.5301712 | 0.9190285 | 0.5863140 | 0 | FALSE | FALSE | 1 | 0 | 1 | FALSE | FALSE | FALSE | FALSE |
+| OG_11009 | 3 | TRUE | Sustained Up (3h) | 1 | Netrin receptor UNC5C (Protein unc-5 homolog 3) (cUNC-5H3) (Protein unc-5 homolog C) | 0 | TRUE | Pocillopora_acuta_HIv2\_\_\_RNAseq.7998_t | Montipora_capitata_HIv3\_\_\_RNAseq.g50148.t1 | Porites_compressa_HIv1\_\_\_RNAseq.g11603.t1 | 0.0093969 | 0.0000017 | 0.0098370 | 0.4859274 | 0.9673555 | 0.9721135 | 2 | TRUE | FALSE | 1 | 1 | 0 | FALSE | FALSE | FALSE | FALSE |
+| OG_11214 | 3 | TRUE | Gradual Down | 1 | NA | NA | FALSE | Pocillopora_acuta_HIv2\_\_\_TS.g15881.t1 | Montipora_capitata_HIv3\_\_\_RNAseq.g41945.t1c | Porites_compressa_HIv1\_\_\_RNAseq.g37129.t1 | 0.0003044 | 0.0010584 | 0.0248931 | 0.8406773 | 0.9883217 | 0.7523045 | 0 | FALSE | FALSE | 0 | 0 | 0 | FALSE | FALSE | FALSE | FALSE |
+
+### Define response categories for 1:1:1 orthologs
+
+``` r
+# Core conserved: DE in all 3, same Mfuzz pattern
+core_conserved_response <- complete_1to1_ogs_summary %>%
+  filter(all_species_DE, Mfuzz_patterns_unique == 1) 
+
+# Core divergent: DE in all 3, different Mfuzz patterns  
+core_divergent_response <- complete_1to1_ogs_summary %>%
+  filter(all_species_DE, Mfuzz_patterns_unique > 1)
+
+# Variable response: DE in 1-2 species only
+variable_response <- complete_1to1_ogs_summary %>%
+  filter(!all_species_DE, n_DE_species >= 1)
+
+# Not responsive
+not_responsive <- complete_1to1_ogs_summary %>%
+  filter(n_DE_species == 0)
+
+cat("1:1:1 Ortholog Response Categories:\n")
+```
+
+    ## 1:1:1 Ortholog Response Categories:
+
+``` r
+cat("  Core conserved (DE in 3 species, same Mfuzz pattern):", nrow(core_conserved_response), "\n")
+```
+
+    ##   Core conserved (DE in 3 species, same Mfuzz pattern): 81
+
+``` r
+cat("  Core divergent (DE in 3 species, different Mfuzz patterns):", nrow(core_divergent_response), "\n")
+```
+
+    ##   Core divergent (DE in 3 species, different Mfuzz patterns): 566
+
+``` r
+cat("  Variable response (DE in 1-2 species):", nrow(variable_response), "\n")
+```
+
+    ##   Variable response (DE in 1-2 species): 5372
+
+``` r
+cat("  Not responsive:", nrow(not_responsive), "\n\n")
+```
+
+    ##   Not responsive: 2452
+
+### Are TFBS conserved across DE 1:1:1 orthologs?
+
+``` r
+core_conserved_response %>% filter(HSF1_conserved == TRUE) %>% kable(format = "markdown")
+```
+
+| OG | n_DE_species | all_species_DE | Mfuzz_patterns | Mfuzz_patterns_unique | annotation | annotation_evalue | has_annotation | gene_Pacuta | gene_Mcap | gene_Pcomp | padj_Pacuta | padj_Mcap | padj_Pcomp | MfuzzM_Pacuta | MfuzzM_Mcap | MfuzzM_Pcomp | n_species_hub | hub_in_any | hub_in_all | n_species_HSF1 | n_species_FOXO3 | n_species_NFE2L2 | HSF1_conserved | FOXO3_conserved | NFE2L2_conserved | any_TF_conserved |
+|:---|---:|:---|:---|---:|:---|---:|:---|:---|:---|:---|---:|---:|---:|---:|---:|---:|---:|:---|:---|---:|---:|---:|:---|:---|:---|:---|
+| OG_7584 | 3 | TRUE | Sustained Up (3h) | 1 | Eukaryotic translation initiation factor 2-alpha kinase 3 (EC 2.7.11.1) (PRKR-like endoplasmic reticulum kinase) (Pancreatic eIF2-alpha kinase) (HsPEK) (Protein tyrosine kinase EIF2AK3) (EC 2.7.10.2) | 0 | TRUE | Pocillopora_acuta_HIv2\_\_\_RNAseq.g24155.t1 | Montipora_capitata_HIv3\_\_\_RNAseq.g23342.t1 | Porites_compressa_HIv1\_\_\_RNAseq.g14248.t1 | 0 | 0 | 0.0005182 | 0.7288276 | 0.9882804 | 0.5299947 | 2 | TRUE | FALSE | 3 | 0 | 0 | TRUE | FALSE | FALSE | TRUE |
+
+``` r
+core_conserved_response %>% filter(FOXO3_conserved == TRUE) %>% kable(format = "markdown")
+```
+
+| OG | n_DE_species | all_species_DE | Mfuzz_patterns | Mfuzz_patterns_unique | annotation | annotation_evalue | has_annotation | gene_Pacuta | gene_Mcap | gene_Pcomp | padj_Pacuta | padj_Mcap | padj_Pcomp | MfuzzM_Pacuta | MfuzzM_Mcap | MfuzzM_Pcomp | n_species_hub | hub_in_any | hub_in_all | n_species_HSF1 | n_species_FOXO3 | n_species_NFE2L2 | HSF1_conserved | FOXO3_conserved | NFE2L2_conserved | any_TF_conserved |
+|:---|---:|:---|:---|---:|:---|---:|:---|:---|:---|:---|---:|---:|---:|---:|---:|---:|---:|:---|:---|---:|---:|---:|:---|:---|:---|:---|
+| OG_12811 | 3 | TRUE | Gradual Down | 1 | NA | NA | FALSE | Pocillopora_acuta_HIv2\_\_\_RNAseq.g11037.t1 | Montipora_capitata_HIv3\_\_\_RNAseq.g20746.t1 | Porites_compressa_HIv1\_\_\_RNAseq.g3627.t1 | 1e-07 | 2.06e-05 | 0 | 0.4061767 | 0.9833159 | 0.9527887 | 2 | TRUE | FALSE | 0 | 3 | 0 | FALSE | TRUE | FALSE | TRUE |
+
+``` r
+core_conserved_response %>% filter(NFE2L2_conserved == TRUE) %>% kable(format = "markdown")
+```
+
+| OG | n_DE_species | all_species_DE | Mfuzz_patterns | Mfuzz_patterns_unique | annotation | annotation_evalue | has_annotation | gene_Pacuta | gene_Mcap | gene_Pcomp | padj_Pacuta | padj_Mcap | padj_Pcomp | MfuzzM_Pacuta | MfuzzM_Mcap | MfuzzM_Pcomp | n_species_hub | hub_in_any | hub_in_all | n_species_HSF1 | n_species_FOXO3 | n_species_NFE2L2 | HSF1_conserved | FOXO3_conserved | NFE2L2_conserved | any_TF_conserved |
+|:---|---:|:---|:---|---:|:---|---:|:---|:---|:---|:---|---:|---:|---:|---:|---:|---:|---:|:---|:---|---:|---:|---:|:---|:---|:---|:---|
+| OG_3443 | 3 | TRUE | Sustained Up (3h) | 1 | Protein DDI1 homolog 2 (EC 3.4.23.-) | 0 | TRUE | Pocillopora_acuta_HIv2\_\_\_RNAseq.g30800.t1 | Montipora_capitata_HIv3\_\_\_RNAseq.g30166.t1 | Porites_compressa_HIv1\_\_\_RNAseq.g624.t1 | 0 | 0.0060282 | 0.0033115 | 0.6787366 | 0.8643735 | 0.9568157 | 3 | TRUE | TRUE | 1 | 0 | 3 | FALSE | FALSE | TRUE | TRUE |
+
+## 8. Non 1:1:1 conserved responses?
 
 ``` r
 sus_up_3hr <- cross_species %>% filter(Mfuzz_pattern == "Sustained Up (3h)")
@@ -290,16 +506,14 @@ sus_up_3hr %>% group_by(species) %>%
     pct_in_all_3 = 100*mean(OG_in_all_3, na.rm = TRUE),
     n_1to1to1 = sum(OG_1to1to1, na.rm = TRUE),
     pct_1to1to1 = 100*mean(OG_1to1to1, na.rm = TRUE)
-  )# %>% kable(format = "markdown")
+  ) %>% kable(format = "markdown")
 ```
 
-    ## # A tibble: 3 × 8
-    ##   species n_genes n_in_OG pct_in_OG n_in_all_3 pct_in_all_3 n_1to1to1
-    ##   <chr>     <int>   <int>     <dbl>      <int>        <dbl>     <int>
-    ## 1 Mcap        963     889      92.3        810         91.1       464
-    ## 2 Pacuta     1610    1442      89.6       1279         88.7       636
-    ## 3 Pcomp      1260    1181      93.7       1051         89.0       638
-    ## # ℹ 1 more variable: pct_1to1to1 <dbl>
+| species | n_genes | n_in_OG | pct_in_OG | n_in_all_3 | pct_in_all_3 | n_1to1to1 | pct_1to1to1 |
+|:--------|--------:|--------:|----------:|-----------:|-------------:|----------:|------------:|
+| Mcap    |     963 |     889 |  92.31568 |        810 |     91.11361 |       464 |    52.19348 |
+| Pacuta  |    1610 |    1442 |  89.56522 |       1279 |     88.69626 |       636 |    44.10541 |
+| Pcomp   |    1260 |    1181 |  93.73016 |       1051 |     88.99238 |       638 |    54.02202 |
 
 ``` r
 sus_up_3hr %>% group_by(species) %>%
@@ -317,17 +531,14 @@ sus_up_3hr %>% group_by(species) %>%
     has_FOXO3 = sum(has_FOXO3, na.rm = TRUE),
     has_NFE2L2 = sum(has_NFE2L2, na.rm = TRUE),
     .groups = 'drop'
-  )# %>% kable(format = "markdown")
+  ) %>% kable(format = "markdown")
 ```
 
-    ## # A tibble: 3 × 13
-    ##   species n_genes  n_DE pct_DE Mfuzz_cluster n_high_conf pct_high_conf n_Modules
-    ##   <chr>     <int> <int>  <dbl> <chr>               <int>         <dbl>     <int>
-    ## 1 Mcap        963   963    100 3                     838          87.0        18
-    ## 2 Pacuta     1610  1610    100 4                    1255          78.0        19
-    ## 3 Pcomp      1260  1260    100 5                    1140          90.5        13
-    ## # ℹ 5 more variables: largest_module <chr>, n_hubs <int>, has_HSF1 <int>,
-    ## #   has_FOXO3 <int>, has_NFE2L2 <int>
+| species | n_genes | n_DE | pct_DE | Mfuzz_cluster | n_high_conf | pct_high_conf | n_Modules | largest_module | n_hubs | has_HSF1 | has_FOXO3 | has_NFE2L2 |
+|:---|---:|---:|---:|:---|---:|---:|---:|:---|---:|---:|---:|---:|
+| Mcap | 963 | 963 | 100 | 3 | 838 | 87.01973 | 18 | ME1 | 253 | 140 | 168 | 109 |
+| Pacuta | 1610 | 1610 | 100 | 4 | 1255 | 77.95031 | 19 | ME1 | 378 | 180 | 244 | 156 |
+| Pcomp | 1260 | 1260 | 100 | 5 | 1140 | 90.47619 | 13 | ME1 | 336 | 171 | 208 | 136 |
 
 ``` r
 sus_up_12hr <- cross_species %>% filter(Mfuzz_pattern == "Sustained Up (12h)")
@@ -433,7 +644,7 @@ grad_down %>% group_by(species) %>%
     ## # ℹ 5 more variables: largest_module <chr>, n_hubs <int>, has_HSF1 <int>,
     ## #   has_FOXO3 <int>, has_NFE2L2 <int>
 
-## 8. Heat stress genes
+## 9. Manually-curated heat stress genes
 
 ``` r
 for (species in species_list){

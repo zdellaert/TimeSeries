@@ -58,6 +58,7 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE,fig.width = 
 library(ImpulseDE2)
 library(tidyverse)
 library(ComplexHeatmap)
+library(pheatmap)
 library(Mfuzz)
 
 #load in parameters and functions
@@ -121,6 +122,9 @@ if(length(outlier_samples) > 0) {
 
 all(rownames(meta) %in% colnames(vst))
 all(rownames(meta) == colnames(vst))
+
+# once outliers are removed, define extra sample lists
+heat_samples <- meta %>% filter(treatment == "H") %>% pull(sample)
 ```
 
 ```{r}
@@ -147,7 +151,7 @@ meta_impulse <- meta %>%
   select(-c(species,treatment))
 ```
 
-## 1. Run ImpulseDE2
+## 2. Run ImpulseDE2
 
 This takes a ton of time and memory, so I run it once then save as an RDS.
 
@@ -204,8 +208,6 @@ Extract genes with significant treatment effect on temporal trajectory and save 
 impulse_sig <- impulse_results %>%
   filter(padj < global_params$padj_threshold)
 
-write.csv(impulse_sig, file.path(outdir, "ImpulseDE2_significant.csv"), row.names = FALSE)
-
 #preview top DE genes and annotations
 impulse_sig %>% arrange(padj) %>% head(20) %>% dplyr::select(Gene,padj,loglik_red,response_type) %>%
   left_join(SwissProt %>% select(query,ProteinNames,BiologicalProcess), by = join_by("Gene"=="query"))
@@ -223,7 +225,7 @@ cat("Other:", sum(impulse_sig$response_type == "Other"), "\n")
 
 ## 4. Visualize ImpulseDE2 Results
 
-### Heatmap of significant genes
+### Classify significant genes by up or downregulation
 
 ```{r}
 lsHeatmaps <- plotHeatmap(
@@ -232,6 +234,33 @@ lsHeatmaps <- plotHeatmap(
   boolIdentifyTransients = TRUE, #set to true if true above
   scaQThres              = global_params$padj_threshold)
 
+# this code is also handy because the object it creates sorts signficiant genes into the following four categories:
+transition_up <- lsHeatmaps$lsvecGeneGroups$transition_up
+transition_down <- lsHeatmaps$lsvecGeneGroups$transition_down
+transient_up <- lsHeatmaps$lsvecGeneGroups$transient_up
+transient_down <- lsHeatmaps$lsvecGeneGroups$transient_down
+classified <- c(transition_up,transition_down,transient_up,transient_down)
+# the unclassified ones below are the same as response_type=="Other"
+unclassified <- impulse_sig %>% filter(!(Gene %in% classified)) %>% pull(Gene)
+
+gene_classification <- data.frame(
+  Gene = c(transition_up, transition_down, transient_up, transient_down, unclassified),
+  classification = c(
+    rep("transition_up", length(transition_up)),
+    rep("transition_down", length(transition_down)),
+    rep("transient_up", length(transient_up)),
+    rep("transient_down", length(transient_down)),
+    rep("unclassified", length(unclassified))
+  )
+)
+
+impulse_sig_classifications <- impulse_sig %>% left_join(gene_classification)
+write.csv(impulse_sig_classifications, file.path(outdir, "ImpulseDE2_significant.csv"), row.names = FALSE)
+```
+
+### Heatmap of significant genes by trajectory
+
+```{r}
 # complexHeatmapRaw = Heatmap of raw data by time point: Average of the size factor (and batch factor) normalised counts per time point and gene.
 draw(lsHeatmaps$complexHeatmapRaw)
 
@@ -253,6 +282,83 @@ dev.off()
 pdf(file.path(outdir_plots, "pdf_figs/ImpulseDE2_heatmap_case.pdf"), width = 10, height = 12)
 draw(lsHeatmaps$complexHeatmapRaw)
 dev.off()
+```
+### Heatmap of top 100 significant transient/transition UP genes normalized to T0
+
+```{r}
+impulse_sig_up <- impulse_sig %>% filter(Gene %in% transient_up | Gene %in% transition_up)
+top_100_DE_genes <- impulse_sig_up %>% arrange(padj) %>% filter(Gene %in% rownames(vst)) %>% head(100) %>% arrange(response_type,padj)
+row_annot <- top_100_DE_genes %>% select(response_type)
+#col_annot <- meta[heat_samples,] %>% select(treatment,time)
+col_annot <- meta[heat_samples,] %>% select(time)
+
+T0_samples <- meta[heat_samples,] %>% filter(time == 0 ) %>% pull(sample)
+
+vsd_heat_top <- vst[top_100_DE_genes$Gene,heat_samples]
+vsd_heat_top$T0mean <- rowMeans(vsd_heat_top[,T0_samples])
+vsd_heat_norm <- vsd_heat_top - vsd_heat_top$T0mean
+vsd_heat_norm <- vsd_heat_norm %>% select(-T0mean)
+
+vsd_max <- max(abs(vsd_heat_norm), na.rm = TRUE)
+scale_colors <- colorRampPalette(c("#3c58a7", "white", "#ee2e25"))(100)
+legend_breaks <- seq(-vsd_max, vsd_max, length.out = 101)
+
+heatmap_up <- pheatmap(vsd_heat_norm, 
+         cluster_rows = FALSE, 
+         show_rownames = FALSE,
+         show_colnames = FALSE,
+         cluster_cols = FALSE, 
+         annotation_names_row = FALSE,
+         annotation_names_col = FALSE,
+         breaks = legend_breaks,
+         col = scale_colors,
+         border_color = NA,
+         gaps_col = cumsum(table(col_annot$time))[-length(table(col_annot$time))],
+         annotation_row = row_annot,
+         annotation_col = col_annot,
+         annotation_colors = list("treatment" = treat_colors,
+                                  "time" = time_colors,
+                                  "response_type" = c("Monotonous" = "#D8AF39FF", "Transient" = "#278B9AFF")))
+
+save_ggplot(heatmap_up, "ImpulseDE2_heatmap_UP", width = 7, height = 10, units = "in", dpi = 300)
+```
+
+### Heatmap of top 100 significant transient/transition downregulated genes normalized to T0
+
+```{r}
+impulse_sig_down <- impulse_sig %>% filter(Gene %in% transient_down | Gene %in% transition_down)
+top_100_DE_genes <- impulse_sig_down %>% arrange(padj) %>% filter(Gene %in% rownames(vst)) %>% head(100) %>% arrange(response_type,padj)
+row_annot <- top_100_DE_genes %>% select(response_type)
+#col_annot <- meta[heat_samples,] %>% select(treatment,time)
+col_annot <- meta[heat_samples,] %>% select(time)
+
+vsd_heat_top <- vst[top_100_DE_genes$Gene,heat_samples]
+vsd_heat_top$T0mean <- rowMeans(vsd_heat_top[,T0_samples])
+vsd_heat_norm <- vsd_heat_top - vsd_heat_top$T0mean
+vsd_heat_norm <- vsd_heat_norm %>% select(-T0mean)
+
+vsd_max <- max(abs(vsd_heat_norm), na.rm = TRUE)
+scale_colors <- colorRampPalette(c("#3c58a7", "white", "#ee2e25"))(100)
+legend_breaks <- seq(-vsd_max, vsd_max, length.out = 101)
+
+heatmap_down <- pheatmap(vsd_heat_norm, 
+         cluster_rows = FALSE, 
+         show_rownames = FALSE,
+         show_colnames = FALSE,
+         cluster_cols = FALSE, 
+         annotation_names_row = FALSE,
+         annotation_names_col = FALSE,
+         breaks = legend_breaks,
+         col = scale_colors,
+         border_color = NA,
+         gaps_col = cumsum(table(col_annot$time))[-length(table(col_annot$time))],
+         annotation_row = row_annot,
+         annotation_col = col_annot,
+         annotation_colors = list("treatment" = treat_colors,
+                                  "time" = time_colors,
+                                  "response_type" = c("Monotonous" = "#D8AF39FF", "Transient" = "#278B9AFF")))
+
+save_ggplot(heatmap_down, "ImpulseDE2_heatmap_DOWN", width = 7, height = 10, units = "in", dpi = 300)
 ```
 
 ### Top gene trajectories
@@ -283,7 +389,6 @@ Filter vst transformed counts to keep significant genes and only heat-samples
 sig_genes <- impulse_sig %>% filter(Gene %in% rownames(vst)) %>% pull(Gene)
 
 # Get VST expression for case (heat) samples only for sig genes
-heat_samples <- meta %>% filter(treatment == "H") %>% pull(sample)
 heat_vsd <- vst[sig_genes, heat_samples]
 ```
 
@@ -432,9 +537,9 @@ dev.off()
 
 ---
 
-# Exploring genes of interest
+## Exploring genes of interest
 
-## Manually-curated heat stress genes by cluster
+### Manually-curated heat stress genes by cluster
 
 ```{r}
 # read in Manual heat stress genes annotation

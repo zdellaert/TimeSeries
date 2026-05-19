@@ -38,45 +38,9 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, fig.width = 10, fig.height =
 
 #load packages
 library(tidyverse)
-```
-
-    ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-    ## ✔ dplyr     1.1.4     ✔ readr     2.1.6
-    ## ✔ forcats   1.0.0     ✔ stringr   1.6.0
-    ## ✔ ggplot2   4.0.1     ✔ tibble    3.3.0
-    ## ✔ lubridate 1.9.4     ✔ tidyr     1.3.1
-    ## ✔ purrr     1.2.1     
-    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-    ## ✖ dplyr::filter() masks stats::filter()
-    ## ✖ dplyr::lag()    masks stats::lag()
-    ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
-
-``` r
 library(knitr)
 library(ComplexHeatmap)
-```
 
-    ## Loading required package: grid
-    ## ========================================
-    ## ComplexHeatmap version 2.26.0
-    ## Bioconductor page: http://bioconductor.org/packages/ComplexHeatmap/
-    ## Github page: https://github.com/jokergoo/ComplexHeatmap
-    ## Documentation: http://jokergoo.github.io/ComplexHeatmap-reference
-    ## 
-    ## If you use it in published research, please cite either one:
-    ## - Gu, Z. Complex Heatmap Visualization. iMeta 2022.
-    ## - Gu, Z. Complex heatmaps reveal patterns and correlations in multidimensional 
-    ##     genomic data. Bioinformatics 2016.
-    ## 
-    ## 
-    ## The new InteractiveComplexHeatmap package can directly export static 
-    ## complex heatmaps into an interactive Shiny app with zero effort. Have a try!
-    ## 
-    ## This message can be suppressed by:
-    ##   suppressPackageStartupMessages(library(ComplexHeatmap))
-    ## ========================================
-
-``` r
 #load in parameters and functions
 source("species_parameters.R")
 source("utils.R")
@@ -104,34 +68,59 @@ sessionInfo() #provides list of loaded packages and version of R
     ## tzcode source: system (glibc)
     ## 
     ## attached base packages:
-    ## [1] grid      stats     graphics  grDevices utils     datasets  methods  
-    ## [8] base     
+    ## [1] tcltk     grid      stats     graphics  grDevices utils     datasets 
+    ## [8] methods   base     
     ## 
     ## other attached packages:
-    ##  [1] ComplexHeatmap_2.26.0 knitr_1.50            lubridate_1.9.4      
-    ##  [4] forcats_1.0.0         stringr_1.6.0         dplyr_1.1.4          
-    ##  [7] purrr_1.2.1           readr_2.1.6           tidyr_1.3.1          
-    ## [10] tibble_3.3.0          ggplot2_4.0.1         tidyverse_2.0.0      
-    ## [13] rmarkdown_2.30       
+    ##  [1] knitr_1.50            Mfuzz_2.68.0          DynDoc_1.86.0        
+    ##  [4] widgetTools_1.86.0    e1071_1.7-16          Biobase_2.70.0       
+    ##  [7] BiocGenerics_0.56.0   generics_0.1.4        pheatmap_1.0.13      
+    ## [10] ComplexHeatmap_2.26.0 lubridate_1.9.4       forcats_1.0.0        
+    ## [13] stringr_1.6.0         dplyr_1.1.4           purrr_1.2.1          
+    ## [16] readr_2.1.6           tidyr_1.3.1           tibble_3.3.0         
+    ## [19] ggplot2_4.0.1         tidyverse_2.0.0       ImpulseDE2_0.99.10   
+    ## [22] rmarkdown_2.30       
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] generics_0.1.4      shape_1.4.6.1       stringi_1.8.7      
-    ##  [4] hms_1.1.4           digest_0.6.39       magrittr_2.0.4     
-    ##  [7] evaluate_1.0.5      timechange_0.3.0    RColorBrewer_1.1-3 
-    ## [10] iterators_1.0.14    circlize_0.4.17     fastmap_1.2.0      
-    ## [13] foreach_1.5.2       doParallel_1.0.17   GlobalOptions_0.1.3
-    ## [16] scales_1.4.0        codetools_0.2-20    cli_3.6.5          
-    ## [19] rlang_1.2.0         crayon_1.5.3        withr_3.0.2        
-    ## [22] yaml_2.3.12         tools_4.5.1         parallel_4.5.1     
-    ## [25] tzdb_0.5.0          colorspace_2.1-2    BiocGenerics_0.56.0
-    ## [28] GetoptLong_1.1.0    vctrs_0.7.0         R6_2.6.1           
-    ## [31] png_0.1-8           stats4_4.5.1        matrixStats_1.5.0  
-    ## [34] lifecycle_1.0.5     S4Vectors_0.48.0    IRanges_2.44.0     
-    ## [37] clue_0.3-66         cluster_2.1.8.1     pkgconfig_2.0.3    
-    ## [40] pillar_1.11.1       gtable_0.3.6        glue_1.8.0         
-    ## [43] xfun_0.56           tidyselect_1.2.1    rstudioapi_0.17.1  
-    ## [46] dichromat_2.0-0.1   rjson_0.2.23        farver_2.1.2       
-    ## [49] htmltools_0.5.9     compiler_4.5.1      S7_0.2.1
+    ##  [1] tidyselect_1.2.1            farver_2.1.2               
+    ##  [3] S7_0.2.1                    fastmap_1.2.0              
+    ##  [5] digest_0.6.39               timechange_0.3.0           
+    ##  [7] lifecycle_1.0.5             cluster_2.1.8.1            
+    ##  [9] Cairo_1.7-0                 magrittr_2.0.4             
+    ## [11] compiler_4.5.1              tkWidgets_1.86.0           
+    ## [13] rlang_1.2.0                 tools_4.5.1                
+    ## [15] yaml_2.3.12                 labeling_0.4.3             
+    ## [17] S4Arrays_1.10.0             bit_4.6.0                  
+    ## [19] DelayedArray_0.36.0         RColorBrewer_1.1-3         
+    ## [21] abind_1.4-8                 BiocParallel_1.44.0        
+    ## [23] withr_3.0.2                 stats4_4.5.1               
+    ## [25] colorspace_2.1-2            scales_1.4.0               
+    ## [27] iterators_1.0.14            dichromat_2.0-0.1          
+    ## [29] SummarizedExperiment_1.40.0 cli_3.6.5                  
+    ## [31] crayon_1.5.3                ragg_1.5.0                 
+    ## [33] rstudioapi_0.17.1           tzdb_0.5.0                 
+    ## [35] rjson_0.2.23                proxy_0.4-27               
+    ## [37] parallel_4.5.1              XVector_0.50.0             
+    ## [39] matrixStats_1.5.0           vctrs_0.7.0                
+    ## [41] Matrix_1.6-4                IRanges_2.44.0             
+    ## [43] GetoptLong_1.1.0            hms_1.1.4                  
+    ## [45] S4Vectors_0.48.0            bit64_4.6.0-1              
+    ## [47] clue_0.3-66                 systemfonts_1.3.1          
+    ## [49] magick_2.9.0                locfit_1.5-9.12            
+    ## [51] foreach_1.5.2               glue_1.8.0                 
+    ## [53] codetools_0.2-20            cowplot_1.2.0              
+    ## [55] stringi_1.8.7               shape_1.4.6.1              
+    ## [57] gtable_0.3.6                GenomicRanges_1.62.0       
+    ## [59] pillar_1.11.1               htmltools_0.5.9            
+    ## [61] Seqinfo_1.0.0               circlize_0.4.17            
+    ## [63] R6_2.6.1                    textshaping_1.0.4          
+    ## [65] doParallel_1.0.17           vroom_1.6.7                
+    ## [67] evaluate_1.0.5              lattice_0.22-7             
+    ## [69] png_0.1-8                   class_7.3-23               
+    ## [71] Rcpp_1.1.1                  SparseArray_1.10.2         
+    ## [73] DESeq2_1.50.2               xfun_0.56                  
+    ## [75] MatrixGenerics_1.22.0       pkgconfig_2.0.3            
+    ## [77] GlobalOptions_0.1.3
 
 ## 2. Setup species-specific parameters and define directories
 
