@@ -493,7 +493,7 @@ genome_path=$3
 gff_path=$4
 makeindex=$5
 
-scratch_dir="/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries"
+scratch_dir="/scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries"
 data_dir="${scratch_dir}/trimmed/combined_files/"
 
 genome_index_dir="${scratch_dir}/STAR_indexes/${genome}"
@@ -622,7 +622,7 @@ gtf_path=$3
 module load qualimap/2.2.1
 
 # list and make required directories
-scratch_dir="/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries"
+scratch_dir="/scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries"
 alignments_dir="${scratch_dir}/aligned/${species}_${genome}"
 
 qc_dir="/project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/alignment_qc/${species}_${genome}"
@@ -676,7 +676,7 @@ module load MultiQC/1.12-foss-2021b
 
 species="MON"
 genome="MCapV3"
-scratch_dir="/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries"
+scratch_dir="/scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries"
 alignments_dir="${scratch_dir}/aligned/${species}_${genome}"
 qc_dir="/project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/alignment_qc/${species}_${genome}"
 
@@ -720,7 +720,7 @@ gtf_path=$3
 module load uri/main StringTie/2.2.1-GCC-11.2.0
 
 # list and make required directories
-scratch_dir="/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries"
+scratch_dir="/scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries"
 alignments_dir="${scratch_dir}/aligned/${species}_${genome}"
 
 out_dir="${scratch_dir}/stringtie/${species}_${genome}"
@@ -808,7 +808,7 @@ genome=$2
 module load uri/main StringTie/2.2.1-GCC-11.2.0
 
 # list and make required directories
-scratch_dir="/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries"
+scratch_dir="/scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries"
 stringtie_dir="${scratch_dir}/stringtie/${species}_${genome}"
 out_dir="/project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/count_matrices"
 script_dir="/project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/scripts"
@@ -1447,7 +1447,7 @@ nano 11_bbduk_rRNA_SILVA.sh
 #SBATCH --export=NONE
 #SBATCH --ntasks=1 --cpus-per-task=4
 #SBATCH --mem=160GB
-#SBATCH -t 6:00:00
+#SBATCH -t 8:00:00
 #SBATCH --array=0-125
 #SBATCH --error=../scripts/outs_errs/%x_%a.error
 #SBATCH --output=../scripts/outs_errs/%x_%a.output

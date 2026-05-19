@@ -2,7 +2,7 @@
 #SBATCH --export=NONE
 #SBATCH --ntasks=1 --cpus-per-task=4
 #SBATCH --mem=160GB
-#SBATCH -t 6:00:00
+#SBATCH -t 8:00:00
 #SBATCH --array=0-125
 #SBATCH --error=../scripts/outs_errs/%x_%a.error
 #SBATCH --output=../scripts/outs_errs/%x_%a.output
