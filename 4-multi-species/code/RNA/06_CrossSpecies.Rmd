@@ -149,7 +149,7 @@ write_csv(complete_1to1_ogs, file.path(outdir, "filtered_orthogroups_1to1to1.csv
 
 ```{r}
 # quick summary
-complete_1to1_ogs %>%
+complete_1to1_ogs_summary <- complete_1to1_ogs %>%
   group_by(species) %>%
   summarise(
     n_genes = n(),
@@ -158,5 +158,166 @@ complete_1to1_ogs %>%
     n_in_clusters = sum(Mfuzz_highconf, na.rm = TRUE),
     n_hubs = sum(is_hub, na.rm = TRUE),
     .groups = 'drop'
-  ) %>% kable(format = "markdown")
+  )
+
+kable(complete_1to1_ogs_summary,format = "markdown")
+```
+
+## 7. Conserved responses?
+
+```{r}
+sus_up_3hr <- cross_species %>% filter(Mfuzz_pattern == "Sustained Up (3h)")
+
+# ortholog summary
+sus_up_3hr %>% group_by(species) %>%
+    summarise(
+    n_genes = n(),
+    n_in_OG = sum(!is.na(OG)),
+    pct_in_OG = 100*mean(!is.na(OG)),
+    n_in_all_3 = sum(OG_in_all_3, na.rm = TRUE),
+    pct_in_all_3 = 100*mean(OG_in_all_3, na.rm = TRUE),
+    n_1to1to1 = sum(OG_1to1to1, na.rm = TRUE),
+    pct_1to1to1 = 100*mean(OG_1to1to1, na.rm = TRUE)
+  )# %>% kable(format = "markdown")
+
+sus_up_3hr %>% group_by(species) %>%
+    summarise(
+    n_genes = n(),
+    n_DE = sum(is_DE, na.rm = TRUE),
+    pct_DE = 100*mean(is_DE, na.rm = TRUE),
+    Mfuzz_cluster = paste0(unique(Mfuzz_cluster, na.rm = TRUE)),
+    n_high_conf = sum(Mfuzz_highconf, na.rm = TRUE),
+    pct_high_conf = 100*mean(Mfuzz_highconf, na.rm = TRUE),
+    n_Modules = length(unique(na.omit(WGCNA_module))),
+    largest_module = names(table(WGCNA_module))[which.max(table(WGCNA_module))],
+    n_hubs = sum(is_hub, na.rm = TRUE),
+    has_HSF1 = sum(has_HSF1, na.rm = TRUE),
+    has_FOXO3 = sum(has_FOXO3, na.rm = TRUE),
+    has_NFE2L2 = sum(has_NFE2L2, na.rm = TRUE),
+    .groups = 'drop'
+  )# %>% kable(format = "markdown")
+```
+
+```{r}
+sus_up_12hr <- cross_species %>% filter(Mfuzz_pattern == "Sustained Up (12h)")
+
+# ortholog summary
+sus_up_12hr %>% group_by(species) %>%
+    summarise(
+    n_genes = n(),
+    n_in_OG = sum(!is.na(OG)),
+    pct_in_OG = 100*mean(!is.na(OG)),
+    n_in_all_3 = sum(OG_in_all_3, na.rm = TRUE),
+    pct_in_all_3 = 100*mean(OG_in_all_3, na.rm = TRUE),
+    n_1to1to1 = sum(OG_1to1to1, na.rm = TRUE),
+    pct_1to1to1 = 100*mean(OG_1to1to1, na.rm = TRUE)
+  )# %>% kable(format = "markdown")
+
+sus_up_12hr %>% group_by(species) %>%
+    summarise(
+    n_genes = n(),
+    n_DE = sum(is_DE, na.rm = TRUE),
+    pct_DE = 100*mean(is_DE, na.rm = TRUE),
+    Mfuzz_cluster = paste0(unique(Mfuzz_cluster, na.rm = TRUE)),
+    n_high_conf = sum(Mfuzz_highconf, na.rm = TRUE),
+    pct_high_conf = 100*mean(Mfuzz_highconf, na.rm = TRUE),
+    n_Modules = length(unique(na.omit(WGCNA_module))),
+    largest_module = names(table(WGCNA_module))[which.max(table(WGCNA_module))],
+    n_hubs = sum(is_hub, na.rm = TRUE),
+    has_HSF1 = sum(has_HSF1, na.rm = TRUE),
+    has_FOXO3 = sum(has_FOXO3, na.rm = TRUE),
+    has_NFE2L2 = sum(has_NFE2L2, na.rm = TRUE),
+    .groups = 'drop'
+  )# %>% kable(format = "markdown")
+```
+
+```{r}
+grad_down <- cross_species %>% filter(Mfuzz_pattern == "Gradual Down")
+
+# ortholog summary
+grad_down %>% group_by(species) %>%
+    summarise(
+    n_genes = n(),
+    n_in_OG = sum(!is.na(OG)),
+    pct_in_OG = 100*mean(!is.na(OG)),
+    n_in_all_3 = sum(OG_in_all_3, na.rm = TRUE),
+    pct_in_all_3 = 100*mean(OG_in_all_3, na.rm = TRUE),
+    n_1to1to1 = sum(OG_1to1to1, na.rm = TRUE),
+    pct_1to1to1 = 100*mean(OG_1to1to1, na.rm = TRUE)
+  )# %>% kable(format = "markdown")
+
+grad_down %>% group_by(species) %>%
+    summarise(
+    n_genes = n(),
+    n_DE = sum(is_DE, na.rm = TRUE),
+    pct_DE = 100*mean(is_DE, na.rm = TRUE),
+    Mfuzz_cluster = paste0(unique(Mfuzz_cluster, na.rm = TRUE)),
+    n_high_conf = sum(Mfuzz_highconf, na.rm = TRUE),
+    pct_high_conf = 100*mean(Mfuzz_highconf, na.rm = TRUE),
+    n_Modules = length(unique(na.omit(WGCNA_module))),
+    largest_module = names(table(WGCNA_module))[which.max(table(WGCNA_module))],
+    n_hubs = sum(is_hub, na.rm = TRUE),
+    has_HSF1 = sum(has_HSF1, na.rm = TRUE),
+    has_FOXO3 = sum(has_FOXO3, na.rm = TRUE),
+    has_NFE2L2 = sum(has_NFE2L2, na.rm = TRUE),
+    .groups = 'drop'
+  )# %>% kable(format = "markdown")
+```
+
+## 8. Heat stress genes
+
+```{r}
+for (species in species_list){
+  HeatStressGenes <- read_csv(paste0(annot_dir,"/heatstress/HeatStressGenes_", species ,".csv")) %>%
+    dplyr::select(-1) %>%
+    dplyr::rename(query = paste0(species,"_gene")) %>%
+    dplyr::select(query,everything())
+  
+  # rename columns
+  HeatStressGenes <- HeatStressGenes %>%
+    dplyr::rename(ref_species=species) %>% 
+    dplyr::rename(gene_sym=gene_id) %>% 
+    dplyr::rename(gene_id=query)
+  
+  # keep only expressed genes
+  HeatStressGenes <- HeatStressGenes %>% filter(gene_id %in% all_master$gene_id)
+
+  assign(paste0("heatstress_",species),HeatStressGenes)
+  
+  HeatStressGenes_unique <- HeatStressGenes %>% group_by(gene_id) %>%
+  summarize(gene_sym = paste(unique(gene_sym), collapse = ","),
+            response_type = paste(unique(response_type), collapse = ","),
+            category = paste(unique(category), collapse = ",")
+            ) 
+  
+  assign(paste0("heatstress_unique_",species),HeatStressGenes_unique)
+  rm(HeatStressGenes)
+  rm(HeatStressGenes_unique)
+}
+
+Pacuta_expanded_sp <- heatstress_unique_Pacuta %>% select(gene_id, gene_sym) %>%
+  left_join(orthologs %>% select(gene_id,OG), by="gene_id") %>% 
+  filter(!is.na(OG))  %>%  select(-gene_id) %>% left_join(cross_species, by="OG")  %>% distinct()
+
+Mcap_expanded_sp <- heatstress_unique_Mcap %>% select(gene_id, gene_sym) %>%
+  left_join(orthologs %>% select(gene_id,OG), by="gene_id") %>% 
+  filter(!is.na(OG))  %>%  select(-gene_id) %>% left_join(cross_species, by="OG")  %>% distinct()
+
+Pcomp_expanded_sp <- heatstress_unique_Pcomp %>% select(gene_id, gene_sym) %>%
+  left_join(orthologs %>% select(gene_id,OG), by="gene_id") %>% 
+  filter(!is.na(OG))  %>%  select(-gene_id) %>% left_join(cross_species, by="OG")  %>% distinct()
+
+unique(Pacuta_expanded_sp$gene_id.x)[!(unique(Pacuta_expanded_sp$gene_id.x) %in% unique(Pcomp_expanded_sp$gene_id.y))]
+
+all_heat <- bind_rows(Pacuta_expanded_sp,Mcap_expanded_sp,Pcomp_expanded_sp) %>% distinct()
+
+all_heat %>% group_by(species,gene_sym) %>%
+  summarize(n=n())  %>% pivot_wider(names_from = species, values_from = n) %>% kable(format = "markdown")
+
+summary <- all_heat %>% group_by(species,gene_sym) %>%
+  summarize(n=n(),
+            n_DE = sum(is_DE, na.rm = TRUE),
+            pct_DE = 100*mean(is_DE, na.rm = TRUE),
+    n_in_clusters = sum(Mfuzz_highconf, na.rm = TRUE),
+    n_hubs = sum(is_hub, na.rm = TRUE)) 
 ```

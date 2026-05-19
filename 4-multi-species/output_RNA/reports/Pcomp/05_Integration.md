@@ -1,16 +1,16 @@
 Integrate across analyses
 ================
 Zoe Dellaert
-2026-05-18
+2026-05-19
 
 - [Analysis of Time Series bulk RNA-seq data: Combine results from all
   analyses](#analysis-of-time-series-bulk-rna-seq-data-combine-results-from-all-analyses)
   - [1. Load packages and functions](#1-load-packages-and-functions)
   - [2. Setup species-specific parameters and define
     directories](#2-setup-species-specific-parameters-and-define-directories)
-  - [3. Load in filtered counts and expression results (ImpuseDE, Mfuzz,
-    WGCNA, TFBS) and SwissProt
-    annotations](#3-load-in-filtered-counts-and-expression-results-impusede-mfuzz-wgcna-tfbs-and-swissprot-annotations)
+  - [3. Load in metadata, filtered counts, transformed counts, and
+    expression results (ImpuseDE, Mfuzz, WGCNA, TFBS) and SwissProt
+    annotations](#3-load-in-metadata-filtered-counts-transformed-counts-and-expression-results-impusede-mfuzz-wgcna-tfbs-and-swissprot-annotations)
   - [4. Combine results across
     analyses](#4-combine-results-across-analyses)
   - [5. Visualize comparisons and overlaps across
@@ -19,6 +19,9 @@ Zoe Dellaert
     - [Visualize overlaps with upset
       plot](#visualize-overlaps-with-upset-plot)
   - [6. Save results](#6-save-results)
+  - [7. Heat stress genes](#7-heat-stress-genes)
+    - [heat stress genes stats](#heat-stress-genes-stats)
+    - [Summary table](#summary-table-1)
 
 # Analysis of Time Series bulk RNA-seq data: Combine results from all analyses
 
@@ -76,24 +79,27 @@ sessionInfo() #provides list of loaded packages and version of R
     ## [13] rmarkdown_2.30       
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] generics_0.1.4      shape_1.4.6.1       stringi_1.8.7      
-    ##  [4] hms_1.1.4           digest_0.6.39       magrittr_2.0.4     
-    ##  [7] evaluate_1.0.5      timechange_0.3.0    RColorBrewer_1.1-3 
-    ## [10] iterators_1.0.14    circlize_0.4.17     fastmap_1.2.0      
-    ## [13] foreach_1.5.2       doParallel_1.0.17   GlobalOptions_0.1.3
-    ## [16] scales_1.4.0        codetools_0.2-20    cli_3.6.5          
-    ## [19] rlang_1.2.0         crayon_1.5.3        withr_3.0.2        
-    ## [22] yaml_2.3.12         tools_4.5.1         parallel_4.5.1     
-    ## [25] tzdb_0.5.0          colorspace_2.1-2    BiocGenerics_0.56.0
-    ## [28] GetoptLong_1.1.0    vctrs_0.7.0         R6_2.6.1           
-    ## [31] png_0.1-8           magick_2.9.0        stats4_4.5.1       
-    ## [34] matrixStats_1.5.0   lifecycle_1.0.5     S4Vectors_0.48.0   
-    ## [37] IRanges_2.44.0      clue_0.3-66         cluster_2.1.8.1    
-    ## [40] pkgconfig_2.0.3     pillar_1.11.1       gtable_0.3.6       
-    ## [43] Rcpp_1.1.1          glue_1.8.0          xfun_0.56          
-    ## [46] tidyselect_1.2.1    rstudioapi_0.17.1   dichromat_2.0-0.1  
-    ## [49] rjson_0.2.23        farver_2.1.2        htmltools_0.5.9    
-    ## [52] Cairo_1.7-0         compiler_4.5.1      S7_0.2.1
+    ##  [1] gtable_0.3.6        circlize_0.4.17     shape_1.4.6.1      
+    ##  [4] rjson_0.2.23        xfun_0.56           GlobalOptions_0.1.3
+    ##  [7] tzdb_0.5.0          Cairo_1.7-0         vctrs_0.7.0        
+    ## [10] tools_4.5.1         generics_0.1.4      stats4_4.5.1       
+    ## [13] parallel_4.5.1      cluster_2.1.8.1     pkgconfig_2.0.3    
+    ## [16] RColorBrewer_1.1-3  S7_0.2.1            S4Vectors_0.48.0   
+    ## [19] lifecycle_1.0.5     compiler_4.5.1      farver_2.1.2       
+    ## [22] textshaping_1.0.4   codetools_0.2-20    clue_0.3-66        
+    ## [25] htmltools_0.5.9     yaml_2.3.12         pillar_1.11.1      
+    ## [28] crayon_1.5.3        magick_2.9.0        iterators_1.0.14   
+    ## [31] foreach_1.5.2       tidyselect_1.2.1    digest_0.6.39      
+    ## [34] stringi_1.8.7       labeling_0.4.3      fastmap_1.2.0      
+    ## [37] colorspace_2.1-2    cli_3.6.5           magrittr_2.0.4     
+    ## [40] dichromat_2.0-0.1   withr_3.0.2         scales_1.4.0       
+    ## [43] bit64_4.6.0-1       timechange_0.3.0    matrixStats_1.5.0  
+    ## [46] bit_4.6.0           ragg_1.5.0          png_0.1-8          
+    ## [49] GetoptLong_1.1.0    hms_1.1.4           evaluate_1.0.5     
+    ## [52] IRanges_2.44.0      doParallel_1.0.17   rlang_1.2.0        
+    ## [55] Rcpp_1.1.1          glue_1.8.0          BiocGenerics_0.56.0
+    ## [58] rstudioapi_0.17.1   vroom_1.6.7         R6_2.6.1           
+    ## [61] systemfonts_1.3.1
 
 ## 2. Setup species-specific parameters and define directories
 
@@ -130,12 +136,18 @@ reportdir <- file.path("../../output_RNA/reports", params$species, "05_Integrati
 if (!dir.exists(reportdir)) dir.create(reportdir, recursive = TRUE)
 ```
 
-## 3. Load in filtered counts and expression results (ImpuseDE, Mfuzz, WGCNA, TFBS) and SwissProt annotations
+## 3. Load in metadata, filtered counts, transformed counts, and expression results (ImpuseDE, Mfuzz, WGCNA, TFBS) and SwissProt annotations
 
 ``` r
+# load in species metadata
+meta <- read.csv(paste0("../../output_RNA/",species,"_RNA_seq_metadata.csv"), row.names = 1)
+
 # load in filtered counts data
 filtered_counts <- read.csv(file.path(input_dir, "filtered_counts.csv"), row.names = 1)
 all_genes <- rownames(filtered_counts)
+
+# load in transformed counts data
+vst_counts <- read.csv(file.path(input_dir, "vsd_expression_matrix.csv"), row.names = 1)
 
 # ImpulseDE2 results
 impulse_results <- read.csv(file.path(impulse_dir, "ImpulseDE2_results.csv"))
@@ -501,3 +513,161 @@ gene_sets <- list(
 # Save gene sets
 saveRDS(gene_sets, file.path(outdir, "gene_sets.rds"))
 ```
+
+## 7. Heat stress genes
+
+``` r
+# make time and treatment factors
+meta$time <- factor(meta$time, levels = as.character(sort(unique(as.numeric(meta$time)))))
+meta$treatment <- factor(meta$treatment)
+```
+
+``` r
+HeatStressGenes <- read_csv(paste0(annot_dir,"/heatstress/HeatStressGenes_", species ,".csv")) %>%
+    dplyr::select(-1) %>%
+    dplyr::rename(query = paste0(species,"_gene")) %>%
+    dplyr::select(query,everything())
+  
+  # rename columns
+  HeatStressGenes <- HeatStressGenes %>%
+    dplyr::rename(ref_species=species) %>% 
+    dplyr::rename(gene_sym=gene_id) %>% 
+    dplyr::rename(gene_id=query)
+  
+  # keep only expressed genes
+  HeatStressGenes <- HeatStressGenes %>% filter(gene_id %in% all_genes)
+
+  assign(paste0("heatstress_",species),HeatStressGenes)
+  
+  HeatStressGenes_unique <- HeatStressGenes %>% group_by(gene_id) %>%
+  summarize(gene_sym = paste(unique(gene_sym), collapse = ","),
+            response_type = paste(unique(response_type), collapse = ","),
+            category = paste(unique(category), collapse = ",")
+            ) 
+```
+
+``` r
+stress_genes_ids <- unique(HeatStressGenes_unique$gene_id) 
+stress_genes_counts <- vst_counts[stress_genes_ids, ]
+
+plot_df <- as.data.frame(t(stress_genes_counts)) %>%
+  rownames_to_column(var="sample") %>%
+  left_join(meta, by=c("sample"="sample")) %>%
+  pivot_longer(cols = all_of(stress_genes_ids), names_to="gene_id", values_to="expression") %>%
+  left_join(HeatStressGenes_unique)
+
+plot_df %>% ggplot(aes(x=time, y=expression, color=gene_sym, group=gene_sym)) +
+  stat_summary(fun="mean", geom="line") +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+  facet_wrap(treatment~response_type) +
+  theme_bw() +
+  labs(y="VST expression", x="Timepoint")
+```
+
+![](./05_Integration_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+
+``` r
+plot_df %>% filter(grepl("Type1", response_type)) %>%
+  ggplot(aes(x=time, y=expression, color=treatment, group=interaction(treatment,gene_id))) +
+  stat_summary(fun="mean", geom="line", alpha=0.6) +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2,linewidth=0.5, alpha=0.6) +
+  scale_color_manual(values = treat_colors) +
+  facet_wrap(~gene_sym, ncol= 3,scales="free_y") +
+  theme_bw() +
+  theme(
+    strip.text = element_text(face="bold", size=8),panel.spacing = unit(0.4, "lines")
+  ) +
+  labs(y="VST expression", x="Timepoint", title = "Type 1 Expressed Response genes")
+```
+
+![](./05_Integration_files/figure-gfm/unnamed-chunk-12-2.png)<!-- -->
+
+``` r
+save_ggplot(last_plot(), "All_Type1")
+
+plot_df %>% filter(grepl("Type2", response_type)) %>%
+  ggplot(aes(x=time, y=expression, color=treatment, group=interaction(treatment,gene_id))) +
+  stat_summary(fun="mean", geom="line", alpha=0.6) +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2,linewidth=0.5, alpha=0.6) +
+  scale_color_manual(values = treat_colors) +
+  facet_wrap(~gene_sym, ncol= 3,scales="free_y") +
+  theme_bw() +
+  theme(
+    strip.text = element_text(face="bold", size=8),panel.spacing = unit(0.4, "lines")
+  ) +
+  labs(y="VST expression", x="Timepoint", title = "Type 2 Expressed Response genes")
+```
+
+![](./05_Integration_files/figure-gfm/unnamed-chunk-12-3.png)<!-- -->
+
+``` r
+save_ggplot(plot = last_plot(), filename = "All_Type2")
+
+plot_df %>% filter(grepl("HSP",gene_sym)|grepl("Nrf2",gene_sym)|grepl("HSF1",gene_sym)) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+  stat_summary(fun="mean", geom="line") +
+  scale_color_manual(values = treat_colors) +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+  facet_wrap(~paste0(str_replace(gene_id,"Pocillopora_acuta_HIv2___",""), ": ", gene_sym)) +
+  theme_bw() +
+  labs(y="VST expression", x="Timepoint")
+```
+
+![](./05_Integration_files/figure-gfm/unnamed-chunk-12-4.png)<!-- -->
+
+### heat stress genes stats
+
+``` r
+heat_res <- HeatStressGenes_unique %>% left_join(master_table, by="gene_id")
+```
+
+### Summary table
+
+``` r
+summary_stats <- tibble(
+  metric = c(
+    "Total genes (post-filtering)",
+    "SwissProt-annotated genes",
+    "Differentially expressed (ImpulseDE2, padj < 0.05)",
+    "DE genes temporally clustered (Mfuzz, membership > 0.5)",
+    "WGCNA assigned",
+    "WGCNA modules",
+    "WGCNA modules Sig. by Time*Treatment",
+    "Hub genes (WGCNA, top 10% kME)",
+    "Hub genes also differentially expressed (ImpulseDE2)",
+    "Genes with HSF1 binding sites",
+    "Genes with FOXO3 binding sites",
+    "Genes with NRF2/NFE2L2 binding sites"
+  ),
+  count = c(
+    nrow(heat_res),
+    sum(!is.na(heat_res$SwissProt_ProteinName)),
+    sum(heat_res$is_DE, na.rm = TRUE),
+    sum(heat_res$Mfuzz_highconf, na.rm = TRUE),
+    sum(!is.na(heat_res$WGCNA_module)),
+    length(unique(heat_res$WGCNA_module)),
+    sum(unique(heat_res$WGCNA_module) %in% sig_modules),
+    sum(heat_res$is_hub),
+    sum(heat_res$is_DE & heat_res$is_hub, na.rm = TRUE),
+    sum(heat_res$has_HSF1),
+    sum(heat_res$has_FOXO3),
+    sum(heat_res$has_NFE2L2)
+  )
+)
+
+summary_stats %>% kable(format = "markdown")
+```
+
+| metric                                                   | count |
+|:---------------------------------------------------------|------:|
+| Total genes (post-filtering)                             |    82 |
+| SwissProt-annotated genes                                |    77 |
+| Differentially expressed (ImpulseDE2, padj \< 0.05)      |    33 |
+| DE genes temporally clustered (Mfuzz, membership \> 0.5) |    29 |
+| WGCNA assigned                                           |    82 |
+| WGCNA modules                                            |    13 |
+| WGCNA modules Sig. by Time\*Treatment                    |     5 |
+| Hub genes (WGCNA, top 10% kME)                           |     9 |
+| Hub genes also differentially expressed (ImpulseDE2)     |     4 |
+| Genes with HSF1 binding sites                            |    14 |
+| Genes with FOXO3 binding sites                           |    13 |
+| Genes with NRF2/NFE2L2 binding sites                     |     9 |

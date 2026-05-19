@@ -62,12 +62,18 @@ reportdir <- file.path("../../output_RNA/reports", params$species, "05_Integrati
 if (!dir.exists(reportdir)) dir.create(reportdir, recursive = TRUE)
 ```
 
-## 3. Load in filtered counts and expression results (ImpuseDE, Mfuzz, WGCNA, TFBS) and SwissProt annotations
+## 3. Load in metadata, filtered counts, transformed counts, and expression results (ImpuseDE, Mfuzz, WGCNA, TFBS) and SwissProt annotations
 
 ```{r}
+# load in species metadata
+meta <- read.csv(paste0("../../output_RNA/",species,"_RNA_seq_metadata.csv"), row.names = 1)
+
 # load in filtered counts data
 filtered_counts <- read.csv(file.path(input_dir, "filtered_counts.csv"), row.names = 1)
 all_genes <- rownames(filtered_counts)
+
+# load in transformed counts data
+vst_counts <- read.csv(file.path(input_dir, "vsd_expression_matrix.csv"), row.names = 1)
 
 # ImpulseDE2 results
 impulse_results <- read.csv(file.path(impulse_dir, "ImpulseDE2_results.csv"))
@@ -316,5 +322,131 @@ saveRDS(gene_sets, file.path(outdir, "gene_sets.rds"))
 ```
 
 
+## 7. Heat stress genes
 
+```{r}
+# make time and treatment factors
+meta$time <- factor(meta$time, levels = as.character(sort(unique(as.numeric(meta$time)))))
+meta$treatment <- factor(meta$treatment)
+```
 
+```{r}
+HeatStressGenes <- read_csv(paste0(annot_dir,"/heatstress/HeatStressGenes_", species ,".csv")) %>%
+    dplyr::select(-1) %>%
+    dplyr::rename(query = paste0(species,"_gene")) %>%
+    dplyr::select(query,everything())
+  
+  # rename columns
+  HeatStressGenes <- HeatStressGenes %>%
+    dplyr::rename(ref_species=species) %>% 
+    dplyr::rename(gene_sym=gene_id) %>% 
+    dplyr::rename(gene_id=query)
+  
+  # keep only expressed genes
+  HeatStressGenes <- HeatStressGenes %>% filter(gene_id %in% all_genes)
+
+  assign(paste0("heatstress_",species),HeatStressGenes)
+  
+  HeatStressGenes_unique <- HeatStressGenes %>% group_by(gene_id) %>%
+  summarize(gene_sym = paste(unique(gene_sym), collapse = ","),
+            response_type = paste(unique(response_type), collapse = ","),
+            category = paste(unique(category), collapse = ",")
+            ) 
+```
+
+```{r}
+stress_genes_ids <- unique(HeatStressGenes_unique$gene_id) 
+stress_genes_counts <- vst_counts[stress_genes_ids, ]
+
+plot_df <- as.data.frame(t(stress_genes_counts)) %>%
+  rownames_to_column(var="sample") %>%
+  left_join(meta, by=c("sample"="sample")) %>%
+  pivot_longer(cols = all_of(stress_genes_ids), names_to="gene_id", values_to="expression") %>%
+  left_join(HeatStressGenes_unique)
+
+plot_df %>% ggplot(aes(x=time, y=expression, color=gene_sym, group=gene_sym)) +
+  stat_summary(fun="mean", geom="line") +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+  facet_wrap(treatment~response_type) +
+  theme_bw() +
+  labs(y="VST expression", x="Timepoint")
+
+plot_df %>% filter(grepl("Type1", response_type)) %>%
+  ggplot(aes(x=time, y=expression, color=treatment, group=interaction(treatment,gene_id))) +
+  stat_summary(fun="mean", geom="line", alpha=0.6) +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2,linewidth=0.5, alpha=0.6) +
+  scale_color_manual(values = treat_colors) +
+  facet_wrap(~gene_sym, ncol= 3,scales="free_y") +
+  theme_bw() +
+  theme(
+    strip.text = element_text(face="bold", size=8),panel.spacing = unit(0.4, "lines")
+  ) +
+  labs(y="VST expression", x="Timepoint", title = "Type 1 Expressed Response genes")
+
+save_ggplot(last_plot(), "All_Type1")
+
+plot_df %>% filter(grepl("Type2", response_type)) %>%
+  ggplot(aes(x=time, y=expression, color=treatment, group=interaction(treatment,gene_id))) +
+  stat_summary(fun="mean", geom="line", alpha=0.6) +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2,linewidth=0.5, alpha=0.6) +
+  scale_color_manual(values = treat_colors) +
+  facet_wrap(~gene_sym, ncol= 3,scales="free_y") +
+  theme_bw() +
+  theme(
+    strip.text = element_text(face="bold", size=8),panel.spacing = unit(0.4, "lines")
+  ) +
+  labs(y="VST expression", x="Timepoint", title = "Type 2 Expressed Response genes")
+
+save_ggplot(plot = last_plot(), filename = "All_Type2")
+
+plot_df %>% filter(grepl("HSP",gene_sym)|grepl("Nrf2",gene_sym)|grepl("HSF1",gene_sym)) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+  stat_summary(fun="mean", geom="line") +
+  scale_color_manual(values = treat_colors) +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+  facet_wrap(~paste0(str_replace(gene_id,"Pocillopora_acuta_HIv2___",""), ": ", gene_sym)) +
+  theme_bw() +
+  labs(y="VST expression", x="Timepoint")
+```
+
+### heat stress genes stats
+
+```{r}
+heat_res <- HeatStressGenes_unique %>% left_join(master_table, by="gene_id")
+```
+
+### Summary table
+
+```{r}
+summary_stats <- tibble(
+  metric = c(
+    "Total genes (post-filtering)",
+    "SwissProt-annotated genes",
+    "Differentially expressed (ImpulseDE2, padj < 0.05)",
+    "DE genes temporally clustered (Mfuzz, membership > 0.5)",
+    "WGCNA assigned",
+    "WGCNA modules",
+    "WGCNA modules Sig. by Time*Treatment",
+    "Hub genes (WGCNA, top 10% kME)",
+    "Hub genes also differentially expressed (ImpulseDE2)",
+    "Genes with HSF1 binding sites",
+    "Genes with FOXO3 binding sites",
+    "Genes with NRF2/NFE2L2 binding sites"
+  ),
+  count = c(
+    nrow(heat_res),
+    sum(!is.na(heat_res$SwissProt_ProteinName)),
+    sum(heat_res$is_DE, na.rm = TRUE),
+    sum(heat_res$Mfuzz_highconf, na.rm = TRUE),
+    sum(!is.na(heat_res$WGCNA_module)),
+    length(unique(heat_res$WGCNA_module)),
+    sum(unique(heat_res$WGCNA_module) %in% sig_modules),
+    sum(heat_res$is_hub),
+    sum(heat_res$is_DE & heat_res$is_hub, na.rm = TRUE),
+    sum(heat_res$has_HSF1),
+    sum(heat_res$has_FOXO3),
+    sum(heat_res$has_NFE2L2)
+  )
+)
+
+summary_stats %>% kable(format = "markdown")
+```
