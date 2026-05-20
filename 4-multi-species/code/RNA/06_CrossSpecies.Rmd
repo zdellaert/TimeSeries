@@ -272,12 +272,31 @@ variable_response <- complete_1to1_ogs_summary %>%
 # Not responsive
 not_responsive <- complete_1to1_ogs_summary %>%
   filter(n_DE_species == 0)
+```
 
-cat("1:1:1 Ortholog Response Categories:\n")
-cat("  Core conserved (DE in 3 species, same Mfuzz pattern):", nrow(core_conserved_response), "\n")
-cat("  Core divergent (DE in 3 species, different Mfuzz patterns):", nrow(core_divergent_response), "\n")
-cat("  Variable response (DE in 1-2 species):", nrow(variable_response), "\n")
-cat("  Not responsive:", nrow(not_responsive), "\n\n")
+#### Summarize the response categories:
+
+1:1:1 Ortholog Response Categories:
+
+- Core conserved: DE in all 3, same Mfuzz pattern
+- Core divergent: DE in all 3, different Mfuzz patterns  
+- Variable response: DE in 1-2 species only
+- Not responsive: DE in 0 species
+
+```{r}
+responses_1to1_ogs_summary <- data.frame(
+  Category = c("Core Conserved", 
+               "Core Divergent", 
+               "Variable Response", 
+               "Not Responsive"),
+  Count = c(nrow(core_conserved_response), nrow(core_divergent_response), 
+            nrow(variable_response), nrow(not_responsive))
+) %>%
+  mutate(
+    Percentage = 100 * Count / sum(Count)
+  )
+
+kable(responses_1to1_ogs_summary,format = "markdown")
 ```
 
 ### Are TFBS conserved across DE 1:1:1 orthologs?
@@ -289,6 +308,48 @@ core_conserved_response %>% filter(FOXO3_conserved == TRUE) %>% kable(format = "
 
 core_conserved_response %>% filter(NFE2L2_conserved == TRUE) %>% kable(format = "markdown")
 ```
+
+### Visualizations
+
+```{r}
+pie_data <- responses_1to1_ogs_summary %>%
+  mutate(Label = paste0(Category, "\nn = ", Count, " (", round(Percentage, 1), "%)"))
+
+p_pie <- ggplot(pie_data, aes(x = "", y = Count, fill = Category)) +
+  geom_bar(stat = "identity", width = 1, color = "white") +
+  coord_polar("y", start = 0) +
+  scale_fill_manual(values = c("#E64B35", "#F39B7F","#8491B4","gray"),
+                    labels = pie_data$Label) +
+  labs(title = "Composition of 1:1:1 Orthologs") +
+  theme_void(base_size = 14) +
+  theme(
+    plot.title = element_text(face = "bold", hjust = 0.5, size = 16),
+    legend.position = "bottom",
+    legend.title = element_blank(),legend.box.margin = margin_auto(10)
+  )
+save_ggplot(p_pie,"all_response_pie", width=8, height=8)
+
+pie_data_allDE <- responses_1to1_ogs_summary %>% filter(grepl("Core",Category)) %>%
+  mutate(Percentage = 100 * Count / sum(Count),
+         Label = paste0(Category, "\nn=", Count, " (", round(Percentage, 1), "%)"))
+
+p_pie_allDE <- ggplot(pie_data_allDE, aes(x = "", y = Count, fill = Category)) +
+  geom_bar(stat = "identity", width = 1, color = "white") +
+  coord_polar("y", start = 0) +
+  scale_fill_manual(values = c("#E64B35", "#F39B7F"),
+                    labels = pie_data$Label) +
+  labs(title = "Composition of 1:1:1 Orthologs: DE in 3 Species") +
+  theme_void(base_size = 14) +
+  theme(
+    plot.title = element_text(face = "bold", hjust = 0.5, size = 16),
+    legend.position = "bottom",
+    legend.title = element_blank(),legend.box.margin = margin_auto(10)
+  )
+
+save_ggplot(p_pie_allDE,"core_response_pie", width=8, height=8)
+```
+
+
 
 
 ## 8. Non 1:1:1 conserved responses?
