@@ -1,7 +1,7 @@
 ImpulseDE2 Temporal Analysis
 ================
 Zoe Dellaert
-2026-05-19
+2026-05-20
 
 - [Bulk RNA-seq Time Course Trajectory Analysis and
   Clustering](#bulk-rna-seq-time-course-trajectory-analysis-and-clustering)
@@ -17,7 +17,7 @@ Zoe Dellaert
     annotations](#3-load-in-raw-counts-transformed-counts-metadata-and-annotations)
 - [ImpulseDE2 Analysis](#impulsede2-analysis)
   - [1. Metadata formatting](#1-metadata-formatting)
-  - [1. Run ImpulseDE2](#1-run-impulsede2)
+  - [2. Run ImpulseDE2](#2-run-impulsede2)
   - [3. Extract ImpulseDE2 results](#3-extract-impulsede2-results)
     - [All genes](#all-genes)
     - [Significant genes](#significant-genes)
@@ -411,7 +411,7 @@ meta_impulse <- meta %>%
   select(-c(species,treatment))
 ```
 
-## 1. Run ImpulseDE2
+## 2. Run ImpulseDE2
 
 This takes a ton of time and memory, so I run it once then save as an
 RDS.
@@ -713,7 +713,7 @@ vsd_heat_norm <- vsd_heat_top - vsd_heat_top$T0mean
 vsd_heat_norm <- vsd_heat_norm %>% select(-T0mean)
 
 vsd_max <- max(abs(vsd_heat_norm), na.rm = TRUE)
-scale_colors <- colorRampPalette(c("#3c58a7", "white", "#ee2e25"))(100)
+scale_colors <- colorRampPalette(c("#3c58a7","#3c58a7", "white", "#ee2e25","#ee2e25"))(100)
 legend_breaks <- seq(-vsd_max, vsd_max, length.out = 101)
 
 heatmap_up <- pheatmap(vsd_heat_norm, 
@@ -738,6 +738,45 @@ heatmap_up <- pheatmap(vsd_heat_norm,
 
 ``` r
 save_ggplot(heatmap_up, "ImpulseDE2_heatmap_UP", width = 7, height = 10, units = "in", dpi = 300)
+
+all_DE_genes <- impulse_sig_up %>% arrange(padj) %>% filter(Gene %in% rownames(vst)) %>% arrange(response_type,padj)
+row_annot <- all_DE_genes %>% select(response_type)
+#col_annot <- meta[heat_samples,] %>% select(treatment,time)
+col_annot <- meta[heat_samples,] %>% select(time)
+
+T0_samples <- meta[heat_samples,] %>% filter(time == 0 ) %>% pull(sample)
+
+vsd_heat_top <- vst[all_DE_genes$Gene,heat_samples]
+vsd_heat_top$T0mean <- rowMeans(vsd_heat_top[,T0_samples])
+vsd_heat_norm <- vsd_heat_top - vsd_heat_top$T0mean
+vsd_heat_norm <- vsd_heat_norm %>% select(-T0mean)
+
+vsd_max <- max(abs(vsd_heat_norm), na.rm = TRUE)
+scale_colors <- colorRampPalette(c("#3c58a7","#3c58a7", "white", "#ee2e25","#ee2e25"))(100)
+legend_breaks <- seq(-vsd_max*.9, vsd_max*.9, length.out = 101)
+
+heatmap_up_all <- pheatmap(vsd_heat_norm, 
+         cluster_rows = FALSE, 
+         show_rownames = FALSE,
+         show_colnames = FALSE,
+         cluster_cols = FALSE, 
+         annotation_names_row = FALSE,
+         annotation_names_col = FALSE,
+         breaks = legend_breaks,
+         col = scale_colors,
+         border_color = NA,
+         gaps_col = cumsum(table(col_annot$time))[-length(table(col_annot$time))],
+         annotation_row = row_annot,
+         annotation_col = col_annot,
+         annotation_colors = list("treatment" = treat_colors,
+                                  "time" = time_colors,
+                                  "response_type" = c("Monotonous" = "#D8AF39FF", "Transient" = "#278B9AFF")))
+```
+
+![](./02_ImpulseDE_files/figure-gfm/unnamed-chunk-12-2.png)<!-- -->
+
+``` r
+save_ggplot(heatmap_up_all, "ImpulseDE2_heatmap_UP_ALL", width = 7, height = 10, units = "in", dpi = 300)
 ```
 
 ### Heatmap of top 100 significant transient/transition downregulated genes normalized to T0
@@ -755,7 +794,7 @@ vsd_heat_norm <- vsd_heat_top - vsd_heat_top$T0mean
 vsd_heat_norm <- vsd_heat_norm %>% select(-T0mean)
 
 vsd_max <- max(abs(vsd_heat_norm), na.rm = TRUE)
-scale_colors <- colorRampPalette(c("#3c58a7", "white", "#ee2e25"))(100)
+scale_colors <- colorRampPalette(c("#3c58a7","#3c58a7", "white", "#ee2e25","#ee2e25"))(100)
 legend_breaks <- seq(-vsd_max, vsd_max, length.out = 101)
 
 heatmap_down <- pheatmap(vsd_heat_norm, 
@@ -780,6 +819,45 @@ heatmap_down <- pheatmap(vsd_heat_norm,
 
 ``` r
 save_ggplot(heatmap_down, "ImpulseDE2_heatmap_DOWN", width = 7, height = 10, units = "in", dpi = 300)
+
+all_DE_genes <- impulse_sig_down %>% arrange(padj) %>% filter(Gene %in% rownames(vst)) %>% arrange(response_type,padj)
+row_annot <- all_DE_genes %>% select(response_type)
+#col_annot <- meta[heat_samples,] %>% select(treatment,time)
+col_annot <- meta[heat_samples,] %>% select(time)
+
+T0_samples <- meta[heat_samples,] %>% filter(time == 0 ) %>% pull(sample)
+
+vsd_heat_top <- vst[all_DE_genes$Gene,heat_samples]
+vsd_heat_top$T0mean <- rowMeans(vsd_heat_top[,T0_samples])
+vsd_heat_norm <- vsd_heat_top - vsd_heat_top$T0mean
+vsd_heat_norm <- vsd_heat_norm %>% select(-T0mean)
+
+vsd_max <- max(abs(vsd_heat_norm), na.rm = TRUE)
+scale_colors <- colorRampPalette(c("#3c58a7","#3c58a7", "white", "#ee2e25","#ee2e25"))(100)
+legend_breaks <- seq(-vsd_max*.9, vsd_max*.9, length.out = 101)
+
+heatmap_down_all <- pheatmap(vsd_heat_norm, 
+         cluster_rows = FALSE, 
+         show_rownames = FALSE,
+         show_colnames = FALSE,
+         cluster_cols = FALSE, 
+         annotation_names_row = FALSE,
+         annotation_names_col = FALSE,
+         breaks = legend_breaks,
+         col = scale_colors,
+         border_color = NA,
+         gaps_col = cumsum(table(col_annot$time))[-length(table(col_annot$time))],
+         annotation_row = row_annot,
+         annotation_col = col_annot,
+         annotation_colors = list("treatment" = treat_colors,
+                                  "time" = time_colors,
+                                  "response_type" = c("Monotonous" = "#D8AF39FF", "Transient" = "#278B9AFF")))
+```
+
+![](./02_ImpulseDE_files/figure-gfm/unnamed-chunk-13-2.png)<!-- -->
+
+``` r
+save_ggplot(heatmap_down_all, "ImpulseDE2_heatmap_DOWN_ALL", width = 7, height = 10, units = "in", dpi = 300)
 ```
 
 ### Top gene trajectories
