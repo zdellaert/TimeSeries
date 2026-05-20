@@ -213,7 +213,7 @@ Upset plot from ComplexHeatmap package, documentation [here](https://github.com/
 ```{r}
 m <- make_comb_mat(as.matrix(overlap_matrix[,-1]))
 
-pdf(file.path(outdir_plots, "analysis_overlap_upset.pdf"), width=12, height=6)
+pdf(file.path(outdir_plots, "pdf_figs/analysis_overlap_upset.pdf"), width=12, height=6)
 UpSet(m, 
       top_annotation = upset_top_annotation(m, add_numbers = TRUE),
       right_annotation = upset_right_annotation(m, add_numbers = TRUE),

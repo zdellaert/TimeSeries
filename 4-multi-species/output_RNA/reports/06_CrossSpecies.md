@@ -1,7 +1,7 @@
 Cross Species Analysis
 ================
 Zoe Dellaert
-2026-05-19
+2026-05-20
 
 - [Analysis of Time Series bulk RNA-seq data: Cross-Species
   Analysis](#analysis-of-time-series-bulk-rna-seq-data-cross-species-analysis)
@@ -26,9 +26,14 @@ Zoe Dellaert
       orthologs](#define-response-categories-for-111-orthologs)
     - [Are TFBS conserved across DE 1:1:1
       orthologs?](#are-tfbs-conserved-across-de-111-orthologs)
-  - [8. Non 1:1:1 conserved responses?](#8-non-111-conserved-responses)
-  - [9. Manually-curated heat stress
-    genes](#9-manually-curated-heat-stress-genes)
+    - [Visualizations](#visualizations)
+  - [8. Mfuzz-pattern conserved responses (not exclusively
+    1:1:1)](#8-mfuzz-pattern-conserved-responses-not-exclusively-111)
+    - [Sustained Up (3h) genes](#sustained-up-3h-genes)
+    - [Sustained Up (12h) genes](#sustained-up-12h-genes)
+    - [Gradual Down genes](#gradual-down-genes)
+  - [9. Manually-curated heat stress gene
+    families](#9-manually-curated-heat-stress-gene-families)
 
 # Analysis of Time Series bulk RNA-seq data: Cross-Species Analysis
 
@@ -64,9 +69,45 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, fig.width = 10, fig.height =
 
 #load packages
 library(tidyverse)
+```
+
+    ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+    ## ✔ dplyr     1.1.4     ✔ readr     2.1.6
+    ## ✔ forcats   1.0.0     ✔ stringr   1.6.0
+    ## ✔ ggplot2   4.0.1     ✔ tibble    3.3.0
+    ## ✔ lubridate 1.9.4     ✔ tidyr     1.3.1
+    ## ✔ purrr     1.2.1     
+    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+    ## ✖ dplyr::filter() masks stats::filter()
+    ## ✖ dplyr::lag()    masks stats::lag()
+    ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+
+``` r
 library(knitr)
 library(ComplexHeatmap)
+```
 
+    ## Loading required package: grid
+    ## ========================================
+    ## ComplexHeatmap version 2.26.0
+    ## Bioconductor page: http://bioconductor.org/packages/ComplexHeatmap/
+    ## Github page: https://github.com/jokergoo/ComplexHeatmap
+    ## Documentation: http://jokergoo.github.io/ComplexHeatmap-reference
+    ## 
+    ## If you use it in published research, please cite either one:
+    ## - Gu, Z. Complex Heatmap Visualization. iMeta 2022.
+    ## - Gu, Z. Complex heatmaps reveal patterns and correlations in multidimensional 
+    ##     genomic data. Bioinformatics 2016.
+    ## 
+    ## 
+    ## The new InteractiveComplexHeatmap package can directly export static 
+    ## complex heatmaps into an interactive Shiny app with zero effort. Have a try!
+    ## 
+    ## This message can be suppressed by:
+    ##   suppressPackageStartupMessages(library(ComplexHeatmap))
+    ## ========================================
+
+``` r
 #load in parameters and functions
 source("species_parameters.R")
 source("utils.R")
@@ -94,59 +135,34 @@ sessionInfo() #provides list of loaded packages and version of R
     ## tzcode source: system (glibc)
     ## 
     ## attached base packages:
-    ## [1] tcltk     grid      stats     graphics  grDevices utils     datasets 
-    ## [8] methods   base     
+    ## [1] grid      stats     graphics  grDevices utils     datasets  methods  
+    ## [8] base     
     ## 
     ## other attached packages:
-    ##  [1] knitr_1.50            Mfuzz_2.68.0          DynDoc_1.86.0        
-    ##  [4] widgetTools_1.86.0    e1071_1.7-16          Biobase_2.70.0       
-    ##  [7] BiocGenerics_0.56.0   generics_0.1.4        pheatmap_1.0.13      
-    ## [10] ComplexHeatmap_2.26.0 lubridate_1.9.4       forcats_1.0.0        
-    ## [13] stringr_1.6.0         dplyr_1.1.4           purrr_1.2.1          
-    ## [16] readr_2.1.6           tidyr_1.3.1           tibble_3.3.0         
-    ## [19] ggplot2_4.0.1         tidyverse_2.0.0       ImpulseDE2_0.99.10   
-    ## [22] rmarkdown_2.30       
+    ##  [1] ComplexHeatmap_2.26.0 knitr_1.50            lubridate_1.9.4      
+    ##  [4] forcats_1.0.0         stringr_1.6.0         dplyr_1.1.4          
+    ##  [7] purrr_1.2.1           readr_2.1.6           tidyr_1.3.1          
+    ## [10] tibble_3.3.0          ggplot2_4.0.1         tidyverse_2.0.0      
+    ## [13] rmarkdown_2.30       
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] tidyselect_1.2.1            farver_2.1.2               
-    ##  [3] S7_0.2.1                    fastmap_1.2.0              
-    ##  [5] digest_0.6.39               timechange_0.3.0           
-    ##  [7] lifecycle_1.0.5             cluster_2.1.8.1            
-    ##  [9] Cairo_1.7-0                 magrittr_2.0.4             
-    ## [11] compiler_4.5.1              tkWidgets_1.86.0           
-    ## [13] rlang_1.2.0                 tools_4.5.1                
-    ## [15] yaml_2.3.12                 labeling_0.4.3             
-    ## [17] S4Arrays_1.10.0             bit_4.6.0                  
-    ## [19] DelayedArray_0.36.0         RColorBrewer_1.1-3         
-    ## [21] abind_1.4-8                 BiocParallel_1.44.0        
-    ## [23] withr_3.0.2                 stats4_4.5.1               
-    ## [25] colorspace_2.1-2            scales_1.4.0               
-    ## [27] iterators_1.0.14            dichromat_2.0-0.1          
-    ## [29] SummarizedExperiment_1.40.0 cli_3.6.5                  
-    ## [31] crayon_1.5.3                ragg_1.5.0                 
-    ## [33] rstudioapi_0.17.1           tzdb_0.5.0                 
-    ## [35] rjson_0.2.23                proxy_0.4-27               
-    ## [37] parallel_4.5.1              XVector_0.50.0             
-    ## [39] matrixStats_1.5.0           vctrs_0.7.0                
-    ## [41] Matrix_1.6-4                IRanges_2.44.0             
-    ## [43] GetoptLong_1.1.0            hms_1.1.4                  
-    ## [45] S4Vectors_0.48.0            bit64_4.6.0-1              
-    ## [47] clue_0.3-66                 systemfonts_1.3.1          
-    ## [49] magick_2.9.0                locfit_1.5-9.12            
-    ## [51] foreach_1.5.2               glue_1.8.0                 
-    ## [53] codetools_0.2-20            cowplot_1.2.0              
-    ## [55] stringi_1.8.7               shape_1.4.6.1              
-    ## [57] gtable_0.3.6                GenomicRanges_1.62.0       
-    ## [59] pillar_1.11.1               htmltools_0.5.9            
-    ## [61] Seqinfo_1.0.0               circlize_0.4.17            
-    ## [63] R6_2.6.1                    textshaping_1.0.4          
-    ## [65] doParallel_1.0.17           vroom_1.6.7                
-    ## [67] evaluate_1.0.5              lattice_0.22-7             
-    ## [69] png_0.1-8                   class_7.3-23               
-    ## [71] Rcpp_1.1.1                  SparseArray_1.10.2         
-    ## [73] DESeq2_1.50.2               xfun_0.56                  
-    ## [75] MatrixGenerics_1.22.0       pkgconfig_2.0.3            
-    ## [77] GlobalOptions_0.1.3
+    ##  [1] generics_0.1.4      shape_1.4.6.1       stringi_1.8.7      
+    ##  [4] hms_1.1.4           digest_0.6.39       magrittr_2.0.4     
+    ##  [7] evaluate_1.0.5      timechange_0.3.0    RColorBrewer_1.1-3 
+    ## [10] iterators_1.0.14    circlize_0.4.17     fastmap_1.2.0      
+    ## [13] foreach_1.5.2       doParallel_1.0.17   GlobalOptions_0.1.3
+    ## [16] scales_1.4.0        codetools_0.2-20    cli_3.6.5          
+    ## [19] rlang_1.2.0         crayon_1.5.3        withr_3.0.2        
+    ## [22] yaml_2.3.12         tools_4.5.1         parallel_4.5.1     
+    ## [25] tzdb_0.5.0          colorspace_2.1-2    BiocGenerics_0.56.0
+    ## [28] GetoptLong_1.1.0    vctrs_0.7.0         R6_2.6.1           
+    ## [31] png_0.1-8           stats4_4.5.1        matrixStats_1.5.0  
+    ## [34] lifecycle_1.0.5     S4Vectors_0.48.0    IRanges_2.44.0     
+    ## [37] clue_0.3-66         cluster_2.1.8.1     pkgconfig_2.0.3    
+    ## [40] pillar_1.11.1       gtable_0.3.6        glue_1.8.0         
+    ## [43] xfun_0.56           tidyselect_1.2.1    rstudioapi_0.17.1  
+    ## [46] dichromat_2.0-0.1   rjson_0.2.23        farver_2.1.2       
+    ## [49] htmltools_0.5.9     compiler_4.5.1      S7_0.2.1
 
 ## 2. Define directories
 
@@ -330,7 +346,7 @@ print(plot)
 ![](./06_CrossSpecies_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
 ``` r
-pdf(file.path(outdir_plots, "DE_overlap_upset.pdf"), width=10, height=6)
+pdf(file.path(outdir_plots, "pdf_figs/DE_overlap_upset.pdf"), width=10, height=6)
   print(plot)
 dev.off()
 ```
@@ -435,35 +451,39 @@ variable_response <- complete_1to1_ogs_summary %>%
 # Not responsive
 not_responsive <- complete_1to1_ogs_summary %>%
   filter(n_DE_species == 0)
-
-cat("1:1:1 Ortholog Response Categories:\n")
 ```
 
-    ## 1:1:1 Ortholog Response Categories:
+#### Summarize the response categories:
+
+1:1:1 Ortholog Response Categories:
+
+- Core conserved: DE in all 3, same Mfuzz pattern
+- Core divergent: DE in all 3, different Mfuzz patterns  
+- Variable response: DE in 1-2 species only
+- Not responsive: DE in 0 species
 
 ``` r
-cat("  Core conserved (DE in 3 species, same Mfuzz pattern):", nrow(core_conserved_response), "\n")
+responses_1to1_ogs_summary <- data.frame(
+  Category = c("Core Conserved", 
+               "Core Divergent", 
+               "Variable Response", 
+               "Not Responsive"),
+  Count = c(nrow(core_conserved_response), nrow(core_divergent_response), 
+            nrow(variable_response), nrow(not_responsive))
+) %>%
+  mutate(
+    Percentage = 100 * Count / sum(Count)
+  )
+
+kable(responses_1to1_ogs_summary,format = "markdown")
 ```
 
-    ##   Core conserved (DE in 3 species, same Mfuzz pattern): 81
-
-``` r
-cat("  Core divergent (DE in 3 species, different Mfuzz patterns):", nrow(core_divergent_response), "\n")
-```
-
-    ##   Core divergent (DE in 3 species, different Mfuzz patterns): 566
-
-``` r
-cat("  Variable response (DE in 1-2 species):", nrow(variable_response), "\n")
-```
-
-    ##   Variable response (DE in 1-2 species): 5372
-
-``` r
-cat("  Not responsive:", nrow(not_responsive), "\n\n")
-```
-
-    ##   Not responsive: 2452
+| Category          | Count | Percentage |
+|:------------------|------:|-----------:|
+| Core Conserved    |    81 |  0.9562035 |
+| Core Divergent    |   566 |  6.6816196 |
+| Variable Response |  5372 | 63.4163617 |
+| Not Responsive    |  2452 | 28.9458151 |
 
 ### Are TFBS conserved across DE 1:1:1 orthologs?
 
@@ -491,7 +511,49 @@ core_conserved_response %>% filter(NFE2L2_conserved == TRUE) %>% kable(format = 
 |:---|---:|:---|:---|---:|:---|---:|:---|:---|:---|:---|---:|---:|---:|---:|---:|---:|---:|:---|:---|---:|---:|---:|:---|:---|:---|:---|
 | OG_3443 | 3 | TRUE | Sustained Up (3h) | 1 | Protein DDI1 homolog 2 (EC 3.4.23.-) | 0 | TRUE | Pocillopora_acuta_HIv2\_\_\_RNAseq.g30800.t1 | Montipora_capitata_HIv3\_\_\_RNAseq.g30166.t1 | Porites_compressa_HIv1\_\_\_RNAseq.g624.t1 | 0 | 0.0060282 | 0.0033115 | 0.6787366 | 0.8643735 | 0.9568157 | 3 | TRUE | TRUE | 1 | 0 | 3 | FALSE | FALSE | TRUE | TRUE |
 
-## 8. Non 1:1:1 conserved responses?
+### Visualizations
+
+``` r
+pie_data <- responses_1to1_ogs_summary %>%
+  mutate(Label = paste0(Category, "\nn = ", Count, " (", round(Percentage, 1), "%)"))
+
+p_pie <- ggplot(pie_data, aes(x = "", y = Count, fill = Category)) +
+  geom_bar(stat = "identity", width = 1, color = "white") +
+  coord_polar("y", start = 0) +
+  scale_fill_manual(values = c("#E64B35", "#F39B7F","#8491B4","gray"),
+                    labels = pie_data$Label) +
+  labs(title = "Composition of 1:1:1 Orthologs") +
+  theme_void(base_size = 14) +
+  theme(
+    plot.title = element_text(face = "bold", hjust = 0.5, size = 16),
+    legend.position = "bottom",
+    legend.title = element_blank(),legend.box.margin = margin_auto(10)
+  )
+save_ggplot(p_pie,"all_response_pie", width=8, height=8)
+
+pie_data_allDE <- responses_1to1_ogs_summary %>% filter(grepl("Core",Category)) %>%
+  mutate(Percentage = 100 * Count / sum(Count),
+         Label = paste0(Category, "\nn=", Count, " (", round(Percentage, 1), "%)"))
+
+p_pie_allDE <- ggplot(pie_data_allDE, aes(x = "", y = Count, fill = Category)) +
+  geom_bar(stat = "identity", width = 1, color = "white") +
+  coord_polar("y", start = 0) +
+  scale_fill_manual(values = c("#E64B35", "#F39B7F"),
+                    labels = pie_data$Label) +
+  labs(title = "Composition of 1:1:1 Orthologs: DE in 3 Species") +
+  theme_void(base_size = 14) +
+  theme(
+    plot.title = element_text(face = "bold", hjust = 0.5, size = 16),
+    legend.position = "bottom",
+    legend.title = element_blank(),legend.box.margin = margin_auto(10)
+  )
+
+save_ggplot(p_pie_allDE,"core_response_pie", width=8, height=8)
+```
+
+## 8. Mfuzz-pattern conserved responses (not exclusively 1:1:1)
+
+### Sustained Up (3h) genes
 
 ``` r
 sus_up_3hr <- cross_species %>% filter(Mfuzz_pattern == "Sustained Up (3h)")
@@ -540,6 +602,8 @@ sus_up_3hr %>% group_by(species) %>%
 | Pacuta | 1610 | 1610 | 100 | 4 | 1255 | 77.95031 | 19 | ME1 | 378 | 180 | 244 | 156 |
 | Pcomp | 1260 | 1260 | 100 | 5 | 1140 | 90.47619 | 13 | ME1 | 336 | 171 | 208 | 136 |
 
+### Sustained Up (12h) genes
+
 ``` r
 sus_up_12hr <- cross_species %>% filter(Mfuzz_pattern == "Sustained Up (12h)")
 
@@ -553,16 +617,14 @@ sus_up_12hr %>% group_by(species) %>%
     pct_in_all_3 = 100*mean(OG_in_all_3, na.rm = TRUE),
     n_1to1to1 = sum(OG_1to1to1, na.rm = TRUE),
     pct_1to1to1 = 100*mean(OG_1to1to1, na.rm = TRUE)
-  )# %>% kable(format = "markdown")
+  ) %>% kable(format = "markdown")
 ```
 
-    ## # A tibble: 3 × 8
-    ##   species n_genes n_in_OG pct_in_OG n_in_all_3 pct_in_all_3 n_1to1to1
-    ##   <chr>     <int>   <int>     <dbl>      <int>        <dbl>     <int>
-    ## 1 Mcap       1096    1011      92.2        916         90.6       510
-    ## 2 Pacuta     1563    1443      92.3       1319         91.4       845
-    ## 3 Pcomp      1074     958      89.2        801         83.6       400
-    ## # ℹ 1 more variable: pct_1to1to1 <dbl>
+| species | n_genes | n_in_OG | pct_in_OG | n_in_all_3 | pct_in_all_3 | n_1to1to1 | pct_1to1to1 |
+|:--------|--------:|--------:|----------:|-----------:|-------------:|----------:|------------:|
+| Mcap    |    1096 |    1011 |  92.24453 |        916 |     90.60336 |       510 |    50.44510 |
+| Pacuta  |    1563 |    1443 |  92.32246 |       1319 |     91.40679 |       845 |    58.55856 |
+| Pcomp   |    1074 |     958 |  89.19926 |        801 |     83.61169 |       400 |    41.75365 |
 
 ``` r
 sus_up_12hr %>% group_by(species) %>%
@@ -580,17 +642,16 @@ sus_up_12hr %>% group_by(species) %>%
     has_FOXO3 = sum(has_FOXO3, na.rm = TRUE),
     has_NFE2L2 = sum(has_NFE2L2, na.rm = TRUE),
     .groups = 'drop'
-  )# %>% kable(format = "markdown")
+  ) %>% kable(format = "markdown")
 ```
 
-    ## # A tibble: 3 × 13
-    ##   species n_genes  n_DE pct_DE Mfuzz_cluster n_high_conf pct_high_conf n_Modules
-    ##   <chr>     <int> <int>  <dbl> <chr>               <int>         <dbl>     <int>
-    ## 1 Mcap       1096  1096    100 2                     946          86.3        23
-    ## 2 Pacuta     1563  1563    100 6                    1208          77.3        18
-    ## 3 Pcomp      1074  1074    100 6                     953          88.7        17
-    ## # ℹ 5 more variables: largest_module <chr>, n_hubs <int>, has_HSF1 <int>,
-    ## #   has_FOXO3 <int>, has_NFE2L2 <int>
+| species | n_genes | n_DE | pct_DE | Mfuzz_cluster | n_high_conf | pct_high_conf | n_Modules | largest_module | n_hubs | has_HSF1 | has_FOXO3 | has_NFE2L2 |
+|:---|---:|---:|---:|:---|---:|---:|---:|:---|---:|---:|---:|---:|
+| Mcap | 1096 | 1096 | 100 | 2 | 946 | 86.31387 | 23 | ME1 | 171 | 110 | 163 | 99 |
+| Pacuta | 1563 | 1563 | 100 | 6 | 1208 | 77.28727 | 18 | ME7 | 169 | 152 | 250 | 128 |
+| Pcomp | 1074 | 1074 | 100 | 6 | 953 | 88.73371 | 17 | ME1 | 120 | 125 | 163 | 98 |
+
+### Gradual Down genes
 
 ``` r
 grad_down <- cross_species %>% filter(Mfuzz_pattern == "Gradual Down")
@@ -605,16 +666,14 @@ grad_down %>% group_by(species) %>%
     pct_in_all_3 = 100*mean(OG_in_all_3, na.rm = TRUE),
     n_1to1to1 = sum(OG_1to1to1, na.rm = TRUE),
     pct_1to1to1 = 100*mean(OG_1to1to1, na.rm = TRUE)
-  )# %>% kable(format = "markdown")
+  ) %>% kable(format = "markdown")
 ```
 
-    ## # A tibble: 3 × 8
-    ##   species n_genes n_in_OG pct_in_OG n_in_all_3 pct_in_all_3 n_1to1to1
-    ##   <chr>     <int>   <int>     <dbl>      <int>        <dbl>     <int>
-    ## 1 Mcap       1294    1127      87.1        949         84.2       542
-    ## 2 Pacuta     1733    1422      82.1       1152         81.0       561
-    ## 3 Pcomp       784     656      83.7        521         79.4       270
-    ## # ℹ 1 more variable: pct_1to1to1 <dbl>
+| species | n_genes | n_in_OG | pct_in_OG | n_in_all_3 | pct_in_all_3 | n_1to1to1 | pct_1to1to1 |
+|:--------|--------:|--------:|----------:|-----------:|-------------:|----------:|------------:|
+| Mcap    |    1294 |    1127 |  87.09428 |        949 |     84.20586 |       542 |    48.09228 |
+| Pacuta  |    1733 |    1422 |  82.05424 |       1152 |     81.01266 |       561 |    39.45148 |
+| Pcomp   |     784 |     656 |  83.67347 |        521 |     79.42073 |       270 |    41.15854 |
 
 ``` r
 grad_down %>% group_by(species) %>%
@@ -632,19 +691,16 @@ grad_down %>% group_by(species) %>%
     has_FOXO3 = sum(has_FOXO3, na.rm = TRUE),
     has_NFE2L2 = sum(has_NFE2L2, na.rm = TRUE),
     .groups = 'drop'
-  )# %>% kable(format = "markdown")
+  ) %>% kable(format = "markdown")
 ```
 
-    ## # A tibble: 3 × 13
-    ##   species n_genes  n_DE pct_DE Mfuzz_cluster n_high_conf pct_high_conf n_Modules
-    ##   <chr>     <int> <int>  <dbl> <chr>               <int>         <dbl>     <int>
-    ## 1 Mcap       1294  1294    100 6                    1130          87.3        24
-    ## 2 Pacuta     1733  1733    100 5                    1392          80.3        15
-    ## 3 Pcomp       784   784    100 1                     641          81.8        19
-    ## # ℹ 5 more variables: largest_module <chr>, n_hubs <int>, has_HSF1 <int>,
-    ## #   has_FOXO3 <int>, has_NFE2L2 <int>
+| species | n_genes | n_DE | pct_DE | Mfuzz_cluster | n_high_conf | pct_high_conf | n_Modules | largest_module | n_hubs | has_HSF1 | has_FOXO3 | has_NFE2L2 |
+|:---|---:|---:|---:|:---|---:|---:|---:|:---|---:|---:|---:|---:|
+| Mcap | 1294 | 1294 | 100 | 6 | 1130 | 87.32612 | 24 | ME9 | 179 | 134 | 224 | 118 |
+| Pacuta | 1733 | 1733 | 100 | 5 | 1392 | 80.32314 | 15 | ME3 | 274 | 200 | 334 | 144 |
+| Pcomp | 784 | 784 | 100 | 1 | 641 | 81.76020 | 19 | ME0 | 53 | 90 | 152 | 63 |
 
-## 9. Manually-curated heat stress genes
+## 9. Manually-curated heat stress gene families
 
 ``` r
 for (species in species_list){
@@ -778,4 +834,45 @@ summary <- all_heat %>% group_by(species,gene_sym) %>%
             pct_DE = 100*mean(is_DE, na.rm = TRUE),
     n_in_clusters = sum(Mfuzz_highconf, na.rm = TRUE),
     n_hubs = sum(is_hub, na.rm = TRUE)) 
+
+summary %>% head() %>% kable(format = "markdown")
 ```
+
+| species | gene_sym |   n | n_DE |     pct_DE | n_in_clusters | n_hubs |
+|:--------|:---------|----:|-----:|-----------:|--------------:|-------:|
+| Mcap    | ACAN     |  70 |    4 |   5.714286 |             1 |      1 |
+| Mcap    | ALDH3B1  |   1 |    0 |   0.000000 |             0 |      0 |
+| Mcap    | ALOX12B  |   6 |    6 | 100.000000 |             6 |      2 |
+| Mcap    | AMPK     |   1 |    1 | 100.000000 |             1 |      0 |
+| Mcap    | AMT1     |   2 |    0 |   0.000000 |             0 |      0 |
+| Mcap    | APAF-1   |   1 |    0 |   0.000000 |             0 |      0 |
+
+``` r
+core_conserved_response %>%
+  filter(gene_Pacuta %in% all_heat$gene_id |
+         gene_Mcap %in% all_heat$gene_id |
+         gene_Pcomp %in% all_heat$gene_id) %>% kable(format = "markdown")
+```
+
+| OG | n_DE_species | all_species_DE | Mfuzz_patterns | Mfuzz_patterns_unique | annotation | annotation_evalue | has_annotation | gene_Pacuta | gene_Mcap | gene_Pcomp | padj_Pacuta | padj_Mcap | padj_Pcomp | MfuzzM_Pacuta | MfuzzM_Mcap | MfuzzM_Pcomp | n_species_hub | hub_in_any | hub_in_all | n_species_HSF1 | n_species_FOXO3 | n_species_NFE2L2 | HSF1_conserved | FOXO3_conserved | NFE2L2_conserved | any_TF_conserved |
+|:---|---:|:---|:---|---:|:---|---:|:---|:---|:---|:---|---:|---:|---:|---:|---:|---:|---:|:---|:---|---:|---:|---:|:---|:---|:---|:---|
+
+``` r
+core_divergent_response %>%
+  filter(gene_Pacuta %in% all_heat$gene_id |
+         gene_Mcap %in% all_heat$gene_id |
+         gene_Pcomp %in% all_heat$gene_id) %>% kable(format = "markdown")
+```
+
+| OG | n_DE_species | all_species_DE | Mfuzz_patterns | Mfuzz_patterns_unique | annotation | annotation_evalue | has_annotation | gene_Pacuta | gene_Mcap | gene_Pcomp | padj_Pacuta | padj_Mcap | padj_Pcomp | MfuzzM_Pacuta | MfuzzM_Mcap | MfuzzM_Pcomp | n_species_hub | hub_in_any | hub_in_all | n_species_HSF1 | n_species_FOXO3 | n_species_NFE2L2 | HSF1_conserved | FOXO3_conserved | NFE2L2_conserved | any_TF_conserved |
+|:---|---:|:---|:---|---:|:---|---:|:---|:---|:---|:---|---:|---:|---:|---:|---:|---:|---:|:---|:---|---:|---:|---:|:---|:---|:---|:---|
+| OG_16781 | 3 | TRUE | Early Peak (3h) \| Sustained Up (3h) | 2 | Apoptosis regulator BAX (Bcl-2-like protein 4) (Bcl2-L-4) | 0 | TRUE | Pocillopora_acuta_HIv2\_\_\_RNAseq.g1543.t1 | Montipora_capitata_HIv3\_\_\_TS.g26835.t1 | Porites_compressa_HIv1\_\_\_RNAseq.g12818.t1 | 0.0019279 | 0.0065098 | 0.0000000 | 0.6781986 | 0.7758511 | 0.9636549 | 0 | FALSE | FALSE | 0 | 1 | 1 | FALSE | FALSE | FALSE | FALSE |
+| OG_7773 | 3 | TRUE | Early Peak (3h) \| Sustained Up (3h) | 2 | 5’-AMP-activated protein kinase catalytic subunit alpha-2 (AMPK subunit alpha-2) (EC 2.7.11.1) (Acetyl-CoA carboxylase kinase) (ACACA kinase) (Hydroxymethylglutaryl-CoA reductase kinase) (HMGCR kinase) (EC 2.7.11.31) | 0 | TRUE | Pocillopora_acuta_HIv2\_\_\_RNAseq.g19827.t1 | Montipora_capitata_HIv3\_\_\_RNAseq.g27769.t1 | Porites_compressa_HIv1\_\_\_RNAseq.g16374.t1 | 0.0308929 | 0.0034566 | 0.0030088 | 0.7965976 | 0.9187788 | 0.8419368 | 1 | TRUE | FALSE | 1 | 2 | 0 | FALSE | FALSE | FALSE | FALSE |
+| OG_13704 | 3 | TRUE | Early Peak (3h) \| Gradual Down \| Sustained Up (3h) | 3 | Probable Bax inhibitor 1 (BI-1) (Testis-enhanced gene transcript protein homolog) (Transmembrane BAX inhibitor motif-containing protein 6) | 0 | TRUE | Pocillopora_acuta_HIv2\_\_\_RNAseq.g15654.t1 | Montipora_capitata_HIv3\_\_\_RNAseq.g45609.t1 | Porites_compressa_HIv1\_\_\_RNAseq.g27468.t1 | 0.0190035 | 0.0459489 | 0.0330665 | 0.5119779 | 0.7575617 | 0.7790794 | 1 | TRUE | FALSE | 0 | 1 | 0 | FALSE | FALSE | FALSE | FALSE |
+| OG_17448 | 3 | TRUE | Gradual Down \| Sustained Down (12h) \| Sustained Down (3h) | 3 | NA | NA | FALSE | Pocillopora_acuta_HIv2\_\_\_RNAseq.g3264.t1 | Montipora_capitata_HIv3\_\_\_RNAseq.g456.t1 | Porites_compressa_HIv1\_\_\_RNAseq.g1296.t1 | 0.0000000 | 0.0020705 | 0.0000006 | 0.6839056 | 0.7009234 | 0.6229924 | 0 | FALSE | FALSE | 0 | 0 | 0 | FALSE | FALSE | FALSE | FALSE |
+| OG_9398 | 3 | TRUE | Gradual Down \| Sustained Down (12h) \| Sustained Down (3h) | 3 | Ammonium transporter Rh type B-B (Rhesus blood group family type B glycoprotein B) (Rh family type B glycoprotein B) (Rh type B glycoprotein B) | 0 | TRUE | Pocillopora_acuta_HIv2\_\_\_RNAseq.g12323.t1 | Montipora_capitata_HIv3\_\_\_TS.g24480.t2 | Porites_compressa_HIv1\_\_\_RNAseq.g39741.t2 | 0.0000000 | 0.0207435 | 0.0266750 | 0.8708145 | 0.9242317 | 0.7177218 | 2 | TRUE | FALSE | 0 | 1 | 0 | FALSE | FALSE | FALSE | FALSE |
+
+None of these genes are in the 81 1:1:1 orthogroups that are DE in all
+three species and share an Mfuzz pattern. However, five of them are
+1:1:1 orthogroups DE in all three species and show different patterns!
+Cool!!

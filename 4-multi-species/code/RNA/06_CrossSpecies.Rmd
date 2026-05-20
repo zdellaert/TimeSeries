@@ -36,6 +36,7 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, fig.width = 10, fig.height =
 library(tidyverse)
 library(knitr)
 library(ComplexHeatmap)
+library(pheatmap)
 
 #load in parameters and functions
 source("species_parameters.R")
@@ -185,7 +186,7 @@ plot <- UpSet(m, pt_size = unit(5, "mm"), lwd = 3,
 
 print(plot)
 
-pdf(file.path(outdir_plots, "DE_overlap_upset.pdf"), width=10, height=6)
+pdf(file.path(outdir_plots, "pdf_figs/DE_overlap_upset.pdf"), width=10, height=6)
   print(plot)
 dev.off()
 
@@ -349,10 +350,9 @@ p_pie_allDE <- ggplot(pie_data_allDE, aes(x = "", y = Count, fill = Category)) +
 save_ggplot(p_pie_allDE,"core_response_pie", width=8, height=8)
 ```
 
+## 8. Mfuzz-pattern conserved responses (not exclusively 1:1:1)
 
-
-
-## 8. Non 1:1:1 conserved responses?
+### Sustained Up (3h) genes
 
 ```{r}
 sus_up_3hr <- cross_species %>% filter(Mfuzz_pattern == "Sustained Up (3h)")
@@ -387,6 +387,8 @@ sus_up_3hr %>% group_by(species) %>%
   ) %>% kable(format = "markdown")
 ```
 
+### Sustained Up (12h) genes
+
 ```{r}
 sus_up_12hr <- cross_species %>% filter(Mfuzz_pattern == "Sustained Up (12h)")
 
@@ -400,7 +402,7 @@ sus_up_12hr %>% group_by(species) %>%
     pct_in_all_3 = 100*mean(OG_in_all_3, na.rm = TRUE),
     n_1to1to1 = sum(OG_1to1to1, na.rm = TRUE),
     pct_1to1to1 = 100*mean(OG_1to1to1, na.rm = TRUE)
-  )# %>% kable(format = "markdown")
+  ) %>% kable(format = "markdown")
 
 sus_up_12hr %>% group_by(species) %>%
     summarise(
@@ -417,8 +419,10 @@ sus_up_12hr %>% group_by(species) %>%
     has_FOXO3 = sum(has_FOXO3, na.rm = TRUE),
     has_NFE2L2 = sum(has_NFE2L2, na.rm = TRUE),
     .groups = 'drop'
-  )# %>% kable(format = "markdown")
+  ) %>% kable(format = "markdown")
 ```
+
+### Gradual Down genes
 
 ```{r}
 grad_down <- cross_species %>% filter(Mfuzz_pattern == "Gradual Down")
@@ -433,7 +437,7 @@ grad_down %>% group_by(species) %>%
     pct_in_all_3 = 100*mean(OG_in_all_3, na.rm = TRUE),
     n_1to1to1 = sum(OG_1to1to1, na.rm = TRUE),
     pct_1to1to1 = 100*mean(OG_1to1to1, na.rm = TRUE)
-  )# %>% kable(format = "markdown")
+  ) %>% kable(format = "markdown")
 
 grad_down %>% group_by(species) %>%
     summarise(
@@ -450,10 +454,10 @@ grad_down %>% group_by(species) %>%
     has_FOXO3 = sum(has_FOXO3, na.rm = TRUE),
     has_NFE2L2 = sum(has_NFE2L2, na.rm = TRUE),
     .groups = 'drop'
-  )# %>% kable(format = "markdown")
+  ) %>% kable(format = "markdown")
 ```
 
-## 9. Manually-curated heat stress genes
+## 9. Manually-curated heat stress gene families
 
 ```{r}
 for (species in species_list){
@@ -509,4 +513,66 @@ summary <- all_heat %>% group_by(species,gene_sym) %>%
             pct_DE = 100*mean(is_DE, na.rm = TRUE),
     n_in_clusters = sum(Mfuzz_highconf, na.rm = TRUE),
     n_hubs = sum(is_hub, na.rm = TRUE)) 
+
+summary %>% head() %>% kable(format = "markdown")
+
+core_conserved_response %>%
+  filter(gene_Pacuta %in% all_heat$gene_id |
+         gene_Mcap %in% all_heat$gene_id |
+         gene_Pcomp %in% all_heat$gene_id) %>% kable(format = "markdown")
+
+core_divergent_response %>%
+  filter(gene_Pacuta %in% all_heat$gene_id |
+         gene_Mcap %in% all_heat$gene_id |
+         gene_Pcomp %in% all_heat$gene_id) %>% kable(format = "markdown")
+
+core_divergent_heat <- core_divergent_response %>%
+  filter(gene_Pacuta %in% all_heat$gene_id |
+         gene_Mcap %in% all_heat$gene_id |
+         gene_Pcomp %in% all_heat$gene_id) %>% pull(OG) 
+
+all_heat %>% filter(OG %in% core_divergent_heat) %>% View()# kable(format = "markdown")
 ```
+
+None of these genes are in the 81 1:1:1 orthogroups that are DE in all three species and share an Mfuzz pattern. However, five of them are 1:1:1 orthogroups DE in all three species and show different patterns! Cool!!
+
+### heat heatmaps
+
+```{r}
+for (species in species_list){
+  input_dir <- file.path("../../output_RNA/counts_filt_norm", species)
+  vst_counts <- read.csv(file.path(input_dir, "vsd_expression_matrix.csv"), row.names = 1) 
+  assign(paste0(species,"_vst"),vst_counts)
+  rm(vst_counts)
+}
+```
+
+
+```{r}
+top_100_Pcomp <- all_heat %>% filter(species =="Pcomp") %>% arrange(ImpulseDE2_padj) %>% filter(gene_id %in% rownames(Pcomp_vst)) %>% head(100) 
+heat_samples <- Pcomp_vst %>% select(contains("_H")) %>% colnames()
+T0_samples <- Pcomp_vst %>% select(contains("_H")) %>% select(contains("_R0_"))  %>% colnames()
+T
+vsd_heat_top <- Pcomp_vst[top_100_Pcomp$gene_id,heat_samples]
+vsd_heat_top$T0mean <- rowMeans(vsd_heat_top[,T0_samples])
+vsd_heat_norm <- vsd_heat_top - vsd_heat_top$T0mean
+vsd_heat_norm <- vsd_heat_norm %>% select(-T0mean)
+
+vsd_max <- max(abs(vsd_heat_norm), na.rm = TRUE)
+scale_colors <- colorRampPalette(c("#3c58a7","#3c58a7", "white", "#ee2e25","#ee2e25"))(100)
+legend_breaks <- seq(-vsd_max, vsd_max, length.out = 101)
+
+heatmap_up <- pheatmap(vsd_heat_norm, 
+         cluster_rows = FALSE, 
+         show_rownames = FALSE,
+         show_colnames = FALSE,
+         cluster_cols = FALSE, 
+         annotation_names_row = FALSE,
+         annotation_names_col = FALSE,
+         breaks = legend_breaks,
+         col = scale_colors,
+         border_color = NA)
+
+save_ggplot(heatmap_up, "ImpulseDE2_heatmap_UP", width = 7, height = 10, units = "in", dpi = 300)
+```
+
