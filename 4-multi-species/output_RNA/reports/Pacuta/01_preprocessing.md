@@ -1,7 +1,7 @@
 RNA-seq Preprocessing and Normalization
 ================
 Zoe Dellaert
-2026-05-10
+2026-05-24
 
 - [Preproccessing of bulk RNA-seq
   data](#preproccessing-of-bulk-rna-seq-data)
@@ -46,9 +46,9 @@ library(tidyverse)
 ```
 
     ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-    ## ✔ dplyr     1.1.4     ✔ readr     2.1.6
+    ## ✔ dplyr     1.1.4     ✔ readr     2.2.0
     ## ✔ forcats   1.0.0     ✔ stringr   1.6.0
-    ## ✔ ggplot2   4.0.1     ✔ tibble    3.3.0
+    ## ✔ ggplot2   4.0.3     ✔ tibble    3.3.0
     ## ✔ lubridate 1.9.4     ✔ tidyr     1.3.1
     ## ✔ purrr     1.2.1     
     ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
@@ -265,33 +265,33 @@ sessionInfo() #provides list of loaded packages and version of R
     ## [15] BiocGenerics_0.56.0         generics_0.1.4             
     ## [17] lubridate_1.9.4             forcats_1.0.0              
     ## [19] stringr_1.6.0               dplyr_1.1.4                
-    ## [21] purrr_1.2.1                 readr_2.1.6                
+    ## [21] purrr_1.2.1                 readr_2.2.0                
     ## [23] tidyr_1.3.1                 tibble_3.3.0               
-    ## [25] ggplot2_4.0.1               tidyverse_2.0.0            
-    ## [27] rmarkdown_2.30             
+    ## [25] ggplot2_4.0.3               tidyverse_2.0.0            
+    ## [27] rmarkdown_2.31             
     ## 
     ## loaded via a namespace (and not attached):
     ##  [1] tidyselect_1.2.1        farver_2.1.2            blob_1.2.4             
-    ##  [4] Biostrings_2.78.0       S7_0.2.1                fastmap_1.2.0          
+    ##  [4] Biostrings_2.78.0       S7_0.2.2                fastmap_1.2.0          
     ##  [7] XML_3.99-0.18           digest_0.6.39           timechange_0.3.0       
     ## [10] lifecycle_1.0.5         survival_3.8-3          KEGGREST_1.50.0        
-    ## [13] RSQLite_2.4.5           magrittr_2.0.4          compiler_4.5.1         
+    ## [13] RSQLite_3.52.0          magrittr_2.0.5          compiler_4.5.1         
     ## [16] rlang_1.2.0             tools_4.5.1             yaml_2.3.12            
     ## [19] knitr_1.50              S4Arrays_1.10.0         bit_4.6.0              
     ## [22] DelayedArray_0.36.0     abind_1.4-8             withr_3.0.2            
     ## [25] grid_4.5.1              xtable_1.8-4            scales_1.4.0           
-    ## [28] dichromat_2.0-0.1       cli_3.6.5               crayon_1.5.3           
+    ## [28] dichromat_2.0-0.1       cli_3.6.6               crayon_1.5.3           
     ## [31] rstudioapi_0.17.1       httr_1.4.7              tzdb_0.5.0             
     ## [34] DBI_1.2.3               cachem_1.1.0            splines_4.5.1          
     ## [37] parallel_4.5.1          AnnotationDbi_1.72.0    XVector_0.50.0         
-    ## [40] vctrs_0.7.0             Matrix_1.6-4            jsonlite_2.0.0         
+    ## [40] vctrs_0.7.3             Matrix_1.6-4            jsonlite_2.0.0         
     ## [43] hms_1.1.4               bit64_4.6.0-1           locfit_1.5-9.12        
     ## [46] annotate_1.86.1         glue_1.8.0              codetools_0.2-20       
     ## [49] stringi_1.8.7           gtable_0.3.6            GenomeInfoDb_1.44.3    
     ## [52] UCSC.utils_1.4.0        pillar_1.11.1           htmltools_0.5.9        
     ## [55] GenomeInfoDbData_1.2.14 R6_2.6.1                evaluate_1.0.5         
     ## [58] lattice_0.22-7          png_0.1-8               memoise_2.0.1          
-    ## [61] Rcpp_1.1.1              SparseArray_1.10.2      xfun_0.56              
+    ## [61] Rcpp_1.1.1-1.1          SparseArray_1.10.2      xfun_0.56              
     ## [64] pkgconfig_2.0.3
 
 ## 0. Setup species-specific parameters
@@ -459,22 +459,22 @@ all(sizeFactors(SF.dds)) < 4
 ## 6. VST-Transforming count data for visualization
 
 ``` r
-vsd <- vst(dds, blind=FALSE)
+vst <- vst(dds, blind=FALSE)
 
-#save the vsd transformation
-vsd_mat <- assay(vsd)
-write.csv(vsd_mat, file = file.path(outdir, "vsd_expression_matrix.csv"))
-cat("VST matrix saved to:", file.path(outdir, "vsd_expression_matrix.csv"))
+#save the vst transformation
+vst_mat <- assay(vst)
+write.csv(vst_mat, file = file.path(outdir, "vst_expression_matrix.csv"))
+cat("VST matrix saved to:", file.path(outdir, "vst_expression_matrix.csv"))
 ```
 
-    ## VST matrix saved to: ../../output_RNA/counts_filt_norm/Pacuta/vsd_expression_matrix.csv
+    ## VST matrix saved to: ../../output_RNA/counts_filt_norm/Pacuta/vst_expression_matrix.csv
 
 ## 7. Two tools to identiy potential outliers:
 
 ### PCA
 
 ``` r
-pcaData <- plotPCA(vsd, intgroup=c("time", "treatment"), returnData=TRUE)
+pcaData <- plotPCA(vst, intgroup=c("time", "treatment"), returnData=TRUE)
 percentVar <- round(100 * attr(pcaData, "percentVar"))
 
 PCA <- ggplot() +
@@ -523,7 +523,7 @@ save_ggplot(PCA_simple, "PCA_simple", width = 8, height = 6)
 ### Hierarchical Clustering
 
 ``` r
-sampleTree <- hclust(dist(t(vsd_mat)), method = "average")
+sampleTree <- hclust(dist(t(vst_mat)), method = "average")
 
 par(mar = c(8, 4, 2, 2))
 plot(sampleTree, 
@@ -540,9 +540,9 @@ abline(h = 100, col = "red", lty = 2)
 ### Heatmap of variable genes
 
 ``` r
-topVarGenes <- head(order(rowVars(vsd_mat), decreasing=TRUE), 500)
+topVarGenes <- head(order(rowVars(vst_mat), decreasing=TRUE), 500)
 
-pheatmap(vsd_mat[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
+pheatmap(vst_mat[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
          cluster_cols=FALSE, 
          annotation_col= meta[,c("treatment","time")],
          annotation_colors = list("treatment" = treat_colors,
@@ -552,7 +552,7 @@ pheatmap(vsd_mat[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
 ![](./01_preprocessing_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
 
 ``` r
-pheatmap(vsd_mat[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
+pheatmap(vst_mat[topVarGenes, ], cluster_rows=TRUE, show_rownames=FALSE,
          cluster_cols=TRUE, cutree_cols = 2,
          annotation_col= meta[,c("treatment","time")],
          annotation_colors = list("treatment" = treat_colors,
@@ -645,32 +645,32 @@ sessionInfo()
     ## [15] BiocGenerics_0.56.0         generics_0.1.4             
     ## [17] lubridate_1.9.4             forcats_1.0.0              
     ## [19] stringr_1.6.0               dplyr_1.1.4                
-    ## [21] purrr_1.2.1                 readr_2.1.6                
+    ## [21] purrr_1.2.1                 readr_2.2.0                
     ## [23] tidyr_1.3.1                 tibble_3.3.0               
-    ## [25] ggplot2_4.0.1               tidyverse_2.0.0            
-    ## [27] rmarkdown_2.30             
+    ## [25] ggplot2_4.0.3               tidyverse_2.0.0            
+    ## [27] rmarkdown_2.31             
     ## 
     ## loaded via a namespace (and not attached):
     ##  [1] tidyselect_1.2.1        farver_2.1.2            blob_1.2.4             
-    ##  [4] Biostrings_2.78.0       S7_0.2.1                fastmap_1.2.0          
+    ##  [4] Biostrings_2.78.0       S7_0.2.2                fastmap_1.2.0          
     ##  [7] XML_3.99-0.18           digest_0.6.39           timechange_0.3.0       
     ## [10] lifecycle_1.0.5         survival_3.8-3          KEGGREST_1.50.0        
-    ## [13] RSQLite_2.4.5           magrittr_2.0.4          compiler_4.5.1         
+    ## [13] RSQLite_3.52.0          magrittr_2.0.5          compiler_4.5.1         
     ## [16] rlang_1.2.0             tools_4.5.1             yaml_2.3.12            
     ## [19] knitr_1.50              labeling_0.4.3          S4Arrays_1.10.0        
     ## [22] bit_4.6.0               DelayedArray_0.36.0     abind_1.4-8            
     ## [25] withr_3.0.2             grid_4.5.1              xtable_1.8-4           
-    ## [28] scales_1.4.0            dichromat_2.0-0.1       cli_3.6.5              
-    ## [31] crayon_1.5.3            ragg_1.5.0              rstudioapi_0.17.1      
+    ## [28] scales_1.4.0            dichromat_2.0-0.1       cli_3.6.6              
+    ## [31] crayon_1.5.3            ragg_1.5.2              rstudioapi_0.17.1      
     ## [34] httr_1.4.7              tzdb_0.5.0              DBI_1.2.3              
     ## [37] cachem_1.1.0            splines_4.5.1           parallel_4.5.1         
-    ## [40] AnnotationDbi_1.72.0    XVector_0.50.0          vctrs_0.7.0            
+    ## [40] AnnotationDbi_1.72.0    XVector_0.50.0          vctrs_0.7.3            
     ## [43] Matrix_1.6-4            jsonlite_2.0.0          hms_1.1.4              
-    ## [46] bit64_4.6.0-1           systemfonts_1.3.1       locfit_1.5-9.12        
+    ## [46] bit64_4.6.0-1           systemfonts_1.3.2       locfit_1.5-9.12        
     ## [49] annotate_1.86.1         glue_1.8.0              codetools_0.2-20       
     ## [52] stringi_1.8.7           gtable_0.3.6            GenomeInfoDb_1.44.3    
     ## [55] UCSC.utils_1.4.0        pillar_1.11.1           htmltools_0.5.9        
-    ## [58] GenomeInfoDbData_1.2.14 R6_2.6.1                textshaping_1.0.4      
+    ## [58] GenomeInfoDbData_1.2.14 R6_2.6.1                textshaping_1.0.5      
     ## [61] evaluate_1.0.5          lattice_0.22-7          png_0.1-8              
-    ## [64] memoise_2.0.1           Rcpp_1.1.1              SparseArray_1.10.2     
+    ## [64] memoise_2.0.1           Rcpp_1.1.1-1.1          SparseArray_1.10.2     
     ## [67] xfun_0.56               pkgconfig_2.0.3

@@ -94,7 +94,7 @@ tables <- paste0(species_list,"_master")
 all_master <- bind_rows(Pacuta_master,Mcap_master,Pcomp_master)
 
 cat("Genes per species:\n")
-print(all_master %>% count(species))
+print(all_master %>% dplyr::count(species))
 ```
 
 ## 5. Join orthologs with expression data
@@ -277,13 +277,6 @@ not_responsive <- complete_1to1_ogs_summary %>%
 
 #### Summarize the response categories:
 
-1:1:1 Ortholog Response Categories:
-
-- Core conserved: DE in all 3, same Mfuzz pattern
-- Core divergent: DE in all 3, different Mfuzz patterns  
-- Variable response: DE in 1-2 species only
-- Not responsive: DE in 0 species
-
 ```{r}
 responses_1to1_ogs_summary <- data.frame(
   Category = c("Core Conserved", 
@@ -296,7 +289,16 @@ responses_1to1_ogs_summary <- data.frame(
   mutate(
     Percentage = 100 * Count / sum(Count)
   )
+```
 
+1:1:1 Ortholog Response Categories:
+
+- Core conserved: DE in all 3, same Mfuzz pattern
+- Core divergent: DE in all 3, different Mfuzz patterns  
+- Variable response: DE in 1-2 species only
+- Not responsive: DE in 0 species
+
+```{r}
 kable(responses_1to1_ogs_summary,format = "markdown")
 ```
 
@@ -330,6 +332,8 @@ p_pie <- ggplot(pie_data, aes(x = "", y = Count, fill = Category)) +
   )
 save_ggplot(p_pie,"all_response_pie", width=8, height=8)
 
+p_pie
+
 pie_data_allDE <- responses_1to1_ogs_summary %>% filter(grepl("Core",Category)) %>%
   mutate(Percentage = 100 * Count / sum(Count),
          Label = paste0(Category, "\nn=", Count, " (", round(Percentage, 1), "%)"))
@@ -348,6 +352,8 @@ p_pie_allDE <- ggplot(pie_data_allDE, aes(x = "", y = Count, fill = Category)) +
   )
 
 save_ggplot(p_pie_allDE,"core_response_pie", width=8, height=8)
+
+p_pie_allDE
 ```
 
 ## 8. Mfuzz-pattern conserved responses (not exclusively 1:1:1)
@@ -531,7 +537,7 @@ core_divergent_heat <- core_divergent_response %>%
          gene_Mcap %in% all_heat$gene_id |
          gene_Pcomp %in% all_heat$gene_id) %>% pull(OG) 
 
-all_heat %>% filter(OG %in% core_divergent_heat) %>% View()# kable(format = "markdown")
+all_heat %>% filter(OG %in% core_divergent_heat) %>% kable(format = "markdown")
 ```
 
 None of these genes are in the 81 1:1:1 orthogroups that are DE in all three species and share an Mfuzz pattern. However, five of them are 1:1:1 orthogroups DE in all three species and show different patterns! Cool!!
@@ -541,7 +547,7 @@ None of these genes are in the 81 1:1:1 orthogroups that are DE in all three spe
 ```{r}
 for (species in species_list){
   input_dir <- file.path("../../output_RNA/counts_filt_norm", species)
-  vst_counts <- read.csv(file.path(input_dir, "vsd_expression_matrix.csv"), row.names = 1) 
+  vst_counts <- read.csv(file.path(input_dir, "vst_expression_matrix.csv"), row.names = 1) 
   assign(paste0(species,"_vst"),vst_counts)
   rm(vst_counts)
 }
@@ -553,16 +559,16 @@ top_100_Pcomp <- all_heat %>% filter(species =="Pcomp") %>% arrange(ImpulseDE2_p
 heat_samples <- Pcomp_vst %>% select(contains("_H")) %>% colnames()
 T0_samples <- Pcomp_vst %>% select(contains("_H")) %>% select(contains("_R0_"))  %>% colnames()
 T
-vsd_heat_top <- Pcomp_vst[top_100_Pcomp$gene_id,heat_samples]
-vsd_heat_top$T0mean <- rowMeans(vsd_heat_top[,T0_samples])
-vsd_heat_norm <- vsd_heat_top - vsd_heat_top$T0mean
-vsd_heat_norm <- vsd_heat_norm %>% select(-T0mean)
+vst_heat_top <- Pcomp_vst[top_100_Pcomp$gene_id,heat_samples]
+vst_heat_top$T0mean <- rowMeans(vst_heat_top[,T0_samples])
+vst_heat_norm <- vst_heat_top - vst_heat_top$T0mean
+vst_heat_norm <- vst_heat_norm %>% select(-T0mean)
 
-vsd_max <- max(abs(vsd_heat_norm), na.rm = TRUE)
+vst_max <- max(abs(vst_heat_norm), na.rm = TRUE)
 scale_colors <- colorRampPalette(c("#3c58a7","#3c58a7", "white", "#ee2e25","#ee2e25"))(100)
-legend_breaks <- seq(-vsd_max, vsd_max, length.out = 101)
+legend_breaks <- seq(-vst_max, vst_max, length.out = 101)
 
-heatmap_up <- pheatmap(vsd_heat_norm, 
+heatmap_up <- pheatmap(vst_heat_norm, 
          cluster_rows = FALSE, 
          show_rownames = FALSE,
          show_colnames = FALSE,

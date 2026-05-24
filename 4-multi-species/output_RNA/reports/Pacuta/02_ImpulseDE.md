@@ -1,7 +1,7 @@
 ImpulseDE2 Temporal Analysis
 ================
 Zoe Dellaert
-2026-05-20
+2026-05-24
 
 - [Bulk RNA-seq Time Course Trajectory Analysis and
   Clustering](#bulk-rna-seq-time-course-trajectory-analysis-and-clustering)
@@ -13,8 +13,8 @@ Zoe Dellaert
   - [1. Load packages and functions](#1-load-packages-and-functions)
   - [2. Setup species-specific
     parameters](#2-setup-species-specific-parameters)
-  - [3. Load in raw counts, transformed counts, metadata, and
-    annotations](#3-load-in-raw-counts-transformed-counts-metadata-and-annotations)
+  - [3. Load in filtered raw counts, transformed counts, metadata, and
+    annotations](#3-load-in-filtered-raw-counts-transformed-counts-metadata-and-annotations)
 - [ImpulseDE2 Analysis](#impulsede2-analysis)
   - [1. Metadata formatting](#1-metadata-formatting)
   - [2. Run ImpulseDE2](#2-run-impulsede2)
@@ -109,9 +109,9 @@ library(tidyverse)
 ```
 
     ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-    ## ✔ dplyr     1.1.4     ✔ readr     2.1.6
+    ## ✔ dplyr     1.1.4     ✔ readr     2.2.0
     ## ✔ forcats   1.0.0     ✔ stringr   1.6.0
-    ## ✔ ggplot2   4.0.1     ✔ tibble    3.3.0
+    ## ✔ ggplot2   4.0.3     ✔ tibble    3.3.0
     ## ✔ lubridate 1.9.4     ✔ tidyr     1.3.1
     ## ✔ purrr     1.2.1     
     ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
@@ -267,16 +267,16 @@ sessionInfo() #provides list of loaded packages and version of R
     ##  [4] e1071_1.7-16          Biobase_2.70.0        BiocGenerics_0.56.0  
     ##  [7] generics_0.1.4        pheatmap_1.0.13       ComplexHeatmap_2.26.0
     ## [10] lubridate_1.9.4       forcats_1.0.0         stringr_1.6.0        
-    ## [13] dplyr_1.1.4           purrr_1.2.1           readr_2.1.6          
-    ## [16] tidyr_1.3.1           tibble_3.3.0          ggplot2_4.0.1        
-    ## [19] tidyverse_2.0.0       ImpulseDE2_0.99.10    rmarkdown_2.30       
+    ## [13] dplyr_1.1.4           purrr_1.2.1           readr_2.2.0          
+    ## [16] tidyr_1.3.1           tibble_3.3.0          ggplot2_4.0.3        
+    ## [19] tidyverse_2.0.0       ImpulseDE2_0.99.10    rmarkdown_2.31       
     ## 
     ## loaded via a namespace (and not attached):
     ##  [1] tidyselect_1.2.1            farver_2.1.2               
-    ##  [3] S7_0.2.1                    fastmap_1.2.0              
+    ##  [3] S7_0.2.2                    fastmap_1.2.0              
     ##  [5] digest_0.6.39               timechange_0.3.0           
-    ##  [7] lifecycle_1.0.5             cluster_2.1.8.1            
-    ##  [9] magrittr_2.0.4              compiler_4.5.1             
+    ##  [7] lifecycle_1.0.5             cluster_2.1.8.2            
+    ##  [9] magrittr_2.0.5              compiler_4.5.1             
     ## [11] tkWidgets_1.86.0            rlang_1.2.0                
     ## [13] tools_4.5.1                 yaml_2.3.12                
     ## [15] knitr_1.50                  S4Arrays_1.10.0            
@@ -285,28 +285,28 @@ sessionInfo() #provides list of loaded packages and version of R
     ## [21] withr_3.0.2                 stats4_4.5.1               
     ## [23] colorspace_2.1-2            scales_1.4.0               
     ## [25] iterators_1.0.14            dichromat_2.0-0.1          
-    ## [27] SummarizedExperiment_1.40.0 cli_3.6.5                  
+    ## [27] SummarizedExperiment_1.40.0 cli_3.6.6                  
     ## [29] crayon_1.5.3                rstudioapi_0.17.1          
     ## [31] tzdb_0.5.0                  rjson_0.2.23               
     ## [33] proxy_0.4-27                parallel_4.5.1             
     ## [35] XVector_0.50.0              matrixStats_1.5.0          
-    ## [37] vctrs_0.7.0                 Matrix_1.6-4               
-    ## [39] IRanges_2.44.0              GetoptLong_1.1.0           
+    ## [37] vctrs_0.7.3                 Matrix_1.6-4               
+    ## [39] IRanges_2.44.0              GetoptLong_1.1.1           
     ## [41] hms_1.1.4                   S4Vectors_0.48.0           
-    ## [43] clue_0.3-66                 locfit_1.5-9.12            
+    ## [43] clue_0.3-68                 locfit_1.5-9.12            
     ## [45] foreach_1.5.2               glue_1.8.0                 
     ## [47] codetools_0.2-20            cowplot_1.2.0              
     ## [49] stringi_1.8.7               shape_1.4.6.1              
     ## [51] gtable_0.3.6                GenomicRanges_1.62.0       
     ## [53] pillar_1.11.1               htmltools_0.5.9            
-    ## [55] Seqinfo_1.0.0               circlize_0.4.17            
+    ## [55] Seqinfo_1.0.0               circlize_0.4.18            
     ## [57] R6_2.6.1                    doParallel_1.0.17          
     ## [59] evaluate_1.0.5              lattice_0.22-7             
     ## [61] png_0.1-8                   class_7.3-23               
-    ## [63] Rcpp_1.1.1                  SparseArray_1.10.2         
+    ## [63] Rcpp_1.1.1-1.1              SparseArray_1.10.2         
     ## [65] DESeq2_1.50.2               xfun_0.56                  
     ## [67] MatrixGenerics_1.22.0       pkgconfig_2.0.3            
-    ## [69] GlobalOptions_0.1.3
+    ## [69] GlobalOptions_0.1.4
 
 ## 2. Setup species-specific parameters
 
@@ -343,31 +343,44 @@ reportdir <- file.path("../../output_RNA/reports", params$species, "02_ImpulseDE
 if (!dir.exists(reportdir)) dir.create(reportdir, recursive = TRUE)
 ```
 
-## 3. Load in raw counts, transformed counts, metadata, and annotations
+## 3. Load in filtered raw counts, transformed counts, metadata, and annotations
 
 ``` r
-# load in raw counts data
-counts_raw <- read.csv(file.path("../../output_RNA/count_matrices", config$count_matrix), row.names = 1)
-
 # load in filtered counts data
 filtered_counts <- read.csv(file.path(input_dir, "filtered_counts.csv"), row.names = 1)
 
 # load in vst-transformed counts
-vst <- read.csv(file.path(input_dir, "vsd_expression_matrix.csv"))
+vst <- read.csv(file.path(input_dir, "vst_expression_matrix.csv"))
 vst <- vst %>% column_to_rownames(var = "X")
 
 # load in metadata
 meta <- read.csv(paste0("../../output_RNA/",species,"_RNA_seq_metadata.csv"))
 meta <- meta %>% column_to_rownames(var = "X") #%>% select(-c(species, replicate))
 
+# make time and treatment factors
+meta$time <- factor(meta$time, levels = as.character(sort(unique(as.numeric(meta$time)))))
+meta$treatment <- factor(meta$treatment)
+
 # remove outliers that are still in metadata and raw_counts files but were removed prior to the vst transformation
 outlier_samples <- config$outlier_samples
 
 if(length(outlier_samples) > 0) {
-    counts_raw <- counts_raw[, !colnames(counts_raw) %in% outlier_samples]
+    filtered_counts <- filtered_counts[, !colnames(filtered_counts) %in% outlier_samples]
     meta <- meta[!rownames(meta) %in% outlier_samples, ]
 }
 
+all(rownames(meta) %in% colnames(filtered_counts))
+```
+
+    ## [1] TRUE
+
+``` r
+all(rownames(meta) == colnames(filtered_counts))
+```
+
+    ## [1] TRUE
+
+``` r
 all(rownames(meta) %in% colnames(vst))
 ```
 
@@ -494,8 +507,6 @@ impulse_results <- impulse_results %>%
 
 impulse_results_annot <- impulse_results %>%
   left_join(SwissProt %>% select(query,ProteinNames,BiologicalProcess), by = join_by("Gene"=="query"))
-
-write.csv(impulse_results, file.path(outdir, "ImpulseDE2_results.csv"), row.names = FALSE)
 ```
 
 ### Significant genes
@@ -640,6 +651,10 @@ gene_classification <- data.frame(
   )
 )
 
+
+impulse_classifications <- impulse_results %>% left_join(gene_classification)
+write.csv(impulse_classifications, file.path(outdir, "ImpulseDE2_results.csv"), row.names = FALSE)
+
 impulse_sig_classifications <- impulse_sig %>% left_join(gene_classification)
 write.csv(impulse_sig_classifications, file.path(outdir, "ImpulseDE2_significant.csv"), row.names = FALSE)
 ```
@@ -707,16 +722,16 @@ col_annot <- meta[heat_samples,] %>% select(time)
 
 T0_samples <- meta[heat_samples,] %>% filter(time == 0 ) %>% pull(sample)
 
-vsd_heat_top <- vst[top_100_DE_genes$Gene,heat_samples]
-vsd_heat_top$T0mean <- rowMeans(vsd_heat_top[,T0_samples])
-vsd_heat_norm <- vsd_heat_top - vsd_heat_top$T0mean
-vsd_heat_norm <- vsd_heat_norm %>% select(-T0mean)
+vst_heat_top <- vst[top_100_DE_genes$Gene,heat_samples]
+vst_heat_top$T0mean <- rowMeans(vst_heat_top[,T0_samples])
+vst_heat_norm <- vst_heat_top - vst_heat_top$T0mean
+vst_heat_norm <- vst_heat_norm %>% select(-T0mean)
 
-vsd_max <- max(abs(vsd_heat_norm), na.rm = TRUE)
+vst_max <- max(abs(vst_heat_norm), na.rm = TRUE)
 scale_colors <- colorRampPalette(c("#3c58a7","#3c58a7", "white", "#ee2e25","#ee2e25"))(100)
-legend_breaks <- seq(-vsd_max, vsd_max, length.out = 101)
+legend_breaks <- seq(-vst_max, vst_max, length.out = 101)
 
-heatmap_up <- pheatmap(vsd_heat_norm, 
+heatmap_up <- pheatmap(vst_heat_norm, 
          cluster_rows = FALSE, 
          show_rownames = FALSE,
          show_colnames = FALSE,
@@ -737,8 +752,24 @@ heatmap_up <- pheatmap(vsd_heat_norm,
 ![](./02_ImpulseDE_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
 
 ``` r
-save_ggplot(heatmap_up, "ImpulseDE2_heatmap_UP", width = 7, height = 10, units = "in", dpi = 300)
+png(file.path(outdir_plots,"ImpulseDE2_heatmap_UP.png"),  width = 7, height = 10, units = "in", res = 300)
+heatmap_up
+dev.off()
+```
 
+    ## png 
+    ##   2
+
+``` r
+pdf(paste0(outdir_plots,"/pdf_figs/ImpulseDE2_heatmap_UP.pdf"), width = 7, height = 10)
+heatmap_up
+dev.off()
+```
+
+    ## png 
+    ##   2
+
+``` r
 all_DE_genes <- impulse_sig_up %>% arrange(padj) %>% filter(Gene %in% rownames(vst)) %>% arrange(response_type,padj)
 row_annot <- all_DE_genes %>% select(response_type)
 #col_annot <- meta[heat_samples,] %>% select(treatment,time)
@@ -746,16 +777,16 @@ col_annot <- meta[heat_samples,] %>% select(time)
 
 T0_samples <- meta[heat_samples,] %>% filter(time == 0 ) %>% pull(sample)
 
-vsd_heat_top <- vst[all_DE_genes$Gene,heat_samples]
-vsd_heat_top$T0mean <- rowMeans(vsd_heat_top[,T0_samples])
-vsd_heat_norm <- vsd_heat_top - vsd_heat_top$T0mean
-vsd_heat_norm <- vsd_heat_norm %>% select(-T0mean)
+vst_heat_top <- vst[all_DE_genes$Gene,heat_samples]
+vst_heat_top$T0mean <- rowMeans(vst_heat_top[,T0_samples])
+vst_heat_norm <- vst_heat_top - vst_heat_top$T0mean
+vst_heat_norm <- vst_heat_norm %>% select(-T0mean)
 
-vsd_max <- max(abs(vsd_heat_norm), na.rm = TRUE)
+vst_max <- max(abs(vst_heat_norm), na.rm = TRUE)
 scale_colors <- colorRampPalette(c("#3c58a7","#3c58a7", "white", "#ee2e25","#ee2e25"))(100)
-legend_breaks <- seq(-vsd_max*.9, vsd_max*.9, length.out = 101)
+legend_breaks <- seq(-vst_max*.9, vst_max*.9, length.out = 101)
 
-heatmap_up_all <- pheatmap(vsd_heat_norm, 
+heatmap_up_all <- pheatmap(vst_heat_norm, 
          cluster_rows = FALSE, 
          show_rownames = FALSE,
          show_colnames = FALSE,
@@ -776,8 +807,22 @@ heatmap_up_all <- pheatmap(vsd_heat_norm,
 ![](./02_ImpulseDE_files/figure-gfm/unnamed-chunk-12-2.png)<!-- -->
 
 ``` r
-save_ggplot(heatmap_up_all, "ImpulseDE2_heatmap_UP_ALL", width = 7, height = 10, units = "in", dpi = 300)
+png(file.path(outdir_plots,"ImpulseDE2_heatmap_UP_ALL.png"),  width = 7, height = 10, units = "in", res = 300)
+heatmap_up_all
+dev.off()
 ```
+
+    ## png 
+    ##   2
+
+``` r
+pdf(paste0(outdir_plots,"/pdf_figs/ImpulseDE2_heatmap_UP_ALL.pdf"), width = 7, height = 10)
+heatmap_up_all
+dev.off()
+```
+
+    ## png 
+    ##   2
 
 ### Heatmap of top 100 significant transient/transition downregulated genes normalized to T0
 
@@ -788,16 +833,16 @@ row_annot <- top_100_DE_genes %>% select(response_type)
 #col_annot <- meta[heat_samples,] %>% select(treatment,time)
 col_annot <- meta[heat_samples,] %>% select(time)
 
-vsd_heat_top <- vst[top_100_DE_genes$Gene,heat_samples]
-vsd_heat_top$T0mean <- rowMeans(vsd_heat_top[,T0_samples])
-vsd_heat_norm <- vsd_heat_top - vsd_heat_top$T0mean
-vsd_heat_norm <- vsd_heat_norm %>% select(-T0mean)
+vst_heat_top <- vst[top_100_DE_genes$Gene,heat_samples]
+vst_heat_top$T0mean <- rowMeans(vst_heat_top[,T0_samples])
+vst_heat_norm <- vst_heat_top - vst_heat_top$T0mean
+vst_heat_norm <- vst_heat_norm %>% select(-T0mean)
 
-vsd_max <- max(abs(vsd_heat_norm), na.rm = TRUE)
+vst_max <- max(abs(vst_heat_norm), na.rm = TRUE)
 scale_colors <- colorRampPalette(c("#3c58a7","#3c58a7", "white", "#ee2e25","#ee2e25"))(100)
-legend_breaks <- seq(-vsd_max, vsd_max, length.out = 101)
+legend_breaks <- seq(-vst_max, vst_max, length.out = 101)
 
-heatmap_down <- pheatmap(vsd_heat_norm, 
+heatmap_down <- pheatmap(vst_heat_norm, 
          cluster_rows = FALSE, 
          show_rownames = FALSE,
          show_colnames = FALSE,
@@ -818,8 +863,24 @@ heatmap_down <- pheatmap(vsd_heat_norm,
 ![](./02_ImpulseDE_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
 
 ``` r
-save_ggplot(heatmap_down, "ImpulseDE2_heatmap_DOWN", width = 7, height = 10, units = "in", dpi = 300)
+png(file.path(outdir_plots,"ImpulseDE2_heatmap_DOWN.png"),  width = 7, height = 10, units = "in", res = 300)
+heatmap_down
+dev.off()
+```
 
+    ## png 
+    ##   2
+
+``` r
+pdf(paste0(outdir_plots,"/pdf_figs/ImpulseDE2_heatmap_DOWN.pdf"), width = 7, height = 10)
+heatmap_down
+dev.off()
+```
+
+    ## png 
+    ##   2
+
+``` r
 all_DE_genes <- impulse_sig_down %>% arrange(padj) %>% filter(Gene %in% rownames(vst)) %>% arrange(response_type,padj)
 row_annot <- all_DE_genes %>% select(response_type)
 #col_annot <- meta[heat_samples,] %>% select(treatment,time)
@@ -827,16 +888,16 @@ col_annot <- meta[heat_samples,] %>% select(time)
 
 T0_samples <- meta[heat_samples,] %>% filter(time == 0 ) %>% pull(sample)
 
-vsd_heat_top <- vst[all_DE_genes$Gene,heat_samples]
-vsd_heat_top$T0mean <- rowMeans(vsd_heat_top[,T0_samples])
-vsd_heat_norm <- vsd_heat_top - vsd_heat_top$T0mean
-vsd_heat_norm <- vsd_heat_norm %>% select(-T0mean)
+vst_heat_top <- vst[all_DE_genes$Gene,heat_samples]
+vst_heat_top$T0mean <- rowMeans(vst_heat_top[,T0_samples])
+vst_heat_norm <- vst_heat_top - vst_heat_top$T0mean
+vst_heat_norm <- vst_heat_norm %>% select(-T0mean)
 
-vsd_max <- max(abs(vsd_heat_norm), na.rm = TRUE)
+vst_max <- max(abs(vst_heat_norm), na.rm = TRUE)
 scale_colors <- colorRampPalette(c("#3c58a7","#3c58a7", "white", "#ee2e25","#ee2e25"))(100)
-legend_breaks <- seq(-vsd_max*.9, vsd_max*.9, length.out = 101)
+legend_breaks <- seq(-vst_max*.9, vst_max*.9, length.out = 101)
 
-heatmap_down_all <- pheatmap(vsd_heat_norm, 
+heatmap_down_all <- pheatmap(vst_heat_norm, 
          cluster_rows = FALSE, 
          show_rownames = FALSE,
          show_colnames = FALSE,
@@ -857,8 +918,22 @@ heatmap_down_all <- pheatmap(vsd_heat_norm,
 ![](./02_ImpulseDE_files/figure-gfm/unnamed-chunk-13-2.png)<!-- -->
 
 ``` r
-save_ggplot(heatmap_down_all, "ImpulseDE2_heatmap_DOWN_ALL", width = 7, height = 10, units = "in", dpi = 300)
+png(file.path(outdir_plots,"ImpulseDE2_heatmap_DOWN_ALL.png"),  width = 7, height = 10, units = "in", res = 300)
+heatmap_down_all
+dev.off()
 ```
+
+    ## png 
+    ##   2
+
+``` r
+pdf(paste0(outdir_plots,"/pdf_figs/ImpulseDE2_heatmap_DOWN_ALL.pdf"), width = 7, height = 10)
+heatmap_down_all
+dev.off()
+```
+
+    ## png 
+    ##   2
 
 ### Top gene trajectories
 
@@ -920,7 +995,7 @@ heat-samples
 sig_genes <- impulse_sig %>% filter(Gene %in% rownames(vst)) %>% pull(Gene)
 
 # Get VST expression for case (heat) samples only for sig genes
-heat_vsd <- vst[sig_genes, heat_samples]
+heat_vst <- vst[sig_genes, heat_samples]
 ```
 
 Average across replicates per timepoint, heat samples only
@@ -1196,16 +1271,16 @@ sessionInfo()
     ##  [4] e1071_1.7-16          Biobase_2.70.0        BiocGenerics_0.56.0  
     ##  [7] generics_0.1.4        pheatmap_1.0.13       ComplexHeatmap_2.26.0
     ## [10] lubridate_1.9.4       forcats_1.0.0         stringr_1.6.0        
-    ## [13] dplyr_1.1.4           purrr_1.2.1           readr_2.1.6          
-    ## [16] tidyr_1.3.1           tibble_3.3.0          ggplot2_4.0.1        
-    ## [19] tidyverse_2.0.0       ImpulseDE2_0.99.10    rmarkdown_2.30       
+    ## [13] dplyr_1.1.4           purrr_1.2.1           readr_2.2.0          
+    ## [16] tidyr_1.3.1           tibble_3.3.0          ggplot2_4.0.3        
+    ## [19] tidyverse_2.0.0       ImpulseDE2_0.99.10    rmarkdown_2.31       
     ## 
     ## loaded via a namespace (and not attached):
     ##  [1] tidyselect_1.2.1            farver_2.1.2               
-    ##  [3] S7_0.2.1                    fastmap_1.2.0              
+    ##  [3] S7_0.2.2                    fastmap_1.2.0              
     ##  [5] digest_0.6.39               timechange_0.3.0           
-    ##  [7] lifecycle_1.0.5             cluster_2.1.8.1            
-    ##  [9] Cairo_1.7-0                 magrittr_2.0.4             
+    ##  [7] lifecycle_1.0.5             cluster_2.1.8.2            
+    ##  [9] Cairo_1.7-0                 magrittr_2.0.5             
     ## [11] compiler_4.5.1              tkWidgets_1.86.0           
     ## [13] rlang_1.2.0                 tools_4.5.1                
     ## [15] yaml_2.3.12                 knitr_1.50                 
@@ -1216,27 +1291,26 @@ sessionInfo()
     ## [25] stats4_4.5.1                colorspace_2.1-2           
     ## [27] scales_1.4.0                iterators_1.0.14           
     ## [29] dichromat_2.0-0.1           SummarizedExperiment_1.40.0
-    ## [31] cli_3.6.5                   crayon_1.5.3               
-    ## [33] ragg_1.5.0                  rstudioapi_0.17.1          
-    ## [35] tzdb_0.5.0                  rjson_0.2.23               
-    ## [37] proxy_0.4-27                parallel_4.5.1             
-    ## [39] XVector_0.50.0              matrixStats_1.5.0          
-    ## [41] vctrs_0.7.0                 Matrix_1.6-4               
-    ## [43] IRanges_2.44.0              GetoptLong_1.1.0           
-    ## [45] hms_1.1.4                   S4Vectors_0.48.0           
-    ## [47] bit64_4.6.0-1               clue_0.3-66                
-    ## [49] systemfonts_1.3.1           magick_2.9.0               
-    ## [51] locfit_1.5-9.12             foreach_1.5.2              
-    ## [53] glue_1.8.0                  codetools_0.2-20           
-    ## [55] cowplot_1.2.0               stringi_1.8.7              
-    ## [57] shape_1.4.6.1               gtable_0.3.6               
-    ## [59] GenomicRanges_1.62.0        pillar_1.11.1              
-    ## [61] htmltools_0.5.9             Seqinfo_1.0.0              
-    ## [63] circlize_0.4.17             R6_2.6.1                   
-    ## [65] textshaping_1.0.4           doParallel_1.0.17          
-    ## [67] vroom_1.6.7                 evaluate_1.0.5             
-    ## [69] lattice_0.22-7              png_0.1-8                  
-    ## [71] class_7.3-23                Rcpp_1.1.1                 
-    ## [73] SparseArray_1.10.2          DESeq2_1.50.2              
-    ## [75] xfun_0.56                   MatrixGenerics_1.22.0      
-    ## [77] pkgconfig_2.0.3             GlobalOptions_0.1.3
+    ## [31] cli_3.6.6                   crayon_1.5.3               
+    ## [33] rstudioapi_0.17.1           tzdb_0.5.0                 
+    ## [35] rjson_0.2.23                proxy_0.4-27               
+    ## [37] parallel_4.5.1              XVector_0.50.0             
+    ## [39] matrixStats_1.5.0           vctrs_0.7.3                
+    ## [41] Matrix_1.6-4                IRanges_2.44.0             
+    ## [43] GetoptLong_1.1.1            hms_1.1.4                  
+    ## [45] S4Vectors_0.48.0            bit64_4.6.0-1              
+    ## [47] clue_0.3-68                 magick_2.9.1               
+    ## [49] locfit_1.5-9.12             foreach_1.5.2              
+    ## [51] glue_1.8.0                  codetools_0.2-20           
+    ## [53] cowplot_1.2.0               stringi_1.8.7              
+    ## [55] shape_1.4.6.1               gtable_0.3.6               
+    ## [57] GenomicRanges_1.62.0        pillar_1.11.1              
+    ## [59] htmltools_0.5.9             Seqinfo_1.0.0              
+    ## [61] circlize_0.4.18             R6_2.6.1                   
+    ## [63] doParallel_1.0.17           vroom_1.7.1                
+    ## [65] evaluate_1.0.5              lattice_0.22-7             
+    ## [67] png_0.1-8                   class_7.3-23               
+    ## [69] Rcpp_1.1.1-1.1              SparseArray_1.10.2         
+    ## [71] DESeq2_1.50.2               xfun_0.56                  
+    ## [73] MatrixGenerics_1.22.0       pkgconfig_2.0.3            
+    ## [75] GlobalOptions_0.1.4

@@ -179,7 +179,7 @@ make_module_heatmap <- function(module_name,
 
 ```{r load-data}
 # load in vst-transformed counts
-vst <- read.csv(file.path(input_dir, "vsd_expression_matrix.csv"))
+vst <- read.csv(file.path(input_dir, "vst_expression_matrix.csv"))
 vst <- vst %>% column_to_rownames(var = "X")
 
 # transpose counts to format needed for WGCNA

@@ -1,7 +1,7 @@
 Integrate across analyses
 ================
 Zoe Dellaert
-2026-05-19
+2026-05-24
 
 - [Analysis of Time Series bulk RNA-seq data: Combine results from all
   analyses](#analysis-of-time-series-bulk-rna-seq-data-combine-results-from-all-analyses)
@@ -68,38 +68,65 @@ sessionInfo() #provides list of loaded packages and version of R
     ## tzcode source: system (glibc)
     ## 
     ## attached base packages:
-    ## [1] grid      stats     graphics  grDevices utils     datasets  methods  
-    ## [8] base     
+    ##  [1] tcltk     grid      stats4    stats     graphics  grDevices utils    
+    ##  [8] datasets  methods   base     
     ## 
     ## other attached packages:
-    ##  [1] ComplexHeatmap_2.26.0 knitr_1.50            lubridate_1.9.4      
-    ##  [4] forcats_1.0.0         stringr_1.6.0         dplyr_1.1.4          
-    ##  [7] purrr_1.2.1           readr_2.1.6           tidyr_1.3.1          
-    ## [10] tibble_3.3.0          ggplot2_4.0.1         tidyverse_2.0.0      
-    ## [13] rmarkdown_2.30       
+    ##  [1] knitr_1.50                  WGCNA_1.73                 
+    ##  [3] fastcluster_1.3.0           dynamicTreeCut_1.63-1      
+    ##  [5] Mfuzz_2.68.0                DynDoc_1.86.0              
+    ##  [7] widgetTools_1.86.0          e1071_1.7-16               
+    ##  [9] ComplexHeatmap_2.26.0       ImpulseDE2_0.99.10         
+    ## [11] BiocParallel_1.44.0         ggnewscale_0.5.2           
+    ## [13] genefilter_1.90.0           RColorBrewer_1.1-3         
+    ## [15] pheatmap_1.0.13             DESeq2_1.50.2              
+    ## [17] SummarizedExperiment_1.40.0 Biobase_2.70.0             
+    ## [19] MatrixGenerics_1.22.0       matrixStats_1.5.0          
+    ## [21] GenomicRanges_1.62.0        Seqinfo_1.0.0              
+    ## [23] IRanges_2.44.0              S4Vectors_0.48.0           
+    ## [25] BiocGenerics_0.56.0         generics_0.1.4             
+    ## [27] lubridate_1.9.4             forcats_1.0.0              
+    ## [29] stringr_1.6.0               dplyr_1.1.4                
+    ## [31] purrr_1.2.1                 readr_2.2.0                
+    ## [33] tidyr_1.3.1                 tibble_3.3.0               
+    ## [35] ggplot2_4.0.3               tidyverse_2.0.0            
+    ## [37] rmarkdown_2.31             
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] gtable_0.3.6        circlize_0.4.17     shape_1.4.6.1      
-    ##  [4] rjson_0.2.23        xfun_0.56           GlobalOptions_0.1.3
-    ##  [7] tzdb_0.5.0          Cairo_1.7-0         vctrs_0.7.0        
-    ## [10] tools_4.5.1         generics_0.1.4      stats4_4.5.1       
-    ## [13] parallel_4.5.1      cluster_2.1.8.1     pkgconfig_2.0.3    
-    ## [16] RColorBrewer_1.1-3  S7_0.2.1            S4Vectors_0.48.0   
-    ## [19] lifecycle_1.0.5     compiler_4.5.1      farver_2.1.2       
-    ## [22] textshaping_1.0.4   codetools_0.2-20    clue_0.3-66        
-    ## [25] htmltools_0.5.9     yaml_2.3.12         pillar_1.11.1      
-    ## [28] crayon_1.5.3        magick_2.9.0        iterators_1.0.14   
-    ## [31] foreach_1.5.2       tidyselect_1.2.1    digest_0.6.39      
-    ## [34] stringi_1.8.7       labeling_0.4.3      fastmap_1.2.0      
-    ## [37] colorspace_2.1-2    cli_3.6.5           magrittr_2.0.4     
-    ## [40] dichromat_2.0-0.1   withr_3.0.2         scales_1.4.0       
-    ## [43] bit64_4.6.0-1       timechange_0.3.0    matrixStats_1.5.0  
-    ## [46] bit_4.6.0           ragg_1.5.0          png_0.1-8          
-    ## [49] GetoptLong_1.1.0    hms_1.1.4           evaluate_1.0.5     
-    ## [52] IRanges_2.44.0      doParallel_1.0.17   rlang_1.2.0        
-    ## [55] Rcpp_1.1.1          glue_1.8.0          BiocGenerics_0.56.0
-    ## [58] rstudioapi_0.17.1   vroom_1.6.7         R6_2.6.1           
-    ## [61] systemfonts_1.3.1
+    ##   [1] rstudioapi_0.17.1       jsonlite_2.0.0          shape_1.4.6.1          
+    ##   [4] magrittr_2.0.5          magick_2.9.1            farver_2.1.2           
+    ##   [7] GlobalOptions_0.1.4     ragg_1.5.2              vctrs_0.7.3            
+    ##  [10] memoise_2.0.1           Cairo_1.7-0             base64enc_0.1-3        
+    ##  [13] htmltools_0.5.9         S4Arrays_1.10.0         SparseArray_1.10.2     
+    ##  [16] Formula_1.2-5           htmlwidgets_1.6.4       impute_1.84.0          
+    ##  [19] cachem_1.1.0            lifecycle_1.0.5         iterators_1.0.14       
+    ##  [22] pkgconfig_2.0.3         Matrix_1.6-4            R6_2.6.1               
+    ##  [25] fastmap_1.2.0           GenomeInfoDbData_1.2.14 clue_0.3-68            
+    ##  [28] digest_0.6.39           colorspace_2.1-2        AnnotationDbi_1.72.0   
+    ##  [31] textshaping_1.0.5       Hmisc_5.2-5             RSQLite_3.52.0         
+    ##  [34] labeling_0.4.3          timechange_0.3.0        httr_1.4.7             
+    ##  [37] abind_1.4-8             compiler_4.5.1          proxy_0.4-27           
+    ##  [40] bit64_4.6.0-1           withr_3.0.2             doParallel_1.0.17      
+    ##  [43] backports_1.5.0         htmlTable_2.4.3         S7_0.2.2               
+    ##  [46] DBI_1.2.3               tkWidgets_1.86.0        DelayedArray_0.36.0    
+    ##  [49] rjson_0.2.23            tools_4.5.1             foreign_0.8-90         
+    ##  [52] nnet_7.3-20             glue_1.8.0              checkmate_2.3.4        
+    ##  [55] cluster_2.1.8.2         gtable_0.3.6            tzdb_0.5.0             
+    ##  [58] preprocessCore_1.72.0   class_7.3-23            data.table_1.18.4      
+    ##  [61] hms_1.1.4               utf8_1.2.6              XVector_0.50.0         
+    ##  [64] foreach_1.5.2           pillar_1.11.1           limma_3.64.3           
+    ##  [67] vroom_1.7.1             circlize_0.4.18         splines_4.5.1          
+    ##  [70] lattice_0.22-7          survival_3.8-3          bit_4.6.0              
+    ##  [73] annotate_1.86.1         tidyselect_1.2.1        GO.db_3.22.0           
+    ##  [76] locfit_1.5-9.12         Biostrings_2.78.0       gridExtra_2.3          
+    ##  [79] xfun_0.56               statmod_1.5.2           stringi_1.8.7          
+    ##  [82] UCSC.utils_1.4.0        yaml_2.3.12             evaluate_1.0.5         
+    ##  [85] codetools_0.2-20        cli_3.6.6               rpart_4.1.24           
+    ##  [88] xtable_1.8-4            systemfonts_1.3.2       dichromat_2.0-0.1      
+    ##  [91] Rcpp_1.1.1-1.1          GenomeInfoDb_1.44.3     png_0.1-8              
+    ##  [94] XML_3.99-0.18           parallel_4.5.1          blob_1.2.4             
+    ##  [97] scales_1.4.0            crayon_1.5.3            GetoptLong_1.1.1       
+    ## [100] rlang_1.2.0             cowplot_1.2.0           KEGGREST_1.50.0
 
 ## 2. Setup species-specific parameters and define directories
 
@@ -147,7 +174,7 @@ filtered_counts <- read.csv(file.path(input_dir, "filtered_counts.csv"), row.nam
 all_genes <- rownames(filtered_counts)
 
 # load in transformed counts data
-vst_counts <- read.csv(file.path(input_dir, "vsd_expression_matrix.csv"), row.names = 1)
+vst_counts <- read.csv(file.path(input_dir, "vst_expression_matrix.csv"), row.names = 1)
 
 # ImpulseDE2 results
 impulse_results <- read.csv(file.path(impulse_dir, "ImpulseDE2_results.csv"))
@@ -233,7 +260,7 @@ Mfuzz_pattern_mapping <- pattern_mapping %>% filter(species ==  params$species) 
 # combine impulseDE results, Mfuzz clusters, WGCNA modules, and TFBS quantification into one master dataframe for downstream analysis and visualization
 
 master_table <- data.frame(gene_id=all_genes) %>%
-  left_join(impulse_results %>% select(Gene, padj, response_type), by = join_by(gene_id == Gene)) %>%
+  left_join(impulse_results %>% select(Gene, padj, response_type,classification), by = join_by(gene_id == Gene)) %>%
   mutate(is_DE = padj < 0.05) %>%
   left_join(mfuzz_clusters %>% select(Gene, cluster, membership), by = join_by(gene_id == Gene)) %>%
   mutate(Mfuzz_highconf = membership > 0.5) %>%
@@ -246,6 +273,7 @@ master_table <- data.frame(gene_id=all_genes) %>%
   left_join(SwissProt, by = join_by(gene_id == query)) %>%
   dplyr::rename(ImpulseDE2_padj = padj,
          ImpulseDE2_response_type = response_type,
+         ImpulseDE2_response_class = classification,
          Mfuzz_cluster = cluster,
          Mfuzz_membership = membership,
          Mfuzz_pattern = pattern,
@@ -340,7 +368,7 @@ Upset plot from ComplexHeatmap package, documentation
 ``` r
 m <- make_comb_mat(as.matrix(overlap_matrix[,-1]))
 
-pdf(file.path(outdir_plots, "analysis_overlap_upset.pdf"), width=12, height=6)
+pdf(file.path(outdir_plots, "pdf_figs/analysis_overlap_upset.pdf"), width=12, height=6)
 UpSet(m, 
       top_annotation = upset_top_annotation(m, add_numbers = TRUE),
       right_annotation = upset_right_annotation(m, add_numbers = TRUE),
@@ -659,15 +687,15 @@ summary_stats %>% kable(format = "markdown")
 
 | metric                                                   | count |
 |:---------------------------------------------------------|------:|
-| Total genes (post-filtering)                             |    74 |
-| SwissProt-annotated genes                                |    53 |
-| Differentially expressed (ImpulseDE2, padj \< 0.05)      |    32 |
-| DE genes temporally clustered (Mfuzz, membership \> 0.5) |    29 |
-| WGCNA assigned                                           |    74 |
-| WGCNA modules                                            |    19 |
-| WGCNA modules Sig. by Time\*Treatment                    |     7 |
-| Hub genes (WGCNA, top 10% kME)                           |    13 |
-| Hub genes also differentially expressed (ImpulseDE2)     |    11 |
-| Genes with HSF1 binding sites                            |    12 |
-| Genes with FOXO3 binding sites                           |    12 |
+| Total genes (post-filtering)                             |    78 |
+| SwissProt-annotated genes                                |    56 |
+| Differentially expressed (ImpulseDE2, padj \< 0.05)      |    34 |
+| DE genes temporally clustered (Mfuzz, membership \> 0.5) |    31 |
+| WGCNA assigned                                           |    78 |
+| WGCNA modules                                            |    20 |
+| WGCNA modules Sig. by Time\*Treatment                    |     8 |
+| Hub genes (WGCNA, top 10% kME)                           |    14 |
+| Hub genes also differentially expressed (ImpulseDE2)     |    12 |
+| Genes with HSF1 binding sites                            |    14 |
+| Genes with FOXO3 binding sites                           |    13 |
 | Genes with NRF2/NFE2L2 binding sites                     |    11 |

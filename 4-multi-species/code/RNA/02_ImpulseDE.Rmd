@@ -95,30 +95,34 @@ reportdir <- file.path("../../output_RNA/reports", params$species, "02_ImpulseDE
 if (!dir.exists(reportdir)) dir.create(reportdir, recursive = TRUE)
 ```
 
-## 3. Load in raw counts, transformed counts, metadata, and annotations
+## 3. Load in filtered raw counts, transformed counts, metadata, and annotations
 
 ```{r load-counts}
-# load in raw counts data
-counts_raw <- read.csv(file.path("../../output_RNA/count_matrices", config$count_matrix), row.names = 1)
-
 # load in filtered counts data
 filtered_counts <- read.csv(file.path(input_dir, "filtered_counts.csv"), row.names = 1)
 
 # load in vst-transformed counts
-vst <- read.csv(file.path(input_dir, "vsd_expression_matrix.csv"))
+vst <- read.csv(file.path(input_dir, "vst_expression_matrix.csv"))
 vst <- vst %>% column_to_rownames(var = "X")
 
 # load in metadata
 meta <- read.csv(paste0("../../output_RNA/",species,"_RNA_seq_metadata.csv"))
 meta <- meta %>% column_to_rownames(var = "X") #%>% select(-c(species, replicate))
 
+# make time and treatment factors
+meta$time <- factor(meta$time, levels = as.character(sort(unique(as.numeric(meta$time)))))
+meta$treatment <- factor(meta$treatment)
+
 # remove outliers that are still in metadata and raw_counts files but were removed prior to the vst transformation
 outlier_samples <- config$outlier_samples
 
 if(length(outlier_samples) > 0) {
-    counts_raw <- counts_raw[, !colnames(counts_raw) %in% outlier_samples]
+    filtered_counts <- filtered_counts[, !colnames(filtered_counts) %in% outlier_samples]
     meta <- meta[!rownames(meta) %in% outlier_samples, ]
 }
+
+all(rownames(meta) %in% colnames(filtered_counts))
+all(rownames(meta) == colnames(filtered_counts))
 
 all(rownames(meta) %in% colnames(vst))
 all(rownames(meta) == colnames(vst))
@@ -196,8 +200,6 @@ impulse_results <- impulse_results %>%
 
 impulse_results_annot <- impulse_results %>%
   left_join(SwissProt %>% select(query,ProteinNames,BiologicalProcess), by = join_by("Gene"=="query"))
-
-write.csv(impulse_results, file.path(outdir, "ImpulseDE2_results.csv"), row.names = FALSE)
 ```
 
 ### Significant genes 
@@ -254,6 +256,10 @@ gene_classification <- data.frame(
   )
 )
 
+
+impulse_classifications <- impulse_results %>% left_join(gene_classification)
+write.csv(impulse_classifications, file.path(outdir, "ImpulseDE2_results.csv"), row.names = FALSE)
+
 impulse_sig_classifications <- impulse_sig %>% left_join(gene_classification)
 write.csv(impulse_sig_classifications, file.path(outdir, "ImpulseDE2_significant.csv"), row.names = FALSE)
 ```
@@ -295,16 +301,16 @@ col_annot <- meta[heat_samples,] %>% select(time)
 
 T0_samples <- meta[heat_samples,] %>% filter(time == 0 ) %>% pull(sample)
 
-vsd_heat_top <- vst[top_100_DE_genes$Gene,heat_samples]
-vsd_heat_top$T0mean <- rowMeans(vsd_heat_top[,T0_samples])
-vsd_heat_norm <- vsd_heat_top - vsd_heat_top$T0mean
-vsd_heat_norm <- vsd_heat_norm %>% select(-T0mean)
+vst_heat_top <- vst[top_100_DE_genes$Gene,heat_samples]
+vst_heat_top$T0mean <- rowMeans(vst_heat_top[,T0_samples])
+vst_heat_norm <- vst_heat_top - vst_heat_top$T0mean
+vst_heat_norm <- vst_heat_norm %>% select(-T0mean)
 
-vsd_max <- max(abs(vsd_heat_norm), na.rm = TRUE)
+vst_max <- max(abs(vst_heat_norm), na.rm = TRUE)
 scale_colors <- colorRampPalette(c("#3c58a7","#3c58a7", "white", "#ee2e25","#ee2e25"))(100)
-legend_breaks <- seq(-vsd_max, vsd_max, length.out = 101)
+legend_breaks <- seq(-vst_max, vst_max, length.out = 101)
 
-heatmap_up <- pheatmap(vsd_heat_norm, 
+heatmap_up <- pheatmap(vst_heat_norm, 
          cluster_rows = FALSE, 
          show_rownames = FALSE,
          show_colnames = FALSE,
@@ -321,7 +327,13 @@ heatmap_up <- pheatmap(vsd_heat_norm,
                                   "time" = time_colors,
                                   "response_type" = c("Monotonous" = "#D8AF39FF", "Transient" = "#278B9AFF")))
 
-save_ggplot(heatmap_up, "ImpulseDE2_heatmap_UP", width = 7, height = 10, units = "in", dpi = 300)
+png(file.path(outdir_plots,"ImpulseDE2_heatmap_UP.png"),  width = 7, height = 10, units = "in", res = 300)
+heatmap_up
+dev.off()
+
+pdf(paste0(outdir_plots,"/pdf_figs/ImpulseDE2_heatmap_UP.pdf"), width = 7, height = 10)
+heatmap_up
+dev.off()
 
 all_DE_genes <- impulse_sig_up %>% arrange(padj) %>% filter(Gene %in% rownames(vst)) %>% arrange(response_type,padj)
 row_annot <- all_DE_genes %>% select(response_type)
@@ -330,16 +342,16 @@ col_annot <- meta[heat_samples,] %>% select(time)
 
 T0_samples <- meta[heat_samples,] %>% filter(time == 0 ) %>% pull(sample)
 
-vsd_heat_top <- vst[all_DE_genes$Gene,heat_samples]
-vsd_heat_top$T0mean <- rowMeans(vsd_heat_top[,T0_samples])
-vsd_heat_norm <- vsd_heat_top - vsd_heat_top$T0mean
-vsd_heat_norm <- vsd_heat_norm %>% select(-T0mean)
+vst_heat_top <- vst[all_DE_genes$Gene,heat_samples]
+vst_heat_top$T0mean <- rowMeans(vst_heat_top[,T0_samples])
+vst_heat_norm <- vst_heat_top - vst_heat_top$T0mean
+vst_heat_norm <- vst_heat_norm %>% select(-T0mean)
 
-vsd_max <- max(abs(vsd_heat_norm), na.rm = TRUE)
+vst_max <- max(abs(vst_heat_norm), na.rm = TRUE)
 scale_colors <- colorRampPalette(c("#3c58a7","#3c58a7", "white", "#ee2e25","#ee2e25"))(100)
-legend_breaks <- seq(-vsd_max*.9, vsd_max*.9, length.out = 101)
+legend_breaks <- seq(-vst_max*.9, vst_max*.9, length.out = 101)
 
-heatmap_up_all <- pheatmap(vsd_heat_norm, 
+heatmap_up_all <- pheatmap(vst_heat_norm, 
          cluster_rows = FALSE, 
          show_rownames = FALSE,
          show_colnames = FALSE,
@@ -356,7 +368,13 @@ heatmap_up_all <- pheatmap(vsd_heat_norm,
                                   "time" = time_colors,
                                   "response_type" = c("Monotonous" = "#D8AF39FF", "Transient" = "#278B9AFF")))
 
-save_ggplot(heatmap_up_all, "ImpulseDE2_heatmap_UP_ALL", width = 7, height = 10, units = "in", dpi = 300)
+png(file.path(outdir_plots,"ImpulseDE2_heatmap_UP_ALL.png"),  width = 7, height = 10, units = "in", res = 300)
+heatmap_up_all
+dev.off()
+
+pdf(paste0(outdir_plots,"/pdf_figs/ImpulseDE2_heatmap_UP_ALL.pdf"), width = 7, height = 10)
+heatmap_up_all
+dev.off()
 ```
 
 ### Heatmap of top 100 significant transient/transition downregulated genes normalized to T0
@@ -368,16 +386,16 @@ row_annot <- top_100_DE_genes %>% select(response_type)
 #col_annot <- meta[heat_samples,] %>% select(treatment,time)
 col_annot <- meta[heat_samples,] %>% select(time)
 
-vsd_heat_top <- vst[top_100_DE_genes$Gene,heat_samples]
-vsd_heat_top$T0mean <- rowMeans(vsd_heat_top[,T0_samples])
-vsd_heat_norm <- vsd_heat_top - vsd_heat_top$T0mean
-vsd_heat_norm <- vsd_heat_norm %>% select(-T0mean)
+vst_heat_top <- vst[top_100_DE_genes$Gene,heat_samples]
+vst_heat_top$T0mean <- rowMeans(vst_heat_top[,T0_samples])
+vst_heat_norm <- vst_heat_top - vst_heat_top$T0mean
+vst_heat_norm <- vst_heat_norm %>% select(-T0mean)
 
-vsd_max <- max(abs(vsd_heat_norm), na.rm = TRUE)
+vst_max <- max(abs(vst_heat_norm), na.rm = TRUE)
 scale_colors <- colorRampPalette(c("#3c58a7","#3c58a7", "white", "#ee2e25","#ee2e25"))(100)
-legend_breaks <- seq(-vsd_max, vsd_max, length.out = 101)
+legend_breaks <- seq(-vst_max, vst_max, length.out = 101)
 
-heatmap_down <- pheatmap(vsd_heat_norm, 
+heatmap_down <- pheatmap(vst_heat_norm, 
          cluster_rows = FALSE, 
          show_rownames = FALSE,
          show_colnames = FALSE,
@@ -394,7 +412,13 @@ heatmap_down <- pheatmap(vsd_heat_norm,
                                   "time" = time_colors,
                                   "response_type" = c("Monotonous" = "#D8AF39FF", "Transient" = "#278B9AFF")))
 
-save_ggplot(heatmap_down, "ImpulseDE2_heatmap_DOWN", width = 7, height = 10, units = "in", dpi = 300)
+png(file.path(outdir_plots,"ImpulseDE2_heatmap_DOWN.png"),  width = 7, height = 10, units = "in", res = 300)
+heatmap_down
+dev.off()
+
+pdf(paste0(outdir_plots,"/pdf_figs/ImpulseDE2_heatmap_DOWN.pdf"), width = 7, height = 10)
+heatmap_down
+dev.off()
 
 all_DE_genes <- impulse_sig_down %>% arrange(padj) %>% filter(Gene %in% rownames(vst)) %>% arrange(response_type,padj)
 row_annot <- all_DE_genes %>% select(response_type)
@@ -403,16 +427,16 @@ col_annot <- meta[heat_samples,] %>% select(time)
 
 T0_samples <- meta[heat_samples,] %>% filter(time == 0 ) %>% pull(sample)
 
-vsd_heat_top <- vst[all_DE_genes$Gene,heat_samples]
-vsd_heat_top$T0mean <- rowMeans(vsd_heat_top[,T0_samples])
-vsd_heat_norm <- vsd_heat_top - vsd_heat_top$T0mean
-vsd_heat_norm <- vsd_heat_norm %>% select(-T0mean)
+vst_heat_top <- vst[all_DE_genes$Gene,heat_samples]
+vst_heat_top$T0mean <- rowMeans(vst_heat_top[,T0_samples])
+vst_heat_norm <- vst_heat_top - vst_heat_top$T0mean
+vst_heat_norm <- vst_heat_norm %>% select(-T0mean)
 
-vsd_max <- max(abs(vsd_heat_norm), na.rm = TRUE)
+vst_max <- max(abs(vst_heat_norm), na.rm = TRUE)
 scale_colors <- colorRampPalette(c("#3c58a7","#3c58a7", "white", "#ee2e25","#ee2e25"))(100)
-legend_breaks <- seq(-vsd_max*.9, vsd_max*.9, length.out = 101)
+legend_breaks <- seq(-vst_max*.9, vst_max*.9, length.out = 101)
 
-heatmap_down_all <- pheatmap(vsd_heat_norm, 
+heatmap_down_all <- pheatmap(vst_heat_norm, 
          cluster_rows = FALSE, 
          show_rownames = FALSE,
          show_colnames = FALSE,
@@ -429,7 +453,13 @@ heatmap_down_all <- pheatmap(vsd_heat_norm,
                                   "time" = time_colors,
                                   "response_type" = c("Monotonous" = "#D8AF39FF", "Transient" = "#278B9AFF")))
 
-save_ggplot(heatmap_down_all, "ImpulseDE2_heatmap_DOWN_ALL", width = 7, height = 10, units = "in", dpi = 300)
+png(file.path(outdir_plots,"ImpulseDE2_heatmap_DOWN_ALL.png"),  width = 7, height = 10, units = "in", res = 300)
+heatmap_down_all
+dev.off()
+
+pdf(paste0(outdir_plots,"/pdf_figs/ImpulseDE2_heatmap_DOWN_ALL.pdf"), width = 7, height = 10)
+heatmap_down_all
+dev.off()
 ```
 
 ### Top gene trajectories
@@ -460,7 +490,7 @@ Filter vst transformed counts to keep significant genes and only heat-samples
 sig_genes <- impulse_sig %>% filter(Gene %in% rownames(vst)) %>% pull(Gene)
 
 # Get VST expression for case (heat) samples only for sig genes
-heat_vsd <- vst[sig_genes, heat_samples]
+heat_vst <- vst[sig_genes, heat_samples]
 ```
 
 Average across replicates per timepoint, heat samples only

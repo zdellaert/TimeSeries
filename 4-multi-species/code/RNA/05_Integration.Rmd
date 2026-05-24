@@ -73,7 +73,7 @@ filtered_counts <- read.csv(file.path(input_dir, "filtered_counts.csv"), row.nam
 all_genes <- rownames(filtered_counts)
 
 # load in transformed counts data
-vst_counts <- read.csv(file.path(input_dir, "vsd_expression_matrix.csv"), row.names = 1)
+vst_counts <- read.csv(file.path(input_dir, "vst_expression_matrix.csv"), row.names = 1)
 
 # ImpulseDE2 results
 impulse_results <- read.csv(file.path(impulse_dir, "ImpulseDE2_results.csv"))
@@ -125,7 +125,7 @@ Mfuzz_pattern_mapping <- pattern_mapping %>% filter(species ==  params$species) 
 # combine impulseDE results, Mfuzz clusters, WGCNA modules, and TFBS quantification into one master dataframe for downstream analysis and visualization
 
 master_table <- data.frame(gene_id=all_genes) %>%
-  left_join(impulse_results %>% select(Gene, padj, response_type), by = join_by(gene_id == Gene)) %>%
+  left_join(impulse_results %>% select(Gene, padj, response_type,classification), by = join_by(gene_id == Gene)) %>%
   mutate(is_DE = padj < 0.05) %>%
   left_join(mfuzz_clusters %>% select(Gene, cluster, membership), by = join_by(gene_id == Gene)) %>%
   mutate(Mfuzz_highconf = membership > 0.5) %>%
@@ -138,6 +138,7 @@ master_table <- data.frame(gene_id=all_genes) %>%
   left_join(SwissProt, by = join_by(gene_id == query)) %>%
   dplyr::rename(ImpulseDE2_padj = padj,
          ImpulseDE2_response_type = response_type,
+         ImpulseDE2_response_class = classification,
          Mfuzz_cluster = cluster,
          Mfuzz_membership = membership,
          Mfuzz_pattern = pattern,
