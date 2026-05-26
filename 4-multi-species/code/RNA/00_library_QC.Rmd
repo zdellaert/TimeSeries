@@ -1,0 +1,596 @@
+---
+title: "RNA-seq QC Report: Time Series Bulk RNA-seq"
+author: "Zoe Dellaert"
+date: "`r Sys.Date()`"
+output:
+  github_document:
+    toc: true
+    html_preview: false
+---
+
+```{r setup, include=FALSE}
+# set up file paths so that Rmd outputs can be viewed using github markdown
+knitr::opts_knit$set(base.dir = normalizePath("../../output_RNA/reports/"), base.url = "./")
+
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, fig.width = 10, fig.height = 7,
+                      fig.path = "00_library_QC_files/figure-gfm/")
+
+#load packages
+library(tidyverse)
+
+sessionInfo() #provides list of loaded packages and version of R
+```
+
+## 0. Read in all data
+
+```{r}
+# set up necessary output directories if they don't exist
+reportdir <- "../../output_RNA/reports/00_library_QC_files/figure-gfm/"
+if (!dir.exists(reportdir)) dir.create(reportdir, recursive = TRUE)
+
+# load in multiqc data of raw reads
+QC_raw <- read.delim("../../output_RNA/raw_qc/multiqc_data_1/multiqc_fastqc.txt") %>%
+  # remove run-2- and run-3_ (yes the underscore and dash were different in the original files) from the sample names to group by sample
+  mutate(Sample=str_replace(Sample, "run-[23][-_]", "") %>% str_remove("_S.*"))  %>%
+  # for each sample, get the total # of reads for both directions from all runs together
+  group_by(Sample) %>%
+  summarise(total_reads_raw = sum(Total.Sequences),n_fastqs = n(),.groups = "drop")
+
+# load in multiqc data of trimmed reads
+QC_trim <- read.delim("../../output_RNA/trimmed_qc/multiqc_data_1/multiqc_fastqc.txt") %>%
+  #remove weird column name prefixes from fastqc
+  rename_with(~str_remove(., "FastQC_mqc.generalstats.fastqc."), starts_with("FastQC_mqc.generalstats.fastqc.")) %>%
+  # remove run-2- and run-3_ (yes the underscore and dash were different in the original files) from the sample names to group by sample
+  mutate(Sample=str_replace(Sample, "run-[23][-_]", "") %>% str_remove("_S.*"))  %>%
+  # for each sample, get the total # of reads for both directions from all runs together
+  group_by(Sample) %>%
+  summarise(total_reads_trim = sum(Total.Sequences),.groups = "drop")
+
+# host mapping rates
+host_map <- bind_rows(
+  read.delim("../../output_RNA/alignment_qc/POR_Pcomp/multiqc_data/multiqc_star.txt") %>% mutate(species="POR",genome="Pcomp"),
+  read.delim("../../output_RNA/alignment_qc/MON_MCapV3/multiqc_data/multiqc_star.txt") %>% mutate(species="MON",genome="MCapV3"),
+  read.delim("../../output_RNA/alignment_qc/POC_PacutaV2/multiqc_data/multiqc_star.txt") %>% mutate(species="POC",genome="PacutaV2")) %>%
+  rename(total_read_pairs_mapped=total_reads) %>% mutate(total_reads_Million = total_read_pairs_mapped/1000000) %>%
+  mutate(uniquely_mapped_Million = uniquely_mapped/1000000)
+
+# cross-host mapping rates (to confirm samples were not misassigned to species)
+cross_map <- bind_rows(
+  #read.delim("../../output_RNA/alignment_qc/POR_MCapV3/multiqc_data/multiqc_star.txt") %>% mutate(species="POR",genome="MCapV3"),
+  #read.delim("../../output_RNA/alignment_qc/POR_PacutaV2/multiqc_data/multiqc_star.txt") %>% mutate(species="POR",genome="PacutaV2"),
+  read.delim("../../output_RNA/alignment_qc/MON_Pcomp/multiqc_data/multiqc_star.txt") %>% mutate(species="MON",genome="Pcomp"),
+  read.delim("../../output_RNA/alignment_qc/MON_PacutaV2/multiqc_data/multiqc_star.txt") %>% mutate(species="MON",genome="PacutaV2"),
+  #read.delim("../../output_RNA/alignment_qc/POC_Pcomp/multiqc_data/multiqc_star.txt") %>% mutate(species="POC",genome="Pcomp"),
+  #read.delim("../../output_RNA/alignment_qc/POC_MCapV3/multiqc_data/multiqc_star.txt") %>% mutate(species="POC",genome="MCapV3")
+  ) %>%
+  rename(total_read_pairs_mapped=total_reads) %>% mutate(total_reads_Million = total_read_pairs_mapped/1000000) %>%
+  mutate(uniquely_mapped_Million = uniquely_mapped/1000000)
+
+# symbiont mapping rates
+sym_map <- bind_rows(
+  read.delim("../../output_RNA/alignment_qc/POR_Cgoreaui_V2/multiqc_data/multiqc_star.txt") %>% mutate(species="POR",genome="Cgoreaui"),
+  read.delim("../../output_RNA/alignment_qc/POR_Dtrenchii/multiqc_data/multiqc_star.txt") %>% mutate(species="POR",genome="Dtrenchii"),
+  read.delim("../../output_RNA/alignment_qc/MON_Cgoreaui_V2/multiqc_data/multiqc_star.txt") %>% mutate(species="MON",genome="Cgoreaui"),
+  read.delim("../../output_RNA/alignment_qc/MON_Dtrenchii/multiqc_data/multiqc_star.txt") %>% mutate(species="MON",genome="Dtrenchii"),
+  read.delim("../../output_RNA/alignment_qc/POC_Cgoreaui_V2/multiqc_data/multiqc_star.txt") %>% mutate(species="POC",genome="Cgoreaui"),
+  read.delim("../../output_RNA/alignment_qc/POC_Dtrenchii/multiqc_data/multiqc_star.txt") %>% mutate(species="POC",genome="Dtrenchii")
+  ) %>%
+  rename(total_read_pairs_mapped=total_reads) %>% mutate(total_reads_Million = total_read_pairs_mapped/1000000) %>%
+  mutate(uniquely_mapped_Million = uniquely_mapped/1000000)
+
+# kraken contamination screen
+kraken <- read.csv("../../output_RNA/contam_screen/contamination_kraken.csv") %>% mutate(species = substr(sample,1,3))
+
+# bbduk rRNA contamination screen from SILVA databases
+rRNA <- read.csv("../../output_RNA/rRNA_screen/rRNA_contamination_bbduk_SILVA.csv")  %>%
+            mutate(matched_reads_total = matched_reads_LSU + matched_reads_SSU,
+                   percent_rRNA = (matched_reads_total/in_reads_LSU) * 100)
+
+# combine all into one giant dataframe
+qc_all <- host_map %>% select(Sample,species,genome, total_read_pairs_mapped, uniquely_mapped, uniquely_mapped_percent) %>%
+  left_join(QC_raw, by = join_by(Sample)) %>%
+  left_join(QC_trim, by = join_by(Sample)) %>%
+  left_join(kraken %>% filter(classification=="Bacteria") %>% select(sample,percent_reads) %>% rename(Sample=sample, bacteria_percent=percent_reads), by = join_by(Sample)) %>%
+    replace_na(list(bacteria_percent=0)) %>%
+  left_join(rRNA %>% select(sample,percent_rRNA) %>% rename(Sample=sample), by = join_by(Sample))
+```
+
+## 1. Assess total number of reads per sample and whether we received the data we paid for (30M reads/sample)
+
+### Raw sequences
+
+```{r}
+cutoff_M <- 30
+
+qc_all %>%
+  group_by(species) %>%
+  summarise(
+    n_samples = n(),
+    min_reads_million = min(total_reads_raw/1000000),
+    max_reads_million = max(total_reads_raw/1000000),
+    .groups = "drop"
+  ) %>%
+  knitr::kable(format = "markdown", digits = 1)
+
+low_samples <- qc_all %>% filter(total_reads_raw < cutoff_M*1e6) %>% select(Sample,species,total_reads_raw) %>% mutate(total_reads_million=total_reads_raw/1000000)
+
+paste0(nrow(low_samples), " samples have fewer than ", cutoff_M/2, "M reads in each direction")
+if(nrow(low_samples > 0)){print(low_samples)}
+write.csv(QC_raw %>% mutate(total_reads_million=total_reads_raw/1000000) %>% arrange(total_reads_million), "../../output_RNA/raw_qc/multiqc_data_1/concatenated_runs_nreads.csv")
+```
+
+### After trimming and low-quality filtering
+
+```{r}
+cutoff_M <- 30
+
+qc_all %>%
+  group_by(species) %>%
+  summarise(
+    n_samples = n(),
+    min_reads_million = min(total_reads_trim/1000000),
+    max_reads_million = max(total_reads_trim/1000000),
+    .groups = "drop"
+  ) %>%
+  knitr::kable(format = "markdown", digits = 1)
+
+low_samples <- qc_all %>% filter(total_reads_trim < cutoff_M*1e6) %>% select(Sample,species,total_reads_trim) %>% mutate(total_reads_million=total_reads_trim/1000000)
+
+paste0(nrow(low_samples), " samples have fewer than ", cutoff_M/2, "M reads in each direction")
+if(nrow(low_samples > 0)){knitr::kable(low_samples,format = "markdown", digits = 1)}
+
+write.csv(QC_trim %>% mutate(total_reads_million=total_reads_trim/1000000) %>% arrange(total_reads_million), "../../output_RNA/trimmed_qc/multiqc_data_1/concatenated_runs_nreads.csv")
+```
+
+## 2. Host: Assess mapping rates of each species to its respective host genome and screen for outliers/low mapping
+
+```{r}
+ggplot(qc_all, aes(x = reorder(Sample, uniquely_mapped_percent), 
+                       y = uniquely_mapped_percent, fill = species)) + 
+  geom_col(color="white") +
+  facet_grid(~species, scales = "free_x") +
+  labs(title = "Mapping Rate to Host Genome",
+       y = "Unique Mapping %", x = NULL) +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90, size = 6)) +
+  guides(fill = "none")
+```
+
+```{r}
+host_mapping_outliers <- data.frame("Sample"=c(), "species"=c(), "genome"=c(), "uniquely_mapped_percent"=c(),"total_reads_Million"=c(),"uniquely_mapped_Million"=c())
+
+for (sp in c("POC","MON","POR")){
+  df <- host_map %>% filter(species ==sp)
+  
+  # IQR method 
+  Q1 <- quantile(df$uniquely_mapped_percent, 0.25)
+  Q3 <- quantile(df$uniquely_mapped_percent, 0.75)
+  IQR_val <- Q3 - Q1
+  
+  lower_bound <- Q1 - 1.5 * IQR_val
+  upper_bound <- Q3 + 1.5 * IQR_val
+  outliers <- df[df$uniquely_mapped_percent < lower_bound | df$uniquely_mapped_percent > upper_bound, ] %>% select(Sample, species,genome, uniquely_mapped_percent,total_reads_Million,uniquely_mapped_Million)
+  print(paste0(sp,": IQR = ", Q1,"-",Q3,"; 1.5 x IQR = ",lower_bound,"-",upper_bound,"; ",nrow(outliers)," outliers"))
+  
+  host_mapping_outliers <- bind_rows(host_mapping_outliers,outliers)
+}
+
+if(nrow(host_mapping_outliers) > 0){knitr::kable(host_mapping_outliers,format = "markdown", digits = 1)}
+```
+
+## 3. Alt. Hosts: Assess mapping rates of each species to non-host genomes
+
+If any of these samples show a higher mapping rate below than to their assigned genome above, there is an issue that could be due to sample mis-ID.
+
+```{r}
+cross_map %>% filter(Sample %in% host_mapping_outliers$Sample) %>% select(Sample, genome, uniquely_mapped_percent) %>%
+  pivot_wider(names_from = genome,values_from = uniquely_mapped_percent) %>% knitr::kable(format = "markdown", digits = 1)
+```
+
+## 4. Symbionts: Assess mapping rates of each species to symbiont genomes
+
+```{r}
+sym_map %>% group_by(species, genome) %>%
+  summarize(range_percent=paste0(min(uniquely_mapped_percent),"-",max(uniquely_mapped_percent)),
+            mean_percent=mean(uniquely_mapped_percent)) %>% knitr::kable(format = "markdown", digits = 1)
+
+ggplot(sym_map, aes(x = reorder(Sample, desc(uniquely_mapped_percent)), y = uniquely_mapped_percent, fill = genome)) + 
+  geom_col(color="white") +
+  facet_grid(~species, scales = "free_x") +
+  labs(title = "Mapping Rate to Cladocopium & Durusdinium Genomes (Could be overlapping reads)",
+       y = "Unique Mapping %", x = NULL) +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90, size = 6))  + scale_fill_brewer(palette = "Set1")
+```
+
+```{r}
+host_sym_compare <- host_map %>% select(Sample, species,uniquely_mapped_percent) %>% rename(host_mapping_rate=uniquely_mapped_percent) %>% left_join(sym_map %>% select(Sample, genome, uniquely_mapped_percent) %>% rename(sym_mapping_rate=uniquely_mapped_percent)) 
+
+ggplot(host_sym_compare, aes(x=host_mapping_rate, y=sym_mapping_rate, color=genome)) + geom_point() +
+  facet_grid(~species) +
+  labs(title = "Mapping Rate to Cladocopium & Durusdinium Genomes vs. Host Genomes (Could be overlapping reads)",
+       y = "Symbiont Mapping %", x = "Host Mapping %") +
+  theme_bw() + scale_color_brewer(palette = "Set1")
+```
+
+
+```{r}
+sym_mapping_outliers <- data.frame("Sample"=c(), "species"=c(), "genome"=c(), "uniquely_mapped_percent"=c(),"total_reads_Million"=c(),"uniquely_mapped_Million"=c())
+
+for (sp in c("POC","MON","POR")){
+  df_sp <- sym_map %>% filter(species ==sp)
+  
+  for (sym in c("Cgoreaui","Dtrenchii")){
+  df <- df_sp %>% filter(genome ==sym)
+  
+  # IQR method 
+  Q1 <- quantile(df$uniquely_mapped_percent, 0.25)
+  Q3 <- quantile(df$uniquely_mapped_percent, 0.75)
+  IQR_val <- Q3 - Q1
+  
+  lower_bound <- Q1 - 1.5 * IQR_val
+  upper_bound <- Q3 + 1.5 * IQR_val
+  outliers <- df[df$uniquely_mapped_percent < lower_bound | df$uniquely_mapped_percent > upper_bound, ] %>% select(Sample, species,genome, uniquely_mapped_percent,total_reads_Million,uniquely_mapped_Million)
+  print(paste0(sp,"-",sym,": IQR = ", Q1,"-",Q3,"; 1.5 x IQR = ",lower_bound,"-",upper_bound,"; ",nrow(outliers)," outliers"))
+  
+  sym_mapping_outliers <- bind_rows(sym_mapping_outliers,outliers)}
+}
+
+if(nrow(sym_mapping_outliers) > 0){knitr::kable(sym_mapping_outliers,format = "markdown", digits = 1)}
+```
+
+## 4. Kraken contamination and mapping comparison
+
+```{r}
+kraken %>% ggplot(aes(x=sample,y = percent_reads,fill=classification)) +geom_col() +
+  facet_grid(~species,scales="free_x")  + theme_classic() + theme(axis.text.x = element_text(angle=90,size=6)) + scale_fill_brewer(palette = "Set2")
+
+ggplot(qc_all, aes(x = uniquely_mapped_percent, y = bacteria_percent)) +
+  geom_point(size = 2) +
+  geom_smooth(method = "lm", se = FALSE, alpha = 0.3) +
+  labs(title = "Host Mapping Rate vs. Bacterial Contamination",
+       x = "Host Mapping %", y = "Bacterial Reads %") +
+  theme_bw() +
+  facet_grid(~species,scales="free_x")
+```
+
+```{r}
+contam_outliers <- data.frame("sample"=c(), "species"=c(),"classification"=c(),"percent_reads"=c())
+
+for (sp in c("POC","MON","POR")){
+   df <- kraken %>% filter(species ==sp & classification=="Bacteria")
+  
+  # IQR method 
+  Q1 <- quantile(df$percent_reads, 0.25)
+  Q3 <- quantile(df$percent_reads, 0.75)
+  IQR_val <- Q3 - Q1
+  
+  lower_bound <- Q1 - 1.5 * IQR_val
+  upper_bound <- Q3 + 1.5 * IQR_val
+  outliers <- df[df$percent_reads < lower_bound | df$percent_reads > upper_bound, ] %>% select(sample, species, classification, percent_reads)
+  print(paste0(sp,": IQR = ", Q1,"-",Q3,"; 1.5 x IQR = ",lower_bound,"-",upper_bound,"; ",nrow(outliers)," outliers"))
+  
+  contam_outliers <- bind_rows(contam_outliers,outliers)
+}
+
+if(nrow(contam_outliers) > 0){knitr::kable(contam_outliers,format = "markdown", digits = 1)}
+```
+
+## 6. rRNA contamination and mapping comparison
+
+```{r}
+rRNA <- rRNA  %>%  left_join(host_map %>% select(Sample,total_read_pairs_mapped, uniquely_mapped, uniquely_mapped_percent,species), by = join_by(sample==Sample))
+
+rRNA <- rRNA  %>% mutate(total_reads_Million = total_read_pairs_mapped/1000000) %>%
+  mutate(matched_reads_pairs = matched_reads_total/2) %>%
+  mutate(matched_reads_pairs_Million = matched_reads_pairs/1000000) %>%
+  mutate(reads_non_rRNA_Million = total_reads_Million-matched_reads_pairs_Million) %>%
+  mutate(uniquely_mapped_Million = uniquely_mapped/1000000)
+
+plot <- qc_all %>% mutate(Raw_Reads_Million=total_reads_raw/1000000) %>%
+  ggplot(aes(x = uniquely_mapped_percent, y = percent_rRNA)) +
+  geom_smooth(method = "lm", se = FALSE, alpha = 0.3) +
+  geom_point(size = 2,shape=21,aes(fill=Raw_Reads_Million)) +
+  scale_fill_distiller(palette = "Spectral") +
+  labs(title = "Host Mapping Rate vs. rRNA Contamination",
+       x = "Host Mapping %", y = "rRNA Reads %") +
+  theme_bw() +
+  facet_grid(~species,scales="free_x")
+plot
+ggsave(paste0(reportdir,"rRNA_v_mapping.png"))
+
+qc_all %>% mutate(Raw_Reads_Million=total_reads_raw/1000000) %>%
+  ggplot(aes(x = Raw_Reads_Million, y = percent_rRNA)) +
+  geom_smooth(method = "lm", se = FALSE, alpha = 0.3) +
+  geom_point(size = 2,shape=21,aes(fill=Raw_Reads_Million)) +
+  scale_fill_distiller(palette = "Spectral") +
+  labs(title = "Host Mapping Rate vs. rRNA Contamination",
+       x = "# of Raw Reads (Million)", y = "rRNA Reads %") +
+  theme_bw() +
+  facet_grid(~species,scales="free_x")
+
+rRNA_summary <- rRNA %>% select(sample,species,uniquely_mapped_percent,matched_reads_pairs_Million,total_reads_Million,percent_rRNA) %>% 
+  dplyr::rename(rRNA_matched_reads_pairs_Million=matched_reads_pairs_Million,
+                total_reads_pairs_Million = total_reads_Million
+                ) %>% arrange(uniquely_mapped_percent) %>%
+  mutate(across(contains("_"), ~ round(as.numeric(.x), 2)))
+
+qc_all %>% pivot_longer(cols = contains("_"),
+               names_to = "metric",
+               values_to = "value") %>%
+  ggplot(aes(x = value,color=species)) +
+  geom_density() +
+  facet_wrap(~ metric, scales = "free") +
+  theme_bw() 
+```
+
+
+## 7. Compare to RNA Extraction QC metrics
+
+```{r}
+# Load and prepare extraction QC metadata
+metadata <- read.csv("../../data_RNA/completed_bulk_RNA_extractions_3species.csv") %>%
+  select(fragment_name, t_hours, treatment, Tank, Extraction_Date, 
+         RNA_QBIT_AVG, RNA_Gel_quality_score, ng_RNA_total) %>%
+  mutate(across(c(t_hours, treatment, Tank, Extraction_Date), factor),
+         across(c(RNA_QBIT_AVG, RNA_Gel_quality_score, ng_RNA_total), as.numeric))
+
+# Join read and extraction QC data
+summary_meta <- qc_all %>% 
+  left_join(metadata, by = join_by("Sample" == "fragment_name"))
+
+# Visualize potential batch effects
+library(patchwork)
+
+for(sp in unique(qc_all$species)){
+  df <- summary_meta %>% filter(species==sp)
+  
+# Continuous variables
+cont_plots <- c("RNA_QBIT_AVG", "RNA_Gel_quality_score", "ng_RNA_total") %>%
+  map(~ ggplot(df, aes(x = .data[[.x]], y = percent_rRNA)) +
+        geom_point(alpha = 0.6) +
+        geom_smooth(method = "lm", se = TRUE) +
+        theme_bw() +
+        labs(title = .x))
+
+# Categorical variables (biological + batch)
+cat_plots <- c("treatment", "t_hours", "Tank", "Extraction_Date") %>%
+  map(~ ggplot(df, aes(x = .data[[.x]], y = percent_rRNA, color=treatment)) +
+        geom_boxplot(outlier.shape = NA) +
+        geom_jitter(alpha = 0.5, width = 0.15) +
+        theme_bw() +
+        labs(title = .x))
+
+print(wrap_plots(c(cont_plots, cat_plots))+plot_annotation(title = paste0(sp," QC Metrics")))
+
+# Model with treatment×time interaction
+model <- lm(percent_rRNA ~ RNA_QBIT_AVG + RNA_Gel_quality_score + ng_RNA_total + 
+              treatment * t_hours + Tank + Extraction_Date,
+            data = df)
+print(paste0("=======",sp," QC Metrics======="))
+print(summary(model))
+print(anova(model))
+
+# Diagnostic plots
+par(mfrow = c(2, 2))
+plot(model)
+}
+
+# Examine batch effect (Extraction_Date)
+summary_meta %>%
+  group_by(Extraction_Date,species) %>%
+  summarise(n = n(), 
+            mean_rRNA = mean(percent_rRNA, na.rm = TRUE),
+            sd_rRNA = sd(percent_rRNA, na.rm = TRUE)) %>%
+  arrange(desc(mean_rRNA))
+```
+
+## 8. POR-only rRNA contamination and mapping comparison
+
+Note: the bbduk reads are unpaired, so the bbduk total reads is 2x total reads in the mapping QC analysis
+
+```{r}
+# load in multiqc data of mapping data
+POR_map <- host_map %>% filter(species == "POR")
+POR_rRNA <- read.csv("../../output_RNA/rRNA_screen/rRNA_contamination_bbduk_POR.csv") %>% rename(bbduk_total_reads=total_reads)
+POR_rRNA_Fede <- read.csv("../../output_RNA/rRNA_screen/rRNA_contamination_bbduk_POR_Federica.csv") %>% select(-total_reads)
+```
+
+```{r}
+POR_rRNA <- POR_rRNA %>% left_join(POR_map %>% select(Sample,total_read_pairs_mapped, uniquely_mapped, uniquely_mapped_percent), by = join_by(sample==Sample))
+
+POR_rRNA <- POR_rRNA %>% mutate(total_reads_Million = total_read_pairs_mapped/1000000) %>%
+  mutate(matched_reads_pairs = matched_reads/2) %>%
+  mutate(matched_reads_pairs_Million = matched_reads_pairs/1000000) %>%
+  mutate(reads_non_rRNA_Million = total_reads_Million-matched_reads_pairs_Million) %>%
+  mutate(uniquely_mapped_Million = uniquely_mapped/1000000)
+
+
+plot <- ggplot(POR_rRNA) + 
+  geom_point(aes(x = percent_rrna, y =uniquely_mapped_percent, color=total_reads_Million)) + theme_bw() + 
+  labs(title = "Percent rRNA reads vs. Unique Mapping Rates:\nPOR Samples")
+plot
+ggsave(paste0(reportdir,"POR_rRNA_v_mapping.png"))
+
+ggplot(POR_rRNA) + 
+  geom_point(aes(x = percent_rrna, y =uniquely_mapped_percent, color=total_reads_Million)) + theme_bw() + 
+  labs(title = "Percent rRNA reads vs. Unique Mapping Rates:\nPOR Samples")
+
+ggplot(POR_rRNA) + 
+  geom_point(aes(x = percent_rrna, y =total_reads_Million, color=total_reads_Million)) + theme_bw() + 
+  labs(title = "Percent rRNA reads vs. Unique Mapping Rates:\nPOR Samples")
+
+
+POR_rRNA_summary <- POR_rRNA %>% select(sample,uniquely_mapped_percent,matched_reads_pairs_Million,total_reads_Million,percent_rrna) %>% 
+  dplyr::rename(rRNA_matched_reads_pairs_Million=matched_reads_pairs_Million,
+                total_reads_pairs_Million = total_reads_Million
+                ) %>% arrange(uniquely_mapped_percent) %>%
+  mutate(across(contains("_"), ~ round(as.numeric(.x), 2)))
+
+
+POR_rRNA_summary %>% pivot_longer(cols = contains("_"),
+               names_to = "metric",
+               values_to = "value") %>%
+  ggplot(aes(x = value)) +
+  geom_density(fill="lightgray") +
+  facet_wrap(~ metric, scales = "free") +
+  theme_bw() 
+
+
+write_csv(POR_rRNA_summary, "../../output_RNA/rRNA_screen/POR_Pcomp_rRNA_and_mapping_metadata.csv")
+```
+
+## 9. POR mRNA-decontaminated rarefaction analysis
+
+
+```{r}
+# Directory containing all rarefaction CSV outputs
+resdir <- "/scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_rarefaction/"
+
+# Load all CSVs
+csv_files <- list.files(resdir, pattern = "_rarefaction.csv$", recursive = TRUE, full.names = TRUE)
+
+all_results <- map_df(csv_files, function(f) {
+  # Extract sample name from parent directory
+  sample_name <- basename(dirname(f))
+  
+  read_csv(f) %>%
+    mutate(sample = sample_name)
+})
+
+head(all_results)
+```
+
+```{r}
+all_results <- all_results %>%
+  mutate(
+    depth = as.numeric(depth),
+    pairs_processed = as.numeric(pairs_processed),
+    pairs_mapped = as.numeric(pairs_mapped),
+    percent_mapped = as.numeric(percent_mapped),
+    percent_unique = as.numeric(percent_unique),
+    genes_detected = as.numeric(genes_detected),
+  )
+```
+
+```{r}
+# Genes detected
+ggplot(all_results, aes(x = depth, y = pairs_processed, color = sample)) +
+  geom_line(size = 1) +
+  geom_point(size = 2) +
+  scale_x_continuous(labels = scales::percent_format(accuracy = 1)) +
+  labs(
+    title = "Reads processed at each subsampling depth",
+    x = "Fraction of original reads used",
+    y = "Reads processed"
+  ) +
+  theme_bw()
+
+# Genes detected
+ggplot(all_results, aes(x = depth, y = pairs_mapped, color = sample)) +
+  geom_line(size = 1) +
+  geom_point(size = 2) +
+  scale_x_continuous(labels = scales::percent_format(accuracy = 1)) +
+  labs(
+    title = "Reads pseudoaligned by subsampling depth",
+    x = "Fraction of original reads used",
+    y = "Reads pseudoaligned"
+  ) +
+  theme_bw()
+
+# Genes detected
+ggplot(all_results, aes(x = depth, y = genes_detected, color = sample)) +
+  geom_line(size = 1) +
+  geom_point(size = 2) +
+  scale_x_continuous(labels = scales::percent_format(accuracy = 1)) +
+  labs(
+    title = "Rarefaction of detected genes by subsampling depth",
+    x = "Fraction of original reads used",
+    y = "Number of genes detected (TPM > 0.5)"
+  ) +
+  theme_bw()
+
+# Mapping rate
+ggplot(all_results, aes(x = depth, y = percent_mapped, color = sample)) +
+  geom_line(size = 1) +
+  geom_point(size = 2) +
+  scale_x_continuous(labels = scales::percent_format()) +
+  labs(
+    title = "Rarefaction of pseudoalignment (mapping) rate by subsampling depth",
+    x = "Fraction of original reads used",
+    y = "Pseudoalignment (mapping) rate"
+  ) +
+  theme_bw()
+
+
+# Mapping rate
+ggplot(all_results, aes(x = depth, y = percent_unique, color = sample)) +
+  geom_line(size = 1) +
+  geom_point(size = 2) +
+  scale_x_continuous(labels = scales::percent_format()) +
+  labs(
+    title = "Rarefaction of unique pseudoalignment (mapping) rate by subsampling depth",
+    x = "Fraction of original reads used",
+    y = "Unique Pseudoalignment (mapping) rate"
+  ) +
+  theme_bw()
+
+```
+```{r}
+plateau <- all_results %>%
+  group_by(sample) %>%
+  arrange(depth) %>%
+  mutate(delta = genes_detected - lag(genes_detected))# %>%
+  #filter(!is.na(delta) & delta < 50)  # threshold for minimal new genes
+
+head(plateau)
+```
+
+```{r}
+POR_combined <- all_results %>% left_join(POR_rRNA_summary)
+
+# Genes detected
+ggplot(POR_combined, aes(x = depth, y = genes_detected, group=sample, color = uniquely_mapped_percent)) +
+  geom_line(size = 1) +
+  geom_point(size = 2) +
+  scale_x_continuous(labels = scales::percent_format(accuracy = 1)) +
+  scale_color_distiller(palette = "Spectral") +
+  labs(
+    title = "Rarefaction of detected genes by subsampling depth",
+    x = "Fraction of original reads used",
+    y = "Number of genes detected (TPM > 0.5)"
+  ) +
+  theme_bw()
+```
+
+```{r}
+POR_rRNA <- read.csv("../../output_RNA/rRNA_screen/rRNA_contamination_bbduk_POR.csv")  %>% 
+  mutate(total_reads_M_correct = total_reads/1000000)
+POR_rRNA_Fede <- read.csv("../../output_RNA/rRNA_screen/rRNA_contamination_bbduk_POR_Federica.csv")  %>% 
+  mutate(total_reads_M_correct = total_reads/1000000)
+
+POR_rRNA$dataset <- "TimeSeries"
+POR_rRNA_Fede$dataset <- "TPC"
+combined <- rbind(POR_rRNA,POR_rRNA_Fede)
+
+ggplot(combined, aes(x=percent_rrna, fill = dataset)) +
+         geom_histogram(alpha=0.5, binwidth=1) + 
+        coord_cartesian(xlim = c(0, 100)) + theme_bw()
+
+library(cowplot) 
+pmain <- ggplot(combined, aes(x=percent_rrna,y=total_reads_M_correct, color = dataset))+
+  geom_point()
+
+xdens <- axis_canvas(pmain, axis = "x")+
+  geom_density(data = combined, aes(x = percent_rrna, fill = dataset), alpha = 0.7, size=0.2)
+
+ydens <- axis_canvas(pmain, axis = "y", coord_flip = TRUE)+
+  geom_density(data = combined, aes(x = total_reads_M_correct, fill = dataset), alpha = 0.7, size=0.2)+
+  coord_flip()
+p1 <- insert_xaxis_grob(pmain, xdens, grid::unit(.2, "null"), position = "top")
+p2 <- insert_yaxis_grob(p1, ydens, grid::unit(.2, "null"), position = "right")
+ggdraw(p2)
+```
+
+
+

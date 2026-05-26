@@ -1,4 +1,4 @@
-# Time Series RNA-seq Bioinformatic Processing
+# Time Series RNA-seq Bioinformatic Processing <!-- omit from toc -->
 
 Script Written By: Zoe Dellaert
 
@@ -19,7 +19,7 @@ Last Updated: 11/17/2024
 - RNA extractions: 
 - Sample list: https://github.com/zdellaert/TimeSeries/blob/main/4-multi-species/data/completed_bulk_RNA_extractions_3species.csv
 
-### Sequencing information
+### Sequencing information <!-- omit from toc -->
 
 - Library prep and sequencing done by Genohub Service Provider: Oklahoma Medical Research Foundation NGS Core
 - Library type: Illumina - RNA (poly-A selected)
@@ -68,14 +68,26 @@ Last Updated: 11/17/2024
     - [run-2-MON\_R72\_H2](#run-2-mon_r72_h2)
     - [GOOD sample example: MON\_R72\_H3](#good-sample-example-mon_r72_h3)
     - [GOOD sample example: run-2-MON\_R72\_H3](#good-sample-example-run-2-mon_r72_h3)
-- [Alternative alignment: *Pseudoalignment* using kallisto](#alternative-alignment-pseudoalignment-using-kallisto)
-    - [Script: 010\_kallisto\_index.sh](#script-010_kallisto_indexsh)
 - [rRNA contamination screen](#rrna-contamination-screen)
   - [Script: 011\_bbduk\_rRNA.sh](#script-011_bbduk_rrnash)
   - [POR rRNA contamination results](#por-rrna-contamination-results)
   - [POR rRNA-mRNA diversity rarefaction analysis](#por-rrna-mrna-diversity-rarefaction-analysis)
   - [Script: 012\_rarefaction\_analysis\_POR\_rRNA.sh](#script-012_rarefaction_analysis_por_rrnash)
   - [Script: 012\_rarefaction\_analysis\_POR\_rRNA\_stats.sh](#script-012_rarefaction_analysis_por_rrna_statssh)
+- [POC rRNA contamination screen](#poc-rrna-contamination-screen)
+- [MON rRNA contamination screen](#mon-rrna-contamination-screen)
+- [species agnostic rRNA screen](#species-agnostic-rrna-screen)
+  - [Script: 11\_bbduk\_rRNA\_SILVA.sh](#script-11_bbduk_rrna_silvash)
+  - [Then, compile the results:](#then-compile-the-results)
+- [Symbiont genomes](#symbiont-genomes)
+  - [Cgoreaui\_V2 Genome (*Cladocopium goreaui*)](#cgoreaui_v2-genome-cladocopium-goreaui)
+  - [Dtrenchii Genome (*Durusdinium trenchii*, CCMP2556 isolate)](#dtrenchii-genome-durusdinium-trenchii-ccmp2556-isolate)
+  - [To add: a breviolum and a symbiodinium](#to-add-a-breviolum-and-a-symbiodinium)
+  - [Then align](#then-align)
+    - [Run STAR as follows:](#run-star-as-follows)
+    - [All 3 coral species \> Cgoreaui\_V2 Genome](#all-3-coral-species--cgoreaui_v2-genome)
+    - [All 3 coral species \> Dtrenchii Genome](#all-3-coral-species--dtrenchii-genome)
+  - [Assess mapping: run multiQC on the STAR alignment reports performed above](#assess-mapping-run-multiqc-on-the-star-alignment-reports-performed-above)
 
 ## Download genomes
 
@@ -563,6 +575,20 @@ sbatch 05_STAR.sh MON MCapV3 \
      T
 ```
 
+```
+cd /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/scripts
+
+sbatch 05_STAR.sh MON PacutaV2 \
+     "/work/pi_hputnam_uri_edu/HI_Genomes/PacutaV2/Pocillopora_acuta_HIv2.assembly.fasta" \
+     "/work/pi_hputnam_uri_edu/HI_Genomes/PacutaV2/Pocillopora_acuta_HIv2.genes.gff3" \
+     F
+
+sbatch 05_STAR.sh MON Pcomp \
+     "/work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.assembly.fasta" \
+     "/work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf" \
+     F
+```
+
 ### POC Genome Version 2 ([*Pocillopora acuta*](http://cyanophora.rutgers.edu/Pocillopora_acuta/))
   - `wget http://cyanophora.rutgers.edu/Pocillopora_acuta/Pocillopora_acuta_HIv2.assembly.fasta.gz`
   - Unity location: `/work/pi_hputnam_uri_edu/HI_Genomes/PacutaV2/Pocillopora_acuta_HIv2.assembly.fasta`
@@ -662,6 +688,9 @@ sbatch 06_qualimap.sh "$species" "$genome" "$gtf_path"
 cd /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/scripts
 
 sbatch 06_qualimap.sh MON MCapV3 "/work/pi_hputnam_uri_edu/HI_Genomes/MCapV3/Montipora_capitata_HIv3.gtf"
+sbatch 06_qualimap.sh MON PacutaV2 "/work/pi_hputnam_uri_edu/HI_Genomes/PacutaV2/Pocillopora_acuta_HIv2.gtf"
+sbatch 06_qualimap.sh MON Pcomp "/work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf"
+
 sbatch 06_qualimap.sh POC PacutaV2 "/work/pi_hputnam_uri_edu/HI_Genomes/PacutaV2/Pocillopora_acuta_HIv2.gtf"
 sbatch 06_qualimap.sh POR Pcomp "/work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf"
 ```
@@ -674,9 +703,28 @@ module purge
 module load uri/main
 module load MultiQC/1.12-foss-2021b
 
+scratch_dir="/scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries"
+
 species="MON"
 genome="MCapV3"
-scratch_dir="/scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries"
+alignments_dir="${scratch_dir}/aligned/${species}_${genome}"
+qc_dir="/project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/alignment_qc/${species}_${genome}"
+
+cd "${qc_dir}"
+
+multiqc . "${alignments_dir}"
+
+species="POC"
+genome="PacutaV2"
+alignments_dir="${scratch_dir}/aligned/${species}_${genome}"
+qc_dir="/project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/alignment_qc/${species}_${genome}"
+
+cd "${qc_dir}"
+
+multiqc . "${alignments_dir}"
+
+species="POR"
+genome="Pcomp"
 alignments_dir="${scratch_dir}/aligned/${species}_${genome}"
 qc_dir="/project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/alignment_qc/${species}_${genome}"
 
@@ -937,7 +985,7 @@ done
 
 ### Contamination screen results
 
-Coral reads will show up as unclassified, because they are not in the kraken database. Samples H1 and H2 showed 10-30% bacterial contamination, which is extremely high compared to the 2% seen in a sample that mapped well.
+Coral reads will show up as unclassified, because they are not in the kraken database. Samples MON_R72_H1 and MON_R72_H2 showed 10-30% bacterial contamination, which is extremely high compared to the 2% seen in a sample that mapped well.
 
 I am running these samples in particular because they showed 0.5% mapping, while all the other MON samples had > 70% mapping rates.
 
@@ -1111,7 +1159,7 @@ done
 
 Unfortunately there is very clear rRNA contamination in our polyA selected libraries. When comparing this to the mapping rates, we can see a clear effect of rRNA amount and *unique* alignment to the genome:
 
-![](./images/POR_rRNA_v_mapping.png)
+![](../output_RNA/reports/00_library_QC_files/figure-gfm/POR_rRNA_v_mapping.png)
 
 | sample      | percent_rrna |
 |-------------|--------------|
@@ -1505,5 +1553,183 @@ rm "${sample_name}"*_[LS]SU.fq.gz
 echo "Completed ${sample_name}"
 ```
 
+### Then, compile the results:
+
+```
+mkdir -p /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/rRNA_screen/
+
+cd /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA
+
+echo "sample,in_reads_LSU,matched_reads_LSU,in_reads_SSU,matched_reads_SSU" > /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/rRNA_screen/rRNA_contamination_bbduk_SILVA.csv
+
+for f in *_stats_LSU.txt; do
+    sample=$(basename "$f" _stats_LSU.txt)
+
+    # Get reads searched against Large Ribosomal Subunit (LSU)
+    in_LSU=$(grep "^#Total" "$f" | awk '{print $2}')
+
+    # Get reads searched against Small Ribosomal Subunit (SSU)
+    in_SSU=$(grep "^#Total" "$sample"_stats_SSU.txt | awk '{print $2}')
+
+    # Get total rRNA matched to LSU
+    matched_LSU=$(grep "^#Matched" "$f" | awk '{print $2}')
+
+    # Get reads searched against Small Ribosomal Subunit (SSU)
+    matched_SSU=$(grep "^#Matched" "$sample"_stats_SSU.txt | awk '{print $2}')
+
+    echo "${sample},${in_LSU},${matched_LSU},${in_SSU},${matched_SSU}" >> /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/rRNA_screen/rRNA_contamination_bbduk_SILVA.csv
+done
+```
+
 ## Symbiont genomes
 
+I will also align all the samples to symbiont references and assess whether we should examine symbiont gene expression as well.
+
+### Cgoreaui_V2 Genome ([*Cladocopium goreaui*](https://www.ncbi.nlm.nih.gov/datasets/genome/GCA_947184155.2/))
+  - `wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/947/184/155/GCA_947184155.2_Cgoreaui_SCF055-01_v2.1/GCA_947184155.2_Cgoreaui_SCF055-01_v2.1_genomic.fna.gz`
+  - Unity location: `/work/pi_hputnam_uri_edu/Dinos/Cgoreaui_V2.fasta`
+
+### Dtrenchii Genome ([*Durusdinium trenchii*, CCMP2556 isolate](https://www.ncbi.nlm.nih.gov/datasets/genome/GCA_963970005.1/))
+  - `wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/963/970/005/GCA_963970005.1_Durusdinium_trenchii_CCMP2556/GCA_963970005.1_Durusdinium_trenchii_CCMP2556_genomic.fna.gz`
+  - Unity location: `/work/pi_hputnam_uri_edu/Dinos/Dtrenchii.fasta`
+
+### To add: a breviolum and a symbiodinium
+
+```
+cd /work/pi_hputnam_uri_edu/Dinos
+
+# 1 - Cladocopium goreaui Cgoreaui_SCF055-01_v2.1, assembled by Chen et al., 2022 https://doi.org/10.3390/microorganisms10081662
+
+wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/947/184/155/GCA_947184155.2_Cgoreaui_SCF055-01_v2.1/GCA_947184155.2_Cgoreaui_SCF055-01_v2.1_genomic.fna.gz
+wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/947/184/155/GCA_947184155.2_Cgoreaui_SCF055-01_v2.1/GCA_947184155.2_Cgoreaui_SCF055-01_v2.1_genomic.gtf.gz
+
+mv GCA_947184155.2_Cgoreaui_SCF055-01_v2.1_genomic.fna.gz Cgoreaui_V2.fasta.gz
+mv GCA_947184155.2_Cgoreaui_SCF055-01_v2.1_genomic.gtf.gz Cgoreaui_V2.gtf.gz
+
+# 2 - Durusdinium trenchii CCMP2556 isolate, assembled by Dougan et al., 2024 https://doi.org/10.1126/sciadv.adn2218
+
+wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/963/970/005/GCA_963970005.1_Durusdinium_trenchii_CCMP2556/GCA_963970005.1_Durusdinium_trenchii_CCMP2556_genomic.fna.gz
+wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/963/970/005/GCA_963970005.1_Durusdinium_trenchii_CCMP2556/GCA_963970005.1_Durusdinium_trenchii_CCMP2556_genomic.gtf.gz
+
+mv GCA_963970005.1_Durusdinium_trenchii_CCMP2556_genomic.fna.gz Dtrenchii.fasta.gz
+mv GCA_963970005.1_Durusdinium_trenchii_CCMP2556_genomic.gtf.gz Dtrenchii.gtf.gz
+
+gunzip *.gz
+```
+
+### Then align
+
+I am using [STAR](https://github.com/alexdobin/STAR) for alignment, manual is [here](https://github.com/alexdobin/STAR/blob/master/doc/STARmanual.pdf)
+
+####  Run STAR as follows:
+
+```
+# run STAR standard script
+sbatch 05_STAR.sh "$species" "$genome" "$genome_path" "$gff_path" T/F
+```
+
+#### All 3 coral species > Cgoreaui_V2 Genome
+
+```
+cd /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/scripts
+
+sbatch 05_STAR.sh MON Cgoreaui_V2 \
+     "/work/pi_hputnam_uri_edu/Dinos/Cgoreaui_V2.fasta" \
+     "/work/pi_hputnam_uri_edu/Dinos/Cgoreaui_V2.gtf" \
+     T
+
+sbatch 05_STAR.sh POC Cgoreaui_V2 \
+     "/work/pi_hputnam_uri_edu/Dinos/Cgoreaui_V2.fasta" \
+     "/work/pi_hputnam_uri_edu/Dinos/Cgoreaui_V2.gtf" \
+     F
+
+sbatch 05_STAR.sh POR Cgoreaui_V2 \
+     "/work/pi_hputnam_uri_edu/Dinos/Cgoreaui_V2.fasta" \
+     "/work/pi_hputnam_uri_edu/Dinos/Cgoreaui_V2.gtf" \
+     F
+```
+
+#### All 3 coral species > Dtrenchii Genome
+
+```
+cd /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/scripts
+
+sbatch 05_STAR.sh MON Dtrenchii \
+     "/work/pi_hputnam_uri_edu/Dinos/Dtrenchii.fasta" \
+     "/work/pi_hputnam_uri_edu/Dinos/Dtrenchii.gtf" \
+     T
+
+sbatch 05_STAR.sh POC Dtrenchii \
+     "/work/pi_hputnam_uri_edu/Dinos/Dtrenchii.fasta" \
+     "/work/pi_hputnam_uri_edu/Dinos/Dtrenchii.gtf" \
+     F
+
+sbatch 05_STAR.sh POR Dtrenchii \
+     "/work/pi_hputnam_uri_edu/Dinos/Dtrenchii.fasta" \
+     "/work/pi_hputnam_uri_edu/Dinos/Dtrenchii.gtf" \
+     F
+```
+
+### Assess mapping: run multiQC on the STAR alignment reports performed above
+
+Then:
+
+```
+# load modules needed for multiqc
+module purge
+module load uri/main
+module load MultiQC/1.12-foss-2021b
+
+scratch_dir="/scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries"
+
+species="MON"
+genome="Cgoreaui_V2"
+alignments_dir="${scratch_dir}/aligned/${species}_${genome}"
+qc_dir="/project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/alignment_qc/${species}_${genome}"
+
+cd "${qc_dir}"
+
+multiqc . "${alignments_dir}"
+
+genome="Dtrenchii"
+alignments_dir="${scratch_dir}/aligned/${species}_${genome}"
+qc_dir="/project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/alignment_qc/${species}_${genome}"
+
+cd "${qc_dir}"
+
+multiqc . "${alignments_dir}"
+
+species="POC"
+genome="Cgoreaui_V2"
+alignments_dir="${scratch_dir}/aligned/${species}_${genome}"
+qc_dir="/project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/alignment_qc/${species}_${genome}"
+
+cd "${qc_dir}"
+
+multiqc . "${alignments_dir}"
+
+genome="Dtrenchii"
+alignments_dir="${scratch_dir}/aligned/${species}_${genome}"
+qc_dir="/project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/alignment_qc/${species}_${genome}"
+
+cd "${qc_dir}"
+
+multiqc . "${alignments_dir}"
+
+species="POR"
+genome="Cgoreaui_V2"
+alignments_dir="${scratch_dir}/aligned/${species}_${genome}"
+qc_dir="/project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/alignment_qc/${species}_${genome}"
+
+cd "${qc_dir}"
+
+multiqc . "${alignments_dir}"
+
+genome="Dtrenchii"
+alignments_dir="${scratch_dir}/aligned/${species}_${genome}"
+qc_dir="/project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/alignment_qc/${species}_${genome}"
+
+cd "${qc_dir}"
+
+multiqc . "${alignments_dir}"
+```

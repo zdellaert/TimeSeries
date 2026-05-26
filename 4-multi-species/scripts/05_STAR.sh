@@ -14,7 +14,7 @@ genome_path=$3
 gff_path=$4
 makeindex=$5
 
-scratch_dir="/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries"
+scratch_dir="/scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries"
 data_dir="${scratch_dir}/trimmed/combined_files/"
 
 genome_index_dir="${scratch_dir}/STAR_indexes/${genome}"

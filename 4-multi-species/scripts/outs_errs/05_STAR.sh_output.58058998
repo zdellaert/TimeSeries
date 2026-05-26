@@ -1,0 +1,336 @@
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/Dtrenchii --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R0_C1_R1_trim.fastq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R0_C1_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_Dtrenchii/POC_R0_C1_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 21 22:28:35 ..... started STAR run
+May 21 22:28:35 ..... loading genome
+May 21 22:29:49 ..... started mapping
+May 21 22:43:47 ..... finished mapping
+May 21 22:43:52 ..... started sorting BAM
+May 21 22:45:37 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/Dtrenchii --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R0_C2_R1_trim.fastq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R0_C2_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_Dtrenchii/POC_R0_C2_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 21 22:45:39 ..... started STAR run
+May 21 22:45:39 ..... loading genome
+May 21 22:45:57 ..... started mapping
+May 21 23:00:08 ..... finished mapping
+May 21 23:00:13 ..... started sorting BAM
+May 21 23:01:58 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/Dtrenchii --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R0_C3_R1_trim.fastq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R0_C3_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_Dtrenchii/POC_R0_C3_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 21 23:02:00 ..... started STAR run
+May 21 23:02:00 ..... loading genome
+May 21 23:02:16 ..... started mapping
+May 21 23:17:02 ..... finished mapping
+May 21 23:17:07 ..... started sorting BAM
+May 21 23:18:57 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/Dtrenchii --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R0_H1_R1_trim.fastq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R0_H1_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_Dtrenchii/POC_R0_H1_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 21 23:18:59 ..... started STAR run
+May 21 23:18:59 ..... loading genome
+May 21 23:19:16 ..... started mapping
+May 21 23:33:15 ..... finished mapping
+May 21 23:33:20 ..... started sorting BAM
+May 21 23:35:03 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/Dtrenchii --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R0_H2_R1_trim.fastq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R0_H2_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_Dtrenchii/POC_R0_H2_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 21 23:35:05 ..... started STAR run
+May 21 23:35:05 ..... loading genome
+May 21 23:35:24 ..... started mapping
+May 21 23:48:29 ..... finished mapping
+May 21 23:48:35 ..... started sorting BAM
+May 21 23:50:08 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/Dtrenchii --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R0_H3_R1_trim.fastq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R0_H3_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_Dtrenchii/POC_R0_H3_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 21 23:50:10 ..... started STAR run
+May 21 23:50:10 ..... loading genome
+May 21 23:50:33 ..... started mapping
+May 22 00:06:56 ..... finished mapping
+May 22 00:07:02 ..... started sorting BAM
+May 22 00:08:54 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/Dtrenchii --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R120_C1_R1_trim.fastq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R120_C1_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_Dtrenchii/POC_R120_C1_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 22 00:08:57 ..... started STAR run
+May 22 00:08:57 ..... loading genome
+May 22 00:09:12 ..... started mapping
+May 22 00:31:02 ..... finished mapping
+May 22 00:31:08 ..... started sorting BAM
+May 22 00:33:48 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/Dtrenchii --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R120_C2_R1_trim.fastq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R120_C2_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_Dtrenchii/POC_R120_C2_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 22 00:33:52 ..... started STAR run
+May 22 00:33:52 ..... loading genome
+May 22 00:34:06 ..... started mapping
+May 22 00:46:32 ..... finished mapping
+May 22 00:46:38 ..... started sorting BAM
+May 22 00:48:11 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/Dtrenchii --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R120_C3_R1_trim.fastq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R120_C3_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_Dtrenchii/POC_R120_C3_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 22 00:48:13 ..... started STAR run
+May 22 00:48:13 ..... loading genome
+May 22 00:48:31 ..... started mapping
+May 22 01:03:01 ..... finished mapping
+May 22 01:03:06 ..... started sorting BAM
+May 22 01:04:49 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/Dtrenchii --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R120_H1_R1_trim.fastq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R120_H1_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_Dtrenchii/POC_R120_H1_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 22 01:04:51 ..... started STAR run
+May 22 01:04:51 ..... loading genome
+May 22 01:05:12 ..... started mapping
+May 22 01:18:58 ..... finished mapping
+May 22 01:19:03 ..... started sorting BAM
+May 22 01:20:45 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/Dtrenchii --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R120_H2_R1_trim.fastq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R120_H2_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_Dtrenchii/POC_R120_H2_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 22 01:20:47 ..... started STAR run
+May 22 01:20:47 ..... loading genome
+May 22 01:21:01 ..... started mapping
+May 22 01:42:40 ..... finished mapping
+May 22 01:42:46 ..... started sorting BAM
+May 22 01:45:32 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/Dtrenchii --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R120_H3_R1_trim.fastq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R120_H3_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_Dtrenchii/POC_R120_H3_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 22 01:45:36 ..... started STAR run
+May 22 01:45:36 ..... loading genome
+May 22 01:45:51 ..... started mapping
+May 22 02:00:20 ..... finished mapping
+May 22 02:00:25 ..... started sorting BAM
+May 22 02:02:15 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/Dtrenchii --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R12_C1_R1_trim.fastq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R12_C1_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_Dtrenchii/POC_R12_C1_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 22 02:02:18 ..... started STAR run
+May 22 02:02:18 ..... loading genome
+May 22 02:02:32 ..... started mapping
+May 22 02:13:57 ..... finished mapping
+May 22 02:14:02 ..... started sorting BAM
+May 22 02:15:27 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/Dtrenchii --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R12_C2_R1_trim.fastq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R12_C2_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_Dtrenchii/POC_R12_C2_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 22 02:15:30 ..... started STAR run
+May 22 02:15:30 ..... loading genome
+May 22 02:15:45 ..... started mapping
+May 22 02:32:45 ..... finished mapping
+May 22 02:32:51 ..... started sorting BAM
+May 22 02:34:46 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/Dtrenchii --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R12_C3_R1_trim.fastq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R12_C3_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_Dtrenchii/POC_R12_C3_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 22 02:34:49 ..... started STAR run
+May 22 02:34:49 ..... loading genome
+May 22 02:35:04 ..... started mapping
+May 22 03:00:49 ..... finished mapping
+May 22 03:00:55 ..... started sorting BAM
+May 22 03:04:08 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/Dtrenchii --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R12_H1_R1_trim.fastq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R12_H1_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_Dtrenchii/POC_R12_H1_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 22 03:04:12 ..... started STAR run
+May 22 03:04:12 ..... loading genome
+May 22 03:04:27 ..... started mapping
+May 22 03:18:36 ..... finished mapping
+May 22 03:18:41 ..... started sorting BAM
+May 22 03:20:23 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/Dtrenchii --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R12_H2_R1_trim.fastq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R12_H2_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_Dtrenchii/POC_R12_H2_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 22 03:20:25 ..... started STAR run
+May 22 03:20:25 ..... loading genome
+May 22 03:20:41 ..... started mapping
+May 22 03:34:27 ..... finished mapping
+May 22 03:34:34 ..... started sorting BAM
+May 22 03:36:15 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/Dtrenchii --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R12_H3_R1_trim.fastq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R12_H3_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_Dtrenchii/POC_R12_H3_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 22 03:36:17 ..... started STAR run
+May 22 03:36:17 ..... loading genome
+May 22 03:36:35 ..... started mapping
+May 22 03:48:17 ..... finished mapping
+May 22 03:48:23 ..... started sorting BAM
+May 22 03:49:48 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/Dtrenchii --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R1_C1_R1_trim.fastq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R1_C1_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_Dtrenchii/POC_R1_C1_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 22 03:49:50 ..... started STAR run
+May 22 03:49:50 ..... loading genome
+May 22 03:50:05 ..... started mapping
+May 22 04:05:03 ..... finished mapping
+May 22 04:05:09 ..... started sorting BAM
+May 22 04:07:02 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/Dtrenchii --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R1_C2_R1_trim.fastq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R1_C2_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_Dtrenchii/POC_R1_C2_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 22 04:07:04 ..... started STAR run
+May 22 04:07:05 ..... loading genome
+May 22 04:07:22 ..... started mapping
+May 22 04:26:38 ..... finished mapping
+May 22 04:26:43 ..... started sorting BAM
+May 22 04:29:09 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/Dtrenchii --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R1_C3_R1_trim.fastq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R1_C3_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_Dtrenchii/POC_R1_C3_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 22 04:29:12 ..... started STAR run
+May 22 04:29:12 ..... loading genome
+May 22 04:29:27 ..... started mapping
+May 22 04:43:41 ..... finished mapping
+May 22 04:43:45 ..... started sorting BAM
+May 22 04:45:30 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/Dtrenchii --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R1_H1_R1_trim.fastq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R1_H1_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_Dtrenchii/POC_R1_H1_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 22 04:45:33 ..... started STAR run
+May 22 04:45:33 ..... loading genome
+May 22 04:45:47 ..... started mapping
+May 22 05:08:13 ..... finished mapping
+May 22 05:08:18 ..... started sorting BAM
+May 22 05:11:00 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/Dtrenchii --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R1_H2_R1_trim.fastq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R1_H2_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_Dtrenchii/POC_R1_H2_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 22 05:11:03 ..... started STAR run
+May 22 05:11:03 ..... loading genome
+May 22 05:11:17 ..... started mapping
+May 22 05:26:01 ..... finished mapping
+May 22 05:26:07 ..... started sorting BAM
+May 22 05:27:57 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/Dtrenchii --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R1_H3_R1_trim.fastq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R1_H3_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_Dtrenchii/POC_R1_H3_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 22 05:28:00 ..... started STAR run
+May 22 05:28:00 ..... loading genome
+May 22 05:28:14 ..... started mapping
+May 22 05:42:52 ..... finished mapping
+May 22 05:42:57 ..... started sorting BAM
+May 22 05:44:48 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/Dtrenchii --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R24_C1_R1_trim.fastq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R24_C1_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_Dtrenchii/POC_R24_C1_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 22 05:44:51 ..... started STAR run
+May 22 05:44:51 ..... loading genome
+May 22 05:45:05 ..... started mapping
+May 22 06:00:32 ..... finished mapping
+May 22 06:00:36 ..... started sorting BAM
+May 22 06:02:35 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/Dtrenchii --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R24_C2_R1_trim.fastq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R24_C2_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_Dtrenchii/POC_R24_C2_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 22 06:02:38 ..... started STAR run
+May 22 06:02:38 ..... loading genome
+May 22 06:02:52 ..... started mapping
+May 22 06:14:52 ..... finished mapping
+May 22 06:14:56 ..... started sorting BAM
+May 22 06:16:29 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/Dtrenchii --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R24_C3_R1_trim.fastq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R24_C3_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_Dtrenchii/POC_R24_C3_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 22 06:16:32 ..... started STAR run
+May 22 06:16:32 ..... loading genome
+May 22 06:16:45 ..... started mapping
+May 22 06:33:12 ..... finished mapping
+May 22 06:33:17 ..... started sorting BAM
+May 22 06:35:19 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/Dtrenchii --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R24_H1_R1_trim.fastq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R24_H1_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_Dtrenchii/POC_R24_H1_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 22 06:35:22 ..... started STAR run
+May 22 06:35:22 ..... loading genome
+May 22 06:35:36 ..... started mapping
+May 22 06:49:39 ..... finished mapping
+May 22 06:49:44 ..... started sorting BAM
+May 22 06:51:29 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/Dtrenchii --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R24_H2_R1_trim.fastq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R24_H2_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_Dtrenchii/POC_R24_H2_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 22 06:51:32 ..... started STAR run
+May 22 06:51:32 ..... loading genome
+May 22 06:51:52 ..... started mapping
+May 22 07:04:15 ..... finished mapping
+May 22 07:04:22 ..... started sorting BAM
+May 22 07:05:51 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/Dtrenchii --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R24_H3_R1_trim.fastq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R24_H3_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_Dtrenchii/POC_R24_H3_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 22 07:05:53 ..... started STAR run
+May 22 07:05:53 ..... loading genome
+May 22 07:06:11 ..... started mapping
+May 22 07:19:24 ..... finished mapping
+May 22 07:19:29 ..... started sorting BAM
+May 22 07:21:08 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/Dtrenchii --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R3_C1_R1_trim.fastq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R3_C1_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_Dtrenchii/POC_R3_C1_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 22 07:21:10 ..... started STAR run
+May 22 07:21:10 ..... loading genome
+May 22 07:21:28 ..... started mapping
+May 22 07:36:58 ..... finished mapping
+May 22 07:37:05 ..... started sorting BAM
+May 22 07:39:07 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/Dtrenchii --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R3_C2_R1_trim.fastq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R3_C2_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_Dtrenchii/POC_R3_C2_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 22 07:39:10 ..... started STAR run
+May 22 07:39:10 ..... loading genome
+May 22 07:39:24 ..... started mapping
+May 22 07:53:11 ..... finished mapping
+May 22 07:53:15 ..... started sorting BAM
+May 22 07:54:59 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/Dtrenchii --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R3_C3_R1_trim.fastq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R3_C3_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_Dtrenchii/POC_R3_C3_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 22 07:55:01 ..... started STAR run
+May 22 07:55:01 ..... loading genome
+May 22 07:55:19 ..... started mapping
+May 22 08:11:53 ..... finished mapping
+May 22 08:11:58 ..... started sorting BAM
+May 22 08:14:01 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/Dtrenchii --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R3_H1_R1_trim.fastq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R3_H1_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_Dtrenchii/POC_R3_H1_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 22 08:14:04 ..... started STAR run
+May 22 08:14:04 ..... loading genome
+May 22 08:14:17 ..... started mapping
+May 22 08:25:33 ..... finished mapping
+May 22 08:25:39 ..... started sorting BAM
+May 22 08:27:07 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/Dtrenchii --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R3_H2_R1_trim.fastq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R3_H2_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_Dtrenchii/POC_R3_H2_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 22 08:27:09 ..... started STAR run
+May 22 08:27:09 ..... loading genome
+May 22 08:27:24 ..... started mapping
+May 22 08:51:01 ..... finished mapping
+May 22 08:51:06 ..... started sorting BAM
+May 22 08:54:04 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/Dtrenchii --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R3_H3_R1_trim.fastq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R3_H3_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_Dtrenchii/POC_R3_H3_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 22 08:54:07 ..... started STAR run
+May 22 08:54:07 ..... loading genome
+May 22 08:54:21 ..... started mapping
+May 22 09:06:55 ..... finished mapping
+May 22 09:07:00 ..... started sorting BAM
+May 22 09:08:34 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/Dtrenchii --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R72_C1_R1_trim.fastq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R72_C1_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_Dtrenchii/POC_R72_C1_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 22 09:08:36 ..... started STAR run
+May 22 09:08:36 ..... loading genome
+May 22 09:08:51 ..... started mapping
+May 22 09:22:12 ..... finished mapping
+May 22 09:22:17 ..... started sorting BAM
+May 22 09:24:03 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/Dtrenchii --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R72_C2_R1_trim.fastq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R72_C2_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_Dtrenchii/POC_R72_C2_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 22 09:24:06 ..... started STAR run
+May 22 09:24:06 ..... loading genome
+May 22 09:24:20 ..... started mapping
+May 22 09:41:48 ..... finished mapping
+May 22 09:41:54 ..... started sorting BAM
+May 22 09:44:03 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/Dtrenchii --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R72_C3_R1_trim.fastq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R72_C3_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_Dtrenchii/POC_R72_C3_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 22 09:44:06 ..... started STAR run
+May 22 09:44:06 ..... loading genome
+May 22 09:44:19 ..... started mapping
+May 22 09:57:13 ..... finished mapping
+May 22 09:57:19 ..... started sorting BAM
+May 22 09:58:55 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/Dtrenchii --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R72_H1_R1_trim.fastq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R72_H1_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_Dtrenchii/POC_R72_H1_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 22 09:58:58 ..... started STAR run
+May 22 09:58:58 ..... loading genome
+May 22 09:59:13 ..... started mapping
+May 22 10:15:39 ..... finished mapping
+May 22 10:15:44 ..... started sorting BAM
+May 22 10:17:49 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/Dtrenchii --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R72_H2_R1_trim.fastq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R72_H2_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_Dtrenchii/POC_R72_H2_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 22 10:17:52 ..... started STAR run
+May 22 10:17:52 ..... loading genome
+May 22 10:18:07 ..... started mapping
+May 22 10:30:36 ..... finished mapping
+May 22 10:30:42 ..... started sorting BAM
+May 22 10:32:15 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/Dtrenchii --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R72_H3_R1_trim.fastq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files/POC_R72_H3_R2_trim.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_Dtrenchii/POC_R72_H3_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 22 10:32:17 ..... started STAR run
+May 22 10:32:17 ..... loading genome
+May 22 10:32:35 ..... started mapping
+May 22 10:44:13 ..... finished mapping
+May 22 10:44:18 ..... started sorting BAM
+May 22 10:45:44 ..... finished successfully

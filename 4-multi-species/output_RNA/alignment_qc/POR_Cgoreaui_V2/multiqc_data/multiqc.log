@@ -1,0 +1,913 @@
+[2026-05-25 13:27:40,948] multiqc                                            [DEBUG  ]  This is MultiQC v1.12
+[2026-05-25 13:27:40,948] multiqc                                            [DEBUG  ]  No MultiQC config found: /modules/uri_apps/software/MultiQC/1.12-foss-2021b/lib/python3.9/site-packages/multiqc_config.yaml
+[2026-05-25 13:27:40,949] multiqc                                            [DEBUG  ]  No MultiQC config found: /home/zdellaert_uri_edu/.multiqc_config.yaml
+[2026-05-25 13:27:40,949] multiqc                                            [DEBUG  ]  No MultiQC config found: multiqc_config.yaml
+[2026-05-25 13:27:40,949] multiqc                                            [DEBUG  ]  Command used: /modules/uri_apps/software/MultiQC/1.12-foss-2021b/bin/multiqc . /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POR_Cgoreaui_V2
+[2026-05-25 13:27:41,444] multiqc                                            [WARNING]  MultiQC Version v1.35 now available!
+[2026-05-25 13:27:41,444] multiqc                                            [DEBUG  ]  Command     : /modules/uri_apps/software/MultiQC/1.12-foss-2021b/bin/multiqc . /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POR_Cgoreaui_V2
+[2026-05-25 13:27:41,445] multiqc                                            [DEBUG  ]  Working dir : /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/alignment_qc/POR_Cgoreaui_V2
+[2026-05-25 13:27:41,445] multiqc                                            [DEBUG  ]  Template    : default
+[2026-05-25 13:27:41,445] multiqc                                            [DEBUG  ]  Running Python 3.9.6 (default, Nov 15 2024, 16:57:16)  [GCC 11.2.0]
+[2026-05-25 13:27:41,446] multiqc                                            [DEBUG  ]  Analysing modules: custom_content, ccs, ngsderive, purple, conpair, lima, peddy, somalier, methylQA, mosdepth, phantompeakqualtools, qualimap, preseq, quast, qorts, rna_seqc, rockhopper, rsem, rseqc, busco, bustools, goleft_indexcov, gffcompare, disambiguate, supernova, deeptools, sargasso, verifybamid, mirtrace, happy, mirtop, sambamba, homer, hops, macs2, theta2, snpeff, gatk, htseq, bcftools, featureCounts, fgbio, dragen, dedup, pbmarkdup, damageprofiler, biobambam2, jcvi, mtnucratio, picard, vep, sentieon, prokka, qc3C, nanostat, samblaster, samtools, sexdeterrmine, eigenstratdatabasetools, bamtools, jellyfish, vcftools, longranger, stacks, varscan2, snippy, bbmap, bismark, biscuit, hicexplorer, hicup, hicpro, salmon, kallisto, slamdunk, star, hisat2, tophat, bowtie2, bowtie1, snpsplit, odgi, pangolin, kat, leehom, adapterRemoval, clipandmerge, cutadapt, flexbar, kaiju, kraken, malt, trimmomatic, sickle, skewer, sortmerna, biobloomtools, fastq_screen, afterqc, fastp, fastqc, pychopper, pycoqc, minionqc, multivcfanalyzer, clusterflow, checkqc, bcl2fastq, bclconvert, interop, ivar, flash, seqyclean, optitype, whatshap
+[2026-05-25 13:27:41,446] multiqc                                            [DEBUG  ]  Using temporary directory for creating report: /tmp/tmp2d1dyt2i
+[2026-05-25 13:27:41,664] multiqc                                            [INFO   ]  Search path : /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/alignment_qc/POR_Cgoreaui_V2
+[2026-05-25 13:27:41,664] multiqc                                            [INFO   ]  Search path : /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POR_Cgoreaui_V2
+[2026-05-25 13:27:41,985] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R3_C1_Log.out
+[2026-05-25 13:27:41,987] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R3_C1_Log.out
+[2026-05-25 13:27:41,987] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R3_C1_Log.out
+[2026-05-25 13:27:41,992] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R3_C1_Log.out
+[2026-05-25 13:27:41,992] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R3_C1_Log.out
+[2026-05-25 13:27:42,186] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R3_C1_Log.out
+[2026-05-25 13:27:42,205] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R0_H3_SJ.out.tab
+[2026-05-25 13:27:42,207] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R0_H3_SJ.out.tab
+[2026-05-25 13:27:42,207] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R0_H3_SJ.out.tab
+[2026-05-25 13:27:42,210] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R0_H3_SJ.out.tab
+[2026-05-25 13:27:42,210] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R0_H3_SJ.out.tab
+[2026-05-25 13:27:42,446] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R0_H3_SJ.out.tab
+[2026-05-25 13:27:42,458] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: POR_R24_C2_Aligned.sortedByCoord.out.bam
+[2026-05-25 13:27:42,466] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R24_H2_SJ.out.tab
+[2026-05-25 13:27:42,468] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R24_H2_SJ.out.tab
+[2026-05-25 13:27:42,472] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R24_H2_SJ.out.tab
+[2026-05-25 13:27:42,475] multiqc                                            [DEBUG  ]  File ignored by vep/vep_html because it exceeded search pattern filesize limit: POR_R24_H2_SJ.out.tab
+[2026-05-25 13:27:42,475] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R24_H2_SJ.out.tab
+[2026-05-25 13:27:42,476] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R24_H2_SJ.out.tab
+[2026-05-25 13:27:42,476] multiqc                                            [DEBUG  ]  File ignored by rockhopper because it exceeded search pattern filesize limit: POR_R24_H2_SJ.out.tab
+[2026-05-25 13:27:42,476] multiqc                                            [DEBUG  ]  File ignored by rseqc/bam_stat because it exceeded search pattern filesize limit: POR_R24_H2_SJ.out.tab
+[2026-05-25 13:27:42,476] multiqc                                            [DEBUG  ]  File ignored by rseqc/junction_annotation because it exceeded search pattern filesize limit: POR_R24_H2_SJ.out.tab
+[2026-05-25 13:27:42,476] multiqc                                            [DEBUG  ]  File ignored by rseqc/read_distribution because it exceeded search pattern filesize limit: POR_R24_H2_SJ.out.tab
+[2026-05-25 13:27:42,476] multiqc                                            [DEBUG  ]  File ignored by rseqc/infer_experiment because it exceeded search pattern filesize limit: POR_R24_H2_SJ.out.tab
+[2026-05-25 13:27:42,494] multiqc                                            [DEBUG  ]  File ignored by stacks/sumstats because it exceeded search pattern filesize limit: POR_R24_H2_SJ.out.tab
+[2026-05-25 13:27:43,152] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R24_H2_SJ.out.tab
+[2026-05-25 13:27:43,188] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: POR_R0_C2_Aligned.sortedByCoord.out.bam
+[2026-05-25 13:27:43,196] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R12_H3_Log.out
+[2026-05-25 13:27:43,198] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R12_H3_Log.out
+[2026-05-25 13:27:43,198] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R12_H3_Log.out
+[2026-05-25 13:27:43,206] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R12_H3_Log.out
+[2026-05-25 13:27:43,206] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R12_H3_Log.out
+[2026-05-25 13:27:43,375] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R12_H3_Log.out
+[2026-05-25 13:27:43,390] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R0_C2_Log.out
+[2026-05-25 13:27:43,392] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R0_C2_Log.out
+[2026-05-25 13:27:43,392] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R0_C2_Log.out
+[2026-05-25 13:27:43,395] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R0_C2_Log.out
+[2026-05-25 13:27:43,396] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R0_C2_Log.out
+[2026-05-25 13:27:43,563] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R0_C2_Log.out
+[2026-05-25 13:27:43,578] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R3_H3_Log.out
+[2026-05-25 13:27:43,580] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R3_H3_Log.out
+[2026-05-25 13:27:43,580] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R3_H3_Log.out
+[2026-05-25 13:27:43,583] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R3_H3_Log.out
+[2026-05-25 13:27:43,583] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R3_H3_Log.out
+[2026-05-25 13:27:43,754] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R3_H3_Log.out
+[2026-05-25 13:27:43,770] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R72_H2_Log.out
+[2026-05-25 13:27:43,771] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R72_H2_Log.out
+[2026-05-25 13:27:43,772] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R72_H2_Log.out
+[2026-05-25 13:27:43,775] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R72_H2_Log.out
+[2026-05-25 13:27:43,775] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R72_H2_Log.out
+[2026-05-25 13:27:43,940] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R72_H2_Log.out
+[2026-05-25 13:27:43,958] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R120_C2_Log.out
+[2026-05-25 13:27:43,961] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R120_C2_Log.out
+[2026-05-25 13:27:43,961] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R120_C2_Log.out
+[2026-05-25 13:27:43,964] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R120_C2_Log.out
+[2026-05-25 13:27:43,964] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R120_C2_Log.out
+[2026-05-25 13:27:44,130] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R120_C2_Log.out
+[2026-05-25 13:27:44,140] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: POR_R120_H2_Aligned.sortedByCoord.out.bam
+[2026-05-25 13:27:44,148] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R12_C1_Log.out
+[2026-05-25 13:27:44,150] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R12_C1_Log.out
+[2026-05-25 13:27:44,150] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R12_C1_Log.out
+[2026-05-25 13:27:44,153] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R12_C1_Log.out
+[2026-05-25 13:27:44,154] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R12_C1_Log.out
+[2026-05-25 13:27:44,347] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R12_C1_Log.out
+[2026-05-25 13:27:44,363] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R1_H2_SJ.out.tab
+[2026-05-25 13:27:44,365] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R1_H2_SJ.out.tab
+[2026-05-25 13:27:44,365] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R1_H2_SJ.out.tab
+[2026-05-25 13:27:44,369] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R1_H2_SJ.out.tab
+[2026-05-25 13:27:44,369] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R1_H2_SJ.out.tab
+[2026-05-25 13:27:44,369] multiqc                                            [DEBUG  ]  File ignored by rockhopper because it exceeded search pattern filesize limit: POR_R1_H2_SJ.out.tab
+[2026-05-25 13:27:44,369] multiqc                                            [DEBUG  ]  File ignored by rseqc/bam_stat because it exceeded search pattern filesize limit: POR_R1_H2_SJ.out.tab
+[2026-05-25 13:27:44,369] multiqc                                            [DEBUG  ]  File ignored by rseqc/junction_annotation because it exceeded search pattern filesize limit: POR_R1_H2_SJ.out.tab
+[2026-05-25 13:27:44,369] multiqc                                            [DEBUG  ]  File ignored by rseqc/read_distribution because it exceeded search pattern filesize limit: POR_R1_H2_SJ.out.tab
+[2026-05-25 13:27:44,369] multiqc                                            [DEBUG  ]  File ignored by rseqc/infer_experiment because it exceeded search pattern filesize limit: POR_R1_H2_SJ.out.tab
+[2026-05-25 13:27:44,671] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R1_H2_SJ.out.tab
+[2026-05-25 13:27:44,692] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R0_C1_SJ.out.tab
+[2026-05-25 13:27:44,694] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R0_C1_SJ.out.tab
+[2026-05-25 13:27:44,694] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R0_C1_SJ.out.tab
+[2026-05-25 13:27:44,697] multiqc                                            [DEBUG  ]  File ignored by vep/vep_html because it exceeded search pattern filesize limit: POR_R0_C1_SJ.out.tab
+[2026-05-25 13:27:44,697] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R0_C1_SJ.out.tab
+[2026-05-25 13:27:44,698] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R0_C1_SJ.out.tab
+[2026-05-25 13:27:44,698] multiqc                                            [DEBUG  ]  File ignored by rockhopper because it exceeded search pattern filesize limit: POR_R0_C1_SJ.out.tab
+[2026-05-25 13:27:44,698] multiqc                                            [DEBUG  ]  File ignored by rseqc/bam_stat because it exceeded search pattern filesize limit: POR_R0_C1_SJ.out.tab
+[2026-05-25 13:27:44,698] multiqc                                            [DEBUG  ]  File ignored by rseqc/junction_annotation because it exceeded search pattern filesize limit: POR_R0_C1_SJ.out.tab
+[2026-05-25 13:27:44,698] multiqc                                            [DEBUG  ]  File ignored by rseqc/read_distribution because it exceeded search pattern filesize limit: POR_R0_C1_SJ.out.tab
+[2026-05-25 13:27:44,698] multiqc                                            [DEBUG  ]  File ignored by rseqc/infer_experiment because it exceeded search pattern filesize limit: POR_R0_C1_SJ.out.tab
+[2026-05-25 13:27:44,712] multiqc                                            [DEBUG  ]  File ignored by stacks/sumstats because it exceeded search pattern filesize limit: POR_R0_C1_SJ.out.tab
+[2026-05-25 13:27:45,254] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R0_C1_SJ.out.tab
+[2026-05-25 13:27:45,288] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: POR_R1_C3_Aligned.sortedByCoord.out.bam
+[2026-05-25 13:27:45,289] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: POR_R1_H1_Aligned.sortedByCoord.out.bam
+[2026-05-25 13:27:45,298] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R24_H3_Log.out
+[2026-05-25 13:27:45,299] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R24_H3_Log.out
+[2026-05-25 13:27:45,300] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R24_H3_Log.out
+[2026-05-25 13:27:45,303] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R24_H3_Log.out
+[2026-05-25 13:27:45,303] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R24_H3_Log.out
+[2026-05-25 13:27:45,469] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R24_H3_Log.out
+[2026-05-25 13:27:45,478] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: POR_R12_C1_Aligned.sortedByCoord.out.bam
+[2026-05-25 13:27:45,478] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: POR_R12_H3_Aligned.sortedByCoord.out.bam
+[2026-05-25 13:27:45,484] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R72_C1_SJ.out.tab
+[2026-05-25 13:27:45,486] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R72_C1_SJ.out.tab
+[2026-05-25 13:27:45,486] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R72_C1_SJ.out.tab
+[2026-05-25 13:27:45,489] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R72_C1_SJ.out.tab
+[2026-05-25 13:27:45,489] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R72_C1_SJ.out.tab
+[2026-05-25 13:27:45,490] multiqc                                            [DEBUG  ]  File ignored by rockhopper because it exceeded search pattern filesize limit: POR_R72_C1_SJ.out.tab
+[2026-05-25 13:27:45,490] multiqc                                            [DEBUG  ]  File ignored by rseqc/bam_stat because it exceeded search pattern filesize limit: POR_R72_C1_SJ.out.tab
+[2026-05-25 13:27:45,490] multiqc                                            [DEBUG  ]  File ignored by rseqc/junction_annotation because it exceeded search pattern filesize limit: POR_R72_C1_SJ.out.tab
+[2026-05-25 13:27:45,490] multiqc                                            [DEBUG  ]  File ignored by rseqc/read_distribution because it exceeded search pattern filesize limit: POR_R72_C1_SJ.out.tab
+[2026-05-25 13:27:45,490] multiqc                                            [DEBUG  ]  File ignored by rseqc/infer_experiment because it exceeded search pattern filesize limit: POR_R72_C1_SJ.out.tab
+[2026-05-25 13:27:45,849] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R72_C1_SJ.out.tab
+[2026-05-25 13:27:45,873] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R12_H2_SJ.out.tab
+[2026-05-25 13:27:45,875] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R12_H2_SJ.out.tab
+[2026-05-25 13:27:45,875] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R12_H2_SJ.out.tab
+[2026-05-25 13:27:45,878] multiqc                                            [DEBUG  ]  File ignored by vep/vep_html because it exceeded search pattern filesize limit: POR_R12_H2_SJ.out.tab
+[2026-05-25 13:27:45,878] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R12_H2_SJ.out.tab
+[2026-05-25 13:27:45,878] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R12_H2_SJ.out.tab
+[2026-05-25 13:27:45,879] multiqc                                            [DEBUG  ]  File ignored by rockhopper because it exceeded search pattern filesize limit: POR_R12_H2_SJ.out.tab
+[2026-05-25 13:27:45,879] multiqc                                            [DEBUG  ]  File ignored by rseqc/bam_stat because it exceeded search pattern filesize limit: POR_R12_H2_SJ.out.tab
+[2026-05-25 13:27:45,879] multiqc                                            [DEBUG  ]  File ignored by rseqc/junction_annotation because it exceeded search pattern filesize limit: POR_R12_H2_SJ.out.tab
+[2026-05-25 13:27:45,879] multiqc                                            [DEBUG  ]  File ignored by rseqc/read_distribution because it exceeded search pattern filesize limit: POR_R12_H2_SJ.out.tab
+[2026-05-25 13:27:45,879] multiqc                                            [DEBUG  ]  File ignored by rseqc/infer_experiment because it exceeded search pattern filesize limit: POR_R12_H2_SJ.out.tab
+[2026-05-25 13:27:45,902] multiqc                                            [DEBUG  ]  File ignored by stacks/sumstats because it exceeded search pattern filesize limit: POR_R12_H2_SJ.out.tab
+[2026-05-25 13:27:46,785] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R12_H2_SJ.out.tab
+[2026-05-25 13:27:46,847] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R24_C1_Log.out
+[2026-05-25 13:27:46,848] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R24_C1_Log.out
+[2026-05-25 13:27:46,848] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R24_C1_Log.out
+[2026-05-25 13:27:46,852] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R24_C1_Log.out
+[2026-05-25 13:27:46,852] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R24_C1_Log.out
+[2026-05-25 13:27:47,033] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R24_C1_Log.out
+[2026-05-25 13:27:47,049] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R72_H3_SJ.out.tab
+[2026-05-25 13:27:47,056] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R72_H3_SJ.out.tab
+[2026-05-25 13:27:47,057] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R72_H3_SJ.out.tab
+[2026-05-25 13:27:47,060] multiqc                                            [DEBUG  ]  File ignored by vep/vep_html because it exceeded search pattern filesize limit: POR_R72_H3_SJ.out.tab
+[2026-05-25 13:27:47,060] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R72_H3_SJ.out.tab
+[2026-05-25 13:27:47,060] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R72_H3_SJ.out.tab
+[2026-05-25 13:27:47,060] multiqc                                            [DEBUG  ]  File ignored by rockhopper because it exceeded search pattern filesize limit: POR_R72_H3_SJ.out.tab
+[2026-05-25 13:27:47,060] multiqc                                            [DEBUG  ]  File ignored by rseqc/bam_stat because it exceeded search pattern filesize limit: POR_R72_H3_SJ.out.tab
+[2026-05-25 13:27:47,060] multiqc                                            [DEBUG  ]  File ignored by rseqc/junction_annotation because it exceeded search pattern filesize limit: POR_R72_H3_SJ.out.tab
+[2026-05-25 13:27:47,060] multiqc                                            [DEBUG  ]  File ignored by rseqc/read_distribution because it exceeded search pattern filesize limit: POR_R72_H3_SJ.out.tab
+[2026-05-25 13:27:47,060] multiqc                                            [DEBUG  ]  File ignored by rseqc/infer_experiment because it exceeded search pattern filesize limit: POR_R72_H3_SJ.out.tab
+[2026-05-25 13:27:47,080] multiqc                                            [DEBUG  ]  File ignored by stacks/sumstats because it exceeded search pattern filesize limit: POR_R72_H3_SJ.out.tab
+[2026-05-25 13:27:47,876] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R72_H3_SJ.out.tab
+[2026-05-25 13:27:47,931] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R120_C2_SJ.out.tab
+[2026-05-25 13:27:47,933] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R120_C2_SJ.out.tab
+[2026-05-25 13:27:47,934] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R120_C2_SJ.out.tab
+[2026-05-25 13:27:47,937] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R120_C2_SJ.out.tab
+[2026-05-25 13:27:47,937] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R120_C2_SJ.out.tab
+[2026-05-25 13:27:47,937] multiqc                                            [DEBUG  ]  File ignored by rockhopper because it exceeded search pattern filesize limit: POR_R120_C2_SJ.out.tab
+[2026-05-25 13:27:47,937] multiqc                                            [DEBUG  ]  File ignored by rseqc/bam_stat because it exceeded search pattern filesize limit: POR_R120_C2_SJ.out.tab
+[2026-05-25 13:27:47,937] multiqc                                            [DEBUG  ]  File ignored by rseqc/junction_annotation because it exceeded search pattern filesize limit: POR_R120_C2_SJ.out.tab
+[2026-05-25 13:27:47,937] multiqc                                            [DEBUG  ]  File ignored by rseqc/read_distribution because it exceeded search pattern filesize limit: POR_R120_C2_SJ.out.tab
+[2026-05-25 13:27:47,937] multiqc                                            [DEBUG  ]  File ignored by rseqc/infer_experiment because it exceeded search pattern filesize limit: POR_R120_C2_SJ.out.tab
+[2026-05-25 13:27:48,374] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R120_C2_SJ.out.tab
+[2026-05-25 13:27:48,397] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: POR_R3_H2_Aligned.sortedByCoord.out.bam
+[2026-05-25 13:27:48,397] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: POR_R72_H3_Aligned.sortedByCoord.out.bam
+[2026-05-25 13:27:48,403] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R3_C2_SJ.out.tab
+[2026-05-25 13:27:48,405] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R3_C2_SJ.out.tab
+[2026-05-25 13:27:48,405] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R3_C2_SJ.out.tab
+[2026-05-25 13:27:48,408] multiqc                                            [DEBUG  ]  File ignored by vep/vep_html because it exceeded search pattern filesize limit: POR_R3_C2_SJ.out.tab
+[2026-05-25 13:27:48,408] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R3_C2_SJ.out.tab
+[2026-05-25 13:27:48,408] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R3_C2_SJ.out.tab
+[2026-05-25 13:27:48,408] multiqc                                            [DEBUG  ]  File ignored by rockhopper because it exceeded search pattern filesize limit: POR_R3_C2_SJ.out.tab
+[2026-05-25 13:27:48,408] multiqc                                            [DEBUG  ]  File ignored by rseqc/bam_stat because it exceeded search pattern filesize limit: POR_R3_C2_SJ.out.tab
+[2026-05-25 13:27:48,408] multiqc                                            [DEBUG  ]  File ignored by rseqc/junction_annotation because it exceeded search pattern filesize limit: POR_R3_C2_SJ.out.tab
+[2026-05-25 13:27:48,408] multiqc                                            [DEBUG  ]  File ignored by rseqc/read_distribution because it exceeded search pattern filesize limit: POR_R3_C2_SJ.out.tab
+[2026-05-25 13:27:48,409] multiqc                                            [DEBUG  ]  File ignored by rseqc/infer_experiment because it exceeded search pattern filesize limit: POR_R3_C2_SJ.out.tab
+[2026-05-25 13:27:48,434] multiqc                                            [DEBUG  ]  File ignored by stacks/sumstats because it exceeded search pattern filesize limit: POR_R3_C2_SJ.out.tab
+[2026-05-25 13:27:49,231] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R3_C2_SJ.out.tab
+[2026-05-25 13:27:49,274] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: POR_R72_C1_Aligned.sortedByCoord.out.bam
+[2026-05-25 13:27:49,289] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R1_H2_Log.out
+[2026-05-25 13:27:49,291] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R1_H2_Log.out
+[2026-05-25 13:27:49,291] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R1_H2_Log.out
+[2026-05-25 13:27:49,294] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R1_H2_Log.out
+[2026-05-25 13:27:49,295] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R1_H2_Log.out
+[2026-05-25 13:27:49,470] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R1_H2_Log.out
+[2026-05-25 13:27:49,486] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R24_H2_Log.out
+[2026-05-25 13:27:49,494] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R24_H2_Log.out
+[2026-05-25 13:27:49,494] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R24_H2_Log.out
+[2026-05-25 13:27:49,497] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R24_H2_Log.out
+[2026-05-25 13:27:49,497] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R24_H2_Log.out
+[2026-05-25 13:27:49,667] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R24_H2_Log.out
+[2026-05-25 13:27:49,676] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: POR_R24_C3_Aligned.sortedByCoord.out.bam
+[2026-05-25 13:27:49,677] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: POR_R24_H1_Aligned.sortedByCoord.out.bam
+[2026-05-25 13:27:49,682] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R1_H3_Log.progress.out
+[2026-05-25 13:27:49,684] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R1_H3_Log.progress.out
+[2026-05-25 13:27:49,693] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: POR_R0_C3_Aligned.sortedByCoord.out.bam
+[2026-05-25 13:27:49,699] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R1_C2_SJ.out.tab
+[2026-05-25 13:27:49,701] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R1_C2_SJ.out.tab
+[2026-05-25 13:27:49,701] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R1_C2_SJ.out.tab
+[2026-05-25 13:27:49,710] multiqc                                            [DEBUG  ]  File ignored by vep/vep_html because it exceeded search pattern filesize limit: POR_R1_C2_SJ.out.tab
+[2026-05-25 13:27:49,710] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R1_C2_SJ.out.tab
+[2026-05-25 13:27:49,710] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R1_C2_SJ.out.tab
+[2026-05-25 13:27:49,710] multiqc                                            [DEBUG  ]  File ignored by rockhopper because it exceeded search pattern filesize limit: POR_R1_C2_SJ.out.tab
+[2026-05-25 13:27:49,710] multiqc                                            [DEBUG  ]  File ignored by rseqc/bam_stat because it exceeded search pattern filesize limit: POR_R1_C2_SJ.out.tab
+[2026-05-25 13:27:49,710] multiqc                                            [DEBUG  ]  File ignored by rseqc/junction_annotation because it exceeded search pattern filesize limit: POR_R1_C2_SJ.out.tab
+[2026-05-25 13:27:49,710] multiqc                                            [DEBUG  ]  File ignored by rseqc/read_distribution because it exceeded search pattern filesize limit: POR_R1_C2_SJ.out.tab
+[2026-05-25 13:27:49,711] multiqc                                            [DEBUG  ]  File ignored by rseqc/infer_experiment because it exceeded search pattern filesize limit: POR_R1_C2_SJ.out.tab
+[2026-05-25 13:27:49,726] multiqc                                            [DEBUG  ]  File ignored by stacks/sumstats because it exceeded search pattern filesize limit: POR_R1_C2_SJ.out.tab
+[2026-05-25 13:27:50,296] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R1_C2_SJ.out.tab
+[2026-05-25 13:27:50,328] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: POR_R0_H1_Aligned.sortedByCoord.out.bam
+[2026-05-25 13:27:50,333] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R1_C3_Log.progress.out
+[2026-05-25 13:27:50,334] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R1_C3_Log.progress.out
+[2026-05-25 13:27:50,351] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R1_C1_Log.out
+[2026-05-25 13:27:50,353] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R1_C1_Log.out
+[2026-05-25 13:27:50,353] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R1_C1_Log.out
+[2026-05-25 13:27:50,356] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R1_C1_Log.out
+[2026-05-25 13:27:50,356] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R1_C1_Log.out
+[2026-05-25 13:27:50,530] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R1_C1_Log.out
+[2026-05-25 13:27:50,545] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R0_H1_SJ.out.tab
+[2026-05-25 13:27:50,546] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R0_H1_SJ.out.tab
+[2026-05-25 13:27:50,547] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R0_H1_SJ.out.tab
+[2026-05-25 13:27:50,550] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R0_H1_SJ.out.tab
+[2026-05-25 13:27:50,550] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R0_H1_SJ.out.tab
+[2026-05-25 13:27:50,697] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R0_H1_SJ.out.tab
+[2026-05-25 13:27:50,708] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R1_H2_Log.progress.out
+[2026-05-25 13:27:50,716] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R1_H2_Log.progress.out
+[2026-05-25 13:27:50,726] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: POR_R120_H3_Aligned.sortedByCoord.out.bam
+[2026-05-25 13:27:50,727] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: POR_R120_C1_Aligned.sortedByCoord.out.bam
+[2026-05-25 13:27:50,733] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R0_C3_SJ.out.tab
+[2026-05-25 13:27:50,734] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R0_C3_SJ.out.tab
+[2026-05-25 13:27:50,735] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R0_C3_SJ.out.tab
+[2026-05-25 13:27:50,738] multiqc                                            [DEBUG  ]  File ignored by vep/vep_html because it exceeded search pattern filesize limit: POR_R0_C3_SJ.out.tab
+[2026-05-25 13:27:50,738] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R0_C3_SJ.out.tab
+[2026-05-25 13:27:50,738] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R0_C3_SJ.out.tab
+[2026-05-25 13:27:50,738] multiqc                                            [DEBUG  ]  File ignored by rockhopper because it exceeded search pattern filesize limit: POR_R0_C3_SJ.out.tab
+[2026-05-25 13:27:50,738] multiqc                                            [DEBUG  ]  File ignored by rseqc/bam_stat because it exceeded search pattern filesize limit: POR_R0_C3_SJ.out.tab
+[2026-05-25 13:27:50,738] multiqc                                            [DEBUG  ]  File ignored by rseqc/junction_annotation because it exceeded search pattern filesize limit: POR_R0_C3_SJ.out.tab
+[2026-05-25 13:27:50,738] multiqc                                            [DEBUG  ]  File ignored by rseqc/read_distribution because it exceeded search pattern filesize limit: POR_R0_C3_SJ.out.tab
+[2026-05-25 13:27:50,738] multiqc                                            [DEBUG  ]  File ignored by rseqc/infer_experiment because it exceeded search pattern filesize limit: POR_R0_C3_SJ.out.tab
+[2026-05-25 13:27:50,752] multiqc                                            [DEBUG  ]  File ignored by stacks/sumstats because it exceeded search pattern filesize limit: POR_R0_C3_SJ.out.tab
+[2026-05-25 13:27:51,245] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R0_C3_SJ.out.tab
+[2026-05-25 13:27:51,282] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R24_C2_SJ.out.tab
+[2026-05-25 13:27:51,284] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R24_C2_SJ.out.tab
+[2026-05-25 13:27:51,285] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R24_C2_SJ.out.tab
+[2026-05-25 13:27:51,288] multiqc                                            [DEBUG  ]  File ignored by vep/vep_html because it exceeded search pattern filesize limit: POR_R24_C2_SJ.out.tab
+[2026-05-25 13:27:51,288] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R24_C2_SJ.out.tab
+[2026-05-25 13:27:51,288] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R24_C2_SJ.out.tab
+[2026-05-25 13:27:51,288] multiqc                                            [DEBUG  ]  File ignored by rockhopper because it exceeded search pattern filesize limit: POR_R24_C2_SJ.out.tab
+[2026-05-25 13:27:51,288] multiqc                                            [DEBUG  ]  File ignored by rseqc/bam_stat because it exceeded search pattern filesize limit: POR_R24_C2_SJ.out.tab
+[2026-05-25 13:27:51,288] multiqc                                            [DEBUG  ]  File ignored by rseqc/junction_annotation because it exceeded search pattern filesize limit: POR_R24_C2_SJ.out.tab
+[2026-05-25 13:27:51,288] multiqc                                            [DEBUG  ]  File ignored by rseqc/read_distribution because it exceeded search pattern filesize limit: POR_R24_C2_SJ.out.tab
+[2026-05-25 13:27:51,288] multiqc                                            [DEBUG  ]  File ignored by rseqc/infer_experiment because it exceeded search pattern filesize limit: POR_R24_C2_SJ.out.tab
+[2026-05-25 13:27:51,301] multiqc                                            [DEBUG  ]  File ignored by stacks/sumstats because it exceeded search pattern filesize limit: POR_R24_C2_SJ.out.tab
+[2026-05-25 13:27:51,761] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R24_C2_SJ.out.tab
+[2026-05-25 13:27:51,792] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R1_C2_Log.progress.out
+[2026-05-25 13:27:51,794] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R1_C2_Log.progress.out
+[2026-05-25 13:27:51,809] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R1_H3_Log.out
+[2026-05-25 13:27:51,811] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R1_H3_Log.out
+[2026-05-25 13:27:51,811] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R1_H3_Log.out
+[2026-05-25 13:27:51,814] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R1_H3_Log.out
+[2026-05-25 13:27:51,814] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R1_H3_Log.out
+[2026-05-25 13:27:51,983] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R1_H3_Log.out
+[2026-05-25 13:27:52,000] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R72_C1_Log.out
+[2026-05-25 13:27:52,002] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R72_C1_Log.out
+[2026-05-25 13:27:52,002] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R72_C1_Log.out
+[2026-05-25 13:27:52,005] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R72_C1_Log.out
+[2026-05-25 13:27:52,005] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R72_C1_Log.out
+[2026-05-25 13:27:52,177] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R72_C1_Log.out
+[2026-05-25 13:27:52,187] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: POR_R1_C2_Aligned.sortedByCoord.out.bam
+[2026-05-25 13:27:52,195] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R120_H1_Log.out
+[2026-05-25 13:27:52,197] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R120_H1_Log.out
+[2026-05-25 13:27:52,197] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R120_H1_Log.out
+[2026-05-25 13:27:52,200] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R120_H1_Log.out
+[2026-05-25 13:27:52,200] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R120_H1_Log.out
+[2026-05-25 13:27:52,366] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R120_H1_Log.out
+[2026-05-25 13:27:52,385] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R72_C3_SJ.out.tab
+[2026-05-25 13:27:52,387] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R72_C3_SJ.out.tab
+[2026-05-25 13:27:52,387] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R72_C3_SJ.out.tab
+[2026-05-25 13:27:52,390] multiqc                                            [DEBUG  ]  File ignored by vep/vep_html because it exceeded search pattern filesize limit: POR_R72_C3_SJ.out.tab
+[2026-05-25 13:27:52,390] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R72_C3_SJ.out.tab
+[2026-05-25 13:27:52,390] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R72_C3_SJ.out.tab
+[2026-05-25 13:27:52,390] multiqc                                            [DEBUG  ]  File ignored by rockhopper because it exceeded search pattern filesize limit: POR_R72_C3_SJ.out.tab
+[2026-05-25 13:27:52,390] multiqc                                            [DEBUG  ]  File ignored by rseqc/bam_stat because it exceeded search pattern filesize limit: POR_R72_C3_SJ.out.tab
+[2026-05-25 13:27:52,390] multiqc                                            [DEBUG  ]  File ignored by rseqc/junction_annotation because it exceeded search pattern filesize limit: POR_R72_C3_SJ.out.tab
+[2026-05-25 13:27:52,390] multiqc                                            [DEBUG  ]  File ignored by rseqc/read_distribution because it exceeded search pattern filesize limit: POR_R72_C3_SJ.out.tab
+[2026-05-25 13:27:52,390] multiqc                                            [DEBUG  ]  File ignored by rseqc/infer_experiment because it exceeded search pattern filesize limit: POR_R72_C3_SJ.out.tab
+[2026-05-25 13:27:52,451] multiqc                                            [DEBUG  ]  File ignored by stacks/sumstats because it exceeded search pattern filesize limit: POR_R72_C3_SJ.out.tab
+[2026-05-25 13:27:54,875] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R72_C3_SJ.out.tab
+[2026-05-25 13:27:55,021] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R1_C1_Log.progress.out
+[2026-05-25 13:27:55,023] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R1_C1_Log.progress.out
+[2026-05-25 13:27:55,038] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R120_H2_SJ.out.tab
+[2026-05-25 13:27:55,040] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R120_H2_SJ.out.tab
+[2026-05-25 13:27:55,040] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R120_H2_SJ.out.tab
+[2026-05-25 13:27:55,043] multiqc                                            [DEBUG  ]  File ignored by vep/vep_html because it exceeded search pattern filesize limit: POR_R120_H2_SJ.out.tab
+[2026-05-25 13:27:55,043] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R120_H2_SJ.out.tab
+[2026-05-25 13:27:55,044] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R120_H2_SJ.out.tab
+[2026-05-25 13:27:55,044] multiqc                                            [DEBUG  ]  File ignored by rockhopper because it exceeded search pattern filesize limit: POR_R120_H2_SJ.out.tab
+[2026-05-25 13:27:55,044] multiqc                                            [DEBUG  ]  File ignored by rseqc/bam_stat because it exceeded search pattern filesize limit: POR_R120_H2_SJ.out.tab
+[2026-05-25 13:27:55,044] multiqc                                            [DEBUG  ]  File ignored by rseqc/junction_annotation because it exceeded search pattern filesize limit: POR_R120_H2_SJ.out.tab
+[2026-05-25 13:27:55,044] multiqc                                            [DEBUG  ]  File ignored by rseqc/read_distribution because it exceeded search pattern filesize limit: POR_R120_H2_SJ.out.tab
+[2026-05-25 13:27:55,044] multiqc                                            [DEBUG  ]  File ignored by rseqc/infer_experiment because it exceeded search pattern filesize limit: POR_R120_H2_SJ.out.tab
+[2026-05-25 13:27:55,084] multiqc                                            [DEBUG  ]  File ignored by stacks/sumstats because it exceeded search pattern filesize limit: POR_R120_H2_SJ.out.tab
+[2026-05-25 13:27:56,344] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R120_H2_SJ.out.tab
+[2026-05-25 13:27:56,425] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: POR_R12_H2_Aligned.sortedByCoord.out.bam
+[2026-05-25 13:27:56,431] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R12_H2_Log.out
+[2026-05-25 13:27:56,433] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R12_H2_Log.out
+[2026-05-25 13:27:56,433] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R12_H2_Log.out
+[2026-05-25 13:27:56,437] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R12_H2_Log.out
+[2026-05-25 13:27:56,437] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R12_H2_Log.out
+[2026-05-25 13:27:56,612] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R12_H2_Log.out
+[2026-05-25 13:27:56,628] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R0_C3_Log.out
+[2026-05-25 13:27:56,629] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R0_C3_Log.out
+[2026-05-25 13:27:56,630] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R0_C3_Log.out
+[2026-05-25 13:27:56,632] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R0_C3_Log.out
+[2026-05-25 13:27:56,633] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R0_C3_Log.out
+[2026-05-25 13:27:56,807] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R0_C3_Log.out
+[2026-05-25 13:27:56,822] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R3_H2_SJ.out.tab
+[2026-05-25 13:27:56,824] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R3_H2_SJ.out.tab
+[2026-05-25 13:27:56,824] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R3_H2_SJ.out.tab
+[2026-05-25 13:27:56,827] multiqc                                            [DEBUG  ]  File ignored by vep/vep_html because it exceeded search pattern filesize limit: POR_R3_H2_SJ.out.tab
+[2026-05-25 13:27:56,827] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R3_H2_SJ.out.tab
+[2026-05-25 13:27:56,827] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R3_H2_SJ.out.tab
+[2026-05-25 13:27:56,827] multiqc                                            [DEBUG  ]  File ignored by rockhopper because it exceeded search pattern filesize limit: POR_R3_H2_SJ.out.tab
+[2026-05-25 13:27:56,827] multiqc                                            [DEBUG  ]  File ignored by rseqc/bam_stat because it exceeded search pattern filesize limit: POR_R3_H2_SJ.out.tab
+[2026-05-25 13:27:56,827] multiqc                                            [DEBUG  ]  File ignored by rseqc/junction_annotation because it exceeded search pattern filesize limit: POR_R3_H2_SJ.out.tab
+[2026-05-25 13:27:56,827] multiqc                                            [DEBUG  ]  File ignored by rseqc/read_distribution because it exceeded search pattern filesize limit: POR_R3_H2_SJ.out.tab
+[2026-05-25 13:27:56,827] multiqc                                            [DEBUG  ]  File ignored by rseqc/infer_experiment because it exceeded search pattern filesize limit: POR_R3_H2_SJ.out.tab
+[2026-05-25 13:27:56,864] multiqc                                            [DEBUG  ]  File ignored by stacks/sumstats because it exceeded search pattern filesize limit: POR_R3_H2_SJ.out.tab
+[2026-05-25 13:27:58,421] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R3_H2_SJ.out.tab
+[2026-05-25 13:27:58,508] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R1_H1_Log.progress.out
+[2026-05-25 13:27:58,509] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R1_H1_Log.progress.out
+[2026-05-25 13:27:58,527] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R120_C3_Log.out
+[2026-05-25 13:27:58,529] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R120_C3_Log.out
+[2026-05-25 13:27:58,529] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R120_C3_Log.out
+[2026-05-25 13:27:58,532] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R120_C3_Log.out
+[2026-05-25 13:27:58,532] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R120_C3_Log.out
+[2026-05-25 13:27:58,689] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R120_C3_Log.out
+[2026-05-25 13:27:58,704] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R3_H2_Log.out
+[2026-05-25 13:27:58,706] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R3_H2_Log.out
+[2026-05-25 13:27:58,706] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R3_H2_Log.out
+[2026-05-25 13:27:58,709] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R3_H2_Log.out
+[2026-05-25 13:27:58,709] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R3_H2_Log.out
+[2026-05-25 13:27:58,873] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R3_H2_Log.out
+[2026-05-25 13:27:58,881] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: POR_R3_H3_Aligned.sortedByCoord.out.bam
+[2026-05-25 13:27:58,882] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: POR_R3_C1_Aligned.sortedByCoord.out.bam
+[2026-05-25 13:27:58,889] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R72_H3_Log.out
+[2026-05-25 13:27:58,891] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R72_H3_Log.out
+[2026-05-25 13:27:58,891] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R72_H3_Log.out
+[2026-05-25 13:27:58,894] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R72_H3_Log.out
+[2026-05-25 13:27:58,894] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R72_H3_Log.out
+[2026-05-25 13:27:59,068] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R72_H3_Log.out
+[2026-05-25 13:27:59,080] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: POR_R72_H2_Aligned.sortedByCoord.out.bam
+[2026-05-25 13:27:59,086] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R12_C2_SJ.out.tab
+[2026-05-25 13:27:59,088] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R12_C2_SJ.out.tab
+[2026-05-25 13:27:59,088] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R12_C2_SJ.out.tab
+[2026-05-25 13:27:59,091] multiqc                                            [DEBUG  ]  File ignored by vep/vep_html because it exceeded search pattern filesize limit: POR_R12_C2_SJ.out.tab
+[2026-05-25 13:27:59,091] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R12_C2_SJ.out.tab
+[2026-05-25 13:27:59,091] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R12_C2_SJ.out.tab
+[2026-05-25 13:27:59,091] multiqc                                            [DEBUG  ]  File ignored by rockhopper because it exceeded search pattern filesize limit: POR_R12_C2_SJ.out.tab
+[2026-05-25 13:27:59,091] multiqc                                            [DEBUG  ]  File ignored by rseqc/bam_stat because it exceeded search pattern filesize limit: POR_R12_C2_SJ.out.tab
+[2026-05-25 13:27:59,091] multiqc                                            [DEBUG  ]  File ignored by rseqc/junction_annotation because it exceeded search pattern filesize limit: POR_R12_C2_SJ.out.tab
+[2026-05-25 13:27:59,091] multiqc                                            [DEBUG  ]  File ignored by rseqc/read_distribution because it exceeded search pattern filesize limit: POR_R12_C2_SJ.out.tab
+[2026-05-25 13:27:59,091] multiqc                                            [DEBUG  ]  File ignored by rseqc/infer_experiment because it exceeded search pattern filesize limit: POR_R12_C2_SJ.out.tab
+[2026-05-25 13:27:59,115] multiqc                                            [DEBUG  ]  File ignored by stacks/sumstats because it exceeded search pattern filesize limit: POR_R12_C2_SJ.out.tab
+[2026-05-25 13:28:00,009] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R12_C2_SJ.out.tab
+[2026-05-25 13:28:00,063] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R0_H1_Log.out
+[2026-05-25 13:28:00,064] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R0_H1_Log.out
+[2026-05-25 13:28:00,065] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R0_H1_Log.out
+[2026-05-25 13:28:00,068] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R0_H1_Log.out
+[2026-05-25 13:28:00,068] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R0_H1_Log.out
+[2026-05-25 13:28:00,240] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R0_H1_Log.out
+[2026-05-25 13:28:00,254] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R72_H1_SJ.out.tab
+[2026-05-25 13:28:00,256] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R72_H1_SJ.out.tab
+[2026-05-25 13:28:00,256] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R72_H1_SJ.out.tab
+[2026-05-25 13:28:00,259] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R72_H1_SJ.out.tab
+[2026-05-25 13:28:00,259] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R72_H1_SJ.out.tab
+[2026-05-25 13:28:00,393] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R72_H1_SJ.out.tab
+[2026-05-25 13:28:00,402] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: POR_R24_H2_Aligned.sortedByCoord.out.bam
+[2026-05-25 13:28:00,407] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R24_C3_Log.progress.out
+[2026-05-25 13:28:00,409] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R24_C3_Log.progress.out
+[2026-05-25 13:28:00,412] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R24_C3_Log.progress.out
+[2026-05-25 13:28:00,430] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R1_C3_Log.out
+[2026-05-25 13:28:00,432] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R1_C3_Log.out
+[2026-05-25 13:28:00,432] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R1_C3_Log.out
+[2026-05-25 13:28:00,435] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R1_C3_Log.out
+[2026-05-25 13:28:00,435] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R1_C3_Log.out
+[2026-05-25 13:28:00,611] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R1_C3_Log.out
+[2026-05-25 13:28:00,625] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R3_H3_SJ.out.tab
+[2026-05-25 13:28:00,627] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R3_H3_SJ.out.tab
+[2026-05-25 13:28:00,628] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R3_H3_SJ.out.tab
+[2026-05-25 13:28:00,636] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R3_H3_SJ.out.tab
+[2026-05-25 13:28:00,636] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R3_H3_SJ.out.tab
+[2026-05-25 13:28:00,636] multiqc                                            [DEBUG  ]  File ignored by rockhopper because it exceeded search pattern filesize limit: POR_R3_H3_SJ.out.tab
+[2026-05-25 13:28:00,636] multiqc                                            [DEBUG  ]  File ignored by rseqc/bam_stat because it exceeded search pattern filesize limit: POR_R3_H3_SJ.out.tab
+[2026-05-25 13:28:00,636] multiqc                                            [DEBUG  ]  File ignored by rseqc/junction_annotation because it exceeded search pattern filesize limit: POR_R3_H3_SJ.out.tab
+[2026-05-25 13:28:00,636] multiqc                                            [DEBUG  ]  File ignored by rseqc/read_distribution because it exceeded search pattern filesize limit: POR_R3_H3_SJ.out.tab
+[2026-05-25 13:28:00,636] multiqc                                            [DEBUG  ]  File ignored by rseqc/infer_experiment because it exceeded search pattern filesize limit: POR_R3_H3_SJ.out.tab
+[2026-05-25 13:28:00,927] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R3_H3_SJ.out.tab
+[2026-05-25 13:28:00,947] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R3_C1_Log.progress.out
+[2026-05-25 13:28:00,949] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R3_C1_Log.progress.out
+[2026-05-25 13:28:00,969] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R12_H1_SJ.out.tab
+[2026-05-25 13:28:00,971] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R12_H1_SJ.out.tab
+[2026-05-25 13:28:00,971] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R12_H1_SJ.out.tab
+[2026-05-25 13:28:00,974] multiqc                                            [DEBUG  ]  File ignored by vep/vep_html because it exceeded search pattern filesize limit: POR_R12_H1_SJ.out.tab
+[2026-05-25 13:28:00,974] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R12_H1_SJ.out.tab
+[2026-05-25 13:28:00,974] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R12_H1_SJ.out.tab
+[2026-05-25 13:28:00,974] multiqc                                            [DEBUG  ]  File ignored by rockhopper because it exceeded search pattern filesize limit: POR_R12_H1_SJ.out.tab
+[2026-05-25 13:28:00,974] multiqc                                            [DEBUG  ]  File ignored by rseqc/bam_stat because it exceeded search pattern filesize limit: POR_R12_H1_SJ.out.tab
+[2026-05-25 13:28:00,974] multiqc                                            [DEBUG  ]  File ignored by rseqc/junction_annotation because it exceeded search pattern filesize limit: POR_R12_H1_SJ.out.tab
+[2026-05-25 13:28:00,974] multiqc                                            [DEBUG  ]  File ignored by rseqc/read_distribution because it exceeded search pattern filesize limit: POR_R12_H1_SJ.out.tab
+[2026-05-25 13:28:00,974] multiqc                                            [DEBUG  ]  File ignored by rseqc/infer_experiment because it exceeded search pattern filesize limit: POR_R12_H1_SJ.out.tab
+[2026-05-25 13:28:01,011] multiqc                                            [DEBUG  ]  File ignored by stacks/sumstats because it exceeded search pattern filesize limit: POR_R12_H1_SJ.out.tab
+[2026-05-25 13:28:02,374] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R12_H1_SJ.out.tab
+[2026-05-25 13:28:02,464] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R72_C2_SJ.out.tab
+[2026-05-25 13:28:02,466] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R72_C2_SJ.out.tab
+[2026-05-25 13:28:02,466] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R72_C2_SJ.out.tab
+[2026-05-25 13:28:02,469] multiqc                                            [DEBUG  ]  File ignored by vep/vep_html because it exceeded search pattern filesize limit: POR_R72_C2_SJ.out.tab
+[2026-05-25 13:28:02,469] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R72_C2_SJ.out.tab
+[2026-05-25 13:28:02,469] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R72_C2_SJ.out.tab
+[2026-05-25 13:28:02,469] multiqc                                            [DEBUG  ]  File ignored by rockhopper because it exceeded search pattern filesize limit: POR_R72_C2_SJ.out.tab
+[2026-05-25 13:28:02,469] multiqc                                            [DEBUG  ]  File ignored by rseqc/bam_stat because it exceeded search pattern filesize limit: POR_R72_C2_SJ.out.tab
+[2026-05-25 13:28:02,469] multiqc                                            [DEBUG  ]  File ignored by rseqc/junction_annotation because it exceeded search pattern filesize limit: POR_R72_C2_SJ.out.tab
+[2026-05-25 13:28:02,470] multiqc                                            [DEBUG  ]  File ignored by rseqc/read_distribution because it exceeded search pattern filesize limit: POR_R72_C2_SJ.out.tab
+[2026-05-25 13:28:02,470] multiqc                                            [DEBUG  ]  File ignored by rseqc/infer_experiment because it exceeded search pattern filesize limit: POR_R72_C2_SJ.out.tab
+[2026-05-25 13:28:02,494] multiqc                                            [DEBUG  ]  File ignored by stacks/sumstats because it exceeded search pattern filesize limit: POR_R72_C2_SJ.out.tab
+[2026-05-25 13:28:03,386] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R72_C2_SJ.out.tab
+[2026-05-25 13:28:03,442] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R120_H3_SJ.out.tab
+[2026-05-25 13:28:03,444] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R120_H3_SJ.out.tab
+[2026-05-25 13:28:03,444] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R120_H3_SJ.out.tab
+[2026-05-25 13:28:03,447] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R120_H3_SJ.out.tab
+[2026-05-25 13:28:03,447] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R120_H3_SJ.out.tab
+[2026-05-25 13:28:03,448] multiqc                                            [DEBUG  ]  File ignored by rockhopper because it exceeded search pattern filesize limit: POR_R120_H3_SJ.out.tab
+[2026-05-25 13:28:03,448] multiqc                                            [DEBUG  ]  File ignored by rseqc/bam_stat because it exceeded search pattern filesize limit: POR_R120_H3_SJ.out.tab
+[2026-05-25 13:28:03,448] multiqc                                            [DEBUG  ]  File ignored by rseqc/junction_annotation because it exceeded search pattern filesize limit: POR_R120_H3_SJ.out.tab
+[2026-05-25 13:28:03,448] multiqc                                            [DEBUG  ]  File ignored by rseqc/read_distribution because it exceeded search pattern filesize limit: POR_R120_H3_SJ.out.tab
+[2026-05-25 13:28:03,448] multiqc                                            [DEBUG  ]  File ignored by rseqc/infer_experiment because it exceeded search pattern filesize limit: POR_R120_H3_SJ.out.tab
+[2026-05-25 13:28:03,718] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R120_H3_SJ.out.tab
+[2026-05-25 13:28:03,737] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R3_H1_Log.progress.out
+[2026-05-25 13:28:03,739] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R3_H1_Log.progress.out
+[2026-05-25 13:28:03,742] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R3_H1_Log.progress.out
+[2026-05-25 13:28:03,749] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: POR_R0_H2_Aligned.sortedByCoord.out.bam
+[2026-05-25 13:28:03,759] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R24_H3_Log.progress.out
+[2026-05-25 13:28:03,761] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R24_H3_Log.progress.out
+[2026-05-25 13:28:03,776] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R12_C3_SJ.out.tab
+[2026-05-25 13:28:03,778] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R12_C3_SJ.out.tab
+[2026-05-25 13:28:03,779] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R12_C3_SJ.out.tab
+[2026-05-25 13:28:03,782] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R12_C3_SJ.out.tab
+[2026-05-25 13:28:03,782] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R12_C3_SJ.out.tab
+[2026-05-25 13:28:03,782] multiqc                                            [DEBUG  ]  File ignored by rockhopper because it exceeded search pattern filesize limit: POR_R12_C3_SJ.out.tab
+[2026-05-25 13:28:03,782] multiqc                                            [DEBUG  ]  File ignored by rseqc/bam_stat because it exceeded search pattern filesize limit: POR_R12_C3_SJ.out.tab
+[2026-05-25 13:28:03,782] multiqc                                            [DEBUG  ]  File ignored by rseqc/junction_annotation because it exceeded search pattern filesize limit: POR_R12_C3_SJ.out.tab
+[2026-05-25 13:28:03,782] multiqc                                            [DEBUG  ]  File ignored by rseqc/read_distribution because it exceeded search pattern filesize limit: POR_R12_C3_SJ.out.tab
+[2026-05-25 13:28:03,782] multiqc                                            [DEBUG  ]  File ignored by rseqc/infer_experiment because it exceeded search pattern filesize limit: POR_R12_C3_SJ.out.tab
+[2026-05-25 13:28:04,237] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R12_C3_SJ.out.tab
+[2026-05-25 13:28:04,262] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R24_C2_Log.progress.out
+[2026-05-25 13:28:04,264] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R24_C2_Log.progress.out
+[2026-05-25 13:28:04,278] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R1_H1_Log.out
+[2026-05-25 13:28:04,280] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R1_H1_Log.out
+[2026-05-25 13:28:04,280] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R1_H1_Log.out
+[2026-05-25 13:28:04,283] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R1_H1_Log.out
+[2026-05-25 13:28:04,283] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R1_H1_Log.out
+[2026-05-25 13:28:04,458] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R1_H1_Log.out
+[2026-05-25 13:28:04,468] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: POR_R120_C2_Aligned.sortedByCoord.out.bam
+[2026-05-25 13:28:04,478] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R120_C1_SJ.out.tab
+[2026-05-25 13:28:04,479] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R120_C1_SJ.out.tab
+[2026-05-25 13:28:04,480] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R120_C1_SJ.out.tab
+[2026-05-25 13:28:04,483] multiqc                                            [DEBUG  ]  File ignored by vep/vep_html because it exceeded search pattern filesize limit: POR_R120_C1_SJ.out.tab
+[2026-05-25 13:28:04,483] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R120_C1_SJ.out.tab
+[2026-05-25 13:28:04,483] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R120_C1_SJ.out.tab
+[2026-05-25 13:28:04,483] multiqc                                            [DEBUG  ]  File ignored by rockhopper because it exceeded search pattern filesize limit: POR_R120_C1_SJ.out.tab
+[2026-05-25 13:28:04,483] multiqc                                            [DEBUG  ]  File ignored by rseqc/bam_stat because it exceeded search pattern filesize limit: POR_R120_C1_SJ.out.tab
+[2026-05-25 13:28:04,483] multiqc                                            [DEBUG  ]  File ignored by rseqc/junction_annotation because it exceeded search pattern filesize limit: POR_R120_C1_SJ.out.tab
+[2026-05-25 13:28:04,483] multiqc                                            [DEBUG  ]  File ignored by rseqc/read_distribution because it exceeded search pattern filesize limit: POR_R120_C1_SJ.out.tab
+[2026-05-25 13:28:04,483] multiqc                                            [DEBUG  ]  File ignored by rseqc/infer_experiment because it exceeded search pattern filesize limit: POR_R120_C1_SJ.out.tab
+[2026-05-25 13:28:04,502] multiqc                                            [DEBUG  ]  File ignored by stacks/sumstats because it exceeded search pattern filesize limit: POR_R120_C1_SJ.out.tab
+[2026-05-25 13:28:05,207] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R120_C1_SJ.out.tab
+[2026-05-25 13:28:05,253] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R24_H2_Log.progress.out
+[2026-05-25 13:28:05,254] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R24_H2_Log.progress.out
+[2026-05-25 13:28:05,272] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R24_C2_Log.out
+[2026-05-25 13:28:05,274] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R24_C2_Log.out
+[2026-05-25 13:28:05,274] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R24_C2_Log.out
+[2026-05-25 13:28:05,277] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R24_C2_Log.out
+[2026-05-25 13:28:05,278] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R24_C2_Log.out
+[2026-05-25 13:28:05,452] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R24_C2_Log.out
+[2026-05-25 13:28:05,467] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R3_C1_SJ.out.tab
+[2026-05-25 13:28:05,469] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R3_C1_SJ.out.tab
+[2026-05-25 13:28:05,469] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R3_C1_SJ.out.tab
+[2026-05-25 13:28:05,472] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R3_C1_SJ.out.tab
+[2026-05-25 13:28:05,472] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R3_C1_SJ.out.tab
+[2026-05-25 13:28:05,472] multiqc                                            [DEBUG  ]  File ignored by rockhopper because it exceeded search pattern filesize limit: POR_R3_C1_SJ.out.tab
+[2026-05-25 13:28:05,472] multiqc                                            [DEBUG  ]  File ignored by rseqc/bam_stat because it exceeded search pattern filesize limit: POR_R3_C1_SJ.out.tab
+[2026-05-25 13:28:05,472] multiqc                                            [DEBUG  ]  File ignored by rseqc/junction_annotation because it exceeded search pattern filesize limit: POR_R3_C1_SJ.out.tab
+[2026-05-25 13:28:05,472] multiqc                                            [DEBUG  ]  File ignored by rseqc/read_distribution because it exceeded search pattern filesize limit: POR_R3_C1_SJ.out.tab
+[2026-05-25 13:28:05,472] multiqc                                            [DEBUG  ]  File ignored by rseqc/infer_experiment because it exceeded search pattern filesize limit: POR_R3_C1_SJ.out.tab
+[2026-05-25 13:28:05,820] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R3_C1_SJ.out.tab
+[2026-05-25 13:28:05,842] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R0_C1_Log.out
+[2026-05-25 13:28:05,844] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R0_C1_Log.out
+[2026-05-25 13:28:05,844] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R0_C1_Log.out
+[2026-05-25 13:28:05,847] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R0_C1_Log.out
+[2026-05-25 13:28:05,847] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R0_C1_Log.out
+[2026-05-25 13:28:06,018] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R0_C1_Log.out
+[2026-05-25 13:28:06,032] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R24_H1_Log.progress.out
+[2026-05-25 13:28:06,034] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R24_H1_Log.progress.out
+[2026-05-25 13:28:06,043] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: POR_R1_H3_Aligned.sortedByCoord.out.bam
+[2026-05-25 13:28:06,043] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: POR_R1_C1_Aligned.sortedByCoord.out.bam
+[2026-05-25 13:28:06,049] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R3_H3_Log.progress.out
+[2026-05-25 13:28:06,050] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R3_H3_Log.progress.out
+[2026-05-25 13:28:06,064] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R1_C3_SJ.out.tab
+[2026-05-25 13:28:06,066] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R1_C3_SJ.out.tab
+[2026-05-25 13:28:06,066] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R1_C3_SJ.out.tab
+[2026-05-25 13:28:06,069] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R1_C3_SJ.out.tab
+[2026-05-25 13:28:06,069] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R1_C3_SJ.out.tab
+[2026-05-25 13:28:06,070] multiqc                                            [DEBUG  ]  File ignored by rockhopper because it exceeded search pattern filesize limit: POR_R1_C3_SJ.out.tab
+[2026-05-25 13:28:06,070] multiqc                                            [DEBUG  ]  File ignored by rseqc/bam_stat because it exceeded search pattern filesize limit: POR_R1_C3_SJ.out.tab
+[2026-05-25 13:28:06,070] multiqc                                            [DEBUG  ]  File ignored by rseqc/junction_annotation because it exceeded search pattern filesize limit: POR_R1_C3_SJ.out.tab
+[2026-05-25 13:28:06,070] multiqc                                            [DEBUG  ]  File ignored by rseqc/read_distribution because it exceeded search pattern filesize limit: POR_R1_C3_SJ.out.tab
+[2026-05-25 13:28:06,070] multiqc                                            [DEBUG  ]  File ignored by rseqc/infer_experiment because it exceeded search pattern filesize limit: POR_R1_C3_SJ.out.tab
+[2026-05-25 13:28:06,524] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R1_C3_SJ.out.tab
+[2026-05-25 13:28:06,555] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R3_C2_Log.out
+[2026-05-25 13:28:06,557] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R3_C2_Log.out
+[2026-05-25 13:28:06,557] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R3_C2_Log.out
+[2026-05-25 13:28:06,565] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R3_C2_Log.out
+[2026-05-25 13:28:06,565] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R3_C2_Log.out
+[2026-05-25 13:28:06,732] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R3_C2_Log.out
+[2026-05-25 13:28:06,746] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R72_C3_Log.out
+[2026-05-25 13:28:06,748] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R72_C3_Log.out
+[2026-05-25 13:28:06,748] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R72_C3_Log.out
+[2026-05-25 13:28:06,751] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R72_C3_Log.out
+[2026-05-25 13:28:06,751] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R72_C3_Log.out
+[2026-05-25 13:28:06,930] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R72_C3_Log.out
+[2026-05-25 13:28:06,947] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R24_H1_SJ.out.tab
+[2026-05-25 13:28:06,949] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R24_H1_SJ.out.tab
+[2026-05-25 13:28:06,949] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R24_H1_SJ.out.tab
+[2026-05-25 13:28:06,952] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R24_H1_SJ.out.tab
+[2026-05-25 13:28:06,952] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R24_H1_SJ.out.tab
+[2026-05-25 13:28:07,025] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R24_H1_SJ.out.tab
+[2026-05-25 13:28:07,034] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R3_C3_Log.progress.out
+[2026-05-25 13:28:07,036] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R3_C3_Log.progress.out
+[2026-05-25 13:28:07,044] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: POR_R12_H1_Aligned.sortedByCoord.out.bam
+[2026-05-25 13:28:07,050] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R120_H3_Log.out
+[2026-05-25 13:28:07,052] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R120_H3_Log.out
+[2026-05-25 13:28:07,052] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R120_H3_Log.out
+[2026-05-25 13:28:07,056] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R120_H3_Log.out
+[2026-05-25 13:28:07,056] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R120_H3_Log.out
+[2026-05-25 13:28:07,255] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R120_H3_Log.out
+[2026-05-25 13:28:07,265] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: POR_R12_C3_Aligned.sortedByCoord.out.bam
+[2026-05-25 13:28:07,269] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R24_C1_Log.progress.out
+[2026-05-25 13:28:07,271] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R24_C1_Log.progress.out
+[2026-05-25 13:28:07,283] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R3_H2_Log.progress.out
+[2026-05-25 13:28:07,285] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R3_H2_Log.progress.out
+[2026-05-25 13:28:07,293] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: POR_R3_C2_Aligned.sortedByCoord.out.bam
+[2026-05-25 13:28:07,299] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R24_C3_SJ.out.tab
+[2026-05-25 13:28:07,301] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R24_C3_SJ.out.tab
+[2026-05-25 13:28:07,301] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R24_C3_SJ.out.tab
+[2026-05-25 13:28:07,304] multiqc                                            [DEBUG  ]  File ignored by vep/vep_html because it exceeded search pattern filesize limit: POR_R24_C3_SJ.out.tab
+[2026-05-25 13:28:07,304] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R24_C3_SJ.out.tab
+[2026-05-25 13:28:07,304] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R24_C3_SJ.out.tab
+[2026-05-25 13:28:07,304] multiqc                                            [DEBUG  ]  File ignored by rockhopper because it exceeded search pattern filesize limit: POR_R24_C3_SJ.out.tab
+[2026-05-25 13:28:07,304] multiqc                                            [DEBUG  ]  File ignored by rseqc/bam_stat because it exceeded search pattern filesize limit: POR_R24_C3_SJ.out.tab
+[2026-05-25 13:28:07,304] multiqc                                            [DEBUG  ]  File ignored by rseqc/junction_annotation because it exceeded search pattern filesize limit: POR_R24_C3_SJ.out.tab
+[2026-05-25 13:28:07,304] multiqc                                            [DEBUG  ]  File ignored by rseqc/read_distribution because it exceeded search pattern filesize limit: POR_R24_C3_SJ.out.tab
+[2026-05-25 13:28:07,304] multiqc                                            [DEBUG  ]  File ignored by rseqc/infer_experiment because it exceeded search pattern filesize limit: POR_R24_C3_SJ.out.tab
+[2026-05-25 13:28:07,324] multiqc                                            [DEBUG  ]  File ignored by stacks/sumstats because it exceeded search pattern filesize limit: POR_R24_C3_SJ.out.tab
+[2026-05-25 13:28:07,848] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R24_C3_SJ.out.tab
+[2026-05-25 13:28:07,888] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R12_C2_Log.out
+[2026-05-25 13:28:07,890] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R12_C2_Log.out
+[2026-05-25 13:28:07,891] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R12_C2_Log.out
+[2026-05-25 13:28:07,894] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R12_C2_Log.out
+[2026-05-25 13:28:07,894] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R12_C2_Log.out
+[2026-05-25 13:28:08,059] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R12_C2_Log.out
+[2026-05-25 13:28:08,073] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R0_H3_Log.out
+[2026-05-25 13:28:08,075] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R0_H3_Log.out
+[2026-05-25 13:28:08,075] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R0_H3_Log.out
+[2026-05-25 13:28:08,078] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R0_H3_Log.out
+[2026-05-25 13:28:08,078] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R0_H3_Log.out
+[2026-05-25 13:28:08,251] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R0_H3_Log.out
+[2026-05-25 13:28:08,268] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R120_C1_Log.out
+[2026-05-25 13:28:08,270] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R120_C1_Log.out
+[2026-05-25 13:28:08,270] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R120_C1_Log.out
+[2026-05-25 13:28:08,273] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R120_C1_Log.out
+[2026-05-25 13:28:08,274] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R120_C1_Log.out
+[2026-05-25 13:28:08,461] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R120_C1_Log.out
+[2026-05-25 13:28:08,473] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R3_C2_Log.progress.out
+[2026-05-25 13:28:08,475] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R3_C2_Log.progress.out
+[2026-05-25 13:28:08,478] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R3_C2_Log.progress.out
+[2026-05-25 13:28:08,492] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R0_C2_SJ.out.tab
+[2026-05-25 13:28:08,494] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R0_C2_SJ.out.tab
+[2026-05-25 13:28:08,494] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R0_C2_SJ.out.tab
+[2026-05-25 13:28:08,497] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R0_C2_SJ.out.tab
+[2026-05-25 13:28:08,497] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R0_C2_SJ.out.tab
+[2026-05-25 13:28:08,497] multiqc                                            [DEBUG  ]  File ignored by rockhopper because it exceeded search pattern filesize limit: POR_R0_C2_SJ.out.tab
+[2026-05-25 13:28:08,497] multiqc                                            [DEBUG  ]  File ignored by rseqc/bam_stat because it exceeded search pattern filesize limit: POR_R0_C2_SJ.out.tab
+[2026-05-25 13:28:08,497] multiqc                                            [DEBUG  ]  File ignored by rseqc/junction_annotation because it exceeded search pattern filesize limit: POR_R0_C2_SJ.out.tab
+[2026-05-25 13:28:08,497] multiqc                                            [DEBUG  ]  File ignored by rseqc/read_distribution because it exceeded search pattern filesize limit: POR_R0_C2_SJ.out.tab
+[2026-05-25 13:28:08,497] multiqc                                            [DEBUG  ]  File ignored by rseqc/infer_experiment because it exceeded search pattern filesize limit: POR_R0_C2_SJ.out.tab
+[2026-05-25 13:28:08,922] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R0_C2_SJ.out.tab
+[2026-05-25 13:28:08,947] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: POR_R72_C3_Aligned.sortedByCoord.out.bam
+[2026-05-25 13:28:08,953] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R1_H1_SJ.out.tab
+[2026-05-25 13:28:08,955] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R1_H1_SJ.out.tab
+[2026-05-25 13:28:08,956] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R1_H1_SJ.out.tab
+[2026-05-25 13:28:08,959] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R1_H1_SJ.out.tab
+[2026-05-25 13:28:08,959] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R1_H1_SJ.out.tab
+[2026-05-25 13:28:09,175] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R1_H1_SJ.out.tab
+[2026-05-25 13:28:09,192] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R72_H1_Log.out
+[2026-05-25 13:28:09,194] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R72_H1_Log.out
+[2026-05-25 13:28:09,194] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R72_H1_Log.out
+[2026-05-25 13:28:09,202] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R72_H1_Log.out
+[2026-05-25 13:28:09,202] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R72_H1_Log.out
+[2026-05-25 13:28:09,371] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R72_H1_Log.out
+[2026-05-25 13:28:09,381] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: POR_R72_H1_Aligned.sortedByCoord.out.bam
+[2026-05-25 13:28:09,383] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: POR_R24_H3_Aligned.sortedByCoord.out.bam
+[2026-05-25 13:28:09,388] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R12_H1_Log.progress.out
+[2026-05-25 13:28:09,389] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R12_H1_Log.progress.out
+[2026-05-25 13:28:09,412] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R120_H1_SJ.out.tab
+[2026-05-25 13:28:09,414] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R120_H1_SJ.out.tab
+[2026-05-25 13:28:09,414] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R120_H1_SJ.out.tab
+[2026-05-25 13:28:09,417] multiqc                                            [DEBUG  ]  File ignored by vep/vep_html because it exceeded search pattern filesize limit: POR_R120_H1_SJ.out.tab
+[2026-05-25 13:28:09,417] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R120_H1_SJ.out.tab
+[2026-05-25 13:28:09,417] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R120_H1_SJ.out.tab
+[2026-05-25 13:28:09,418] multiqc                                            [DEBUG  ]  File ignored by rockhopper because it exceeded search pattern filesize limit: POR_R120_H1_SJ.out.tab
+[2026-05-25 13:28:09,418] multiqc                                            [DEBUG  ]  File ignored by rseqc/bam_stat because it exceeded search pattern filesize limit: POR_R120_H1_SJ.out.tab
+[2026-05-25 13:28:09,418] multiqc                                            [DEBUG  ]  File ignored by rseqc/junction_annotation because it exceeded search pattern filesize limit: POR_R120_H1_SJ.out.tab
+[2026-05-25 13:28:09,418] multiqc                                            [DEBUG  ]  File ignored by rseqc/read_distribution because it exceeded search pattern filesize limit: POR_R120_H1_SJ.out.tab
+[2026-05-25 13:28:09,418] multiqc                                            [DEBUG  ]  File ignored by rseqc/infer_experiment because it exceeded search pattern filesize limit: POR_R120_H1_SJ.out.tab
+[2026-05-25 13:28:09,473] multiqc                                            [DEBUG  ]  File ignored by stacks/sumstats because it exceeded search pattern filesize limit: POR_R120_H1_SJ.out.tab
+[2026-05-25 13:28:11,477] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R120_H1_SJ.out.tab
+[2026-05-25 13:28:11,595] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R72_H2_Log.progress.out
+[2026-05-25 13:28:11,596] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R72_H2_Log.progress.out
+[2026-05-25 13:28:11,612] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R12_H3_SJ.out.tab
+[2026-05-25 13:28:11,613] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R12_H3_SJ.out.tab
+[2026-05-25 13:28:11,614] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R12_H3_SJ.out.tab
+[2026-05-25 13:28:11,617] multiqc                                            [DEBUG  ]  File ignored by vep/vep_html because it exceeded search pattern filesize limit: POR_R12_H3_SJ.out.tab
+[2026-05-25 13:28:11,617] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R12_H3_SJ.out.tab
+[2026-05-25 13:28:11,617] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R12_H3_SJ.out.tab
+[2026-05-25 13:28:11,617] multiqc                                            [DEBUG  ]  File ignored by rockhopper because it exceeded search pattern filesize limit: POR_R12_H3_SJ.out.tab
+[2026-05-25 13:28:11,617] multiqc                                            [DEBUG  ]  File ignored by rseqc/bam_stat because it exceeded search pattern filesize limit: POR_R12_H3_SJ.out.tab
+[2026-05-25 13:28:11,617] multiqc                                            [DEBUG  ]  File ignored by rseqc/junction_annotation because it exceeded search pattern filesize limit: POR_R12_H3_SJ.out.tab
+[2026-05-25 13:28:11,617] multiqc                                            [DEBUG  ]  File ignored by rseqc/read_distribution because it exceeded search pattern filesize limit: POR_R12_H3_SJ.out.tab
+[2026-05-25 13:28:11,617] multiqc                                            [DEBUG  ]  File ignored by rseqc/infer_experiment because it exceeded search pattern filesize limit: POR_R12_H3_SJ.out.tab
+[2026-05-25 13:28:11,635] multiqc                                            [DEBUG  ]  File ignored by stacks/sumstats because it exceeded search pattern filesize limit: POR_R12_H3_SJ.out.tab
+[2026-05-25 13:28:12,246] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R12_H3_SJ.out.tab
+[2026-05-25 13:28:12,280] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: POR_R24_C1_Aligned.sortedByCoord.out.bam
+[2026-05-25 13:28:12,286] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R12_H1_Log.out
+[2026-05-25 13:28:12,288] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R12_H1_Log.out
+[2026-05-25 13:28:12,288] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R12_H1_Log.out
+[2026-05-25 13:28:12,291] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R12_H1_Log.out
+[2026-05-25 13:28:12,291] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R12_H1_Log.out
+[2026-05-25 13:28:12,453] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R12_H1_Log.out
+[2026-05-25 13:28:12,473] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R120_H2_Log.out
+[2026-05-25 13:28:12,475] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R120_H2_Log.out
+[2026-05-25 13:28:12,475] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R120_H2_Log.out
+[2026-05-25 13:28:12,478] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R120_H2_Log.out
+[2026-05-25 13:28:12,478] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R120_H2_Log.out
+[2026-05-25 13:28:12,652] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R120_H2_Log.out
+[2026-05-25 13:28:12,668] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R72_C2_Log.progress.out
+[2026-05-25 13:28:12,675] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R72_C2_Log.progress.out
+[2026-05-25 13:28:12,689] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R12_C1_Log.progress.out
+[2026-05-25 13:28:12,691] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R12_C1_Log.progress.out
+[2026-05-25 13:28:12,707] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R3_C3_Log.out
+[2026-05-25 13:28:12,708] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R3_C3_Log.out
+[2026-05-25 13:28:12,709] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R3_C3_Log.out
+[2026-05-25 13:28:12,712] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R3_C3_Log.out
+[2026-05-25 13:28:12,712] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R3_C3_Log.out
+[2026-05-25 13:28:12,873] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R3_C3_Log.out
+[2026-05-25 13:28:12,891] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R3_H1_SJ.out.tab
+[2026-05-25 13:28:12,893] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R3_H1_SJ.out.tab
+[2026-05-25 13:28:12,893] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R3_H1_SJ.out.tab
+[2026-05-25 13:28:12,896] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R3_H1_SJ.out.tab
+[2026-05-25 13:28:12,896] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R3_H1_SJ.out.tab
+[2026-05-25 13:28:12,897] multiqc                                            [DEBUG  ]  File ignored by rockhopper because it exceeded search pattern filesize limit: POR_R3_H1_SJ.out.tab
+[2026-05-25 13:28:12,897] multiqc                                            [DEBUG  ]  File ignored by rseqc/bam_stat because it exceeded search pattern filesize limit: POR_R3_H1_SJ.out.tab
+[2026-05-25 13:28:12,897] multiqc                                            [DEBUG  ]  File ignored by rseqc/junction_annotation because it exceeded search pattern filesize limit: POR_R3_H1_SJ.out.tab
+[2026-05-25 13:28:12,897] multiqc                                            [DEBUG  ]  File ignored by rseqc/read_distribution because it exceeded search pattern filesize limit: POR_R3_H1_SJ.out.tab
+[2026-05-25 13:28:12,897] multiqc                                            [DEBUG  ]  File ignored by rseqc/infer_experiment because it exceeded search pattern filesize limit: POR_R3_H1_SJ.out.tab
+[2026-05-25 13:28:13,334] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R3_H1_SJ.out.tab
+[2026-05-25 13:28:13,356] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: POR_R0_H3_Aligned.sortedByCoord.out.bam
+[2026-05-25 13:28:13,356] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: POR_R0_C1_Aligned.sortedByCoord.out.bam
+[2026-05-25 13:28:13,364] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R72_C2_Log.out
+[2026-05-25 13:28:13,366] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R72_C2_Log.out
+[2026-05-25 13:28:13,366] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R72_C2_Log.out
+[2026-05-25 13:28:13,369] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R72_C2_Log.out
+[2026-05-25 13:28:13,369] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R72_C2_Log.out
+[2026-05-25 13:28:13,531] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R72_C2_Log.out
+[2026-05-25 13:28:13,545] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: POR_R120_C3_Aligned.sortedByCoord.out.bam
+[2026-05-25 13:28:13,551] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R12_C3_Log.out
+[2026-05-25 13:28:13,553] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R12_C3_Log.out
+[2026-05-25 13:28:13,553] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R12_C3_Log.out
+[2026-05-25 13:28:13,556] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R12_C3_Log.out
+[2026-05-25 13:28:13,556] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R12_C3_Log.out
+[2026-05-25 13:28:13,721] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R12_C3_Log.out
+[2026-05-25 13:28:13,737] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R0_H2_Log.out
+[2026-05-25 13:28:13,738] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R0_H2_Log.out
+[2026-05-25 13:28:13,739] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R0_H2_Log.out
+[2026-05-25 13:28:13,742] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R0_H2_Log.out
+[2026-05-25 13:28:13,742] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R0_H2_Log.out
+[2026-05-25 13:28:13,922] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R0_H2_Log.out
+[2026-05-25 13:28:13,931] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: POR_R120_H1_Aligned.sortedByCoord.out.bam
+[2026-05-25 13:28:13,935] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R72_H3_Log.progress.out
+[2026-05-25 13:28:13,937] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R72_H3_Log.progress.out
+[2026-05-25 13:28:13,952] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R3_C3_SJ.out.tab
+[2026-05-25 13:28:13,954] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R3_C3_SJ.out.tab
+[2026-05-25 13:28:13,955] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R3_C3_SJ.out.tab
+[2026-05-25 13:28:13,958] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R3_C3_SJ.out.tab
+[2026-05-25 13:28:13,958] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R3_C3_SJ.out.tab
+[2026-05-25 13:28:13,958] multiqc                                            [DEBUG  ]  File ignored by rockhopper because it exceeded search pattern filesize limit: POR_R3_C3_SJ.out.tab
+[2026-05-25 13:28:13,958] multiqc                                            [DEBUG  ]  File ignored by rseqc/bam_stat because it exceeded search pattern filesize limit: POR_R3_C3_SJ.out.tab
+[2026-05-25 13:28:13,958] multiqc                                            [DEBUG  ]  File ignored by rseqc/junction_annotation because it exceeded search pattern filesize limit: POR_R3_C3_SJ.out.tab
+[2026-05-25 13:28:13,958] multiqc                                            [DEBUG  ]  File ignored by rseqc/read_distribution because it exceeded search pattern filesize limit: POR_R3_C3_SJ.out.tab
+[2026-05-25 13:28:13,958] multiqc                                            [DEBUG  ]  File ignored by rseqc/infer_experiment because it exceeded search pattern filesize limit: POR_R3_C3_SJ.out.tab
+[2026-05-25 13:28:14,413] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R3_C3_SJ.out.tab
+[2026-05-25 13:28:14,445] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R0_H1_Log.progress.out
+[2026-05-25 13:28:14,447] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R0_H1_Log.progress.out
+[2026-05-25 13:28:14,461] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R120_H1_Log.progress.out
+[2026-05-25 13:28:14,463] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R120_H1_Log.progress.out
+[2026-05-25 13:28:14,466] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R120_H1_Log.progress.out
+[2026-05-25 13:28:14,479] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R72_H2_SJ.out.tab
+[2026-05-25 13:28:14,481] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R72_H2_SJ.out.tab
+[2026-05-25 13:28:14,481] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R72_H2_SJ.out.tab
+[2026-05-25 13:28:14,484] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R72_H2_SJ.out.tab
+[2026-05-25 13:28:14,484] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R72_H2_SJ.out.tab
+[2026-05-25 13:28:14,587] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R72_H2_SJ.out.tab
+[2026-05-25 13:28:14,598] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R3_H1_Log.out
+[2026-05-25 13:28:14,600] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R3_H1_Log.out
+[2026-05-25 13:28:14,601] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R3_H1_Log.out
+[2026-05-25 13:28:14,604] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R3_H1_Log.out
+[2026-05-25 13:28:14,604] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R3_H1_Log.out
+[2026-05-25 13:28:14,797] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R3_H1_Log.out
+[2026-05-25 13:28:14,811] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R120_C3_SJ.out.tab
+[2026-05-25 13:28:14,813] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R120_C3_SJ.out.tab
+[2026-05-25 13:28:14,813] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R120_C3_SJ.out.tab
+[2026-05-25 13:28:14,816] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R120_C3_SJ.out.tab
+[2026-05-25 13:28:14,816] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R120_C3_SJ.out.tab
+[2026-05-25 13:28:14,816] multiqc                                            [DEBUG  ]  File ignored by rockhopper because it exceeded search pattern filesize limit: POR_R120_C3_SJ.out.tab
+[2026-05-25 13:28:14,816] multiqc                                            [DEBUG  ]  File ignored by rseqc/bam_stat because it exceeded search pattern filesize limit: POR_R120_C3_SJ.out.tab
+[2026-05-25 13:28:14,816] multiqc                                            [DEBUG  ]  File ignored by rseqc/junction_annotation because it exceeded search pattern filesize limit: POR_R120_C3_SJ.out.tab
+[2026-05-25 13:28:14,816] multiqc                                            [DEBUG  ]  File ignored by rseqc/read_distribution because it exceeded search pattern filesize limit: POR_R120_C3_SJ.out.tab
+[2026-05-25 13:28:14,816] multiqc                                            [DEBUG  ]  File ignored by rseqc/infer_experiment because it exceeded search pattern filesize limit: POR_R120_C3_SJ.out.tab
+[2026-05-25 13:28:15,223] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R120_C3_SJ.out.tab
+[2026-05-25 13:28:15,250] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R12_C1_SJ.out.tab
+[2026-05-25 13:28:15,252] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R12_C1_SJ.out.tab
+[2026-05-25 13:28:15,252] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R12_C1_SJ.out.tab
+[2026-05-25 13:28:15,255] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R12_C1_SJ.out.tab
+[2026-05-25 13:28:15,255] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R12_C1_SJ.out.tab
+[2026-05-25 13:28:15,255] multiqc                                            [DEBUG  ]  File ignored by rockhopper because it exceeded search pattern filesize limit: POR_R12_C1_SJ.out.tab
+[2026-05-25 13:28:15,255] multiqc                                            [DEBUG  ]  File ignored by rseqc/bam_stat because it exceeded search pattern filesize limit: POR_R12_C1_SJ.out.tab
+[2026-05-25 13:28:15,256] multiqc                                            [DEBUG  ]  File ignored by rseqc/junction_annotation because it exceeded search pattern filesize limit: POR_R12_C1_SJ.out.tab
+[2026-05-25 13:28:15,256] multiqc                                            [DEBUG  ]  File ignored by rseqc/read_distribution because it exceeded search pattern filesize limit: POR_R12_C1_SJ.out.tab
+[2026-05-25 13:28:15,256] multiqc                                            [DEBUG  ]  File ignored by rseqc/infer_experiment because it exceeded search pattern filesize limit: POR_R12_C1_SJ.out.tab
+[2026-05-25 13:28:15,525] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R12_C1_SJ.out.tab
+[2026-05-25 13:28:15,551] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R120_C1_Log.progress.out
+[2026-05-25 13:28:15,553] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R120_C1_Log.progress.out
+[2026-05-25 13:28:15,556] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R120_C1_Log.progress.out
+[2026-05-25 13:28:15,565] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R0_C1_Log.progress.out
+[2026-05-25 13:28:15,567] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R0_C1_Log.progress.out
+[2026-05-25 13:28:15,581] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R72_C3_Log.progress.out
+[2026-05-25 13:28:15,583] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R72_C3_Log.progress.out
+[2026-05-25 13:28:15,597] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R0_C2_Log.progress.out
+[2026-05-25 13:28:15,598] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R0_C2_Log.progress.out
+[2026-05-25 13:28:15,613] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R12_C3_Log.progress.out
+[2026-05-25 13:28:15,614] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R12_C3_Log.progress.out
+[2026-05-25 13:28:15,630] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R1_C2_Log.out
+[2026-05-25 13:28:15,632] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R1_C2_Log.out
+[2026-05-25 13:28:15,632] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R1_C2_Log.out
+[2026-05-25 13:28:15,635] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R1_C2_Log.out
+[2026-05-25 13:28:15,636] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R1_C2_Log.out
+[2026-05-25 13:28:15,802] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R1_C2_Log.out
+[2026-05-25 13:28:15,814] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R120_C2_Log.progress.out
+[2026-05-25 13:28:15,816] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R120_C2_Log.progress.out
+[2026-05-25 13:28:15,828] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: POR_R1_H2_Aligned.sortedByCoord.out.bam
+[2026-05-25 13:28:15,834] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R24_H3_SJ.out.tab
+[2026-05-25 13:28:15,836] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R24_H3_SJ.out.tab
+[2026-05-25 13:28:15,836] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R24_H3_SJ.out.tab
+[2026-05-25 13:28:15,839] multiqc                                            [DEBUG  ]  File ignored by vep/vep_html because it exceeded search pattern filesize limit: POR_R24_H3_SJ.out.tab
+[2026-05-25 13:28:15,839] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R24_H3_SJ.out.tab
+[2026-05-25 13:28:15,839] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R24_H3_SJ.out.tab
+[2026-05-25 13:28:15,839] multiqc                                            [DEBUG  ]  File ignored by rockhopper because it exceeded search pattern filesize limit: POR_R24_H3_SJ.out.tab
+[2026-05-25 13:28:15,839] multiqc                                            [DEBUG  ]  File ignored by rseqc/bam_stat because it exceeded search pattern filesize limit: POR_R24_H3_SJ.out.tab
+[2026-05-25 13:28:15,839] multiqc                                            [DEBUG  ]  File ignored by rseqc/junction_annotation because it exceeded search pattern filesize limit: POR_R24_H3_SJ.out.tab
+[2026-05-25 13:28:15,839] multiqc                                            [DEBUG  ]  File ignored by rseqc/read_distribution because it exceeded search pattern filesize limit: POR_R24_H3_SJ.out.tab
+[2026-05-25 13:28:15,839] multiqc                                            [DEBUG  ]  File ignored by rseqc/infer_experiment because it exceeded search pattern filesize limit: POR_R24_H3_SJ.out.tab
+[2026-05-25 13:28:15,870] multiqc                                            [DEBUG  ]  File ignored by stacks/sumstats because it exceeded search pattern filesize limit: POR_R24_H3_SJ.out.tab
+[2026-05-25 13:28:16,800] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R24_H3_SJ.out.tab
+[2026-05-25 13:28:16,867] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R0_H2_SJ.out.tab
+[2026-05-25 13:28:16,869] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R0_H2_SJ.out.tab
+[2026-05-25 13:28:16,869] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R0_H2_SJ.out.tab
+[2026-05-25 13:28:16,872] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R0_H2_SJ.out.tab
+[2026-05-25 13:28:16,872] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R0_H2_SJ.out.tab
+[2026-05-25 13:28:16,872] multiqc                                            [DEBUG  ]  File ignored by rockhopper because it exceeded search pattern filesize limit: POR_R0_H2_SJ.out.tab
+[2026-05-25 13:28:16,872] multiqc                                            [DEBUG  ]  File ignored by rseqc/bam_stat because it exceeded search pattern filesize limit: POR_R0_H2_SJ.out.tab
+[2026-05-25 13:28:16,872] multiqc                                            [DEBUG  ]  File ignored by rseqc/junction_annotation because it exceeded search pattern filesize limit: POR_R0_H2_SJ.out.tab
+[2026-05-25 13:28:16,872] multiqc                                            [DEBUG  ]  File ignored by rseqc/read_distribution because it exceeded search pattern filesize limit: POR_R0_H2_SJ.out.tab
+[2026-05-25 13:28:16,872] multiqc                                            [DEBUG  ]  File ignored by rseqc/infer_experiment because it exceeded search pattern filesize limit: POR_R0_H2_SJ.out.tab
+[2026-05-25 13:28:17,128] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R0_H2_SJ.out.tab
+[2026-05-25 13:28:17,146] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R120_H2_Log.progress.out
+[2026-05-25 13:28:17,148] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R120_H2_Log.progress.out
+[2026-05-25 13:28:17,160] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R12_H3_Log.progress.out
+[2026-05-25 13:28:17,162] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R12_H3_Log.progress.out
+[2026-05-25 13:28:17,176] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R0_H2_Log.progress.out
+[2026-05-25 13:28:17,183] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R0_H2_Log.progress.out
+[2026-05-25 13:28:17,197] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R1_C1_SJ.out.tab
+[2026-05-25 13:28:17,199] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R1_C1_SJ.out.tab
+[2026-05-25 13:28:17,199] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R1_C1_SJ.out.tab
+[2026-05-25 13:28:17,202] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R1_C1_SJ.out.tab
+[2026-05-25 13:28:17,202] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R1_C1_SJ.out.tab
+[2026-05-25 13:28:17,370] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R1_C1_SJ.out.tab
+[2026-05-25 13:28:17,378] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: POR_R12_C2_Aligned.sortedByCoord.out.bam
+[2026-05-25 13:28:17,387] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R24_H1_Log.out
+[2026-05-25 13:28:17,388] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R24_H1_Log.out
+[2026-05-25 13:28:17,388] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R24_H1_Log.out
+[2026-05-25 13:28:17,397] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R24_H1_Log.out
+[2026-05-25 13:28:17,397] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R24_H1_Log.out
+[2026-05-25 13:28:17,588] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R24_H1_Log.out
+[2026-05-25 13:28:17,600] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: POR_R3_C3_Aligned.sortedByCoord.out.bam
+[2026-05-25 13:28:17,601] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: POR_R3_H1_Aligned.sortedByCoord.out.bam
+[2026-05-25 13:28:17,606] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R12_C2_Log.progress.out
+[2026-05-25 13:28:17,613] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R12_C2_Log.progress.out
+[2026-05-25 13:28:17,628] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R72_C1_Log.progress.out
+[2026-05-25 13:28:17,630] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R72_C1_Log.progress.out
+[2026-05-25 13:28:17,644] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R0_C3_Log.progress.out
+[2026-05-25 13:28:17,645] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R0_C3_Log.progress.out
+[2026-05-25 13:28:17,660] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R1_H3_SJ.out.tab
+[2026-05-25 13:28:17,662] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R1_H3_SJ.out.tab
+[2026-05-25 13:28:17,663] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R1_H3_SJ.out.tab
+[2026-05-25 13:28:17,666] multiqc                                            [DEBUG  ]  File ignored by vep/vep_html because it exceeded search pattern filesize limit: POR_R1_H3_SJ.out.tab
+[2026-05-25 13:28:17,666] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R1_H3_SJ.out.tab
+[2026-05-25 13:28:17,666] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R1_H3_SJ.out.tab
+[2026-05-25 13:28:17,666] multiqc                                            [DEBUG  ]  File ignored by rockhopper because it exceeded search pattern filesize limit: POR_R1_H3_SJ.out.tab
+[2026-05-25 13:28:17,666] multiqc                                            [DEBUG  ]  File ignored by rseqc/bam_stat because it exceeded search pattern filesize limit: POR_R1_H3_SJ.out.tab
+[2026-05-25 13:28:17,666] multiqc                                            [DEBUG  ]  File ignored by rseqc/junction_annotation because it exceeded search pattern filesize limit: POR_R1_H3_SJ.out.tab
+[2026-05-25 13:28:17,666] multiqc                                            [DEBUG  ]  File ignored by rseqc/read_distribution because it exceeded search pattern filesize limit: POR_R1_H3_SJ.out.tab
+[2026-05-25 13:28:17,666] multiqc                                            [DEBUG  ]  File ignored by rseqc/infer_experiment because it exceeded search pattern filesize limit: POR_R1_H3_SJ.out.tab
+[2026-05-25 13:28:17,683] multiqc                                            [DEBUG  ]  File ignored by stacks/sumstats because it exceeded search pattern filesize limit: POR_R1_H3_SJ.out.tab
+[2026-05-25 13:28:18,246] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R1_H3_SJ.out.tab
+[2026-05-25 13:28:18,281] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R120_C3_Log.progress.out
+[2026-05-25 13:28:18,283] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R120_C3_Log.progress.out
+[2026-05-25 13:28:18,298] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R24_C3_Log.out
+[2026-05-25 13:28:18,300] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R24_C3_Log.out
+[2026-05-25 13:28:18,300] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R24_C3_Log.out
+[2026-05-25 13:28:18,303] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R24_C3_Log.out
+[2026-05-25 13:28:18,303] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R24_C3_Log.out
+[2026-05-25 13:28:18,475] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R24_C3_Log.out
+[2026-05-25 13:28:18,490] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R120_H3_Log.progress.out
+[2026-05-25 13:28:18,492] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R120_H3_Log.progress.out
+[2026-05-25 13:28:18,507] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R24_C1_SJ.out.tab
+[2026-05-25 13:28:18,509] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: POR_R24_C1_SJ.out.tab
+[2026-05-25 13:28:18,509] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R24_C1_SJ.out.tab
+[2026-05-25 13:28:18,512] multiqc                                            [DEBUG  ]  File ignored by vep/vep_txt because it exceeded search pattern filesize limit: POR_R24_C1_SJ.out.tab
+[2026-05-25 13:28:18,512] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: POR_R24_C1_SJ.out.tab
+[2026-05-25 13:28:18,512] multiqc                                            [DEBUG  ]  File ignored by rockhopper because it exceeded search pattern filesize limit: POR_R24_C1_SJ.out.tab
+[2026-05-25 13:28:18,513] multiqc                                            [DEBUG  ]  File ignored by rseqc/bam_stat because it exceeded search pattern filesize limit: POR_R24_C1_SJ.out.tab
+[2026-05-25 13:28:18,513] multiqc                                            [DEBUG  ]  File ignored by rseqc/junction_annotation because it exceeded search pattern filesize limit: POR_R24_C1_SJ.out.tab
+[2026-05-25 13:28:18,513] multiqc                                            [DEBUG  ]  File ignored by rseqc/read_distribution because it exceeded search pattern filesize limit: POR_R24_C1_SJ.out.tab
+[2026-05-25 13:28:18,513] multiqc                                            [DEBUG  ]  File ignored by rseqc/infer_experiment because it exceeded search pattern filesize limit: POR_R24_C1_SJ.out.tab
+[2026-05-25 13:28:18,906] multiqc                                            [DEBUG  ]  File ignored by nanostat because it exceeded search pattern filesize limit: POR_R24_C1_SJ.out.tab
+[2026-05-25 13:28:18,932] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R0_H3_Log.progress.out
+[2026-05-25 13:28:18,934] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R0_H3_Log.progress.out
+[2026-05-25 13:28:18,946] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R72_H1_Log.progress.out
+[2026-05-25 13:28:18,948] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R72_H1_Log.progress.out
+[2026-05-25 13:28:18,963] multiqc                                            [DEBUG  ]  File ignored by ccs/v4 because it exceeded search pattern filesize limit: POR_R12_H2_Log.progress.out
+[2026-05-25 13:28:18,965] multiqc                                            [DEBUG  ]  File ignored by lima/summary because it exceeded search pattern filesize limit: POR_R12_H2_Log.progress.out
+[2026-05-25 13:28:18,973] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: POR_R72_C2_Aligned.sortedByCoord.out.bam
+[2026-05-25 13:28:19,823] multiqc.plots.bargraph                             [DEBUG  ]  Using matplotlib version 3.4.3
+[2026-05-25 13:28:20,044] multiqc.modules.star.star                          [DEBUG  ]  Duplicate ReadsPerGene sample name found! Overwriting: POR_R120_C3
+[2026-05-25 13:28:20,134] multiqc.modules.star.star                          [DEBUG  ]  Duplicate ReadsPerGene sample name found! Overwriting: POR_R72_H1
+[2026-05-25 13:28:20,225] multiqc.modules.star.star                          [DEBUG  ]  Duplicate ReadsPerGene sample name found! Overwriting: POR_R0_H2
+[2026-05-25 13:28:20,316] multiqc.modules.star.star                          [DEBUG  ]  Duplicate ReadsPerGene sample name found! Overwriting: POR_R0_C3
+[2026-05-25 13:28:20,407] multiqc.modules.star.star                          [DEBUG  ]  Duplicate ReadsPerGene sample name found! Overwriting: POR_R120_H2
+[2026-05-25 13:28:20,497] multiqc.modules.star.star                          [DEBUG  ]  Duplicate ReadsPerGene sample name found! Overwriting: POR_R12_H1
+[2026-05-25 13:28:20,587] multiqc.modules.star.star                          [DEBUG  ]  Duplicate ReadsPerGene sample name found! Overwriting: POR_R1_C1
+[2026-05-25 13:28:20,678] multiqc.modules.star.star                          [DEBUG  ]  Duplicate ReadsPerGene sample name found! Overwriting: POR_R24_C3
+[2026-05-25 13:28:20,765] multiqc.modules.star.star                          [DEBUG  ]  Duplicate ReadsPerGene sample name found! Overwriting: POR_R3_H3
+[2026-05-25 13:28:20,852] multiqc.modules.star.star                          [DEBUG  ]  Duplicate ReadsPerGene sample name found! Overwriting: POR_R3_C2
+[2026-05-25 13:28:20,936] multiqc.modules.star.star                          [DEBUG  ]  Duplicate ReadsPerGene sample name found! Overwriting: POR_R24_H2
+[2026-05-25 13:28:21,020] multiqc.modules.star.star                          [DEBUG  ]  Duplicate ReadsPerGene sample name found! Overwriting: POR_R0_H3
+[2026-05-25 13:28:21,106] multiqc.modules.star.star                          [DEBUG  ]  Duplicate ReadsPerGene sample name found! Overwriting: POR_R120_C2
+[2026-05-25 13:28:21,190] multiqc.modules.star.star                          [DEBUG  ]  Duplicate ReadsPerGene sample name found! Overwriting: POR_R120_H3
+[2026-05-25 13:28:21,273] multiqc.modules.star.star                          [DEBUG  ]  Duplicate ReadsPerGene sample name found! Overwriting: POR_R72_C1
+[2026-05-25 13:28:21,354] multiqc.modules.star.star                          [DEBUG  ]  Duplicate ReadsPerGene sample name found! Overwriting: POR_R0_C2
+[2026-05-25 13:28:21,435] multiqc.modules.star.star                          [DEBUG  ]  Duplicate ReadsPerGene sample name found! Overwriting: POR_R3_H2
+[2026-05-25 13:28:21,517] multiqc.modules.star.star                          [DEBUG  ]  Duplicate ReadsPerGene sample name found! Overwriting: POR_R24_C2
+[2026-05-25 13:28:21,610] multiqc.modules.star.star                          [DEBUG  ]  Duplicate ReadsPerGene sample name found! Overwriting: POR_R1_H1
+[2026-05-25 13:28:21,703] multiqc.modules.star.star                          [DEBUG  ]  Duplicate ReadsPerGene sample name found! Overwriting: POR_R12_C1
+[2026-05-25 13:28:21,796] multiqc.modules.star.star                          [DEBUG  ]  Duplicate ReadsPerGene sample name found! Overwriting: POR_R24_H3
+[2026-05-25 13:28:21,883] multiqc.modules.star.star                          [DEBUG  ]  Duplicate ReadsPerGene sample name found! Overwriting: POR_R3_C3
+[2026-05-25 13:28:21,962] multiqc.modules.star.star                          [DEBUG  ]  Duplicate ReadsPerGene sample name found! Overwriting: POR_R0_C1
+[2026-05-25 13:28:22,041] multiqc.modules.star.star                          [DEBUG  ]  Duplicate ReadsPerGene sample name found! Overwriting: POR_R72_C2
+[2026-05-25 13:28:22,120] multiqc.modules.star.star                          [DEBUG  ]  Duplicate ReadsPerGene sample name found! Overwriting: POR_R72_H3
+[2026-05-25 13:28:22,200] multiqc.modules.star.star                          [DEBUG  ]  Duplicate ReadsPerGene sample name found! Overwriting: POR_R120_C1
+[2026-05-25 13:28:22,281] multiqc.modules.star.star                          [DEBUG  ]  Duplicate ReadsPerGene sample name found! Overwriting: POR_R12_C2
+[2026-05-25 13:28:22,360] multiqc.modules.star.star                          [DEBUG  ]  Duplicate ReadsPerGene sample name found! Overwriting: POR_R1_H2
+[2026-05-25 13:28:22,439] multiqc.modules.star.star                          [DEBUG  ]  Duplicate ReadsPerGene sample name found! Overwriting: POR_R3_H1
+[2026-05-25 13:28:22,518] multiqc.modules.star.star                          [DEBUG  ]  Duplicate ReadsPerGene sample name found! Overwriting: POR_R1_C3
+[2026-05-25 13:28:22,598] multiqc.modules.star.star                          [DEBUG  ]  Duplicate ReadsPerGene sample name found! Overwriting: POR_R12_H3
+[2026-05-25 13:28:22,677] multiqc.modules.star.star                          [DEBUG  ]  Duplicate ReadsPerGene sample name found! Overwriting: POR_R24_C1
+[2026-05-25 13:28:22,757] multiqc.modules.star.star                          [DEBUG  ]  Duplicate ReadsPerGene sample name found! Overwriting: POR_R72_C3
+[2026-05-25 13:28:22,837] multiqc.modules.star.star                          [DEBUG  ]  Duplicate ReadsPerGene sample name found! Overwriting: POR_R120_H1
+[2026-05-25 13:28:22,917] multiqc.modules.star.star                          [DEBUG  ]  Duplicate ReadsPerGene sample name found! Overwriting: POR_R0_H1
+[2026-05-25 13:28:22,995] multiqc.modules.star.star                          [DEBUG  ]  Duplicate ReadsPerGene sample name found! Overwriting: POR_R72_H2
+[2026-05-25 13:28:23,077] multiqc.modules.star.star                          [DEBUG  ]  Duplicate ReadsPerGene sample name found! Overwriting: POR_R3_C1
+[2026-05-25 13:28:23,156] multiqc.modules.star.star                          [DEBUG  ]  Duplicate ReadsPerGene sample name found! Overwriting: POR_R12_C3
+[2026-05-25 13:28:23,236] multiqc.modules.star.star                          [DEBUG  ]  Duplicate ReadsPerGene sample name found! Overwriting: POR_R1_H3
+[2026-05-25 13:28:23,315] multiqc.modules.star.star                          [DEBUG  ]  Duplicate ReadsPerGene sample name found! Overwriting: POR_R24_H1
+[2026-05-25 13:28:23,396] multiqc.modules.star.star                          [DEBUG  ]  Duplicate ReadsPerGene sample name found! Overwriting: POR_R1_C2
+[2026-05-25 13:28:23,483] multiqc.modules.star.star                          [DEBUG  ]  Duplicate ReadsPerGene sample name found! Overwriting: POR_R12_H2
+[2026-05-25 13:28:23,484] multiqc.modules.star.star                          [INFO   ]  Found 42 reports and 42 gene count files
+[2026-05-25 13:28:23,520] multiqc                                            [INFO   ]  Compressing plot data
+[2026-05-25 13:28:23,551] multiqc                                            [INFO   ]  Report      : multiqc_report.html
+[2026-05-25 13:28:23,551] multiqc                                            [INFO   ]  Data        : multiqc_data
+[2026-05-25 13:28:23,551] multiqc                                            [DEBUG  ]  Moving data file from '/tmp/tmp2d1dyt2i/multiqc_data' to '/project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/alignment_qc/POR_Cgoreaui_V2/multiqc_data'
+[2026-05-25 13:28:23,891] multiqc                                            [INFO   ]  MultiQC complete

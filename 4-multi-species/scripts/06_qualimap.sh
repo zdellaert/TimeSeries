@@ -17,7 +17,7 @@ gtf_path=$3
 module load qualimap/2.2.1
 
 # list and make required directories
-scratch_dir="/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries"
+scratch_dir="/scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries"
 alignments_dir="${scratch_dir}/aligned/${species}_${genome}"
 
 qc_dir="/project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/alignment_qc/${species}_${genome}"
