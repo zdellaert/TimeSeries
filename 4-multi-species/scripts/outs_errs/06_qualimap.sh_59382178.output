@@ -1,0 +1,1789 @@
+Running Qualimap on POC_R0_C1...
+Java memory size is set to 8G
+Launching application...
+
+QualiMap v.2.2.1
+Built on 2016-10-03 18:14
+
+Selected tool: rnaseq
+Initializing regions from /work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf...
+
+Initialized 100000 regions...
+Initialized 200000 regions...
+Initialized 300000 regions...
+Initialized 400000 regions...
+Initialized 500000 regions...
+
+Initialized 530756 regions it total
+
+Starting constructing transcripts for RNA-seq stats...
+Finished constructing transcripts
+
+Starting BAM file analysis
+
+Sorting BAM file by name...
+
+Read 10000000 records.
+Read 20000000 records.
+Read 30000000 records.
+Finished reading inputs, merging and writing to output now.
+Sorting by name finished.
+
+Counted 31015 read pairs, 0 single reads
+
+Processed 155722 reads in total
+
+Cleanup of temporary files
+
+BAM file analysis finished
+Creating plots
+Writing HTML report...
+HTML report created successfully
+
+Running Qualimap on POC_R120_H2...
+Java memory size is set to 8G
+Launching application...
+
+QualiMap v.2.2.1
+Built on 2016-10-03 18:14
+
+Selected tool: rnaseq
+Initializing regions from /work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf...
+
+Initialized 100000 regions...
+Initialized 200000 regions...
+Initialized 300000 regions...
+Initialized 400000 regions...
+Initialized 500000 regions...
+
+Initialized 530756 regions it total
+
+Starting constructing transcripts for RNA-seq stats...
+Finished constructing transcripts
+
+Starting BAM file analysis
+
+Sorting BAM file by name...
+
+Read 10000000 records.
+Read 20000000 records.
+Read 30000000 records.
+Read 40000000 records.
+Read 50000000 records.
+Read 60000000 records.
+Finished reading inputs, merging and writing to output now.
+Sorting by name finished.
+
+Counted 43001 read pairs, 0 single reads
+
+Processed 192928 reads in total
+
+Cleanup of temporary files
+
+BAM file analysis finished
+Creating plots
+Writing HTML report...
+HTML report created successfully
+
+Running Qualimap on POC_R120_H3...
+Java memory size is set to 8G
+Launching application...
+
+QualiMap v.2.2.1
+Built on 2016-10-03 18:14
+
+Selected tool: rnaseq
+Initializing regions from /work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf...
+
+Initialized 100000 regions...
+Initialized 200000 regions...
+Initialized 300000 regions...
+Initialized 400000 regions...
+Initialized 500000 regions...
+
+Initialized 530756 regions it total
+
+Starting constructing transcripts for RNA-seq stats...
+Finished constructing transcripts
+
+Starting BAM file analysis
+
+Sorting BAM file by name...
+
+Read 10000000 records.
+Read 20000000 records.
+Read 30000000 records.
+Finished reading inputs, merging and writing to output now.
+Sorting by name finished.
+
+Counted 30844 read pairs, 1 single reads
+
+Processed 186707 reads in total
+
+Cleanup of temporary files
+
+BAM file analysis finished
+Creating plots
+Writing HTML report...
+HTML report created successfully
+
+Running Qualimap on POC_R12_C1...
+Java memory size is set to 8G
+Launching application...
+
+QualiMap v.2.2.1
+Built on 2016-10-03 18:14
+
+Selected tool: rnaseq
+Initializing regions from /work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf...
+
+Initialized 100000 regions...
+Initialized 200000 regions...
+Initialized 300000 regions...
+Initialized 400000 regions...
+Initialized 500000 regions...
+
+Initialized 530756 regions it total
+
+Starting constructing transcripts for RNA-seq stats...
+Finished constructing transcripts
+
+Starting BAM file analysis
+
+Sorting BAM file by name...
+
+Read 10000000 records.
+Read 20000000 records.
+Read 30000000 records.
+Finished reading inputs, merging and writing to output now.
+Sorting by name finished.
+
+Counted 25280 read pairs, 0 single reads
+
+Processed 134676 reads in total
+
+Cleanup of temporary files
+
+BAM file analysis finished
+Creating plots
+Writing HTML report...
+HTML report created successfully
+
+Running Qualimap on POC_R12_C2...
+Java memory size is set to 8G
+Launching application...
+
+QualiMap v.2.2.1
+Built on 2016-10-03 18:14
+
+Selected tool: rnaseq
+Initializing regions from /work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf...
+
+Initialized 100000 regions...
+Initialized 200000 regions...
+Initialized 300000 regions...
+Initialized 400000 regions...
+Initialized 500000 regions...
+
+Initialized 530756 regions it total
+
+Starting constructing transcripts for RNA-seq stats...
+Finished constructing transcripts
+
+Starting BAM file analysis
+
+Sorting BAM file by name...
+
+Read 10000000 records.
+Read 20000000 records.
+Read 30000000 records.
+Read 40000000 records.
+Finished reading inputs, merging and writing to output now.
+Sorting by name finished.
+
+Counted 33125 read pairs, 0 single reads
+
+Processed 190546 reads in total
+
+Cleanup of temporary files
+
+BAM file analysis finished
+Creating plots
+Writing HTML report...
+HTML report created successfully
+
+Running Qualimap on POC_R12_C3...
+Java memory size is set to 8G
+Launching application...
+
+QualiMap v.2.2.1
+Built on 2016-10-03 18:14
+
+Selected tool: rnaseq
+Initializing regions from /work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf...
+
+Initialized 100000 regions...
+Initialized 200000 regions...
+Initialized 300000 regions...
+Initialized 400000 regions...
+Initialized 500000 regions...
+
+Initialized 530756 regions it total
+
+Starting constructing transcripts for RNA-seq stats...
+Finished constructing transcripts
+
+Starting BAM file analysis
+
+Sorting BAM file by name...
+
+Read 10000000 records.
+Read 20000000 records.
+Read 30000000 records.
+Read 40000000 records.
+Read 50000000 records.
+Read 60000000 records.
+Finished reading inputs, merging and writing to output now.
+Sorting by name finished.
+
+Counted 59068 read pairs, 3 single reads
+
+Processed 294437 reads in total
+
+Cleanup of temporary files
+
+BAM file analysis finished
+Creating plots
+Writing HTML report...
+HTML report created successfully
+
+Running Qualimap on POC_R12_H1...
+Java memory size is set to 8G
+Launching application...
+
+QualiMap v.2.2.1
+Built on 2016-10-03 18:14
+
+Selected tool: rnaseq
+Initializing regions from /work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf...
+
+Initialized 100000 regions...
+Initialized 200000 regions...
+Initialized 300000 regions...
+Initialized 400000 regions...
+Initialized 500000 regions...
+
+Initialized 530756 regions it total
+
+Starting constructing transcripts for RNA-seq stats...
+Finished constructing transcripts
+
+Starting BAM file analysis
+
+Sorting BAM file by name...
+
+Read 10000000 records.
+Read 20000000 records.
+Read 30000000 records.
+Finished reading inputs, merging and writing to output now.
+Sorting by name finished.
+
+Counted 27322 read pairs, 0 single reads
+
+Processed 156252 reads in total
+
+Cleanup of temporary files
+
+BAM file analysis finished
+Creating plots
+Writing HTML report...
+HTML report created successfully
+
+Running Qualimap on POC_R12_H2...
+Java memory size is set to 8G
+Launching application...
+
+QualiMap v.2.2.1
+Built on 2016-10-03 18:14
+
+Selected tool: rnaseq
+Initializing regions from /work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf...
+
+Initialized 100000 regions...
+Initialized 200000 regions...
+Initialized 300000 regions...
+Initialized 400000 regions...
+Initialized 500000 regions...
+
+Initialized 530756 regions it total
+
+Starting constructing transcripts for RNA-seq stats...
+Finished constructing transcripts
+
+Starting BAM file analysis
+
+Sorting BAM file by name...
+
+Read 10000000 records.
+Read 20000000 records.
+Read 30000000 records.
+Finished reading inputs, merging and writing to output now.
+Sorting by name finished.
+
+Counted 27920 read pairs, 0 single reads
+
+Processed 154592 reads in total
+
+Cleanup of temporary files
+
+BAM file analysis finished
+Creating plots
+Writing HTML report...
+HTML report created successfully
+
+Running Qualimap on POC_R12_H3...
+Java memory size is set to 8G
+Launching application...
+
+QualiMap v.2.2.1
+Built on 2016-10-03 18:14
+
+Selected tool: rnaseq
+Initializing regions from /work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf...
+
+Initialized 100000 regions...
+Initialized 200000 regions...
+Initialized 300000 regions...
+Initialized 400000 regions...
+Initialized 500000 regions...
+
+Initialized 530756 regions it total
+
+Starting constructing transcripts for RNA-seq stats...
+Finished constructing transcripts
+
+Starting BAM file analysis
+
+Sorting BAM file by name...
+
+Read 10000000 records.
+Read 20000000 records.
+Read 30000000 records.
+Finished reading inputs, merging and writing to output now.
+Sorting by name finished.
+
+Counted 22927 read pairs, 0 single reads
+
+Processed 119436 reads in total
+
+Cleanup of temporary files
+
+BAM file analysis finished
+Creating plots
+Writing HTML report...
+HTML report created successfully
+
+Running Qualimap on POC_R1_C1...
+Java memory size is set to 8G
+Launching application...
+
+QualiMap v.2.2.1
+Built on 2016-10-03 18:14
+
+Selected tool: rnaseq
+Initializing regions from /work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf...
+
+Initialized 100000 regions...
+Initialized 200000 regions...
+Initialized 300000 regions...
+Initialized 400000 regions...
+Initialized 500000 regions...
+
+Initialized 530756 regions it total
+
+Starting constructing transcripts for RNA-seq stats...
+Finished constructing transcripts
+
+Starting BAM file analysis
+
+Sorting BAM file by name...
+
+Read 10000000 records.
+Read 20000000 records.
+Read 30000000 records.
+Read 40000000 records.
+Finished reading inputs, merging and writing to output now.
+Sorting by name finished.
+
+Counted 30600 read pairs, 0 single reads
+
+Processed 161486 reads in total
+
+Cleanup of temporary files
+
+BAM file analysis finished
+Creating plots
+Writing HTML report...
+HTML report created successfully
+
+Running Qualimap on POC_R1_C2...
+Java memory size is set to 8G
+Launching application...
+
+QualiMap v.2.2.1
+Built on 2016-10-03 18:14
+
+Selected tool: rnaseq
+Initializing regions from /work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf...
+
+Initialized 100000 regions...
+Initialized 200000 regions...
+Initialized 300000 regions...
+Initialized 400000 regions...
+Initialized 500000 regions...
+
+Initialized 530756 regions it total
+
+Starting constructing transcripts for RNA-seq stats...
+Finished constructing transcripts
+
+Starting BAM file analysis
+
+Sorting BAM file by name...
+
+Read 10000000 records.
+Read 20000000 records.
+Read 30000000 records.
+Read 40000000 records.
+Read 50000000 records.
+Finished reading inputs, merging and writing to output now.
+Sorting by name finished.
+
+Counted 36918 read pairs, 0 single reads
+
+Processed 197062 reads in total
+
+Cleanup of temporary files
+
+BAM file analysis finished
+Creating plots
+Writing HTML report...
+HTML report created successfully
+
+Running Qualimap on POC_R0_C2...
+Java memory size is set to 8G
+Launching application...
+
+QualiMap v.2.2.1
+Built on 2016-10-03 18:14
+
+Selected tool: rnaseq
+Initializing regions from /work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf...
+
+Initialized 100000 regions...
+Initialized 200000 regions...
+Initialized 300000 regions...
+Initialized 400000 regions...
+Initialized 500000 regions...
+
+Initialized 530756 regions it total
+
+Starting constructing transcripts for RNA-seq stats...
+Finished constructing transcripts
+
+Starting BAM file analysis
+
+Sorting BAM file by name...
+
+Read 10000000 records.
+Read 20000000 records.
+Read 30000000 records.
+Finished reading inputs, merging and writing to output now.
+Sorting by name finished.
+
+Counted 29204 read pairs, 0 single reads
+
+Processed 158806 reads in total
+
+Cleanup of temporary files
+
+BAM file analysis finished
+Creating plots
+Writing HTML report...
+HTML report created successfully
+
+Running Qualimap on POC_R1_C3...
+Java memory size is set to 8G
+Launching application...
+
+QualiMap v.2.2.1
+Built on 2016-10-03 18:14
+
+Selected tool: rnaseq
+Initializing regions from /work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf...
+
+Initialized 100000 regions...
+Initialized 200000 regions...
+Initialized 300000 regions...
+Initialized 400000 regions...
+Initialized 500000 regions...
+
+Initialized 530756 regions it total
+
+Starting constructing transcripts for RNA-seq stats...
+Finished constructing transcripts
+
+Starting BAM file analysis
+
+Sorting BAM file by name...
+
+Read 10000000 records.
+Read 20000000 records.
+Read 30000000 records.
+Finished reading inputs, merging and writing to output now.
+Sorting by name finished.
+
+Counted 31739 read pairs, 0 single reads
+
+Processed 168184 reads in total
+
+Cleanup of temporary files
+
+BAM file analysis finished
+Creating plots
+Writing HTML report...
+HTML report created successfully
+
+Running Qualimap on POC_R1_H1...
+Java memory size is set to 8G
+Launching application...
+
+QualiMap v.2.2.1
+Built on 2016-10-03 18:14
+
+Selected tool: rnaseq
+Initializing regions from /work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf...
+
+Initialized 100000 regions...
+Initialized 200000 regions...
+Initialized 300000 regions...
+Initialized 400000 regions...
+Initialized 500000 regions...
+
+Initialized 530756 regions it total
+
+Starting constructing transcripts for RNA-seq stats...
+Finished constructing transcripts
+
+Starting BAM file analysis
+
+Sorting BAM file by name...
+
+Read 10000000 records.
+Read 20000000 records.
+Read 30000000 records.
+Read 40000000 records.
+Read 50000000 records.
+Finished reading inputs, merging and writing to output now.
+Sorting by name finished.
+
+Counted 51671 read pairs, 0 single reads
+
+Processed 261260 reads in total
+
+Cleanup of temporary files
+
+BAM file analysis finished
+Creating plots
+Writing HTML report...
+HTML report created successfully
+
+Running Qualimap on POC_R1_H2...
+Java memory size is set to 8G
+Launching application...
+
+QualiMap v.2.2.1
+Built on 2016-10-03 18:14
+
+Selected tool: rnaseq
+Initializing regions from /work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf...
+
+Initialized 100000 regions...
+Initialized 200000 regions...
+Initialized 300000 regions...
+Initialized 400000 regions...
+Initialized 500000 regions...
+
+Initialized 530756 regions it total
+
+Starting constructing transcripts for RNA-seq stats...
+Finished constructing transcripts
+
+Starting BAM file analysis
+
+Sorting BAM file by name...
+
+Read 10000000 records.
+Read 20000000 records.
+Read 30000000 records.
+Read 40000000 records.
+Finished reading inputs, merging and writing to output now.
+Sorting by name finished.
+
+Counted 34962 read pairs, 0 single reads
+
+Processed 180744 reads in total
+
+Cleanup of temporary files
+
+BAM file analysis finished
+Creating plots
+Writing HTML report...
+HTML report created successfully
+
+Running Qualimap on POC_R1_H3...
+Java memory size is set to 8G
+Launching application...
+
+QualiMap v.2.2.1
+Built on 2016-10-03 18:14
+
+Selected tool: rnaseq
+Initializing regions from /work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf...
+
+Initialized 100000 regions...
+Initialized 200000 regions...
+Initialized 300000 regions...
+Initialized 400000 regions...
+Initialized 500000 regions...
+
+Initialized 530756 regions it total
+
+Starting constructing transcripts for RNA-seq stats...
+Finished constructing transcripts
+
+Starting BAM file analysis
+
+Sorting BAM file by name...
+
+Read 10000000 records.
+Read 20000000 records.
+Read 30000000 records.
+Finished reading inputs, merging and writing to output now.
+Sorting by name finished.
+
+Counted 32502 read pairs, 0 single reads
+
+Processed 199862 reads in total
+
+Cleanup of temporary files
+
+BAM file analysis finished
+Creating plots
+Writing HTML report...
+HTML report created successfully
+
+Running Qualimap on POC_R24_C1...
+Java memory size is set to 8G
+Launching application...
+
+QualiMap v.2.2.1
+Built on 2016-10-03 18:14
+
+Selected tool: rnaseq
+Initializing regions from /work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf...
+
+Initialized 100000 regions...
+Initialized 200000 regions...
+Initialized 300000 regions...
+Initialized 400000 regions...
+Initialized 500000 regions...
+
+Initialized 530756 regions it total
+
+Starting constructing transcripts for RNA-seq stats...
+Finished constructing transcripts
+
+Starting BAM file analysis
+
+Sorting BAM file by name...
+
+Read 10000000 records.
+Read 20000000 records.
+Read 30000000 records.
+Read 40000000 records.
+Finished reading inputs, merging and writing to output now.
+Sorting by name finished.
+
+Counted 34126 read pairs, 0 single reads
+
+Processed 197130 reads in total
+
+Cleanup of temporary files
+
+BAM file analysis finished
+Creating plots
+Writing HTML report...
+HTML report created successfully
+
+Running Qualimap on POC_R24_C2...
+Java memory size is set to 8G
+Launching application...
+
+QualiMap v.2.2.1
+Built on 2016-10-03 18:14
+
+Selected tool: rnaseq
+Initializing regions from /work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf...
+
+Initialized 100000 regions...
+Initialized 200000 regions...
+Initialized 300000 regions...
+Initialized 400000 regions...
+Initialized 500000 regions...
+
+Initialized 530756 regions it total
+
+Starting constructing transcripts for RNA-seq stats...
+Finished constructing transcripts
+
+Starting BAM file analysis
+
+Sorting BAM file by name...
+
+Read 10000000 records.
+Read 20000000 records.
+Read 30000000 records.
+Finished reading inputs, merging and writing to output now.
+Sorting by name finished.
+
+Counted 26935 read pairs, 0 single reads
+
+Processed 165540 reads in total
+
+Cleanup of temporary files
+
+BAM file analysis finished
+Creating plots
+Writing HTML report...
+HTML report created successfully
+
+Running Qualimap on POC_R24_C3...
+Java memory size is set to 8G
+Launching application...
+
+QualiMap v.2.2.1
+Built on 2016-10-03 18:14
+
+Selected tool: rnaseq
+Initializing regions from /work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf...
+
+Initialized 100000 regions...
+Initialized 200000 regions...
+Initialized 300000 regions...
+Initialized 400000 regions...
+Initialized 500000 regions...
+
+Initialized 530756 regions it total
+
+Starting constructing transcripts for RNA-seq stats...
+Finished constructing transcripts
+
+Starting BAM file analysis
+
+Sorting BAM file by name...
+
+Read 10000000 records.
+Read 20000000 records.
+Read 30000000 records.
+Read 40000000 records.
+Finished reading inputs, merging and writing to output now.
+Sorting by name finished.
+
+Counted 35149 read pairs, 1 single reads
+
+Processed 179765 reads in total
+
+Cleanup of temporary files
+
+BAM file analysis finished
+Creating plots
+Writing HTML report...
+HTML report created successfully
+
+Running Qualimap on POC_R24_H1...
+Java memory size is set to 8G
+Launching application...
+
+QualiMap v.2.2.1
+Built on 2016-10-03 18:14
+
+Selected tool: rnaseq
+Initializing regions from /work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf...
+
+Initialized 100000 regions...
+Initialized 200000 regions...
+Initialized 300000 regions...
+Initialized 400000 regions...
+Initialized 500000 regions...
+
+Initialized 530756 regions it total
+
+Starting constructing transcripts for RNA-seq stats...
+Finished constructing transcripts
+
+Starting BAM file analysis
+
+Sorting BAM file by name...
+
+Read 10000000 records.
+Read 20000000 records.
+Read 30000000 records.
+Finished reading inputs, merging and writing to output now.
+Sorting by name finished.
+
+Counted 28675 read pairs, 0 single reads
+
+Processed 146860 reads in total
+
+Cleanup of temporary files
+
+BAM file analysis finished
+Creating plots
+Writing HTML report...
+HTML report created successfully
+
+Running Qualimap on POC_R24_H2...
+Java memory size is set to 8G
+Launching application...
+
+QualiMap v.2.2.1
+Built on 2016-10-03 18:14
+
+Selected tool: rnaseq
+Initializing regions from /work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf...
+
+Initialized 100000 regions...
+Initialized 200000 regions...
+Initialized 300000 regions...
+Initialized 400000 regions...
+Initialized 500000 regions...
+
+Initialized 530756 regions it total
+
+Starting constructing transcripts for RNA-seq stats...
+Finished constructing transcripts
+
+Starting BAM file analysis
+
+Sorting BAM file by name...
+
+Read 10000000 records.
+Read 20000000 records.
+Read 30000000 records.
+Finished reading inputs, merging and writing to output now.
+Sorting by name finished.
+
+Counted 24578 read pairs, 0 single reads
+
+Processed 131776 reads in total
+
+Cleanup of temporary files
+
+BAM file analysis finished
+Creating plots
+Writing HTML report...
+HTML report created successfully
+
+Running Qualimap on POC_R24_H3...
+Java memory size is set to 8G
+Launching application...
+
+QualiMap v.2.2.1
+Built on 2016-10-03 18:14
+
+Selected tool: rnaseq
+Initializing regions from /work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf...
+
+Initialized 100000 regions...
+Initialized 200000 regions...
+Initialized 300000 regions...
+Initialized 400000 regions...
+Initialized 500000 regions...
+
+Initialized 530756 regions it total
+
+Starting constructing transcripts for RNA-seq stats...
+Finished constructing transcripts
+
+Starting BAM file analysis
+
+Sorting BAM file by name...
+
+Read 10000000 records.
+Read 20000000 records.
+Read 30000000 records.
+Finished reading inputs, merging and writing to output now.
+Sorting by name finished.
+
+Counted 26888 read pairs, 0 single reads
+
+Processed 149842 reads in total
+
+Cleanup of temporary files
+
+BAM file analysis finished
+Creating plots
+Writing HTML report...
+HTML report created successfully
+
+Running Qualimap on POC_R0_C3...
+Java memory size is set to 8G
+Launching application...
+
+QualiMap v.2.2.1
+Built on 2016-10-03 18:14
+
+Selected tool: rnaseq
+Initializing regions from /work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf...
+
+Initialized 100000 regions...
+Initialized 200000 regions...
+Initialized 300000 regions...
+Initialized 400000 regions...
+Initialized 500000 regions...
+
+Initialized 530756 regions it total
+
+Starting constructing transcripts for RNA-seq stats...
+Finished constructing transcripts
+
+Starting BAM file analysis
+
+Sorting BAM file by name...
+
+Read 10000000 records.
+Read 20000000 records.
+Read 30000000 records.
+Finished reading inputs, merging and writing to output now.
+Sorting by name finished.
+
+Counted 32029 read pairs, 0 single reads
+
+Processed 195476 reads in total
+
+Cleanup of temporary files
+
+BAM file analysis finished
+Creating plots
+Writing HTML report...
+HTML report created successfully
+
+Running Qualimap on POC_R3_C1...
+Java memory size is set to 8G
+Launching application...
+
+QualiMap v.2.2.1
+Built on 2016-10-03 18:14
+
+Selected tool: rnaseq
+Initializing regions from /work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf...
+
+Initialized 100000 regions...
+Initialized 200000 regions...
+Initialized 300000 regions...
+Initialized 400000 regions...
+Initialized 500000 regions...
+
+Initialized 530756 regions it total
+
+Starting constructing transcripts for RNA-seq stats...
+Finished constructing transcripts
+
+Starting BAM file analysis
+
+Sorting BAM file by name...
+
+Read 10000000 records.
+Read 20000000 records.
+Read 30000000 records.
+Read 40000000 records.
+Finished reading inputs, merging and writing to output now.
+Sorting by name finished.
+
+Counted 30205 read pairs, 0 single reads
+
+Processed 156487 reads in total
+
+Cleanup of temporary files
+
+BAM file analysis finished
+Creating plots
+Writing HTML report...
+HTML report created successfully
+
+Running Qualimap on POC_R3_C2...
+Java memory size is set to 8G
+Launching application...
+
+QualiMap v.2.2.1
+Built on 2016-10-03 18:14
+
+Selected tool: rnaseq
+Initializing regions from /work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf...
+
+Initialized 100000 regions...
+Initialized 200000 regions...
+Initialized 300000 regions...
+Initialized 400000 regions...
+Initialized 500000 regions...
+
+Initialized 530756 regions it total
+
+Starting constructing transcripts for RNA-seq stats...
+Finished constructing transcripts
+
+Starting BAM file analysis
+
+Sorting BAM file by name...
+
+Read 10000000 records.
+Read 20000000 records.
+Read 30000000 records.
+Finished reading inputs, merging and writing to output now.
+Sorting by name finished.
+
+Counted 29445 read pairs, 0 single reads
+
+Processed 153190 reads in total
+
+Cleanup of temporary files
+
+BAM file analysis finished
+Creating plots
+Writing HTML report...
+HTML report created successfully
+
+Running Qualimap on POC_R3_C3...
+Java memory size is set to 8G
+Launching application...
+
+QualiMap v.2.2.1
+Built on 2016-10-03 18:14
+
+Selected tool: rnaseq
+Initializing regions from /work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf...
+
+Initialized 100000 regions...
+Initialized 200000 regions...
+Initialized 300000 regions...
+Initialized 400000 regions...
+Initialized 500000 regions...
+
+Initialized 530756 regions it total
+
+Starting constructing transcripts for RNA-seq stats...
+Finished constructing transcripts
+
+Starting BAM file analysis
+
+Sorting BAM file by name...
+
+Read 10000000 records.
+Read 20000000 records.
+Read 30000000 records.
+Read 40000000 records.
+Finished reading inputs, merging and writing to output now.
+Sorting by name finished.
+
+Counted 35052 read pairs, 0 single reads
+
+Processed 219334 reads in total
+
+Cleanup of temporary files
+
+BAM file analysis finished
+Creating plots
+Writing HTML report...
+HTML report created successfully
+
+Running Qualimap on POC_R3_H1...
+Java memory size is set to 8G
+Launching application...
+
+QualiMap v.2.2.1
+Built on 2016-10-03 18:14
+
+Selected tool: rnaseq
+Initializing regions from /work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf...
+
+Initialized 100000 regions...
+Initialized 200000 regions...
+Initialized 300000 regions...
+Initialized 400000 regions...
+Initialized 500000 regions...
+
+Initialized 530756 regions it total
+
+Starting constructing transcripts for RNA-seq stats...
+Finished constructing transcripts
+
+Starting BAM file analysis
+
+Sorting BAM file by name...
+
+Read 10000000 records.
+Read 20000000 records.
+Read 30000000 records.
+Finished reading inputs, merging and writing to output now.
+Sorting by name finished.
+
+Counted 23304 read pairs, 0 single reads
+
+Processed 132256 reads in total
+
+Cleanup of temporary files
+
+BAM file analysis finished
+Creating plots
+Writing HTML report...
+HTML report created successfully
+
+Running Qualimap on POC_R3_H2...
+Java memory size is set to 8G
+Launching application...
+
+QualiMap v.2.2.1
+Built on 2016-10-03 18:14
+
+Selected tool: rnaseq
+Initializing regions from /work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf...
+
+Initialized 100000 regions...
+Initialized 200000 regions...
+Initialized 300000 regions...
+Initialized 400000 regions...
+Initialized 500000 regions...
+
+Initialized 530756 regions it total
+
+Starting constructing transcripts for RNA-seq stats...
+Finished constructing transcripts
+
+Starting BAM file analysis
+
+Sorting BAM file by name...
+
+Read 10000000 records.
+Read 20000000 records.
+Read 30000000 records.
+Read 40000000 records.
+Read 50000000 records.
+Read 60000000 records.
+Finished reading inputs, merging and writing to output now.
+Sorting by name finished.
+
+Counted 45207 read pairs, 0 single reads
+
+Processed 219764 reads in total
+
+Cleanup of temporary files
+
+BAM file analysis finished
+Creating plots
+Writing HTML report...
+HTML report created successfully
+
+Running Qualimap on POC_R3_H3...
+Java memory size is set to 8G
+Launching application...
+
+QualiMap v.2.2.1
+Built on 2016-10-03 18:14
+
+Selected tool: rnaseq
+Initializing regions from /work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf...
+
+Initialized 100000 regions...
+Initialized 200000 regions...
+Initialized 300000 regions...
+Initialized 400000 regions...
+Initialized 500000 regions...
+
+Initialized 530756 regions it total
+
+Starting constructing transcripts for RNA-seq stats...
+Finished constructing transcripts
+
+Starting BAM file analysis
+
+Sorting BAM file by name...
+
+Read 10000000 records.
+Read 20000000 records.
+Read 30000000 records.
+Finished reading inputs, merging and writing to output now.
+Sorting by name finished.
+
+Counted 23995 read pairs, 0 single reads
+
+Processed 141386 reads in total
+
+Cleanup of temporary files
+
+BAM file analysis finished
+Creating plots
+Writing HTML report...
+HTML report created successfully
+
+Running Qualimap on POC_R72_C1...
+Java memory size is set to 8G
+Launching application...
+
+QualiMap v.2.2.1
+Built on 2016-10-03 18:14
+
+Selected tool: rnaseq
+Initializing regions from /work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf...
+
+Initialized 100000 regions...
+Initialized 200000 regions...
+Initialized 300000 regions...
+Initialized 400000 regions...
+Initialized 500000 regions...
+
+Initialized 530756 regions it total
+
+Starting constructing transcripts for RNA-seq stats...
+Finished constructing transcripts
+
+Starting BAM file analysis
+
+Sorting BAM file by name...
+
+Read 10000000 records.
+Read 20000000 records.
+Read 30000000 records.
+Finished reading inputs, merging and writing to output now.
+Sorting by name finished.
+
+Counted 28826 read pairs, 0 single reads
+
+Processed 148518 reads in total
+
+Cleanup of temporary files
+
+BAM file analysis finished
+Creating plots
+Writing HTML report...
+HTML report created successfully
+
+Running Qualimap on POC_R72_C2...
+Java memory size is set to 8G
+Launching application...
+
+QualiMap v.2.2.1
+Built on 2016-10-03 18:14
+
+Selected tool: rnaseq
+Initializing regions from /work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf...
+
+Initialized 100000 regions...
+Initialized 200000 regions...
+Initialized 300000 regions...
+Initialized 400000 regions...
+Initialized 500000 regions...
+
+Initialized 530756 regions it total
+
+Starting constructing transcripts for RNA-seq stats...
+Finished constructing transcripts
+
+Starting BAM file analysis
+
+Sorting BAM file by name...
+
+Read 10000000 records.
+Read 20000000 records.
+Read 30000000 records.
+Read 40000000 records.
+Finished reading inputs, merging and writing to output now.
+Sorting by name finished.
+
+Counted 37477 read pairs, 0 single reads
+
+Processed 190812 reads in total
+
+Cleanup of temporary files
+
+BAM file analysis finished
+Creating plots
+Writing HTML report...
+HTML report created successfully
+
+Running Qualimap on POC_R72_C3...
+Java memory size is set to 8G
+Launching application...
+
+QualiMap v.2.2.1
+Built on 2016-10-03 18:14
+
+Selected tool: rnaseq
+Initializing regions from /work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf...
+
+Initialized 100000 regions...
+Initialized 200000 regions...
+Initialized 300000 regions...
+Initialized 400000 regions...
+Initialized 500000 regions...
+
+Initialized 530756 regions it total
+
+Starting constructing transcripts for RNA-seq stats...
+Finished constructing transcripts
+
+Starting BAM file analysis
+
+Sorting BAM file by name...
+
+Read 10000000 records.
+Read 20000000 records.
+Read 30000000 records.
+Finished reading inputs, merging and writing to output now.
+Sorting by name finished.
+
+Counted 27347 read pairs, 0 single reads
+
+Processed 146962 reads in total
+
+Cleanup of temporary files
+
+BAM file analysis finished
+Creating plots
+Writing HTML report...
+HTML report created successfully
+
+Running Qualimap on POC_R72_H1...
+Java memory size is set to 8G
+Launching application...
+
+QualiMap v.2.2.1
+Built on 2016-10-03 18:14
+
+Selected tool: rnaseq
+Initializing regions from /work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf...
+
+Initialized 100000 regions...
+Initialized 200000 regions...
+Initialized 300000 regions...
+Initialized 400000 regions...
+Initialized 500000 regions...
+
+Initialized 530756 regions it total
+
+Starting constructing transcripts for RNA-seq stats...
+Finished constructing transcripts
+
+Starting BAM file analysis
+
+Sorting BAM file by name...
+
+Read 10000000 records.
+Read 20000000 records.
+Read 30000000 records.
+Read 40000000 records.
+Finished reading inputs, merging and writing to output now.
+Sorting by name finished.
+
+Counted 34608 read pairs, 0 single reads
+
+Processed 192500 reads in total
+
+Cleanup of temporary files
+
+BAM file analysis finished
+Creating plots
+Writing HTML report...
+HTML report created successfully
+
+Running Qualimap on POC_R0_H1...
+Java memory size is set to 8G
+Launching application...
+
+QualiMap v.2.2.1
+Built on 2016-10-03 18:14
+
+Selected tool: rnaseq
+Initializing regions from /work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf...
+
+Initialized 100000 regions...
+Initialized 200000 regions...
+Initialized 300000 regions...
+Initialized 400000 regions...
+Initialized 500000 regions...
+
+Initialized 530756 regions it total
+
+Starting constructing transcripts for RNA-seq stats...
+Finished constructing transcripts
+
+Starting BAM file analysis
+
+Sorting BAM file by name...
+
+Read 10000000 records.
+Read 20000000 records.
+Read 30000000 records.
+Finished reading inputs, merging and writing to output now.
+Sorting by name finished.
+
+Counted 27576 read pairs, 1 single reads
+
+Processed 139800 reads in total
+
+Cleanup of temporary files
+
+BAM file analysis finished
+Creating plots
+Writing HTML report...
+HTML report created successfully
+
+Running Qualimap on POC_R72_H2...
+Java memory size is set to 8G
+Launching application...
+
+QualiMap v.2.2.1
+Built on 2016-10-03 18:14
+
+Selected tool: rnaseq
+Initializing regions from /work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf...
+
+Initialized 100000 regions...
+Initialized 200000 regions...
+Initialized 300000 regions...
+Initialized 400000 regions...
+Initialized 500000 regions...
+
+Initialized 530756 regions it total
+
+Starting constructing transcripts for RNA-seq stats...
+Finished constructing transcripts
+
+Starting BAM file analysis
+
+Sorting BAM file by name...
+
+Read 10000000 records.
+Read 20000000 records.
+Read 30000000 records.
+Finished reading inputs, merging and writing to output now.
+Sorting by name finished.
+
+Counted 25479 read pairs, 0 single reads
+
+Processed 144286 reads in total
+
+Cleanup of temporary files
+
+BAM file analysis finished
+Creating plots
+Writing HTML report...
+HTML report created successfully
+
+Running Qualimap on POC_R72_H3...
+Java memory size is set to 8G
+Launching application...
+
+QualiMap v.2.2.1
+Built on 2016-10-03 18:14
+
+Selected tool: rnaseq
+Initializing regions from /work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf...
+
+Initialized 100000 regions...
+Initialized 200000 regions...
+Initialized 300000 regions...
+Initialized 400000 regions...
+Initialized 500000 regions...
+
+Initialized 530756 regions it total
+
+Starting constructing transcripts for RNA-seq stats...
+Finished constructing transcripts
+
+Starting BAM file analysis
+
+Sorting BAM file by name...
+
+Read 10000000 records.
+Read 20000000 records.
+Read 30000000 records.
+Finished reading inputs, merging and writing to output now.
+Sorting by name finished.
+
+Counted 25693 read pairs, 0 single reads
+
+Processed 161018 reads in total
+
+Cleanup of temporary files
+
+BAM file analysis finished
+Creating plots
+Writing HTML report...
+HTML report created successfully
+
+Running Qualimap on POC_R0_H2...
+Java memory size is set to 8G
+Launching application...
+
+QualiMap v.2.2.1
+Built on 2016-10-03 18:14
+
+Selected tool: rnaseq
+Initializing regions from /work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf...
+
+Initialized 100000 regions...
+Initialized 200000 regions...
+Initialized 300000 regions...
+Initialized 400000 regions...
+Initialized 500000 regions...
+
+Initialized 530756 regions it total
+
+Starting constructing transcripts for RNA-seq stats...
+Finished constructing transcripts
+
+Starting BAM file analysis
+
+Sorting BAM file by name...
+
+Read 10000000 records.
+Read 20000000 records.
+Read 30000000 records.
+Finished reading inputs, merging and writing to output now.
+Sorting by name finished.
+
+Counted 27355 read pairs, 1 single reads
+
+Processed 147317 reads in total
+
+Cleanup of temporary files
+
+BAM file analysis finished
+Creating plots
+Writing HTML report...
+HTML report created successfully
+
+Running Qualimap on POC_R0_H3...
+Java memory size is set to 8G
+Launching application...
+
+QualiMap v.2.2.1
+Built on 2016-10-03 18:14
+
+Selected tool: rnaseq
+Initializing regions from /work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf...
+
+Initialized 100000 regions...
+Initialized 200000 regions...
+Initialized 300000 regions...
+Initialized 400000 regions...
+Initialized 500000 regions...
+
+Initialized 530756 regions it total
+
+Starting constructing transcripts for RNA-seq stats...
+Finished constructing transcripts
+
+Starting BAM file analysis
+
+Sorting BAM file by name...
+
+Read 10000000 records.
+Read 20000000 records.
+Read 30000000 records.
+Read 40000000 records.
+Finished reading inputs, merging and writing to output now.
+Sorting by name finished.
+
+Counted 33911 read pairs, 0 single reads
+
+Processed 182790 reads in total
+
+Cleanup of temporary files
+
+BAM file analysis finished
+Creating plots
+Writing HTML report...
+HTML report created successfully
+
+Running Qualimap on POC_R120_C1...
+Java memory size is set to 8G
+Launching application...
+
+QualiMap v.2.2.1
+Built on 2016-10-03 18:14
+
+Selected tool: rnaseq
+Initializing regions from /work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf...
+
+Initialized 100000 regions...
+Initialized 200000 regions...
+Initialized 300000 regions...
+Initialized 400000 regions...
+Initialized 500000 regions...
+
+Initialized 530756 regions it total
+
+Starting constructing transcripts for RNA-seq stats...
+Finished constructing transcripts
+
+Starting BAM file analysis
+
+Sorting BAM file by name...
+
+Read 10000000 records.
+Read 20000000 records.
+Read 30000000 records.
+Read 40000000 records.
+Read 50000000 records.
+Finished reading inputs, merging and writing to output now.
+Sorting by name finished.
+
+Counted 51520 read pairs, 1 single reads
+
+Processed 261543 reads in total
+
+Cleanup of temporary files
+
+BAM file analysis finished
+Creating plots
+Writing HTML report...
+HTML report created successfully
+
+Running Qualimap on POC_R120_C2...
+Java memory size is set to 8G
+Launching application...
+
+QualiMap v.2.2.1
+Built on 2016-10-03 18:14
+
+Selected tool: rnaseq
+Initializing regions from /work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf...
+
+Initialized 100000 regions...
+Initialized 200000 regions...
+Initialized 300000 regions...
+Initialized 400000 regions...
+Initialized 500000 regions...
+
+Initialized 530756 regions it total
+
+Starting constructing transcripts for RNA-seq stats...
+Finished constructing transcripts
+
+Starting BAM file analysis
+
+Sorting BAM file by name...
+
+Read 10000000 records.
+Read 20000000 records.
+Read 30000000 records.
+Finished reading inputs, merging and writing to output now.
+Sorting by name finished.
+
+Counted 26206 read pairs, 0 single reads
+
+Processed 131113 reads in total
+
+Cleanup of temporary files
+
+BAM file analysis finished
+Creating plots
+Writing HTML report...
+HTML report created successfully
+
+Running Qualimap on POC_R120_C3...
+Java memory size is set to 8G
+Launching application...
+
+QualiMap v.2.2.1
+Built on 2016-10-03 18:14
+
+Selected tool: rnaseq
+Initializing regions from /work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf...
+
+Initialized 100000 regions...
+Initialized 200000 regions...
+Initialized 300000 regions...
+Initialized 400000 regions...
+Initialized 500000 regions...
+
+Initialized 530756 regions it total
+
+Starting constructing transcripts for RNA-seq stats...
+Finished constructing transcripts
+
+Starting BAM file analysis
+
+Sorting BAM file by name...
+
+Read 10000000 records.
+Read 20000000 records.
+Read 30000000 records.
+Finished reading inputs, merging and writing to output now.
+Sorting by name finished.
+
+Counted 27859 read pairs, 1 single reads
+
+Processed 141663 reads in total
+
+Cleanup of temporary files
+
+BAM file analysis finished
+Creating plots
+Writing HTML report...
+HTML report created successfully
+
+Running Qualimap on POC_R120_H1...
+Java memory size is set to 8G
+Launching application...
+
+QualiMap v.2.2.1
+Built on 2016-10-03 18:14
+
+Selected tool: rnaseq
+Initializing regions from /work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf...
+
+Initialized 100000 regions...
+Initialized 200000 regions...
+Initialized 300000 regions...
+Initialized 400000 regions...
+Initialized 500000 regions...
+
+Initialized 530756 regions it total
+
+Starting constructing transcripts for RNA-seq stats...
+Finished constructing transcripts
+
+Starting BAM file analysis
+
+Sorting BAM file by name...
+
+Read 10000000 records.
+Read 20000000 records.
+Read 30000000 records.
+Finished reading inputs, merging and writing to output now.
+Sorting by name finished.
+
+Counted 28483 read pairs, 0 single reads
+
+Processed 173942 reads in total
+
+Cleanup of temporary files
+
+BAM file analysis finished
+Creating plots
+Writing HTML report...
+HTML report created successfully
+
