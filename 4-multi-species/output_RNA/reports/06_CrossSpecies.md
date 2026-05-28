@@ -1,7 +1,7 @@
 Cross Species Analysis
 ================
 Zoe Dellaert
-2026-05-20
+2026-05-28
 
 - [Analysis of Time Series bulk RNA-seq data: Cross-Species
   Analysis](#analysis-of-time-series-bulk-rna-seq-data-cross-species-analysis)
@@ -34,6 +34,8 @@ Zoe Dellaert
     - [Gradual Down genes](#gradual-down-genes)
   - [9. Manually-curated heat stress gene
     families](#9-manually-curated-heat-stress-gene-families)
+    - [heat heatmaps](#heat-heatmaps)
+    - [ortholog heatmaps](#ortholog-heatmaps)
 
 # Analysis of Time Series bulk RNA-seq data: Cross-Species Analysis
 
@@ -72,9 +74,9 @@ library(tidyverse)
 ```
 
     ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-    ## ✔ dplyr     1.1.4     ✔ readr     2.1.6
+    ## ✔ dplyr     1.1.4     ✔ readr     2.2.0
     ## ✔ forcats   1.0.0     ✔ stringr   1.6.0
-    ## ✔ ggplot2   4.0.1     ✔ tibble    3.3.0
+    ## ✔ ggplot2   4.0.3     ✔ tibble    3.3.0
     ## ✔ lubridate 1.9.4     ✔ tidyr     1.3.1
     ## ✔ purrr     1.2.1     
     ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
@@ -108,6 +110,17 @@ library(ComplexHeatmap)
     ## ========================================
 
 ``` r
+library(pheatmap)
+```
+
+    ## 
+    ## Attaching package: 'pheatmap'
+    ## 
+    ## The following object is masked from 'package:ComplexHeatmap':
+    ## 
+    ##     pheatmap
+
+``` r
 #load in parameters and functions
 source("species_parameters.R")
 source("utils.R")
@@ -139,30 +152,30 @@ sessionInfo() #provides list of loaded packages and version of R
     ## [8] base     
     ## 
     ## other attached packages:
-    ##  [1] ComplexHeatmap_2.26.0 knitr_1.50            lubridate_1.9.4      
-    ##  [4] forcats_1.0.0         stringr_1.6.0         dplyr_1.1.4          
-    ##  [7] purrr_1.2.1           readr_2.1.6           tidyr_1.3.1          
-    ## [10] tibble_3.3.0          ggplot2_4.0.1         tidyverse_2.0.0      
-    ## [13] rmarkdown_2.30       
+    ##  [1] pheatmap_1.0.13       ComplexHeatmap_2.26.0 knitr_1.50           
+    ##  [4] lubridate_1.9.4       forcats_1.0.0         stringr_1.6.0        
+    ##  [7] dplyr_1.1.4           purrr_1.2.1           readr_2.2.0          
+    ## [10] tidyr_1.3.1           tibble_3.3.0          ggplot2_4.0.3        
+    ## [13] tidyverse_2.0.0       rmarkdown_2.31       
     ## 
     ## loaded via a namespace (and not attached):
     ##  [1] generics_0.1.4      shape_1.4.6.1       stringi_1.8.7      
-    ##  [4] hms_1.1.4           digest_0.6.39       magrittr_2.0.4     
+    ##  [4] hms_1.1.4           digest_0.6.39       magrittr_2.0.5     
     ##  [7] evaluate_1.0.5      timechange_0.3.0    RColorBrewer_1.1-3 
-    ## [10] iterators_1.0.14    circlize_0.4.17     fastmap_1.2.0      
-    ## [13] foreach_1.5.2       doParallel_1.0.17   GlobalOptions_0.1.3
-    ## [16] scales_1.4.0        codetools_0.2-20    cli_3.6.5          
+    ## [10] iterators_1.0.14    circlize_0.4.18     fastmap_1.2.0      
+    ## [13] foreach_1.5.2       doParallel_1.0.17   GlobalOptions_0.1.4
+    ## [16] scales_1.4.0        codetools_0.2-20    cli_3.6.6          
     ## [19] rlang_1.2.0         crayon_1.5.3        withr_3.0.2        
     ## [22] yaml_2.3.12         tools_4.5.1         parallel_4.5.1     
     ## [25] tzdb_0.5.0          colorspace_2.1-2    BiocGenerics_0.56.0
-    ## [28] GetoptLong_1.1.0    vctrs_0.7.0         R6_2.6.1           
+    ## [28] GetoptLong_1.1.1    vctrs_0.7.3         R6_2.6.1           
     ## [31] png_0.1-8           stats4_4.5.1        matrixStats_1.5.0  
     ## [34] lifecycle_1.0.5     S4Vectors_0.48.0    IRanges_2.44.0     
-    ## [37] clue_0.3-66         cluster_2.1.8.1     pkgconfig_2.0.3    
+    ## [37] clue_0.3-68         cluster_2.1.8.2     pkgconfig_2.0.3    
     ## [40] pillar_1.11.1       gtable_0.3.6        glue_1.8.0         
     ## [43] xfun_0.56           tidyselect_1.2.1    rstudioapi_0.17.1  
     ## [46] dichromat_2.0-0.1   rjson_0.2.23        farver_2.1.2       
-    ## [49] htmltools_0.5.9     compiler_4.5.1      S7_0.2.1
+    ## [49] htmltools_0.5.9     compiler_4.5.1      S7_0.2.2
 
 ## 2. Define directories
 
@@ -222,7 +235,7 @@ cat("Genes per species:\n")
     ## Genes per species:
 
 ``` r
-print(all_master %>% count(species))
+print(all_master %>% dplyr::count(species))
 ```
 
     ##   species     n
@@ -455,13 +468,6 @@ not_responsive <- complete_1to1_ogs_summary %>%
 
 #### Summarize the response categories:
 
-1:1:1 Ortholog Response Categories:
-
-- Core conserved: DE in all 3, same Mfuzz pattern
-- Core divergent: DE in all 3, different Mfuzz patterns  
-- Variable response: DE in 1-2 species only
-- Not responsive: DE in 0 species
-
 ``` r
 responses_1to1_ogs_summary <- data.frame(
   Category = c("Core Conserved", 
@@ -474,7 +480,16 @@ responses_1to1_ogs_summary <- data.frame(
   mutate(
     Percentage = 100 * Count / sum(Count)
   )
+```
 
+1:1:1 Ortholog Response Categories:
+
+- Core conserved: DE in all 3, same Mfuzz pattern
+- Core divergent: DE in all 3, different Mfuzz patterns  
+- Variable response: DE in 1-2 species only
+- Not responsive: DE in 0 species
+
+``` r
 kable(responses_1to1_ogs_summary,format = "markdown")
 ```
 
@@ -531,6 +546,12 @@ p_pie <- ggplot(pie_data, aes(x = "", y = Count, fill = Category)) +
   )
 save_ggplot(p_pie,"all_response_pie", width=8, height=8)
 
+p_pie
+```
+
+![](./06_CrossSpecies_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+
+``` r
 pie_data_allDE <- responses_1to1_ogs_summary %>% filter(grepl("Core",Category)) %>%
   mutate(Percentage = 100 * Count / sum(Count),
          Label = paste0(Category, "\nn=", Count, " (", round(Percentage, 1), "%)"))
@@ -549,7 +570,11 @@ p_pie_allDE <- ggplot(pie_data_allDE, aes(x = "", y = Count, fill = Category)) +
   )
 
 save_ggplot(p_pie_allDE,"core_response_pie", width=8, height=8)
+
+p_pie_allDE
 ```
+
+![](./06_CrossSpecies_files/figure-gfm/unnamed-chunk-13-2.png)<!-- -->
 
 ## 8. Mfuzz-pattern conserved responses (not exclusively 1:1:1)
 
@@ -797,6 +822,7 @@ all_heat %>% group_by(species,gene_sym) %>%
 | BAK             |    1 |      1 |     1 |
 | BAX             |    1 |      1 |     1 |
 | BI-1            |    1 |      1 |     1 |
+| BNIP3           |    1 |      1 |     1 |
 | Bcl-2           |    3 |      3 |     3 |
 | CAT             |    1 |      1 |     1 |
 | Cas3,Casp       |    2 |      2 |     1 |
@@ -807,10 +833,11 @@ all_heat %>% group_by(species,gene_sym) %>%
 | GR              |    1 |      1 |     1 |
 | GS              |    2 |      1 |     1 |
 | Glut8,SLC2A8    |    1 |      1 |     1 |
+| HIF-a           |    3 |      1 |     1 |
 | HSF1            |    1 |      1 |     1 |
 | HSP70,Hsc71     |    1 |      1 |     2 |
 | HSP90           |    2 |      1 |     1 |
-| NF-KB           |    3 |      1 |     2 |
+| NF-KB           |    3 |      1 |     4 |
 | NID-2           |   45 |     27 |    23 |
 | NPC2            |    3 |      3 |     3 |
 | Nrf2,Nrf1       |    1 |      1 |     1 |
@@ -825,7 +852,6 @@ all_heat %>% group_by(species,gene_sym) %>%
 | VIT             |    1 |      1 |     6 |
 | mTOR            |    1 |      3 |     1 |
 | Casp7           |   NA |     NA |     2 |
-| NF-KB1          |   NA |     NA |     2 |
 
 ``` r
 summary <- all_heat %>% group_by(species,gene_sym) %>%
@@ -872,7 +898,263 @@ core_divergent_response %>%
 | OG_17448 | 3 | TRUE | Gradual Down \| Sustained Down (12h) \| Sustained Down (3h) | 3 | NA | NA | FALSE | Pocillopora_acuta_HIv2\_\_\_RNAseq.g3264.t1 | Montipora_capitata_HIv3\_\_\_RNAseq.g456.t1 | Porites_compressa_HIv1\_\_\_RNAseq.g1296.t1 | 0.0000000 | 0.0020705 | 0.0000006 | 0.6839056 | 0.7009234 | 0.6229924 | 0 | FALSE | FALSE | 0 | 0 | 0 | FALSE | FALSE | FALSE | FALSE |
 | OG_9398 | 3 | TRUE | Gradual Down \| Sustained Down (12h) \| Sustained Down (3h) | 3 | Ammonium transporter Rh type B-B (Rhesus blood group family type B glycoprotein B) (Rh family type B glycoprotein B) (Rh type B glycoprotein B) | 0 | TRUE | Pocillopora_acuta_HIv2\_\_\_RNAseq.g12323.t1 | Montipora_capitata_HIv3\_\_\_TS.g24480.t2 | Porites_compressa_HIv1\_\_\_RNAseq.g39741.t2 | 0.0000000 | 0.0207435 | 0.0266750 | 0.8708145 | 0.9242317 | 0.7177218 | 2 | TRUE | FALSE | 0 | 1 | 0 | FALSE | FALSE | FALSE | FALSE |
 
+``` r
+core_divergent_heat <- core_divergent_response %>%
+  filter(gene_Pacuta %in% all_heat$gene_id |
+         gene_Mcap %in% all_heat$gene_id |
+         gene_Pcomp %in% all_heat$gene_id) %>% pull(OG) 
+
+all_heat %>% filter(OG %in% core_divergent_heat) %>% kable(format = "markdown")
+```
+
+| gene_sym | OG | gene_id | ImpulseDE2_padj | ImpulseDE2_response_type | ImpulseDE2_response_class | is_DE | Mfuzz_cluster | Mfuzz_membership | Mfuzz_highconf | Mfuzz_pattern | WGCNA_module | kME_own | is_hub | count_FOXO3 | count_HSF1 | count_NFE2L2 | has_HSF1 | has_FOXO3 | has_NFE2L2 | SwissProt_BlastHit | SwissProt_BlastEval | SwissProt_ProteinName | BiologicalProcess | GeneOntologyIDs | CellularComponent | MolecularFunction | species | n_total_genes | n_species | n_Pacuta | n_Mcap | n_Pcomp | OG_in_all_3 | OG_1to1to1 |
+|:---|:---|:---|---:|:---|:---|:---|---:|---:|:---|:---|:---|---:|:---|---:|---:|---:|:---|:---|:---|:---|---:|:---|:---|:---|:---|:---|:---|---:|---:|---:|---:|---:|:---|:---|
+| RhBG | OG_9398 | Pocillopora_acuta_HIv2\_\_\_RNAseq.g12323.t1 | 0.0000000 | Transient | transient_down | TRUE | 3 | 0.8708145 | TRUE | Sustained Down (3h) | ME2 | 0.8471927 | TRUE | 0 | 0 | 0 | FALSE | FALSE | FALSE | Q7T070 | 0 | Ammonium transporter Rh type B (Rhesus blood group family type B glycoprotein) (Rh family type B glycoprotein) (Rh type B glycoprotein) | ammonium homeostasis \[<GO:0097272>\]; ammonium transmembrane transport \[<GO:0072488>\] | <GO:0005886>; <GO:0008519>; <GO:0016323>; <GO:0030659>; <GO:0072488>; <GO:0097272> | basolateral plasma membrane \[<GO:0016323>\]; cytoplasmic vesicle membrane \[<GO:0030659>\]; plasma membrane \[<GO:0005886>\] | ammonium channel activity \[<GO:0008519>\] | Pacuta | 3 | 3 | 1 | 1 | 1 | TRUE | TRUE |
+| RhBG | OG_9398 | Montipora_capitata_HIv3\_\_\_TS.g24480.t2 | 0.0207435 | Other | unclassified | TRUE | 1 | 0.9242317 | TRUE | Sustained Down (12h) | ME3 | 0.8317881 | TRUE | 1 | 0 | 0 | FALSE | TRUE | FALSE | Q6DCG4 | 0 | Ammonium transporter Rh type B-B (Rhesus blood group family type B glycoprotein B) (Rh family type B glycoprotein B) (Rh type B glycoprotein B) | ammonium homeostasis \[<GO:0097272>\]; ammonium transmembrane transport \[<GO:0072488>\] | <GO:0005886>; <GO:0008519>; <GO:0016323>; <GO:0030659>; <GO:0072488>; <GO:0097272> | basolateral plasma membrane \[<GO:0016323>\]; cytoplasmic vesicle membrane \[<GO:0030659>\]; plasma membrane \[<GO:0005886>\] | ammonium channel activity \[<GO:0008519>\] | Mcap | 3 | 3 | 1 | 1 | 1 | TRUE | TRUE |
+| RhBG | OG_9398 | Porites_compressa_HIv1\_\_\_RNAseq.g39741.t2 | 0.0266750 | Other | unclassified | TRUE | 1 | 0.7177218 | TRUE | Gradual Down | ME2 | 0.4661373 | FALSE | 0 | 0 | 0 | FALSE | FALSE | FALSE | Q6DCG4 | 0 | Ammonium transporter Rh type B-B (Rhesus blood group family type B glycoprotein B) (Rh family type B glycoprotein B) (Rh type B glycoprotein B) | ammonium homeostasis \[<GO:0097272>\]; ammonium transmembrane transport \[<GO:0072488>\] | <GO:0005886>; <GO:0008519>; <GO:0016323>; <GO:0030659>; <GO:0072488>; <GO:0097272> | basolateral plasma membrane \[<GO:0016323>\]; cytoplasmic vesicle membrane \[<GO:0030659>\]; plasma membrane \[<GO:0005886>\] | ammonium channel activity \[<GO:0008519>\] | Pcomp | 3 | 3 | 1 | 1 | 1 | TRUE | TRUE |
+| BAX | OG_16781 | Pocillopora_acuta_HIv2\_\_\_RNAseq.g1543.t1 | 0.0019279 | Transient | transient_up | TRUE | 2 | 0.6781986 | TRUE | Early Peak (3h) | ME8 | 0.8442124 | FALSE | 0 | 0 | 1 | FALSE | FALSE | TRUE | Q07812 | 0 | Apoptosis regulator BAX (Bcl-2-like protein 4) (Bcl2-L-4) | apoptotic mitochondrial changes \[<GO:0008637>\]; apoptotic process \[<GO:0006915>\]; apoptotic process involved in blood vessel morphogenesis \[<GO:1902262>\]; apoptotic process involved in embryonic digit morphogenesis \[<GO:1902263>\]; apoptotic process involved in mammary gland involution \[<GO:0060057>\]; apoptotic signaling pathway \[<GO:0097190>\]; B cell apoptotic process \[<GO:0001783>\]; B cell homeostasis \[<GO:0001782>\]; B cell homeostatic proliferation \[<GO:0002358>\]; B cell negative selection \[<GO:0002352>\]; B cell receptor apoptotic signaling pathway \[<GO:1990117>\]; blood vessel remodeling \[<GO:0001974>\]; calcium ion transport into cytosol \[<GO:0060402>\]; cellular response to unfolded protein \[<GO:0034620>\]; cellular response to UV \[<GO:0034644>\]; cellular response to virus \[<GO:0098586>\]; cerebral cortex development \[<GO:0021987>\]; development of secondary sexual characteristics \[<GO:0045136>\]; ectopic germ cell programmed cell death \[<GO:0035234>\]; endoplasmic reticulum calcium ion homeostasis \[<GO:0032469>\]; epithelial cell apoptotic process \[<GO:1904019>\]; establishment or maintenance of transmembrane electrochemical gradient \[<GO:0010248>\]; execution phase of apoptosis \[<GO:0097194>\]; extrinsic apoptotic signaling pathway \[<GO:0097191>\]; extrinsic apoptotic signaling pathway in absence of ligand \[<GO:0097192>\]; extrinsic apoptotic signaling pathway via death domain receptors \[<GO:0008625>\]; fertilization \[<GO:0009566>\]; germ cell development \[<GO:0007281>\]; glycosphingolipid metabolic process \[<GO:0006687>\]; homeostasis of number of cells within a tissue \[<GO:0048873>\]; hypothalamus development \[<GO:0021854>\]; intrinsic apoptotic signaling pathway \[<GO:0097193>\]; intrinsic apoptotic signaling pathway by p53 class mediator \[<GO:0072332>\]; intrinsic apoptotic signaling pathway in response to DNA damage \[<GO:0008630>\]; intrinsic apoptotic signaling pathway in response to endoplasmic reticulum stress \[<GO:0070059>\]; kidney development \[<GO:0001822>\]; mitochondrial fragmentation involved in apoptotic process \[<GO:0043653>\]; mitochondrial fusion \[<GO:0008053>\]; motor neuron apoptotic process \[<GO:0097049>\]; myeloid cell homeostasis \[<GO:0002262>\]; negative regulation of apoptotic signaling pathway \[<GO:2001234>\]; negative regulation of endoplasmic reticulum calcium ion concentration \[<GO:0032471>\]; negative regulation of fibroblast proliferation \[<GO:0048147>\]; negative regulation of mitochondrial membrane potential \[<GO:0010917>\]; negative regulation of neuron apoptotic process \[<GO:0043524>\]; negative regulation of protein binding \[<GO:0032091>\]; neuron migration \[<GO:0001764>\]; odontogenesis of dentin-containing tooth \[<GO:0042475>\]; ovarian follicle development \[<GO:0001541>\]; positive regulation of apoptotic DNA fragmentation \[<GO:1902512>\]; positive regulation of apoptotic process \[<GO:0043065>\]; positive regulation of apoptotic process involved in mammary gland involution \[<GO:0060058>\]; positive regulation of B cell apoptotic process \[<GO:0002904>\]; positive regulation of calcium ion transport into cytosol \[<GO:0010524>\]; positive regulation of developmental pigmentation \[<GO:0048087>\]; positive regulation of epithelial cell apoptotic process \[<GO:1904037>\]; positive regulation of intrinsic apoptotic signaling pathway \[<GO:2001244>\]; positive regulation of IRE1-mediated unfolded protein response \[<GO:1903896>\]; positive regulation of mitochondrial membrane permeability involved in apoptotic process \[<GO:1902110>\]; positive regulation of motor neuron apoptotic process \[<GO:2000673>\]; positive regulation of neuron apoptotic process \[<GO:0043525>\]; positive regulation of protein-containing complex assembly \[<GO:0031334>\]; positive regulation of release of cytochrome c from mitochondria \[<GO:0090200>\]; positive regulation of release of sequestered calcium ion into cytosol \[<GO:0051281>\]; positive regulation of reproductive process \[<GO:2000243>\]; post-embryonic camera-type eye morphogenesis \[<GO:0048597>\]; protein insertion into mitochondrial membrane \[<GO:0051204>\]; regulation of apoptotic process \[<GO:0042981>\]; regulation of cell cycle \[<GO:0051726>\]; regulation of mammary gland epithelial cell proliferation \[<GO:0033599>\]; regulation of mitochondrial membrane permeability involved in programmed necrotic cell death \[<GO:1902445>\]; regulation of mitochondrial membrane potential \[<GO:0051881>\]; regulation of nitrogen utilization \[<GO:0006808>\]; release of cytochrome c from mitochondria \[<GO:0001836>\]; release of matrix enzymes from mitochondria \[<GO:0032976>\]; release of sequestered calcium ion into cytosol \[<GO:0051209>\]; response to axon injury \[<GO:0048678>\]; response to gamma radiation \[<GO:0010332>\]; response to salt stress \[<GO:0009651>\]; response to toxic substance \[<GO:0009636>\]; retina development in camera-type eye \[<GO:0060041>\]; retinal cell programmed cell death \[<GO:0046666>\]; Sertoli cell proliferation \[<GO:0060011>\]; spermatid differentiation \[<GO:0048515>\]; supramolecular fiber organization \[<GO:0097435>\]; T cell homeostatic proliferation \[<GO:0001777>\]; thymocyte apoptotic process \[<GO:0070242>\]; vagina development \[<GO:0060068>\] | <GO:0001541>; <GO:0001764>; <GO:0001777>; <GO:0001782>; <GO:0001783>; <GO:0001822>; <GO:0001836>; <GO:0001974>; <GO:0002262>; <GO:0002352>; <GO:0002358>; <GO:0002904>; <GO:0005634>; <GO:0005635>; <GO:0005737>; <GO:0005739>; <GO:0005741>; <GO:0005757>; <GO:0005783>; <GO:0005789>; <GO:0005829>; <GO:0006687>; <GO:0006808>; <GO:0006915>; <GO:0007281>; <GO:0008053>; <GO:0008289>; <GO:0008625>; <GO:0008630>; <GO:0008637>; <GO:0009566>; <GO:0009636>; <GO:0009651>; <GO:0010248>; <GO:0010332>; <GO:0010524>; <GO:0010917>; <GO:0015267>; <GO:0016020>; <GO:0021854>; <GO:0021987>; <GO:0030544>; <GO:0031334>; <GO:0032091>; <GO:0032469>; <GO:0032471>; <GO:0032976>; <GO:0033599>; <GO:0034620>; <GO:0034644>; <GO:0035234>; <GO:0042475>; <GO:0042802>; <GO:0042803>; <GO:0042981>; <GO:0043065>; <GO:0043524>; <GO:0043525>; <GO:0043653>; <GO:0045136>; <GO:0046666>; <GO:0046930>; <GO:0046982>; <GO:0048087>; <GO:0048147>; <GO:0048515>; <GO:0048597>; <GO:0048678>; <GO:0048873>; <GO:0051204>; <GO:0051209>; <GO:0051281>; <GO:0051434>; <GO:0051726>; <GO:0051881>; <GO:0060011>; <GO:0060041>; <GO:0060057>; <GO:0060058>; <GO:0060068>; <GO:0060402>; <GO:0070059>; <GO:0070062>; <GO:0070242>; <GO:0072332>; <GO:0090200>; <GO:0097049>; <GO:0097136>; <GO:0097144>; <GO:0097145>; <GO:0097190>; <GO:0097191>; <GO:0097192>; <GO:0097193>; <GO:0097194>; <GO:0097435>; <GO:0098586>; <GO:1902110>; <GO:1902262>; <GO:1902263>; <GO:1902445>; <GO:1902512>; <GO:1903896>; <GO:1904019>; <GO:1904037>; <GO:1990117>; <GO:2000243>; <GO:2000673>; <GO:2001234>; <GO:2001244> | BAK complex \[<GO:0097145>\]; BAX complex \[<GO:0097144>\]; Bcl-2 family protein complex \[<GO:0097136>\]; cytoplasm \[<GO:0005737>\]; cytosol \[<GO:0005829>\]; endoplasmic reticulum \[<GO:0005783>\]; endoplasmic reticulum membrane \[<GO:0005789>\]; extracellular exosome \[<GO:0070062>\]; membrane \[<GO:0016020>\]; mitochondrial outer membrane \[<GO:0005741>\]; mitochondrial permeability transition pore complex \[<GO:0005757>\]; mitochondrion \[<GO:0005739>\]; nuclear envelope \[<GO:0005635>\]; nucleus \[<GO:0005634>\]; pore complex \[<GO:0046930>\] | BH3 domain binding \[<GO:0051434>\]; channel activity \[<GO:0015267>\]; Hsp70 protein binding \[<GO:0030544>\]; identical protein binding \[<GO:0042802>\]; lipid binding \[<GO:0008289>\]; protein heterodimerization activity \[<GO:0046982>\]; protein homodimerization activity \[<GO:0042803>\] | Pacuta | 3 | 3 | 1 | 1 | 1 | TRUE | TRUE |
+| BAX | OG_16781 | Montipora_capitata_HIv3\_\_\_TS.g26835.t1 | 0.0065098 | Transient | transient_up | TRUE | 3 | 0.7758511 | TRUE | Sustained Up (3h) | ME19 | 0.8221738 | FALSE | 0 | 0 | 0 | FALSE | FALSE | FALSE | O02703 | 0 | Apoptosis regulator BAX | apoptotic mitochondrial changes \[<GO:0008637>\]; apoptotic signaling pathway \[<GO:0097190>\]; B cell apoptotic process \[<GO:0001783>\]; establishment or maintenance of transmembrane electrochemical gradient \[<GO:0010248>\]; extrinsic apoptotic signaling pathway in absence of ligand \[<GO:0097192>\]; intrinsic apoptotic signaling pathway \[<GO:0097193>\]; intrinsic apoptotic signaling pathway in response to DNA damage \[<GO:0008630>\]; mitochondrial fragmentation involved in apoptotic process \[<GO:0043653>\]; mitochondrial fusion \[<GO:0008053>\]; negative regulation of mitochondrial membrane potential \[<GO:0010917>\]; negative regulation of protein binding \[<GO:0032091>\]; positive regulation of apoptotic process \[<GO:0043065>\]; positive regulation of intrinsic apoptotic signaling pathway \[<GO:2001244>\]; positive regulation of neuron apoptotic process \[<GO:0043525>\]; positive regulation of protein-containing complex assembly \[<GO:0031334>\]; positive regulation of release of cytochrome c from mitochondria \[<GO:0090200>\]; regulation of apoptotic process \[<GO:0042981>\]; regulation of mitochondrial membrane potential \[<GO:0051881>\]; release of cytochrome c from mitochondria \[<GO:0001836>\]; release of matrix enzymes from mitochondria \[<GO:0032976>\]; response to toxic substance \[<GO:0009636>\] | <GO:0001783>; <GO:0001836>; <GO:0005634>; <GO:0005737>; <GO:0005739>; <GO:0005741>; <GO:0005757>; <GO:0005783>; <GO:0005789>; <GO:0005829>; <GO:0008053>; <GO:0008289>; <GO:0008630>; <GO:0008637>; <GO:0009636>; <GO:0010248>; <GO:0010917>; <GO:0015267>; <GO:0031334>; <GO:0032091>; <GO:0032976>; <GO:0042803>; <GO:0042981>; <GO:0043065>; <GO:0043525>; <GO:0043653>; <GO:0046930>; <GO:0051434>; <GO:0051881>; <GO:0090200>; <GO:0097136>; <GO:0097144>; <GO:0097190>; <GO:0097192>; <GO:0097193>; <GO:2001244> | BAX complex \[<GO:0097144>\]; Bcl-2 family protein complex \[<GO:0097136>\]; cytoplasm \[<GO:0005737>\]; cytosol \[<GO:0005829>\]; endoplasmic reticulum \[<GO:0005783>\]; endoplasmic reticulum membrane \[<GO:0005789>\]; mitochondrial outer membrane \[<GO:0005741>\]; mitochondrial permeability transition pore complex \[<GO:0005757>\]; mitochondrion \[<GO:0005739>\]; nucleus \[<GO:0005634>\]; pore complex \[<GO:0046930>\] | BH3 domain binding \[<GO:0051434>\]; channel activity \[<GO:0015267>\]; lipid binding \[<GO:0008289>\]; protein homodimerization activity \[<GO:0042803>\] | Mcap | 3 | 3 | 1 | 1 | 1 | TRUE | TRUE |
+| BAX | OG_16781 | Porites_compressa_HIv1\_\_\_RNAseq.g12818.t1 | 0.0000000 | Transient | transient_up | TRUE | 5 | 0.9636549 | TRUE | Sustained Up (3h) | ME18 | 0.8333326 | FALSE | 1 | 0 | 0 | FALSE | TRUE | FALSE | Q07812 | 0 | Apoptosis regulator BAX (Bcl-2-like protein 4) (Bcl2-L-4) | apoptotic mitochondrial changes \[<GO:0008637>\]; apoptotic process \[<GO:0006915>\]; apoptotic process involved in blood vessel morphogenesis \[<GO:1902262>\]; apoptotic process involved in embryonic digit morphogenesis \[<GO:1902263>\]; apoptotic process involved in mammary gland involution \[<GO:0060057>\]; apoptotic signaling pathway \[<GO:0097190>\]; B cell apoptotic process \[<GO:0001783>\]; B cell homeostasis \[<GO:0001782>\]; B cell homeostatic proliferation \[<GO:0002358>\]; B cell negative selection \[<GO:0002352>\]; B cell receptor apoptotic signaling pathway \[<GO:1990117>\]; blood vessel remodeling \[<GO:0001974>\]; calcium ion transport into cytosol \[<GO:0060402>\]; cellular response to unfolded protein \[<GO:0034620>\]; cellular response to UV \[<GO:0034644>\]; cellular response to virus \[<GO:0098586>\]; cerebral cortex development \[<GO:0021987>\]; development of secondary sexual characteristics \[<GO:0045136>\]; ectopic germ cell programmed cell death \[<GO:0035234>\]; endoplasmic reticulum calcium ion homeostasis \[<GO:0032469>\]; epithelial cell apoptotic process \[<GO:1904019>\]; establishment or maintenance of transmembrane electrochemical gradient \[<GO:0010248>\]; execution phase of apoptosis \[<GO:0097194>\]; extrinsic apoptotic signaling pathway \[<GO:0097191>\]; extrinsic apoptotic signaling pathway in absence of ligand \[<GO:0097192>\]; extrinsic apoptotic signaling pathway via death domain receptors \[<GO:0008625>\]; fertilization \[<GO:0009566>\]; germ cell development \[<GO:0007281>\]; glycosphingolipid metabolic process \[<GO:0006687>\]; homeostasis of number of cells within a tissue \[<GO:0048873>\]; hypothalamus development \[<GO:0021854>\]; intrinsic apoptotic signaling pathway \[<GO:0097193>\]; intrinsic apoptotic signaling pathway by p53 class mediator \[<GO:0072332>\]; intrinsic apoptotic signaling pathway in response to DNA damage \[<GO:0008630>\]; intrinsic apoptotic signaling pathway in response to endoplasmic reticulum stress \[<GO:0070059>\]; kidney development \[<GO:0001822>\]; mitochondrial fragmentation involved in apoptotic process \[<GO:0043653>\]; mitochondrial fusion \[<GO:0008053>\]; motor neuron apoptotic process \[<GO:0097049>\]; myeloid cell homeostasis \[<GO:0002262>\]; negative regulation of apoptotic signaling pathway \[<GO:2001234>\]; negative regulation of endoplasmic reticulum calcium ion concentration \[<GO:0032471>\]; negative regulation of fibroblast proliferation \[<GO:0048147>\]; negative regulation of mitochondrial membrane potential \[<GO:0010917>\]; negative regulation of neuron apoptotic process \[<GO:0043524>\]; negative regulation of protein binding \[<GO:0032091>\]; neuron migration \[<GO:0001764>\]; odontogenesis of dentin-containing tooth \[<GO:0042475>\]; ovarian follicle development \[<GO:0001541>\]; positive regulation of apoptotic DNA fragmentation \[<GO:1902512>\]; positive regulation of apoptotic process \[<GO:0043065>\]; positive regulation of apoptotic process involved in mammary gland involution \[<GO:0060058>\]; positive regulation of B cell apoptotic process \[<GO:0002904>\]; positive regulation of calcium ion transport into cytosol \[<GO:0010524>\]; positive regulation of developmental pigmentation \[<GO:0048087>\]; positive regulation of epithelial cell apoptotic process \[<GO:1904037>\]; positive regulation of intrinsic apoptotic signaling pathway \[<GO:2001244>\]; positive regulation of IRE1-mediated unfolded protein response \[<GO:1903896>\]; positive regulation of mitochondrial membrane permeability involved in apoptotic process \[<GO:1902110>\]; positive regulation of motor neuron apoptotic process \[<GO:2000673>\]; positive regulation of neuron apoptotic process \[<GO:0043525>\]; positive regulation of protein-containing complex assembly \[<GO:0031334>\]; positive regulation of release of cytochrome c from mitochondria \[<GO:0090200>\]; positive regulation of release of sequestered calcium ion into cytosol \[<GO:0051281>\]; positive regulation of reproductive process \[<GO:2000243>\]; post-embryonic camera-type eye morphogenesis \[<GO:0048597>\]; protein insertion into mitochondrial membrane \[<GO:0051204>\]; regulation of apoptotic process \[<GO:0042981>\]; regulation of cell cycle \[<GO:0051726>\]; regulation of mammary gland epithelial cell proliferation \[<GO:0033599>\]; regulation of mitochondrial membrane permeability involved in programmed necrotic cell death \[<GO:1902445>\]; regulation of mitochondrial membrane potential \[<GO:0051881>\]; regulation of nitrogen utilization \[<GO:0006808>\]; release of cytochrome c from mitochondria \[<GO:0001836>\]; release of matrix enzymes from mitochondria \[<GO:0032976>\]; release of sequestered calcium ion into cytosol \[<GO:0051209>\]; response to axon injury \[<GO:0048678>\]; response to gamma radiation \[<GO:0010332>\]; response to salt stress \[<GO:0009651>\]; response to toxic substance \[<GO:0009636>\]; retina development in camera-type eye \[<GO:0060041>\]; retinal cell programmed cell death \[<GO:0046666>\]; Sertoli cell proliferation \[<GO:0060011>\]; spermatid differentiation \[<GO:0048515>\]; supramolecular fiber organization \[<GO:0097435>\]; T cell homeostatic proliferation \[<GO:0001777>\]; thymocyte apoptotic process \[<GO:0070242>\]; vagina development \[<GO:0060068>\] | <GO:0001541>; <GO:0001764>; <GO:0001777>; <GO:0001782>; <GO:0001783>; <GO:0001822>; <GO:0001836>; <GO:0001974>; <GO:0002262>; <GO:0002352>; <GO:0002358>; <GO:0002904>; <GO:0005634>; <GO:0005635>; <GO:0005737>; <GO:0005739>; <GO:0005741>; <GO:0005757>; <GO:0005783>; <GO:0005789>; <GO:0005829>; <GO:0006687>; <GO:0006808>; <GO:0006915>; <GO:0007281>; <GO:0008053>; <GO:0008289>; <GO:0008625>; <GO:0008630>; <GO:0008637>; <GO:0009566>; <GO:0009636>; <GO:0009651>; <GO:0010248>; <GO:0010332>; <GO:0010524>; <GO:0010917>; <GO:0015267>; <GO:0016020>; <GO:0021854>; <GO:0021987>; <GO:0030544>; <GO:0031334>; <GO:0032091>; <GO:0032469>; <GO:0032471>; <GO:0032976>; <GO:0033599>; <GO:0034620>; <GO:0034644>; <GO:0035234>; <GO:0042475>; <GO:0042802>; <GO:0042803>; <GO:0042981>; <GO:0043065>; <GO:0043524>; <GO:0043525>; <GO:0043653>; <GO:0045136>; <GO:0046666>; <GO:0046930>; <GO:0046982>; <GO:0048087>; <GO:0048147>; <GO:0048515>; <GO:0048597>; <GO:0048678>; <GO:0048873>; <GO:0051204>; <GO:0051209>; <GO:0051281>; <GO:0051434>; <GO:0051726>; <GO:0051881>; <GO:0060011>; <GO:0060041>; <GO:0060057>; <GO:0060058>; <GO:0060068>; <GO:0060402>; <GO:0070059>; <GO:0070062>; <GO:0070242>; <GO:0072332>; <GO:0090200>; <GO:0097049>; <GO:0097136>; <GO:0097144>; <GO:0097145>; <GO:0097190>; <GO:0097191>; <GO:0097192>; <GO:0097193>; <GO:0097194>; <GO:0097435>; <GO:0098586>; <GO:1902110>; <GO:1902262>; <GO:1902263>; <GO:1902445>; <GO:1902512>; <GO:1903896>; <GO:1904019>; <GO:1904037>; <GO:1990117>; <GO:2000243>; <GO:2000673>; <GO:2001234>; <GO:2001244> | BAK complex \[<GO:0097145>\]; BAX complex \[<GO:0097144>\]; Bcl-2 family protein complex \[<GO:0097136>\]; cytoplasm \[<GO:0005737>\]; cytosol \[<GO:0005829>\]; endoplasmic reticulum \[<GO:0005783>\]; endoplasmic reticulum membrane \[<GO:0005789>\]; extracellular exosome \[<GO:0070062>\]; membrane \[<GO:0016020>\]; mitochondrial outer membrane \[<GO:0005741>\]; mitochondrial permeability transition pore complex \[<GO:0005757>\]; mitochondrion \[<GO:0005739>\]; nuclear envelope \[<GO:0005635>\]; nucleus \[<GO:0005634>\]; pore complex \[<GO:0046930>\] | BH3 domain binding \[<GO:0051434>\]; channel activity \[<GO:0015267>\]; Hsp70 protein binding \[<GO:0030544>\]; identical protein binding \[<GO:0042802>\]; lipid binding \[<GO:0008289>\]; protein heterodimerization activity \[<GO:0046982>\]; protein homodimerization activity \[<GO:0042803>\] | Pcomp | 3 | 3 | 1 | 1 | 1 | TRUE | TRUE |
+| BI-1 | OG_13704 | Pocillopora_acuta_HIv2\_\_\_RNAseq.g15654.t1 | 0.0190035 | Transient | transient_up | TRUE | 2 | 0.5119779 | TRUE | Early Peak (3h) | ME8 | 0.8060700 | FALSE | 0 | 0 | 0 | FALSE | FALSE | FALSE | Q9IA79 | 0 | Probable Bax inhibitor 1 (BI-1) (Testis-enhanced gene transcript protein homolog) (Transmembrane BAX inhibitor motif-containing protein 6) | apoptotic process \[<GO:0006915>\]; cellular response to unfolded protein \[<GO:0034620>\]; negative regulation of apoptotic signaling pathway \[<GO:2001234>\]; negative regulation of RNA splicing \[<GO:0033119>\] | <GO:0005789>; <GO:0006915>; <GO:0019899>; <GO:0031966>; <GO:0033119>; <GO:0034620>; <GO:2001234> | endoplasmic reticulum membrane \[<GO:0005789>\]; mitochondrial membrane \[<GO:0031966>\] | enzyme binding \[<GO:0019899>\] | Pacuta | 3 | 3 | 1 | 1 | 1 | TRUE | TRUE |
+| BI-1 | OG_13704 | Montipora_capitata_HIv3\_\_\_RNAseq.g45609.t1 | 0.0459489 | Other | unclassified | TRUE | 3 | 0.7575617 | TRUE | Sustained Up (3h) | ME16 | 0.8800624 | TRUE | 1 | 0 | 0 | FALSE | TRUE | FALSE | Q9IA79 | 0 | Probable Bax inhibitor 1 (BI-1) (Testis-enhanced gene transcript protein homolog) (Transmembrane BAX inhibitor motif-containing protein 6) | apoptotic process \[<GO:0006915>\]; cellular response to unfolded protein \[<GO:0034620>\]; negative regulation of apoptotic signaling pathway \[<GO:2001234>\]; negative regulation of RNA splicing \[<GO:0033119>\] | <GO:0005789>; <GO:0006915>; <GO:0019899>; <GO:0031966>; <GO:0033119>; <GO:0034620>; <GO:2001234> | endoplasmic reticulum membrane \[<GO:0005789>\]; mitochondrial membrane \[<GO:0031966>\] | enzyme binding \[<GO:0019899>\] | Mcap | 3 | 3 | 1 | 1 | 1 | TRUE | TRUE |
+| BI-1 | OG_13704 | Porites_compressa_HIv1\_\_\_RNAseq.g27468.t1 | 0.0330665 | Other | unclassified | TRUE | 1 | 0.7790794 | TRUE | Gradual Down | ME0 | 0.0643369 | FALSE | 0 | 0 | 0 | FALSE | FALSE | FALSE | Q9IA79 | 0 | Probable Bax inhibitor 1 (BI-1) (Testis-enhanced gene transcript protein homolog) (Transmembrane BAX inhibitor motif-containing protein 6) | apoptotic process \[<GO:0006915>\]; cellular response to unfolded protein \[<GO:0034620>\]; negative regulation of apoptotic signaling pathway \[<GO:2001234>\]; negative regulation of RNA splicing \[<GO:0033119>\] | <GO:0005789>; <GO:0006915>; <GO:0019899>; <GO:0031966>; <GO:0033119>; <GO:0034620>; <GO:2001234> | endoplasmic reticulum membrane \[<GO:0005789>\]; mitochondrial membrane \[<GO:0031966>\] | enzyme binding \[<GO:0019899>\] | Pcomp | 3 | 3 | 1 | 1 | 1 | TRUE | TRUE |
+| AMPK | OG_7773 | Pocillopora_acuta_HIv2\_\_\_RNAseq.g19827.t1 | 0.0308929 | Transient | transient_up | TRUE | 2 | 0.7965976 | TRUE | Early Peak (3h) | ME5 | 0.7908382 | FALSE | 1 | 0 | 0 | FALSE | TRUE | FALSE | Q8BRK8 | 0 | 5’-AMP-activated protein kinase catalytic subunit alpha-2 (AMPK subunit alpha-2) (EC 2.7.11.1) (Acetyl-CoA carboxylase kinase) (ACACA kinase) (Hydroxymethylglutaryl-CoA reductase kinase) (HMGCR kinase) (EC 2.7.11.31) | autophagy \[<GO:0006914>\]; cellular response to calcium ion \[<GO:0071277>\]; cellular response to glucose starvation \[<GO:0042149>\]; cellular response to glucose stimulus \[<GO:0071333>\]; cellular response to nutrient levels \[<GO:0031669>\]; cellular response to oxidative stress \[<GO:0034599>\]; cellular response to prostaglandin E stimulus \[<GO:0071380>\]; cellular response to xenobiotic stimulus \[<GO:0071466>\]; cholesterol biosynthetic process \[<GO:0006695>\]; energy homeostasis \[<GO:0097009>\]; fatty acid biosynthetic process \[<GO:0006633>\]; fatty acid homeostasis \[<GO:0055089>\]; glucose homeostasis \[<GO:0042593>\]; lipid biosynthetic process \[<GO:0008610>\]; lipid droplet disassembly \[<GO:1905691>\]; negative regulation of apoptotic process \[<GO:0043066>\]; negative regulation of gene expression \[<GO:0010629>\]; negative regulation of hepatocyte apoptotic process \[<GO:1903944>\]; negative regulation of TOR signaling \[<GO:0032007>\]; negative regulation of TORC1 signaling \[<GO:1904262>\]; negative regulation of tubulin deacetylation \[<GO:1904428>\]; positive regulation of autophagy \[<GO:0010508>\]; positive regulation of glycolytic process \[<GO:0045821>\]; positive regulation of protein localization \[<GO:1903829>\]; protein localization to lipid droplet \[<GO:1990044>\]; protein phosphorylation \[<GO:0006468>\]; regulation of circadian rhythm \[<GO:0042752>\]; regulation of gene expression \[<GO:0010468>\]; regulation of macroautophagy \[<GO:0016241>\]; regulation of microtubule cytoskeleton organization \[<GO:0070507>\]; regulation of stress granule assembly \[<GO:0062028>\]; response to muscle activity \[<GO:0014850>\]; rhythmic process \[<GO:0048511>\]; Wnt signaling pathway \[<GO:0016055>\] | <GO:0003682>; <GO:0004674>; <GO:0004679>; <GO:0004712>; <GO:0005524>; <GO:0005634>; <GO:0005654>; <GO:0005737>; <GO:0005794>; <GO:0005829>; <GO:0006468>; <GO:0006633>; <GO:0006695>; <GO:0006914>; <GO:0008610>; <GO:0010468>; <GO:0010494>; <GO:0010508>; <GO:0010629>; <GO:0014850>; <GO:0016055>; <GO:0016241>; <GO:0016607>; <GO:0030424>; <GO:0030425>; <GO:0031588>; <GO:0031669>; <GO:0032007>; <GO:0034599>; <GO:0036064>; <GO:0042149>; <GO:0042593>; <GO:0042752>; <GO:0043025>; <GO:0043066>; <GO:0045821>; <GO:0046872>; <GO:0047322>; <GO:0048511>; <GO:0055089>; <GO:0062028>; <GO:0070507>; <GO:0071277>; <GO:0071333>; <GO:0071380>; <GO:0071466>; <GO:0097009>; <GO:0106310>; <GO:0140823>; <GO:1903829>; <GO:1903944>; <GO:1904262>; <GO:1904428>; <GO:1905691>; <GO:1990044> | axon \[<GO:0030424>\]; ciliary basal body \[<GO:0036064>\]; cytoplasm \[<GO:0005737>\]; cytoplasmic stress granule \[<GO:0010494>\]; cytosol \[<GO:0005829>\]; dendrite \[<GO:0030425>\]; Golgi apparatus \[<GO:0005794>\]; neuronal cell body \[<GO:0043025>\]; nuclear speck \[<GO:0016607>\]; nucleoplasm \[<GO:0005654>\]; nucleotide-activated protein kinase complex \[<GO:0031588>\]; nucleus \[<GO:0005634>\] | \[hydroxymethylglutaryl-CoA reductase (NADPH)\] kinase activity \[<GO:0047322>\]; AMP-activated protein kinase activity \[<GO:0004679>\]; ATP binding \[<GO:0005524>\]; chromatin binding \[<GO:0003682>\]; histone H2BS36 kinase activity \[<GO:0140823>\]; metal ion binding \[<GO:0046872>\]; protein serine kinase activity \[<GO:0106310>\]; protein serine/threonine kinase activity \[<GO:0004674>\]; protein serine/threonine/tyrosine kinase activity \[<GO:0004712>\] | Pacuta | 3 | 3 | 1 | 1 | 1 | TRUE | TRUE |
+| AMPK | OG_7773 | Montipora_capitata_HIv3\_\_\_RNAseq.g27769.t1 | 0.0034566 | Transient | transient_up | TRUE | 3 | 0.9187788 | TRUE | Sustained Up (3h) | ME18 | 0.8000042 | FALSE | 0 | 0 | 0 | FALSE | FALSE | FALSE | Q09137 | 0 | 5’-AMP-activated protein kinase catalytic subunit alpha-2 (AMPK subunit alpha-2) (EC 2.7.11.1) (Acetyl-CoA carboxylase kinase) (ACACA kinase) (Hydroxymethylglutaryl-CoA reductase kinase) (HMGCR kinase) (EC 2.7.11.31) | autophagy \[<GO:0006914>\]; cellular response to calcium ion \[<GO:0071277>\]; cellular response to glucose starvation \[<GO:0042149>\]; cellular response to glucose stimulus \[<GO:0071333>\]; cellular response to nutrient levels \[<GO:0031669>\]; cellular response to oxidative stress \[<GO:0034599>\]; cellular response to prostaglandin E stimulus \[<GO:0071380>\]; cellular response to xenobiotic stimulus \[<GO:0071466>\]; cholesterol biosynthetic process \[<GO:0006695>\]; energy homeostasis \[<GO:0097009>\]; fatty acid biosynthetic process \[<GO:0006633>\]; fatty acid homeostasis \[<GO:0055089>\]; glucose homeostasis \[<GO:0042593>\]; lipid biosynthetic process \[<GO:0008610>\]; lipid droplet disassembly \[<GO:1905691>\]; negative regulation of apoptotic process \[<GO:0043066>\]; negative regulation of gene expression \[<GO:0010629>\]; negative regulation of hepatocyte apoptotic process \[<GO:1903944>\]; negative regulation of TOR signaling \[<GO:0032007>\]; negative regulation of TORC1 signaling \[<GO:1904262>\]; negative regulation of tubulin deacetylation \[<GO:1904428>\]; positive regulation of autophagy \[<GO:0010508>\]; positive regulation of glycolytic process \[<GO:0045821>\]; positive regulation of protein localization \[<GO:1903829>\]; protein localization to lipid droplet \[<GO:1990044>\]; regulation of circadian rhythm \[<GO:0042752>\]; regulation of gene expression \[<GO:0010468>\]; regulation of lipid metabolic process \[<GO:0019216>\]; regulation of macroautophagy \[<GO:0016241>\]; regulation of microtubule cytoskeleton organization \[<GO:0070507>\]; regulation of stress granule assembly \[<GO:0062028>\]; response to activity \[<GO:0014823>\]; response to caffeine \[<GO:0031000>\]; response to muscle activity \[<GO:0014850>\]; rhythmic process \[<GO:0048511>\]; Wnt signaling pathway \[<GO:0016055>\] | <GO:0003682>; <GO:0004672>; <GO:0004674>; <GO:0004679>; <GO:0004712>; <GO:0005524>; <GO:0005634>; <GO:0005654>; <GO:0005737>; <GO:0006633>; <GO:0006695>; <GO:0006914>; <GO:0008610>; <GO:0010468>; <GO:0010494>; <GO:0010508>; <GO:0010629>; <GO:0014823>; <GO:0014850>; <GO:0016055>; <GO:0016241>; <GO:0016324>; <GO:0019216>; <GO:0030424>; <GO:0030425>; <GO:0030674>; <GO:0031000>; <GO:0031588>; <GO:0031669>; <GO:0032007>; <GO:0032991>; <GO:0034599>; <GO:0042149>; <GO:0042593>; <GO:0042752>; <GO:0043025>; <GO:0043066>; <GO:0044877>; <GO:0045821>; <GO:0046872>; <GO:0047322>; <GO:0048511>; <GO:0055089>; <GO:0062028>; <GO:0070507>; <GO:0071277>; <GO:0071333>; <GO:0071380>; <GO:0071466>; <GO:0097009>; <GO:0106310>; <GO:0140823>; <GO:1903829>; <GO:1903944>; <GO:1904262>; <GO:1904428>; <GO:1905691>; <GO:1990044> | apical plasma membrane \[<GO:0016324>\]; axon \[<GO:0030424>\]; cytoplasm \[<GO:0005737>\]; cytoplasmic stress granule \[<GO:0010494>\]; dendrite \[<GO:0030425>\]; neuronal cell body \[<GO:0043025>\]; nucleoplasm \[<GO:0005654>\]; nucleotide-activated protein kinase complex \[<GO:0031588>\]; nucleus \[<GO:0005634>\]; protein-containing complex \[<GO:0032991>\] | \[hydroxymethylglutaryl-CoA reductase (NADPH)\] kinase activity \[<GO:0047322>\]; AMP-activated protein kinase activity \[<GO:0004679>\]; ATP binding \[<GO:0005524>\]; chromatin binding \[<GO:0003682>\]; histone H2BS36 kinase activity \[<GO:0140823>\]; metal ion binding \[<GO:0046872>\]; protein kinase activity \[<GO:0004672>\]; protein serine kinase activity \[<GO:0106310>\]; protein serine/threonine kinase activity \[<GO:0004674>\]; protein serine/threonine/tyrosine kinase activity \[<GO:0004712>\]; protein-containing complex binding \[<GO:0044877>\]; protein-macromolecule adaptor activity \[<GO:0030674>\] | Mcap | 3 | 3 | 1 | 1 | 1 | TRUE | TRUE |
+| AMPK | OG_7773 | Porites_compressa_HIv1\_\_\_RNAseq.g16374.t1 | 0.0030088 | Monotonous | transition_up | TRUE | 5 | 0.8419368 | TRUE | Sustained Up (3h) | ME1 | 0.9070010 | TRUE | 1 | 1 | 0 | TRUE | TRUE | FALSE | Q8BRK8 | 0 | 5’-AMP-activated protein kinase catalytic subunit alpha-2 (AMPK subunit alpha-2) (EC 2.7.11.1) (Acetyl-CoA carboxylase kinase) (ACACA kinase) (Hydroxymethylglutaryl-CoA reductase kinase) (HMGCR kinase) (EC 2.7.11.31) | autophagy \[<GO:0006914>\]; cellular response to calcium ion \[<GO:0071277>\]; cellular response to glucose starvation \[<GO:0042149>\]; cellular response to glucose stimulus \[<GO:0071333>\]; cellular response to nutrient levels \[<GO:0031669>\]; cellular response to oxidative stress \[<GO:0034599>\]; cellular response to prostaglandin E stimulus \[<GO:0071380>\]; cellular response to xenobiotic stimulus \[<GO:0071466>\]; cholesterol biosynthetic process \[<GO:0006695>\]; energy homeostasis \[<GO:0097009>\]; fatty acid biosynthetic process \[<GO:0006633>\]; fatty acid homeostasis \[<GO:0055089>\]; glucose homeostasis \[<GO:0042593>\]; lipid biosynthetic process \[<GO:0008610>\]; lipid droplet disassembly \[<GO:1905691>\]; negative regulation of apoptotic process \[<GO:0043066>\]; negative regulation of gene expression \[<GO:0010629>\]; negative regulation of hepatocyte apoptotic process \[<GO:1903944>\]; negative regulation of TOR signaling \[<GO:0032007>\]; negative regulation of TORC1 signaling \[<GO:1904262>\]; negative regulation of tubulin deacetylation \[<GO:1904428>\]; positive regulation of autophagy \[<GO:0010508>\]; positive regulation of glycolytic process \[<GO:0045821>\]; positive regulation of protein localization \[<GO:1903829>\]; protein localization to lipid droplet \[<GO:1990044>\]; protein phosphorylation \[<GO:0006468>\]; regulation of circadian rhythm \[<GO:0042752>\]; regulation of gene expression \[<GO:0010468>\]; regulation of macroautophagy \[<GO:0016241>\]; regulation of microtubule cytoskeleton organization \[<GO:0070507>\]; regulation of stress granule assembly \[<GO:0062028>\]; response to muscle activity \[<GO:0014850>\]; rhythmic process \[<GO:0048511>\]; Wnt signaling pathway \[<GO:0016055>\] | <GO:0003682>; <GO:0004674>; <GO:0004679>; <GO:0004712>; <GO:0005524>; <GO:0005634>; <GO:0005654>; <GO:0005737>; <GO:0005794>; <GO:0005829>; <GO:0006468>; <GO:0006633>; <GO:0006695>; <GO:0006914>; <GO:0008610>; <GO:0010468>; <GO:0010494>; <GO:0010508>; <GO:0010629>; <GO:0014850>; <GO:0016055>; <GO:0016241>; <GO:0016607>; <GO:0030424>; <GO:0030425>; <GO:0031588>; <GO:0031669>; <GO:0032007>; <GO:0034599>; <GO:0036064>; <GO:0042149>; <GO:0042593>; <GO:0042752>; <GO:0043025>; <GO:0043066>; <GO:0045821>; <GO:0046872>; <GO:0047322>; <GO:0048511>; <GO:0055089>; <GO:0062028>; <GO:0070507>; <GO:0071277>; <GO:0071333>; <GO:0071380>; <GO:0071466>; <GO:0097009>; <GO:0106310>; <GO:0140823>; <GO:1903829>; <GO:1903944>; <GO:1904262>; <GO:1904428>; <GO:1905691>; <GO:1990044> | axon \[<GO:0030424>\]; ciliary basal body \[<GO:0036064>\]; cytoplasm \[<GO:0005737>\]; cytoplasmic stress granule \[<GO:0010494>\]; cytosol \[<GO:0005829>\]; dendrite \[<GO:0030425>\]; Golgi apparatus \[<GO:0005794>\]; neuronal cell body \[<GO:0043025>\]; nuclear speck \[<GO:0016607>\]; nucleoplasm \[<GO:0005654>\]; nucleotide-activated protein kinase complex \[<GO:0031588>\]; nucleus \[<GO:0005634>\] | \[hydroxymethylglutaryl-CoA reductase (NADPH)\] kinase activity \[<GO:0047322>\]; AMP-activated protein kinase activity \[<GO:0004679>\]; ATP binding \[<GO:0005524>\]; chromatin binding \[<GO:0003682>\]; histone H2BS36 kinase activity \[<GO:0140823>\]; metal ion binding \[<GO:0046872>\]; protein serine kinase activity \[<GO:0106310>\]; protein serine/threonine kinase activity \[<GO:0004674>\]; protein serine/threonine/tyrosine kinase activity \[<GO:0004712>\] | Pcomp | 3 | 3 | 1 | 1 | 1 | TRUE | TRUE |
+| GOGAT | OG_17448 | Pocillopora_acuta_HIv2\_\_\_RNAseq.g3264.t1 | 0.0000000 | Transient | transient_down | TRUE | 3 | 0.6839056 | TRUE | Sustained Down (3h) | ME3 | 0.7059177 | FALSE | 0 | 0 | 0 | FALSE | FALSE | FALSE | NA | NA | NA | NA | NA | NA | NA | Pacuta | 3 | 3 | 1 | 1 | 1 | TRUE | TRUE |
+| GOGAT | OG_17448 | Montipora_capitata_HIv3\_\_\_RNAseq.g456.t1 | 0.0020705 | Monotonous | transition_down | TRUE | 1 | 0.7009234 | TRUE | Sustained Down (12h) | ME3 | 0.7158633 | FALSE | 0 | 0 | 0 | FALSE | FALSE | FALSE | NA | NA | NA | NA | NA | NA | NA | Mcap | 3 | 3 | 1 | 1 | 1 | TRUE | TRUE |
+| GOGAT | OG_17448 | Porites_compressa_HIv1\_\_\_RNAseq.g1296.t1 | 0.0000006 | Monotonous | transition_down | TRUE | 1 | 0.6229924 | TRUE | Gradual Down | ME2 | 0.7303659 | FALSE | 0 | 0 | 0 | FALSE | FALSE | FALSE | NA | NA | NA | NA | NA | NA | NA | Pcomp | 3 | 3 | 1 | 1 | 1 | TRUE | TRUE |
+
 None of these genes are in the 81 1:1:1 orthogroups that are DE in all
 three species and share an Mfuzz pattern. However, five of them are
 1:1:1 orthogroups DE in all three species and show different patterns!
 Cool!!
+
+### heat heatmaps
+
+``` r
+for (species in species_list){
+  input_dir <- file.path("../../output_RNA/counts_filt_norm", species)
+  vst_counts <- read.csv(file.path(input_dir, "vst_expression_matrix.csv"), row.names = 1) 
+  assign(paste0(species,"_vst"),vst_counts)
+  rm(vst_counts)
+}
+```
+
+``` r
+top_100_Pcomp <- all_heat %>% filter(species =="Pcomp") %>% arrange(ImpulseDE2_padj) %>% filter(gene_id %in% rownames(Pcomp_vst)) %>% head(100) 
+heat_samples <- Pcomp_vst %>% select(contains("_H")) %>% colnames()
+T0_samples <- Pcomp_vst %>% select(contains("_H")) %>% select(contains("_R0_"))  %>% colnames()
+T
+```
+
+    ## [1] TRUE
+
+``` r
+vst_heat_top <- Pcomp_vst[top_100_Pcomp$gene_id,heat_samples]
+vst_heat_top$T0mean <- rowMeans(vst_heat_top[,T0_samples])
+vst_heat_norm <- vst_heat_top - vst_heat_top$T0mean
+vst_heat_norm <- vst_heat_norm %>% select(-T0mean)
+
+vst_max <- max(abs(vst_heat_norm), na.rm = TRUE)
+scale_colors <- colorRampPalette(c("#3c58a7","#3c58a7", "white", "#ee2e25","#ee2e25"))(100)
+legend_breaks <- seq(-vst_max, vst_max, length.out = 101)
+
+heatmap_up <- pheatmap(vst_heat_norm, 
+         cluster_rows = FALSE, 
+         show_rownames = FALSE,
+         show_colnames = FALSE,
+         cluster_cols = FALSE, 
+         annotation_names_row = FALSE,
+         annotation_names_col = FALSE,
+         breaks = legend_breaks,
+         col = scale_colors,
+         border_color = NA)
+
+save_ggplot(heatmap_up, "ImpulseDE2_heatmap_UP", width = 7, height = 10, units = "in", dpi = 300)
+
+heatmap_up
+```
+
+![](./06_CrossSpecies_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
+
+### ortholog heatmaps
+
+``` r
+for (species in species_list){
+  input_dir <- file.path("../../output_RNA/counts_filt_norm", species)
+  vst_counts <- read.csv(file.path(input_dir, "vst_expression_matrix.csv"), row.names = 1) 
+  assign(paste0(species,"_vst"),vst_counts)
+  
+  samples <- colnames(vst_counts)
+  
+  meta <- data.frame(
+  sample = samples, 
+  species = str_split(samples, "_", simplify = TRUE)[,1], #extract first part of sample name to get species
+  time = str_replace(str_split(samples, "_", simplify = TRUE)[,2],"R", ""), #extract "R##" part to get timepoint then remove R
+  replicate = str_split(samples, "_", simplify = TRUE)[,3], #extract "R##" part to get timepoint then remove R
+  treatment = str_replace(str_split(samples, "_", simplify = TRUE)[,3],"\\d", "")
+)
+  rownames(meta) <- meta$sample
+  # make time and treatment factors
+  meta$time <- factor(meta$time, levels = as.character(sort(unique(as.numeric(meta$time)))))
+  meta$treatment <- factor(meta$treatment)
+  
+  assign(paste0(species,"_meta"),meta)
+  rm(vst_counts)
+  rm(samples)
+  rm(meta)
+}
+```
+
+``` r
+Pcomp_1to1 <- complete_1to1_ogs %>% filter(species =="Pcomp") %>% arrange(OG) %>% filter(gene_id %in% rownames(Pcomp_vst))# %>% head(100) 
+
+Pcomp_1to1_conserved <- complete_1to1_ogs %>% arrange(ImpulseDE2_padj) %>% filter(species =="Pcomp") %>% filter(gene_id %in% core_conserved_response$gene_Pcomp) %>% filter(gene_id %in% rownames(Pcomp_vst))# %>% head(100) 
+
+Pcomp_1to1_divergent <- complete_1to1_ogs %>% arrange(ImpulseDE2_padj) %>% filter(species =="Pcomp") %>% filter(gene_id %in% core_divergent_response$gene_Pcomp) %>% filter(gene_id %in% rownames(Pcomp_vst))# %>% head(100) 
+
+Pcomp_1to1 <- bind_rows(Pcomp_1to1_conserved,Pcomp_1to1_divergent)
+
+heat_samples <- Pcomp_vst %>% select(contains("_H")) %>% colnames()
+T0_samples <- Pcomp_vst %>% select(contains("_H")) %>% select(contains("_R0_"))  %>% colnames()
+row_annot <- Pcomp_1to1 %>% column_to_rownames(var="gene_id") %>% select(ImpulseDE2_response_type) %>% dplyr::rename(response_type = ImpulseDE2_response_type)
+col_annot <- Pcomp_meta[heat_samples,] %>% select(time)
+
+vst_heat_selected <- Pcomp_vst[Pcomp_1to1$gene_id,heat_samples]
+vst_heat_selected$T0mean <- rowMeans(vst_heat_selected[,T0_samples])
+vst_heat_norm <- vst_heat_selected - vst_heat_selected$T0mean
+vst_heat_norm <- vst_heat_norm %>% select(-T0mean)
+
+vst_max <- max(abs(vst_heat_norm), na.rm = TRUE)
+scale_colors <- colorRampPalette(c("#3c58a7","#3c58a7", "white", "#ee2e25","#ee2e25"))(100)
+legend_breaks <- seq(-vst_max, vst_max, length.out = 101)
+
+Pcomp_coreOG1to1 <- pheatmap(vst_heat_norm, 
+         cluster_rows = FALSE, 
+         show_rownames = FALSE,
+         show_colnames = FALSE,
+         cluster_cols = FALSE, 
+         annotation_names_row = FALSE,
+         annotation_names_col = FALSE,
+         breaks = legend_breaks,
+         col = scale_colors,
+         border_color = NA,
+         gaps_col = cumsum(table(col_annot$time))[-length(table(col_annot$time))],
+         annotation_row = row_annot,
+         annotation_col = col_annot,
+         annotation_colors = list("treatment" = treat_colors,
+                                  "time" = time_colors,
+                                  "response_type" = c("Other" = "gray","Monotonous" = "#D8AF39FF", "Transient" = "#278B9AFF")))
+
+save_ggplot(Pcomp_coreOG1to1, "Pcomp_1to1to1_coreDE_orthologs", width = 7, height = 10, units = "in", dpi = 300)
+
+Pcomp_coreOG1to1
+```
+
+![](./06_CrossSpecies_files/figure-gfm/unnamed-chunk-21-1.png)<!-- -->
+
+``` r
+Pacuta_1to1 <- complete_1to1_ogs %>% filter(species =="Pacuta") %>% arrange(OG) %>% filter(gene_id %in% rownames(Pacuta_vst))# %>% head(100) 
+
+Pacuta_1to1_conserved <- complete_1to1_ogs %>% arrange(ImpulseDE2_padj) %>% filter(species =="Pacuta") %>% filter(gene_id %in% core_conserved_response$gene_Pacuta) %>% filter(gene_id %in% rownames(Pacuta_vst))# %>% head(100) 
+
+Pacuta_1to1_divergent <- complete_1to1_ogs %>% arrange(ImpulseDE2_padj) %>% filter(species =="Pacuta") %>% filter(gene_id %in% core_divergent_response$gene_Pacuta) %>% filter(gene_id %in% rownames(Pacuta_vst))# %>% head(100) 
+
+Pacuta_1to1 <- bind_rows(Pacuta_1to1_conserved,Pacuta_1to1_divergent)
+
+heat_samples <- Pacuta_vst %>% select(contains("_H")) %>% colnames()
+T0_samples <- Pacuta_vst %>% select(contains("_H")) %>% select(contains("_R0_"))  %>% colnames()
+row_annot <- Pacuta_1to1 %>% column_to_rownames(var="gene_id") %>% select(ImpulseDE2_response_type) %>% dplyr::rename(response_type = ImpulseDE2_response_type)
+col_annot <- Pacuta_meta[heat_samples,] %>% select(time)
+
+vst_heat_selected <- Pacuta_vst[Pacuta_1to1$gene_id,heat_samples]
+vst_heat_selected$T0mean <- rowMeans(vst_heat_selected[,T0_samples])
+vst_heat_norm <- vst_heat_selected - vst_heat_selected$T0mean
+vst_heat_norm <- vst_heat_norm %>% select(-T0mean)
+
+vst_max <- max(abs(vst_heat_norm), na.rm = TRUE)
+scale_colors <- colorRampPalette(c("#3c58a7","#3c58a7", "white", "#ee2e25","#ee2e25"))(100)
+legend_breaks <- seq(-vst_max, vst_max, length.out = 101)
+
+Pacuta_coreOG1to1 <- pheatmap(vst_heat_norm, 
+         cluster_rows = FALSE, 
+         show_rownames = FALSE,
+         show_colnames = FALSE,
+         cluster_cols = FALSE, 
+         annotation_names_row = FALSE,
+         annotation_names_col = FALSE,
+         breaks = legend_breaks,
+         col = scale_colors,
+         border_color = NA,
+         gaps_col = cumsum(table(col_annot$time))[-length(table(col_annot$time))],
+         annotation_row = row_annot,
+         annotation_col = col_annot,
+         annotation_colors = list("treatment" = treat_colors,
+                                  "time" = time_colors,
+                                  "response_type" = c("Other" = "gray","Monotonous" = "#D8AF39FF", "Transient" = "#278B9AFF")))
+
+save_ggplot(Pacuta_coreOG1to1, "Pacuta_1to1to1_coreDE_orthologs", width = 7, height = 10, units = "in", dpi = 300)
+
+Pacuta_coreOG1to1
+```
+
+![](./06_CrossSpecies_files/figure-gfm/unnamed-chunk-22-1.png)<!-- -->
+
+``` r
+Mcap_1to1 <- complete_1to1_ogs %>% filter(species =="Mcap") %>% arrange(OG) %>% filter(gene_id %in% rownames(Mcap_vst))# %>% head(100) 
+
+Mcap_1to1_conserved <- complete_1to1_ogs %>% arrange(ImpulseDE2_padj) %>% filter(species =="Mcap") %>% filter(gene_id %in% core_conserved_response$gene_Mcap) %>% filter(gene_id %in% rownames(Mcap_vst))# %>% head(100) 
+
+Mcap_1to1_divergent <- complete_1to1_ogs %>% arrange(ImpulseDE2_padj) %>% filter(species =="Mcap") %>% filter(gene_id %in% core_divergent_response$gene_Mcap) %>% filter(gene_id %in% rownames(Mcap_vst))# %>% head(100) 
+
+Mcap_1to1 <- bind_rows(Mcap_1to1_conserved,Mcap_1to1_divergent)
+
+heat_samples <- Mcap_vst %>% select(contains("_H")) %>% colnames()
+T0_samples <- Mcap_vst %>% select(contains("_H")) %>% select(contains("_R0_"))  %>% colnames()
+row_annot <- Mcap_1to1 %>% column_to_rownames(var="gene_id") %>% select(ImpulseDE2_response_type) %>% dplyr::rename(response_type = ImpulseDE2_response_type)
+col_annot <- Mcap_meta[heat_samples,] %>% select(time)
+
+vst_heat_selected <- Mcap_vst[Mcap_1to1$gene_id,heat_samples]
+vst_heat_selected$T0mean <- rowMeans(vst_heat_selected[,T0_samples])
+vst_heat_norm <- vst_heat_selected - vst_heat_selected$T0mean
+vst_heat_norm <- vst_heat_norm %>% select(-T0mean)
+
+vst_max <- max(abs(vst_heat_norm), na.rm = TRUE)
+scale_colors <- colorRampPalette(c("#3c58a7","#3c58a7", "white", "#ee2e25","#ee2e25"))(100)
+legend_breaks <- seq(-vst_max, vst_max, length.out = 101)
+
+Mcap_coreOG1to1 <- pheatmap(vst_heat_norm, 
+         cluster_rows = FALSE, 
+         show_rownames = FALSE,
+         show_colnames = FALSE,
+         cluster_cols = FALSE, 
+         annotation_names_row = FALSE,
+         annotation_names_col = FALSE,
+         breaks = legend_breaks,
+         col = scale_colors,
+         border_color = NA,
+         gaps_col = cumsum(table(col_annot$time))[-length(table(col_annot$time))],
+         annotation_row = row_annot,
+         annotation_col = col_annot,
+         annotation_colors = list("treatment" = treat_colors,
+                                  "time" = time_colors,
+                                  "response_type" = c("Other" = "gray","Monotonous" = "#D8AF39FF", "Transient" = "#278B9AFF")))
+
+save_ggplot(Mcap_coreOG1to1, "Mcap_1to1to1_coreDE_orthologs", width = 7, height = 10, units = "in", dpi = 300)
+
+Mcap_coreOG1to1
+```
+
+![](./06_CrossSpecies_files/figure-gfm/unnamed-chunk-23-1.png)<!-- -->
+
+``` r
+library(patchwork)
+library(ggplotify)
+
+patch_heatmaps <- as.ggplot(Pacuta_coreOG1to1) | as.ggplot(Mcap_coreOG1to1) | as.ggplot(Pcomp_coreOG1to1)
+
+patch_heatmaps +  plot_layout(guides = 'collect')
+```
+
+![](./06_CrossSpecies_files/figure-gfm/unnamed-chunk-24-1.png)<!-- -->

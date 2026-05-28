@@ -580,5 +580,182 @@ heatmap_up <- pheatmap(vst_heat_norm,
          border_color = NA)
 
 save_ggplot(heatmap_up, "ImpulseDE2_heatmap_UP", width = 7, height = 10, units = "in", dpi = 300)
+
+heatmap_up
 ```
+
+### ortholog heatmaps
+
+```{r}
+for (species in species_list){
+  input_dir <- file.path("../../output_RNA/counts_filt_norm", species)
+  vst_counts <- read.csv(file.path(input_dir, "vst_expression_matrix.csv"), row.names = 1) 
+  assign(paste0(species,"_vst"),vst_counts)
+  
+  samples <- colnames(vst_counts)
+  
+  meta <- data.frame(
+  sample = samples, 
+  species = str_split(samples, "_", simplify = TRUE)[,1], #extract first part of sample name to get species
+  time = str_replace(str_split(samples, "_", simplify = TRUE)[,2],"R", ""), #extract "R##" part to get timepoint then remove R
+  replicate = str_split(samples, "_", simplify = TRUE)[,3], #extract "R##" part to get timepoint then remove R
+  treatment = str_replace(str_split(samples, "_", simplify = TRUE)[,3],"\\d", "")
+)
+  rownames(meta) <- meta$sample
+  # make time and treatment factors
+  meta$time <- factor(meta$time, levels = as.character(sort(unique(as.numeric(meta$time)))))
+  meta$treatment <- factor(meta$treatment)
+  
+  assign(paste0(species,"_meta"),meta)
+  rm(vst_counts)
+  rm(samples)
+  rm(meta)
+}
+```
+
+```{r}
+Pcomp_1to1 <- complete_1to1_ogs %>% filter(species =="Pcomp") %>% arrange(OG) %>% filter(gene_id %in% rownames(Pcomp_vst))# %>% head(100) 
+
+Pcomp_1to1_conserved <- complete_1to1_ogs %>% arrange(ImpulseDE2_padj) %>% filter(species =="Pcomp") %>% filter(gene_id %in% core_conserved_response$gene_Pcomp) %>% filter(gene_id %in% rownames(Pcomp_vst))# %>% head(100) 
+
+Pcomp_1to1_divergent <- complete_1to1_ogs %>% arrange(ImpulseDE2_padj) %>% filter(species =="Pcomp") %>% filter(gene_id %in% core_divergent_response$gene_Pcomp) %>% filter(gene_id %in% rownames(Pcomp_vst))# %>% head(100) 
+
+Pcomp_1to1 <- bind_rows(Pcomp_1to1_conserved,Pcomp_1to1_divergent)
+
+heat_samples <- Pcomp_vst %>% select(contains("_H")) %>% colnames()
+T0_samples <- Pcomp_vst %>% select(contains("_H")) %>% select(contains("_R0_"))  %>% colnames()
+row_annot <- Pcomp_1to1 %>% column_to_rownames(var="gene_id") %>% select(ImpulseDE2_response_type) %>% dplyr::rename(response_type = ImpulseDE2_response_type)
+col_annot <- Pcomp_meta[heat_samples,] %>% select(time)
+
+vst_heat_selected <- Pcomp_vst[Pcomp_1to1$gene_id,heat_samples]
+vst_heat_selected$T0mean <- rowMeans(vst_heat_selected[,T0_samples])
+vst_heat_norm <- vst_heat_selected - vst_heat_selected$T0mean
+vst_heat_norm <- vst_heat_norm %>% select(-T0mean)
+
+vst_max <- max(abs(vst_heat_norm), na.rm = TRUE)
+scale_colors <- colorRampPalette(c("#3c58a7","#3c58a7", "white", "#ee2e25","#ee2e25"))(100)
+legend_breaks <- seq(-vst_max, vst_max, length.out = 101)
+
+Pcomp_coreOG1to1 <- pheatmap(vst_heat_norm, 
+         cluster_rows = FALSE, 
+         show_rownames = FALSE,
+         show_colnames = FALSE,
+         cluster_cols = FALSE, 
+         annotation_names_row = FALSE,
+         annotation_names_col = FALSE,
+         breaks = legend_breaks,
+         col = scale_colors,
+         border_color = NA,
+         gaps_col = cumsum(table(col_annot$time))[-length(table(col_annot$time))],
+         annotation_row = row_annot,
+         annotation_col = col_annot,
+         annotation_colors = list("treatment" = treat_colors,
+                                  "time" = time_colors,
+                                  "response_type" = c("Other" = "gray","Monotonous" = "#D8AF39FF", "Transient" = "#278B9AFF")))
+
+save_ggplot(Pcomp_coreOG1to1, "Pcomp_1to1to1_coreDE_orthologs", width = 7, height = 10, units = "in", dpi = 300)
+
+Pcomp_coreOG1to1
+```
+
+```{r}
+Pacuta_1to1 <- complete_1to1_ogs %>% filter(species =="Pacuta") %>% arrange(OG) %>% filter(gene_id %in% rownames(Pacuta_vst))# %>% head(100) 
+
+Pacuta_1to1_conserved <- complete_1to1_ogs %>% arrange(ImpulseDE2_padj) %>% filter(species =="Pacuta") %>% filter(gene_id %in% core_conserved_response$gene_Pacuta) %>% filter(gene_id %in% rownames(Pacuta_vst))# %>% head(100) 
+
+Pacuta_1to1_divergent <- complete_1to1_ogs %>% arrange(ImpulseDE2_padj) %>% filter(species =="Pacuta") %>% filter(gene_id %in% core_divergent_response$gene_Pacuta) %>% filter(gene_id %in% rownames(Pacuta_vst))# %>% head(100) 
+
+Pacuta_1to1 <- bind_rows(Pacuta_1to1_conserved,Pacuta_1to1_divergent)
+
+heat_samples <- Pacuta_vst %>% select(contains("_H")) %>% colnames()
+T0_samples <- Pacuta_vst %>% select(contains("_H")) %>% select(contains("_R0_"))  %>% colnames()
+row_annot <- Pacuta_1to1 %>% column_to_rownames(var="gene_id") %>% select(ImpulseDE2_response_type) %>% dplyr::rename(response_type = ImpulseDE2_response_type)
+col_annot <- Pacuta_meta[heat_samples,] %>% select(time)
+
+vst_heat_selected <- Pacuta_vst[Pacuta_1to1$gene_id,heat_samples]
+vst_heat_selected$T0mean <- rowMeans(vst_heat_selected[,T0_samples])
+vst_heat_norm <- vst_heat_selected - vst_heat_selected$T0mean
+vst_heat_norm <- vst_heat_norm %>% select(-T0mean)
+
+vst_max <- max(abs(vst_heat_norm), na.rm = TRUE)
+scale_colors <- colorRampPalette(c("#3c58a7","#3c58a7", "white", "#ee2e25","#ee2e25"))(100)
+legend_breaks <- seq(-vst_max, vst_max, length.out = 101)
+
+Pacuta_coreOG1to1 <- pheatmap(vst_heat_norm, 
+         cluster_rows = FALSE, 
+         show_rownames = FALSE,
+         show_colnames = FALSE,
+         cluster_cols = FALSE, 
+         annotation_names_row = FALSE,
+         annotation_names_col = FALSE,
+         breaks = legend_breaks,
+         col = scale_colors,
+         border_color = NA,
+         gaps_col = cumsum(table(col_annot$time))[-length(table(col_annot$time))],
+         annotation_row = row_annot,
+         annotation_col = col_annot,
+         annotation_colors = list("treatment" = treat_colors,
+                                  "time" = time_colors,
+                                  "response_type" = c("Other" = "gray","Monotonous" = "#D8AF39FF", "Transient" = "#278B9AFF")))
+
+save_ggplot(Pacuta_coreOG1to1, "Pacuta_1to1to1_coreDE_orthologs", width = 7, height = 10, units = "in", dpi = 300)
+
+Pacuta_coreOG1to1
+```
+
+```{r}
+Mcap_1to1 <- complete_1to1_ogs %>% filter(species =="Mcap") %>% arrange(OG) %>% filter(gene_id %in% rownames(Mcap_vst))# %>% head(100) 
+
+Mcap_1to1_conserved <- complete_1to1_ogs %>% arrange(ImpulseDE2_padj) %>% filter(species =="Mcap") %>% filter(gene_id %in% core_conserved_response$gene_Mcap) %>% filter(gene_id %in% rownames(Mcap_vst))# %>% head(100) 
+
+Mcap_1to1_divergent <- complete_1to1_ogs %>% arrange(ImpulseDE2_padj) %>% filter(species =="Mcap") %>% filter(gene_id %in% core_divergent_response$gene_Mcap) %>% filter(gene_id %in% rownames(Mcap_vst))# %>% head(100) 
+
+Mcap_1to1 <- bind_rows(Mcap_1to1_conserved,Mcap_1to1_divergent)
+
+heat_samples <- Mcap_vst %>% select(contains("_H")) %>% colnames()
+T0_samples <- Mcap_vst %>% select(contains("_H")) %>% select(contains("_R0_"))  %>% colnames()
+row_annot <- Mcap_1to1 %>% column_to_rownames(var="gene_id") %>% select(ImpulseDE2_response_type) %>% dplyr::rename(response_type = ImpulseDE2_response_type)
+col_annot <- Mcap_meta[heat_samples,] %>% select(time)
+
+vst_heat_selected <- Mcap_vst[Mcap_1to1$gene_id,heat_samples]
+vst_heat_selected$T0mean <- rowMeans(vst_heat_selected[,T0_samples])
+vst_heat_norm <- vst_heat_selected - vst_heat_selected$T0mean
+vst_heat_norm <- vst_heat_norm %>% select(-T0mean)
+
+vst_max <- max(abs(vst_heat_norm), na.rm = TRUE)
+scale_colors <- colorRampPalette(c("#3c58a7","#3c58a7", "white", "#ee2e25","#ee2e25"))(100)
+legend_breaks <- seq(-vst_max, vst_max, length.out = 101)
+
+Mcap_coreOG1to1 <- pheatmap(vst_heat_norm, 
+         cluster_rows = FALSE, 
+         show_rownames = FALSE,
+         show_colnames = FALSE,
+         cluster_cols = FALSE, 
+         annotation_names_row = FALSE,
+         annotation_names_col = FALSE,
+         breaks = legend_breaks,
+         col = scale_colors,
+         border_color = NA,
+         gaps_col = cumsum(table(col_annot$time))[-length(table(col_annot$time))],
+         annotation_row = row_annot,
+         annotation_col = col_annot,
+         annotation_colors = list("treatment" = treat_colors,
+                                  "time" = time_colors,
+                                  "response_type" = c("Other" = "gray","Monotonous" = "#D8AF39FF", "Transient" = "#278B9AFF")))
+
+save_ggplot(Mcap_coreOG1to1, "Mcap_1to1to1_coreDE_orthologs", width = 7, height = 10, units = "in", dpi = 300)
+
+Mcap_coreOG1to1
+```
+
+```{r}
+library(patchwork)
+library(ggplotify)
+
+patch_heatmaps <- as.ggplot(Pacuta_coreOG1to1) | as.ggplot(Mcap_coreOG1to1) | as.ggplot(Pcomp_coreOG1to1)
+
+patch_heatmaps +  plot_layout(guides = 'collect')
+```
+
+
 
