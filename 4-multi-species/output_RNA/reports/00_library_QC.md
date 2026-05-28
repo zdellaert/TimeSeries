@@ -1,7 +1,7 @@
 RNA-seq QC Report: Time Series Bulk RNA-seq
 ================
 Zoe Dellaert
-2026-05-26
+2026-05-28
 
 - [0. Read in all data](#0-read-in-all-data)
 - [1. Assess total number of reads per sample and whether we received
@@ -63,12 +63,12 @@ host_map <- bind_rows(
 
 # cross-host mapping rates (to confirm samples were not misassigned to species)
 cross_map <- bind_rows(
-  #read.delim("../../output_RNA/alignment_qc/POR_MCapV3/multiqc_data/multiqc_star.txt") %>% mutate(species="POR",genome="MCapV3"),
-  #read.delim("../../output_RNA/alignment_qc/POR_PacutaV2/multiqc_data/multiqc_star.txt") %>% mutate(species="POR",genome="PacutaV2"),
+  read.delim("../../output_RNA/alignment_qc/POR_MCapV3/multiqc_data/multiqc_star.txt") %>% mutate(species="POR",genome="MCapV3"),
+  read.delim("../../output_RNA/alignment_qc/POR_PacutaV2/multiqc_data/multiqc_star.txt") %>% mutate(species="POR",genome="PacutaV2"),
   read.delim("../../output_RNA/alignment_qc/MON_Pcomp/multiqc_data/multiqc_star.txt") %>% mutate(species="MON",genome="Pcomp"),
   read.delim("../../output_RNA/alignment_qc/MON_PacutaV2/multiqc_data/multiqc_star.txt") %>% mutate(species="MON",genome="PacutaV2"),
-  #read.delim("../../output_RNA/alignment_qc/POC_Pcomp/multiqc_data/multiqc_star.txt") %>% mutate(species="POC",genome="Pcomp"),
-  #read.delim("../../output_RNA/alignment_qc/POC_MCapV3/multiqc_data/multiqc_star.txt") %>% mutate(species="POC",genome="MCapV3")
+  read.delim("../../output_RNA/alignment_qc/POC_Pcomp/multiqc_data/multiqc_star.txt") %>% mutate(species="POC",genome="Pcomp"),
+  read.delim("../../output_RNA/alignment_qc/POC_MCapV3/multiqc_data/multiqc_star.txt") %>% mutate(species="POC",genome="MCapV3")
   ) %>%
   rename(total_read_pairs_mapped=total_reads) %>% mutate(total_reads_Million = total_read_pairs_mapped/1000000) %>%
   mutate(uniquely_mapped_Million = uniquely_mapped/1000000)
@@ -247,18 +247,23 @@ assigned genome above, there is an issue that could be due to sample
 mis-ID.
 
 ``` r
-cross_map %>% filter(Sample %in% host_mapping_outliers$Sample) %>% select(Sample, genome, uniquely_mapped_percent) %>%
+cross_map %>% bind_rows(host_map) %>% filter(Sample %in% host_mapping_outliers$Sample) %>% select(Sample, genome, uniquely_mapped_percent) %>%
   pivot_wider(names_from = genome,values_from = uniquely_mapped_percent) %>% knitr::kable(format = "markdown", digits = 1)
 ```
 
-| Sample      | Pcomp | PacutaV2 |
-|:------------|------:|---------:|
-| MON_R0_H1   |   0.3 |      0.2 |
-| MON_R0_H2   |   0.4 |      0.2 |
-| MON_R120_C3 |   0.5 |      0.1 |
-| MON_R3_H2   |   0.4 |      0.1 |
-| MON_R72_H1  |   0.0 |      0.2 |
-| MON_R72_H2  |   0.0 |      0.3 |
+| Sample      | Pcomp | PacutaV2 | MCapV3 |
+|:------------|------:|---------:|-------:|
+| MON_R0_H1   |   0.3 |      0.2 |   64.1 |
+| MON_R0_H2   |   0.4 |      0.2 |   63.4 |
+| MON_R120_C3 |   0.5 |      0.1 |   58.4 |
+| MON_R3_H2   |   0.4 |      0.1 |   64.3 |
+| MON_R72_H1  |   0.0 |      0.2 |    0.2 |
+| MON_R72_H2  |   0.0 |      0.3 |    0.5 |
+| POC_R120_C1 |   0.2 |     62.7 |    0.2 |
+| POC_R120_H2 |   0.1 |     67.4 |    0.1 |
+| POC_R12_C3  |   0.2 |     63.3 |    0.2 |
+| POC_R1_H1   |   0.2 |     64.7 |    0.2 |
+| POC_R3_H2   |   0.1 |     63.7 |    0.1 |
 
 ## 4. Symbionts: Assess mapping rates of each species to symbiont genomes
 

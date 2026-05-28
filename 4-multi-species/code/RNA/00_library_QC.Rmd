@@ -56,12 +56,12 @@ host_map <- bind_rows(
 
 # cross-host mapping rates (to confirm samples were not misassigned to species)
 cross_map <- bind_rows(
-  #read.delim("../../output_RNA/alignment_qc/POR_MCapV3/multiqc_data/multiqc_star.txt") %>% mutate(species="POR",genome="MCapV3"),
-  #read.delim("../../output_RNA/alignment_qc/POR_PacutaV2/multiqc_data/multiqc_star.txt") %>% mutate(species="POR",genome="PacutaV2"),
+  read.delim("../../output_RNA/alignment_qc/POR_MCapV3/multiqc_data/multiqc_star.txt") %>% mutate(species="POR",genome="MCapV3"),
+  read.delim("../../output_RNA/alignment_qc/POR_PacutaV2/multiqc_data/multiqc_star.txt") %>% mutate(species="POR",genome="PacutaV2"),
   read.delim("../../output_RNA/alignment_qc/MON_Pcomp/multiqc_data/multiqc_star.txt") %>% mutate(species="MON",genome="Pcomp"),
   read.delim("../../output_RNA/alignment_qc/MON_PacutaV2/multiqc_data/multiqc_star.txt") %>% mutate(species="MON",genome="PacutaV2"),
-  #read.delim("../../output_RNA/alignment_qc/POC_Pcomp/multiqc_data/multiqc_star.txt") %>% mutate(species="POC",genome="Pcomp"),
-  #read.delim("../../output_RNA/alignment_qc/POC_MCapV3/multiqc_data/multiqc_star.txt") %>% mutate(species="POC",genome="MCapV3")
+  read.delim("../../output_RNA/alignment_qc/POC_Pcomp/multiqc_data/multiqc_star.txt") %>% mutate(species="POC",genome="Pcomp"),
+  read.delim("../../output_RNA/alignment_qc/POC_MCapV3/multiqc_data/multiqc_star.txt") %>% mutate(species="POC",genome="MCapV3")
   ) %>%
   rename(total_read_pairs_mapped=total_reads) %>% mutate(total_reads_Million = total_read_pairs_mapped/1000000) %>%
   mutate(uniquely_mapped_Million = uniquely_mapped/1000000)
@@ -183,7 +183,7 @@ if(nrow(host_mapping_outliers) > 0){knitr::kable(host_mapping_outliers,format = 
 If any of these samples show a higher mapping rate below than to their assigned genome above, there is an issue that could be due to sample mis-ID.
 
 ```{r}
-cross_map %>% filter(Sample %in% host_mapping_outliers$Sample) %>% select(Sample, genome, uniquely_mapped_percent) %>%
+cross_map %>% bind_rows(host_map) %>% filter(Sample %in% host_mapping_outliers$Sample) %>% select(Sample, genome, uniquely_mapped_percent) %>%
   pivot_wider(names_from = genome,values_from = uniquely_mapped_percent) %>% knitr::kable(format = "markdown", digits = 1)
 ```
 
