@@ -88,6 +88,12 @@ Last Updated: 11/17/2024
     - [All 3 coral species \> Cgoreaui\_V2 Genome](#all-3-coral-species--cgoreaui_v2-genome)
     - [All 3 coral species \> Dtrenchii Genome](#all-3-coral-species--dtrenchii-genome)
   - [Assess mapping: run multiQC on the STAR alignment reports performed above](#assess-mapping-run-multiqc-on-the-star-alignment-reports-performed-above)
+- [Post-rRNA Removal Alignment with STAR](#post-rrna-removal-alignment-with-star)
+  - [First, write a general alignment script](#first-write-a-general-alignment-script-1)
+    - [Script: 12\_rRNA\_free\_STAR.sh](#script-12_rrna_free_starsh)
+  - [MON Genome Version 3 (*Montipora capitata*)](#mon-genome-version-3-montipora-capitata-1)
+  - [POC Genome Version 2 (*Pocillopora acuta*)](#poc-genome-version-2-pocillopora-acuta-1)
+  - [POR Genome (*Porites compressa*)](#por-genome-porites-compressa-1)
 
 ## Download genomes
 
@@ -1536,7 +1542,7 @@ nano 11_bbduk_rRNA_SILVA.sh
 #SBATCH --no-requeue
 
 data_dir="/scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files"
-out_dir="/scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA"
+out_dir="/scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired"
 rrna_ref="/scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/references"
 
 mkdir -p "${out_dir}"
@@ -1559,8 +1565,10 @@ echo "R2: ${R2_file}"
 bbduk.sh -Xmx136g in1="${R1_file}" \
          in2="${R2_file}" \
          ref="${rrna_ref}/SILVA_138.2_LSURef_NR99_tax_silva_trunc.fasta.gz" \
-         outm="${sample_name}_rRNA_LSU.fq.gz" \
-         outu="${sample_name}_clean_LSU.fq.gz" \
+         outm1="${sample_name}_R1_rRNA_LSU.fq.gz" \
+         outm2="${sample_name}_R2_rRNA_LSU.fq.gz" \
+         out1="${sample_name}_R1_clean_LSU.fq.gz" \
+         out2="${sample_name}_R2_clean_LSU.fq.gz" \
          stats="${sample_name}_stats_LSU.txt" \
          k=31 \
          hdist=1 \
@@ -1569,19 +1577,23 @@ bbduk.sh -Xmx136g in1="${R1_file}" \
 
 # Run BBDuk to match against rRNA Small Subunit Database against file cleaned in above code
 
-bbduk.sh -Xmx136g in="${sample_name}_clean_LSU.fq.gz" \
+bbduk.sh -Xmx136g in1="${sample_name}_R1_clean_LSU.fq.gz" \
+         in2="${sample_name}_R2_clean_LSU.fq.gz" \
          ref="${rrna_ref}/SILVA_138.2_SSURef_NR99_tax_silva_trunc.fasta.gz" \
-         outm="${sample_name}_rRNA_SSU.fq.gz" \
-         outu="${sample_name}_clean.fq.gz" \
+         outm1="${sample_name}_R1_rRNA_SSU.fq.gz" \
+         outm2="${sample_name}_R2_rRNA_SSU.fq.gz" \
+         out1="${sample_name}_R1_clean.fq.gz" \
+         out2="${sample_name}_R2_clean.fq.gz" \
          stats="${sample_name}_stats_SSU.txt" \
          k=31 hdist=1 rskip=2 threads=4 overwrite=t
 
 # Combine fastq and stats files
-cat "${sample_name}_rRNA_LSU.fq.gz" "${sample_name}_rRNA_SSU.fq.gz" > "${sample_name}_rRNA.fq.gz"
+cat "${sample_name}_R1_rRNA_LSU.fq.gz" "${sample_name}_R1_rRNA_SSU.fq.gz" > "${sample_name}_R1_rRNA.fq.gz"
+cat "${sample_name}_R2_rRNA_LSU.fq.gz" "${sample_name}_R2_rRNA_SSU.fq.gz" > "${sample_name}_R2_rRNA.fq.gz"
 cat "${sample_name}_stats_LSU.txt" "${sample_name}_stats_SSU.txt" > "${sample_name}_stats.txt"
 
 # Cleanup
-rm "${sample_name}"*_[LS]SU.fq.gz
+#rm "${sample_name}"*_[LS]SU.fq.gz
 
 echo "Completed ${sample_name}"
 ```
@@ -1765,4 +1777,133 @@ qc_dir="/project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_
 cd "${qc_dir}"
 
 multiqc . "${alignments_dir}"
+```
+
+
+## Post-rRNA Removal Alignment with STAR
+
+I am using [STAR](https://github.com/alexdobin/STAR) for alignment, manual is [here](https://github.com/alexdobin/STAR/blob/master/doc/STARmanual.pdf)
+
+### First, write a general alignment script
+
+```
+cd /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/scripts
+nano 12_rRNA_free_STAR.sh
+
+#enter text in next code chunk
+```
+
+#### Script: 12_rRNA_free_STAR.sh
+
+```
+#!/usr/bin/env bash
+#SBATCH --export=NONE
+#SBATCH --ntasks=1 --cpus-per-task=20
+#SBATCH --mem=100GB
+#SBATCH --time=24:00:00
+#SBATCH --error=../scripts/outs_errs/%x_error.%j #if your job fails, the error report will be put in this file
+#SBATCH --output=../scripts/outs_errs/%x_output.%j #once your job is completed, any final job report comments will be put in this file
+#SBATCH --mail-type=END,FAIL,TIME_LIMIT_80
+#SBATCH --no-requeue
+
+species=$1
+genome=$2
+genome_path=$3
+gff_path=$4
+makeindex=$5
+
+scratch_dir="/scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries"
+data_dir="${scratch_dir}/rRNA_decomp_SILVA_paired/"
+
+genome_index_dir="${scratch_dir}/STAR_indexes/${genome}"
+out_dir="${scratch_dir}/aligned/${species}_${genome}_rRNA_removed"
+
+mkdir -p "${genome_index_dir}"
+mkdir -p "${out_dir}"
+
+cd "${scratch_dir}"
+
+# load modules 
+module load uri/main STAR/2.7.11b-GCC-12.3.0
+
+# genome index generation
+if [ "${makeindex}" = "T" ]; then
+  STAR --runMode genomeGenerate \
+      --runThreadN 20 \
+      --genomeDir "${genome_index_dir}" \
+      --genomeFastaFiles "${genome_path}" \
+      --sjdbGTFfile "${gff_path}" \
+      --sjdbGTFtagExonParentTranscript Parent \
+      --genomeSAindexNbases 13
+fi
+
+trimmed=( "${data_dir}"*"${species}"*"R1_clean.fq.gz" )
+
+# run star
+
+for R1_file in "${trimmed[@]}"; do
+
+  # extract sample name
+  sample_name=$(basename "${R1_file}" "_R1_clean.fq.gz")
+
+  # define R2 file
+  R2_file="${data_dir}${sample_name}_R2_clean.fq.gz"
+
+  STAR --runMode alignReads \
+       --genomeDir "${genome_index_dir}" \
+       --runThreadN 10 \
+       --readFilesCommand zcat \
+       --readFilesIn "${R1_file}" "${R2_file}" \
+       --outSAMtype BAM SortedByCoordinate \
+       --outSAMunmapped Within \
+       --outSAMattributes Standard \
+       --outFileNamePrefix "${out_dir}/${sample_name}_" \
+       --quantMode GeneCounts
+done
+```
+
+Then run as follows:
+
+```
+# run STAR standard script
+sbatch 12_rRNA_free_STAR.sh "$species" "$genome" "$genome_path" "$gff_path" T/F
+```
+
+### MON Genome Version 3 ([*Montipora capitata*](http://cyanophora.rutgers.edu/montipora/))
+  - `wget http://cyanophora.rutgers.edu/montipora/Montipora_capitata_HIv3.assembly.fasta.gz`
+  - Unity location: `/work/pi_hputnam_uri_edu/HI_Genomes/MCapV3/Montipora_capitata_HIv3.assembly.fasta`
+
+```
+cd /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/scripts
+
+sbatch 12_rRNA_free_STAR.sh MON MCapV3 \
+     "/work/pi_hputnam_uri_edu/HI_Genomes/MCapV3/Montipora_capitata_HIv3.assembly.fasta" \
+     "/work/pi_hputnam_uri_edu/HI_Genomes/MCapV3/Montipora_capitata_HIv3.genes.gff3" \
+     T
+```
+
+### POC Genome Version 2 ([*Pocillopora acuta*](http://cyanophora.rutgers.edu/Pocillopora_acuta/))
+  - `wget http://cyanophora.rutgers.edu/Pocillopora_acuta/Pocillopora_acuta_HIv2.assembly.fasta.gz`
+  - Unity location: `/work/pi_hputnam_uri_edu/HI_Genomes/PacutaV2/Pocillopora_acuta_HIv2.assembly.fasta`
+
+```
+cd /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/scripts
+
+sbatch 12_rRNA_free_STAR.sh POC PacutaV2 \
+     "/work/pi_hputnam_uri_edu/HI_Genomes/PacutaV2/Pocillopora_acuta_HIv2.assembly.fasta" \
+     "/work/pi_hputnam_uri_edu/HI_Genomes/PacutaV2/Pocillopora_acuta_HIv2.genes.gff3" \
+     T
+```
+
+### POR Genome ([*Porites compressa*](http://cyanophora.rutgers.edu/porites_compressa/))
+  - `wget http://cyanophora.rutgers.edu/porites_compressa/Porites_compressa_HIv1.assembly.fasta.gz`
+  - Unity location: `/work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.assembly.fasta`
+
+```
+cd /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/scripts
+
+sbatch 12_rRNA_free_STAR.sh POR Pcomp \
+     "/work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.assembly.fasta" \
+     "/work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf" \
+     T
 ```

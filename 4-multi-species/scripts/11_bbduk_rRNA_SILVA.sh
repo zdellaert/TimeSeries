@@ -10,7 +10,7 @@
 #SBATCH --no-requeue
 
 data_dir="/scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/trimmed/combined_files"
-out_dir="/scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA"
+out_dir="/scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired"
 rrna_ref="/scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/references"
 
 mkdir -p "${out_dir}"
@@ -33,8 +33,10 @@ echo "R2: ${R2_file}"
 bbduk.sh -Xmx136g in1="${R1_file}" \
          in2="${R2_file}" \
          ref="${rrna_ref}/SILVA_138.2_LSURef_NR99_tax_silva_trunc.fasta.gz" \
-         outm="${sample_name}_rRNA_LSU.fq.gz" \
-         outu="${sample_name}_clean_LSU.fq.gz" \
+         outm1="${sample_name}_R1_rRNA_LSU.fq.gz" \
+         outm2="${sample_name}_R2_rRNA_LSU.fq.gz" \
+         out1="${sample_name}_R1_clean_LSU.fq.gz" \
+         out2="${sample_name}_R2_clean_LSU.fq.gz" \
          stats="${sample_name}_stats_LSU.txt" \
          k=31 \
          hdist=1 \
@@ -43,18 +45,22 @@ bbduk.sh -Xmx136g in1="${R1_file}" \
 
 # Run BBDuk to match against rRNA Small Subunit Database against file cleaned in above code
 
-bbduk.sh -Xmx136g in="${sample_name}_clean_LSU.fq.gz" \
+bbduk.sh -Xmx136g in1="${sample_name}_R1_clean_LSU.fq.gz" \
+         in2="${sample_name}_R2_clean_LSU.fq.gz" \
          ref="${rrna_ref}/SILVA_138.2_SSURef_NR99_tax_silva_trunc.fasta.gz" \
-         outm="${sample_name}_rRNA_SSU.fq.gz" \
-         outu="${sample_name}_clean.fq.gz" \
+         outm1="${sample_name}_R1_rRNA_SSU.fq.gz" \
+         outm2="${sample_name}_R2_rRNA_SSU.fq.gz" \
+         out1="${sample_name}_R1_clean.fq.gz" \
+         out2="${sample_name}_R2_clean.fq.gz" \
          stats="${sample_name}_stats_SSU.txt" \
          k=31 hdist=1 rskip=2 threads=4 overwrite=t
 
 # Combine fastq and stats files
-cat "${sample_name}_rRNA_LSU.fq.gz" "${sample_name}_rRNA_SSU.fq.gz" > "${sample_name}_rRNA.fq.gz"
+cat "${sample_name}_R1_rRNA_LSU.fq.gz" "${sample_name}_R1_rRNA_SSU.fq.gz" > "${sample_name}_R1_rRNA.fq.gz"
+cat "${sample_name}_R2_rRNA_LSU.fq.gz" "${sample_name}_R2_rRNA_SSU.fq.gz" > "${sample_name}_R2_rRNA.fq.gz"
 cat "${sample_name}_stats_LSU.txt" "${sample_name}_stats_SSU.txt" > "${sample_name}_stats.txt"
 
 # Cleanup
-rm "${sample_name}"*_[LS]SU.fq.gz
+#rm "${sample_name}"*_[LS]SU.fq.gz
 
 echo "Completed ${sample_name}"

@@ -35,3 +35,11 @@ code.Rproj
 
 # in progress
 4-multi-species/code/in_progress_notes/*
+4-multi-species/.vscode/settings.json
+4-multi-species/code/RNA/genes_remember.md
+4-multi-species/code/old/*
+*nf-core*
+*nfcore*
+4-multi-species/scripts/*
+4-multi-species/scripts/11_bbduk_rRNA_SILVA.sh
+4-multi-species/scripts/README.md
