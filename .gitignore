@@ -40,6 +40,4 @@ code.Rproj
 4-multi-species/code/old/*
 *nf-core*
 *nfcore*
-4-multi-species/scripts/*
-4-multi-species/scripts/11_bbduk_rRNA_SILVA.sh
-4-multi-species/scripts/README.md
+4-multi-species/scripts/outs_errs/*
