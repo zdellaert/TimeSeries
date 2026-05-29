@@ -479,7 +479,7 @@ for (species in species_list){
     dplyr::rename(gene_id=query)
   
   # keep only expressed genes
-  HeatStressGenes <- HeatStressGenes %>% filter(gene_id %in% all_master$gene_id)
+  HeatStressGenes <- HeatStressGenes %>% filter(gene_id %in% all_master$gene_id) %>% arrange(gene_sym)
 
   assign(paste0("heatstress_",species),HeatStressGenes)
   
@@ -506,10 +506,13 @@ Pcomp_expanded_sp <- heatstress_unique_Pcomp %>% select(gene_id, gene_sym) %>%
   left_join(orthologs %>% select(gene_id,OG), by="gene_id") %>% 
   filter(!is.na(OG))  %>%  select(-gene_id) %>% left_join(cross_species, by="OG")  %>% distinct()
 
-unique(Pacuta_expanded_sp$gene_id.x)[!(unique(Pacuta_expanded_sp$gene_id.x) %in% unique(Pcomp_expanded_sp$gene_id.y))]
+HeatGenes_Info <- bind_rows(heatstress_unique_Pacuta %>% select(-gene_id),
+                            heatstress_unique_Mcap  %>% select(-gene_id),
+                            heatstress_unique_Pcomp %>% select(-gene_id)) %>% distinct()
 
 all_heat <- bind_rows(Pacuta_expanded_sp,Mcap_expanded_sp,Pcomp_expanded_sp) %>% distinct()
-
+all_heat <- all_heat %>% left_join(HeatGenes_Info, by="gene_sym")
+  
 all_heat %>% group_by(species,gene_sym) %>%
   summarize(n=n())  %>% pivot_wider(names_from = species, values_from = n) %>% kable(format = "markdown")
 
@@ -542,49 +545,7 @@ all_heat %>% filter(OG %in% core_divergent_heat) %>% kable(format = "markdown")
 
 None of these genes are in the 81 1:1:1 orthogroups that are DE in all three species and share an Mfuzz pattern. However, five of them are 1:1:1 orthogroups DE in all three species and show different patterns! Cool!!
 
-### heat heatmaps
-
-```{r}
-for (species in species_list){
-  input_dir <- file.path("../../output_RNA/counts_filt_norm", species)
-  vst_counts <- read.csv(file.path(input_dir, "vst_expression_matrix.csv"), row.names = 1) 
-  assign(paste0(species,"_vst"),vst_counts)
-  rm(vst_counts)
-}
-```
-
-
-```{r}
-top_100_Pcomp <- all_heat %>% filter(species =="Pcomp") %>% arrange(ImpulseDE2_padj) %>% filter(gene_id %in% rownames(Pcomp_vst)) %>% head(100) 
-heat_samples <- Pcomp_vst %>% select(contains("_H")) %>% colnames()
-T0_samples <- Pcomp_vst %>% select(contains("_H")) %>% select(contains("_R0_"))  %>% colnames()
-T
-vst_heat_top <- Pcomp_vst[top_100_Pcomp$gene_id,heat_samples]
-vst_heat_top$T0mean <- rowMeans(vst_heat_top[,T0_samples])
-vst_heat_norm <- vst_heat_top - vst_heat_top$T0mean
-vst_heat_norm <- vst_heat_norm %>% select(-T0mean)
-
-vst_max <- max(abs(vst_heat_norm), na.rm = TRUE)
-scale_colors <- colorRampPalette(c("#3c58a7","#3c58a7", "white", "#ee2e25","#ee2e25"))(100)
-legend_breaks <- seq(-vst_max, vst_max, length.out = 101)
-
-heatmap_up <- pheatmap(vst_heat_norm, 
-         cluster_rows = FALSE, 
-         show_rownames = FALSE,
-         show_colnames = FALSE,
-         cluster_cols = FALSE, 
-         annotation_names_row = FALSE,
-         annotation_names_col = FALSE,
-         breaks = legend_breaks,
-         col = scale_colors,
-         border_color = NA)
-
-save_ggplot(heatmap_up, "ImpulseDE2_heatmap_UP", width = 7, height = 10, units = "in", dpi = 300)
-
-heatmap_up
-```
-
-### ortholog heatmaps
+### heat + ortholog heatmaps
 
 ```{r}
 for (species in species_list){
@@ -613,6 +574,163 @@ for (species in species_list){
 }
 ```
 
+
+### heat genes heatmaps
+
+```{r}
+category_cols <- c(paletteer::paletteer_d("rcartocolor::Vivid"))
+names(category_cols) <- unique(HeatGenes_Info$category)
+
+mfuzz_cols <- c(paletteer::paletteer_d("MetBrewer::VanGogh2"))
+names(mfuzz_cols) <- unique(all_heat$Mfuzz_pattern)[!(is.na(unique(all_heat$Mfuzz_pattern)))]
+```
+
+
+```{r}
+heat_genes_Pcomp <- all_heat %>% filter(species =="Pcomp") %>% arrange(ImpulseDE2_padj) %>% filter(gene_id %in% rownames(Pcomp_vst)) %>% filter(ImpulseDE2_padj < 0.05)
+heat_samples <- Pcomp_vst %>% select(contains("_H")) %>% colnames()
+T0_samples <- Pcomp_vst %>% select(contains("_H")) %>% select(contains("_R0_"))  %>% colnames()
+row_annot <- heat_genes_Pcomp %>% column_to_rownames(var="gene_id") %>% select(category,response_type,ImpulseDE2_response_type,Mfuzz_pattern) %>% dplyr::rename(ImpulseDE2_pattern = ImpulseDE2_response_type)
+row_gene_labels <- heat_genes_Pcomp$gene_sym
+names(row_gene_labels) <- heat_genes_Pcomp$gene_id
+col_annot <- Pcomp_meta[heat_samples,] %>% select(time)
+
+vst_heat_selected <- Pcomp_vst[heat_genes_Pcomp$gene_id,heat_samples]
+vst_heat_selected$T0mean <- rowMeans(vst_heat_selected[,T0_samples])
+vst_heat_norm <- vst_heat_selected - vst_heat_selected$T0mean
+vst_heat_norm <- vst_heat_norm %>% select(-T0mean)
+
+vst_max <- max(abs(vst_heat_norm), na.rm = TRUE)
+scale_colors <- colorRampPalette(c("#3c58a7","#3c58a7", "white", "#ee2e25","#ee2e25"))(100)
+legend_breaks <- seq(-vst_max, vst_max, length.out = 101)
+
+Pcomp_heat_genes <- pheatmap::pheatmap(vst_heat_norm, 
+         cluster_rows = TRUE, 
+         show_rownames = TRUE,
+         show_colnames = FALSE,
+         cluster_cols = FALSE, 
+         annotation_names_row = TRUE,
+         annotation_names_col = FALSE,
+         breaks = legend_breaks,
+         col = scale_colors,
+         border_color = NA,
+         gaps_col = cumsum(table(col_annot$time))[-length(table(col_annot$time))],
+         annotation_row = row_annot,
+         labels_row = row_gene_labels,
+         #fontsize_row = 5,
+         annotation_col = col_annot,
+         annotation_colors = list("treatment" = treat_colors,
+                                  "time" = time_colors,
+                                  "category" = category_cols,
+                                  "Mfuzz_pattern" = mfuzz_cols,
+                                  "ImpulseDE2_pattern" = c("Other" = "gray","Monotonous" = "#D8AF39FF", "Transient" = "#278B9AFF")))
+
+png(file.path(outdir_plots,"Pcomp_sig_heat_stress_genes.png"),  width = 10, height = 10, units = "in", res = 300)
+Pcomp_heat_genes
+dev.off()
+
+pdf(file.path(outdir_plots,"/pdf_figs/Pcomp_sig_heat_stress_genes.pdf"),  width = 10, height = 10)
+Pcomp_heat_genes
+dev.off()
+```
+
+```{r}
+heat_genes_Pacuta <- all_heat %>% filter(species =="Pacuta") %>% arrange(ImpulseDE2_padj) %>% filter(gene_id %in% rownames(Pacuta_vst)) %>% filter(ImpulseDE2_padj < 0.05)
+heat_samples <- Pacuta_vst %>% select(contains("_H")) %>% colnames()
+T0_samples <- Pacuta_vst %>% select(contains("_H")) %>% select(contains("_R0_"))  %>% colnames()
+row_annot <- heat_genes_Pacuta %>% column_to_rownames(var="gene_id") %>% select(category,response_type,ImpulseDE2_response_type,Mfuzz_pattern) %>% dplyr::rename(ImpulseDE2_pattern = ImpulseDE2_response_type)
+row_gene_labels <- heat_genes_Pacuta$gene_sym
+names(row_gene_labels) <- heat_genes_Pacuta$gene_id
+col_annot <- Pacuta_meta[heat_samples,] %>% select(time)
+
+vst_heat_selected <- Pacuta_vst[heat_genes_Pacuta$gene_id,heat_samples]
+vst_heat_selected$T0mean <- rowMeans(vst_heat_selected[,T0_samples])
+vst_heat_norm <- vst_heat_selected - vst_heat_selected$T0mean
+vst_heat_norm <- vst_heat_norm %>% select(-T0mean)
+
+vst_max <- max(abs(vst_heat_norm), na.rm = TRUE)
+scale_colors <- colorRampPalette(c("#3c58a7","#3c58a7", "white", "#ee2e25","#ee2e25"))(100)
+legend_breaks <- seq(-vst_max, vst_max, length.out = 101)
+
+Pacuta_heat_genes <- pheatmap::pheatmap(vst_heat_norm, 
+         cluster_rows = TRUE, 
+         show_rownames = TRUE,
+         show_colnames = FALSE,
+         cluster_cols = FALSE, 
+         annotation_names_row = TRUE,
+         annotation_names_col = FALSE,
+         breaks = legend_breaks,
+         col = scale_colors,
+         border_color = NA,
+         gaps_col = cumsum(table(col_annot$time))[-length(table(col_annot$time))],
+         annotation_row = row_annot,
+         labels_row = row_gene_labels,
+         #fontsize_row = 5,
+         annotation_col = col_annot,
+         annotation_colors = list("treatment" = treat_colors,
+                                  "time" = time_colors,
+                                  "category" = category_cols,
+                                  "Mfuzz_pattern" = mfuzz_cols,
+                                  "ImpulseDE2_pattern" = c("Other" = "gray","Monotonous" = "#D8AF39FF", "Transient" = "#278B9AFF")))
+
+png(file.path(outdir_plots,"Pacuta_sig_heat_stress_genes.png"),  width = 10, height = 10, units = "in", res = 300)
+Pacuta_heat_genes
+dev.off()
+
+pdf(file.path(outdir_plots,"/pdf_figs/Pacuta_sig_heat_stress_genes.pdf"),  width = 10, height = 10)
+Pacuta_heat_genes
+dev.off()
+```
+
+```{r}
+heat_genes_Mcap <- all_heat %>% filter(species =="Mcap") %>% arrange(ImpulseDE2_padj) %>% filter(gene_id %in% rownames(Mcap_vst)) %>% filter(ImpulseDE2_padj < 0.05)
+heat_samples <- Mcap_vst %>% select(contains("_H")) %>% colnames()
+T0_samples <- Mcap_vst %>% select(contains("_H")) %>% select(contains("_R0_"))  %>% colnames()
+row_annot <- heat_genes_Mcap %>% column_to_rownames(var="gene_id") %>% select(category,response_type,ImpulseDE2_response_type,Mfuzz_pattern) %>% dplyr::rename(ImpulseDE2_pattern = ImpulseDE2_response_type)
+row_gene_labels <- heat_genes_Mcap$gene_sym
+names(row_gene_labels) <- heat_genes_Mcap$gene_id
+col_annot <- Mcap_meta[heat_samples,] %>% select(time)
+
+vst_heat_selected <- Mcap_vst[heat_genes_Mcap$gene_id,heat_samples]
+vst_heat_selected$T0mean <- rowMeans(vst_heat_selected[,T0_samples])
+vst_heat_norm <- vst_heat_selected - vst_heat_selected$T0mean
+vst_heat_norm <- vst_heat_norm %>% select(-T0mean)
+
+vst_max <- max(abs(vst_heat_norm), na.rm = TRUE)
+scale_colors <- colorRampPalette(c("#3c58a7","#3c58a7", "white", "#ee2e25","#ee2e25"))(100)
+legend_breaks <- seq(-vst_max, vst_max, length.out = 101)
+
+Mcap_heat_genes <- pheatmap::pheatmap(vst_heat_norm, 
+         cluster_rows = TRUE, 
+         show_rownames = TRUE,
+         show_colnames = FALSE,
+         cluster_cols = FALSE, 
+         annotation_names_row = TRUE,
+         annotation_names_col = FALSE,
+         breaks = legend_breaks,
+         col = scale_colors,
+         border_color = NA,
+         gaps_col = cumsum(table(col_annot$time))[-length(table(col_annot$time))],
+         annotation_row = row_annot,
+         labels_row = row_gene_labels,
+         #fontsize_row = 5,
+         annotation_col = col_annot,
+         annotation_colors = list("treatment" = treat_colors,
+                                  "time" = time_colors,
+                                  "category" = category_cols,
+                                  "Mfuzz_pattern" = mfuzz_cols,
+                                  "ImpulseDE2_pattern" = c("Other" = "gray","Monotonous" = "#D8AF39FF", "Transient" = "#278B9AFF")))
+
+png(file.path(outdir_plots,"Mcap_sig_heat_stress_genes.png"),  width = 10, height = 10, units = "in", res = 300)
+Mcap_heat_genes
+dev.off()
+
+pdf(file.path(outdir_plots,"/pdf_figs/Mcap_sig_heat_stress_genes.pdf"),  width = 10, height = 10)
+Mcap_heat_genes
+dev.off()
+```
+
+### 1:1 ortholog heatmaps
 ```{r}
 Pcomp_1to1 <- complete_1to1_ogs %>% filter(species =="Pcomp") %>% arrange(OG) %>% filter(gene_id %in% rownames(Pcomp_vst))# %>% head(100) 
 
@@ -624,7 +742,7 @@ Pcomp_1to1 <- bind_rows(Pcomp_1to1_conserved,Pcomp_1to1_divergent)
 
 heat_samples <- Pcomp_vst %>% select(contains("_H")) %>% colnames()
 T0_samples <- Pcomp_vst %>% select(contains("_H")) %>% select(contains("_R0_"))  %>% colnames()
-row_annot <- Pcomp_1to1 %>% column_to_rownames(var="gene_id") %>% select(ImpulseDE2_response_type) %>% dplyr::rename(response_type = ImpulseDE2_response_type)
+row_annot <- Pcomp_1to1 %>% column_to_rownames(var="gene_id") %>% select(ImpulseDE2_response_type) %>% dplyr::rename(ImpulseDE2_pattern = ImpulseDE2_response_type)
 col_annot <- Pcomp_meta[heat_samples,] %>% select(time)
 
 vst_heat_selected <- Pcomp_vst[Pcomp_1to1$gene_id,heat_samples]
@@ -651,11 +769,15 @@ Pcomp_coreOG1to1 <- pheatmap(vst_heat_norm,
          annotation_col = col_annot,
          annotation_colors = list("treatment" = treat_colors,
                                   "time" = time_colors,
-                                  "response_type" = c("Other" = "gray","Monotonous" = "#D8AF39FF", "Transient" = "#278B9AFF")))
+                                  "ImpulseDE2_pattern" = c("Other" = "gray","Monotonous" = "#D8AF39FF", "Transient" = "#278B9AFF")))
 
-save_ggplot(Pcomp_coreOG1to1, "Pcomp_1to1to1_coreDE_orthologs", width = 7, height = 10, units = "in", dpi = 300)
-
+png(file.path(outdir_plots,"Pcomp_1to1to1_coreDE_orthologs.png"),  width = 7, height = 10, units = "in", res = 300)
 Pcomp_coreOG1to1
+dev.off()
+
+pdf(file.path(outdir_plots,"/pdf_figs/Pcomp_1to1to1_coreDE_orthologs.pdf"),  width = 7, height = 10)
+Pcomp_coreOG1to1
+dev.off()
 ```
 
 ```{r}
@@ -669,7 +791,7 @@ Pacuta_1to1 <- bind_rows(Pacuta_1to1_conserved,Pacuta_1to1_divergent)
 
 heat_samples <- Pacuta_vst %>% select(contains("_H")) %>% colnames()
 T0_samples <- Pacuta_vst %>% select(contains("_H")) %>% select(contains("_R0_"))  %>% colnames()
-row_annot <- Pacuta_1to1 %>% column_to_rownames(var="gene_id") %>% select(ImpulseDE2_response_type) %>% dplyr::rename(response_type = ImpulseDE2_response_type)
+row_annot <- Pacuta_1to1 %>% column_to_rownames(var="gene_id") %>% select(ImpulseDE2_response_type) %>% dplyr::rename(ImpulseDE2_pattern = ImpulseDE2_response_type)
 col_annot <- Pacuta_meta[heat_samples,] %>% select(time)
 
 vst_heat_selected <- Pacuta_vst[Pacuta_1to1$gene_id,heat_samples]
@@ -696,11 +818,15 @@ Pacuta_coreOG1to1 <- pheatmap(vst_heat_norm,
          annotation_col = col_annot,
          annotation_colors = list("treatment" = treat_colors,
                                   "time" = time_colors,
-                                  "response_type" = c("Other" = "gray","Monotonous" = "#D8AF39FF", "Transient" = "#278B9AFF")))
+                                  "ImpulseDE2_pattern" = c("Other" = "gray","Monotonous" = "#D8AF39FF", "Transient" = "#278B9AFF")))
 
-save_ggplot(Pacuta_coreOG1to1, "Pacuta_1to1to1_coreDE_orthologs", width = 7, height = 10, units = "in", dpi = 300)
-
+png(file.path(outdir_plots,"Pacuta_1to1to1_coreDE_orthologs.png"),  width = 7, height = 10, units = "in", res = 300)
 Pacuta_coreOG1to1
+dev.off()
+
+pdf(file.path(outdir_plots,"/pdf_figs/Pacuta_1to1to1_coreDE_orthologs.pdf"),  width = 7, height = 10)
+Pacuta_coreOG1to1
+dev.off()
 ```
 
 ```{r}
@@ -714,7 +840,7 @@ Mcap_1to1 <- bind_rows(Mcap_1to1_conserved,Mcap_1to1_divergent)
 
 heat_samples <- Mcap_vst %>% select(contains("_H")) %>% colnames()
 T0_samples <- Mcap_vst %>% select(contains("_H")) %>% select(contains("_R0_"))  %>% colnames()
-row_annot <- Mcap_1to1 %>% column_to_rownames(var="gene_id") %>% select(ImpulseDE2_response_type) %>% dplyr::rename(response_type = ImpulseDE2_response_type)
+row_annot <- Mcap_1to1 %>% column_to_rownames(var="gene_id") %>% select(ImpulseDE2_response_type) %>% dplyr::rename(ImpulseDE2_pattern = ImpulseDE2_response_type)
 col_annot <- Mcap_meta[heat_samples,] %>% select(time)
 
 vst_heat_selected <- Mcap_vst[Mcap_1to1$gene_id,heat_samples]
@@ -741,12 +867,18 @@ Mcap_coreOG1to1 <- pheatmap(vst_heat_norm,
          annotation_col = col_annot,
          annotation_colors = list("treatment" = treat_colors,
                                   "time" = time_colors,
-                                  "response_type" = c("Other" = "gray","Monotonous" = "#D8AF39FF", "Transient" = "#278B9AFF")))
+                                  "ImpulseDE2_pattern" = c("Other" = "gray","Monotonous" = "#D8AF39FF", "Transient" = "#278B9AFF")))
 
-save_ggplot(Mcap_coreOG1to1, "Mcap_1to1to1_coreDE_orthologs", width = 7, height = 10, units = "in", dpi = 300)
-
+png(file.path(outdir_plots,"Mcap_1to1to1_coreDE_orthologs.png"),  width = 7, height = 10, units = "in", res = 300)
 Mcap_coreOG1to1
+dev.off()
+
+pdf(file.path(outdir_plots,"/pdf_figs/Mcap_1to1to1_coreDE_orthologs.pdf"),  width = 7, height = 10)
+Mcap_coreOG1to1
+dev.off()
 ```
+
+#### patchwork
 
 ```{r}
 library(patchwork)
