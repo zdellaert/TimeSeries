@@ -1,7 +1,7 @@
 ImpulseDE2 Temporal Analysis
 ================
 Zoe Dellaert
-2026-05-24
+2026-05-29
 
 - [Bulk RNA-seq Time Course Trajectory Analysis and
   Clustering](#bulk-rna-seq-time-course-trajectory-analysis-and-clustering)
@@ -1086,7 +1086,7 @@ dev.off()
 HeatStressGenes <- read_csv(paste0(annot_dir,"/heatstress/HeatStressGenes_", species ,".csv")) %>%
   dplyr::select(-1) %>% dplyr::rename(query = paste0(species,"_gene")) %>% dplyr::select(query,everything())
 
-HeatStressGenes_unique <- HeatStressGenes %>% group_by(query) %>%
+HeatStressGenes_unique <- HeatStressGenes %>% group_by(query) %>% arrange(gene_id) %>%
   summarize(gene_id = paste(unique(gene_id), collapse = ","),
             response_type = paste(unique(response_type), collapse = ","),
             category = paste(unique(category), collapse = ",")) 
@@ -1108,7 +1108,7 @@ cluster_assignments %>% filter(Gene %in% HSPS)
 
 ``` r
 heat_clustered <- HeatStressGenes_unique %>% left_join(cluster_assignments, by = join_by(query==Gene)) %>%
-  arrange(cluster, desc(cluster))
+  arrange(cluster, desc(cluster),gene_id)
 
 # plot this to show which genes are in which cluster
 heat_clustered %>% filter(!is.na(cluster)) %>% ggplot(aes(y=reorder(gene_id, cluster), x=factor(cluster), fill=cluster)) +
