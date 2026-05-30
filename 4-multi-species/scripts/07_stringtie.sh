@@ -17,7 +17,7 @@ gtf_path=$3
 module load uri/main StringTie/2.2.1-GCC-11.2.0
 
 # list and make required directories
-scratch_dir="/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries"
+scratch_dir="/scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries"
 alignments_dir="${scratch_dir}/aligned/${species}_${genome}"
 
 out_dir="${scratch_dir}/stringtie/${species}_${genome}"

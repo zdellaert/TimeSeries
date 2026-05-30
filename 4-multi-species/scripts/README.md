@@ -94,6 +94,10 @@ Last Updated: 11/17/2024
   - [MON Genome Version 3 (*Montipora capitata*)](#mon-genome-version-3-montipora-capitata-1)
   - [POC Genome Version 2 (*Pocillopora acuta*)](#poc-genome-version-2-pocillopora-acuta-1)
   - [POR Genome (*Porites compressa*)](#por-genome-porites-compressa-1)
+- [Assess Mapping Quality](#assess-mapping-quality-1)
+  - [Run script on the alignments performed above](#run-script-on-the-alignments-performed-above-3)
+- [Assembly with stringtie](#assembly-with-stringtie-1)
+- [rRNA-free Gene count matrices](#rrna-free-gene-count-matrices)
 
 ## Download genomes
 
@@ -918,14 +922,13 @@ python "${script_dir}"/prepDE.py3 -g "${out_dir}"/"${species}"_"${genome}"_gene_
 
 echo "Gene count matrix compiled." $(date)
 ```
-cd 
+
 Then run as follows:
 
 ```
 # run stringtie standard script
 sbatch 08_prepDE.sh "$species" "$genome"
 ```
-
 
 ### Run script on the alignments performed above
 
@@ -1879,7 +1882,7 @@ cd /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/scripts
 sbatch 12_rRNA_free_STAR.sh MON MCapV3 \
      "/work/pi_hputnam_uri_edu/HI_Genomes/MCapV3/Montipora_capitata_HIv3.assembly.fasta" \
      "/work/pi_hputnam_uri_edu/HI_Genomes/MCapV3/Montipora_capitata_HIv3.genes.gff3" \
-     T
+     F
 ```
 
 ### POC Genome Version 2 ([*Pocillopora acuta*](http://cyanophora.rutgers.edu/Pocillopora_acuta/))
@@ -1892,7 +1895,12 @@ cd /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/scripts
 sbatch 12_rRNA_free_STAR.sh POC PacutaV2 \
      "/work/pi_hputnam_uri_edu/HI_Genomes/PacutaV2/Pocillopora_acuta_HIv2.assembly.fasta" \
      "/work/pi_hputnam_uri_edu/HI_Genomes/PacutaV2/Pocillopora_acuta_HIv2.genes.gff3" \
-     T
+     F
+
+sbatch --dependency=afterok:59421204_80,59421204_82 12_rRNA_free_STAR.sh POC PacutaV2 \
+     "/work/pi_hputnam_uri_edu/HI_Genomes/PacutaV2/Pocillopora_acuta_HIv2.assembly.fasta" \
+     "/work/pi_hputnam_uri_edu/HI_Genomes/PacutaV2/Pocillopora_acuta_HIv2.genes.gff3" \
+     F
 ```
 
 ### POR Genome ([*Porites compressa*](http://cyanophora.rutgers.edu/porites_compressa/))
@@ -1905,5 +1913,79 @@ cd /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/scripts
 sbatch 12_rRNA_free_STAR.sh POR Pcomp \
      "/work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.assembly.fasta" \
      "/work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf" \
-     T
+     F
 ```
+
+## Assess Mapping Quality
+
+I am using [Qualimap](http://qualimap.conesalab.org/) to assess the STAR mapping quality, then performing multiqc on the Qualimap and STAR log files to get a cohesive mapping report. Qualimap is SUPER slow, so I am running it as an array job. We can use the same script as before, but just append "_rRNA_removed" to the genome argument since that is how we adapted the directory structure above.
+
+### Run script on the alignments performed above
+
+```
+cd /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/scripts
+
+sbatch 06_qualimap.sh MON MCapV3_rRNA_removed "/work/pi_hputnam_uri_edu/HI_Genomes/MCapV3/Montipora_capitata_HIv3.gtf"
+sbatch 06_qualimap.sh POC PacutaV2_rRNA_removed "/work/pi_hputnam_uri_edu/HI_Genomes/PacutaV2/Pocillopora_acuta_HIv2.gtf"
+sbatch 06_qualimap.sh POR Pcomp_rRNA_removed "/work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf"
+```
+
+Then:
+
+```
+# load modules needed for multiqc
+module purge
+module load uri/main
+module load MultiQC/1.12-foss-2021b
+
+scratch_dir="/scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries"
+
+species="MON"
+genome="MCapV3_rRNA_removed"
+alignments_dir="${scratch_dir}/aligned/${species}_${genome}"
+qc_dir="/project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/alignment_qc/${species}_${genome}"
+
+cd "${qc_dir}"
+
+multiqc . "${alignments_dir}"
+
+species="POC"
+genome="PacutaV2_rRNA_removed"
+alignments_dir="${scratch_dir}/aligned/${species}_${genome}"
+qc_dir="/project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/alignment_qc/${species}_${genome}"
+
+cd "${qc_dir}"
+
+multiqc . "${alignments_dir}"
+
+species="POR"
+genome="Pcomp_rRNA_removed"
+alignments_dir="${scratch_dir}/aligned/${species}_${genome}"
+qc_dir="/project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/alignment_qc/${species}_${genome}"
+
+cd "${qc_dir}"
+
+multiqc . "${alignments_dir}"
+```
+
+## Assembly with stringtie
+
+```
+cd /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/scripts
+
+sbatch 07_stringtie.sh MON MCapV3_rRNA_removed "/work/pi_hputnam_uri_edu/HI_Genomes/MCapV3/Montipora_capitata_HIv3.gtf"
+sbatch 07_stringtie.sh POC PacutaV2_rRNA_removed "/work/pi_hputnam_uri_edu/HI_Genomes/PacutaV2/Pocillopora_acuta_HIv2.gtf"
+sbatch 07_stringtie.sh POR Pcomp_rRNA_removed "/work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf"
+```
+
+## rRNA-free Gene count matrices
+
+```
+cd /project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/scripts
+
+sbatch 08_prepDE.sh MON MCapV3_rRNA_removed
+sbatch 08_prepDE.sh POC PacutaV2_rRNA_removed
+sbatch 08_prepDE.sh POR Pcomp_rRNA_removed
+```
+
+Woohoo! [Gene count matrices complete.](https://github.com/zdellaert/TimeSeries/tree/main/4-multi-species/output_RNA/count_matrices).

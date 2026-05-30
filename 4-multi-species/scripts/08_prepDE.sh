@@ -16,7 +16,7 @@ genome=$2
 module load uri/main StringTie/2.2.1-GCC-11.2.0
 
 # list and make required directories
-scratch_dir="/scratch3/workspace/zdellaert_uri_edu-shared/TimeSeries"
+scratch_dir="/scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries"
 stringtie_dir="${scratch_dir}/stringtie/${species}_${genome}"
 out_dir="/project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/output_RNA/count_matrices"
 script_dir="/project/pi_hputnam_uri_edu/zdellaert/TimeSeries/4-multi-species/scripts"

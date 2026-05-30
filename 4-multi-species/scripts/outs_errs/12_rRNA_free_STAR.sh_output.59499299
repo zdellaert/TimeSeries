@@ -1,0 +1,336 @@
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/PacutaV2 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R0_C1_R1_clean.fq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R0_C1_R2_clean.fq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_PacutaV2_rRNA_removed/POC_R0_C1_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 29 02:50:25 ..... started STAR run
+May 29 02:50:25 ..... loading genome
+May 29 02:50:28 ..... started mapping
+May 29 02:59:13 ..... finished mapping
+May 29 02:59:14 ..... started sorting BAM
+May 29 02:59:40 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/PacutaV2 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R0_C2_R1_clean.fq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R0_C2_R2_clean.fq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_PacutaV2_rRNA_removed/POC_R0_C2_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 29 02:59:42 ..... started STAR run
+May 29 02:59:42 ..... loading genome
+May 29 02:59:45 ..... started mapping
+May 29 03:08:32 ..... finished mapping
+May 29 03:08:34 ..... started sorting BAM
+May 29 03:08:59 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/PacutaV2 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R0_C3_R1_clean.fq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R0_C3_R2_clean.fq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_PacutaV2_rRNA_removed/POC_R0_C3_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 29 03:09:01 ..... started STAR run
+May 29 03:09:01 ..... loading genome
+May 29 03:09:03 ..... started mapping
+May 29 03:16:56 ..... finished mapping
+May 29 03:16:57 ..... started sorting BAM
+May 29 03:17:20 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/PacutaV2 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R0_H1_R1_clean.fq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R0_H1_R2_clean.fq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_PacutaV2_rRNA_removed/POC_R0_H1_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 29 03:17:22 ..... started STAR run
+May 29 03:17:22 ..... loading genome
+May 29 03:17:25 ..... started mapping
+May 29 03:26:21 ..... finished mapping
+May 29 03:26:23 ..... started sorting BAM
+May 29 03:26:49 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/PacutaV2 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R0_H2_R1_clean.fq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R0_H2_R2_clean.fq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_PacutaV2_rRNA_removed/POC_R0_H2_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 29 03:26:51 ..... started STAR run
+May 29 03:26:51 ..... loading genome
+May 29 03:26:54 ..... started mapping
+May 29 03:35:33 ..... finished mapping
+May 29 03:35:34 ..... started sorting BAM
+May 29 03:35:56 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/PacutaV2 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R0_H3_R1_clean.fq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R0_H3_R2_clean.fq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_PacutaV2_rRNA_removed/POC_R0_H3_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 29 03:35:58 ..... started STAR run
+May 29 03:35:58 ..... loading genome
+May 29 03:36:01 ..... started mapping
+May 29 03:45:23 ..... finished mapping
+May 29 03:45:24 ..... started sorting BAM
+May 29 03:45:50 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/PacutaV2 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R120_C1_R1_clean.fq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R120_C1_R2_clean.fq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_PacutaV2_rRNA_removed/POC_R120_C1_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 29 03:45:52 ..... started STAR run
+May 29 03:45:52 ..... loading genome
+May 29 03:45:55 ..... started mapping
+May 29 04:00:03 ..... finished mapping
+May 29 04:00:05 ..... started sorting BAM
+May 29 04:00:58 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/PacutaV2 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R120_C2_R1_clean.fq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R120_C2_R2_clean.fq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_PacutaV2_rRNA_removed/POC_R120_C2_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 29 04:01:01 ..... started STAR run
+May 29 04:01:01 ..... loading genome
+May 29 04:01:04 ..... started mapping
+May 29 04:09:07 ..... finished mapping
+May 29 04:09:08 ..... started sorting BAM
+May 29 04:09:30 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/PacutaV2 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R120_C3_R1_clean.fq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R120_C3_R2_clean.fq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_PacutaV2_rRNA_removed/POC_R120_C3_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 29 04:09:32 ..... started STAR run
+May 29 04:09:32 ..... loading genome
+May 29 04:09:35 ..... started mapping
+May 29 04:18:42 ..... finished mapping
+May 29 04:18:43 ..... started sorting BAM
+May 29 04:19:09 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/PacutaV2 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R120_H1_R1_clean.fq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R120_H1_R2_clean.fq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_PacutaV2_rRNA_removed/POC_R120_H1_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 29 04:19:10 ..... started STAR run
+May 29 04:19:10 ..... loading genome
+May 29 04:19:13 ..... started mapping
+May 29 04:27:02 ..... finished mapping
+May 29 04:27:04 ..... started sorting BAM
+May 29 04:27:25 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/PacutaV2 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R120_H2_R1_clean.fq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R120_H2_R2_clean.fq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_PacutaV2_rRNA_removed/POC_R120_H2_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 29 04:27:27 ..... started STAR run
+May 29 04:27:27 ..... loading genome
+May 29 04:27:30 ..... started mapping
+May 29 04:46:59 ..... finished mapping
+May 29 04:47:01 ..... started sorting BAM
+May 29 04:47:56 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/PacutaV2 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R120_H3_R1_clean.fq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R120_H3_R2_clean.fq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_PacutaV2_rRNA_removed/POC_R120_H3_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 29 04:47:59 ..... started STAR run
+May 29 04:47:59 ..... loading genome
+May 29 04:48:02 ..... started mapping
+May 29 05:09:23 ..... finished mapping
+May 29 05:09:24 ..... started sorting BAM
+May 29 05:09:53 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/PacutaV2 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R12_C1_R1_clean.fq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R12_C1_R2_clean.fq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_PacutaV2_rRNA_removed/POC_R12_C1_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 29 05:09:55 ..... started STAR run
+May 29 05:09:55 ..... loading genome
+May 29 05:09:58 ..... started mapping
+May 29 05:18:24 ..... finished mapping
+May 29 05:18:25 ..... started sorting BAM
+May 29 05:18:45 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/PacutaV2 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R12_C2_R1_clean.fq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R12_C2_R2_clean.fq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_PacutaV2_rRNA_removed/POC_R12_C2_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 29 05:18:47 ..... started STAR run
+May 29 05:18:47 ..... loading genome
+May 29 05:18:50 ..... started mapping
+May 29 05:29:21 ..... finished mapping
+May 29 05:29:22 ..... started sorting BAM
+May 29 05:29:48 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/PacutaV2 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R12_C3_R1_clean.fq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R12_C3_R2_clean.fq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_PacutaV2_rRNA_removed/POC_R12_C3_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 29 05:29:50 ..... started STAR run
+May 29 05:29:50 ..... loading genome
+May 29 05:29:53 ..... started mapping
+May 29 05:45:21 ..... finished mapping
+May 29 05:45:22 ..... started sorting BAM
+May 29 05:46:36 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/PacutaV2 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R12_H1_R1_clean.fq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R12_H1_R2_clean.fq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_PacutaV2_rRNA_removed/POC_R12_H1_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 29 05:46:40 ..... started STAR run
+May 29 05:46:40 ..... loading genome
+May 29 05:46:43 ..... started mapping
+May 29 05:54:58 ..... finished mapping
+May 29 05:54:59 ..... started sorting BAM
+May 29 05:55:21 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/PacutaV2 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R12_H2_R1_clean.fq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R12_H2_R2_clean.fq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_PacutaV2_rRNA_removed/POC_R12_H2_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 29 05:55:23 ..... started STAR run
+May 29 05:55:23 ..... loading genome
+May 29 05:55:26 ..... started mapping
+May 29 06:05:10 ..... finished mapping
+May 29 06:05:12 ..... started sorting BAM
+May 29 06:05:36 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/PacutaV2 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R12_H3_R1_clean.fq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R12_H3_R2_clean.fq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_PacutaV2_rRNA_removed/POC_R12_H3_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 29 06:05:38 ..... started STAR run
+May 29 06:05:38 ..... loading genome
+May 29 06:05:41 ..... started mapping
+May 29 06:13:20 ..... finished mapping
+May 29 06:13:21 ..... started sorting BAM
+May 29 06:13:43 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/PacutaV2 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R1_C1_R1_clean.fq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R1_C1_R2_clean.fq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_PacutaV2_rRNA_removed/POC_R1_C1_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 29 06:13:45 ..... started STAR run
+May 29 06:13:45 ..... loading genome
+May 29 06:13:48 ..... started mapping
+May 29 06:23:27 ..... finished mapping
+May 29 06:23:29 ..... started sorting BAM
+May 29 06:23:57 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/PacutaV2 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R1_C2_R1_clean.fq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R1_C2_R2_clean.fq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_PacutaV2_rRNA_removed/POC_R1_C2_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 29 06:23:59 ..... started STAR run
+May 29 06:23:59 ..... loading genome
+May 29 06:24:03 ..... started mapping
+May 29 06:35:52 ..... finished mapping
+May 29 06:35:53 ..... started sorting BAM
+May 29 06:36:30 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/PacutaV2 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R1_C3_R1_clean.fq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R1_C3_R2_clean.fq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_PacutaV2_rRNA_removed/POC_R1_C3_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 29 06:36:33 ..... started STAR run
+May 29 06:36:33 ..... loading genome
+May 29 06:36:36 ..... started mapping
+May 29 06:44:29 ..... finished mapping
+May 29 06:44:30 ..... started sorting BAM
+May 29 06:44:52 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/PacutaV2 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R1_H1_R1_clean.fq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R1_H1_R2_clean.fq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_PacutaV2_rRNA_removed/POC_R1_H1_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 29 06:44:54 ..... started STAR run
+May 29 06:44:54 ..... loading genome
+May 29 06:44:57 ..... started mapping
+May 29 06:57:19 ..... finished mapping
+May 29 06:57:20 ..... started sorting BAM
+May 29 06:58:13 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/PacutaV2 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R1_H2_R1_clean.fq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R1_H2_R2_clean.fq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_PacutaV2_rRNA_removed/POC_R1_H2_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 29 06:58:16 ..... started STAR run
+May 29 06:58:16 ..... loading genome
+May 29 06:58:18 ..... started mapping
+May 29 07:08:01 ..... finished mapping
+May 29 07:08:03 ..... started sorting BAM
+May 29 07:08:27 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/PacutaV2 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R1_H3_R1_clean.fq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R1_H3_R2_clean.fq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_PacutaV2_rRNA_removed/POC_R1_H3_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 29 07:08:29 ..... started STAR run
+May 29 07:08:29 ..... loading genome
+May 29 07:08:32 ..... started mapping
+May 29 07:16:40 ..... finished mapping
+May 29 07:16:41 ..... started sorting BAM
+May 29 07:17:04 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/PacutaV2 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R24_C1_R1_clean.fq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R24_C1_R2_clean.fq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_PacutaV2_rRNA_removed/POC_R24_C1_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 29 07:17:06 ..... started STAR run
+May 29 07:17:06 ..... loading genome
+May 29 07:17:09 ..... started mapping
+May 29 07:25:42 ..... finished mapping
+May 29 07:25:43 ..... started sorting BAM
+May 29 07:26:08 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/PacutaV2 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R24_C2_R1_clean.fq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R24_C2_R2_clean.fq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_PacutaV2_rRNA_removed/POC_R24_C2_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 29 07:26:11 ..... started STAR run
+May 29 07:26:11 ..... loading genome
+May 29 07:26:13 ..... started mapping
+May 29 07:32:24 ..... finished mapping
+May 29 07:32:25 ..... started sorting BAM
+May 29 07:32:44 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/PacutaV2 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R24_C3_R1_clean.fq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R24_C3_R2_clean.fq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_PacutaV2_rRNA_removed/POC_R24_C3_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 29 07:32:45 ..... started STAR run
+May 29 07:32:45 ..... loading genome
+May 29 07:32:48 ..... started mapping
+May 29 07:43:30 ..... finished mapping
+May 29 07:43:31 ..... started sorting BAM
+May 29 07:43:58 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/PacutaV2 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R24_H1_R1_clean.fq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R24_H1_R2_clean.fq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_PacutaV2_rRNA_removed/POC_R24_H1_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 29 07:44:00 ..... started STAR run
+May 29 07:44:00 ..... loading genome
+May 29 07:44:03 ..... started mapping
+May 29 07:52:51 ..... finished mapping
+May 29 07:52:53 ..... started sorting BAM
+May 29 07:53:19 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/PacutaV2 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R24_H2_R1_clean.fq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R24_H2_R2_clean.fq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_PacutaV2_rRNA_removed/POC_R24_H2_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 29 07:53:21 ..... started STAR run
+May 29 07:53:21 ..... loading genome
+May 29 07:53:24 ..... started mapping
+May 29 08:01:31 ..... finished mapping
+May 29 08:01:32 ..... started sorting BAM
+May 29 08:01:54 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/PacutaV2 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R24_H3_R1_clean.fq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R24_H3_R2_clean.fq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_PacutaV2_rRNA_removed/POC_R24_H3_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 29 08:01:56 ..... started STAR run
+May 29 08:01:56 ..... loading genome
+May 29 08:01:59 ..... started mapping
+May 29 08:09:11 ..... finished mapping
+May 29 08:09:12 ..... started sorting BAM
+May 29 08:09:34 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/PacutaV2 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R3_C1_R1_clean.fq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R3_C1_R2_clean.fq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_PacutaV2_rRNA_removed/POC_R3_C1_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 29 08:09:36 ..... started STAR run
+May 29 08:09:36 ..... loading genome
+May 29 08:09:39 ..... started mapping
+May 29 08:18:10 ..... finished mapping
+May 29 08:18:12 ..... started sorting BAM
+May 29 08:18:37 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/PacutaV2 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R3_C2_R1_clean.fq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R3_C2_R2_clean.fq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_PacutaV2_rRNA_removed/POC_R3_C2_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 29 08:18:39 ..... started STAR run
+May 29 08:18:39 ..... loading genome
+May 29 08:18:42 ..... started mapping
+May 29 08:27:29 ..... finished mapping
+May 29 08:27:30 ..... started sorting BAM
+May 29 08:27:55 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/PacutaV2 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R3_C3_R1_clean.fq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R3_C3_R2_clean.fq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_PacutaV2_rRNA_removed/POC_R3_C3_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 29 08:27:57 ..... started STAR run
+May 29 08:27:57 ..... loading genome
+May 29 08:28:00 ..... started mapping
+May 29 08:36:44 ..... finished mapping
+May 29 08:36:45 ..... started sorting BAM
+May 29 08:37:12 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/PacutaV2 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R3_H1_R1_clean.fq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R3_H1_R2_clean.fq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_PacutaV2_rRNA_removed/POC_R3_H1_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 29 08:37:14 ..... started STAR run
+May 29 08:37:15 ..... loading genome
+May 29 08:37:17 ..... started mapping
+May 29 08:45:09 ..... finished mapping
+May 29 08:45:11 ..... started sorting BAM
+May 29 08:45:31 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/PacutaV2 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R3_H2_R1_clean.fq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R3_H2_R2_clean.fq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_PacutaV2_rRNA_removed/POC_R3_H2_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 29 08:45:32 ..... started STAR run
+May 29 08:45:32 ..... loading genome
+May 29 08:45:35 ..... started mapping
+May 29 08:58:25 ..... finished mapping
+May 29 08:58:26 ..... started sorting BAM
+May 29 08:59:24 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/PacutaV2 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R3_H3_R1_clean.fq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R3_H3_R2_clean.fq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_PacutaV2_rRNA_removed/POC_R3_H3_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 29 08:59:27 ..... started STAR run
+May 29 08:59:27 ..... loading genome
+May 29 08:59:30 ..... started mapping
+May 29 09:07:13 ..... finished mapping
+May 29 09:07:14 ..... started sorting BAM
+May 29 09:07:35 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/PacutaV2 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R72_C1_R1_clean.fq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R72_C1_R2_clean.fq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_PacutaV2_rRNA_removed/POC_R72_C1_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 29 09:07:37 ..... started STAR run
+May 29 09:07:37 ..... loading genome
+May 29 09:07:40 ..... started mapping
+May 29 09:16:06 ..... finished mapping
+May 29 09:16:08 ..... started sorting BAM
+May 29 09:16:34 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/PacutaV2 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R72_C2_R1_clean.fq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R72_C2_R2_clean.fq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_PacutaV2_rRNA_removed/POC_R72_C2_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 29 09:16:36 ..... started STAR run
+May 29 09:16:36 ..... loading genome
+May 29 09:16:39 ..... started mapping
+May 29 09:27:47 ..... finished mapping
+May 29 09:27:48 ..... started sorting BAM
+May 29 09:28:16 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/PacutaV2 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R72_C3_R1_clean.fq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R72_C3_R2_clean.fq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_PacutaV2_rRNA_removed/POC_R72_C3_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 29 09:28:19 ..... started STAR run
+May 29 09:28:19 ..... loading genome
+May 29 09:28:22 ..... started mapping
+May 29 09:38:16 ..... finished mapping
+May 29 09:38:18 ..... started sorting BAM
+May 29 09:38:41 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/PacutaV2 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R72_H1_R1_clean.fq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R72_H1_R2_clean.fq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_PacutaV2_rRNA_removed/POC_R72_H1_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 29 09:38:43 ..... started STAR run
+May 29 09:38:43 ..... loading genome
+May 29 09:38:46 ..... started mapping
+May 29 09:49:11 ..... finished mapping
+May 29 09:49:12 ..... started sorting BAM
+May 29 09:49:38 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/PacutaV2 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R72_H2_R1_clean.fq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R72_H2_R2_clean.fq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_PacutaV2_rRNA_removed/POC_R72_H2_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 29 09:49:41 ..... started STAR run
+May 29 09:49:41 ..... loading genome
+May 29 09:49:44 ..... started mapping
+May 29 09:59:04 ..... finished mapping
+May 29 09:59:05 ..... started sorting BAM
+May 29 09:59:28 ..... finished successfully
+	STAR --runMode alignReads --genomeDir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/STAR_indexes/PacutaV2 --runThreadN 10 --readFilesCommand zcat --readFilesIn /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R72_H3_R1_clean.fq.gz /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/rRNA_decomp_SILVA_paired/POC_R72_H3_R2_clean.fq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --outFileNamePrefix /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/aligned/POC_PacutaV2_rRNA_removed/POC_R72_H3_ --quantMode GeneCounts
+	STAR version: 2.7.11b   compiled: 2024-09-18T11:48:15-04:00 uri-cpu006:/tmp/STAR/2.7.11b/GCC-12.3.0/STAR-2.7.11b/source
+May 29 09:59:30 ..... started STAR run
+May 29 09:59:30 ..... loading genome
+May 29 09:59:33 ..... started mapping
+May 29 10:05:59 ..... finished mapping
+May 29 10:06:01 ..... started sorting BAM
+May 29 10:06:18 ..... finished successfully
