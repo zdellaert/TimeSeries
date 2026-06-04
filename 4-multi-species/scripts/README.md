@@ -1663,6 +1663,19 @@ mv GCA_963970005.1_Durusdinium_trenchii_CCMP2556_genomic.fna.gz Dtrenchii.fasta.
 mv GCA_963970005.1_Durusdinium_trenchii_CCMP2556_genomic.gtf.gz Dtrenchii.gtf.gz
 
 gunzip *.gz
+
+#filter GTFs to remove lines with blank transcript IDs
+grep -v 'transcript_id ""' Dtrenchii.gtf > Dtrenchii_filtered.gtf
+grep -v 'transcript_id ""' Cgoreaui_V2.gtf > Cgoreaui_V2_filtered.gtf
+
+# load modules needed
+module load gffread/0.12.7
+
+# -E : remove any "non-transcript features and optional attributes"
+gffread -E Dtrenchii_filtered.gtf -T -o Dtrenchii_cleaned.gtf
+gffread -E Cgoreaui_V2_filtered.gtf -T -o Cgoreaui_V2_cleaned.gtf
+
+rm *filtered.gtf
 ```
 
 ### Then align
