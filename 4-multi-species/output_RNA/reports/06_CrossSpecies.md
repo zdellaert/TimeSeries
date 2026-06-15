@@ -1,7 +1,7 @@
 Cross Species Analysis
 ================
 Zoe Dellaert
-2026-05-29
+2026-06-15
 
 - [Analysis of Time Series bulk RNA-seq data: Cross-Species
   Analysis](#analysis-of-time-series-bulk-rna-seq-data-cross-species-analysis)
@@ -72,51 +72,14 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, fig.width = 10, fig.height =
 
 #load packages
 library(tidyverse)
-```
-
-    ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-    ## ✔ dplyr     1.1.4     ✔ readr     2.2.0
-    ## ✔ forcats   1.0.0     ✔ stringr   1.6.0
-    ## ✔ ggplot2   4.0.3     ✔ tibble    3.3.0
-    ## ✔ lubridate 1.9.4     ✔ tidyr     1.3.1
-    ## ✔ purrr     1.2.1     
-    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-    ## ✖ dplyr::filter() masks stats::filter()
-    ## ✖ dplyr::lag()    masks stats::lag()
-    ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
-
-``` r
 library(knitr)
 library(ComplexHeatmap)
-```
-
-    ## Loading required package: grid
-    ## ========================================
-    ## ComplexHeatmap version 2.26.0
-    ## Bioconductor page: http://bioconductor.org/packages/ComplexHeatmap/
-    ## Github page: https://github.com/jokergoo/ComplexHeatmap
-    ## Documentation: http://jokergoo.github.io/ComplexHeatmap-reference
-    ## 
-    ## If you use it in published research, please cite either one:
-    ## - Gu, Z. Complex Heatmap Visualization. iMeta 2022.
-    ## - Gu, Z. Complex heatmaps reveal patterns and correlations in multidimensional 
-    ##     genomic data. Bioinformatics 2016.
-    ## 
-    ## 
-    ## The new InteractiveComplexHeatmap package can directly export static 
-    ## complex heatmaps into an interactive Shiny app with zero effort. Have a try!
-    ## 
-    ## This message can be suppressed by:
-    ##   suppressPackageStartupMessages(library(ComplexHeatmap))
-    ## ========================================
-
-``` r
 library(pheatmap)
 ```
 
     ## 
     ## Attaching package: 'pheatmap'
-    ## 
+
     ## The following object is masked from 'package:ComplexHeatmap':
     ## 
     ##     pheatmap
@@ -153,30 +116,34 @@ sessionInfo() #provides list of loaded packages and version of R
     ## [8] base     
     ## 
     ## other attached packages:
-    ##  [1] pheatmap_1.0.13       ComplexHeatmap_2.26.0 knitr_1.50           
-    ##  [4] lubridate_1.9.4       forcats_1.0.0         stringr_1.6.0        
-    ##  [7] dplyr_1.1.4           purrr_1.2.1           readr_2.2.0          
-    ## [10] tidyr_1.3.1           tibble_3.3.0          ggplot2_4.0.3        
+    ##  [1] pheatmap_1.0.13       ComplexHeatmap_2.26.0 knitr_1.51           
+    ##  [4] lubridate_1.9.4       forcats_1.0.1         stringr_1.6.0        
+    ##  [7] dplyr_1.2.1           purrr_1.2.1           readr_2.2.0          
+    ## [10] tidyr_1.3.2           tibble_3.3.1          ggplot2_4.0.3        
     ## [13] tidyverse_2.0.0       rmarkdown_2.31       
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] generics_0.1.4      shape_1.4.6.1       stringi_1.8.7      
-    ##  [4] hms_1.1.4           digest_0.6.39       magrittr_2.0.5     
-    ##  [7] evaluate_1.0.5      timechange_0.3.0    RColorBrewer_1.1-3 
-    ## [10] iterators_1.0.14    circlize_0.4.18     fastmap_1.2.0      
-    ## [13] foreach_1.5.2       doParallel_1.0.17   GlobalOptions_0.1.4
-    ## [16] scales_1.4.0        codetools_0.2-20    cli_3.6.6          
-    ## [19] rlang_1.2.0         crayon_1.5.3        withr_3.0.2        
-    ## [22] yaml_2.3.12         tools_4.5.1         parallel_4.5.1     
-    ## [25] tzdb_0.5.0          colorspace_2.1-2    BiocGenerics_0.56.0
-    ## [28] GetoptLong_1.1.1    vctrs_0.7.3         R6_2.6.1           
-    ## [31] png_0.1-8           stats4_4.5.1        matrixStats_1.5.0  
-    ## [34] lifecycle_1.0.5     S4Vectors_0.48.0    IRanges_2.44.0     
-    ## [37] clue_0.3-68         cluster_2.1.8.2     pkgconfig_2.0.3    
-    ## [40] pillar_1.11.1       gtable_0.3.6        glue_1.8.0         
-    ## [43] xfun_0.56           tidyselect_1.2.1    rstudioapi_0.17.1  
-    ## [46] dichromat_2.0-0.1   rjson_0.2.23        farver_2.1.2       
-    ## [49] htmltools_0.5.9     compiler_4.5.1      S7_0.2.2
+    ##  [1] gtable_0.3.6        circlize_0.4.18     shape_1.4.6.1      
+    ##  [4] rjson_0.2.23        xfun_0.56           GlobalOptions_0.1.4
+    ##  [7] tzdb_0.5.0          Cairo_1.7-0         vctrs_0.7.3        
+    ## [10] tools_4.5.1         generics_0.1.4      stats4_4.5.1       
+    ## [13] parallel_4.5.1      cluster_2.1.8.2     pkgconfig_2.0.3    
+    ## [16] RColorBrewer_1.1-3  S7_0.2.2            S4Vectors_0.48.0   
+    ## [19] lifecycle_1.0.5     compiler_4.5.1      farver_2.1.2       
+    ## [22] textshaping_1.0.5   codetools_0.2-20    clue_0.3-68        
+    ## [25] htmltools_0.5.9     yaml_2.3.12         pillar_1.11.1      
+    ## [28] crayon_1.5.3        magick_2.9.1        iterators_1.0.14   
+    ## [31] foreach_1.5.2       tidyselect_1.2.1    digest_0.6.39      
+    ## [34] stringi_1.8.7       labeling_0.4.3      fastmap_1.2.0      
+    ## [37] colorspace_2.1-2    cli_3.6.6           magrittr_2.0.5     
+    ## [40] dichromat_2.0-0.1   withr_3.0.2         scales_1.4.0       
+    ## [43] bit64_4.6.0-1       timechange_0.3.0    matrixStats_1.5.0  
+    ## [46] bit_4.6.0           otel_0.2.0          ragg_1.5.2         
+    ## [49] png_0.1-9           GetoptLong_1.1.1    hms_1.1.4          
+    ## [52] evaluate_1.0.5      IRanges_2.44.0      doParallel_1.0.17  
+    ## [55] rlang_1.2.0         Rcpp_1.1.1-1.1      glue_1.8.1         
+    ## [58] BiocGenerics_0.56.0 rstudioapi_0.17.1   vroom_1.7.1        
+    ## [61] R6_2.6.1            systemfonts_1.3.2
 
 ## 2. Define directories
 
@@ -804,47 +771,47 @@ all_heat %>% group_by(species,gene_sym) %>%
   summarize(n=n())  %>% pivot_wider(names_from = species, values_from = n) %>% kable(format = "markdown")
 ```
 
-| gene_sym        | Mcap | Pacuta | Pcomp |
-|:----------------|-----:|-------:|------:|
-| ACAN            |   70 |     26 |    11 |
-| ALDH3B1         |    1 |      1 |     1 |
-| ALOX12B         |    6 |      5 |    12 |
-| AMPK            |    1 |      1 |     1 |
-| AMT1            |    2 |      1 |     2 |
-| APAF-1          |    1 |      1 |     1 |
-| Alox5           |    1 |      1 |     1 |
-| BAK             |    1 |      1 |     1 |
-| BAX             |    1 |      1 |     1 |
-| BI-1            |    1 |      1 |     1 |
-| BNIP3           |    1 |      1 |     1 |
-| Bcl-2           |    3 |      3 |     3 |
-| CAT             |    1 |      1 |     1 |
-| Cas3,Casp       |    2 |      2 |     1 |
-| DNaj            |    1 |      2 |     1 |
-| Foxo3           |    1 |      1 |     1 |
-| GDH             |    1 |      1 |     1 |
-| GOGAT           |    1 |      1 |     1 |
-| GR              |    1 |      1 |     1 |
-| GS              |    2 |      1 |     1 |
-| Glut8,SLC2A8    |    1 |      1 |     1 |
-| HIF-a           |    3 |      1 |     1 |
-| HSF1            |    1 |      1 |     1 |
-| HSP70,Hsc71     |    1 |      1 |     2 |
-| HSP90           |    2 |      1 |     1 |
-| NF-KB           |    3 |      1 |     4 |
-| NID-2           |   45 |     27 |    23 |
-| NPC2            |    3 |      3 |     3 |
-| Nrf1,Nrf2       |    1 |      1 |     1 |
-| OGG1            |    1 |      1 |     1 |
-| PMP34           |    1 |      1 |     1 |
-| RhBG            |    1 |      1 |     1 |
-| ST1C2           |    9 |     18 |    21 |
-| Survivin        |    1 |      1 |     1 |
-| TGFa            |    2 |      1 |    NA |
-| TNFR27,TNFRSF27 |    4 |      1 |     2 |
-| VIT             |    1 |      1 |     6 |
-| mTOR            |    1 |      3 |     1 |
-| Casp7           |   NA |     NA |     2 |
+| gene_sym     | Mcap | Pacuta | Pcomp |
+|:-------------|-----:|-------:|------:|
+| ACAN         |   70 |     26 |    11 |
+| ALDH3B1      |    1 |      1 |     1 |
+| ALOX12B      |    6 |      5 |    12 |
+| AMPK         |    1 |      1 |     1 |
+| AMT1         |    2 |      1 |     2 |
+| APAF-1       |    1 |      1 |     1 |
+| Alox5        |    1 |      1 |     1 |
+| BAK          |    1 |      1 |     1 |
+| BAX          |    1 |      1 |     1 |
+| BI-1         |    1 |      1 |     1 |
+| BNIP3        |    1 |      1 |     1 |
+| Bcl-2        |    3 |      3 |     3 |
+| CAT          |    1 |      1 |     1 |
+| Cas3,Casp    |    2 |      2 |     1 |
+| DNaj         |    1 |      2 |     1 |
+| Foxo3        |    1 |      1 |     1 |
+| GDH          |    1 |      1 |     1 |
+| GOGAT        |    1 |      1 |     1 |
+| GR           |    1 |      1 |     1 |
+| GS           |    2 |      1 |     1 |
+| Glut8,SLC2A8 |    1 |      1 |     1 |
+| HIF-a        |    3 |      1 |     1 |
+| HSF1         |    1 |      1 |     1 |
+| HSP70,Hsc71  |    1 |      1 |     2 |
+| HSP90        |    2 |      1 |     1 |
+| NF-KB        |    3 |      1 |     4 |
+| NID-2        |   45 |     27 |    23 |
+| NPC2         |    3 |      3 |     3 |
+| Nrf1,Nrf2    |    1 |      1 |     1 |
+| OGG1         |    1 |      1 |     1 |
+| PMP34        |    1 |      1 |     1 |
+| RhBG         |    1 |      1 |     1 |
+| ST1C2        |    9 |     18 |    21 |
+| Survivin     |    1 |      1 |     1 |
+| TGFa         |    2 |      1 |    NA |
+| TNFR27       |    4 |      1 |     2 |
+| VIT          |    1 |      1 |     6 |
+| mTOR         |    1 |      3 |     1 |
+| Casp7        |   NA |     NA |     2 |
 
 ``` r
 summary <- all_heat %>% group_by(species,gene_sym) %>%
