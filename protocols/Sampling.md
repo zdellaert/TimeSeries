@@ -40,7 +40,7 @@
       3. Clip coral off plug into formalin fixative
 2. Begin dark adaptation for 30 minutes when sampling is complete
 3. Write down plug number from sheet onto each tube so each tube has redundant labelling
-4. Move all PAXgene (LCM) and formalin tubes (spatial) to racks 4 ºC cold room on shaker organized by timepoint (shake 24 hours)
+4. Move all PAXgene (LCM) and formalin tubes (FFPE) to racks 4 ºC cold room on shaker organized by timepoint (shake 24 hours)
 5. Move all DNA/RNA shield tubes to box in -80ºC (can be at 4ºC for a few hours first to let tissues lyse if desired)
 6. Move all whirlpaks to mesh bag in -80ºC
 7. After 30 minutes, PAM the 3 designated PAM fragments in each tank and record F, M, Y values and plug #
