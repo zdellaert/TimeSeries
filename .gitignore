@@ -40,3 +40,4 @@ code.Rproj
 4-multi-species/code/old/*
 *nf-core*
 *nfcore*
+.renvignore
