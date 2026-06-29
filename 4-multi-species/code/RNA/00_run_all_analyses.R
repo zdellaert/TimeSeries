@@ -5,8 +5,8 @@ library(rmarkdown)
 species_list <- c("Pacuta", "Mcap", "Pcomp")
 
 # All species library-QC
-render("00_library_QC.Rmd",
-       output_dir = "../../output_RNA/reports")
+# render("00_library_QC.Rmd",
+#        output_dir = "../../output_RNA/reports")
 
 # Create species-specific output directories
 for (sp in species_list) {
