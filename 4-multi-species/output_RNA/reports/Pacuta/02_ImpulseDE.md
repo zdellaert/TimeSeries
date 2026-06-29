@@ -109,6 +109,8 @@ library(tidyverse)
 library(ComplexHeatmap)
 ```
 
+    ## Warning: package 'ComplexHeatmap' was built under R version 4.5.2
+
     ## Loading required package: grid
 
     ## ========================================
@@ -162,8 +164,6 @@ library(Mfuzz)
     ## 
     ##     element
 
-    ## Warning in fun(libname, pkgname): couldn't connect to display ":0"
-
     ## 
     ## Attaching package: 'widgetTools'
 
@@ -187,23 +187,18 @@ sessionInfo() #provides list of loaded packages and version of R
 ```
 
     ## R version 4.5.1 (2025-06-13)
-    ## Platform: x86_64-pc-linux-gnu
-    ## Running under: Ubuntu 24.04.1 LTS
+    ## Platform: x86_64-apple-darwin20
+    ## Running under: macOS Tahoe 26.4.1
     ## 
     ## Matrix products: default
-    ## BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 
-    ## LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.26.so;  LAPACK version 3.12.0
+    ## BLAS:   /Library/Frameworks/R.framework/Versions/4.5-x86_64/Resources/lib/libRblas.0.dylib 
+    ## LAPACK: /Library/Frameworks/R.framework/Versions/4.5-x86_64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1
     ## 
     ## locale:
-    ##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
-    ##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
-    ##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
-    ##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
-    ##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
-    ## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+    ## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
     ## 
-    ## time zone: Etc/UTC
-    ## tzcode source: system (glibc)
+    ## time zone: America/New_York
+    ## tzcode source: internal
     ## 
     ## attached base packages:
     ##  [1] tcltk     grid      stats4    stats     graphics  grDevices utils    
@@ -239,23 +234,22 @@ sessionInfo() #provides list of loaded packages and version of R
     ## [22] cachem_1.1.0         blob_1.3.0           DelayedArray_0.36.1 
     ## [25] cluster_2.1.8.2      parallel_4.5.1       R6_2.6.1            
     ## [28] stringi_1.8.7        Rcpp_1.1.1-1.1       iterators_1.0.14    
-    ## [31] knitr_1.51           Matrix_1.7-3         splines_4.5.1       
+    ## [31] knitr_1.51           Matrix_1.7-5         splines_4.5.1       
     ## [34] timechange_0.4.0     tidyselect_1.2.1     rstudioapi_0.19.0   
-    ## [37] dichromat_2.0-0.1    abind_1.4-8          yaml_2.3.12         
-    ## [40] doParallel_1.0.17    codetools_0.2-20     lattice_0.22-7      
-    ## [43] withr_3.0.3          KEGGREST_1.50.0      S7_0.2.2            
-    ## [46] evaluate_1.0.5       survival_3.8-3       proxy_0.4-29        
-    ## [49] circlize_0.4.18      Biostrings_2.78.0    pillar_1.11.1       
-    ## [52] tkWidgets_1.88.0     foreach_1.5.2        hms_1.1.4           
-    ## [55] scales_1.4.0         xtable_1.8-8         class_7.3-23        
-    ## [58] glue_1.8.1           tools_4.5.1          annotate_1.88.0     
-    ## [61] locfit_1.5-9.12      XML_3.99-0.23        cowplot_1.2.0       
-    ## [64] AnnotationDbi_1.72.0 colorspace_2.1-2     cli_3.6.6           
-    ## [67] textshaping_1.0.5    S4Arrays_1.10.1      gtable_0.3.6        
-    ## [70] digest_0.6.39        SparseArray_1.10.10  rjson_0.2.23        
-    ## [73] farver_2.1.2         memoise_2.0.1        htmltools_0.5.9     
-    ## [76] lifecycle_1.0.5      httr_1.4.8           GlobalOptions_0.1.4 
-    ## [79] bit64_4.8.2
+    ## [37] abind_1.4-8          yaml_2.3.12          doParallel_1.0.17   
+    ## [40] codetools_0.2-20     lattice_0.22-9       withr_3.0.3         
+    ## [43] KEGGREST_1.50.0      S7_0.2.2             evaluate_1.0.5      
+    ## [46] survival_3.8-6       proxy_0.4-29         circlize_0.4.18     
+    ## [49] Biostrings_2.78.0    pillar_1.11.1        tkWidgets_1.88.0    
+    ## [52] foreach_1.5.2        hms_1.1.4            scales_1.4.0        
+    ## [55] xtable_1.8-8         class_7.3-23         glue_1.8.1          
+    ## [58] tools_4.5.1          annotate_1.88.0      locfit_1.5-9.12     
+    ## [61] XML_3.99-0.23        cowplot_1.2.0        AnnotationDbi_1.72.0
+    ## [64] colorspace_2.1-2     cli_3.6.6            textshaping_1.0.5   
+    ## [67] S4Arrays_1.10.1      gtable_0.3.6         digest_0.6.39       
+    ## [70] SparseArray_1.10.10  rjson_0.2.23         farver_2.1.2        
+    ## [73] memoise_2.0.1        htmltools_0.5.9      lifecycle_1.0.5     
+    ## [76] httr_1.4.8           GlobalOptions_0.1.4  bit64_4.8.2
 
 ## 2. Setup species-specific parameters
 
@@ -630,8 +624,8 @@ draw(lsHeatmaps$complexHeatmapFit)
 dev.off()
 ```
 
-    ## png 
-    ##   2
+    ## quartz_off_screen 
+    ##                 2
 
 ``` r
 pdf(file.path(outdir_plots,"pdf_figs/ImpulseDE2_heatmap_case_fit.pdf"), width = 10, height = 12)
@@ -639,8 +633,8 @@ draw(lsHeatmaps$complexHeatmapFit)
 dev.off()
 ```
 
-    ## png 
-    ##   2
+    ## quartz_off_screen 
+    ##                 2
 
 ``` r
 png(file.path(outdir_plots,"ImpulseDE2_heatmap_case.png"), width = 2000, height = 2400, res = 300)
@@ -648,8 +642,8 @@ draw(lsHeatmaps$complexHeatmapRaw)
 dev.off()
 ```
 
-    ## png 
-    ##   2
+    ## quartz_off_screen 
+    ##                 2
 
 ``` r
 pdf(file.path(outdir_plots, "pdf_figs/ImpulseDE2_heatmap_case.pdf"), width = 10, height = 12)
@@ -657,8 +651,8 @@ draw(lsHeatmaps$complexHeatmapRaw)
 dev.off()
 ```
 
-    ## png 
-    ##   2
+    ## quartz_off_screen 
+    ##                 2
 
 ### Heatmap of top 100 significant transient/transition UP genes normalized to T0
 
@@ -702,8 +696,8 @@ heatmap_up
 dev.off()
 ```
 
-    ## png 
-    ##   2
+    ## quartz_off_screen 
+    ##                 2
 
 ``` r
 pdf(paste0(outdir_plots,"/pdf_figs/ImpulseDE2_heatmap_UP.pdf"), width = 7, height = 10)
@@ -711,8 +705,8 @@ heatmap_up
 dev.off()
 ```
 
-    ## png 
-    ##   2
+    ## quartz_off_screen 
+    ##                 2
 
 ``` r
 all_DE_genes <- impulse_sig_up %>% arrange(padj) %>% filter(Gene %in% rownames(vst)) %>% arrange(response_type,padj)
@@ -753,8 +747,8 @@ heatmap_up_all
 dev.off()
 ```
 
-    ## png 
-    ##   2
+    ## quartz_off_screen 
+    ##                 2
 
 ``` r
 pdf(paste0(outdir_plots,"/pdf_figs/ImpulseDE2_heatmap_UP_ALL.pdf"), width = 7, height = 10)
@@ -762,8 +756,8 @@ heatmap_up_all
 dev.off()
 ```
 
-    ## png 
-    ##   2
+    ## quartz_off_screen 
+    ##                 2
 
 ### Heatmap of top 100 significant transient/transition downregulated genes normalized to T0
 
@@ -805,8 +799,8 @@ heatmap_down
 dev.off()
 ```
 
-    ## png 
-    ##   2
+    ## quartz_off_screen 
+    ##                 2
 
 ``` r
 pdf(paste0(outdir_plots,"/pdf_figs/ImpulseDE2_heatmap_DOWN.pdf"), width = 7, height = 10)
@@ -814,8 +808,8 @@ heatmap_down
 dev.off()
 ```
 
-    ## png 
-    ##   2
+    ## quartz_off_screen 
+    ##                 2
 
 ``` r
 all_DE_genes <- impulse_sig_down %>% arrange(padj) %>% filter(Gene %in% rownames(vst)) %>% arrange(response_type,padj)
@@ -856,8 +850,8 @@ heatmap_down_all
 dev.off()
 ```
 
-    ## png 
-    ##   2
+    ## quartz_off_screen 
+    ##                 2
 
 ``` r
 pdf(paste0(outdir_plots,"/pdf_figs/ImpulseDE2_heatmap_DOWN_ALL.pdf"), width = 7, height = 10)
@@ -865,8 +859,8 @@ heatmap_down_all
 dev.off()
 ```
 
-    ## png 
-    ##   2
+    ## quartz_off_screen 
+    ##                 2
 
 ### Top gene trajectories
 
@@ -1077,8 +1071,8 @@ mfuzz.plot2(heat_eset, cl = mfuzz_clusters, mfrow = c(2,k/2),
 dev.off()
 ```
 
-    ## png 
-    ##   2
+    ## quartz_off_screen 
+    ##                 2
 
 ``` r
 pdf(paste0(outdir_plots,"/pdf_figs/temporal_clusters.pdf"), width = 12, height = 10)
@@ -1088,8 +1082,8 @@ mfuzz.plot2(heat_eset, cl = mfuzz_clusters, mfrow = c(2,k/2),
 dev.off()
 ```
 
-    ## png 
-    ##   2
+    ## quartz_off_screen 
+    ##                 2
 
 ``` r
 png(paste0(outdir_plots,"/temporal_clusters_membership50.png"), width = 12, height = 10, units = "in", res = 300)
@@ -1100,8 +1094,8 @@ mfuzz.plot2(heat_eset, cl = mfuzz_clusters, mfrow = c(2,k/2),
 dev.off()
 ```
 
-    ## png 
-    ##   2
+    ## quartz_off_screen 
+    ##                 2
 
 ``` r
 pdf(paste0(outdir_plots,"/pdf_figs/temporal_clusters_membership50.pdf"), width = 12, height = 10)
@@ -1112,8 +1106,8 @@ mfuzz.plot2(heat_eset, cl = mfuzz_clusters, mfrow = c(2,k/2),
 dev.off()
 ```
 
-    ## png 
-    ##   2
+    ## quartz_off_screen 
+    ##                 2
 
 ``` r
 png(paste0(outdir_plots,"/temporal_clusters_scaled.png"), width = 12, height = 10, units = "in", res = 300)
@@ -1124,8 +1118,8 @@ mfuzz.plot2(heat_eset, cl = mfuzz_clusters, mfrow = c(2,k/2),
 dev.off()
 ```
 
-    ## png 
-    ##   2
+    ## quartz_off_screen 
+    ##                 2
 
 ``` r
 standardized_avg_heat_expr <- as_tibble(exprs(heat_eset),rownames="gene")
@@ -1249,23 +1243,18 @@ sessionInfo()
 ```
 
     ## R version 4.5.1 (2025-06-13)
-    ## Platform: x86_64-pc-linux-gnu
-    ## Running under: Ubuntu 24.04.1 LTS
+    ## Platform: x86_64-apple-darwin20
+    ## Running under: macOS Tahoe 26.4.1
     ## 
     ## Matrix products: default
-    ## BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 
-    ## LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.26.so;  LAPACK version 3.12.0
+    ## BLAS:   /Library/Frameworks/R.framework/Versions/4.5-x86_64/Resources/lib/libRblas.0.dylib 
+    ## LAPACK: /Library/Frameworks/R.framework/Versions/4.5-x86_64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1
     ## 
     ## locale:
-    ##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
-    ##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
-    ##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
-    ##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
-    ##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
-    ## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+    ## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
     ## 
-    ## time zone: Etc/UTC
-    ## tzcode source: system (glibc)
+    ## time zone: America/New_York
+    ## tzcode source: internal
     ## 
     ## attached base packages:
     ##  [1] tcltk     grid      stats4    stats     graphics  grDevices utils    
@@ -1293,29 +1282,28 @@ sessionInfo()
     ## loaded via a namespace (and not attached):
     ##  [1] DBI_1.3.0            rlang_1.2.0          magrittr_2.0.5      
     ##  [4] clue_0.3-68          GetoptLong_1.1.1     otel_0.2.0          
-    ##  [7] compiler_4.5.1       RSQLite_3.53.2       mgcv_1.9-3          
-    ## [10] png_0.1-9            systemfonts_1.3.2    vctrs_0.7.3         
-    ## [13] pkgconfig_2.0.3      shape_1.4.6.1        crayon_1.5.3        
-    ## [16] fastmap_1.2.0        magick_2.9.1         XVector_0.50.0      
-    ## [19] labeling_0.4.3       tzdb_0.5.0           ragg_1.5.2          
-    ## [22] bit_4.6.0            xfun_0.59            cachem_1.1.0        
-    ## [25] blob_1.3.0           DelayedArray_0.36.1  cluster_2.1.8.2     
-    ## [28] parallel_4.5.1       R6_2.6.1             stringi_1.8.7       
-    ## [31] Rcpp_1.1.1-1.1       iterators_1.0.14     knitr_1.51          
-    ## [34] Matrix_1.7-3         splines_4.5.1        timechange_0.4.0    
-    ## [37] tidyselect_1.2.1     rstudioapi_0.19.0    dichromat_2.0-0.1   
-    ## [40] abind_1.4-8          yaml_2.3.12          doParallel_1.0.17   
-    ## [43] codetools_0.2-20     lattice_0.22-7       withr_3.0.3         
-    ## [46] KEGGREST_1.50.0      S7_0.2.2             evaluate_1.0.5      
-    ## [49] survival_3.8-3       proxy_0.4-29         circlize_0.4.18     
-    ## [52] Biostrings_2.78.0    pillar_1.11.1        tkWidgets_1.88.0    
-    ## [55] foreach_1.5.2        vroom_1.7.1          hms_1.1.4           
-    ## [58] scales_1.4.0         xtable_1.8-8         class_7.3-23        
-    ## [61] glue_1.8.1           tools_4.5.1          annotate_1.88.0     
-    ## [64] locfit_1.5-9.12      XML_3.99-0.23        Cairo_1.7-0         
-    ## [67] cowplot_1.2.0        AnnotationDbi_1.72.0 colorspace_2.1-2    
-    ## [70] nlme_3.1-168         cli_3.6.6            textshaping_1.0.5   
-    ## [73] S4Arrays_1.10.1      gtable_0.3.6         digest_0.6.39       
-    ## [76] SparseArray_1.10.10  rjson_0.2.23         farver_2.1.2        
-    ## [79] memoise_2.0.1        htmltools_0.5.9      lifecycle_1.0.5     
-    ## [82] httr_1.4.8           GlobalOptions_0.1.4  bit64_4.8.2
+    ##  [7] compiler_4.5.1       RSQLite_3.53.2       png_0.1-9           
+    ## [10] systemfonts_1.3.2    vctrs_0.7.3          pkgconfig_2.0.3     
+    ## [13] shape_1.4.6.1        crayon_1.5.3         fastmap_1.2.0       
+    ## [16] XVector_0.50.0       labeling_0.4.3       tzdb_0.5.0          
+    ## [19] ragg_1.5.2           bit_4.6.0            xfun_0.59           
+    ## [22] cachem_1.1.0         blob_1.3.0           DelayedArray_0.36.1 
+    ## [25] cluster_2.1.8.2      parallel_4.5.1       R6_2.6.1            
+    ## [28] stringi_1.8.7        Rcpp_1.1.1-1.1       iterators_1.0.14    
+    ## [31] knitr_1.51           Matrix_1.7-5         splines_4.5.1       
+    ## [34] timechange_0.4.0     tidyselect_1.2.1     rstudioapi_0.19.0   
+    ## [37] abind_1.4-8          yaml_2.3.12          doParallel_1.0.17   
+    ## [40] codetools_0.2-20     lattice_0.22-9       withr_3.0.3         
+    ## [43] KEGGREST_1.50.0      S7_0.2.2             evaluate_1.0.5      
+    ## [46] survival_3.8-6       proxy_0.4-29         circlize_0.4.18     
+    ## [49] Biostrings_2.78.0    pillar_1.11.1        tkWidgets_1.88.0    
+    ## [52] foreach_1.5.2        vroom_1.7.1          hms_1.1.4           
+    ## [55] scales_1.4.0         xtable_1.8-8         class_7.3-23        
+    ## [58] glue_1.8.1           tools_4.5.1          annotate_1.88.0     
+    ## [61] locfit_1.5-9.12      XML_3.99-0.23        cowplot_1.2.0       
+    ## [64] AnnotationDbi_1.72.0 colorspace_2.1-2     nlme_3.1-169        
+    ## [67] cli_3.6.6            textshaping_1.0.5    S4Arrays_1.10.1     
+    ## [70] gtable_0.3.6         digest_0.6.39        SparseArray_1.10.10 
+    ## [73] rjson_0.2.23         farver_2.1.2         memoise_2.0.1       
+    ## [76] htmltools_0.5.9      lifecycle_1.0.5      httr_1.4.8          
+    ## [79] GlobalOptions_0.1.4  bit64_4.8.2

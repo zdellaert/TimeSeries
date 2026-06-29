@@ -85,23 +85,18 @@ sessionInfo() #provides list of loaded packages and version of R
 ```
 
     ## R version 4.5.1 (2025-06-13)
-    ## Platform: x86_64-pc-linux-gnu
-    ## Running under: Ubuntu 24.04.1 LTS
+    ## Platform: x86_64-apple-darwin20
+    ## Running under: macOS Tahoe 26.4.1
     ## 
     ## Matrix products: default
-    ## BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 
-    ## LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.26.so;  LAPACK version 3.12.0
+    ## BLAS:   /Library/Frameworks/R.framework/Versions/4.5-x86_64/Resources/lib/libRblas.0.dylib 
+    ## LAPACK: /Library/Frameworks/R.framework/Versions/4.5-x86_64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1
     ## 
     ## locale:
-    ##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
-    ##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
-    ##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
-    ##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
-    ##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
-    ## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+    ## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
     ## 
-    ## time zone: Etc/UTC
-    ## tzcode source: system (glibc)
+    ## time zone: America/New_York
+    ## tzcode source: internal
     ## 
     ## attached base packages:
     ##  [1] tcltk     grid      stats4    stats     graphics  grDevices utils    
@@ -129,40 +124,39 @@ sessionInfo() #provides list of loaded packages and version of R
     ## [37] rmarkdown_2.31             
     ## 
     ## loaded via a namespace (and not attached):
-    ##   [1] rstudioapi_0.19.0     shape_1.4.6.1         magrittr_2.0.5       
-    ##   [4] magick_2.9.1          farver_2.1.2          GlobalOptions_0.1.4  
-    ##   [7] ragg_1.5.2            vctrs_0.7.3           memoise_2.0.1        
-    ##  [10] Cairo_1.7-0           base64enc_0.1-6       htmltools_0.5.9      
-    ##  [13] S4Arrays_1.10.1       SparseArray_1.10.10   Formula_1.2-5        
-    ##  [16] htmlwidgets_1.6.4     impute_1.84.0         cachem_1.1.0         
-    ##  [19] lifecycle_1.0.5       iterators_1.0.14      pkgconfig_2.0.3      
-    ##  [22] Matrix_1.7-3          R6_2.6.1              fastmap_1.2.0        
-    ##  [25] clue_0.3-68           digest_0.6.39         colorspace_2.1-2     
-    ##  [28] AnnotationDbi_1.72.0  textshaping_1.0.5     Hmisc_5.2-6          
-    ##  [31] RSQLite_3.53.2        labeling_0.4.3        timechange_0.4.0     
-    ##  [34] httr_1.4.8            abind_1.4-8           mgcv_1.9-3           
-    ##  [37] compiler_4.5.1        proxy_0.4-29          bit64_4.8.2          
-    ##  [40] withr_3.0.3           doParallel_1.0.17     backports_1.5.1      
-    ##  [43] htmlTable_2.5.0       S7_0.2.2              DBI_1.3.0            
-    ##  [46] tkWidgets_1.88.0      DelayedArray_0.36.1   rjson_0.2.23         
-    ##  [49] tools_4.5.1           foreign_0.8-90        otel_0.2.0           
-    ##  [52] nnet_7.3-20           glue_1.8.1            nlme_3.1-168         
-    ##  [55] checkmate_2.3.4       cluster_2.1.8.2       gtable_0.3.6         
-    ##  [58] tzdb_0.5.0            preprocessCore_1.72.0 class_7.3-23         
-    ##  [61] data.table_1.18.4     hms_1.1.4             utf8_1.2.6           
-    ##  [64] XVector_0.50.0        foreach_1.5.2         pillar_1.11.1        
-    ##  [67] limma_3.66.0          vroom_1.7.1           circlize_0.4.18      
-    ##  [70] splines_4.5.1         lattice_0.22-7        survival_3.8-3       
-    ##  [73] bit_4.6.0             annotate_1.88.0       tidyselect_1.2.1     
-    ##  [76] locfit_1.5-9.12       Biostrings_2.78.0     gridExtra_2.3.1      
-    ##  [79] xfun_0.59             statmod_1.5.2         stringi_1.8.7        
-    ##  [82] yaml_2.3.12           evaluate_1.0.5        codetools_0.2-20     
-    ##  [85] cli_3.6.6             rpart_4.1.24          xtable_1.8-8         
-    ##  [88] systemfonts_1.3.2     dichromat_2.0-0.1     Rcpp_1.1.1-1.1       
-    ##  [91] png_0.1-9             XML_3.99-0.23         parallel_4.5.1       
-    ##  [94] blob_1.3.0            scales_1.4.0          crayon_1.5.3         
-    ##  [97] GetoptLong_1.1.1      rlang_1.2.0           cowplot_1.2.0        
-    ## [100] KEGGREST_1.50.0
+    ##  [1] rstudioapi_0.19.0     shape_1.4.6.1         magrittr_2.0.5       
+    ##  [4] farver_2.1.2          GlobalOptions_0.1.4   ragg_1.5.2           
+    ##  [7] vctrs_0.7.3           memoise_2.0.1         base64enc_0.1-6      
+    ## [10] htmltools_0.5.9       S4Arrays_1.10.1       SparseArray_1.10.10  
+    ## [13] Formula_1.2-5         htmlwidgets_1.6.4     impute_1.84.0        
+    ## [16] cachem_1.1.0          lifecycle_1.0.5       iterators_1.0.14     
+    ## [19] pkgconfig_2.0.3       Matrix_1.7-5          R6_2.6.1             
+    ## [22] fastmap_1.2.0         clue_0.3-68           digest_0.6.39        
+    ## [25] colorspace_2.1-2      AnnotationDbi_1.72.0  textshaping_1.0.5    
+    ## [28] Hmisc_5.2-6           RSQLite_3.53.2        labeling_0.4.3       
+    ## [31] timechange_0.4.0      mgcv_1.9-4            httr_1.4.8           
+    ## [34] abind_1.4-8           compiler_4.5.1        proxy_0.4-29         
+    ## [37] bit64_4.8.2           withr_3.0.3           doParallel_1.0.17    
+    ## [40] backports_1.5.1       htmlTable_2.5.0       S7_0.2.2             
+    ## [43] DBI_1.3.0             tkWidgets_1.88.0      DelayedArray_0.36.1  
+    ## [46] rjson_0.2.23          tools_4.5.1           foreign_0.8-91       
+    ## [49] otel_0.2.0            nnet_7.3-20           glue_1.8.1           
+    ## [52] nlme_3.1-169          checkmate_2.3.4       cluster_2.1.8.2      
+    ## [55] gtable_0.3.6          tzdb_0.5.0            preprocessCore_1.72.0
+    ## [58] class_7.3-23          data.table_1.18.4     hms_1.1.4            
+    ## [61] utf8_1.2.6            XVector_0.50.0        foreach_1.5.2        
+    ## [64] pillar_1.11.1         limma_3.66.0          vroom_1.7.1          
+    ## [67] circlize_0.4.18       splines_4.5.1         lattice_0.22-9       
+    ## [70] survival_3.8-6        bit_4.6.0             annotate_1.88.0      
+    ## [73] tidyselect_1.2.1      locfit_1.5-9.12       Biostrings_2.78.0    
+    ## [76] gridExtra_2.3.1       xfun_0.59             statmod_1.5.2        
+    ## [79] stringi_1.8.7         yaml_2.3.12           evaluate_1.0.5       
+    ## [82] codetools_0.2-20      cli_3.6.6             rpart_4.1.27         
+    ## [85] xtable_1.8-8          systemfonts_1.3.2     Rcpp_1.1.1-1.1       
+    ## [88] png_0.1-9             XML_3.99-0.23         parallel_4.5.1       
+    ## [91] blob_1.3.0            scales_1.4.0          crayon_1.5.3         
+    ## [94] GetoptLong_1.1.1      rlang_1.2.0           cowplot_1.2.0        
+    ## [97] KEGGREST_1.50.0
 
 ## 2. Setup species-specific parameters
 
@@ -202,7 +196,7 @@ options(stringsAsFactors = FALSE)
 enableWGCNAThreads(global_params$n_cores)
 ```
 
-    ## Allowing parallel execution with up to 18 working processes.
+    ## Allowing parallel execution with up to 4 working processes.
 
 Create Heatmap function based heavily off of the following tutorial:
 
