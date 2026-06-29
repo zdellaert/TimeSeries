@@ -213,8 +213,8 @@ complete_1to1_ogs_summary <- complete_1to1_ogs %>%
     Mfuzz_patterns_unique = length(unique(na.omit(Mfuzz_pattern))),
     
     # get annotation info (we pre-sorted by evalue above, so the best annotation will be chosen)
-    annotation = first(na.omit(SwissProt_ProteinName)),
-    annotation_evalue = first(na.omit(SwissProt_BlastEval)),
+    annotation = dplyr::first(na.omit(SwissProt_ProteinName)),
+    annotation_evalue = dplyr::first(na.omit(SwissProt_BlastEval)),
     has_annotation = !all(is.na(SwissProt_ProteinName)),
     
     # list the gene for each species (again, these are only OGs where there is exactly one gene per species)

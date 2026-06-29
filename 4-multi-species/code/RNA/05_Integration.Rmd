@@ -407,6 +407,14 @@ plot_df %>% filter(grepl("HSP",gene_sym)|grepl("Nrf2",gene_sym)|grepl("HSF1",gen
   facet_wrap(~paste0(str_replace(gene_id,"Pocillopora_acuta_HIv2___",""), ": ", gene_sym)) +
   theme_bw() +
   labs(y="VST expression", x="Timepoint")
+
+plot_df %>% filter(grepl("BNIP",gene_sym)|grepl("HIF",gene_sym)) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+  stat_summary(fun="mean", geom="line") +
+  scale_color_manual(values = treat_colors) +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+  facet_wrap(~paste0(str_replace(gene_id,"Pocillopora_acuta_HIv2___",""), ": ", gene_sym)) +
+  theme_bw() +
+  labs(y="VST expression", x="Timepoint")
 ```
 
 ### heat stress genes stats
