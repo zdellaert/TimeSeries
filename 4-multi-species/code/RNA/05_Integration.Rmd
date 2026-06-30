@@ -12,8 +12,6 @@ output:
 
 # Analysis of Time Series bulk RNA-seq data: Combine results from all analyses
 
----
-
 ## 1. Load packages and functions
 
 ```{r setup}
@@ -27,6 +25,10 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, fig.width = 10, fig.height =
 library(tidyverse)
 library(knitr)
 library(ComplexHeatmap)
+library(igraph)
+library(ggraph)
+library(ggarrow)
+library(patchwork)
 
 #load in parameters and functions
 source("species_parameters.R")
@@ -192,7 +194,7 @@ summary_stats %>% kable(format = "markdown")
 First make a true/false matrix for columns of interest
 
 - is_DE = is differentially expressed (padj < 0.05) by ImpulseDE2
-- Mfuzz_highconf = of the DE genes, these had a membership of > 0.5 in their Mfuzz cluster 
+- Mfuzz_highconf = of the DE genes, these had a membership of > 0.5 in their Mfuzz cluster
 - WGCNA_sig_module = member of a WGCNA module that was signfiicant for the interaction between temperature and timepoint by limma
 - is_hub = is a hub gene for its module
 - Has_TF_binding = has at least one match for the searched transcription factor bindinf motifs (HSF1, FOXO3, or NFE2L2/NRF2)
@@ -322,7 +324,6 @@ gene_sets <- list(
 saveRDS(gene_sets, file.path(outdir, "gene_sets.rds"))
 ```
 
-
 ## 7. Heat stress genes
 
 ```{r}
@@ -353,6 +354,8 @@ HeatStressGenes <- read_csv(paste0(annot_dir,"/heatstress/HeatStressGenes_", spe
             response_type = paste(unique(response_type), collapse = ","),
             category = paste(unique(category), collapse = ",")
             ) 
+  
+  HeatStressGenes_unique <- HeatStressGenes_unique %>% mutate(gene_sym=str_replace(str_replace(gene_sym,"Hsc71,HSP70","HSP70"),"HSP70,Hsc71","HSP70"))
 ```
 
 ```{r}
@@ -421,6 +424,8 @@ plot_df %>% filter(grepl("BNIP",gene_sym)|grepl("HIF",gene_sym)) %>% ggplot(aes(
 
 ```{r}
 heat_res <- HeatStressGenes_unique %>% left_join(master_table, by="gene_id")
+
+heat_res <- heat_res %>% mutate(gene_sym=str_replace(str_replace(gene_sym,"Hsc71,HSP70","HSP70"),"HSP70,Hsc71","HSP70"))
 ```
 
 ### Summary table
@@ -459,3 +464,173 @@ summary_stats <- tibble(
 
 summary_stats %>% kable(format = "markdown")
 ```
+
+## 8. Pathway visualization
+
+### Set up pathway
+
+```{r}
+# define edges - each gene needs to be paired with a target
+edges <- data.frame(
+  from = c("HSF1",  "HSF1",  "HSP90",    "HIF-a", "BNIP3", "Bcl-2", "Bcl-2"),
+  to   = c("HSP90", "HSP70", "HIF-a", "BNIP3",    "Bcl-2",  "BAK",  "BAX"),
+  int_type   = c("activate", "activate", "activate", "activate",    "inhibit",  "inhibit",  "inhibit")
+)
+
+# Create graph
+g <- graph_from_data_frame(edges, directed = TRUE)
+
+# use ggraph to get coordinates for basic tree layout of graph
+basic_layout <- ggraph(g, layout = "tree")$data %>% select(x, y, name)
+
+edges_detailed <- edges %>% 
+  mutate(edge_id = paste0(from, "-", to)) %>% 
+  mutate(from = as.character(from)) %>% 
+  mutate(to = as.character(to)) %>% 
+  inner_join(basic_layout, by = c("from" = "name")) %>% 
+  rename(
+    temx = x, 
+    temy = y,
+  ) %>% 
+  inner_join(basic_layout, by = c("to" = "name")) %>% 
+  rename(
+    x = temx,
+    y = temy,
+    xend = x,
+    yend = y
+  )
+```
+
+#### VST H vs. C
+
+```{r}
+pathway_genes <- HeatStressGenes_unique %>%
+  filter(gene_sym %in%
+           c("HSF1", "HSP90","HSP70", "HIF-a","BNIP3","Bcl-2", "BAK","BAX"))
+
+pathway_genes_ids <- unique(pathway_genes$gene_id) 
+pathway_genes_counts <- vst_counts[pathway_genes_ids, ]
+
+plot_df <- as.data.frame(t(pathway_genes_counts)) %>%
+  rownames_to_column(var="sample") %>%
+  left_join(meta, by=c("sample"="sample")) %>%
+  pivot_longer(cols = all_of(pathway_genes_ids), names_to="gene_id", values_to="expression") %>%
+  left_join(HeatStressGenes_unique)
+```
+
+```{r}
+plot_df_means <- plot_df %>% group_by(gene_id, gene_sym, time, treatment) %>%
+  summarize(mean_expr = mean(expression), .groups = "drop")
+```
+
+```{r}
+timepoints <- c("1", "3", "12")
+treatments <- c("C", "H")
+
+plot_list <- list()
+
+for (plot_time in timepoints) {
+  for (plot_treat in treatments) {
+    filtered_expr <- plot_df_means %>% filter(time==plot_time & treatment==plot_treat)
+    
+    nodes <- basic_layout %>% left_join(filtered_expr, by=join_by(name==gene_sym))
+    
+    edges_plot <- edges_detailed %>%
+      mutate(int_type = factor(int_type, levels = c("activate", "inhibit")))
+    
+    p <- ggplot() +
+      geom_label(data = nodes,
+                aes(x = x, y = y,label = name,fill=mean_expr),
+                size = 4) +
+      geom_arrow_segment(data=edges_plot, aes(x = x, y = y-0.2,
+                             xend = xend, yend = yend+0.3,
+                             arrow_head = int_type, color = int_type),
+                 linewidth = 1.1, alpha = 0.8) +
+      scale_arrow_head_discrete(values = list(
+        arrow_head_wings(offset = 30, inset = 70),
+        arrow_head_line(90, lineend = "butt")),guide="none") +
+      scale_fill_gradient2(low = "blue", mid = "white", high = "red",
+                           midpoint = median(plot_df_means$mean_expr),
+                           limits=c(min(plot_df_means$mean_expr),
+                                   max(plot_df_means$mean_expr))) +
+      scale_color_manual(values = c("green3", "tomato1"),guide="none") +
+      labs(arrow_head = "",
+           color = "",
+           fill= "VST\nExpr.",
+           title = paste0(plot_time," hours, ", plot_treat)) +
+      theme_void() +
+      scale_x_continuous(limits = c(-1.5, 1.5)) +
+      theme(legend.position = c(0.75, 0.5))
+    
+    plot_list[[paste0(plot_time, plot_treat)]] <- p
+  }
+}
+
+wrap_plots(plot_list, ncol = 2, nrow = 3) +
+  plot_layout(guides = 'collect')
+```
+
+
+#### VST Heat - Control 
+
+```{r}
+plot_df_diff <- plot_df_means %>%
+  pivot_wider(names_from = treatment, 
+              values_from = mean_expr,
+              values_fill = 0) %>%
+  mutate(diff = H - C) %>%
+  pivot_longer(cols = c(H, C, diff),
+               names_to = "treatment",
+               values_to = "mean_expr")  %>% filter(treatment=="diff")
+```
+
+```{r}
+timepoints <- unique(meta$time)
+treatments <- c("diff")
+
+plot_list <- list()
+
+for (plot_time in timepoints) {
+  for (plot_treat in treatments) {
+    filtered_expr <- plot_df_diff %>% filter(time==plot_time & treatment==plot_treat)
+    
+    nodes <- basic_layout %>% left_join(filtered_expr, by=join_by(name==gene_sym))
+    
+    edges_plot <- edges_detailed %>%
+      mutate(int_type = factor(int_type, levels = c("activate", "inhibit")))
+    
+    p <- ggplot() +
+      geom_label(data = nodes,
+                aes(x = x, y = y,label = name,fill=mean_expr),
+                size = 4) +
+      geom_arrow_segment(data=edges_plot, aes(x = x, y = y-0.2,
+                             xend = xend, yend = yend+0.3,
+                             arrow_head = int_type, color = int_type),
+                 linewidth = 1.1, alpha = 0.8) +
+      scale_arrow_head_discrete(values = list(
+        arrow_head_wings(offset = 30, inset = 70),
+        arrow_head_line(90, lineend = "butt")),guide="none") +
+      scale_fill_gradient2(low = "blue", mid = "gray90", high = "red",
+                           midpoint = 0,
+                           limits=c(min(plot_df_diff$mean_expr)-1,max(plot_df_diff$mean_expr))) +
+      scale_color_manual(values = c("green3", "tomato1"),guide="none") +
+      labs(arrow_head = "",
+           color = "",
+           fill= "VST\nExpr.",
+           title = paste0(plot_time," hours, ", plot_treat)) +
+      theme_void() +
+      scale_x_continuous(limits = c(-1.5, 1.5)) +
+      theme(legend.position = c(0.75, 0.5))
+    
+    plot_list[[paste0(plot_time, plot_treat)]] <- p
+  }
+}
+
+final <- wrap_plots(plot_list, ncol = 4, nrow = 2) +
+  plot_layout(guides = 'collect')
+
+final
+
+save_ggplot(final, "HSF1_Pathway_VST_Diff")
+```
+
