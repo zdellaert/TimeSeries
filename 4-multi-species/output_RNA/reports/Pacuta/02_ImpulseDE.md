@@ -1,7 +1,7 @@
 ImpulseDE2 Temporal Analysis
 ================
 Zoe Dellaert
-2026-06-29
+2026-07-01
 
 - [Bulk RNA-seq Time Course Trajectory Analysis and
   Clustering](#bulk-rna-seq-time-course-trajectory-analysis-and-clustering)
@@ -131,23 +131,19 @@ library(ComplexHeatmap)
     ## This message can be suppressed by:
     ##   suppressPackageStartupMessages(library(ComplexHeatmap))
     ## ========================================
-    ## ! pheatmap() has been masked by ComplexHeatmap::pheatmap(). Most of the arguments
-    ##    in the original pheatmap() are identically supported in the new function. You 
-    ##    can still use the original function by explicitly calling pheatmap::pheatmap().
+
+``` r
+library(pheatmap)
+```
 
     ## 
-    ## Attaching package: 'ComplexHeatmap'
+    ## Attaching package: 'pheatmap'
 
-    ## The following object is masked from 'package:genefilter':
-    ## 
-    ##     dist2
-
-    ## The following object is masked from 'package:pheatmap':
+    ## The following object is masked from 'package:ComplexHeatmap':
     ## 
     ##     pheatmap
 
 ``` r
-library(pheatmap)
 library(Mfuzz)
 ```
 
@@ -207,21 +203,20 @@ sessionInfo() #provides list of loaded packages and version of R
     ## other attached packages:
     ##  [1] Mfuzz_2.70.0                DynDoc_1.88.0              
     ##  [3] widgetTools_1.88.0          e1071_1.7-17               
-    ##  [5] ComplexHeatmap_2.26.1       ImpulseDE2_0.99.10         
-    ##  [7] BiocParallel_1.44.0         ggnewscale_0.5.2           
-    ##  [9] genefilter_1.92.0           RColorBrewer_1.1-3         
-    ## [11] pheatmap_1.0.13             DESeq2_1.50.2              
-    ## [13] SummarizedExperiment_1.40.0 Biobase_2.70.0             
-    ## [15] MatrixGenerics_1.22.0       matrixStats_1.5.0          
-    ## [17] GenomicRanges_1.62.1        Seqinfo_1.0.0              
-    ## [19] IRanges_2.44.0              S4Vectors_0.48.1           
-    ## [21] BiocGenerics_0.56.0         generics_0.1.4             
-    ## [23] lubridate_1.9.5             forcats_1.0.1              
-    ## [25] stringr_1.6.0               dplyr_1.2.1                
-    ## [27] purrr_1.2.2                 readr_2.2.0                
-    ## [29] tidyr_1.3.2                 tibble_3.3.1               
-    ## [31] ggplot2_4.0.3               tidyverse_2.0.0            
-    ## [33] rmarkdown_2.31             
+    ##  [5] pheatmap_1.0.13             ComplexHeatmap_2.26.1      
+    ##  [7] ImpulseDE2_0.99.10          BiocParallel_1.44.0        
+    ##  [9] ggnewscale_0.5.2            RColorBrewer_1.1-3         
+    ## [11] SummarizedExperiment_1.40.0 Biobase_2.70.0             
+    ## [13] MatrixGenerics_1.22.0       matrixStats_1.5.0          
+    ## [15] GenomicRanges_1.62.1        Seqinfo_1.0.0              
+    ## [17] IRanges_2.44.0              S4Vectors_0.48.1           
+    ## [19] BiocGenerics_0.56.0         generics_0.1.4             
+    ## [21] lubridate_1.9.5             forcats_1.0.1              
+    ## [23] stringr_1.6.0               dplyr_1.2.1                
+    ## [25] purrr_1.2.2                 readr_2.2.0                
+    ## [27] tidyr_1.3.2                 tibble_3.3.1               
+    ## [29] ggplot2_4.0.3               tidyverse_2.0.0            
+    ## [31] rmarkdown_2.31             
     ## 
     ## loaded via a namespace (and not attached):
     ##  [1] DBI_1.3.0            rlang_1.2.0          magrittr_2.0.5      
@@ -232,7 +227,7 @@ sessionInfo() #provides list of loaded packages and version of R
     ## [16] XVector_0.50.0       labeling_0.4.3       tzdb_0.5.0          
     ## [19] ragg_1.5.2           bit_4.6.0            xfun_0.59           
     ## [22] cachem_1.1.0         blob_1.3.0           DelayedArray_0.36.1 
-    ## [25] cluster_2.1.8.2      parallel_4.5.1       R6_2.6.1            
+    ## [25] parallel_4.5.1       cluster_2.1.8.2      R6_2.6.1            
     ## [28] stringi_1.8.7        Rcpp_1.1.1-1.1       iterators_1.0.14    
     ## [31] knitr_1.51           Matrix_1.7-5         splines_4.5.1       
     ## [34] timechange_0.4.0     tidyselect_1.2.1     rstudioapi_0.19.0   
@@ -246,10 +241,11 @@ sessionInfo() #provides list of loaded packages and version of R
     ## [58] tools_4.5.1          annotate_1.88.0      locfit_1.5-9.12     
     ## [61] XML_3.99-0.23        cowplot_1.2.0        AnnotationDbi_1.72.0
     ## [64] colorspace_2.1-2     cli_3.6.6            textshaping_1.0.5   
-    ## [67] S4Arrays_1.10.1      gtable_0.3.6         digest_0.6.39       
-    ## [70] SparseArray_1.10.10  rjson_0.2.23         farver_2.1.2        
-    ## [73] memoise_2.0.1        htmltools_0.5.9      lifecycle_1.0.5     
-    ## [76] httr_1.4.8           GlobalOptions_0.1.4  bit64_4.8.2
+    ## [67] S4Arrays_1.10.1      gtable_0.3.6         DESeq2_1.50.2       
+    ## [70] digest_0.6.39        SparseArray_1.10.10  rjson_0.2.23        
+    ## [73] farver_2.1.2         memoise_2.0.1        htmltools_0.5.9     
+    ## [76] lifecycle_1.0.5      httr_1.4.8           GlobalOptions_0.1.4 
+    ## [79] bit64_4.8.2
 
 ## 2. Setup species-specific parameters
 
@@ -690,7 +686,11 @@ heatmap_up <- pheatmap(vst_heat_norm,
          annotation_colors = list("treatment" = treat_colors,
                                   "time" = time_colors,
                                   "response_type" = c("Monotonous" = "#D8AF39FF", "Transient" = "#278B9AFF")))
+```
 
+![](./02_ImpulseDE_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+
+``` r
 png(file.path(outdir_plots,"ImpulseDE2_heatmap_UP.png"),  width = 7, height = 10, units = "in", res = 300)
 heatmap_up
 dev.off()
@@ -741,7 +741,11 @@ heatmap_up_all <- pheatmap(vst_heat_norm,
          annotation_colors = list("treatment" = treat_colors,
                                   "time" = time_colors,
                                   "response_type" = c("Monotonous" = "#D8AF39FF", "Transient" = "#278B9AFF")))
+```
 
+![](./02_ImpulseDE_files/figure-gfm/unnamed-chunk-12-2.png)<!-- -->
+
+``` r
 png(file.path(outdir_plots,"ImpulseDE2_heatmap_UP_ALL.png"),  width = 7, height = 10, units = "in", res = 300)
 heatmap_up_all
 dev.off()
@@ -793,7 +797,11 @@ heatmap_down <- pheatmap(vst_heat_norm,
          annotation_colors = list("treatment" = treat_colors,
                                   "time" = time_colors,
                                   "response_type" = c("Monotonous" = "#D8AF39FF", "Transient" = "#278B9AFF")))
+```
 
+![](./02_ImpulseDE_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+
+``` r
 png(file.path(outdir_plots,"ImpulseDE2_heatmap_DOWN.png"),  width = 7, height = 10, units = "in", res = 300)
 heatmap_down
 dev.off()
@@ -844,7 +852,11 @@ heatmap_down_all <- pheatmap(vst_heat_norm,
          annotation_colors = list("treatment" = treat_colors,
                                   "time" = time_colors,
                                   "response_type" = c("Monotonous" = "#D8AF39FF", "Transient" = "#278B9AFF")))
+```
 
+![](./02_ImpulseDE_files/figure-gfm/unnamed-chunk-13-2.png)<!-- -->
+
+``` r
 png(file.path(outdir_plots,"ImpulseDE2_heatmap_DOWN_ALL.png"),  width = 7, height = 10, units = "in", res = 300)
 heatmap_down_all
 dev.off()
@@ -1263,21 +1275,20 @@ sessionInfo()
     ## other attached packages:
     ##  [1] Mfuzz_2.70.0                DynDoc_1.88.0              
     ##  [3] widgetTools_1.88.0          e1071_1.7-17               
-    ##  [5] ComplexHeatmap_2.26.1       ImpulseDE2_0.99.10         
-    ##  [7] BiocParallel_1.44.0         ggnewscale_0.5.2           
-    ##  [9] genefilter_1.92.0           RColorBrewer_1.1-3         
-    ## [11] pheatmap_1.0.13             DESeq2_1.50.2              
-    ## [13] SummarizedExperiment_1.40.0 Biobase_2.70.0             
-    ## [15] MatrixGenerics_1.22.0       matrixStats_1.5.0          
-    ## [17] GenomicRanges_1.62.1        Seqinfo_1.0.0              
-    ## [19] IRanges_2.44.0              S4Vectors_0.48.1           
-    ## [21] BiocGenerics_0.56.0         generics_0.1.4             
-    ## [23] lubridate_1.9.5             forcats_1.0.1              
-    ## [25] stringr_1.6.0               dplyr_1.2.1                
-    ## [27] purrr_1.2.2                 readr_2.2.0                
-    ## [29] tidyr_1.3.2                 tibble_3.3.1               
-    ## [31] ggplot2_4.0.3               tidyverse_2.0.0            
-    ## [33] rmarkdown_2.31             
+    ##  [5] pheatmap_1.0.13             ComplexHeatmap_2.26.1      
+    ##  [7] ImpulseDE2_0.99.10          BiocParallel_1.44.0        
+    ##  [9] ggnewscale_0.5.2            RColorBrewer_1.1-3         
+    ## [11] SummarizedExperiment_1.40.0 Biobase_2.70.0             
+    ## [13] MatrixGenerics_1.22.0       matrixStats_1.5.0          
+    ## [15] GenomicRanges_1.62.1        Seqinfo_1.0.0              
+    ## [17] IRanges_2.44.0              S4Vectors_0.48.1           
+    ## [19] BiocGenerics_0.56.0         generics_0.1.4             
+    ## [21] lubridate_1.9.5             forcats_1.0.1              
+    ## [23] stringr_1.6.0               dplyr_1.2.1                
+    ## [25] purrr_1.2.2                 readr_2.2.0                
+    ## [27] tidyr_1.3.2                 tibble_3.3.1               
+    ## [29] ggplot2_4.0.3               tidyverse_2.0.0            
+    ## [31] rmarkdown_2.31             
     ## 
     ## loaded via a namespace (and not attached):
     ##  [1] DBI_1.3.0            rlang_1.2.0          magrittr_2.0.5      
@@ -1288,7 +1299,7 @@ sessionInfo()
     ## [16] XVector_0.50.0       labeling_0.4.3       tzdb_0.5.0          
     ## [19] ragg_1.5.2           bit_4.6.0            xfun_0.59           
     ## [22] cachem_1.1.0         blob_1.3.0           DelayedArray_0.36.1 
-    ## [25] cluster_2.1.8.2      parallel_4.5.1       R6_2.6.1            
+    ## [25] parallel_4.5.1       cluster_2.1.8.2      R6_2.6.1            
     ## [28] stringi_1.8.7        Rcpp_1.1.1-1.1       iterators_1.0.14    
     ## [31] knitr_1.51           Matrix_1.7-5         splines_4.5.1       
     ## [34] timechange_0.4.0     tidyselect_1.2.1     rstudioapi_0.19.0   
@@ -1303,7 +1314,14 @@ sessionInfo()
     ## [61] locfit_1.5-9.12      XML_3.99-0.23        cowplot_1.2.0       
     ## [64] AnnotationDbi_1.72.0 colorspace_2.1-2     nlme_3.1-169        
     ## [67] cli_3.6.6            textshaping_1.0.5    S4Arrays_1.10.1     
-    ## [70] gtable_0.3.6         digest_0.6.39        SparseArray_1.10.10 
-    ## [73] rjson_0.2.23         farver_2.1.2         memoise_2.0.1       
-    ## [76] htmltools_0.5.9      lifecycle_1.0.5      httr_1.4.8          
-    ## [79] GlobalOptions_0.1.4  bit64_4.8.2
+    ## [70] gtable_0.3.6         DESeq2_1.50.2        digest_0.6.39       
+    ## [73] SparseArray_1.10.10  rjson_0.2.23         farver_2.1.2        
+    ## [76] memoise_2.0.1        htmltools_0.5.9      lifecycle_1.0.5     
+    ## [79] httr_1.4.8           GlobalOptions_0.1.4  bit64_4.8.2
+
+``` r
+detach(package:Mfuzz, unload=TRUE)
+detach(package:ImpulseDE2, unload=TRUE)
+detach(package:pheatmap, unload=TRUE)
+detach(package:ComplexHeatmap, unload=TRUE)
+```

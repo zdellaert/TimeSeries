@@ -488,12 +488,12 @@ edges_detailed <- edges %>%
   mutate(from = as.character(from)) %>% 
   mutate(to = as.character(to)) %>% 
   inner_join(basic_layout, by = c("from" = "name")) %>% 
-  rename(
+  dplyr::rename(
     temx = x, 
     temy = y,
   ) %>% 
   inner_join(basic_layout, by = c("to" = "name")) %>% 
-  rename(
+  dplyr::rename(
     x = temx,
     y = temy,
     xend = x,
@@ -632,5 +632,15 @@ final <- wrap_plots(plot_list, ncol = 4, nrow = 2) +
 final
 
 save_ggplot(final, "HSF1_Pathway_VST_Diff")
+```
+
+```{r}
+sessionInfo()
+
+detach(package:igraph, unload=TRUE)
+detach(package:ggraph, unload=TRUE)
+detach(package:ggarrow, unload=TRUE)
+detach(package:patchwork, unload=TRUE)
+detach(package:ComplexHeatmap, unload=TRUE)
 ```
 

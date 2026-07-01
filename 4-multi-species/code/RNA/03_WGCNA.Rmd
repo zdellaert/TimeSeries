@@ -600,3 +600,10 @@ write.csv(module_eigengenes %>% rownames_to_column("sample"),
 #save hub genes as csv
 write.csv(hub_genes, file.path(outdir, "hub_genes.csv"), row.names = FALSE)
 ```
+
+```{r}
+sessionInfo()
+
+detach(package:WGCNA, unload=TRUE)
+```
+

@@ -1,7 +1,7 @@
 Integrate across analyses
 ================
 Zoe Dellaert
-2026-06-30
+2026-07-01
 
 - [Analysis of Time Series bulk RNA-seq data: Combine results from all
   analyses](#analysis-of-time-series-bulk-rna-seq-data-combine-results-from-all-analyses)
@@ -38,27 +38,12 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, fig.width = 10, fig.height =
 
 #load packages
 library(tidyverse)
-```
-
-    ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-    ## ✔ dplyr     1.2.1     ✔ readr     2.2.0
-    ## ✔ forcats   1.0.1     ✔ stringr   1.6.0
-    ## ✔ ggplot2   4.0.3     ✔ tibble    3.3.1
-    ## ✔ lubridate 1.9.5     ✔ tidyr     1.3.2
-    ## ✔ purrr     1.2.2     
-    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-    ## ✖ dplyr::filter() masks stats::filter()
-    ## ✖ dplyr::lag()    masks stats::lag()
-    ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
-
-``` r
 library(knitr)
 library(ComplexHeatmap)
 ```
 
     ## Warning: package 'ComplexHeatmap' was built under R version 4.5.2
 
-    ## Loading required package: grid
     ## ========================================
     ## ComplexHeatmap version 2.26.1
     ## Bioconductor page: http://bioconductor.org/packages/ComplexHeatmap/
@@ -84,31 +69,55 @@ library(igraph)
 
     ## 
     ## Attaching package: 'igraph'
+
+    ## The following object is masked from 'package:DynDoc':
     ## 
+    ##     path
+
+    ## The following object is masked from 'package:GenomicRanges':
+    ## 
+    ##     union
+
+    ## The following object is masked from 'package:IRanges':
+    ## 
+    ##     union
+
+    ## The following object is masked from 'package:S4Vectors':
+    ## 
+    ##     union
+
+    ## The following objects are masked from 'package:BiocGenerics':
+    ## 
+    ##     normalize, path, union
+
+    ## The following objects are masked from 'package:generics':
+    ## 
+    ##     components, union
+
     ## The following objects are masked from 'package:lubridate':
     ## 
     ##     %--%, union
-    ## 
+
     ## The following objects are masked from 'package:dplyr':
     ## 
     ##     as_data_frame, groups, union
-    ## 
+
     ## The following objects are masked from 'package:purrr':
     ## 
     ##     compose, simplify
-    ## 
+
     ## The following object is masked from 'package:tidyr':
     ## 
     ##     crossing
-    ## 
+
     ## The following object is masked from 'package:tibble':
     ## 
     ##     as_data_frame
-    ## 
+
     ## The following objects are masked from 'package:stats':
     ## 
     ##     decompose, spectrum
-    ## 
+
     ## The following object is masked from 'package:base':
     ## 
     ##     union
@@ -140,40 +149,66 @@ sessionInfo() #provides list of loaded packages and version of R
     ## tzcode source: internal
     ## 
     ## attached base packages:
-    ## [1] grid      stats     graphics  grDevices utils     datasets  methods  
-    ## [8] base     
+    ##  [1] tcltk     grid      stats4    stats     graphics  grDevices utils    
+    ##  [8] datasets  methods   base     
     ## 
     ## other attached packages:
-    ##  [1] patchwork_1.3.2       ggarrow_0.1.1         ggraph_2.2.2         
-    ##  [4] igraph_2.3.3          ComplexHeatmap_2.26.1 knitr_1.51           
-    ##  [7] lubridate_1.9.5       forcats_1.0.1         stringr_1.6.0        
-    ## [10] dplyr_1.2.1           purrr_1.2.2           readr_2.2.0          
-    ## [13] tidyr_1.3.2           tibble_3.3.1          ggplot2_4.0.3        
-    ## [16] tidyverse_2.0.0       rmarkdown_2.31       
+    ##  [1] patchwork_1.3.2             ggarrow_0.1.1              
+    ##  [3] ggraph_2.2.2                igraph_2.3.3               
+    ##  [5] ComplexHeatmap_2.26.1       knitr_1.51                 
+    ##  [7] fastcluster_1.3.0           dynamicTreeCut_1.63-1      
+    ##  [9] DynDoc_1.88.0               widgetTools_1.88.0         
+    ## [11] e1071_1.7-17                BiocParallel_1.44.0        
+    ## [13] ggnewscale_0.5.2            RColorBrewer_1.1-3         
+    ## [15] SummarizedExperiment_1.40.0 Biobase_2.70.0             
+    ## [17] MatrixGenerics_1.22.0       matrixStats_1.5.0          
+    ## [19] GenomicRanges_1.62.1        Seqinfo_1.0.0              
+    ## [21] IRanges_2.44.0              S4Vectors_0.48.1           
+    ## [23] BiocGenerics_0.56.0         generics_0.1.4             
+    ## [25] lubridate_1.9.5             forcats_1.0.1              
+    ## [27] stringr_1.6.0               dplyr_1.2.1                
+    ## [29] purrr_1.2.2                 readr_2.2.0                
+    ## [31] tidyr_1.3.2                 tibble_3.3.1               
+    ## [33] ggplot2_4.0.3               tidyverse_2.0.0            
+    ## [35] rmarkdown_2.31             
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] gtable_0.3.6        circlize_0.4.18     shape_1.4.6.1      
-    ##  [4] rjson_0.2.23        xfun_0.59           GlobalOptions_0.1.4
-    ##  [7] ggrepel_0.9.8       tzdb_0.5.0          vctrs_0.7.3        
-    ## [10] tools_4.5.1         generics_0.1.4      stats4_4.5.1       
-    ## [13] parallel_4.5.1      cluster_2.1.8.2     pkgconfig_2.0.3    
-    ## [16] RColorBrewer_1.1-3  S7_0.2.2            S4Vectors_0.48.1   
-    ## [19] lifecycle_1.0.5     compiler_4.5.1      farver_2.1.2       
-    ## [22] ggforce_0.5.0       graphlayouts_1.2.4  codetools_0.2-20   
-    ## [25] clue_0.3-68         htmltools_0.5.9     yaml_2.3.12        
-    ## [28] pillar_1.11.1       crayon_1.5.3        MASS_7.3-65        
-    ## [31] cachem_1.1.0        viridis_0.6.5       iterators_1.0.14   
-    ## [34] foreach_1.5.2       tidyselect_1.2.1    digest_0.6.39      
-    ## [37] stringi_1.8.7       polyclip_1.10-7     fastmap_1.2.0      
-    ## [40] colorspace_2.1-2    cli_3.6.6           magrittr_2.0.5     
-    ## [43] tidygraph_1.3.1     withr_3.0.3         scales_1.4.0       
-    ## [46] timechange_0.4.0    matrixStats_1.5.0   otel_0.2.0         
-    ## [49] gridExtra_2.3.1     png_0.1-9           GetoptLong_1.1.1   
-    ## [52] hms_1.1.4           memoise_2.0.1       evaluate_1.0.5     
-    ## [55] IRanges_2.44.0      doParallel_1.0.17   viridisLite_0.4.3  
-    ## [58] rlang_1.2.0         Rcpp_1.1.1-1.1      glue_1.8.1         
-    ## [61] tweenr_2.0.3        BiocGenerics_0.56.0 rstudioapi_0.19.0  
-    ## [64] R6_2.6.1
+    ##   [1] rstudioapi_0.19.0     shape_1.4.6.1         magrittr_2.0.5       
+    ##   [4] farver_2.1.2          GlobalOptions_0.1.4   ragg_1.5.2           
+    ##   [7] vctrs_0.7.3           memoise_2.0.1         base64enc_0.1-6      
+    ##  [10] htmltools_0.5.9       S4Arrays_1.10.1       SparseArray_1.10.10  
+    ##  [13] Formula_1.2-5         htmlwidgets_1.6.4     impute_1.84.0        
+    ##  [16] cachem_1.1.0          lifecycle_1.0.5       iterators_1.0.14     
+    ##  [19] pkgconfig_2.0.3       Matrix_1.7-5          R6_2.6.1             
+    ##  [22] fastmap_1.2.0         clue_0.3-68           digest_0.6.39        
+    ##  [25] colorspace_2.1-2      AnnotationDbi_1.72.0  DESeq2_1.50.2        
+    ##  [28] textshaping_1.0.5     Hmisc_5.2-6           RSQLite_3.53.2       
+    ##  [31] labeling_0.4.3        timechange_0.4.0      polyclip_1.10-7      
+    ##  [34] httr_1.4.8            abind_1.4-8           compiler_4.5.1       
+    ##  [37] proxy_0.4-29          bit64_4.8.2           withr_3.0.3          
+    ##  [40] doParallel_1.0.17     htmlTable_2.5.0       S7_0.2.2             
+    ##  [43] backports_1.5.1       viridis_0.6.5         DBI_1.3.0            
+    ##  [46] ggforce_0.5.0         MASS_7.3-65           tkWidgets_1.88.0     
+    ##  [49] DelayedArray_0.36.1   rjson_0.2.23          tools_4.5.1          
+    ##  [52] foreign_0.8-91        otel_0.2.0            nnet_7.3-20          
+    ##  [55] glue_1.8.1            nlme_3.1-169          checkmate_2.3.4      
+    ##  [58] cluster_2.1.8.2       gtable_0.3.6          tzdb_0.5.0           
+    ##  [61] preprocessCore_1.72.0 class_7.3-23          data.table_1.18.4    
+    ##  [64] hms_1.1.4             tidygraph_1.3.1       utf8_1.2.6           
+    ##  [67] XVector_0.50.0        ggrepel_0.9.8         foreach_1.5.2        
+    ##  [70] pillar_1.11.1         limma_3.66.0          vroom_1.7.1          
+    ##  [73] circlize_0.4.18       splines_4.5.1         tweenr_2.0.3         
+    ##  [76] lattice_0.22-9        survival_3.8-6        bit_4.6.0            
+    ##  [79] annotate_1.88.0       tidyselect_1.2.1      locfit_1.5-9.12      
+    ##  [82] Biostrings_2.78.0     gridExtra_2.3.1       xfun_0.59            
+    ##  [85] graphlayouts_1.2.4    statmod_1.5.2         stringi_1.8.7        
+    ##  [88] yaml_2.3.12           evaluate_1.0.5        codetools_0.2-20     
+    ##  [91] cli_3.6.6             rpart_4.1.27          xtable_1.8-8         
+    ##  [94] systemfonts_1.3.2     Rcpp_1.1.1-1.1        png_0.1-9            
+    ##  [97] XML_3.99-0.23         parallel_4.5.1        blob_1.3.0           
+    ## [100] viridisLite_0.4.3     scales_1.4.0          crayon_1.5.3         
+    ## [103] GetoptLong_1.1.1      rlang_1.2.0           cowplot_1.2.0        
+    ## [106] KEGGREST_1.50.0
 
 ## 2. Setup species-specific parameters and define directories
 
@@ -786,12 +821,12 @@ edges_detailed <- edges %>%
   mutate(from = as.character(from)) %>% 
   mutate(to = as.character(to)) %>% 
   inner_join(basic_layout, by = c("from" = "name")) %>% 
-  rename(
+  dplyr::rename(
     temx = x, 
     temy = y,
   ) %>% 
   inner_join(basic_layout, by = c("to" = "name")) %>% 
-  rename(
+  dplyr::rename(
     x = temx,
     y = temy,
     xend = x,
@@ -935,4 +970,98 @@ final
 
 ``` r
 save_ggplot(final, "HSF1_Pathway_VST_Diff")
+```
+
+``` r
+sessionInfo()
+```
+
+    ## R version 4.5.1 (2025-06-13)
+    ## Platform: x86_64-apple-darwin20
+    ## Running under: macOS Tahoe 26.4.1
+    ## 
+    ## Matrix products: default
+    ## BLAS:   /Library/Frameworks/R.framework/Versions/4.5-x86_64/Resources/lib/libRblas.0.dylib 
+    ## LAPACK: /Library/Frameworks/R.framework/Versions/4.5-x86_64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1
+    ## 
+    ## locale:
+    ## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+    ## 
+    ## time zone: America/New_York
+    ## tzcode source: internal
+    ## 
+    ## attached base packages:
+    ##  [1] tcltk     grid      stats4    stats     graphics  grDevices utils    
+    ##  [8] datasets  methods   base     
+    ## 
+    ## other attached packages:
+    ##  [1] patchwork_1.3.2             ggarrow_0.1.1              
+    ##  [3] ggraph_2.2.2                igraph_2.3.3               
+    ##  [5] ComplexHeatmap_2.26.1       knitr_1.51                 
+    ##  [7] fastcluster_1.3.0           dynamicTreeCut_1.63-1      
+    ##  [9] DynDoc_1.88.0               widgetTools_1.88.0         
+    ## [11] e1071_1.7-17                BiocParallel_1.44.0        
+    ## [13] ggnewscale_0.5.2            RColorBrewer_1.1-3         
+    ## [15] SummarizedExperiment_1.40.0 Biobase_2.70.0             
+    ## [17] MatrixGenerics_1.22.0       matrixStats_1.5.0          
+    ## [19] GenomicRanges_1.62.1        Seqinfo_1.0.0              
+    ## [21] IRanges_2.44.0              S4Vectors_0.48.1           
+    ## [23] BiocGenerics_0.56.0         generics_0.1.4             
+    ## [25] lubridate_1.9.5             forcats_1.0.1              
+    ## [27] stringr_1.6.0               dplyr_1.2.1                
+    ## [29] purrr_1.2.2                 readr_2.2.0                
+    ## [31] tidyr_1.3.2                 tibble_3.3.1               
+    ## [33] ggplot2_4.0.3               tidyverse_2.0.0            
+    ## [35] rmarkdown_2.31             
+    ## 
+    ## loaded via a namespace (and not attached):
+    ##   [1] rstudioapi_0.19.0     shape_1.4.6.1         magrittr_2.0.5       
+    ##   [4] farver_2.1.2          GlobalOptions_0.1.4   ragg_1.5.2           
+    ##   [7] vctrs_0.7.3           memoise_2.0.1         base64enc_0.1-6      
+    ##  [10] htmltools_0.5.9       S4Arrays_1.10.1       SparseArray_1.10.10  
+    ##  [13] Formula_1.2-5         htmlwidgets_1.6.4     impute_1.84.0        
+    ##  [16] cachem_1.1.0          lifecycle_1.0.5       iterators_1.0.14     
+    ##  [19] pkgconfig_2.0.3       Matrix_1.7-5          R6_2.6.1             
+    ##  [22] fastmap_1.2.0         clue_0.3-68           digest_0.6.39        
+    ##  [25] colorspace_2.1-2      AnnotationDbi_1.72.0  DESeq2_1.50.2        
+    ##  [28] textshaping_1.0.5     Hmisc_5.2-6           RSQLite_3.53.2       
+    ##  [31] labeling_0.4.3        timechange_0.4.0      polyclip_1.10-7      
+    ##  [34] httr_1.4.8            abind_1.4-8           compiler_4.5.1       
+    ##  [37] proxy_0.4-29          bit64_4.8.2           withr_3.0.3          
+    ##  [40] doParallel_1.0.17     htmlTable_2.5.0       S7_0.2.2             
+    ##  [43] backports_1.5.1       viridis_0.6.5         DBI_1.3.0            
+    ##  [46] ggforce_0.5.0         MASS_7.3-65           tkWidgets_1.88.0     
+    ##  [49] DelayedArray_0.36.1   rjson_0.2.23          tools_4.5.1          
+    ##  [52] foreign_0.8-91        otel_0.2.0            nnet_7.3-20          
+    ##  [55] glue_1.8.1            nlme_3.1-169          checkmate_2.3.4      
+    ##  [58] cluster_2.1.8.2       gtable_0.3.6          tzdb_0.5.0           
+    ##  [61] preprocessCore_1.72.0 class_7.3-23          data.table_1.18.4    
+    ##  [64] hms_1.1.4             tidygraph_1.3.1       utf8_1.2.6           
+    ##  [67] XVector_0.50.0        ggrepel_0.9.8         foreach_1.5.2        
+    ##  [70] pillar_1.11.1         limma_3.66.0          vroom_1.7.1          
+    ##  [73] circlize_0.4.18       splines_4.5.1         tweenr_2.0.3         
+    ##  [76] lattice_0.22-9        survival_3.8-6        bit_4.6.0            
+    ##  [79] annotate_1.88.0       tidyselect_1.2.1      locfit_1.5-9.12      
+    ##  [82] Biostrings_2.78.0     gridExtra_2.3.1       xfun_0.59            
+    ##  [85] graphlayouts_1.2.4    statmod_1.5.2         stringi_1.8.7        
+    ##  [88] yaml_2.3.12           evaluate_1.0.5        codetools_0.2-20     
+    ##  [91] cli_3.6.6             rpart_4.1.27          xtable_1.8-8         
+    ##  [94] systemfonts_1.3.2     Rcpp_1.1.1-1.1        png_0.1-9            
+    ##  [97] XML_3.99-0.23         parallel_4.5.1        blob_1.3.0           
+    ## [100] viridisLite_0.4.3     scales_1.4.0          crayon_1.5.3         
+    ## [103] GetoptLong_1.1.1      rlang_1.2.0           cowplot_1.2.0        
+    ## [106] KEGGREST_1.50.0
+
+``` r
+detach(package:igraph, unload=TRUE)
+```
+
+    ## Warning: 'igraph' namespace cannot be unloaded:
+    ##   namespace 'igraph' is imported by 'ggraph', 'tidygraph' so cannot be unloaded
+
+``` r
+detach(package:ggraph, unload=TRUE)
+detach(package:ggarrow, unload=TRUE)
+detach(package:patchwork, unload=TRUE)
+detach(package:ComplexHeatmap, unload=TRUE)
 ```

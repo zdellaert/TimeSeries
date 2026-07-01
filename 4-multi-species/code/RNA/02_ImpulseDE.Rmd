@@ -725,5 +725,10 @@ heat_clustered %>% filter(!is.na(cluster)) %>% ggplot(aes(y=reorder(gene_id, clu
 
 ```{r}
 sessionInfo()
+
+detach(package:Mfuzz, unload=TRUE)
+detach(package:ImpulseDE2, unload=TRUE)
+detach(package:pheatmap, unload=TRUE)
+detach(package:ComplexHeatmap, unload=TRUE)
 ```
 

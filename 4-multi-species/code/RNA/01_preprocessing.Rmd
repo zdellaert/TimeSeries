@@ -274,5 +274,9 @@ cat("  PC2 variance:", percentVar[2], "%\n")
 
 ```{r}
 sessionInfo()
+
+detach(package:genefilter, unload=TRUE)
+detach(package:DESeq2, unload=TRUE)
+detach(package:pheatmap, unload=TRUE)
 ```
 

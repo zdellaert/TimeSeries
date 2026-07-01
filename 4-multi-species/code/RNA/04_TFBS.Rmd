@@ -146,3 +146,7 @@ head(TFBS_by_gene %>% mutate(total_motifs=(`count_FOXO3` + `count_HSF1` + `count
 write.csv(TFBS_by_gene, file.path(outdir, "TFBS_counts.csv"), row.names = FALSE)
 ```
 
+```{r}
+sessionInfo()
+```
+

@@ -1,7 +1,7 @@
 RNA-seq Preprocessing and Normalization
 ================
 Zoe Dellaert
-2026-06-29
+2026-07-01
 
 - [Preproccessing of bulk RNA-seq
   data](#preproccessing-of-bulk-rna-seq-data)
@@ -671,3 +671,9 @@ sessionInfo()
     ## [58] lattice_0.22-9       png_0.1-9            memoise_2.0.1       
     ## [61] Rcpp_1.1.1-1.1       SparseArray_1.10.10  xfun_0.59           
     ## [64] pkgconfig_2.0.3
+
+``` r
+detach(package:genefilter, unload=TRUE)
+detach(package:DESeq2, unload=TRUE)
+detach(package:pheatmap, unload=TRUE)
+```
