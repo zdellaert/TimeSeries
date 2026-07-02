@@ -648,42 +648,18 @@ standardized_avg_heat_expr %>% ggplot(aes(x=time, y=zscore)) +
   geom_line(aes(group=gene),alpha=0.01)+
   stat_summary(fun = mean, geom = "line", linewidth = 1,mapping=aes(color=cluster)) + theme_bw() + facet_grid(~cluster)
 
-standardized_avg_heat_expr %>% ggplot(aes(x=time, y=zscore)) + 
-  geom_line(aes(group=gene,color=membership),alpha=0.01)+
-  stat_summary(fun = mean, geom = "line", linewidth = 1) + theme_bw() + facet_grid(~cluster)
-
-standardized_avg_heat_expr %>% 
-  group_by(time, cluster) %>%
-  summarise(mean_zscore = mean(zscore), .groups = "drop") %>%
-  ggplot(aes(x = time, y = mean_zscore, color = cluster)) +
-  geom_smooth(method = "loess", se = FALSE, span = .5) +
-  theme_minimal()+ facet_grid(~cluster)
-
-
 centers <- as_tibble(cluster_centers,rownames="cluster")
 centers <- centers %>% pivot_longer(cols=starts_with("R"), names_to="timepoint",values_to="center")
 centers <- centers %>%
   mutate(time=as.numeric(str_remove(timepoint,"R")),
          cluster=factor(cluster))
 
-centers %>% ggplot(aes(x = time, y = center, group=cluster,color = cluster)) +
-  geom_line(linewidth=1)+
-  theme_minimal()+ facet_grid(~cluster)
-
-centers %>% ggplot(aes(x = time, y = center, group=cluster,color = cluster)) +
-  geom_smooth(method = "loess",span = .75,se=FALSE) +
-  theme_minimal() + facet_grid(~cluster)
-
 centers %>% ggplot(aes(x = as.numeric(factor(time)), y = center, group=cluster,color = cluster)) +
-  geom_line(linewidth=1)+
-  theme_minimal()+ facet_grid(~cluster)
+  geom_smooth(method = "loess",span = .7,se=FALSE,linewidth = 3) +
+  theme_minimal() + facet_grid(~cluster) + theme_void() + theme(legend.position = "none")
 
-centers %>% ggplot(aes(x = as.numeric(factor(time)), y = center, group=cluster,color = cluster)) +
-  geom_smooth(method = "loess",span = .75,se=FALSE) +
-  theme_minimal() + facet_grid(~cluster)
-
+save_ggplot(last_plot(),"cluster_centers_smooth", width=16, height=4)
 ```
-
 
 ---
 
