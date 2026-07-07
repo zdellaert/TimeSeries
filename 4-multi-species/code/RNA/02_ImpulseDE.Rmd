@@ -135,6 +135,19 @@ heat_samples <- meta %>% filter(treatment == "H") %>% pull(sample)
 # read in SwissProt annotation
 SwissProt <- read.delim(file.path(annot_dir,config$SwissProt))
 cat("Annotations:", nrow(SwissProt), "Swissprot-annotated genes")
+
+SwissProt$SwissProt_ShortName <- ifelse(nchar(SwissProt$ProteinNames) > 40,
+                            paste0(substr(SwissProt$ProteinNames, 1, 37), "..."),
+                            SwissProt$ProteinNames)
+```
+
+```{r}
+#loads the pattern mapping assessed by me after running ImpulseDE2 and comparing across species (see ../../output_RNA/ImpulseDE2/cluster_patterns.md)
+
+Mfuzz_pattern_mapping <- NULL
+source("../../output_RNA/ImpulseDE2/cluster_patterns.R")
+
+Mfuzz_pattern_mapping <- pattern_mapping %>% filter(species ==  params$species) %>% dplyr::select(-species)
 ```
 
 ---
@@ -199,7 +212,7 @@ impulse_results <- impulse_results %>%
   ))
 
 impulse_results_annot <- impulse_results %>%
-  left_join(SwissProt %>% select(query,ProteinNames,BiologicalProcess), by = join_by("Gene"=="query"))
+  left_join(SwissProt %>% select(query,ProteinNames,BiologicalProcess,SwissProt_ShortName), by = join_by("Gene"=="query"))
 ```
 
 ### Significant genes 
@@ -567,7 +580,7 @@ table(cluster_assignments$cluster, cluster_assignments$response_type)
 saveRDS(mfuzz_clusters, file.path(outdir_mfuzz, "mfuzz_result.rds"))
 saveRDS(heat_eset, file.path(outdir_mfuzz, "mfuzz_input_eset.rds"))
 write.csv(cluster_assignments, file.path(outdir_mfuzz, "cluster_assignments.csv"), row.names = FALSE)
-write.csv(as.data.frame(mfuzz_clusters$centers), file.path(outdir_mfuzz, "cluster_centers.csv"))
+#write.csv(as.data.frame(mfuzz_clusters$centers), file.path(outdir_mfuzz, "cluster_centers.csv"))
 ```
 
 ## 4. Characterize Clusters
@@ -589,6 +602,7 @@ cluster_info <- data.frame(
 
 print(cluster_info)
 write.csv(cluster_info, file.path(outdir_mfuzz, "cluster_info.csv"), row.names = FALSE)
+write.csv(cluster_centers, file.path(outdir_mfuzz, "cluster_centers.csv"), row.names = FALSE)
 ```
 
 ### Visualize all significant genes in their clusters
@@ -624,6 +638,19 @@ mfuzz.plot2(heat_eset, cl = mfuzz_clusters, mfrow = c(2,k/2),
             time.labels = c("0", "1", "3", "12", "24", "72", "120"),
             xlab = "Time (hours)",x11=FALSE)
 dev.off()
+
+### diy code skeleton
+# 
+# standardized_avg_heat_expr <- as_tibble(exprs(heat_eset),rownames="gene")
+# standardized_avg_heat_expr <- standardized_avg_heat_expr %>% pivot_longer(cols=starts_with("R"), names_to="timepoint",values_to="zscore")
+# standardized_avg_heat_expr <- standardized_avg_heat_expr %>% left_join(cluster_assignments, by=join_by("gene"=="Gene"))
+# standardized_avg_heat_expr <- standardized_avg_heat_expr %>%
+#   mutate(time=as.numeric(str_remove(timepoint,"R")),
+#          cluster=factor(cluster))
+# 
+# standardized_avg_heat_expr %>% ggplot(aes(x=time, y=zscore)) + 
+#   geom_line(aes(group=gene),alpha=0.01)+
+#   stat_summary(fun = mean, geom = "line", linewidth = 1,mapping=aes(color=cluster)) + theme_bw() + facet_grid(~cluster)
 ```
 
 
@@ -637,26 +664,54 @@ dev.off()
 ```
 
 ```{r}
-standardized_avg_heat_expr <- as_tibble(exprs(heat_eset),rownames="gene")
-standardized_avg_heat_expr <- standardized_avg_heat_expr %>% pivot_longer(cols=starts_with("R"), names_to="timepoint",values_to="zscore")
-standardized_avg_heat_expr <- standardized_avg_heat_expr %>% left_join(cluster_assignments, by=join_by("gene"=="Gene"))
-standardized_avg_heat_expr <- standardized_avg_heat_expr %>%
-  mutate(time=as.numeric(str_remove(timepoint,"R")),
-         cluster=factor(cluster))
-
-standardized_avg_heat_expr %>% ggplot(aes(x=time, y=zscore)) + 
-  geom_line(aes(group=gene),alpha=0.01)+
-  stat_summary(fun = mean, geom = "line", linewidth = 1,mapping=aes(color=cluster)) + theme_bw() + facet_grid(~cluster)
-
 centers <- as_tibble(cluster_centers,rownames="cluster")
 centers <- centers %>% pivot_longer(cols=starts_with("R"), names_to="timepoint",values_to="center")
 centers <- centers %>%
   mutate(time=as.numeric(str_remove(timepoint,"R")),
-         cluster=factor(cluster))
+         cluster=factor(cluster)) %>%
+  left_join(Mfuzz_pattern_mapping %>%
+              mutate(cluster=factor(cluster),
+                     pattern=factor(pattern, levels=logical_order)))
 
-centers %>% ggplot(aes(x = as.numeric(factor(time)), y = center, group=cluster,color = cluster)) +
+centers <- centers %>% group_by(cluster) %>% 
+  mutate(center_scale =center-center[timepoint=="R0"],
+         end_sign = case_when(center_scale[timepoint == "R120"] > 1 ~ "Up",
+                              center_scale[timepoint == "R120"] < -1 ~"Down",
+                              .default = "Return"),
+         end_sign=factor(end_sign,levels=c("Up","Return","Down"))) %>% ungroup()
+
+centers %>% ggplot(aes(x = as.numeric(factor(time)), y = center, group=cluster,color = pattern)) +
   geom_smooth(method = "loess",span = .7,se=FALSE,linewidth = 3) +
   theme_minimal() + facet_grid(~cluster) + theme_void() + theme(legend.position = "none")
+  scale_color_manual(values=mfuzz_cols) + 
+  facet_grid(~pattern) + theme_void() + theme(legend.position = "none")
+
+save_ggplot(last_plot(),"cluster_centers_void_facet", width=16, height=4)
+
+centers %>% ggplot(aes(x = time, y = center_scale, group=cluster,color = pattern)) +
+     geom_smooth(method = "loess",span = .5,se=FALSE,linewidth = 2) +
+     scale_color_manual(values=mfuzz_cols) + 
+     facet_grid(end_sign~.) +
+     ggpubr::theme_pubr(base_size=14) +
+     theme(strip.background = element_rect(fill = "white"),strip.text = element_text(face="bold"),legend.position = "right") + 
+     labs(y="Cluster Z-Score", x="Time (Hours)",color="Cluster Pattern") + 
+     geom_hline(yintercept = 0, linetype="dashed", size=1)
+
+save_ggplot(last_plot(),"cluster_centers_smooth_scaled2", width=8, height=8)
+
+centers %>% ggplot(aes(x = factor(time), y = center_scale, group=cluster,color = pattern)) +
+     geom_smooth(method = "loess",span = .7,se=FALSE,linewidth = 2) +
+     scale_color_manual(values=mfuzz_cols) + 
+     facet_grid(end_sign~.) +
+     ggpubr::theme_pubr(base_size=14) +
+     theme(strip.background = element_rect(fill = "white"),strip.text = element_text(face="bold"),legend.position = "right") + 
+     labs(y="Cluster Z-Score", x="Time (Hours)",color="Cluster Pattern") + 
+     geom_hline(yintercept = 0, linetype="dashed", size=1)
+
+save_ggplot(last_plot(),"cluster_centers_smooth3", width=8, height=8)
+```
+
+---
 
 save_ggplot(last_plot(),"cluster_centers_smooth", width=16, height=4)
 ```
