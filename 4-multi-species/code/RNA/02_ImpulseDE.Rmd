@@ -675,8 +675,8 @@ centers <- centers %>%
 
 centers <- centers %>% group_by(cluster) %>% 
   mutate(center_scale =center-center[timepoint=="R0"],
-         end_sign = case_when(center_scale[timepoint == "R120"] > 1 ~ "Up",
-                              center_scale[timepoint == "R120"] < -1 ~"Down",
+         end_sign = case_when(center_scale[timepoint == "R120"] > .5 ~ "Up",
+                              center_scale[timepoint == "R120"] < -.5 ~"Down",
                               .default = "Return"),
          end_sign=factor(end_sign,levels=c("Up","Return","Down"))) %>% ungroup()
 
