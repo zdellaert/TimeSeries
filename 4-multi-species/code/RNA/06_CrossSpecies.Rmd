@@ -41,6 +41,7 @@ library(pheatmap)
 #load in parameters and functions
 source("species_parameters.R")
 source("utils.R")
+source("../../output_RNA/ImpulseDE2/cluster_patterns.R")
 
 sessionInfo() #provides list of loaded packages and version of R
 ```
