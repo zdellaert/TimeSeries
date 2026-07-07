@@ -1,7 +1,7 @@
 ImpulseDE2 Temporal Analysis
 ================
 Zoe Dellaert
-2026-07-02
+2026-07-07
 
 - [Bulk RNA-seq Time Course Trajectory Analysis and
   Clustering](#bulk-rna-seq-time-course-trajectory-analysis-and-clustering)
@@ -42,9 +42,12 @@ Zoe Dellaert
   - [4. Characterize Clusters](#4-characterize-clusters)
     - [Visualize all significant genes in their
       clusters](#visualize-all-significant-genes-in-their-clusters)
+  - [5. Heatmaps by Mfuzz cluster - top 20
+    genes](#5-heatmaps-by-mfuzz-cluster---top-20-genes)
   - [Exploring genes of interest](#exploring-genes-of-interest)
     - [Manually-curated heat stress genes by
       cluster](#manually-curated-heat-stress-genes-by-cluster)
+    - [Pacuta LCM](#pacuta-lcm)
 
 # Bulk RNA-seq Time Course Trajectory Analysis and Clustering
 
@@ -179,45 +182,51 @@ sessionInfo() #provides list of loaded packages and version of R
     ## [19] ggplot2_4.0.3         tidyverse_2.0.0       rmarkdown_2.31       
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] rlang_1.2.0                 magrittr_2.0.5             
-    ##  [3] clue_0.3-68                 GetoptLong_1.1.1           
-    ##  [5] otel_0.2.0                  matrixStats_1.5.0          
-    ##  [7] compiler_4.5.1              png_0.1-9                  
-    ##  [9] systemfonts_1.3.2           vctrs_0.7.3                
-    ## [11] pkgconfig_2.0.3             shape_1.4.6.1              
-    ## [13] crayon_1.5.3                fastmap_1.2.0              
-    ## [15] XVector_0.50.0              labeling_0.4.3             
-    ## [17] tzdb_0.5.0                  ragg_1.5.2                 
-    ## [19] bit_4.6.0                   xfun_0.59                  
-    ## [21] DelayedArray_0.36.1         BiocParallel_1.44.0        
-    ## [23] parallel_4.5.1              cluster_2.1.8.2            
-    ## [25] R6_2.6.1                    stringi_1.8.7              
-    ## [27] RColorBrewer_1.1-3          GenomicRanges_1.62.1       
-    ## [29] Rcpp_1.1.1-1.1              Seqinfo_1.0.0              
-    ## [31] SummarizedExperiment_1.40.0 iterators_1.0.14           
-    ## [33] knitr_1.51                  IRanges_2.44.0             
-    ## [35] Matrix_1.7-5                splines_4.5.1              
-    ## [37] timechange_0.4.0            tidyselect_1.2.1           
-    ## [39] rstudioapi_0.19.0           abind_1.4-8                
-    ## [41] yaml_2.3.12                 doParallel_1.0.17          
-    ## [43] codetools_0.2-20            lattice_0.22-9             
-    ## [45] withr_3.0.3                 S7_0.2.2                   
-    ## [47] evaluate_1.0.5              proxy_0.4-29               
-    ## [49] circlize_0.4.18             pillar_1.11.1              
-    ## [51] MatrixGenerics_1.22.0       tkWidgets_1.88.0           
-    ## [53] foreach_1.5.2               stats4_4.5.1               
-    ## [55] vroom_1.7.1                 S4Vectors_0.48.1           
-    ## [57] hms_1.1.4                   scales_1.4.0               
-    ## [59] class_7.3-23                glue_1.8.1                 
-    ## [61] tools_4.5.1                 locfit_1.5-9.12            
-    ## [63] cowplot_1.2.0               colorspace_2.1-2           
-    ## [65] nlme_3.1-169                cli_3.6.6                  
-    ## [67] textshaping_1.0.5           S4Arrays_1.10.1            
-    ## [69] gtable_0.3.6                DESeq2_1.50.2              
-    ## [71] digest_0.6.39               SparseArray_1.10.10        
-    ## [73] rjson_0.2.23                farver_2.1.2               
-    ## [75] htmltools_0.5.9             lifecycle_1.0.5            
-    ## [77] GlobalOptions_0.1.4         bit64_4.8.2
+    ##  [1] splines_4.5.1               prismatic_1.1.2            
+    ##  [3] lifecycle_1.0.5             rstatix_0.7.3              
+    ##  [5] doParallel_1.0.17           lattice_0.22-9             
+    ##  [7] vroom_1.7.1                 backports_1.5.1            
+    ##  [9] magrittr_2.0.5              yaml_2.3.12                
+    ## [11] otel_0.2.0                  cowplot_1.2.0              
+    ## [13] RColorBrewer_1.1-3          abind_1.4-8                
+    ## [15] GenomicRanges_1.62.1        circlize_0.4.18            
+    ## [17] IRanges_2.44.0              S4Vectors_0.48.1           
+    ## [19] codetools_0.2-20            DelayedArray_0.36.1        
+    ## [21] tidyselect_1.2.1            shape_1.4.6.1              
+    ## [23] farver_2.1.2                matrixStats_1.5.0          
+    ## [25] stats4_4.5.1                Seqinfo_1.0.0              
+    ## [27] GetoptLong_1.1.1            Formula_1.2-5              
+    ## [29] iterators_1.0.14            systemfonts_1.3.2          
+    ## [31] foreach_1.5.2               tools_4.5.1                
+    ## [33] ragg_1.5.2                  Rcpp_1.1.1-1.1             
+    ## [35] glue_1.8.1                  SparseArray_1.10.10        
+    ## [37] xfun_0.59                   DESeq2_1.50.2              
+    ## [39] MatrixGenerics_1.22.0       withr_3.0.3                
+    ## [41] fastmap_1.2.0               digest_0.6.39              
+    ## [43] timechange_0.4.0            R6_2.6.1                   
+    ## [45] textshaping_1.0.5           colorspace_2.1-2           
+    ## [47] class_7.3-23                S4Arrays_1.10.1            
+    ## [49] pkgconfig_2.0.3             gtable_0.3.6               
+    ## [51] S7_0.2.2                    XVector_0.50.0             
+    ## [53] htmltools_0.5.9             carData_3.0-6              
+    ## [55] clue_0.3-68                 scales_1.4.0               
+    ## [57] png_0.1-9                   tkWidgets_1.88.0           
+    ## [59] knitr_1.51                  rstudioapi_0.19.0          
+    ## [61] tzdb_0.5.0                  rjson_0.2.23               
+    ## [63] nlme_3.1-169                proxy_0.4-29               
+    ## [65] GlobalOptions_0.1.4         parallel_4.5.1             
+    ## [67] pillar_1.11.1               vctrs_0.7.3                
+    ## [69] ggpubr_0.6.3                car_3.1-5                  
+    ## [71] cluster_2.1.8.2             paletteer_1.7.0            
+    ## [73] evaluate_1.0.5              cli_3.6.6                  
+    ## [75] locfit_1.5-9.12             compiler_4.5.1             
+    ## [77] rlang_1.2.0                 crayon_1.5.3               
+    ## [79] ggsignif_0.6.4              labeling_0.4.3             
+    ## [81] rematch2_2.1.2              stringi_1.8.7              
+    ## [83] BiocParallel_1.44.0         Matrix_1.7-5               
+    ## [85] hms_1.1.4                   bit64_4.8.2                
+    ## [87] SummarizedExperiment_1.40.0 broom_1.0.13               
+    ## [89] bit_4.6.0
 
 ## 2. Setup species-specific parameters
 
@@ -315,6 +324,21 @@ cat("Annotations:", nrow(SwissProt), "Swissprot-annotated genes")
 ```
 
     ## Annotations: 22929 Swissprot-annotated genes
+
+``` r
+SwissProt$SwissProt_ShortName <- ifelse(nchar(SwissProt$ProteinNames) > 40,
+                            paste0(substr(SwissProt$ProteinNames, 1, 37), "..."),
+                            SwissProt$ProteinNames)
+```
+
+``` r
+#loads the pattern mapping assessed by me after running ImpulseDE2 and comparing across species (see ../../output_RNA/ImpulseDE2/cluster_patterns.md)
+
+Mfuzz_pattern_mapping <- NULL
+source("../../output_RNA/ImpulseDE2/cluster_patterns.R")
+
+Mfuzz_pattern_mapping <- pattern_mapping %>% filter(species ==  params$species) %>% dplyr::select(-species)
+```
 
 ------------------------------------------------------------------------
 
@@ -417,7 +441,7 @@ impulse_results <- impulse_results %>%
   ))
 
 impulse_results_annot <- impulse_results %>%
-  left_join(SwissProt %>% select(query,ProteinNames,BiologicalProcess), by = join_by("Gene"=="query"))
+  left_join(SwissProt %>% select(query,ProteinNames,BiologicalProcess,SwissProt_ShortName), by = join_by("Gene"=="query"))
 ```
 
 ### Significant genes
@@ -577,14 +601,14 @@ write.csv(impulse_sig_classifications, file.path(outdir, "ImpulseDE2_significant
 draw(lsHeatmaps$complexHeatmapRaw)
 ```
 
-![](./02_ImpulseDE_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+![](./02_ImpulseDE_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
 
 ``` r
 # complexHeatmapFit = Heatmap of impulse-fitted data by time point.
 draw(lsHeatmaps$complexHeatmapFit)
 ```
 
-![](./02_ImpulseDE_files/figure-gfm/unnamed-chunk-11-2.png)<!-- -->
+![](./02_ImpulseDE_files/figure-gfm/unnamed-chunk-12-2.png)<!-- -->
 
 ``` r
 png(file.path(outdir_plots,"ImpulseDE2_heatmap_case_fit.png"), width = 2000, height = 2400, res = 300)
@@ -660,7 +684,7 @@ heatmap_up <- pheatmap(vst_heat_norm,
                                   "response_type" = c("Monotonous" = "#D8AF39FF", "Transient" = "#278B9AFF")))
 ```
 
-![](./02_ImpulseDE_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+![](./02_ImpulseDE_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
 
 ``` r
 png(file.path(outdir_plots,"ImpulseDE2_heatmap_UP.png"),  width = 7, height = 10, units = "in", res = 300)
@@ -715,7 +739,7 @@ heatmap_up_all <- pheatmap(vst_heat_norm,
                                   "response_type" = c("Monotonous" = "#D8AF39FF", "Transient" = "#278B9AFF")))
 ```
 
-![](./02_ImpulseDE_files/figure-gfm/unnamed-chunk-12-2.png)<!-- -->
+![](./02_ImpulseDE_files/figure-gfm/unnamed-chunk-13-2.png)<!-- -->
 
 ``` r
 png(file.path(outdir_plots,"ImpulseDE2_heatmap_UP_ALL.png"),  width = 7, height = 10, units = "in", res = 300)
@@ -771,7 +795,7 @@ heatmap_down <- pheatmap(vst_heat_norm,
                                   "response_type" = c("Monotonous" = "#D8AF39FF", "Transient" = "#278B9AFF")))
 ```
 
-![](./02_ImpulseDE_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+![](./02_ImpulseDE_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
 
 ``` r
 png(file.path(outdir_plots,"ImpulseDE2_heatmap_DOWN.png"),  width = 7, height = 10, units = "in", res = 300)
@@ -826,7 +850,7 @@ heatmap_down_all <- pheatmap(vst_heat_norm,
                                   "response_type" = c("Monotonous" = "#D8AF39FF", "Transient" = "#278B9AFF")))
 ```
 
-![](./02_ImpulseDE_files/figure-gfm/unnamed-chunk-13-2.png)<!-- -->
+![](./02_ImpulseDE_files/figure-gfm/unnamed-chunk-14-2.png)<!-- -->
 
 ``` r
 png(file.path(outdir_plots,"ImpulseDE2_heatmap_DOWN_ALL.png"),  width = 7, height = 10, units = "in", res = 300)
@@ -997,7 +1021,7 @@ table(cluster_assignments$cluster, cluster_assignments$response_type)
 saveRDS(mfuzz_clusters, file.path(outdir_mfuzz, "mfuzz_result.rds"))
 saveRDS(heat_eset, file.path(outdir_mfuzz, "mfuzz_input_eset.rds"))
 write.csv(cluster_assignments, file.path(outdir_mfuzz, "cluster_assignments.csv"), row.names = FALSE)
-write.csv(as.data.frame(mfuzz_clusters$centers), file.path(outdir_mfuzz, "cluster_centers.csv"))
+#write.csv(as.data.frame(mfuzz_clusters$centers), file.path(outdir_mfuzz, "cluster_centers.csv"))
 ```
 
 ## 4. Characterize Clusters
@@ -1030,6 +1054,7 @@ print(cluster_info)
 
 ``` r
 write.csv(cluster_info, file.path(outdir_mfuzz, "cluster_info.csv"), row.names = FALSE)
+write.csv(cluster_centers, file.path(outdir_mfuzz, "cluster_centers.csv"), row.names = FALSE)
 ```
 
 ### Visualize all significant genes in their clusters
@@ -1038,13 +1063,13 @@ write.csv(cluster_info, file.path(outdir_mfuzz, "cluster_info.csv"), row.names =
 mfuzz.plot(heat_eset, cl = mfuzz_clusters, new.window =FALSE, mfrow = c(2,k/2), time.labels =  c(0,1,3,12,24,72,120))
 ```
 
-![](./02_ImpulseDE_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->
+![](./02_ImpulseDE_files/figure-gfm/unnamed-chunk-21-1.png)<!-- -->
 
 ``` r
 mfuzz.plot(heat_eset, cl = mfuzz_clusters, new.window =FALSE, mfrow = c(2,k/2), time.labels =  c(0,1,3,12,24,72,120), min.mem = 0.5)
 ```
 
-![](./02_ImpulseDE_files/figure-gfm/unnamed-chunk-20-2.png)<!-- -->
+![](./02_ImpulseDE_files/figure-gfm/unnamed-chunk-21-2.png)<!-- -->
 
 ``` r
 # Visualize clusters
@@ -1094,6 +1119,21 @@ dev.off()
     ##                 2
 
 ``` r
+### diy code skeleton
+# 
+# standardized_avg_heat_expr <- as_tibble(exprs(heat_eset),rownames="gene")
+# standardized_avg_heat_expr <- standardized_avg_heat_expr %>% pivot_longer(cols=starts_with("R"), names_to="timepoint",values_to="zscore")
+# standardized_avg_heat_expr <- standardized_avg_heat_expr %>% left_join(cluster_assignments, by=join_by("gene"=="Gene"))
+# standardized_avg_heat_expr <- standardized_avg_heat_expr %>%
+#   mutate(time=as.numeric(str_remove(timepoint,"R")),
+#          cluster=factor(cluster))
+# 
+# standardized_avg_heat_expr %>% ggplot(aes(x=time, y=zscore)) + 
+#   geom_line(aes(group=gene),alpha=0.01)+
+#   stat_summary(fun = mean, geom = "line", linewidth = 1,mapping=aes(color=cluster)) + theme_bw() + facet_grid(~cluster)
+```
+
+``` r
 png(paste0(outdir_plots,"/temporal_clusters_scaled.png"), width = 12, height = 10, units = "in", res = 300)
 mfuzz.plot2(heat_eset, cl = mfuzz_clusters, mfrow = c(2,k/2),
             time.points = c(0, 1, 3, 12, 24, 72, 120),
@@ -1106,37 +1146,321 @@ dev.off()
     ##                 2
 
 ``` r
-standardized_avg_heat_expr <- as_tibble(exprs(heat_eset),rownames="gene")
-standardized_avg_heat_expr <- standardized_avg_heat_expr %>% pivot_longer(cols=starts_with("R"), names_to="timepoint",values_to="zscore")
-standardized_avg_heat_expr <- standardized_avg_heat_expr %>% left_join(cluster_assignments, by=join_by("gene"=="Gene"))
-standardized_avg_heat_expr <- standardized_avg_heat_expr %>%
-  mutate(time=as.numeric(str_remove(timepoint,"R")),
-         cluster=factor(cluster))
-
-standardized_avg_heat_expr %>% ggplot(aes(x=time, y=zscore)) + 
-  geom_line(aes(group=gene),alpha=0.01)+
-  stat_summary(fun = mean, geom = "line", linewidth = 1,mapping=aes(color=cluster)) + theme_bw() + facet_grid(~cluster)
-```
-
-![](./02_ImpulseDE_files/figure-gfm/unnamed-chunk-22-1.png)<!-- -->
-
-``` r
 centers <- as_tibble(cluster_centers,rownames="cluster")
 centers <- centers %>% pivot_longer(cols=starts_with("R"), names_to="timepoint",values_to="center")
 centers <- centers %>%
   mutate(time=as.numeric(str_remove(timepoint,"R")),
-         cluster=factor(cluster))
+         cluster=factor(cluster)) %>%
+  left_join(Mfuzz_pattern_mapping %>%
+              mutate(cluster=factor(cluster),
+                     pattern=factor(pattern, levels=logical_order)))
 
-centers %>% ggplot(aes(x = as.numeric(factor(time)), y = center, group=cluster,color = cluster)) +
+centers <- centers %>% group_by(cluster) %>% 
+  mutate(center_scale =center-center[timepoint=="R0"],
+         end_sign = case_when(center_scale[timepoint == "R120"] > .5 ~ "Up",
+                              center_scale[timepoint == "R120"] < -.5 ~"Down",
+                              .default = "Return"),
+         end_sign=factor(end_sign,levels=c("Up","Return","Down"))) %>% ungroup()
+
+centers %>% ggplot(aes(x = as.numeric(factor(time)), y = center, group=cluster,color = pattern)) +
   geom_smooth(method = "loess",span = .7,se=FALSE,linewidth = 3) +
-  theme_minimal() + facet_grid(~cluster) + theme_void() + theme(legend.position = "none")
+  scale_color_manual(values=mfuzz_cols) + 
+  facet_grid(~pattern) + theme_void() + theme(legend.position = "none")
 ```
 
-![](./02_ImpulseDE_files/figure-gfm/unnamed-chunk-22-2.png)<!-- -->
+![](./02_ImpulseDE_files/figure-gfm/unnamed-chunk-23-1.png)<!-- -->
 
 ``` r
-save_ggplot(last_plot(),"cluster_centers_smooth", width=16, height=4)
+save_ggplot(last_plot(),"cluster_centers_void_facet", width=16, height=4)
+
+centers %>% ggplot(aes(x = time, y = center_scale, group=cluster,color = pattern)) +
+     geom_smooth(method = "loess",span = .5,se=FALSE,linewidth = 2) +
+     scale_color_manual(values=mfuzz_cols) + 
+     facet_grid(end_sign~.) +
+     ggpubr::theme_pubr(base_size=14) +
+     theme(strip.background = element_rect(fill = "white"),strip.text = element_text(face="bold"),legend.position = "right") + 
+     labs(y="Cluster Z-Score", x="Time (Hours)",color="Cluster Pattern") + 
+     geom_hline(yintercept = 0, linetype="dashed", size=1)
 ```
+
+![](./02_ImpulseDE_files/figure-gfm/unnamed-chunk-23-2.png)<!-- -->
+
+``` r
+save_ggplot(last_plot(),"cluster_centers_smooth_scaled", width=8, height=8)
+
+centers %>% ggplot(aes(x = factor(time), y = center_scale, group=cluster,color = pattern)) +
+     geom_smooth(method = "loess",span = .7,se=FALSE,linewidth = 2) +
+     scale_color_manual(values=mfuzz_cols) + 
+     facet_grid(end_sign~.) +
+     ggpubr::theme_pubr(base_size=14) +
+     theme(strip.background = element_rect(fill = "white"),strip.text = element_text(face="bold"),legend.position = "right") + 
+     labs(y="Cluster Z-Score", x="Time (Hours)",color="Cluster Pattern") + 
+     geom_hline(yintercept = 0, linetype="dashed", size=1)
+```
+
+![](./02_ImpulseDE_files/figure-gfm/unnamed-chunk-23-3.png)<!-- -->
+
+``` r
+save_ggplot(last_plot(),"cluster_centers_smooth", width=8, height=8)
+```
+
+------------------------------------------------------------------------
+
+## 5. Heatmaps by Mfuzz cluster - top 20 genes
+
+``` r
+sig_genes_by_clust <- impulse_results_annot %>% 
+  filter(Gene %in% rownames(vst)) %>% filter(padj < 0.05) %>% 
+  left_join(cluster_assignments %>% select(Gene, cluster, membership)) %>%
+  left_join(Mfuzz_pattern_mapping, by = "cluster") %>%
+  dplyr::rename(Mfuzz_cluster = cluster,
+                Mfuzz_pattern = pattern) %>%
+  group_by(Mfuzz_cluster) %>% arrange(padj) %>% slice_head(n=20) %>% ungroup()
+
+heat_samples <- vst %>% select(contains("_H")) %>% colnames()
+T0_samples <- vst %>% select(contains("_H")) %>% select(contains("_R0_"))  %>% colnames()
+row_annot <- sig_genes_by_clust %>% column_to_rownames(var="Gene") %>% select(Mfuzz_pattern) 
+
+row_annot$Mfuzz_pattern <- factor(row_annot$Mfuzz_pattern, levels=logical_order)
+col_annot <- meta[heat_samples,] %>% select(time)
+
+vst_heat_selected <- vst[sig_genes_by_clust$Gene,heat_samples]
+vst_heat_selected$T0mean <- rowMeans(vst_heat_selected[,T0_samples])
+vst_heat_norm <- vst_heat_selected - vst_heat_selected$T0mean
+vst_heat_norm <- vst_heat_norm %>% select(-T0mean) %>% as.matrix()
+
+vst_max <- max(abs(vst_heat_norm), na.rm = TRUE)
+scale_colors <- colorRampPalette(c("#3c58a7","#3c58a7", "white", "#ee2e25","#ee2e25"))(100)
+col_fun <- circlize::colorRamp2(c(-vst_max, -vst_max/2,0, vst_max/2,vst_max),c("#3c58a7","#3c58a7", "white", "#ee2e25","#ee2e25"))
+legend_breaks <- seq(-vst_max, vst_max, length.out = 101)
+
+row_ha <- rowAnnotation(
+  Mfuzz_pattern = row_annot$Mfuzz_pattern,
+  col = list(Mfuzz_pattern = mfuzz_cols),
+  annotation_name_side = "bottom",show_annotation_name = FALSE,
+  simple_anno_size = unit(3, "mm"),
+  annotation_name_rot = 270,
+  annotation_name_gp = gpar(fontface = "bold",fontsize=10),
+  gap = unit(2, "points"))
+
+#### gene labels - mark
+row_gene_labels <- sig_genes_by_clust$SwissProt_ShortName
+#row_gene_labels[is.na(row_gene_labels)] <- ""
+names(row_gene_labels) <- sig_genes_by_clust$gene_id
+label_indeces <- which(!is.na(row_gene_labels))
+
+row_gene_labels_marked <- rowAnnotation(
+  gene_labels = anno_mark(at = label_indeces, 
+    labels = row_gene_labels[label_indeces],
+    labels_gp=gpar(fontsize = 8)))
+
+col_ha <- HeatmapAnnotation(
+  time = col_annot$time,
+  simple_anno_size = unit(3, "mm"),
+  #treatment = col_annot$treatment,
+  col = list(
+    "time" = time_colors
+    #"treatment" = treat_colors,
+   ),show_annotation_name = FALSE)
+
+### adding cluster center annotations
+align_to = row_annot$Mfuzz_pattern
+
+lines_plot = lapply(levels(align_to), function(nm) {
+    ggplot(centers %>% filter(pattern==nm), aes(x = as.numeric(factor(time)),
+                        y = center, color = pattern)) +
+  geom_smooth(method = "loess",span = .7,se=FALSE,linewidth = 2) +
+  scale_color_manual(values=mfuzz_cols) + 
+  theme_void() + 
+    theme(legend.position = "none")
+})
+names(lines_plot) = levels(align_to)
+
+panel_fun = function(index, nm) {
+    gb = lines_plot[[nm]]
+    g = grid.grabExpr(print(gb))
+    pushViewport(viewport())
+   # grid.rect()
+    grid.draw(g)
+    popViewport()
+}
+
+sig_genes_heatmap_lines <- ComplexHeatmap::Heatmap(
+  vst_heat_norm,
+  name = "vst",
+  col = col_fun,
+  cluster_columns = FALSE,
+  cluster_rows = TRUE,
+  row_split = row_annot$Mfuzz_pattern,row_title = NULL,
+  cluster_row_slices = FALSE,
+  show_parent_dend_line = FALSE,
+  column_split = col_annot$time, column_title = NULL,
+  row_dend_width = unit(17.5, "mm"),
+  column_gap = unit(c(1.75), "mm"),
+  show_row_names = FALSE, #row_names_gp = gpar(fontsize = 4), row_labels = row_gene_labels[rownames(vst_heat_norm)],
+  show_column_names = FALSE,
+  top_annotation = col_ha,
+ # left_annotation = row_ha,
+ # right_annotation = row_gene_labels_marked,
+  left_annotation = rowAnnotation(lineplots = anno_link(align_to = align_to, 
+    which = "row", panel_fun = panel_fun, side="left",
+    size = unit(2, "cm"), gap = unit(.1, "cm"), width = unit(4, "cm"))),
+ show_row_dend =  FALSE,
+  border = FALSE
+)
+
+png(file.path(outdir_plots,"sig_clustered_20_lines.png"),  width = 10, height = 10, units = "in", res = 300)
+sig_genes_heatmap_lines
+dev.off()
+```
+
+    ## quartz_off_screen 
+    ##                 2
+
+``` r
+pdf(file.path(outdir_plots,"/pdf_figs/sig_clustered_20_lines.pdf"),  width = 10, height = 10)
+sig_genes_heatmap_lines
+dev.off()
+```
+
+    ## quartz_off_screen 
+    ##                 2
+
+``` r
+sig_genes_heatmap_lines
+```
+
+![](./02_ImpulseDE_files/figure-gfm/unnamed-chunk-24-1.png)<!-- -->
+
+``` r
+sig_genes_heatmap_lines_right <- ComplexHeatmap::Heatmap(
+  vst_heat_norm,
+  name = "vst",
+  col = col_fun,
+  cluster_columns = FALSE,
+  cluster_rows = TRUE,
+  row_split = row_annot$Mfuzz_pattern,row_title = NULL,
+  cluster_row_slices = FALSE,
+  show_parent_dend_line = FALSE,
+  column_split = col_annot$time, column_title = NULL,
+  row_dend_width = unit(17.5, "mm"),
+  column_gap = unit(c(1.75), "mm"),
+  show_row_names = FALSE, #row_names_gp = gpar(fontsize = 4), row_labels = row_gene_labels[rownames(vst_heat_norm)],
+  show_column_names = FALSE,
+  top_annotation = HeatmapAnnotation(
+  time = col_annot$time,
+  simple_anno_size = unit(3, "mm"),
+  col = list("time" = time_colors),
+  show_legend=FALSE,
+  show_annotation_name = FALSE),
+  left_annotation = rowAnnotation(
+  Mfuzz_pattern = row_annot$Mfuzz_pattern,
+  col = list(Mfuzz_pattern = mfuzz_cols),
+  annotation_name_side = "bottom",show_annotation_name = FALSE,
+  simple_anno_size = unit(3, "mm"),
+  annotation_name_rot = 270,
+  annotation_name_gp = gpar(fontface = "bold",fontsize=10),
+  gap = unit(2, "points"),show_legend=FALSE),
+ # right_annotation = row_gene_labels_marked,
+  right_annotation = rowAnnotation(lineplots = anno_link(align_to = align_to, 
+    which = "row", panel_fun = panel_fun, side="right",
+    size = unit(3, "cm"), gap = unit(.1, "cm"), width = unit(4, "cm")),
+    show_legend=FALSE),
+ show_row_dend =  TRUE,
+  border = FALSE,
+ show_heatmap_legend = FALSE
+)
+
+png(file.path(outdir_plots,"sig_clustered_20_linesR.png"),  width = 8, height = 10, units = "in", res = 300)
+sig_genes_heatmap_lines_right
+dev.off()
+```
+
+    ## quartz_off_screen 
+    ##                 2
+
+``` r
+pdf(file.path(outdir_plots,"/pdf_figs/sig_clustered_20_linesR.pdf"),  width = 15, height = 10)
+sig_genes_heatmap_lines_right
+dev.off()
+```
+
+    ## quartz_off_screen 
+    ##                 2
+
+``` r
+sig_genes_heatmap_lines_right
+```
+
+![](./02_ImpulseDE_files/figure-gfm/unnamed-chunk-24-2.png)<!-- -->
+
+``` r
+sig_genes_heatmap <- ComplexHeatmap::Heatmap(
+  vst_heat_norm,
+  name = "vst",
+  col = col_fun,
+  cluster_columns = FALSE,
+  cluster_rows = TRUE,
+  row_split = row_annot$Mfuzz_pattern,row_title = NULL,
+  cluster_row_slices = FALSE,
+  show_parent_dend_line = FALSE,
+  column_split = col_annot$time, column_title = NULL,
+  row_dend_width = unit(17.5, "mm"),
+  column_gap = unit(c(1.75), "mm"),
+  show_row_names = FALSE, #row_names_gp = gpar(fontsize = 4), row_labels = row_gene_labels[rownames(vst_heat_norm)],
+  show_column_names = FALSE,
+  top_annotation = col_ha,
+  left_annotation = row_ha,
+  #right_annotation = row_gene_labels_marked,
+  border = FALSE
+)
+
+png(file.path(outdir_plots,"sig_clustered_20.png"),  width = 10, height = 10, units = "in", res = 300)
+sig_genes_heatmap
+dev.off()
+```
+
+    ## quartz_off_screen 
+    ##                 2
+
+``` r
+pdf(file.path(outdir_plots,"/pdf_figs/sig_clustered_20.pdf"),  width = 10, height = 10)
+sig_genes_heatmap
+dev.off()
+```
+
+    ## quartz_off_screen 
+    ##                 2
+
+``` r
+sig_genes_heatmap
+```
+
+![](./02_ImpulseDE_files/figure-gfm/unnamed-chunk-24-3.png)<!-- -->
+
+``` r
+png(file.path(outdir_plots,"sig_clustered_20_lab.png"),  width = 10, height = 12, units = "in", res = 300)
+sig_genes_heatmap + row_gene_labels_marked 
+dev.off()
+```
+
+    ## quartz_off_screen 
+    ##                 2
+
+``` r
+pdf(file.path(outdir_plots,"/pdf_figs/sig_clustered_20_lab.pdf"),  width = 12, height = 15)
+sig_genes_heatmap + row_gene_labels_marked
+dev.off()
+```
+
+    ## quartz_off_screen 
+    ##                 2
+
+``` r
+sig_genes_heatmap + row_gene_labels_marked
+```
+
+![](./02_ImpulseDE_files/figure-gfm/unnamed-chunk-24-4.png)<!-- -->
 
 ------------------------------------------------------------------------
 
@@ -1180,7 +1504,106 @@ heat_clustered %>% filter(!is.na(cluster)) %>% ggplot(aes(y=reorder(gene_id, clu
   labs(x="Mfuzz Cluster", y="Gene ID", title="Heat stress genes clustered by temporal expression pattern")
 ```
 
-![](./02_ImpulseDE_files/figure-gfm/unnamed-chunk-25-1.png)<!-- -->
+![](./02_ImpulseDE_files/figure-gfm/unnamed-chunk-27-1.png)<!-- -->
+
+### Pacuta LCM
+
+``` r
+if (species == "Pacuta"){
+DESeq_LCM <- read.csv("../../../../LaserCoral/output_RNA/differential_expression/DESeq_results.csv", header = TRUE) %>% dplyr::rename("query" ="X")
+
+LCM_DE_impulse <- DESeq_LCM %>% filter(padj<0.05 & abs(log2FoldChange) > 1) %>%
+  rename(Gene=query,LCM_LFC = log2FoldChange, LCM_padj=padj) %>%
+  select(Gene, LCM_LFC, LCM_padj) %>%
+  mutate(Tissue_Up = ifelse(LCM_LFC > 0, "Oral", "Aboral")) %>% 
+  inner_join(impulse_results_annot)
+}
+```
+
+``` r
+if (species == "Pacuta"){
+sig_LCM_genes_by_clust <- LCM_DE_impulse %>% 
+  filter(Gene %in% rownames(vst)) %>% filter(padj < 0.001) %>% 
+  left_join(cluster_assignments %>% select(Gene, cluster, membership)) %>%
+  left_join(Mfuzz_pattern_mapping, by = "cluster") %>%
+  dplyr::rename(Mfuzz_cluster = cluster,
+                Mfuzz_pattern = pattern)  
+
+heat_samples <- vst %>% select(contains("_H")) %>% colnames()
+T0_samples <- vst %>% select(contains("_H")) %>% select(contains("_R0_"))  %>% colnames()
+row_annot <- sig_LCM_genes_by_clust %>% column_to_rownames(var="Gene") %>% select(Mfuzz_pattern,Tissue_Up) 
+
+row_annot$Mfuzz_pattern <- factor(row_annot$Mfuzz_pattern, levels=logical_order)
+col_annot <- meta[heat_samples,] %>% select(time)
+
+vst_heat_selected <- vst[sig_LCM_genes_by_clust$Gene,heat_samples]
+vst_heat_selected$T0mean <- rowMeans(vst_heat_selected[,T0_samples])
+vst_heat_norm <- vst_heat_selected - vst_heat_selected$T0mean
+vst_heat_norm <- vst_heat_norm %>% select(-T0mean) %>% as.matrix()
+
+vst_max <- max(abs(vst_heat_norm), na.rm = TRUE)
+col_fun <- circlize::colorRamp2(c(-vst_max, -vst_max/2,0, vst_max/2,vst_max),c("#3c58a7","#3c58a7", "white", "#ee2e25","#ee2e25"))
+legend_breaks <- seq(-vst_max, vst_max, length.out = 101)
+
+row_ha <- rowAnnotation(
+  LCM_Tissue_Up = row_annot$Tissue_Up,
+   Mfuzz_pattern = row_annot$Mfuzz_pattern,
+  col = list(Mfuzz_pattern = mfuzz_cols),
+  annotation_name_side = "bottom",show_annotation_name = FALSE,
+  simple_anno_size = unit(3, "mm"),
+  annotation_name_rot = 270,
+  annotation_name_gp = gpar(fontface = "bold",fontsize=10),
+  gap = unit(2, "points"))
+
+#### gene labels - mark
+row_gene_labels <- sig_LCM_genes_by_clust$SwissProt_ShortName
+#row_gene_labels[is.na(row_gene_labels)] <- ""
+names(row_gene_labels) <- sig_LCM_genes_by_clust$gene_id
+label_indeces <- which(!is.na(row_gene_labels))
+
+row_gene_labels_marked <- rowAnnotation(
+  gene_labels = anno_mark(at = label_indeces, 
+    labels = row_gene_labels[label_indeces],
+    labels_gp=gpar(fontsize = 4)))
+
+col_ha <- HeatmapAnnotation(
+  time = col_annot$time,
+  simple_anno_size = unit(3, "mm"),
+  #treatment = col_annot$treatment,
+  col = list(
+    "time" = time_colors
+    #"treatment" = treat_colors,
+   ),show_annotation_name = FALSE)
+
+sig_genes_heatmap <- ComplexHeatmap::Heatmap(
+  vst_heat_norm,
+  name = "vst",
+  col = col_fun,
+  cluster_columns = FALSE,
+  cluster_rows = TRUE,
+  row_split = row_annot,row_title = NULL,
+  cluster_row_slices = FALSE,
+  show_parent_dend_line = FALSE,
+  column_split = col_annot$time, column_title = NULL,
+  row_dend_width = unit(17.5, "mm"),
+  column_gap = unit(c(1.75), "mm"),
+  show_row_names = FALSE, #row_names_gp = gpar(fontsize = 4), row_labels = row_gene_labels[rownames(vst_heat_norm)],
+  show_column_names = FALSE,
+  top_annotation = col_ha,
+  left_annotation = row_ha,
+  #right_annotation = row_gene_labels_marked,
+  border = FALSE
+)
+
+png(file.path(outdir_plots,"LCM_sig_lab.png"),  width = 10, height = 20, units = "in", res = 300)
+sig_genes_heatmap + row_gene_labels_marked 
+dev.off()
+
+pdf(file.path(outdir_plots,"/pdf_figs/LCM_sig_lab.pdf"),  width = 12, height = 20)
+sig_genes_heatmap + row_gene_labels_marked
+dev.off()
+}
+```
 
 ``` r
 sessionInfo()
@@ -1214,45 +1637,51 @@ sessionInfo()
     ## [19] ggplot2_4.0.3         tidyverse_2.0.0       rmarkdown_2.31       
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] rlang_1.2.0                 magrittr_2.0.5             
-    ##  [3] clue_0.3-68                 GetoptLong_1.1.1           
-    ##  [5] otel_0.2.0                  matrixStats_1.5.0          
-    ##  [7] compiler_4.5.1              png_0.1-9                  
-    ##  [9] systemfonts_1.3.2           vctrs_0.7.3                
-    ## [11] pkgconfig_2.0.3             shape_1.4.6.1              
-    ## [13] crayon_1.5.3                fastmap_1.2.0              
-    ## [15] XVector_0.50.0              labeling_0.4.3             
-    ## [17] tzdb_0.5.0                  ragg_1.5.2                 
-    ## [19] bit_4.6.0                   xfun_0.59                  
-    ## [21] DelayedArray_0.36.1         BiocParallel_1.44.0        
-    ## [23] parallel_4.5.1              cluster_2.1.8.2            
-    ## [25] R6_2.6.1                    stringi_1.8.7              
-    ## [27] RColorBrewer_1.1-3          GenomicRanges_1.62.1       
-    ## [29] Rcpp_1.1.1-1.1              Seqinfo_1.0.0              
-    ## [31] SummarizedExperiment_1.40.0 iterators_1.0.14           
-    ## [33] knitr_1.51                  IRanges_2.44.0             
-    ## [35] Matrix_1.7-5                splines_4.5.1              
-    ## [37] timechange_0.4.0            tidyselect_1.2.1           
-    ## [39] rstudioapi_0.19.0           abind_1.4-8                
-    ## [41] yaml_2.3.12                 doParallel_1.0.17          
-    ## [43] codetools_0.2-20            lattice_0.22-9             
-    ## [45] withr_3.0.3                 S7_0.2.2                   
-    ## [47] evaluate_1.0.5              proxy_0.4-29               
-    ## [49] circlize_0.4.18             pillar_1.11.1              
-    ## [51] MatrixGenerics_1.22.0       tkWidgets_1.88.0           
-    ## [53] foreach_1.5.2               stats4_4.5.1               
-    ## [55] vroom_1.7.1                 S4Vectors_0.48.1           
-    ## [57] hms_1.1.4                   scales_1.4.0               
-    ## [59] class_7.3-23                glue_1.8.1                 
-    ## [61] tools_4.5.1                 locfit_1.5-9.12            
-    ## [63] cowplot_1.2.0               colorspace_2.1-2           
-    ## [65] nlme_3.1-169                cli_3.6.6                  
-    ## [67] textshaping_1.0.5           S4Arrays_1.10.1            
-    ## [69] gtable_0.3.6                DESeq2_1.50.2              
-    ## [71] digest_0.6.39               SparseArray_1.10.10        
-    ## [73] rjson_0.2.23                farver_2.1.2               
-    ## [75] htmltools_0.5.9             lifecycle_1.0.5            
-    ## [77] GlobalOptions_0.1.4         bit64_4.8.2
+    ##  [1] matrixStats_1.5.0           RColorBrewer_1.1-3         
+    ##  [3] doParallel_1.0.17           tools_4.5.1                
+    ##  [5] backports_1.5.1             R6_2.6.1                   
+    ##  [7] GetoptLong_1.1.1            withr_3.0.3                
+    ##  [9] cli_3.6.6                   textshaping_1.0.5          
+    ## [11] labeling_0.4.3              prismatic_1.1.2            
+    ## [13] S7_0.2.2                    proxy_0.4-29               
+    ## [15] systemfonts_1.3.2           rstudioapi_0.19.0          
+    ## [17] shape_1.4.6.1               vroom_1.7.1                
+    ## [19] car_3.1-5                   Matrix_1.7-5               
+    ## [21] S4Vectors_0.48.1            abind_1.4-8                
+    ## [23] lifecycle_1.0.5             yaml_2.3.12                
+    ## [25] carData_3.0-6               SummarizedExperiment_1.40.0
+    ## [27] SparseArray_1.10.10         paletteer_1.7.0            
+    ## [29] crayon_1.5.3                lattice_0.22-9             
+    ## [31] cowplot_1.2.0               pillar_1.11.1              
+    ## [33] knitr_1.51                  tkWidgets_1.88.0           
+    ## [35] GenomicRanges_1.62.1        rjson_0.2.23               
+    ## [37] codetools_0.2-20            glue_1.8.1                 
+    ## [39] vctrs_0.7.3                 png_0.1-9                  
+    ## [41] gtable_0.3.6                rematch2_2.1.2             
+    ## [43] xfun_0.59                   S4Arrays_1.10.1            
+    ## [45] Seqinfo_1.0.0               iterators_1.0.14           
+    ## [47] nlme_3.1-169                bit64_4.8.2                
+    ## [49] otel_0.2.0                  colorspace_2.1-2           
+    ## [51] DESeq2_1.50.2               tidyselect_1.2.1           
+    ## [53] bit_4.6.0                   compiler_4.5.1             
+    ## [55] DelayedArray_0.36.1         scales_1.4.0               
+    ## [57] digest_0.6.39               XVector_0.50.0             
+    ## [59] htmltools_0.5.9             pkgconfig_2.0.3            
+    ## [61] MatrixGenerics_1.22.0       fastmap_1.2.0              
+    ## [63] rlang_1.2.0                 GlobalOptions_0.1.4        
+    ## [65] farver_2.1.2                BiocParallel_1.44.0        
+    ## [67] magrittr_2.0.5              Formula_1.2-5              
+    ## [69] Rcpp_1.1.1-1.1              stringi_1.8.7              
+    ## [71] parallel_4.5.1              splines_4.5.1              
+    ## [73] hms_1.1.4                   circlize_0.4.18            
+    ## [75] locfit_1.5-9.12             ggpubr_0.6.3               
+    ## [77] ggsignif_0.6.4              stats4_4.5.1               
+    ## [79] evaluate_1.0.5              tzdb_0.5.0                 
+    ## [81] foreach_1.5.2               clue_0.3-68                
+    ## [83] broom_1.0.13                rstatix_0.7.3              
+    ## [85] class_7.3-23                ragg_1.5.2                 
+    ## [87] IRanges_2.44.0              cluster_2.1.8.2            
+    ## [89] timechange_0.4.0
 
 ``` r
 detach(package:Mfuzz, unload=TRUE)
