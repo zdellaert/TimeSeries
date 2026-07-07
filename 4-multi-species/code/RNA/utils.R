@@ -16,6 +16,8 @@ treat_colors <- c("C" = "lightblue4", "H" = "#D55E00")
 time_colors <- colorRampPalette(c("#ffffcc","#0c2c84"))(7)
 names(time_colors) <- c("0", "1", "3", "12", "24", "72", "120")
 
+species_colors <- c("Pacuta" = "#5E65BEFF", "Mcap" = "#D29C44FF", "Pcomp" = "#7EC5F4FF",
+                    "POC" = "#5E65BEFF", "MON" = "#D29C44FF", "POR" = "#7EC5F4FF")
 
 # for legend making, this is the color scheme used in mfuzz.plot2 
 # colmap <- c( "#FF8F00", "#FFA700", "#FFBF00",
