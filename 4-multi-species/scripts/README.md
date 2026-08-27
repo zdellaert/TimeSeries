@@ -47,7 +47,6 @@ Last Updated: 5/26/2026
   - [Script: 04\_combine\_files.sh](#script-04_combine_filessh)
 - [Alignment with STAR](#alignment-with-star)
   - [First, write a general alignment script](#first-write-a-general-alignment-script)
-    - [Script: 05\_STAR.sh](#script-05_starsh)
   - [MON Genome Version 3 (*Montipora capitata*)](#mon-genome-version-3-montipora-capitata)
   - [POC Genome Version 2 (*Pocillopora acuta*)](#poc-genome-version-2-pocillopora-acuta)
   - [POR Genome (*Porites compressa*)](#por-genome-porites-compressa)
@@ -63,11 +62,6 @@ Last Updated: 5/26/2026
 - [Contamination screen for poorly mapped samples](#contamination-screen-for-poorly-mapped-samples)
   - [Script: 09\_kraken.sh](#script-09_krakensh)
   - [Contamination screen results](#contamination-screen-results)
-    - [MON\_R72\_H1](#mon_r72_h1)
-    - [MON\_R72\_H2](#mon_r72_h2)
-    - [run-2-MON\_R72\_H2](#run-2-mon_r72_h2)
-    - [GOOD sample example: MON\_R72\_H3](#good-sample-example-mon_r72_h3)
-    - [GOOD sample example: run-2-MON\_R72\_H3](#good-sample-example-run-2-mon_r72_h3)
 - [rRNA contamination screen](#rrna-contamination-screen)
   - [Script: 011\_bbduk\_rRNA.sh](#script-011_bbduk_rrnash)
   - [POR rRNA contamination results](#por-rrna-contamination-results)
@@ -84,13 +78,9 @@ Last Updated: 5/26/2026
   - [Dtrenchii Genome (*Durusdinium trenchii*, CCMP2556 isolate)](#dtrenchii-genome-durusdinium-trenchii-ccmp2556-isolate)
   - [To add: a breviolum and a symbiodinium](#to-add-a-breviolum-and-a-symbiodinium)
   - [Then align](#then-align)
-    - [Run STAR as follows:](#run-star-as-follows)
-    - [All 3 coral species \> Cgoreaui\_V2 Genome](#all-3-coral-species--cgoreaui_v2-genome)
-    - [All 3 coral species \> Dtrenchii Genome](#all-3-coral-species--dtrenchii-genome)
   - [Assess mapping: run multiQC on the STAR alignment reports performed above](#assess-mapping-run-multiqc-on-the-star-alignment-reports-performed-above)
 - [Post-rRNA Removal Alignment with STAR](#post-rrna-removal-alignment-with-star)
   - [First, write a general alignment script](#first-write-a-general-alignment-script-1)
-    - [Script: 12\_rRNA\_free\_STAR.sh](#script-12_rrna_free_starsh)
   - [MON Genome Version 3 (*Montipora capitata*)](#mon-genome-version-3-montipora-capitata-1)
   - [POC Genome Version 2 (*Pocillopora acuta*)](#poc-genome-version-2-pocillopora-acuta-1)
   - [POR Genome (*Porites compressa*)](#por-genome-porites-compressa-1)
@@ -98,6 +88,8 @@ Last Updated: 5/26/2026
   - [Run script on the alignments performed above](#run-script-on-the-alignments-performed-above-3)
 - [Assembly with stringtie](#assembly-with-stringtie-1)
 - [rRNA-free Gene count matrices](#rrna-free-gene-count-matrices)
+- [SNP Calling](#snp-calling)
+  - [First trying nf core pipelien](#first-trying-nf-core-pipelien)
 
 ## Download genomes
 
@@ -2002,3 +1994,55 @@ sbatch 08_prepDE.sh POR Pcomp_rRNA_removed
 ```
 
 Woohoo! [Gene count matrices complete.](https://github.com/zdellaert/TimeSeries/tree/main/4-multi-species/output_RNA/count_matrices).
+
+## SNP Calling
+
+https://emmastrand.github.io/EmmaStrand_Notebook/SNP-Calling-with-RNASeq-data/
+
+https://gatk.broadinstitute.org/hc/en-us/articles/360035531192-RNAseq-short-variant-discovery-SNPs-Indels
+
+```
+
+```
+
+### First trying nf core pipelien
+
+```
+cd /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/
+
+mkdir -p nfcore_rnavar/scripts
+cd nfcore_rnavar/scripts
+
+nano runRNA_SNP.sh
+```
+
+```
+#!/usr/bin/env bash
+#SBATCH --export=NONE
+#SBATCH --nodes=1 --ntasks-per-node=8
+#SBATCH --mem=500GB
+#SBATCH -t 96:00:00
+#SBATCH --mail-type=BEGIN,END,FAIL,TIME_LIMIT_80 #email you when job starts, stops and/or fails
+#SBATCH --error=scripts/"%x_error.%j" #if your job fails, the error report will be put in this file
+#SBATCH --output=scripts/"%x_output.%j" #once your job is completed, any final job report comments will be put in this file
+
+## Load Nextflow and Apptainer environment modules
+module purge
+module load nextflow/26.04.1
+module load apptainer/latest
+
+## Set Nextflow directories to use scratch
+export NXF_WORK=/scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/nfcore_rnavar/nextflow_work
+export NXF_TEMP=/scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/nfcore_rnavar/nextflow_temp
+
+## See note https://docs.seqera.io/nextflow/strict-syntax
+export NXF_SYNTAX_PARSER=v1
+
+nextflow run nf-core/rnavar \
+   --input /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/nfcore_rnavar/samplesheet_POR.csv \
+   --outdir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/nfcore_rnavar/POR_out \
+   --fasta /work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.assembly.fasta \
+   --gtf /work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf \
+   --skip_baserecalibration \
+   -profile unity
+```
