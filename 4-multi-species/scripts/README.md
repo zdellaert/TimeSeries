@@ -89,7 +89,8 @@ Last Updated: 5/26/2026
 - [Assembly with stringtie](#assembly-with-stringtie-1)
 - [rRNA-free Gene count matrices](#rrna-free-gene-count-matrices)
 - [SNP Calling](#snp-calling)
-  - [First trying nf core pipelien](#first-trying-nf-core-pipelien)
+  - [DIY](#diy)
+  - [First trying nf core pipeline](#first-trying-nf-core-pipeline)
 
 ## Download genomes
 
@@ -1997,15 +1998,19 @@ Woohoo! [Gene count matrices complete.](https://github.com/zdellaert/TimeSeries/
 
 ## SNP Calling
 
-https://emmastrand.github.io/EmmaStrand_Notebook/SNP-Calling-with-RNASeq-data/
+### DIY
 
-https://gatk.broadinstitute.org/hc/en-us/articles/360035531192-RNAseq-short-variant-discovery-SNPs-Indels
+- Resources:
+  - https://emmastrand.github.io/EmmaStrand_Notebook/SNP-Calling-with-RNASeq-data/
+  - https://github.com/fscucchia/Pastreoides_development_depth/blob/main/SNPs/README.md
+  - https://palumbilab.stanford.edu/sites/g/files/sbiybj26116/files/media/file/simplefoolsguide.pdf
+  - https://github.com/bethsheets/Population-Genomics-via-RNAseq/tree/docs/assembly-scripts
 
-```
+Key pipeline: https://gatk.broadinstitute.org/hc/en-us/articles/360035531192-RNAseq-short-variant-discovery-SNPs-Indels
 
-```
+### First trying nf core pipeline
 
-### First trying nf core pipelien
+https://nf-co.re/rnavar/1.3.0/parameters/#igenomes_ignore
 
 ```
 cd /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/
@@ -2038,11 +2043,17 @@ export NXF_TEMP=/scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeri
 ## See note https://docs.seqera.io/nextflow/strict-syntax
 export NXF_SYNTAX_PARSER=v1
 
+mkdir -p /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/nfcore_rnavar/dummy_cache
+
 nextflow run nf-core/rnavar \
    --input /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/nfcore_rnavar/samplesheet_POR.csv \
    --outdir /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/nfcore_rnavar/POR_out \
    --fasta /work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.assembly.fasta \
    --gtf /work/pi_hputnam_uri_edu/HI_Genomes/Pcompressa/Porites_compressa_HIv1.gtf \
    --skip_baserecalibration \
+   --igenomes_ignore \
+   --skip 'snpeff,vep' \
+   --snpeff_cache /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/nfcore_rnavar/dummy_cache \
+   --vep_cache /scratch4/workspace/zdellaert_uri_edu-shared_TimeSeries/TimeSeries/nfcore_rnavar/dummy_cache \
    -profile unity
 ```
