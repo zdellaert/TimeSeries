@@ -1,22 +1,9 @@
----
-title: "Surface Area Calculations from Wax Dipping"
-author: "HM Putnam, AS Huffmyer; edited ZD 9/19/2026"
-date: "10/26/2021"
-output:
-  github_document: default
----
+Surface Area Calculations from Wax Dipping
+================
+HM Putnam, AS Huffmyer; edited ZD 9/19/2026
+10/26/2021
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
-
-## install packages if you dont already have them
-if (!require("tidyverse")) install.packages("tidyverse")
-
-# load packages
-library(tidyverse)
-```
-
-```{r}
+``` r
 #load wax data
 smpls <- read.csv("../../data_phys/wax_dipped.csv", header=TRUE)
 stnds <- read.csv("../../data_phys/wax_standards.csv", header=TRUE)
@@ -34,26 +21,55 @@ stnds$surface.area.cm2 <- 2*pi*(stnds$rad)*(stnds$Length_cm)
 # calculate the curve coefficients for slope and intercept to apply as the standard
 stnd.curve <- lm(surface.area.cm2~delta.mass.g, data=stnds)
 plot(surface.area.cm2~delta.mass.g, data=stnds)
-stnd.curve$coefficients
-summary(stnd.curve)$r.squared
+```
 
+![](SurfaceArea_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
+
+``` r
+stnd.curve$coefficients
+```
+
+    ##  (Intercept) delta.mass.g 
+    ##    0.2385004   61.5462956
+
+``` r
+summary(stnd.curve)$r.squared
+```
+
+    ## [1] 0.984836
+
+``` r
 #Calculate surface area using the standard curve
 smpls$surface.area.cm2 <- stnd.curve$coefficients[2] * smpls$delta.mass.g + stnd.curve$coefficients[1]
 
 #check the range to make sure your samples fall within the range of the standards
 range(smpls$surface.area.cm2)
-range(stnds$surface.area.cm2)
+```
 
+    ## [1]  1.112458 14.178736
+
+``` r
+range(stnds$surface.area.cm2)
+```
+
+    ## [1]  2.199115 16.022123
+
+``` r
 #Save the output for use in normilzation for phys assays
 smpls%>%
   select(species, fragment, surface.area.cm2, Homogenate.Volume)%>%
   write_csv("../../output_phys/surface_area.csv")
 ```
 
-### Below is not from Hollie + Ariana's code, but my own checks for outliers
+### Below is not from Hollie + Ariana’s code, but my own checks for outliers
 
-```{r}
+``` r
 sum(smpls$surface.area.cm2 < min(stnds$surface.area.cm2) )
+```
+
+    ## [1] 29
+
+``` r
   # 29/126 samples had a surface area smaller than that of the smallest standard...
 
 ggplot(smpls, aes(x = species, y = surface.area.cm2)) +
@@ -63,7 +79,11 @@ ggplot(smpls, aes(x = species, y = surface.area.cm2)) +
   labs(title = "Surface Area by Species with Outliers Highlighted",
        x = "Species",
        y = "Surface Area (cm²)")
+```
 
+![](SurfaceArea_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+
+``` r
 ggplot(smpls, aes(x = surface.area.cm2)) +
   geom_histogram(bins=100) +
   facet_grid(species~.) + 
@@ -73,11 +93,12 @@ ggplot(smpls, aes(x = surface.area.cm2)) +
        y = "Surface Area (cm²)")
 ```
 
+![](SurfaceArea_files/figure-gfm/unnamed-chunk-2-2.png)<!-- -->
+
 Outliers to check out:
 
-- MON_P24_C1 (** this one especially)
+- MON_P24_C1 (\*\* this one especially)
 - POR_P3_C2
 - POR_P72_C3
 - POR_P3_H1
 - POC_P12_C2
-
