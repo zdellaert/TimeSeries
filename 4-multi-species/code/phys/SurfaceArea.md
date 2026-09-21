@@ -46,7 +46,7 @@ smpls$surface.area.cm2 <- stnd.curve$coefficients[2] * smpls$delta.mass.g + stnd
 range(smpls$surface.area.cm2)
 ```
 
-    ## [1]  1.112458 14.178736
+    ## [1]  1.112458 11.716885
 
 ``` r
 range(stnds$surface.area.cm2)
@@ -95,10 +95,12 @@ ggplot(smpls, aes(x = surface.area.cm2)) +
 
 ![](SurfaceArea_files/figure-gfm/unnamed-chunk-2-2.png)<!-- -->
 
-Outliers to check out:
+On 9/21/26, I checked the following outliers in the original data and
+re-scraped any cut surfaces that could’ve artifically inflated the
+wax-dipped weight. New weights are written next to the originals on the
+datasheet and trackable through github commit 9/21/26.
 
-- MON_P24_C1 (\*\* this one especially)
+- MON_P24_C1
 - POR_P3_C2
-- POR_P72_C3
 - POR_P3_H1
 - POC_P12_C2
