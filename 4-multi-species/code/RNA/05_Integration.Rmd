@@ -8,6 +8,8 @@ output:
   github_document:
     toc: true
     html_preview: false
+editor_options: 
+  chunk_output_type: inline
 ---
 
 # Analysis of Time Series bulk RNA-seq data: Combine results from all analyses
@@ -57,8 +59,10 @@ tfbs_dir <- file.path("../../output_RNA/TFBS", species)
 # set up necessary output directories if they don't exist
 outdir <- file.path("../../output_RNA/analysis_integration", species)
 outdir_plots <- file.path(outdir,"plots")
+outdir_topGO <- file.path(outdir,"topGO")
 if (!dir.exists(outdir)) dir.create(outdir, recursive = TRUE)
 if (!dir.exists(outdir_plots)) dir.create(outdir_plots, recursive = TRUE)
+if (!dir.exists(outdir_topGO)) dir.create(outdir_topGO, recursive = TRUE)
 
 reportdir <- file.path("../../output_RNA/reports", params$species, "05_Integration_files/figure-gfm/")
 if (!dir.exists(reportdir)) dir.create(reportdir, recursive = TRUE)
@@ -356,10 +360,12 @@ HeatStressGenes <- read_csv(paste0(annot_dir,"/heatstress/HeatStressGenes_", spe
             ) 
   
   HeatStressGenes_unique <- HeatStressGenes_unique %>% mutate(gene_sym=str_replace(str_replace(gene_sym,"Hsc71,HSP70","HSP70"),"HSP70,Hsc71","HSP70"))
+  
+  HeatStressGenes_unique <- HeatStressGenes_unique %>% rbind(c("Pocillopora_acuta_HIv2___TS.g10636.t2","ABCB1","",""))
 ```
 
 ```{r}
-stress_genes_ids <- unique(HeatStressGenes_unique$gene_id) 
+stress_genes_ids <- unique(HeatStressGenes_unique$gene_id)
 stress_genes_counts <- vst_counts[stress_genes_ids, ]
 
 plot_df <- as.data.frame(t(stress_genes_counts)) %>%
@@ -412,6 +418,14 @@ plot_df %>% filter(grepl("HSP",gene_sym)|grepl("Nrf2",gene_sym)|grepl("HSF1",gen
   labs(y="VST expression", x="Timepoint")
 
 plot_df %>% filter(grepl("BNIP",gene_sym)|grepl("HIF",gene_sym)) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+  stat_summary(fun="mean", geom="line") +
+  scale_color_manual(values = treat_colors) +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+  facet_wrap(~paste0(str_replace(gene_id,"Pocillopora_acuta_HIv2___",""), ": ", gene_sym)) +
+  theme_bw() +
+  labs(y="VST expression", x="Timepoint")
+
+plot_df %>% filter(grepl("HSP90",gene_sym)|grepl("10636",gene_id)) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
   stat_summary(fun="mean", geom="line") +
   scale_color_manual(values = treat_colors) +
   stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
@@ -634,6 +648,166 @@ final
 save_ggplot(final, "HSF1_Pathway_VST_Diff")
 ```
 
+## 9. GO Enrichment of Clusters of Interest
+
+### 1. Set up dataframes for GO enrichment
+
+```{r}
+library(topGO) # these get loaded here since they mask some key functions used above
+library(GO.db) # these get loaded here since they mask some key functions used above
+library(dplyr) # load dplyr last so that select refers to dplyr::select
+
+outdir_plots <- outdir_topGO
+
+enrich_table <- master_table
+
+enrich_table$GO.terms <- gsub("; ", ";", enrich_table$GeneOntologyIDs)
+enrich_table$GO.terms[enrich_table$GO.terms==""] <- NA
+genes_with_GO <- enrich_table %>% filter(!is.na(GO.terms)) %>%  dplyr::select(gene_id,GO.terms,SwissProt_ProteinName)
+
+# format into the format required by topGO for custom mappings
+Custom_GOs <- genes_with_GO %>%
+  # Separate GO terms into individual rows
+  separate_rows(GO.terms, sep = ";") %>%
+  dplyr::rename(GOID = GO.terms) %>%
+  dplyr::select(gene_id, GOID)
+
+Custom_GOs_valid <- Custom_GOs %>% filter(GOID %in% keys(GO.db))
+
+nrow(enrich_table)
+nrow(genes_with_GO)
+cat(nrow(genes_with_GO),"(",100*(nrow(genes_with_GO)/nrow(enrich_table)),"%) of expressed genes have GO annotations\n")
+cat(length(unique(Custom_GOs_valid$gene_id)),"(",100*(length(unique(Custom_GOs_valid$gene_id))/nrow(enrich_table)),"%) of expressed genes have valid GO annotations")
+```
+
+```{r}
+GO <- AnnotationDbi::select(GO.db,columns=c("GOID","ONTOLOGY"),
+                            keys=unique(Custom_GOs_valid$GOID))
+
+names(GO)[2] <- "category"
+
+Custom_GOs_valid <- merge(Custom_GOs_valid,GO,by="GOID",all.x=TRUE,sort=FALSE)
+
+geneID2GO_BP <- Custom_GOs_valid %>% dplyr::select(gene_id,GOID,category) %>%
+  filter(category=="BP") %>%
+  distinct() %>%
+  group_by(gene_id) %>%
+  summarise(GOs = list(GOID), .groups = "drop") %>%
+  deframe()
+
+geneID2GO_MF <- Custom_GOs_valid %>% dplyr::select(gene_id,GOID,category) %>%
+  filter(category=="MF") %>%
+  distinct() %>%
+  group_by(gene_id) %>%
+  summarise(GOs = list(GOID), .groups = "drop") %>%
+  deframe()
+
+geneID2GO_CC <- Custom_GOs_valid %>% dplyr::select(gene_id,GOID,category) %>%
+  filter(category=="CC") %>%
+  distinct() %>%
+  group_by(gene_id) %>%
+  summarise(GOs = list(GOID), .groups = "drop") %>%
+  deframe()
+```
+
+```{r}
+go_all_results <- list()
+
+for (pattern in unique(Mfuzz_pattern_mapping$pattern)){
+  allRes <- tibble()
+    
+  # make short version of pattern name for file saving
+  pattern_short <- str_replace_all(pattern," ","")
+  # select genes belonging to that cluster pattern
+  topgo_clust <- enrich_table %>% 
+    filter(Mfuzz_pattern == pattern) %>% pull(gene_id) 
+  
+  for (ont in c("BP", "MF", "CC")){
+    geneID2GO <- get(paste0("geneID2GO_",ont))
+    
+    # set a factor for all genes in the list that have GO annotations for the given ontology whether they belong in the test set or not
+  test_genes <- as.factor(as.numeric(names(geneID2GO) %in% topgo_clust))
+  names(test_genes) <- names(geneID2GO)
+    
+    GOdata <- new("topGOdata",
+                ontology = ont,
+                allGenes = test_genes,
+                nodeSize = 5,
+                gene2GO = geneID2GO,
+                annot = annFUN.gene2GO) 
+    
+    resultWeight <- runTest(GOdata, algorithm = "weight01", statistic = "fisher")
+    
+    ontRes <- GenTable(GOdata, weight01 = resultWeight,
+                     orderBy = "weight01",
+                     ranksOf = "classicFisher",
+                     topNodes = length(score(resultWeight)),
+                     numChar = 150) %>%
+    mutate(pval = as.numeric(weight01),
+           ontology = ont, 
+           EnrichRatio = Significant / Annotated,
+           bh_adjust = p.adjust(pval, method="BH")) #add adjusted p-values
+    
+  allRes <- rbind(allRes,ontRes)
+  }
+ 
+  go_plot_data <- allRes %>%
+    filter(pval < 0.05) %>%
+    group_by(ontology) %>% slice_min(pval, n = 20) %>% ungroup() %>%
+    mutate(Term = str_trunc(Term, 75),
+           Term = fct_reorder(Term, -log10(pval)))
+  
+  ggplot(go_plot_data,
+         aes(x = EnrichRatio, y = Term, size = Significant, color = -log10(pval))) +
+    geom_point() +
+    scale_color_gradient(low = "#3c58a7", high = "#ee2e25") +
+    facet_grid(ontology ~ ., scales = "free_y", space = "free_y") +
+    theme_bw(base_size = 12) +
+    theme(strip.background = element_rect(fill = "white"),
+          strip.text = element_text(face = "bold")) +
+    labs(title = paste(species, pattern, "genes:",ont),
+         x = "Enrich ratio (sig / annotated)", y = NULL,
+         size = "# sig genes", color = "-log10(p)")
+  
+  save_ggplot(last_plot(), paste0("GO_dotplot",pattern_short), width = 9, height = 12)
+  
+  go_all_results[[paste(pattern)]] <- allRes
+}
+
+all_go_combined <- list_rbind(go_all_results,names_to="Mfuzz_pattern")
+
+write.csv(all_go_combined, file.path(outdir_topGO, "GO_enrichment_all_clusters.csv"), row.names = FALSE)
+```
+
+```{r}
+go_all_plot <- all_go_combined %>% 
+  # keep significant BP terms only
+  filter(pval < 0.05, ontology=="BP") %>%
+  group_by(Mfuzz_pattern) %>%
+  arrange(pval,desc(Significant),.by_group = TRUE) %>%
+  # choose 5 most significant by pvalue
+   slice_min(pval, n = 5,with_ties=FALSE) %>%
+   ungroup() %>%
+    mutate(Term = str_trunc(Term, 60),
+           Term = fct_reorder(Term, -log10(pval)),
+           Mfuzz_pattern=factor(Mfuzz_pattern,levels=logical_order)) 
+
+ggplot(go_all_plot,
+       aes(x = EnrichRatio, y = Term, size = Significant, color = -log10(pval))) +
+  geom_point() + scale_color_gradient(low = "#3c58a7", high = "#ee2e25") + theme_bw(base_size = 10) +
+   facet_grid(Mfuzz_pattern ~ ., scales = "free_y", space = "free_y") +
+  theme(strip.background = element_rect(fill = "white"),
+          strip.text = element_text(face = "bold",angle=0),
+        axis.text.y=element_text(color="black")) +
+  labs(title = paste0(species, ": Top 5 BP GO enriched terms\nby Mfuzz pattern"),
+         x = NULL, y = NULL,
+         size = "# sig genes", color = "-log10(p)")
+
+ save_ggplot(last_plot(), "GO_dotplot_top5_BP_byMfuzz", width = 6, height = 8)
+```
+
+
+
 ```{r}
 sessionInfo()
 
@@ -642,5 +816,8 @@ detach(package:ggraph, unload=TRUE)
 detach(package:ggarrow, unload=TRUE)
 detach(package:patchwork, unload=TRUE)
 detach(package:ComplexHeatmap, unload=TRUE)
+detach(package:topGO, unload=TRUE)
+detach(package:GO.db, unload=TRUE)
+detach(package:AnnotationDbi, unload=TRUE)
 ```
 
