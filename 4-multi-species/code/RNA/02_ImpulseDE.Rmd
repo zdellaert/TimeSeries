@@ -953,6 +953,106 @@ heat_clustered %>% filter(!is.na(cluster)) %>% ggplot(aes(y=reorder(gene_id, clu
   labs(x="Mfuzz Cluster", y="Gene ID", title="Heat stress genes clustered by temporal expression pattern")
 ```
 
+### Pacuta LCM
+
+```{r}
+if (species == "Pacuta"){
+DESeq_LCM <- read.csv("../../../../LaserCoral/output_RNA/differential_expression/DESeq_results.csv", header = TRUE) %>% dplyr::rename("query" ="X")
+
+LCM_DE_impulse <- DESeq_LCM %>% filter(padj<0.05 & abs(log2FoldChange) > 1) %>%
+  rename(Gene=query,LCM_LFC = log2FoldChange, LCM_padj=padj) %>%
+  select(Gene, LCM_LFC, LCM_padj) %>%
+  mutate(Tissue_Up = ifelse(LCM_LFC > 0, "Oral", "Aboral")) %>% 
+  inner_join(impulse_results_annot)
+}
+```
+
+```{r}
+if (species == "Pacuta"){
+sig_LCM_genes_by_clust <- LCM_DE_impulse %>% 
+  filter(Gene %in% rownames(vst)) %>% filter(padj < 0.001) %>% 
+  left_join(cluster_assignments %>% select(Gene, cluster, membership)) %>%
+  left_join(Mfuzz_pattern_mapping, by = "cluster") %>%
+  dplyr::rename(Mfuzz_cluster = cluster,
+                Mfuzz_pattern = pattern)  
+
+heat_samples <- vst %>% select(contains("_H")) %>% colnames()
+T0_samples <- vst %>% select(contains("_H")) %>% select(contains("_R0_"))  %>% colnames()
+row_annot <- sig_LCM_genes_by_clust %>% column_to_rownames(var="Gene") %>% select(Mfuzz_pattern,Tissue_Up) 
+
+row_annot$Mfuzz_pattern <- factor(row_annot$Mfuzz_pattern, levels=logical_order)
+col_annot <- meta[heat_samples,] %>% select(time)
+
+vst_heat_selected <- vst[sig_LCM_genes_by_clust$Gene,heat_samples]
+vst_heat_selected$T0mean <- rowMeans(vst_heat_selected[,T0_samples])
+vst_heat_norm <- vst_heat_selected - vst_heat_selected$T0mean
+vst_heat_norm <- vst_heat_norm %>% select(-T0mean) %>% as.matrix()
+
+vst_max <- max(abs(vst_heat_norm), na.rm = TRUE)
+col_fun <- circlize::colorRamp2(c(-vst_max, -vst_max/2,0, vst_max/2,vst_max),c("#3c58a7","#3c58a7", "white", "#ee2e25","#ee2e25"))
+legend_breaks <- seq(-vst_max, vst_max, length.out = 101)
+
+row_ha <- rowAnnotation(
+  LCM_Tissue_Up = row_annot$Tissue_Up,
+   Mfuzz_pattern = row_annot$Mfuzz_pattern,
+  col = list(Mfuzz_pattern = mfuzz_cols),
+  annotation_name_side = "bottom",show_annotation_name = FALSE,
+  simple_anno_size = unit(3, "mm"),
+  annotation_name_rot = 270,
+  annotation_name_gp = gpar(fontface = "bold",fontsize=10),
+  gap = unit(2, "points"))
+
+#### gene labels - mark
+row_gene_labels <- sig_LCM_genes_by_clust$SwissProt_ShortName
+#row_gene_labels[is.na(row_gene_labels)] <- ""
+names(row_gene_labels) <- sig_LCM_genes_by_clust$gene_id
+label_indeces <- which(!is.na(row_gene_labels))
+
+row_gene_labels_marked <- rowAnnotation(
+  gene_labels = anno_mark(at = label_indeces, 
+    labels = row_gene_labels[label_indeces],
+    labels_gp=gpar(fontsize = 4)))
+
+col_ha <- HeatmapAnnotation(
+  time = col_annot$time,
+  simple_anno_size = unit(3, "mm"),
+  #treatment = col_annot$treatment,
+  col = list(
+    "time" = time_colors
+    #"treatment" = treat_colors,
+   ),show_annotation_name = FALSE)
+
+sig_genes_heatmap <- ComplexHeatmap::Heatmap(
+  vst_heat_norm,
+  name = "vst",
+  col = col_fun,
+  cluster_columns = FALSE,
+  cluster_rows = TRUE,
+  row_split = row_annot,row_title = NULL,
+  cluster_row_slices = FALSE,
+  show_parent_dend_line = FALSE,
+  column_split = col_annot$time, column_title = NULL,
+  row_dend_width = unit(17.5, "mm"),
+  column_gap = unit(c(1.75), "mm"),
+  show_row_names = FALSE, #row_names_gp = gpar(fontsize = 4), row_labels = row_gene_labels[rownames(vst_heat_norm)],
+  show_column_names = FALSE,
+  top_annotation = col_ha,
+  left_annotation = row_ha,
+  #right_annotation = row_gene_labels_marked,
+  border = FALSE
+)
+
+png(file.path(outdir_plots,"LCM_sig_lab.png"),  width = 10, height = 20, units = "in", res = 300)
+sig_genes_heatmap + row_gene_labels_marked 
+dev.off()
+
+pdf(file.path(outdir_plots,"/pdf_figs/LCM_sig_lab.pdf"),  width = 12, height = 20)
+sig_genes_heatmap + row_gene_labels_marked
+dev.off()
+}
+```
+
+
 ```{r}
 sessionInfo()
 
