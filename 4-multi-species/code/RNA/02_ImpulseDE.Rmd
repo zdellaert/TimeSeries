@@ -960,7 +960,7 @@ if (species == "Pacuta"){
 DESeq_LCM <- read.csv("../../../../LaserCoral/output_RNA/differential_expression/DESeq_results.csv", header = TRUE) %>% dplyr::rename("query" ="X")
 
 LCM_DE_impulse <- DESeq_LCM %>% filter(padj<0.05 & abs(log2FoldChange) > 1) %>%
-  rename(Gene=query,LCM_LFC = log2FoldChange, LCM_padj=padj) %>%
+  dplyr::rename(Gene=query,LCM_LFC = log2FoldChange, LCM_padj=padj) %>%
   select(Gene, LCM_LFC, LCM_padj) %>%
   mutate(Tissue_Up = ifelse(LCM_LFC > 0, "Oral", "Aboral")) %>% 
   inner_join(impulse_results_annot)

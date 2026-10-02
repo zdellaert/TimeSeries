@@ -862,7 +862,7 @@ col_ha <- HeatmapAnnotation(
 
 # Annotations/metadata for the orthogroups/rows
 
-row_annot <- core_conserved_exp %>% column_to_rownames(var="OG") %>% select(Mfuzz_patterns)  %>% rename(Mfuzz_pattern=Mfuzz_patterns)
+row_annot <- core_conserved_exp %>% column_to_rownames(var="OG") %>% dplyr::select(Mfuzz_patterns)  %>% dplyr::rename(Mfuzz_pattern=Mfuzz_patterns)
 row_annot$Mfuzz_pattern <- factor(row_annot$Mfuzz_pattern, levels=logical_order)
 
 row_ha <- rowAnnotation(

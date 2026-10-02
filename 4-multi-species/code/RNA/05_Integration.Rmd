@@ -361,7 +361,7 @@ HeatStressGenes <- read_csv(paste0(annot_dir,"/heatstress/HeatStressGenes_", spe
   
   HeatStressGenes_unique <- HeatStressGenes_unique %>% mutate(gene_sym=str_replace(str_replace(gene_sym,"Hsc71,HSP70","HSP70"),"HSP70,Hsc71","HSP70"))
   
-  HeatStressGenes_unique <- HeatStressGenes_unique %>% rbind(c("Pocillopora_acuta_HIv2___TS.g10636.t2","ABCB1","",""))
+#HeatStressGenes_unique <- HeatStressGenes_unique %>% rbind(c("Pocillopora_acuta_HIv2___TS.g10636.t2","ABCB1","",""))
 ```
 
 ```{r}
@@ -680,6 +680,8 @@ cat(nrow(genes_with_GO),"(",100*(nrow(genes_with_GO)/nrow(enrich_table)),"%) of 
 cat(length(unique(Custom_GOs_valid$gene_id)),"(",100*(length(unique(Custom_GOs_valid$gene_id))/nrow(enrich_table)),"%) of expressed genes have valid GO annotations")
 ```
 
+### 2. Form the topGO objects
+
 ```{r}
 GO <- AnnotationDbi::select(GO.db,columns=c("GOID","ONTOLOGY"),
                             keys=unique(Custom_GOs_valid$GOID))
@@ -709,6 +711,8 @@ geneID2GO_CC <- Custom_GOs_valid %>% dplyr::select(gene_id,GOID,category) %>%
   summarise(GOs = list(GOID), .groups = "drop") %>%
   deframe()
 ```
+
+### 3. Run topGO
 
 ```{r}
 go_all_results <- list()
@@ -765,7 +769,7 @@ for (pattern in unique(Mfuzz_pattern_mapping$pattern)){
     theme_bw(base_size = 12) +
     theme(strip.background = element_rect(fill = "white"),
           strip.text = element_text(face = "bold")) +
-    labs(title = paste(species, pattern, "genes:",ont),
+    labs(title = paste(species, pattern, "genes"),
          x = "Enrich ratio (sig / annotated)", y = NULL,
          size = "# sig genes", color = "-log10(p)")
   

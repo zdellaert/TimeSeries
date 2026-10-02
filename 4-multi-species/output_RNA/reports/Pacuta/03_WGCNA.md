@@ -1,7 +1,7 @@
 WGCNA Analysis
 ================
 Zoe Dellaert
-2026-07-01
+2026-10-02
 
 - [Network analysis of Time Series bulk RNA-seq
   data](#network-analysis-of-time-series-bulk-rna-seq-data)
@@ -148,38 +148,41 @@ sessionInfo() #provides list of loaded packages and version of R
     ## [29] tidyverse_2.0.0             rmarkdown_2.31             
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] rstudioapi_0.19.0     shape_1.4.6.1         magrittr_2.0.5       
-    ##  [4] farver_2.1.2          GlobalOptions_0.1.4   ragg_1.5.2           
-    ##  [7] vctrs_0.7.3           memoise_2.0.1         base64enc_0.1-6      
-    ## [10] htmltools_0.5.9       S4Arrays_1.10.1       SparseArray_1.10.10  
-    ## [13] Formula_1.2-5         htmlwidgets_1.6.4     impute_1.84.0        
-    ## [16] cachem_1.1.0          lifecycle_1.0.5       iterators_1.0.14     
-    ## [19] pkgconfig_2.0.3       Matrix_1.7-5          R6_2.6.1             
-    ## [22] fastmap_1.2.0         clue_0.3-68           digest_0.6.39        
-    ## [25] colorspace_2.1-2      AnnotationDbi_1.72.0  DESeq2_1.50.2        
-    ## [28] textshaping_1.0.5     Hmisc_5.2-6           RSQLite_3.53.2       
-    ## [31] labeling_0.4.3        timechange_0.4.0      httr_1.4.8           
-    ## [34] abind_1.4-8           compiler_4.5.1        proxy_0.4-29         
-    ## [37] bit64_4.8.2           withr_3.0.3           doParallel_1.0.17    
-    ## [40] htmlTable_2.5.0       S7_0.2.2              backports_1.5.1      
-    ## [43] DBI_1.3.0             tkWidgets_1.88.0      DelayedArray_0.36.1  
-    ## [46] rjson_0.2.23          tools_4.5.1           foreign_0.8-91       
-    ## [49] otel_0.2.0            nnet_7.3-20           glue_1.8.1           
-    ## [52] nlme_3.1-169          checkmate_2.3.4       cluster_2.1.8.2      
-    ## [55] gtable_0.3.6          tzdb_0.5.0            preprocessCore_1.72.0
-    ## [58] class_7.3-23          data.table_1.18.4     hms_1.1.4            
-    ## [61] XVector_0.50.0        foreach_1.5.2         pillar_1.11.1        
-    ## [64] vroom_1.7.1           circlize_0.4.18       splines_4.5.1        
-    ## [67] lattice_0.22-9        survival_3.8-6        bit_4.6.0            
-    ## [70] annotate_1.88.0       tidyselect_1.2.1      locfit_1.5-9.12      
-    ## [73] Biostrings_2.78.0     knitr_1.51            gridExtra_2.3.1      
-    ## [76] xfun_0.59             stringi_1.8.7         yaml_2.3.12          
-    ## [79] evaluate_1.0.5        codetools_0.2-20      cli_3.6.6            
-    ## [82] rpart_4.1.27          xtable_1.8-8          systemfonts_1.3.2    
-    ## [85] Rcpp_1.1.1-1.1        png_0.1-9             XML_3.99-0.23        
-    ## [88] parallel_4.5.1        blob_1.3.0            scales_1.4.0         
-    ## [91] crayon_1.5.3          GetoptLong_1.1.1      rlang_1.2.0          
-    ## [94] cowplot_1.2.0         KEGGREST_1.50.0
+    ##   [1] splines_4.5.1         prismatic_1.1.2       preprocessCore_1.72.0
+    ##   [4] rpart_4.1.27          XML_3.99-0.23         lifecycle_1.0.5      
+    ##   [7] rstatix_0.7.3         doParallel_1.0.17     vroom_1.7.1          
+    ##  [10] lattice_0.22-9        backports_1.5.1       magrittr_2.0.5       
+    ##  [13] Hmisc_5.2-6           yaml_2.3.12           otel_0.2.0           
+    ##  [16] cowplot_1.2.0         DBI_1.3.0             abind_1.4-8          
+    ##  [19] nnet_7.3-20           circlize_0.4.18       annotate_1.88.0      
+    ##  [22] codetools_0.2-20      DelayedArray_0.36.1   tidyselect_1.2.1     
+    ##  [25] shape_1.4.6.1         farver_2.1.2          base64enc_0.1-6      
+    ##  [28] GetoptLong_1.1.1      Formula_1.2-5         survival_3.8-6       
+    ##  [31] iterators_1.0.14      systemfonts_1.3.2     foreach_1.5.2        
+    ##  [34] tools_4.5.1           ragg_1.5.2            Rcpp_1.1.1-1.1       
+    ##  [37] glue_1.8.1            gridExtra_2.3.1       SparseArray_1.10.10  
+    ##  [40] xfun_0.59             DESeq2_1.50.2         withr_3.0.3          
+    ##  [43] fastmap_1.2.0         digest_0.6.39         timechange_0.4.0     
+    ##  [46] R6_2.6.1              textshaping_1.0.5     colorspace_2.1-2     
+    ##  [49] RSQLite_3.53.2        data.table_1.18.4     class_7.3-23         
+    ##  [52] htmlwidgets_1.6.4     httr_1.4.8            S4Arrays_1.10.1      
+    ##  [55] pkgconfig_2.0.3       gtable_0.3.6          blob_1.3.0           
+    ##  [58] impute_1.84.0         S7_0.2.2              XVector_0.50.0       
+    ##  [61] htmltools_0.5.9       carData_3.0-6         clue_0.3-68          
+    ##  [64] scales_1.4.0          png_0.1-9             tkWidgets_1.88.0     
+    ##  [67] knitr_1.51            rstudioapi_0.19.0     tzdb_0.5.0           
+    ##  [70] rjson_0.2.23          checkmate_2.3.4       nlme_3.1-169         
+    ##  [73] proxy_0.4-29          cachem_1.1.0          GlobalOptions_0.1.4  
+    ##  [76] parallel_4.5.1        foreign_0.8-91        AnnotationDbi_1.72.0 
+    ##  [79] pillar_1.11.1         vctrs_0.7.3           ggpubr_0.6.3         
+    ##  [82] car_3.1-5             xtable_1.8-8          cluster_2.1.8.2      
+    ##  [85] htmlTable_2.5.0       paletteer_1.7.0       evaluate_1.0.5       
+    ##  [88] cli_3.6.6             locfit_1.5-9.12       compiler_4.5.1       
+    ##  [91] rlang_1.2.0           crayon_1.5.3          ggsignif_0.6.4       
+    ##  [94] labeling_0.4.3        rematch2_2.1.2        stringi_1.8.7        
+    ##  [97] Biostrings_2.78.0     Matrix_1.7-5          hms_1.1.4            
+    ## [100] bit64_4.8.2           KEGGREST_1.50.0       broom_1.0.13         
+    ## [103] memoise_2.0.1         bit_4.6.0
 
 ## 2. Setup species-specific parameters
 
@@ -916,39 +919,42 @@ sessionInfo()
     ## [29] tidyverse_2.0.0             rmarkdown_2.31             
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] rstudioapi_0.19.0     shape_1.4.6.1         magrittr_2.0.5       
-    ##  [4] farver_2.1.2          GlobalOptions_0.1.4   ragg_1.5.2           
-    ##  [7] vctrs_0.7.3           memoise_2.0.1         base64enc_0.1-6      
-    ## [10] htmltools_0.5.9       S4Arrays_1.10.1       SparseArray_1.10.10  
-    ## [13] Formula_1.2-5         htmlwidgets_1.6.4     impute_1.84.0        
-    ## [16] cachem_1.1.0          lifecycle_1.0.5       iterators_1.0.14     
-    ## [19] pkgconfig_2.0.3       Matrix_1.7-5          R6_2.6.1             
-    ## [22] fastmap_1.2.0         clue_0.3-68           digest_0.6.39        
-    ## [25] colorspace_2.1-2      AnnotationDbi_1.72.0  DESeq2_1.50.2        
-    ## [28] textshaping_1.0.5     Hmisc_5.2-6           RSQLite_3.53.2       
-    ## [31] labeling_0.4.3        timechange_0.4.0      httr_1.4.8           
-    ## [34] abind_1.4-8           compiler_4.5.1        proxy_0.4-29         
-    ## [37] bit64_4.8.2           withr_3.0.3           doParallel_1.0.17    
-    ## [40] htmlTable_2.5.0       S7_0.2.2              backports_1.5.1      
-    ## [43] DBI_1.3.0             tkWidgets_1.88.0      DelayedArray_0.36.1  
-    ## [46] rjson_0.2.23          tools_4.5.1           foreign_0.8-91       
-    ## [49] otel_0.2.0            nnet_7.3-20           glue_1.8.1           
-    ## [52] nlme_3.1-169          checkmate_2.3.4       cluster_2.1.8.2      
-    ## [55] gtable_0.3.6          tzdb_0.5.0            preprocessCore_1.72.0
-    ## [58] class_7.3-23          data.table_1.18.4     hms_1.1.4            
-    ## [61] XVector_0.50.0        foreach_1.5.2         pillar_1.11.1        
-    ## [64] limma_3.66.0          vroom_1.7.1           circlize_0.4.18      
-    ## [67] splines_4.5.1         lattice_0.22-9        survival_3.8-6       
-    ## [70] bit_4.6.0             annotate_1.88.0       tidyselect_1.2.1     
-    ## [73] ComplexHeatmap_2.26.1 locfit_1.5-9.12       Biostrings_2.78.0    
-    ## [76] knitr_1.51            gridExtra_2.3.1       xfun_0.59            
-    ## [79] statmod_1.5.2         stringi_1.8.7         yaml_2.3.12          
-    ## [82] evaluate_1.0.5        codetools_0.2-20      cli_3.6.6            
-    ## [85] rpart_4.1.27          xtable_1.8-8          systemfonts_1.3.2    
-    ## [88] Rcpp_1.1.1-1.1        png_0.1-9             XML_3.99-0.23        
-    ## [91] parallel_4.5.1        blob_1.3.0            scales_1.4.0         
-    ## [94] crayon_1.5.3          GetoptLong_1.1.1      rlang_1.2.0          
-    ## [97] cowplot_1.2.0         KEGGREST_1.50.0
+    ##   [1] splines_4.5.1         prismatic_1.1.2       preprocessCore_1.72.0
+    ##   [4] rpart_4.1.27          XML_3.99-0.23         lifecycle_1.0.5      
+    ##   [7] rstatix_0.7.3         doParallel_1.0.17     vroom_1.7.1          
+    ##  [10] lattice_0.22-9        backports_1.5.1       magrittr_2.0.5       
+    ##  [13] limma_3.66.0          Hmisc_5.2-6           yaml_2.3.12          
+    ##  [16] otel_0.2.0            cowplot_1.2.0         DBI_1.3.0            
+    ##  [19] abind_1.4-8           nnet_7.3-20           circlize_0.4.18      
+    ##  [22] annotate_1.88.0       codetools_0.2-20      DelayedArray_0.36.1  
+    ##  [25] tidyselect_1.2.1      shape_1.4.6.1         farver_2.1.2         
+    ##  [28] base64enc_0.1-6       GetoptLong_1.1.1      Formula_1.2-5        
+    ##  [31] survival_3.8-6        iterators_1.0.14      systemfonts_1.3.2    
+    ##  [34] foreach_1.5.2         tools_4.5.1           ragg_1.5.2           
+    ##  [37] Rcpp_1.1.1-1.1        glue_1.8.1            gridExtra_2.3.1      
+    ##  [40] SparseArray_1.10.10   xfun_0.59             DESeq2_1.50.2        
+    ##  [43] withr_3.0.3           fastmap_1.2.0         digest_0.6.39        
+    ##  [46] timechange_0.4.0      R6_2.6.1              textshaping_1.0.5    
+    ##  [49] colorspace_2.1-2      RSQLite_3.53.2        data.table_1.18.4    
+    ##  [52] class_7.3-23          htmlwidgets_1.6.4     httr_1.4.8           
+    ##  [55] S4Arrays_1.10.1       pkgconfig_2.0.3       gtable_0.3.6         
+    ##  [58] blob_1.3.0            ComplexHeatmap_2.26.1 impute_1.84.0        
+    ##  [61] S7_0.2.2              XVector_0.50.0        htmltools_0.5.9      
+    ##  [64] carData_3.0-6         clue_0.3-68           scales_1.4.0         
+    ##  [67] png_0.1-9             tkWidgets_1.88.0      knitr_1.51           
+    ##  [70] rstudioapi_0.19.0     tzdb_0.5.0            rjson_0.2.23         
+    ##  [73] checkmate_2.3.4       nlme_3.1-169          proxy_0.4-29         
+    ##  [76] cachem_1.1.0          GlobalOptions_0.1.4   parallel_4.5.1       
+    ##  [79] foreign_0.8-91        AnnotationDbi_1.72.0  pillar_1.11.1        
+    ##  [82] vctrs_0.7.3           ggpubr_0.6.3          car_3.1-5            
+    ##  [85] xtable_1.8-8          cluster_2.1.8.2       htmlTable_2.5.0      
+    ##  [88] paletteer_1.7.0       evaluate_1.0.5        cli_3.6.6            
+    ##  [91] locfit_1.5-9.12       compiler_4.5.1        rlang_1.2.0          
+    ##  [94] crayon_1.5.3          ggsignif_0.6.4        labeling_0.4.3       
+    ##  [97] rematch2_2.1.2        stringi_1.8.7         Biostrings_2.78.0    
+    ## [100] Matrix_1.7-5          hms_1.1.4             bit64_4.8.2          
+    ## [103] statmod_1.5.2         KEGGREST_1.50.0       broom_1.0.13         
+    ## [106] memoise_2.0.1         bit_4.6.0
 
 ``` r
 detach(package:WGCNA, unload=TRUE)

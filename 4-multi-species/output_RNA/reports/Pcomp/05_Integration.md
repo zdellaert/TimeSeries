@@ -1,7 +1,7 @@
 Integrate across analyses
 ================
 Zoe Dellaert
-2026-07-01
+2026-10-02
 
 - [Analysis of Time Series bulk RNA-seq data: Combine results from all
   analyses](#analysis-of-time-series-bulk-rna-seq-data-combine-results-from-all-analyses)
@@ -24,6 +24,12 @@ Zoe Dellaert
     - [Summary table](#summary-table-1)
   - [8. Pathway visualization](#8-pathway-visualization)
     - [Set up pathway](#set-up-pathway)
+  - [9. GO Enrichment of Clusters of
+    Interest](#9-go-enrichment-of-clusters-of-interest)
+    - [1. Set up dataframes for GO
+      enrichment](#1-set-up-dataframes-for-go-enrichment)
+    - [2. Form the topGO objects](#2-form-the-topgo-objects)
+    - [3. Run topGO](#3-run-topgo)
 
 # Analysis of Time Series bulk RNA-seq data: Combine results from all analyses
 
@@ -125,11 +131,6 @@ library(igraph)
 ``` r
 library(ggraph)
 library(ggarrow)
-```
-
-    ## Overwriting method merge_element(<ggarrow::element_arrow>, <ANY>)
-
-``` r
 library(patchwork)
 
 #load in parameters and functions
@@ -178,42 +179,45 @@ sessionInfo() #provides list of loaded packages and version of R
     ## [35] rmarkdown_2.31             
     ## 
     ## loaded via a namespace (and not attached):
-    ##   [1] splines_4.5.1         polyclip_1.10-7       preprocessCore_1.72.0
-    ##   [4] XML_3.99-0.23         rpart_4.1.27          lifecycle_1.0.5      
-    ##   [7] doParallel_1.0.17     lattice_0.22-9        vroom_1.7.1          
-    ##  [10] MASS_7.3-65           backports_1.5.1       magrittr_2.0.5       
-    ##  [13] limma_3.66.0          Hmisc_5.2-6           yaml_2.3.12          
-    ##  [16] otel_0.2.0            cowplot_1.2.0         DBI_1.3.0            
-    ##  [19] abind_1.4-8           nnet_7.3-20           tweenr_2.0.3         
-    ##  [22] circlize_0.4.18       ggrepel_0.9.8         annotate_1.88.0      
-    ##  [25] codetools_0.2-20      DelayedArray_0.36.1   ggforce_0.5.0        
-    ##  [28] tidyselect_1.2.1      shape_1.4.6.1         farver_2.1.2         
-    ##  [31] viridis_0.6.5         base64enc_0.1-6       GetoptLong_1.1.1     
-    ##  [34] tidygraph_1.3.1       Formula_1.2-5         survival_3.8-6       
-    ##  [37] iterators_1.0.14      systemfonts_1.3.2     foreach_1.5.2        
-    ##  [40] tools_4.5.1           ragg_1.5.2            Rcpp_1.1.1-1.1       
-    ##  [43] glue_1.8.1            gridExtra_2.3.1       SparseArray_1.10.10  
-    ##  [46] xfun_0.59             mgcv_1.9-4            DESeq2_1.50.2        
-    ##  [49] withr_3.0.3           fastmap_1.2.0         digest_0.6.39        
-    ##  [52] timechange_0.4.0      R6_2.6.1              textshaping_1.0.5    
-    ##  [55] colorspace_2.1-2      RSQLite_3.53.2        utf8_1.2.6           
-    ##  [58] data.table_1.18.4     class_7.3-23          graphlayouts_1.2.4   
-    ##  [61] httr_1.4.8            htmlwidgets_1.6.4     S4Arrays_1.10.1      
-    ##  [64] pkgconfig_2.0.3       gtable_0.3.6          blob_1.3.0           
-    ##  [67] S7_0.2.2              impute_1.84.0         XVector_0.50.0       
-    ##  [70] htmltools_0.5.9       clue_0.3-68           scales_1.4.0         
-    ##  [73] png_0.1-9             tkWidgets_1.88.0      rstudioapi_0.19.0    
-    ##  [76] tzdb_0.5.0            rjson_0.2.23          checkmate_2.3.4      
-    ##  [79] nlme_3.1-169          proxy_0.4-29          cachem_1.1.0         
-    ##  [82] GlobalOptions_0.1.4   parallel_4.5.1        foreign_0.8-91       
-    ##  [85] AnnotationDbi_1.72.0  pillar_1.11.1         vctrs_0.7.3          
-    ##  [88] xtable_1.8-8          cluster_2.1.8.2       htmlTable_2.5.0      
-    ##  [91] evaluate_1.0.5        cli_3.6.6             locfit_1.5-9.12      
-    ##  [94] compiler_4.5.1        rlang_1.2.0           crayon_1.5.3         
-    ##  [97] labeling_0.4.3        stringi_1.8.7         viridisLite_0.4.3    
-    ## [100] Biostrings_2.78.0     Matrix_1.7-5          hms_1.1.4            
-    ## [103] bit64_4.8.2           KEGGREST_1.50.0       statmod_1.5.2        
-    ## [106] memoise_2.0.1         bit_4.6.0
+    ##   [1] splines_4.5.1         prismatic_1.1.2       polyclip_1.10-7      
+    ##   [4] preprocessCore_1.72.0 rpart_4.1.27          XML_3.99-0.23        
+    ##   [7] lifecycle_1.0.5       rstatix_0.7.3         doParallel_1.0.17    
+    ##  [10] MASS_7.3-65           vroom_1.7.1           lattice_0.22-9       
+    ##  [13] backports_1.5.1       magrittr_2.0.5        limma_3.66.0         
+    ##  [16] Hmisc_5.2-6           yaml_2.3.12           otel_0.2.0           
+    ##  [19] cowplot_1.2.0         DBI_1.3.0             abind_1.4-8          
+    ##  [22] nnet_7.3-20           tweenr_2.0.3          circlize_0.4.18      
+    ##  [25] ggrepel_0.9.8         annotate_1.88.0       codetools_0.2-20     
+    ##  [28] DelayedArray_0.36.1   ggforce_0.5.0         tidyselect_1.2.1     
+    ##  [31] shape_1.4.6.1         farver_2.1.2          viridis_0.6.5        
+    ##  [34] base64enc_0.1-6       GetoptLong_1.1.1      tidygraph_1.3.1      
+    ##  [37] Formula_1.2-5         survival_3.8-6        iterators_1.0.14     
+    ##  [40] systemfonts_1.3.2     foreach_1.5.2         tools_4.5.1          
+    ##  [43] ragg_1.5.2            Rcpp_1.1.1-1.1        glue_1.8.1           
+    ##  [46] gridExtra_2.3.1       SparseArray_1.10.10   xfun_0.59            
+    ##  [49] DESeq2_1.50.2         withr_3.0.3           fastmap_1.2.0        
+    ##  [52] digest_0.6.39         timechange_0.4.0      R6_2.6.1             
+    ##  [55] textshaping_1.0.5     colorspace_2.1-2      RSQLite_3.53.2       
+    ##  [58] utf8_1.2.6            data.table_1.18.4     class_7.3-23         
+    ##  [61] graphlayouts_1.2.4    htmlwidgets_1.6.4     httr_1.4.8           
+    ##  [64] S4Arrays_1.10.1       pkgconfig_2.0.3       gtable_0.3.6         
+    ##  [67] blob_1.3.0            impute_1.84.0         S7_0.2.2             
+    ##  [70] XVector_0.50.0        htmltools_0.5.9       carData_3.0-6        
+    ##  [73] clue_0.3-68           scales_1.4.0          png_0.1-9            
+    ##  [76] tkWidgets_1.88.0      rstudioapi_0.19.0     tzdb_0.5.0           
+    ##  [79] rjson_0.2.23          checkmate_2.3.4       nlme_3.1-169         
+    ##  [82] proxy_0.4-29          cachem_1.1.0          GlobalOptions_0.1.4  
+    ##  [85] parallel_4.5.1        foreign_0.8-91        AnnotationDbi_1.72.0 
+    ##  [88] pillar_1.11.1         vctrs_0.7.3           ggpubr_0.6.3         
+    ##  [91] car_3.1-5             xtable_1.8-8          cluster_2.1.8.2      
+    ##  [94] htmlTable_2.5.0       paletteer_1.7.0       evaluate_1.0.5       
+    ##  [97] cli_3.6.6             locfit_1.5-9.12       compiler_4.5.1       
+    ## [100] rlang_1.2.0           crayon_1.5.3          ggsignif_0.6.4       
+    ## [103] labeling_0.4.3        rematch2_2.1.2        stringi_1.8.7        
+    ## [106] viridisLite_0.4.3     Biostrings_2.78.0     Matrix_1.7-5         
+    ## [109] hms_1.1.4             bit64_4.8.2           statmod_1.5.2        
+    ## [112] KEGGREST_1.50.0       broom_1.0.13          memoise_2.0.1        
+    ## [115] bit_4.6.0
 
 ## 2. Setup species-specific parameters and define directories
 
@@ -243,8 +247,10 @@ tfbs_dir <- file.path("../../output_RNA/TFBS", species)
 # set up necessary output directories if they don't exist
 outdir <- file.path("../../output_RNA/analysis_integration", species)
 outdir_plots <- file.path(outdir,"plots")
+outdir_topGO <- file.path(outdir,"topGO")
 if (!dir.exists(outdir)) dir.create(outdir, recursive = TRUE)
 if (!dir.exists(outdir_plots)) dir.create(outdir_plots, recursive = TRUE)
+if (!dir.exists(outdir_topGO)) dir.create(outdir_topGO, recursive = TRUE)
 
 reportdir <- file.path("../../output_RNA/reports", params$species, "05_Integration_files/figure-gfm/")
 if (!dir.exists(reportdir)) dir.create(reportdir, recursive = TRUE)
@@ -337,7 +343,12 @@ cat("Annotations:", nrow(SwissProt), "Swissprot-annotated genes")
 
 Mfuzz_pattern_mapping <- NULL
 source("../../output_RNA/ImpulseDE2/cluster_patterns.R")
+```
 
+    ## Warning: Unknown or uninitialised column: `Mfuzz_pattern`.
+    ## Unknown or uninitialised column: `Mfuzz_pattern`.
+
+``` r
 Mfuzz_pattern_mapping <- pattern_mapping %>% filter(species ==  params$species) %>% dplyr::select(-species)
 ```
 
@@ -661,10 +672,12 @@ HeatStressGenes <- read_csv(paste0(annot_dir,"/heatstress/HeatStressGenes_", spe
             ) 
   
   HeatStressGenes_unique <- HeatStressGenes_unique %>% mutate(gene_sym=str_replace(str_replace(gene_sym,"Hsc71,HSP70","HSP70"),"HSP70,Hsc71","HSP70"))
+  
+#HeatStressGenes_unique <- HeatStressGenes_unique %>% rbind(c("Pocillopora_acuta_HIv2___TS.g10636.t2","ABCB1","",""))
 ```
 
 ``` r
-stress_genes_ids <- unique(HeatStressGenes_unique$gene_id) 
+stress_genes_ids <- unique(HeatStressGenes_unique$gene_id)
 stress_genes_counts <- vst_counts[stress_genes_ids, ]
 
 plot_df <- as.data.frame(t(stress_genes_counts)) %>%
@@ -742,6 +755,18 @@ plot_df %>% filter(grepl("BNIP",gene_sym)|grepl("HIF",gene_sym)) %>% ggplot(aes(
 ```
 
 ![](./05_Integration_files/figure-gfm/unnamed-chunk-12-5.png)<!-- -->
+
+``` r
+plot_df %>% filter(grepl("HSP90",gene_sym)|grepl("10636",gene_id)) %>% ggplot(aes(x=time, y=expression, color=treatment, group=treatment)) +
+  stat_summary(fun="mean", geom="line") +
+  scale_color_manual(values = treat_colors) +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2) +
+  facet_wrap(~paste0(str_replace(gene_id,"Pocillopora_acuta_HIv2___",""), ": ", gene_sym)) +
+  theme_bw() +
+  labs(y="VST expression", x="Timepoint")
+```
+
+![](./05_Integration_files/figure-gfm/unnamed-chunk-12-6.png)<!-- -->
 
 ### heat stress genes stats
 
@@ -977,6 +1002,194 @@ final
 save_ggplot(final, "HSF1_Pathway_VST_Diff")
 ```
 
+## 9. GO Enrichment of Clusters of Interest
+
+### 1. Set up dataframes for GO enrichment
+
+``` r
+library(topGO) # these get loaded here since they mask some key functions used above
+```
+
+    ## Warning: package 'graph' was built under R version 4.5.2
+
+``` r
+library(GO.db) # these get loaded here since they mask some key functions used above
+library(dplyr) # load dplyr last so that select refers to dplyr::select
+
+outdir_plots <- outdir_topGO
+
+enrich_table <- master_table
+
+enrich_table$GO.terms <- gsub("; ", ";", enrich_table$GeneOntologyIDs)
+enrich_table$GO.terms[enrich_table$GO.terms==""] <- NA
+genes_with_GO <- enrich_table %>% filter(!is.na(GO.terms)) %>%  dplyr::select(gene_id,GO.terms,SwissProt_ProteinName)
+
+# format into the format required by topGO for custom mappings
+Custom_GOs <- genes_with_GO %>%
+  # Separate GO terms into individual rows
+  separate_rows(GO.terms, sep = ";") %>%
+  dplyr::rename(GOID = GO.terms) %>%
+  dplyr::select(gene_id, GOID)
+
+Custom_GOs_valid <- Custom_GOs %>% filter(GOID %in% keys(GO.db))
+
+nrow(enrich_table)
+```
+
+    ## [1] 27492
+
+``` r
+nrow(genes_with_GO)
+```
+
+    ## [1] 18671
+
+``` r
+cat(nrow(genes_with_GO),"(",100*(nrow(genes_with_GO)/nrow(enrich_table)),"%) of expressed genes have GO annotations\n")
+```
+
+    ## 18671 ( 67.9143 %) of expressed genes have GO annotations
+
+``` r
+cat(length(unique(Custom_GOs_valid$gene_id)),"(",100*(length(unique(Custom_GOs_valid$gene_id))/nrow(enrich_table)),"%) of expressed genes have valid GO annotations")
+```
+
+    ## 18658 ( 67.86702 %) of expressed genes have valid GO annotations
+
+### 2. Form the topGO objects
+
+``` r
+GO <- AnnotationDbi::select(GO.db,columns=c("GOID","ONTOLOGY"),
+                            keys=unique(Custom_GOs_valid$GOID))
+
+names(GO)[2] <- "category"
+
+Custom_GOs_valid <- merge(Custom_GOs_valid,GO,by="GOID",all.x=TRUE,sort=FALSE)
+
+geneID2GO_BP <- Custom_GOs_valid %>% dplyr::select(gene_id,GOID,category) %>%
+  filter(category=="BP") %>%
+  distinct() %>%
+  group_by(gene_id) %>%
+  summarise(GOs = list(GOID), .groups = "drop") %>%
+  deframe()
+
+geneID2GO_MF <- Custom_GOs_valid %>% dplyr::select(gene_id,GOID,category) %>%
+  filter(category=="MF") %>%
+  distinct() %>%
+  group_by(gene_id) %>%
+  summarise(GOs = list(GOID), .groups = "drop") %>%
+  deframe()
+
+geneID2GO_CC <- Custom_GOs_valid %>% dplyr::select(gene_id,GOID,category) %>%
+  filter(category=="CC") %>%
+  distinct() %>%
+  group_by(gene_id) %>%
+  summarise(GOs = list(GOID), .groups = "drop") %>%
+  deframe()
+```
+
+### 3. Run topGO
+
+``` r
+go_all_results <- list()
+
+for (pattern in unique(Mfuzz_pattern_mapping$pattern)){
+  allRes <- tibble()
+    
+  # make short version of pattern name for file saving
+  pattern_short <- str_replace_all(pattern," ","")
+  # select genes belonging to that cluster pattern
+  topgo_clust <- enrich_table %>% 
+    filter(Mfuzz_pattern == pattern) %>% pull(gene_id) 
+  
+  for (ont in c("BP", "MF", "CC")){
+    geneID2GO <- get(paste0("geneID2GO_",ont))
+    
+    # set a factor for all genes in the list that have GO annotations for the given ontology whether they belong in the test set or not
+  test_genes <- as.factor(as.numeric(names(geneID2GO) %in% topgo_clust))
+  names(test_genes) <- names(geneID2GO)
+    
+    GOdata <- new("topGOdata",
+                ontology = ont,
+                allGenes = test_genes,
+                nodeSize = 5,
+                gene2GO = geneID2GO,
+                annot = annFUN.gene2GO) 
+    
+    resultWeight <- runTest(GOdata, algorithm = "weight01", statistic = "fisher")
+    
+    ontRes <- GenTable(GOdata, weight01 = resultWeight,
+                     orderBy = "weight01",
+                     ranksOf = "classicFisher",
+                     topNodes = length(score(resultWeight)),
+                     numChar = 150) %>%
+    mutate(pval = as.numeric(weight01),
+           ontology = ont, 
+           EnrichRatio = Significant / Annotated,
+           bh_adjust = p.adjust(pval, method="BH")) #add adjusted p-values
+    
+  allRes <- rbind(allRes,ontRes)
+  }
+ 
+  go_plot_data <- allRes %>%
+    filter(pval < 0.05) %>%
+    group_by(ontology) %>% slice_min(pval, n = 20) %>% ungroup() %>%
+    mutate(Term = str_trunc(Term, 75),
+           Term = fct_reorder(Term, -log10(pval)))
+  
+  ggplot(go_plot_data,
+         aes(x = EnrichRatio, y = Term, size = Significant, color = -log10(pval))) +
+    geom_point() +
+    scale_color_gradient(low = "#3c58a7", high = "#ee2e25") +
+    facet_grid(ontology ~ ., scales = "free_y", space = "free_y") +
+    theme_bw(base_size = 12) +
+    theme(strip.background = element_rect(fill = "white"),
+          strip.text = element_text(face = "bold")) +
+    labs(title = paste(species, pattern, "genes"),
+         x = "Enrich ratio (sig / annotated)", y = NULL,
+         size = "# sig genes", color = "-log10(p)")
+  
+  save_ggplot(last_plot(), paste0("GO_dotplot",pattern_short), width = 9, height = 12)
+  
+  go_all_results[[paste(pattern)]] <- allRes
+}
+
+all_go_combined <- list_rbind(go_all_results,names_to="Mfuzz_pattern")
+
+write.csv(all_go_combined, file.path(outdir_topGO, "GO_enrichment_all_clusters.csv"), row.names = FALSE)
+```
+
+``` r
+go_all_plot <- all_go_combined %>% 
+  # keep significant BP terms only
+  filter(pval < 0.05, ontology=="BP") %>%
+  group_by(Mfuzz_pattern) %>%
+  arrange(pval,desc(Significant),.by_group = TRUE) %>%
+  # choose 5 most significant by pvalue
+   slice_min(pval, n = 5,with_ties=FALSE) %>%
+   ungroup() %>%
+    mutate(Term = str_trunc(Term, 60),
+           Term = fct_reorder(Term, -log10(pval)),
+           Mfuzz_pattern=factor(Mfuzz_pattern,levels=logical_order)) 
+
+ggplot(go_all_plot,
+       aes(x = EnrichRatio, y = Term, size = Significant, color = -log10(pval))) +
+  geom_point() + scale_color_gradient(low = "#3c58a7", high = "#ee2e25") + theme_bw(base_size = 10) +
+   facet_grid(Mfuzz_pattern ~ ., scales = "free_y", space = "free_y") +
+  theme(strip.background = element_rect(fill = "white"),
+          strip.text = element_text(face = "bold",angle=0),
+        axis.text.y=element_text(color="black")) +
+  labs(title = paste0(species, ": Top 5 BP GO enriched terms\nby Mfuzz pattern"),
+         x = NULL, y = NULL,
+         size = "# sig genes", color = "-log10(p)")
+```
+
+![](./05_Integration_files/figure-gfm/unnamed-chunk-24-1.png)<!-- -->
+
+``` r
+ save_ggplot(last_plot(), "GO_dotplot_top5_BP_byMfuzz", width = 6, height = 8)
+```
+
 ``` r
 sessionInfo()
 ```
@@ -1000,73 +1213,83 @@ sessionInfo()
     ##  [8] datasets  methods   base     
     ## 
     ## other attached packages:
-    ##  [1] patchwork_1.3.2             ggarrow_0.1.1              
-    ##  [3] ggraph_2.2.2                igraph_2.3.3               
-    ##  [5] ComplexHeatmap_2.26.1       knitr_1.51                 
-    ##  [7] fastcluster_1.3.0           dynamicTreeCut_1.63-1      
-    ##  [9] DynDoc_1.88.0               widgetTools_1.88.0         
-    ## [11] e1071_1.7-17                BiocParallel_1.44.0        
-    ## [13] ggnewscale_0.5.2            RColorBrewer_1.1-3         
-    ## [15] SummarizedExperiment_1.40.0 Biobase_2.70.0             
-    ## [17] MatrixGenerics_1.22.0       matrixStats_1.5.0          
-    ## [19] GenomicRanges_1.62.1        Seqinfo_1.0.0              
-    ## [21] IRanges_2.44.0              S4Vectors_0.48.1           
-    ## [23] BiocGenerics_0.56.0         generics_0.1.4             
-    ## [25] lubridate_1.9.5             forcats_1.0.1              
-    ## [27] stringr_1.6.0               dplyr_1.2.1                
-    ## [29] purrr_1.2.2                 readr_2.2.0                
-    ## [31] tidyr_1.3.2                 tibble_3.3.1               
-    ## [33] ggplot2_4.0.3               tidyverse_2.0.0            
-    ## [35] rmarkdown_2.31             
+    ##  [1] topGO_2.62.0                SparseM_1.84-2             
+    ##  [3] GO.db_3.22.0                AnnotationDbi_1.72.0       
+    ##  [5] graph_1.88.1                patchwork_1.3.2            
+    ##  [7] ggarrow_0.1.1               ggraph_2.2.2               
+    ##  [9] igraph_2.3.3                ComplexHeatmap_2.26.1      
+    ## [11] knitr_1.51                  fastcluster_1.3.0          
+    ## [13] dynamicTreeCut_1.63-1       DynDoc_1.88.0              
+    ## [15] widgetTools_1.88.0          e1071_1.7-17               
+    ## [17] BiocParallel_1.44.0         ggnewscale_0.5.2           
+    ## [19] RColorBrewer_1.1-3          SummarizedExperiment_1.40.0
+    ## [21] Biobase_2.70.0              MatrixGenerics_1.22.0      
+    ## [23] matrixStats_1.5.0           GenomicRanges_1.62.1       
+    ## [25] Seqinfo_1.0.0               IRanges_2.44.0             
+    ## [27] S4Vectors_0.48.1            BiocGenerics_0.56.0        
+    ## [29] generics_0.1.4              lubridate_1.9.5            
+    ## [31] forcats_1.0.1               stringr_1.6.0              
+    ## [33] dplyr_1.2.1                 purrr_1.2.2                
+    ## [35] readr_2.2.0                 tidyr_1.3.2                
+    ## [37] tibble_3.3.1                ggplot2_4.0.3              
+    ## [39] tidyverse_2.0.0             rmarkdown_2.31             
     ## 
     ## loaded via a namespace (and not attached):
-    ##   [1] splines_4.5.1         polyclip_1.10-7       preprocessCore_1.72.0
-    ##   [4] XML_3.99-0.23         rpart_4.1.27          lifecycle_1.0.5      
-    ##   [7] doParallel_1.0.17     lattice_0.22-9        vroom_1.7.1          
-    ##  [10] MASS_7.3-65           backports_1.5.1       magrittr_2.0.5       
-    ##  [13] limma_3.66.0          Hmisc_5.2-6           yaml_2.3.12          
-    ##  [16] otel_0.2.0            cowplot_1.2.0         DBI_1.3.0            
-    ##  [19] abind_1.4-8           nnet_7.3-20           tweenr_2.0.3         
-    ##  [22] circlize_0.4.18       ggrepel_0.9.8         annotate_1.88.0      
-    ##  [25] codetools_0.2-20      DelayedArray_0.36.1   ggforce_0.5.0        
-    ##  [28] tidyselect_1.2.1      shape_1.4.6.1         farver_2.1.2         
-    ##  [31] viridis_0.6.5         base64enc_0.1-6       GetoptLong_1.1.1     
-    ##  [34] tidygraph_1.3.1       Formula_1.2-5         survival_3.8-6       
-    ##  [37] iterators_1.0.14      systemfonts_1.3.2     foreach_1.5.2        
-    ##  [40] tools_4.5.1           ragg_1.5.2            Rcpp_1.1.1-1.1       
-    ##  [43] glue_1.8.1            gridExtra_2.3.1       SparseArray_1.10.10  
-    ##  [46] xfun_0.59             mgcv_1.9-4            DESeq2_1.50.2        
-    ##  [49] withr_3.0.3           fastmap_1.2.0         digest_0.6.39        
-    ##  [52] timechange_0.4.0      R6_2.6.1              textshaping_1.0.5    
-    ##  [55] colorspace_2.1-2      RSQLite_3.53.2        utf8_1.2.6           
-    ##  [58] data.table_1.18.4     class_7.3-23          graphlayouts_1.2.4   
-    ##  [61] httr_1.4.8            htmlwidgets_1.6.4     S4Arrays_1.10.1      
-    ##  [64] pkgconfig_2.0.3       gtable_0.3.6          blob_1.3.0           
-    ##  [67] S7_0.2.2              impute_1.84.0         XVector_0.50.0       
-    ##  [70] htmltools_0.5.9       clue_0.3-68           scales_1.4.0         
-    ##  [73] png_0.1-9             tkWidgets_1.88.0      rstudioapi_0.19.0    
-    ##  [76] tzdb_0.5.0            rjson_0.2.23          checkmate_2.3.4      
-    ##  [79] nlme_3.1-169          proxy_0.4-29          cachem_1.1.0         
-    ##  [82] GlobalOptions_0.1.4   parallel_4.5.1        foreign_0.8-91       
-    ##  [85] AnnotationDbi_1.72.0  pillar_1.11.1         vctrs_0.7.3          
-    ##  [88] xtable_1.8-8          cluster_2.1.8.2       htmlTable_2.5.0      
-    ##  [91] evaluate_1.0.5        cli_3.6.6             locfit_1.5-9.12      
-    ##  [94] compiler_4.5.1        rlang_1.2.0           crayon_1.5.3         
-    ##  [97] labeling_0.4.3        stringi_1.8.7         viridisLite_0.4.3    
-    ## [100] Biostrings_2.78.0     Matrix_1.7-5          hms_1.1.4            
-    ## [103] bit64_4.8.2           KEGGREST_1.50.0       statmod_1.5.2        
-    ## [106] memoise_2.0.1         bit_4.6.0
+    ##   [1] httr_1.4.8            doParallel_1.0.17     tools_4.5.1          
+    ##   [4] backports_1.5.1       utf8_1.2.6            R6_2.6.1             
+    ##   [7] GetoptLong_1.1.1      withr_3.0.3           gridExtra_2.3.1      
+    ##  [10] preprocessCore_1.72.0 cli_3.6.6             textshaping_1.0.5    
+    ##  [13] labeling_0.4.3        prismatic_1.1.2       S7_0.2.2             
+    ##  [16] proxy_0.4-29          systemfonts_1.3.2     foreign_0.8-91       
+    ##  [19] limma_3.66.0          rstudioapi_0.19.0     impute_1.84.0        
+    ##  [22] RSQLite_3.53.2        shape_1.4.6.1         vroom_1.7.1          
+    ##  [25] car_3.1-5             Matrix_1.7-5          abind_1.4-8          
+    ##  [28] lifecycle_1.0.5       yaml_2.3.12           carData_3.0-6        
+    ##  [31] SparseArray_1.10.10   paletteer_1.7.0       blob_1.3.0           
+    ##  [34] crayon_1.5.3          lattice_0.22-9        cowplot_1.2.0        
+    ##  [37] annotate_1.88.0       KEGGREST_1.50.0       pillar_1.11.1        
+    ##  [40] tkWidgets_1.88.0      rjson_0.2.23          codetools_0.2-20     
+    ##  [43] glue_1.8.1            data.table_1.18.4     vctrs_0.7.3          
+    ##  [46] png_0.1-9             gtable_0.3.6          rematch2_2.1.2       
+    ##  [49] cachem_1.1.0          xfun_0.59             S4Arrays_1.10.1      
+    ##  [52] tidygraph_1.3.1       survival_3.8-6        iterators_1.0.14     
+    ##  [55] statmod_1.5.2         nlme_3.1-169          bit64_4.8.2          
+    ##  [58] otel_0.2.0            rpart_4.1.27          colorspace_2.1-2     
+    ##  [61] DBI_1.3.0             Hmisc_5.2-6           nnet_7.3-20          
+    ##  [64] DESeq2_1.50.2         tidyselect_1.2.1      bit_4.6.0            
+    ##  [67] compiler_4.5.1        htmlTable_2.5.0       DelayedArray_0.36.1  
+    ##  [70] checkmate_2.3.4       scales_1.4.0          digest_0.6.39        
+    ##  [73] XVector_0.50.0        htmltools_0.5.9       pkgconfig_2.0.3      
+    ##  [76] base64enc_0.1-6       fastmap_1.2.0         rlang_1.2.0          
+    ##  [79] GlobalOptions_0.1.4   htmlwidgets_1.6.4     farver_2.1.2         
+    ##  [82] magrittr_2.0.5        Formula_1.2-5         Rcpp_1.1.1-1.1       
+    ##  [85] viridis_0.6.5         stringi_1.8.7         MASS_7.3-65          
+    ##  [88] parallel_4.5.1        ggrepel_0.9.8         Biostrings_2.78.0    
+    ##  [91] graphlayouts_1.2.4    splines_4.5.1         hms_1.1.4            
+    ##  [94] circlize_0.4.18       locfit_1.5-9.12       ggpubr_0.6.3         
+    ##  [97] ggsignif_0.6.4        XML_3.99-0.23         evaluate_1.0.5       
+    ## [100] tzdb_0.5.0            foreach_1.5.2         tweenr_2.0.3         
+    ## [103] polyclip_1.10-7       clue_0.3-68           ggforce_0.5.0        
+    ## [106] broom_1.0.13          xtable_1.8-8          rstatix_0.7.3        
+    ## [109] viridisLite_0.4.3     class_7.3-23          ragg_1.5.2           
+    ## [112] memoise_2.0.1         cluster_2.1.8.2       timechange_0.4.0
 
 ``` r
 detach(package:igraph, unload=TRUE)
 ```
 
     ## Warning: 'igraph' namespace cannot be unloaded:
-    ##   namespace 'igraph' is imported by 'tidygraph', 'ggraph' so cannot be unloaded
+    ##   namespace 'igraph' is imported by 'ggraph', 'tidygraph' so cannot be unloaded
 
 ``` r
 detach(package:ggraph, unload=TRUE)
 detach(package:ggarrow, unload=TRUE)
 detach(package:patchwork, unload=TRUE)
 detach(package:ComplexHeatmap, unload=TRUE)
+detach(package:topGO, unload=TRUE)
+detach(package:GO.db, unload=TRUE)
+detach(package:AnnotationDbi, unload=TRUE)
 ```
+
+    ## Warning: 'AnnotationDbi' namespace cannot be unloaded:
+    ##   namespace 'AnnotationDbi' is imported by 'annotate' so cannot be unloaded

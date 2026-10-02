@@ -1,7 +1,7 @@
 RNA-seq Preprocessing and Normalization
 ================
 Zoe Dellaert
-2026-07-01
+2026-10-02
 
 - [Preproccessing of bulk RNA-seq
   data](#preproccessing-of-bulk-rna-seq-data)
@@ -495,7 +495,8 @@ PCA <- ggplot() +
 
   xlab(paste0("PC1: ",percentVar[1],"% variance")) +
   ylab(paste0("PC2: ",percentVar[2],"% variance")) + 
-  coord_fixed() + theme_bw() + ggtitle(paste(species, "- PCA of VST-transformed counts"))
+  #coord_fixed() +
+  theme_bw() + ggtitle(paste(species, "- PCA of VST-transformed counts"))
 
 print(PCA)
 ```
@@ -512,7 +513,8 @@ PCA_simple <- ggplot(data = pcaData, aes(x=PC1, y=PC2, color=treatment, shape=ti
   xlab(paste0("PC1: ",percentVar[1],"% variance")) +
   ylab(paste0("PC2: ",percentVar[2],"% variance")) + 
   labs(color = "Treatment", shape = "Time (h)") +
-  coord_fixed() + theme_bw() + ggtitle(paste(species, "- PCA of VST-transformed counts"))
+  #coord_fixed() +
+  theme_bw() + ggtitle(paste(species, "- PCA of VST-transformed counts"))
 
 print(PCA_simple)
 ```

@@ -1,7 +1,7 @@
 Cross Species Analysis
 ================
 Zoe Dellaert
-2026-07-07
+2026-10-02
 
 - [Analysis of Time Series bulk RNA-seq data: Cross-Species
   Analysis](#analysis-of-time-series-bulk-rna-seq-data-cross-species-analysis)
@@ -263,7 +263,7 @@ print(all_master %>% dplyr::count(species))
 cross_species <- all_master %>%
   left_join(orthologs, by = c("gene_id", "species"))
 
-write_csv(cross_species, file.path(outdir, "cross_species_integrated_results.csv"))
+write_csv(cross_species %>% select(-SwissProt_ShortName), file.path(outdir, "cross_species_integrated_results.csv"))
 ```
 
 ### Species-level summaries of orthogroups:
@@ -313,7 +313,7 @@ complete_1to1_ogs <- cross_species %>%
   filter(n_distinct(species) == 3) %>%
   ungroup()
 
-write_csv(complete_1to1_ogs, file.path(outdir, "filtered_orthogroups_1to1to1.csv"))
+write_csv(complete_1to1_ogs %>% select(-SwissProt_ShortName), file.path(outdir, "filtered_orthogroups_1to1to1.csv"))
 ```
 
 ### Species-level summaries of 1:1:1 orthogroups:
@@ -1298,7 +1298,7 @@ col_ha <- HeatmapAnnotation(
 
 # Annotations/metadata for the orthogroups/rows
 
-row_annot <- core_conserved_exp %>% column_to_rownames(var="OG") %>% select(Mfuzz_patterns)  %>% rename(Mfuzz_pattern=Mfuzz_patterns)
+row_annot <- core_conserved_exp %>% column_to_rownames(var="OG") %>% dplyr::select(Mfuzz_patterns)  %>% dplyr::rename(Mfuzz_pattern=Mfuzz_patterns)
 row_annot$Mfuzz_pattern <- factor(row_annot$Mfuzz_pattern, levels=logical_order)
 
 row_ha <- rowAnnotation(
