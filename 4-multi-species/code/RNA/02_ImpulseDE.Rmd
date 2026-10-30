@@ -944,12 +944,16 @@ cluster_assignments %>% filter(Gene %in% HSPS)
 
 ```{r}
 heat_clustered <- HeatStressGenes_unique %>% left_join(cluster_assignments, by = join_by(query==Gene)) %>%
-  arrange(cluster, desc(cluster),gene_id)
-
+  arrange(cluster, desc(cluster),gene_id) %>%
+  left_join(Mfuzz_pattern_mapping, by = "cluster") %>%
+  dplyr::rename(Mfuzz_pattern = pattern) %>%
+              mutate(Mfuzz_pattern=factor(Mfuzz_pattern, levels=logical_order))
+                     
 # plot this to show which genes are in which cluster
-heat_clustered %>% filter(!is.na(cluster)) %>% ggplot(aes(y=reorder(gene_id, cluster), x=factor(cluster), fill=cluster)) +
+heat_clustered %>% filter(!is.na(cluster)) %>% ggplot(aes(y=reorder(gene_id, cluster), x=factor(Mfuzz_pattern), fill=Mfuzz_pattern)) +
   geom_tile() +
   theme_bw() +
+  scale_fill_manual(values=mfuzz_cols) + 
   labs(x="Mfuzz Cluster", y="Gene ID", title="Heat stress genes clustered by temporal expression pattern")
 ```
 
