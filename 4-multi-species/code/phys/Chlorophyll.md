@@ -1,0 +1,546 @@
+Chlorophyll Analysis
+================
+Zoe Dellaert Based on code from Taylor Lindsay
+11/03/2026
+
+- Input files:
+  - CHL platemaps  
+  - CHL platereader outputs
+  - Homogenate volume
+  - Surface area
+- Output files:
+  - Results file (chl a & chl c2)
+
+``` r
+#load  data
+chl_path <- "../../data_phys/chlorophyll"
+frag_data <- read.csv("../../output_phys/surface_area.csv", header=TRUE)
+metadata <- read.csv("../../../TimeSeries_All_Samples_Status.csv", header=TRUE)
+metadata <- metadata %>%
+  filter(type == "phys" | type == " phys") %>% 
+  select(fragment_name,species,t_hours,treatment, Tank)
+
+# Define function to read in chl data
+read_chl <- function(file) {
+  chl_data <- read_csv(file, skip = 37) %>%
+    select(-1) %>%
+    magrittr::set_colnames(c("row", 1:12, "wavelength")) %>%
+    fill(row) %>%
+    gather("col", "absorbance", -wavelength, -row) %>%
+    unite("well", c(row, col), sep = "")
+}
+
+# List chlorophyll data files
+chl_data_files <- list.files(path = chl_path, pattern = "*data.csv", full.names = TRUE) # List all files in directory
+chl_platemaps <- list.files(path = chl_path, pattern = "*map.csv",  full.names = TRUE) # List platemap files
+
+# Read in all files into tibble
+df <- tibble(file = chl_data_files) %>%
+  mutate(platemap = map(file, ~ read_csv(str_replace(.,"_data","_map"))),
+         chl_data = map(file, ~ read_chl(.)))
+
+# Merge platemap and data for each plate
+df <- df %>%
+  mutate(merged = map2(platemap, chl_data, ~ right_join(.x, .y)))
+
+# Load homogenate volume and surface area data
+frag_data <- frag_data %>% 
+  filter(!is.na(Homogenate.Volume)) %>%
+  filter(!is.na(surface.area.cm2))
+```
+
+## Calculate Chl Concentrations
+
+``` r
+# average all technical replicates for each plate/sample/wavelength, including all acetone blanks together (per plate)
+df <- df %>%
+  unnest(merged) %>%
+  filter(!is.na(fragment)) %>%                         # remove empty wells (colony_id is NA)
+  group_by(file, fragment, wavelength) %>%
+  summarise(n = n(), mean_abs = mean(absorbance)) %>%
+  spread(wavelength, mean_abs)
+
+# get the acetone blank 750 absorbace for each file (i.e., plate), and subtract from 630 and 663 values for each sample
+df <- df %>%
+  group_by(file) %>%
+  mutate(blank750 = `Chl:750`[fragment == "Acetone_Blank"]) %>%
+  ungroup() %>%
+  mutate(adj630 = `Chl:630` - blank750,
+         adj663 = `Chl:663` - blank750)
+
+# calculate chla and chlc2 values based on equations from Jeffrey and Humphrey 1975
+# units µg/ml
+#path length adjustment = 0.6 
+
+df <- df %>%
+  mutate(chla.ug.ml = (11.43 * adj663)/0.6 - (0.64 * adj630)/0.6,
+         chlc2.ug.ml = (27.09 * adj630)/0.6 - (3.63 * adj663)/0.6)
+```
+
+## Join with sample data
+
+``` r
+# Normalize to Surface Area -----------------------------------------------
+
+# Join DF with homogenate volumne and surface area data
+chl <- full_join(df, frag_data)
+
+# Multiply chlorophyll by the homogenate volume and divide by surface area
+chl <- chl %>%
+  filter(!is.na(surface.area.cm2)) %>%
+  filter(!is.na(chla.ug.ml)) %>%
+  mutate(chla.ug.cm2 = chla.ug.ml * as.numeric(Homogenate.Volume) / as.numeric(surface.area.cm2),
+         chlc2.ug.cm2 = chlc2.ug.ml * as.numeric(Homogenate.Volume) / as.numeric(surface.area.cm2))
+
+# write chlorophyll data to file
+chl %>%
+  select(fragment, chla.ug.cm2, chlc2.ug.cm2) %>%
+  write.csv(., paste("../../output_phys/chlorophyll.csv"))
+```
+
+## Plot for QC / outlier identification
+
+``` r
+ggplot(chl, aes(x = species, y = chla.ug.cm2)) +
+  geom_boxplot(outlier.color = "red", outlier.shape = 8, outlier.size = 3) +
+  geom_jitter(width = 0.2, alpha = 0.5) +
+  theme_bw() +
+  labs(title = "Chlorophyll A normalized to surface area by Species with Outliers Highlighted",
+       x = "Species",
+       y = "Chlorophyll A")
+```
+
+![](Chlorophyll_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+
+``` r
+ggplot(chl, aes(x = species, y = chlc2.ug.cm2)) +
+  geom_boxplot(outlier.color = "red", outlier.shape = 8, outlier.size = 3) +
+  geom_jitter(width = 0.2, alpha = 0.5) +
+  theme_bw() +
+  labs(title = "Chlorophyll C2 normalized to surface area by Species with Outliers Highlighted",
+       x = "Species",
+       y = "Chlorophyll C2")
+```
+
+![](Chlorophyll_files/figure-gfm/unnamed-chunk-4-2.png)<!-- -->
+
+``` r
+ggplot(chl, aes(x = chla.ug.cm2)) +
+  geom_histogram(bins=100) +
+  facet_grid(species~.) + 
+  theme_bw() +
+  labs(title = "Chlorophyll A normalized to surface area",
+       x = "Species",
+       y = "Chlorophyll A")
+```
+
+![](Chlorophyll_files/figure-gfm/unnamed-chunk-4-3.png)<!-- -->
+
+``` r
+ggplot(chl, aes(x = chlc2.ug.cm2)) +
+  geom_histogram(bins=100) +
+  facet_grid(species~.) + 
+  theme_bw() +
+  labs(title = "Chlorophyll C2 normalized to surface area",
+       x = "Species",
+       y = "Chlorophyll C2")
+```
+
+![](Chlorophyll_files/figure-gfm/unnamed-chunk-4-4.png)<!-- --> \##
+Plotting for data analysis
+
+``` r
+save_ggplot <- function(plot, filename, width = 10, height = 7, units = "in", dpi = 300,bg=NULL) {
+  png_path <- file.path(outdir, paste0(filename, ".png"))
+  pdf_dir <- file.path(outdir, "pdf_figs")
+  pdf_path <- file.path(pdf_dir, paste0(filename, ".pdf"))
+  
+  # Ensure the pdf_figs directory exists
+  if (!dir.exists(pdf_dir)) dir.create(pdf_dir, recursive = TRUE)
+  
+  # Save plots
+  ggsave(filename = png_path, plot = plot, width = width, height = height, units = units, dpi = dpi,bg = bg)
+  ggsave(filename = pdf_path, plot = plot, width = width, height = height, units = units, dpi = dpi,bg = bg)
+}
+
+treat_colors <- c("control" = "lightblue4", "heat" = "#D55E00")
+time_colors <- colorRampPalette(c("#ffffcc","#0c2c84"))(7)
+names(time_colors) <- c("0", "1", "3", "12", "24", "72", "120")
+outdir <- "../../output_phys/chlorophyll/"
+```
+
+``` r
+final <- chl %>% left_join(metadata %>% rename(fragment=fragment_name))
+
+# make time and treatment factors
+final$t_hours <- factor(final$t_hours, levels = as.character(sort(unique(as.numeric(final$t_hours)))))
+final$treatment <- factor(final$treatment)
+```
+
+### POC
+
+``` r
+POC <- final %>% filter(species == "POC")
+
+POC %>%
+  ggplot(., aes(x=t_hours, y=chla.ug.cm2, color=treatment)) +
+  geom_jitter(alpha=0.25, size=1.5, width = 0.22) + 
+  theme_minimal() + labs(x = "Timepoint",y = "Color Score") +
+  scale_color_manual(values = treat_colors) +
+  geom_point(stat = "summary", fun = mean, aes(group = treatment), size=3) +
+  stat_summary(fun.data = mean_se, geom = "errorbar", width = 0.2, aes(group = treatment)) +
+  geom_line(stat = "summary", fun = mean, size = 1.2, aes(group = treatment)) +
+  stat_compare_means(aes(group = treatment),method = "anova",label = "p.format",size = 3)
+```
+
+![](Chlorophyll_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+
+``` r
+save_ggplot(last_plot(), "Pacu")
+
+POC %>%
+  ggplot(., aes(x=t_hours, y=chla.ug.cm2, color=treatment, shape=Tank)) +
+  geom_jitter(alpha=0.25, size=1.5, width = 0.22) + 
+  theme_minimal() + labs(x = "Timepoint",y = "Color Score") +
+  scale_color_manual(values = treat_colors) +
+  geom_point(stat = "summary", fun = mean, aes(group = Tank), size=3) +
+  stat_summary(fun.data = mean_se, geom = "errorbar", width = 0.1, size = 0.4, aes(group = Tank)) +
+  geom_line(stat = "summary", fun = mean, size = 0.4, aes(group = Tank)) +
+  stat_compare_means(aes(group = treatment),method = "anova",label = "p.format",size = 3)
+```
+
+![](Chlorophyll_files/figure-gfm/unnamed-chunk-7-2.png)<!-- -->
+
+``` r
+save_ggplot(last_plot(), "Pacu_by_tank")
+
+POC %>%
+  ggplot(., aes(x=t_hours, y=chla.ug.cm2, color=treatment, shape=Tank)) +
+  theme_minimal() + labs(x = "Timepoint",y = "Color Score") +
+  scale_color_manual(values = treat_colors) +
+  stat_summary(fun.data = mean_se, geom = "errorbar", position = position_dodge(width = 0.5), width = 0.2, alpha = 0.5) +
+  stat_summary(fun.data = mean_se, geom = "point", position = position_dodge(width = 0.5), alpha = 0.5,size=2.5) +
+  stat_summary(fun = mean, geom = "point", aes(group = treatment), size = 2.5) +
+  stat_summary(fun = mean, geom = "line", aes(group = treatment), size = 1.2) +
+  stat_compare_means(aes(group = treatment),method = "anova",label = "p.format",size = 3)
+```
+
+![](Chlorophyll_files/figure-gfm/unnamed-chunk-7-3.png)<!-- -->
+
+``` r
+save_ggplot(last_plot(), "Pacu_tank_means")
+```
+
+``` r
+proc <- POC
+
+norm_outliers <- c()
+
+for (test_column in c("chla.ug.cm2","chlc2.ug.cm2")){
+    stats_temp <- proc %>%
+        group_by(across(all_of(c("treatment")))) %>%
+        mutate(Q1 = quantile(get(test_column), 0.25),
+               Q3 = quantile(get(test_column), 0.75),
+               IQR_val = Q3 - Q1,
+               lower_bound = Q1 - 1.5 * IQR_val,
+               upper_bound = Q3 + 1.5 * IQR_val,
+               is_outlier = get(test_column) < lower_bound | get(test_column) > upper_bound) %>%
+        ungroup()
+    
+    outliers_heat <- stats_temp %>% filter(treatment =="heat" & is_outlier==TRUE)
+    outliers_control <- stats_temp %>% filter(treatment =="control" & is_outlier==TRUE)
+    
+    cat("###################################\n\n")
+    cat(test_column,", Heat Samples: IQR = ", round(outliers_heat$Q1,2),"-",round(outliers_heat$Q3,2),"; ",nrow(outliers_heat)," outlier(s)\n\n")
+    
+    if(nrow(outliers_heat) > 0){print(outliers_heat %>% dplyr::select(c(file,fragment,t_hours,treatment,test_column,lower_bound,upper_bound)))}
+    
+     cat("\n\n###################################\n\n")
+    cat(test_column,", Control Samples: IQR = ", round(outliers_control$Q1,2),"-",round(outliers_control$Q3,2),"; ",nrow(outliers_control)," outlier(s)\n\n")
+    
+    if(nrow(outliers_control) > 0){print(outliers_control %>% dplyr::select(c(file,fragment,t_hours,treatment,test_column,lower_bound,upper_bound)))}
+    
+    cat("\n\n")
+
+    norm_outliers <- c(norm_outliers,outliers_heat$fragment,outliers_control$fragment)
+}
+```
+
+    ## ###################################
+    ## 
+    ## chla.ug.cm2 , Heat Samples: IQR =  3.74 - 4.7 ;  1  outlier(s)
+
+    ## # A tibble: 1 × 7
+    ##   file            fragment t_hours treatment chla.ug.cm2 lower_bound upper_bound
+    ##   <chr>           <chr>    <fct>   <fct>           <dbl>       <dbl>       <dbl>
+    ## 1 ../../data_phy… POC_P72… 72      heat             1.91        2.31        6.14
+    ## 
+    ## 
+    ## ###################################
+    ## 
+    ## chla.ug.cm2 , Control Samples: IQR =   -  ;  0  outlier(s)
+    ## 
+    ## 
+    ## 
+    ## ###################################
+    ## 
+    ## chlc2.ug.cm2 , Heat Samples: IQR =   -  ;  0  outlier(s)
+    ## 
+    ## 
+    ## 
+    ## ###################################
+    ## 
+    ## chlc2.ug.cm2 , Control Samples: IQR =   -  ;  0  outlier(s)
+
+``` r
+unique(norm_outliers)
+```
+
+    ## [1] "POC_P72_H3"
+
+### POR
+
+``` r
+POR <- final %>% filter(species == "POR")
+
+POR %>%
+  ggplot(., aes(x=t_hours, y=chla.ug.cm2, color=treatment)) +
+  geom_jitter(alpha=0.25, size=1.5, width = 0.22) + 
+  theme_minimal() + labs(x = "Timepoint",y = "Color Score") +
+  scale_color_manual(values = treat_colors) +
+  geom_point(stat = "summary", fun = mean, aes(group = treatment), size=3) +
+  stat_summary(fun.data = mean_se, geom = "errorbar", width = 0.2, aes(group = treatment)) +
+  geom_line(stat = "summary", fun = mean, size = 1.2, aes(group = treatment)) +
+  stat_compare_means(aes(group = treatment),method = "anova",label = "p.format",size = 3)
+```
+
+![](Chlorophyll_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+
+``` r
+save_ggplot(last_plot(), "Pcomp")
+
+POR %>%
+  ggplot(., aes(x=t_hours, y=chla.ug.cm2, color=treatment, shape=Tank)) +
+  geom_jitter(alpha=0.25, size=1.5, width = 0.22) + 
+  theme_minimal() + labs(x = "Timepoint",y = "Color Score") +
+  scale_color_manual(values = treat_colors) +
+  geom_point(stat = "summary", fun = mean, aes(group = Tank), size=3) +
+  stat_summary(fun.data = mean_se, geom = "errorbar", width = 0.1, size = 0.4, aes(group = Tank)) +
+  geom_line(stat = "summary", fun = mean, size = 0.4, aes(group = Tank)) +
+  stat_compare_means(aes(group = treatment),method = "anova",label = "p.format",size = 3)
+```
+
+![](Chlorophyll_files/figure-gfm/unnamed-chunk-9-2.png)<!-- -->
+
+``` r
+save_ggplot(last_plot(), "Pcomp_by_tank")
+
+POR %>%
+  ggplot(., aes(x=t_hours, y=chla.ug.cm2, color=treatment, shape=Tank)) +
+  theme_minimal() + labs(x = "Timepoint",y = "Color Score") +
+  scale_color_manual(values = treat_colors) +
+  stat_summary(fun.data = mean_se, geom = "errorbar", position = position_dodge(width = 0.5), width = 0.2, alpha = 0.5) +
+  stat_summary(fun.data = mean_se, geom = "point", position = position_dodge(width = 0.5), alpha = 0.5,size=2.5) +
+  stat_summary(fun = mean, geom = "point", aes(group = treatment), size = 2.5) +
+  stat_summary(fun = mean, geom = "line", aes(group = treatment), size = 1.2) +
+  stat_compare_means(aes(group = treatment),method = "anova",label = "p.format",size = 3)
+```
+
+![](Chlorophyll_files/figure-gfm/unnamed-chunk-9-3.png)<!-- -->
+
+``` r
+save_ggplot(last_plot(), "Pcomp_tank_means")
+```
+
+``` r
+proc <- POR
+
+norm_outliers <- c()
+
+for (test_column in c("chla.ug.cm2","chlc2.ug.cm2")){
+    stats_temp <- proc %>%
+        group_by(across(all_of(c("treatment")))) %>%
+        mutate(Q1 = quantile(get(test_column), 0.25),
+               Q3 = quantile(get(test_column), 0.75),
+               IQR_val = Q3 - Q1,
+               lower_bound = Q1 - 1.5 * IQR_val,
+               upper_bound = Q3 + 1.5 * IQR_val,
+               is_outlier = get(test_column) < lower_bound | get(test_column) > upper_bound) %>%
+        ungroup()
+    
+    outliers_heat <- stats_temp %>% filter(treatment =="heat" & is_outlier==TRUE)
+    outliers_control <- stats_temp %>% filter(treatment =="control" & is_outlier==TRUE)
+    
+    cat("###################################\n\n")
+    cat(test_column,", Heat Samples: IQR = ", round(outliers_heat$Q1,2),"-",round(outliers_heat$Q3,2),"; ",nrow(outliers_heat)," outlier(s)\n\n")
+    
+    if(nrow(outliers_heat) > 0){print(outliers_heat %>% dplyr::select(c(file,fragment,t_hours,treatment,test_column,lower_bound,upper_bound)))}
+    
+     cat("\n\n###################################\n\n")
+    cat(test_column,", Control Samples: IQR = ", round(outliers_control$Q1,2),"-",round(outliers_control$Q3,2),"; ",nrow(outliers_control)," outlier(s)\n\n")
+    
+    if(nrow(outliers_control) > 0){print(outliers_control %>% dplyr::select(c(file,fragment,t_hours,treatment,test_column,lower_bound,upper_bound)))}
+    
+    cat("\n\n")
+
+    norm_outliers <- c(norm_outliers,outliers_heat$fragment,outliers_control$fragment)
+}
+```
+
+    ## ###################################
+    ## 
+    ## chla.ug.cm2 , Heat Samples: IQR =   -  ;  0  outlier(s)
+    ## 
+    ## 
+    ## 
+    ## ###################################
+    ## 
+    ## chla.ug.cm2 , Control Samples: IQR =   -  ;  0  outlier(s)
+    ## 
+    ## 
+    ## 
+    ## ###################################
+    ## 
+    ## chlc2.ug.cm2 , Heat Samples: IQR =  0.48 - 0.73 ;  1  outlier(s)
+    ## 
+    ## # A tibble: 1 × 7
+    ##   file           fragment t_hours treatment chlc2.ug.cm2 lower_bound upper_bound
+    ##   <chr>          <chr>    <fct>   <fct>            <dbl>       <dbl>       <dbl>
+    ## 1 ../../data_ph… POR_P3_… 3       heat              1.12       0.115        1.09
+    ## 
+    ## 
+    ## ###################################
+    ## 
+    ## chlc2.ug.cm2 , Control Samples: IQR =   -  ;  0  outlier(s)
+
+``` r
+unique(norm_outliers)
+```
+
+    ## [1] "POR_P3_H2"
+
+### MON
+
+``` r
+MON <- final %>% filter(species == "MON")
+
+MON %>%
+  ggplot(., aes(x=t_hours, y=chla.ug.cm2, color=treatment)) +
+  geom_jitter(alpha=0.25, size=1.5, width = 0.22) + 
+  theme_minimal() + labs(x = "Timepoint",y = "Color Score") +
+  scale_color_manual(values = treat_colors) +
+  geom_point(stat = "summary", fun = mean, aes(group = treatment), size=3) +
+  stat_summary(fun.data = mean_se, geom = "errorbar", width = 0.2, aes(group = treatment)) +
+  geom_line(stat = "summary", fun = mean, size = 1.2, aes(group = treatment)) +
+  stat_compare_means(aes(group = treatment),method = "anova",label = "p.format",size = 3)
+```
+
+![](Chlorophyll_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+
+``` r
+save_ggplot(last_plot(), "Mcap")
+
+MON %>%
+  ggplot(., aes(x=t_hours, y=chla.ug.cm2, color=treatment, shape=Tank)) +
+  geom_jitter(alpha=0.25, size=1.5, width = 0.22) + 
+  theme_minimal() + labs(x = "Timepoint",y = "Color Score") +
+  scale_color_manual(values = treat_colors) +
+  geom_point(stat = "summary", fun = mean, aes(group = Tank), size=3) +
+  stat_summary(fun.data = mean_se, geom = "errorbar", width = 0.1, size = 0.4, aes(group = Tank)) +
+  geom_line(stat = "summary", fun = mean, size = 0.4, aes(group = Tank)) +
+  stat_compare_means(aes(group = treatment),method = "anova",label = "p.format",size = 3)
+```
+
+![](Chlorophyll_files/figure-gfm/unnamed-chunk-11-2.png)<!-- -->
+
+``` r
+save_ggplot(last_plot(), "Mcap_by_tank")
+
+MON %>%
+  ggplot(., aes(x=t_hours, y=chla.ug.cm2, color=treatment, shape=Tank)) +
+  theme_minimal() + labs(x = "Timepoint",y = "Color Score") +
+  scale_color_manual(values = treat_colors) +
+  stat_summary(fun.data = mean_se, geom = "errorbar", position = position_dodge(width = 0.5), width = 0.2, alpha = 0.5) +
+  stat_summary(fun.data = mean_se, geom = "point", position = position_dodge(width = 0.5), alpha = 0.5,size=2.5) +
+  stat_summary(fun = mean, geom = "point", aes(group = treatment), size = 2.5) +
+  stat_summary(fun = mean, geom = "line", aes(group = treatment), size = 1.2) +
+  stat_compare_means(aes(group = treatment),method = "anova",label = "p.format",size = 3)
+```
+
+![](Chlorophyll_files/figure-gfm/unnamed-chunk-11-3.png)<!-- -->
+
+``` r
+save_ggplot(last_plot(), "Mcap_tank_means")
+```
+
+``` r
+proc <- MON
+
+norm_outliers <- c()
+
+for (test_column in c("chla.ug.cm2","chlc2.ug.cm2")){
+    stats_temp <- proc %>%
+        group_by(across(all_of(c("treatment")))) %>%
+        mutate(Q1 = quantile(get(test_column), 0.25),
+               Q3 = quantile(get(test_column), 0.75),
+               IQR_val = Q3 - Q1,
+               lower_bound = Q1 - 1.5 * IQR_val,
+               upper_bound = Q3 + 1.5 * IQR_val,
+               is_outlier = get(test_column) < lower_bound | get(test_column) > upper_bound) %>%
+        ungroup()
+    
+    outliers_heat <- stats_temp %>% filter(treatment =="heat" & is_outlier==TRUE)
+    outliers_control <- stats_temp %>% filter(treatment =="control" & is_outlier==TRUE)
+    
+    cat("###################################\n\n")
+    cat(test_column,", Heat Samples: IQR = ", round(outliers_heat$Q1,2),"-",round(outliers_heat$Q3,2),"; ",nrow(outliers_heat)," outlier(s)\n\n")
+    
+    if(nrow(outliers_heat) > 0){print(outliers_heat %>% dplyr::select(c(file,fragment,t_hours,treatment,test_column,lower_bound,upper_bound)))}
+    
+    cat("\n\n###################################\n\n")
+    cat(test_column,", Control Samples: IQR = ", round(outliers_control$Q1,2),"-",round(outliers_control$Q3,2),"; ",nrow(outliers_control)," outlier(s)\n\n")
+    
+    if(nrow(outliers_control) > 0){print(outliers_control %>% dplyr::select(c(file,fragment,t_hours,treatment,test_column,lower_bound,upper_bound)))}
+    
+    cat("\n\n")
+
+    norm_outliers <- c(norm_outliers,outliers_heat$fragment,outliers_control$fragment)
+}
+```
+
+    ## ###################################
+    ## 
+    ## chla.ug.cm2 , Heat Samples: IQR =  1.06 - 1.78 ;  1  outlier(s)
+    ## 
+    ## # A tibble: 1 × 7
+    ##   file            fragment t_hours treatment chla.ug.cm2 lower_bound upper_bound
+    ##   <chr>           <chr>    <fct>   <fct>           <dbl>       <dbl>       <dbl>
+    ## 1 ../../data_phy… MON_P3_… 3       heat             3.96     -0.0258        2.86
+    ## 
+    ## 
+    ## ###################################
+    ## 
+    ## chla.ug.cm2 , Control Samples: IQR =   -  ;  0  outlier(s)
+    ## 
+    ## 
+    ## 
+    ## ###################################
+    ## 
+    ## chlc2.ug.cm2 , Heat Samples: IQR =  0.32 0.32 - 0.43 0.43 ;  2  outlier(s)
+    ## 
+    ## # A tibble: 2 × 7
+    ##   file           fragment t_hours treatment chlc2.ug.cm2 lower_bound upper_bound
+    ##   <chr>          <chr>    <fct>   <fct>            <dbl>       <dbl>       <dbl>
+    ## 1 ../../data_ph… MON_P3_… 3       heat             0.705       0.166       0.581
+    ## 2 ../../data_ph… MON_P3_… 3       heat             0.146       0.166       0.581
+    ## 
+    ## 
+    ## ###################################
+    ## 
+    ## chlc2.ug.cm2 , Control Samples: IQR =   -  ;  0  outlier(s)
+
+``` r
+unique(norm_outliers)
+```
+
+    ## [1] "MON_P3_H1" "MON_P3_H3"
