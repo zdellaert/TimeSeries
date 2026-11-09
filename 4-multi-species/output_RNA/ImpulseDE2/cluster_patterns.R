@@ -21,7 +21,7 @@ pattern_mapping <- tribble(
 )
 
 mfuzz_cols <- c(paletteer::paletteer_d("MetBrewer::VanGogh2"))
-names(mfuzz_cols) <- unique(pattern_mapping$Mfuzz_pattern)[!(is.na(unique(pattern_mapping$Mfuzz_pattern)))]
+names(mfuzz_cols) <- unique(pattern_mapping$pattern)[!(is.na(unique(pattern_mapping$pattern)))]
 
 logical_order <- c("Early Peak (3h)", "Sustained Up (3h)", "Sustained Up (12h)", 
                    "Early Dip (3h)", "U-shaped Dip (12h)", "Sustained Down (3h)", 
