@@ -2,13 +2,29 @@
 
 Data and methods for Chapter Four of my dissertation, a stort-term heat stress physiology & high-resolution gene expression time series performed on *Porites compressa*, *Montipora capitata*, and *Pocillopora acuta* in the experimental tank system at CBLS in Summer 2025.
 
-## Protocols
+## For Gene Expression code + results, go [here](./4-multi-species/)
+
+## Repository Structure
+
+```bash
+TimeSeries/
+├── README.md           # This file
+├── 1-Pcom              # All experimental metadata + code for Porites compressa experiment
+├── 2-Mcap              # All experimental metadata + code for Montipora capitata experiment
+├── 3-Pacu              # All experimental metadata + code for Pocillopora acuta experiment
+├── 4-multi-species     # All RNA/Gene Expression analysis + whole-experiment phys analysis lives here
+├── TimeSeries_All_Samples_Status.csv   # List of all samples
+├── protocols          # experimental protocols (tank setup, sampling, image analysis)
+└── renv               # Renv R project environment trackin setup
+```
+
+## Experimental + Sampling Protocols
 
 - [Sampling protocol for each timepoint](https://github.com/zdellaert/TimeSeries/blob/main/protocols/Sampling.md)    
 - [Example sampling schedule](https://github.com/zdellaert/TimeSeries/blob/main/protocols/Example_Sampling_Schedule.pdf)
 - [Bulk RNA extraction protocol](https://github.com/zdellaert/TimeSeries/blob/main/protocols/Bulk_DNA_RNA_Extractions_Zymo_Quick_Miniprep.md)
 
-## Google Drive Links:
+## Experimental Google Drive Links:
 
 ### Important Google Sheets:
 
