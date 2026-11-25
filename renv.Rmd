@@ -1,0 +1,29 @@
+---
+title: "renv"
+output: html_document
+---
+
+
+```{r}
+install.packages("renv")
+BiocManager::install(version = "3.22")
+
+renv::status()
+renv::restore()
+renv::install("bioc::foreign")
+renv::install("bioc::rpart")
+renv::install("bioc::Matrix")
+renv::install("bioc::ComplexHeatmap")
+renv::install("bioc::patchwork")
+renv::install("bioc::Mfuzz")
+renv::install("bioc::ggnewscale")
+renv::install("bioc::patchwork")
+renv::install("bioc::genefilter")
+renv::install("bioc::tidyverse")
+renv::install("bioc::ggplotify")
+renv::install("bioc::paletteer")
+renv::install("YosefLab/ImpulseDE2")
+renv::install("bioc::impute")
+renv::install("bioc::WGCNA")
+renv::status()
+```

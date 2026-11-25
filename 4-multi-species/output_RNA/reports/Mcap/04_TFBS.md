@@ -1,7 +1,7 @@
 Transcription Factor Binding Sites Analysis
 ================
 Zoe Dellaert
-2026-10-02
+2026-11-24
 
 - [Analysis of Time Series bulk RNA-seq data: Transcription Factor
   Binding Sites (TFBS)
@@ -147,7 +147,7 @@ sessionInfo() #provides list of loaded packages and version of R
     ##  [25] vroom_1.7.1           car_3.1-5             Matrix_1.7-5         
     ##  [28] abind_1.4-8           lifecycle_1.0.5       yaml_2.3.12          
     ##  [31] carData_3.0-6         SparseArray_1.10.10   paletteer_1.7.0      
-    ##  [34] blob_1.3.0            crayon_1.5.3          lattice_0.22-9       
+    ##  [34] blob_1.3.0            crayon_1.5.3          lattice_0.23-1       
     ##  [37] cowplot_1.2.0         annotate_1.88.0       KEGGREST_1.50.0      
     ##  [40] ComplexHeatmap_2.26.1 pillar_1.11.1         tkWidgets_1.88.0     
     ##  [43] rjson_0.2.23          codetools_0.2-20      glue_1.8.1           
@@ -157,7 +157,7 @@ sessionInfo() #provides list of loaded packages and version of R
     ##  [55] survival_3.8-6        iterators_1.0.14      statmod_1.5.2        
     ##  [58] nlme_3.1-169          bit64_4.8.2           otel_0.2.0           
     ##  [61] rpart_4.1.27          colorspace_2.1-2      DBI_1.3.0            
-    ##  [64] Hmisc_5.2-6           nnet_7.3-20           DESeq2_1.50.2        
+    ##  [64] Hmisc_5.2-6           nnet_7.3-21           DESeq2_1.50.2        
     ##  [67] tidyselect_1.2.1      bit_4.6.0             compiler_4.5.1       
     ##  [70] htmlTable_2.5.0       DelayedArray_0.36.1   checkmate_2.3.4      
     ##  [73] scales_1.4.0          digest_0.6.39         XVector_0.50.0       
@@ -165,7 +165,7 @@ sessionInfo() #provides list of loaded packages and version of R
     ##  [79] fastmap_1.2.0         rlang_1.2.0           GlobalOptions_0.1.4  
     ##  [82] htmlwidgets_1.6.4     farver_2.1.2          magrittr_2.0.5       
     ##  [85] Formula_1.2-5         Rcpp_1.1.1-1.1        viridis_0.6.5        
-    ##  [88] stringi_1.8.7         MASS_7.3-65           parallel_4.5.1       
+    ##  [88] stringi_1.8.7         MASS_7.3-66           parallel_4.5.1       
     ##  [91] ggrepel_0.9.8         Biostrings_2.78.0     graphlayouts_1.2.4   
     ##  [94] splines_4.5.1         hms_1.1.4             circlize_0.4.18      
     ##  [97] locfit_1.5-9.12       igraph_2.3.3          ggpubr_0.6.3         
@@ -173,8 +173,8 @@ sessionInfo() #provides list of loaded packages and version of R
     ## [103] tzdb_0.5.0            foreach_1.5.2         tweenr_2.0.3         
     ## [106] polyclip_1.10-7       clue_0.3-68           ggforce_0.5.0        
     ## [109] broom_1.0.13          xtable_1.8-8          rstatix_0.7.3        
-    ## [112] viridisLite_0.4.3     class_7.3-23          ragg_1.5.2           
-    ## [115] memoise_2.0.1         AnnotationDbi_1.72.0  cluster_2.1.8.2      
+    ## [112] viridisLite_0.4.3     class_7.3-24          ragg_1.5.2           
+    ## [115] memoise_2.0.1         AnnotationDbi_1.72.0  cluster_2.1.8.3      
     ## [118] timechange_0.4.0
 
 ## 2. Setup species-specific parameters and define directories
@@ -354,7 +354,7 @@ sessionInfo()
     ##  [25] vroom_1.7.1           car_3.1-5             Matrix_1.7-5         
     ##  [28] abind_1.4-8           lifecycle_1.0.5       yaml_2.3.12          
     ##  [31] carData_3.0-6         SparseArray_1.10.10   paletteer_1.7.0      
-    ##  [34] blob_1.3.0            crayon_1.5.3          lattice_0.22-9       
+    ##  [34] blob_1.3.0            crayon_1.5.3          lattice_0.23-1       
     ##  [37] cowplot_1.2.0         annotate_1.88.0       KEGGREST_1.50.0      
     ##  [40] ComplexHeatmap_2.26.1 pillar_1.11.1         tkWidgets_1.88.0     
     ##  [43] rjson_0.2.23          codetools_0.2-20      glue_1.8.1           
@@ -364,7 +364,7 @@ sessionInfo()
     ##  [55] survival_3.8-6        iterators_1.0.14      statmod_1.5.2        
     ##  [58] nlme_3.1-169          bit64_4.8.2           otel_0.2.0           
     ##  [61] rpart_4.1.27          colorspace_2.1-2      DBI_1.3.0            
-    ##  [64] Hmisc_5.2-6           nnet_7.3-20           DESeq2_1.50.2        
+    ##  [64] Hmisc_5.2-6           nnet_7.3-21           DESeq2_1.50.2        
     ##  [67] tidyselect_1.2.1      bit_4.6.0             compiler_4.5.1       
     ##  [70] htmlTable_2.5.0       DelayedArray_0.36.1   checkmate_2.3.4      
     ##  [73] scales_1.4.0          digest_0.6.39         XVector_0.50.0       
@@ -372,7 +372,7 @@ sessionInfo()
     ##  [79] fastmap_1.2.0         rlang_1.2.0           GlobalOptions_0.1.4  
     ##  [82] htmlwidgets_1.6.4     farver_2.1.2          magrittr_2.0.5       
     ##  [85] Formula_1.2-5         Rcpp_1.1.1-1.1        viridis_0.6.5        
-    ##  [88] stringi_1.8.7         MASS_7.3-65           parallel_4.5.1       
+    ##  [88] stringi_1.8.7         MASS_7.3-66           parallel_4.5.1       
     ##  [91] ggrepel_0.9.8         Biostrings_2.78.0     graphlayouts_1.2.4   
     ##  [94] splines_4.5.1         hms_1.1.4             circlize_0.4.18      
     ##  [97] locfit_1.5-9.12       igraph_2.3.3          ggpubr_0.6.3         
@@ -380,6 +380,6 @@ sessionInfo()
     ## [103] tzdb_0.5.0            foreach_1.5.2         tweenr_2.0.3         
     ## [106] polyclip_1.10-7       clue_0.3-68           ggforce_0.5.0        
     ## [109] broom_1.0.13          xtable_1.8-8          rstatix_0.7.3        
-    ## [112] viridisLite_0.4.3     class_7.3-23          ragg_1.5.2           
-    ## [115] memoise_2.0.1         AnnotationDbi_1.72.0  cluster_2.1.8.2      
+    ## [112] viridisLite_0.4.3     class_7.3-24          ragg_1.5.2           
+    ## [115] memoise_2.0.1         AnnotationDbi_1.72.0  cluster_2.1.8.3      
     ## [118] timechange_0.4.0

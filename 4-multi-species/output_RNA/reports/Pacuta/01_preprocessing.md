@@ -1,7 +1,7 @@
 RNA-seq Preprocessing and Normalization
 ================
 Zoe Dellaert
-2026-10-02
+2026-11-24
 
 - [Preproccessing of bulk RNA-seq
   data](#preproccessing-of-bulk-rna-seq-data)
@@ -293,7 +293,7 @@ sessionInfo() #provides list of loaded packages and version of R
     ## [43] bit64_4.8.2          locfit_1.5-9.12      annotate_1.88.0     
     ## [46] glue_1.8.1           codetools_0.2-20     stringi_1.8.7       
     ## [49] gtable_0.3.6         pillar_1.11.1        htmltools_0.5.9     
-    ## [52] R6_2.6.1             evaluate_1.0.5       lattice_0.22-9      
+    ## [52] R6_2.6.1             evaluate_1.0.5       lattice_0.23-1      
     ## [55] png_0.1-9            memoise_2.0.1        Rcpp_1.1.1-1.1      
     ## [58] SparseArray_1.10.10  xfun_0.59            pkgconfig_2.0.3
 
@@ -670,7 +670,7 @@ sessionInfo()
     ## [49] glue_1.8.1           codetools_0.2-20     stringi_1.8.7       
     ## [52] gtable_0.3.6         pillar_1.11.1        htmltools_0.5.9     
     ## [55] R6_2.6.1             textshaping_1.0.5    evaluate_1.0.5      
-    ## [58] lattice_0.22-9       png_0.1-9            memoise_2.0.1       
+    ## [58] lattice_0.23-1       png_0.1-9            memoise_2.0.1       
     ## [61] Rcpp_1.1.1-1.1       SparseArray_1.10.10  xfun_0.59           
     ## [64] pkgconfig_2.0.3
 

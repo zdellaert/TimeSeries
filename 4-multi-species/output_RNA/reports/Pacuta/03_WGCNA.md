@@ -1,7 +1,7 @@
 WGCNA Analysis
 ================
 Zoe Dellaert
-2026-10-02
+2026-11-24
 
 - [Network analysis of Time Series bulk RNA-seq
   data](#network-analysis-of-time-series-bulk-rna-seq-data)
@@ -151,10 +151,10 @@ sessionInfo() #provides list of loaded packages and version of R
     ##   [1] splines_4.5.1         prismatic_1.1.2       preprocessCore_1.72.0
     ##   [4] rpart_4.1.27          XML_3.99-0.23         lifecycle_1.0.5      
     ##   [7] rstatix_0.7.3         doParallel_1.0.17     vroom_1.7.1          
-    ##  [10] lattice_0.22-9        backports_1.5.1       magrittr_2.0.5       
+    ##  [10] lattice_0.23-1        backports_1.5.1       magrittr_2.0.5       
     ##  [13] Hmisc_5.2-6           yaml_2.3.12           otel_0.2.0           
     ##  [16] cowplot_1.2.0         DBI_1.3.0             abind_1.4-8          
-    ##  [19] nnet_7.3-20           circlize_0.4.18       annotate_1.88.0      
+    ##  [19] nnet_7.3-21           circlize_0.4.18       annotate_1.88.0      
     ##  [22] codetools_0.2-20      DelayedArray_0.36.1   tidyselect_1.2.1     
     ##  [25] shape_1.4.6.1         farver_2.1.2          base64enc_0.1-6      
     ##  [28] GetoptLong_1.1.1      Formula_1.2-5         survival_3.8-6       
@@ -164,7 +164,7 @@ sessionInfo() #provides list of loaded packages and version of R
     ##  [40] xfun_0.59             DESeq2_1.50.2         withr_3.0.3          
     ##  [43] fastmap_1.2.0         digest_0.6.39         timechange_0.4.0     
     ##  [46] R6_2.6.1              textshaping_1.0.5     colorspace_2.1-2     
-    ##  [49] RSQLite_3.53.2        data.table_1.18.4     class_7.3-23         
+    ##  [49] RSQLite_3.53.2        data.table_1.18.4     class_7.3-24         
     ##  [52] htmlwidgets_1.6.4     httr_1.4.8            S4Arrays_1.10.1      
     ##  [55] pkgconfig_2.0.3       gtable_0.3.6          blob_1.3.0           
     ##  [58] impute_1.84.0         S7_0.2.2              XVector_0.50.0       
@@ -175,7 +175,7 @@ sessionInfo() #provides list of loaded packages and version of R
     ##  [73] proxy_0.4-29          cachem_1.1.0          GlobalOptions_0.1.4  
     ##  [76] parallel_4.5.1        foreign_0.8-91        AnnotationDbi_1.72.0 
     ##  [79] pillar_1.11.1         vctrs_0.7.3           ggpubr_0.6.3         
-    ##  [82] car_3.1-5             xtable_1.8-8          cluster_2.1.8.2      
+    ##  [82] car_3.1-5             xtable_1.8-8          cluster_2.1.8.3      
     ##  [85] htmlTable_2.5.0       paletteer_1.7.0       evaluate_1.0.5       
     ##  [88] cli_3.6.6             locfit_1.5-9.12       compiler_4.5.1       
     ##  [91] rlang_1.2.0           crayon_1.5.3          ggsignif_0.6.4       
@@ -922,10 +922,10 @@ sessionInfo()
     ##   [1] splines_4.5.1         prismatic_1.1.2       preprocessCore_1.72.0
     ##   [4] rpart_4.1.27          XML_3.99-0.23         lifecycle_1.0.5      
     ##   [7] rstatix_0.7.3         doParallel_1.0.17     vroom_1.7.1          
-    ##  [10] lattice_0.22-9        backports_1.5.1       magrittr_2.0.5       
+    ##  [10] lattice_0.23-1        backports_1.5.1       magrittr_2.0.5       
     ##  [13] limma_3.66.0          Hmisc_5.2-6           yaml_2.3.12          
     ##  [16] otel_0.2.0            cowplot_1.2.0         DBI_1.3.0            
-    ##  [19] abind_1.4-8           nnet_7.3-20           circlize_0.4.18      
+    ##  [19] abind_1.4-8           nnet_7.3-21           circlize_0.4.18      
     ##  [22] annotate_1.88.0       codetools_0.2-20      DelayedArray_0.36.1  
     ##  [25] tidyselect_1.2.1      shape_1.4.6.1         farver_2.1.2         
     ##  [28] base64enc_0.1-6       GetoptLong_1.1.1      Formula_1.2-5        
@@ -936,7 +936,7 @@ sessionInfo()
     ##  [43] withr_3.0.3           fastmap_1.2.0         digest_0.6.39        
     ##  [46] timechange_0.4.0      R6_2.6.1              textshaping_1.0.5    
     ##  [49] colorspace_2.1-2      RSQLite_3.53.2        data.table_1.18.4    
-    ##  [52] class_7.3-23          htmlwidgets_1.6.4     httr_1.4.8           
+    ##  [52] class_7.3-24          htmlwidgets_1.6.4     httr_1.4.8           
     ##  [55] S4Arrays_1.10.1       pkgconfig_2.0.3       gtable_0.3.6         
     ##  [58] blob_1.3.0            ComplexHeatmap_2.26.1 impute_1.84.0        
     ##  [61] S7_0.2.2              XVector_0.50.0        htmltools_0.5.9      
@@ -947,7 +947,7 @@ sessionInfo()
     ##  [76] cachem_1.1.0          GlobalOptions_0.1.4   parallel_4.5.1       
     ##  [79] foreign_0.8-91        AnnotationDbi_1.72.0  pillar_1.11.1        
     ##  [82] vctrs_0.7.3           ggpubr_0.6.3          car_3.1-5            
-    ##  [85] xtable_1.8-8          cluster_2.1.8.2       htmlTable_2.5.0      
+    ##  [85] xtable_1.8-8          cluster_2.1.8.3       htmlTable_2.5.0      
     ##  [88] paletteer_1.7.0       evaluate_1.0.5        cli_3.6.6            
     ##  [91] locfit_1.5-9.12       compiler_4.5.1        rlang_1.2.0          
     ##  [94] crayon_1.5.3          ggsignif_0.6.4        labeling_0.4.3       

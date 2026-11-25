@@ -1,7 +1,7 @@
 RNA-seq Preprocessing and Normalization
 ================
 Zoe Dellaert
-2026-10-02
+2026-11-24
 
 - [Preproccessing of bulk RNA-seq
   data](#preproccessing-of-bulk-rna-seq-data)
@@ -135,7 +135,7 @@ sessionInfo() #provides list of loaded packages and version of R
     ##  [25] car_3.1-5             Matrix_1.7-5          abind_1.4-8          
     ##  [28] lifecycle_1.0.5       yaml_2.3.12           carData_3.0-6        
     ##  [31] SparseArray_1.10.10   paletteer_1.7.0       blob_1.3.0           
-    ##  [34] crayon_1.5.3          lattice_0.22-9        cowplot_1.2.0        
+    ##  [34] crayon_1.5.3          lattice_0.23-1        cowplot_1.2.0        
     ##  [37] annotate_1.88.0       KEGGREST_1.50.0       pillar_1.11.1        
     ##  [40] tkWidgets_1.88.0      rjson_0.2.23          codetools_0.2-20     
     ##  [43] glue_1.8.1            data.table_1.18.4     vctrs_0.7.3          
@@ -144,7 +144,7 @@ sessionInfo() #provides list of loaded packages and version of R
     ##  [52] tidygraph_1.3.1       survival_3.8-6        iterators_1.0.14     
     ##  [55] statmod_1.5.2         nlme_3.1-169          bit64_4.8.2          
     ##  [58] otel_0.2.0            rpart_4.1.27          colorspace_2.1-2     
-    ##  [61] DBI_1.3.0             Hmisc_5.2-6           nnet_7.3-20          
+    ##  [61] DBI_1.3.0             Hmisc_5.2-6           nnet_7.3-21          
     ##  [64] tidyselect_1.2.1      bit_4.6.0             compiler_4.5.1       
     ##  [67] htmlTable_2.5.0       DelayedArray_0.36.1   checkmate_2.3.4      
     ##  [70] scales_1.4.0          digest_0.6.39         XVector_0.50.0       
@@ -152,7 +152,7 @@ sessionInfo() #provides list of loaded packages and version of R
     ##  [76] fastmap_1.2.0         rlang_1.2.0           GlobalOptions_0.1.4  
     ##  [79] htmlwidgets_1.6.4     farver_2.1.2          magrittr_2.0.5       
     ##  [82] Formula_1.2-5         Rcpp_1.1.1-1.1        viridis_0.6.5        
-    ##  [85] stringi_1.8.7         MASS_7.3-65           parallel_4.5.1       
+    ##  [85] stringi_1.8.7         MASS_7.3-66           parallel_4.5.1       
     ##  [88] ggrepel_0.9.8         Biostrings_2.78.0     graphlayouts_1.2.4   
     ##  [91] splines_4.5.1         hms_1.1.4             circlize_0.4.18      
     ##  [94] locfit_1.5-9.12       igraph_2.3.3          ggpubr_0.6.3         
@@ -160,8 +160,8 @@ sessionInfo() #provides list of loaded packages and version of R
     ## [100] tzdb_0.5.0            foreach_1.5.2         tweenr_2.0.3         
     ## [103] polyclip_1.10-7       clue_0.3-68           ggforce_0.5.0        
     ## [106] broom_1.0.13          xtable_1.8-8          rstatix_0.7.3        
-    ## [109] viridisLite_0.4.3     class_7.3-23          ragg_1.5.2           
-    ## [112] memoise_2.0.1         AnnotationDbi_1.72.0  cluster_2.1.8.2      
+    ## [109] viridisLite_0.4.3     class_7.3-24          ragg_1.5.2           
+    ## [112] memoise_2.0.1         AnnotationDbi_1.72.0  cluster_2.1.8.3      
     ## [115] timechange_0.4.0
 
 ## 0. Setup species-specific parameters
@@ -535,7 +535,7 @@ sessionInfo()
     ##  [25] car_3.1-5             Matrix_1.7-5          abind_1.4-8          
     ##  [28] lifecycle_1.0.5       yaml_2.3.12           carData_3.0-6        
     ##  [31] SparseArray_1.10.10   paletteer_1.7.0       blob_1.3.0           
-    ##  [34] crayon_1.5.3          lattice_0.22-9        cowplot_1.2.0        
+    ##  [34] crayon_1.5.3          lattice_0.23-1        cowplot_1.2.0        
     ##  [37] annotate_1.88.0       KEGGREST_1.50.0       pillar_1.11.1        
     ##  [40] tkWidgets_1.88.0      rjson_0.2.23          codetools_0.2-20     
     ##  [43] glue_1.8.1            data.table_1.18.4     vctrs_0.7.3          
@@ -544,7 +544,7 @@ sessionInfo()
     ##  [52] tidygraph_1.3.1       survival_3.8-6        iterators_1.0.14     
     ##  [55] statmod_1.5.2         nlme_3.1-169          bit64_4.8.2          
     ##  [58] otel_0.2.0            rpart_4.1.27          colorspace_2.1-2     
-    ##  [61] DBI_1.3.0             Hmisc_5.2-6           nnet_7.3-20          
+    ##  [61] DBI_1.3.0             Hmisc_5.2-6           nnet_7.3-21          
     ##  [64] tidyselect_1.2.1      bit_4.6.0             compiler_4.5.1       
     ##  [67] htmlTable_2.5.0       DelayedArray_0.36.1   checkmate_2.3.4      
     ##  [70] scales_1.4.0          digest_0.6.39         XVector_0.50.0       
@@ -552,7 +552,7 @@ sessionInfo()
     ##  [76] fastmap_1.2.0         rlang_1.2.0           GlobalOptions_0.1.4  
     ##  [79] htmlwidgets_1.6.4     farver_2.1.2          magrittr_2.0.5       
     ##  [82] Formula_1.2-5         Rcpp_1.1.1-1.1        viridis_0.6.5        
-    ##  [85] stringi_1.8.7         MASS_7.3-65           parallel_4.5.1       
+    ##  [85] stringi_1.8.7         MASS_7.3-66           parallel_4.5.1       
     ##  [88] ggrepel_0.9.8         Biostrings_2.78.0     graphlayouts_1.2.4   
     ##  [91] splines_4.5.1         hms_1.1.4             circlize_0.4.18      
     ##  [94] locfit_1.5-9.12       igraph_2.3.3          ggpubr_0.6.3         
@@ -560,8 +560,8 @@ sessionInfo()
     ## [100] tzdb_0.5.0            foreach_1.5.2         tweenr_2.0.3         
     ## [103] polyclip_1.10-7       clue_0.3-68           ggforce_0.5.0        
     ## [106] broom_1.0.13          xtable_1.8-8          rstatix_0.7.3        
-    ## [109] viridisLite_0.4.3     class_7.3-23          ragg_1.5.2           
-    ## [112] memoise_2.0.1         AnnotationDbi_1.72.0  cluster_2.1.8.2      
+    ## [109] viridisLite_0.4.3     class_7.3-24          ragg_1.5.2           
+    ## [112] memoise_2.0.1         AnnotationDbi_1.72.0  cluster_2.1.8.3      
     ## [115] timechange_0.4.0
 
 ``` r

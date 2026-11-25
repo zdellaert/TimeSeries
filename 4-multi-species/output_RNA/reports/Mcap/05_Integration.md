@@ -1,7 +1,7 @@
 Integrate across analyses
 ================
 Zoe Dellaert
-2026-10-02
+2026-11-24
 
 - [Analysis of Time Series bulk RNA-seq data: Combine results from all
   analyses](#analysis-of-time-series-bulk-rna-seq-data-combine-results-from-all-analyses)
@@ -162,12 +162,12 @@ sessionInfo() #provides list of loaded packages and version of R
     ##  [4] rjson_0.2.23        xfun_0.59           GlobalOptions_0.1.4
     ##  [7] ggrepel_0.9.8       tzdb_0.5.0          vctrs_0.7.3        
     ## [10] tools_4.5.1         generics_0.1.4      stats4_4.5.1       
-    ## [13] parallel_4.5.1      cluster_2.1.8.2     pkgconfig_2.0.3    
+    ## [13] parallel_4.5.1      cluster_2.1.8.3     pkgconfig_2.0.3    
     ## [16] RColorBrewer_1.1-3  S7_0.2.2            S4Vectors_0.48.1   
     ## [19] lifecycle_1.0.5     compiler_4.5.1      farver_2.1.2       
     ## [22] ggforce_0.5.0       graphlayouts_1.2.4  codetools_0.2-20   
     ## [25] clue_0.3-68         htmltools_0.5.9     yaml_2.3.12        
-    ## [28] pillar_1.11.1       crayon_1.5.3        MASS_7.3-65        
+    ## [28] pillar_1.11.1       crayon_1.5.3        MASS_7.3-66        
     ## [31] cachem_1.1.0        viridis_0.6.5       iterators_1.0.14   
     ## [34] foreach_1.5.2       tidyselect_1.2.1    digest_0.6.39      
     ## [37] stringi_1.8.7       polyclip_1.10-7     fastmap_1.2.0      
@@ -305,12 +305,7 @@ cat("Annotations:", nrow(SwissProt), "Swissprot-annotated genes")
 
 Mfuzz_pattern_mapping <- NULL
 source("../../output_RNA/ImpulseDE2/cluster_patterns.R")
-```
 
-    ## Warning: Unknown or uninitialised column: `Mfuzz_pattern`.
-    ## Unknown or uninitialised column: `Mfuzz_pattern`.
-
-``` r
 Mfuzz_pattern_mapping <- pattern_mapping %>% filter(species ==  params$species) %>% dplyr::select(-species)
 ```
 
@@ -634,8 +629,8 @@ HeatStressGenes <- read_csv(paste0(annot_dir,"/heatstress/HeatStressGenes_", spe
             ) 
   
   HeatStressGenes_unique <- HeatStressGenes_unique %>% mutate(gene_sym=str_replace(str_replace(gene_sym,"Hsc71,HSP70","HSP70"),"HSP70,Hsc71","HSP70"))
-  
-#HeatStressGenes_unique <- HeatStressGenes_unique %>% rbind(c("Pocillopora_acuta_HIv2___TS.g10636.t2","ABCB1","",""))
+
+if (species=="Pacuta"){HeatStressGenes_unique <- HeatStressGenes_unique %>% rbind(c("Pocillopora_acuta_HIv2___TS.g10636.t2","ABCB1","",""))}
 ```
 
 ``` r
@@ -777,18 +772,18 @@ summary_stats %>% kable(format = "markdown")
 
 | metric                                                   | count |
 |:---------------------------------------------------------|------:|
-| Total genes (post-filtering)                             |    83 |
-| SwissProt-annotated genes                                |    58 |
-| Differentially expressed (ImpulseDE2, padj \< 0.05)      |    35 |
-| DE genes temporally clustered (Mfuzz, membership \> 0.5) |    30 |
-| WGCNA assigned                                           |    83 |
-| WGCNA modules                                            |    20 |
+| Total genes (post-filtering)                             |    79 |
+| SwissProt-annotated genes                                |    62 |
+| Differentially expressed (ImpulseDE2, padj \< 0.05)      |    36 |
+| DE genes temporally clustered (Mfuzz, membership \> 0.5) |    31 |
+| WGCNA assigned                                           |    79 |
+| WGCNA modules                                            |    22 |
 | WGCNA modules Sig. by Time\*Treatment                    |     8 |
-| Hub genes (WGCNA, top 10% kME)                           |    16 |
-| Hub genes also differentially expressed (ImpulseDE2)     |    14 |
-| Genes with HSF1 binding sites                            |    13 |
+| Hub genes (WGCNA, top 10% kME)                           |    18 |
+| Hub genes also differentially expressed (ImpulseDE2)     |    16 |
+| Genes with HSF1 binding sites                            |    12 |
 | Genes with FOXO3 binding sites                           |    14 |
-| Genes with NRF2/NFE2L2 binding sites                     |    12 |
+| Genes with NRF2/NFE2L2 binding sites                     |    13 |
 
 ## 8. Pathway visualization
 
@@ -1201,12 +1196,12 @@ sessionInfo()
     ## [19] XVector_0.50.0      labeling_0.4.3      tzdb_0.5.0         
     ## [22] ragg_1.5.2          bit_4.6.0           xfun_0.59          
     ## [25] cachem_1.1.0        blob_1.3.0          tweenr_2.0.3       
-    ## [28] parallel_4.5.1      cluster_2.1.8.2     R6_2.6.1           
+    ## [28] parallel_4.5.1      cluster_2.1.8.3     R6_2.6.1           
     ## [31] stringi_1.8.7       RColorBrewer_1.1-3  Rcpp_1.1.1-1.1     
     ## [34] Seqinfo_1.0.0       iterators_1.0.14    timechange_0.4.0   
     ## [37] tidyselect_1.2.1    rstudioapi_0.19.0   yaml_2.3.12        
     ## [40] viridis_0.6.5       doParallel_1.0.17   codetools_0.2-20   
-    ## [43] lattice_0.22-9      withr_3.0.3         KEGGREST_1.50.0    
+    ## [43] lattice_0.23-1      withr_3.0.3         KEGGREST_1.50.0    
     ## [46] S7_0.2.2            evaluate_1.0.5      polyclip_1.10-7    
     ## [49] circlize_0.4.18     Biostrings_2.78.0   pillar_1.11.1      
     ## [52] foreach_1.5.2       vroom_1.7.1         paletteer_1.7.0    
@@ -1217,7 +1212,7 @@ sessionInfo()
     ## [67] digest_0.6.39       prismatic_1.1.2     ggrepel_0.9.8      
     ## [70] rjson_0.2.23        farver_2.1.2        memoise_2.0.1      
     ## [73] htmltools_0.5.9     lifecycle_1.0.5     httr_1.4.8         
-    ## [76] GlobalOptions_0.1.4 bit64_4.8.2         MASS_7.3-65
+    ## [76] GlobalOptions_0.1.4 bit64_4.8.2         MASS_7.3-66
 
 ``` r
 detach(package:igraph, unload=TRUE)

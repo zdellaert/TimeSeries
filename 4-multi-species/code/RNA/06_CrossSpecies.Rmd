@@ -1223,5 +1223,8 @@ quick_gene_of_interest_plot(Argo,"Argonaute")
 
 DNMT <- all_master %>% filter(grepl("(Dnmt1)", SwissProt_ProteinName)) %>% pull(gene_id)
 quick_gene_of_interest_plot(DNMT,"DNMT")
+
+HSF1 <- all_heat %>% filter(grepl("HSF1", gene_sym)) %>% pull(gene_id)
+quick_gene_of_interest_plot(HSF1,"HSF1")
 ```
 

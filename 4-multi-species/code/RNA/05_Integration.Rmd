@@ -360,8 +360,8 @@ HeatStressGenes <- read_csv(paste0(annot_dir,"/heatstress/HeatStressGenes_", spe
             ) 
   
   HeatStressGenes_unique <- HeatStressGenes_unique %>% mutate(gene_sym=str_replace(str_replace(gene_sym,"Hsc71,HSP70","HSP70"),"HSP70,Hsc71","HSP70"))
-  
-#HeatStressGenes_unique <- HeatStressGenes_unique %>% rbind(c("Pocillopora_acuta_HIv2___TS.g10636.t2","ABCB1","",""))
+
+if (species=="Pacuta"){HeatStressGenes_unique <- HeatStressGenes_unique %>% rbind(c("Pocillopora_acuta_HIv2___TS.g10636.t2","ABCB1","",""))}
 ```
 
 ```{r}

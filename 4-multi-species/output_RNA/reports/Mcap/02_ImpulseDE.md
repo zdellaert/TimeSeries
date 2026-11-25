@@ -1,7 +1,7 @@
 ImpulseDE2 Temporal Analysis
 ================
 Zoe Dellaert
-2026-10-02
+2026-11-24
 
 - [Bulk RNA-seq Time Course Trajectory Analysis and
   Clustering](#bulk-rna-seq-time-course-trajectory-analysis-and-clustering)
@@ -204,7 +204,7 @@ sessionInfo() #provides list of loaded packages and version of R
     ##  [25] car_3.1-5             Matrix_1.7-5          abind_1.4-8          
     ##  [28] lifecycle_1.0.5       yaml_2.3.12           carData_3.0-6        
     ##  [31] SparseArray_1.10.10   paletteer_1.7.0       blob_1.3.0           
-    ##  [34] crayon_1.5.3          lattice_0.22-9        cowplot_1.2.0        
+    ##  [34] crayon_1.5.3          lattice_0.23-1        cowplot_1.2.0        
     ##  [37] annotate_1.88.0       KEGGREST_1.50.0       pillar_1.11.1        
     ##  [40] tkWidgets_1.88.0      rjson_0.2.23          codetools_0.2-20     
     ##  [43] glue_1.8.1            data.table_1.18.4     vctrs_0.7.3          
@@ -213,7 +213,7 @@ sessionInfo() #provides list of loaded packages and version of R
     ##  [52] tidygraph_1.3.1       survival_3.8-6        iterators_1.0.14     
     ##  [55] statmod_1.5.2         nlme_3.1-169          bit64_4.8.2          
     ##  [58] otel_0.2.0            rpart_4.1.27          colorspace_2.1-2     
-    ##  [61] DBI_1.3.0             Hmisc_5.2-6           nnet_7.3-20          
+    ##  [61] DBI_1.3.0             Hmisc_5.2-6           nnet_7.3-21          
     ##  [64] DESeq2_1.50.2         tidyselect_1.2.1      bit_4.6.0            
     ##  [67] compiler_4.5.1        htmlTable_2.5.0       DelayedArray_0.36.1  
     ##  [70] checkmate_2.3.4       scales_1.4.0          digest_0.6.39        
@@ -221,7 +221,7 @@ sessionInfo() #provides list of loaded packages and version of R
     ##  [76] base64enc_0.1-6       fastmap_1.2.0         rlang_1.2.0          
     ##  [79] GlobalOptions_0.1.4   htmlwidgets_1.6.4     farver_2.1.2         
     ##  [82] magrittr_2.0.5        Formula_1.2-5         Rcpp_1.1.1-1.1       
-    ##  [85] viridis_0.6.5         stringi_1.8.7         MASS_7.3-65          
+    ##  [85] viridis_0.6.5         stringi_1.8.7         MASS_7.3-66          
     ##  [88] parallel_4.5.1        ggrepel_0.9.8         Biostrings_2.78.0    
     ##  [91] graphlayouts_1.2.4    splines_4.5.1         hms_1.1.4            
     ##  [94] circlize_0.4.18       locfit_1.5-9.12       igraph_2.3.3         
@@ -229,9 +229,9 @@ sessionInfo() #provides list of loaded packages and version of R
     ## [100] evaluate_1.0.5        tzdb_0.5.0            foreach_1.5.2        
     ## [103] tweenr_2.0.3          polyclip_1.10-7       clue_0.3-68          
     ## [106] ggforce_0.5.0         broom_1.0.13          xtable_1.8-8         
-    ## [109] rstatix_0.7.3         viridisLite_0.4.3     class_7.3-23         
+    ## [109] rstatix_0.7.3         viridisLite_0.4.3     class_7.3-24         
     ## [112] ragg_1.5.2            memoise_2.0.1         AnnotationDbi_1.72.0 
-    ## [115] cluster_2.1.8.2       timechange_0.4.0
+    ## [115] cluster_2.1.8.3       timechange_0.4.0
 
 ## 2. Setup species-specific parameters
 
@@ -1505,7 +1505,7 @@ heat_clustered <- HeatStressGenes_unique %>% left_join(cluster_assignments, by =
   left_join(Mfuzz_pattern_mapping, by = "cluster") %>%
   dplyr::rename(Mfuzz_pattern = pattern) %>%
               mutate(Mfuzz_pattern=factor(Mfuzz_pattern, levels=logical_order))
-
+                     
 # plot this to show which genes are in which cluster
 heat_clustered %>% filter(!is.na(cluster)) %>% ggplot(aes(y=reorder(gene_id, cluster), x=factor(Mfuzz_pattern), fill=Mfuzz_pattern)) +
   geom_tile() +
@@ -1669,7 +1669,7 @@ sessionInfo()
     ##  [25] vroom_1.7.1           car_3.1-5             Matrix_1.7-5         
     ##  [28] abind_1.4-8           lifecycle_1.0.5       yaml_2.3.12          
     ##  [31] carData_3.0-6         SparseArray_1.10.10   paletteer_1.7.0      
-    ##  [34] blob_1.3.0            crayon_1.5.3          lattice_0.22-9       
+    ##  [34] blob_1.3.0            crayon_1.5.3          lattice_0.23-1       
     ##  [37] cowplot_1.2.0         annotate_1.88.0       KEGGREST_1.50.0      
     ##  [40] pillar_1.11.1         tkWidgets_1.88.0      rjson_0.2.23         
     ##  [43] codetools_0.2-20      glue_1.8.1            data.table_1.18.4    
@@ -1679,7 +1679,7 @@ sessionInfo()
     ##  [55] iterators_1.0.14      statmod_1.5.2         nlme_3.1-169         
     ##  [58] bit64_4.8.2           otel_0.2.0            rpart_4.1.27         
     ##  [61] colorspace_2.1-2      DBI_1.3.0             Hmisc_5.2-6          
-    ##  [64] nnet_7.3-20           DESeq2_1.50.2         tidyselect_1.2.1     
+    ##  [64] nnet_7.3-21           DESeq2_1.50.2         tidyselect_1.2.1     
     ##  [67] bit_4.6.0             compiler_4.5.1        htmlTable_2.5.0      
     ##  [70] DelayedArray_0.36.1   checkmate_2.3.4       scales_1.4.0         
     ##  [73] digest_0.6.39         XVector_0.50.0        htmltools_0.5.9      
@@ -1687,7 +1687,7 @@ sessionInfo()
     ##  [79] rlang_1.2.0           GlobalOptions_0.1.4   htmlwidgets_1.6.4    
     ##  [82] farver_2.1.2          magrittr_2.0.5        Formula_1.2-5        
     ##  [85] Rcpp_1.1.1-1.1        viridis_0.6.5         stringi_1.8.7        
-    ##  [88] MASS_7.3-65           parallel_4.5.1        ggrepel_0.9.8        
+    ##  [88] MASS_7.3-66           parallel_4.5.1        ggrepel_0.9.8        
     ##  [91] Biostrings_2.78.0     graphlayouts_1.2.4    splines_4.5.1        
     ##  [94] hms_1.1.4             circlize_0.4.18       locfit_1.5-9.12      
     ##  [97] igraph_2.3.3          ggpubr_0.6.3          ggsignif_0.6.4       
@@ -1695,8 +1695,8 @@ sessionInfo()
     ## [103] foreach_1.5.2         tweenr_2.0.3          polyclip_1.10-7      
     ## [106] clue_0.3-68           ggforce_0.5.0         broom_1.0.13         
     ## [109] xtable_1.8-8          rstatix_0.7.3         viridisLite_0.4.3    
-    ## [112] class_7.3-23          ragg_1.5.2            memoise_2.0.1        
-    ## [115] AnnotationDbi_1.72.0  cluster_2.1.8.2       timechange_0.4.0
+    ## [112] class_7.3-24          ragg_1.5.2            memoise_2.0.1        
+    ## [115] AnnotationDbi_1.72.0  cluster_2.1.8.3       timechange_0.4.0
 
 ``` r
 detach(package:Mfuzz, unload=TRUE)

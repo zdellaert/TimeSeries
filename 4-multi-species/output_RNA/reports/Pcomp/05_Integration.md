@@ -1,7 +1,7 @@
 Integrate across analyses
 ================
 Zoe Dellaert
-2026-10-02
+2026-11-24
 
 - [Analysis of Time Series bulk RNA-seq data: Combine results from all
   analyses](#analysis-of-time-series-bulk-rna-seq-data-combine-results-from-all-analyses)
@@ -182,11 +182,11 @@ sessionInfo() #provides list of loaded packages and version of R
     ##   [1] splines_4.5.1         prismatic_1.1.2       polyclip_1.10-7      
     ##   [4] preprocessCore_1.72.0 rpart_4.1.27          XML_3.99-0.23        
     ##   [7] lifecycle_1.0.5       rstatix_0.7.3         doParallel_1.0.17    
-    ##  [10] MASS_7.3-65           vroom_1.7.1           lattice_0.22-9       
+    ##  [10] MASS_7.3-66           vroom_1.7.1           lattice_0.23-1       
     ##  [13] backports_1.5.1       magrittr_2.0.5        limma_3.66.0         
     ##  [16] Hmisc_5.2-6           yaml_2.3.12           otel_0.2.0           
     ##  [19] cowplot_1.2.0         DBI_1.3.0             abind_1.4-8          
-    ##  [22] nnet_7.3-20           tweenr_2.0.3          circlize_0.4.18      
+    ##  [22] nnet_7.3-21           tweenr_2.0.3          circlize_0.4.18      
     ##  [25] ggrepel_0.9.8         annotate_1.88.0       codetools_0.2-20     
     ##  [28] DelayedArray_0.36.1   ggforce_0.5.0         tidyselect_1.2.1     
     ##  [31] shape_1.4.6.1         farver_2.1.2          viridis_0.6.5        
@@ -198,7 +198,7 @@ sessionInfo() #provides list of loaded packages and version of R
     ##  [49] DESeq2_1.50.2         withr_3.0.3           fastmap_1.2.0        
     ##  [52] digest_0.6.39         timechange_0.4.0      R6_2.6.1             
     ##  [55] textshaping_1.0.5     colorspace_2.1-2      RSQLite_3.53.2       
-    ##  [58] utf8_1.2.6            data.table_1.18.4     class_7.3-23         
+    ##  [58] utf8_1.2.6            data.table_1.18.4     class_7.3-24         
     ##  [61] graphlayouts_1.2.4    htmlwidgets_1.6.4     httr_1.4.8           
     ##  [64] S4Arrays_1.10.1       pkgconfig_2.0.3       gtable_0.3.6         
     ##  [67] blob_1.3.0            impute_1.84.0         S7_0.2.2             
@@ -209,7 +209,7 @@ sessionInfo() #provides list of loaded packages and version of R
     ##  [82] proxy_0.4-29          cachem_1.1.0          GlobalOptions_0.1.4  
     ##  [85] parallel_4.5.1        foreign_0.8-91        AnnotationDbi_1.72.0 
     ##  [88] pillar_1.11.1         vctrs_0.7.3           ggpubr_0.6.3         
-    ##  [91] car_3.1-5             xtable_1.8-8          cluster_2.1.8.2      
+    ##  [91] car_3.1-5             xtable_1.8-8          cluster_2.1.8.3      
     ##  [94] htmlTable_2.5.0       paletteer_1.7.0       evaluate_1.0.5       
     ##  [97] cli_3.6.6             locfit_1.5-9.12       compiler_4.5.1       
     ## [100] rlang_1.2.0           crayon_1.5.3          ggsignif_0.6.4       
@@ -343,12 +343,7 @@ cat("Annotations:", nrow(SwissProt), "Swissprot-annotated genes")
 
 Mfuzz_pattern_mapping <- NULL
 source("../../output_RNA/ImpulseDE2/cluster_patterns.R")
-```
 
-    ## Warning: Unknown or uninitialised column: `Mfuzz_pattern`.
-    ## Unknown or uninitialised column: `Mfuzz_pattern`.
-
-``` r
 Mfuzz_pattern_mapping <- pattern_mapping %>% filter(species ==  params$species) %>% dplyr::select(-species)
 ```
 
@@ -672,8 +667,8 @@ HeatStressGenes <- read_csv(paste0(annot_dir,"/heatstress/HeatStressGenes_", spe
             ) 
   
   HeatStressGenes_unique <- HeatStressGenes_unique %>% mutate(gene_sym=str_replace(str_replace(gene_sym,"Hsc71,HSP70","HSP70"),"HSP70,Hsc71","HSP70"))
-  
-#HeatStressGenes_unique <- HeatStressGenes_unique %>% rbind(c("Pocillopora_acuta_HIv2___TS.g10636.t2","ABCB1","",""))
+
+if (species=="Pacuta"){HeatStressGenes_unique <- HeatStressGenes_unique %>% rbind(c("Pocillopora_acuta_HIv2___TS.g10636.t2","ABCB1","",""))}
 ```
 
 ``` r
@@ -815,16 +810,16 @@ summary_stats %>% kable(format = "markdown")
 
 | metric                                                   | count |
 |:---------------------------------------------------------|------:|
-| Total genes (post-filtering)                             |    84 |
-| SwissProt-annotated genes                                |    76 |
-| Differentially expressed (ImpulseDE2, padj \< 0.05)      |    30 |
-| DE genes temporally clustered (Mfuzz, membership \> 0.5) |    26 |
-| WGCNA assigned                                           |    84 |
-| WGCNA modules                                            |    13 |
+| Total genes (post-filtering)                             |    78 |
+| SwissProt-annotated genes                                |    73 |
+| Differentially expressed (ImpulseDE2, padj \< 0.05)      |    32 |
+| DE genes temporally clustered (Mfuzz, membership \> 0.5) |    28 |
+| WGCNA assigned                                           |    78 |
+| WGCNA modules                                            |    14 |
 | WGCNA modules Sig. by Time\*Treatment                    |     6 |
-| Hub genes (WGCNA, top 10% kME)                           |     9 |
+| Hub genes (WGCNA, top 10% kME)                           |    10 |
 | Hub genes also differentially expressed (ImpulseDE2)     |     5 |
-| Genes with HSF1 binding sites                            |    15 |
+| Genes with HSF1 binding sites                            |    16 |
 | Genes with FOXO3 binding sites                           |     9 |
 | Genes with NRF2/NFE2L2 binding sites                     |     9 |
 
@@ -1246,7 +1241,7 @@ sessionInfo()
     ##  [25] car_3.1-5             Matrix_1.7-5          abind_1.4-8          
     ##  [28] lifecycle_1.0.5       yaml_2.3.12           carData_3.0-6        
     ##  [31] SparseArray_1.10.10   paletteer_1.7.0       blob_1.3.0           
-    ##  [34] crayon_1.5.3          lattice_0.22-9        cowplot_1.2.0        
+    ##  [34] crayon_1.5.3          lattice_0.23-1        cowplot_1.2.0        
     ##  [37] annotate_1.88.0       KEGGREST_1.50.0       pillar_1.11.1        
     ##  [40] tkWidgets_1.88.0      rjson_0.2.23          codetools_0.2-20     
     ##  [43] glue_1.8.1            data.table_1.18.4     vctrs_0.7.3          
@@ -1255,7 +1250,7 @@ sessionInfo()
     ##  [52] tidygraph_1.3.1       survival_3.8-6        iterators_1.0.14     
     ##  [55] statmod_1.5.2         nlme_3.1-169          bit64_4.8.2          
     ##  [58] otel_0.2.0            rpart_4.1.27          colorspace_2.1-2     
-    ##  [61] DBI_1.3.0             Hmisc_5.2-6           nnet_7.3-20          
+    ##  [61] DBI_1.3.0             Hmisc_5.2-6           nnet_7.3-21          
     ##  [64] DESeq2_1.50.2         tidyselect_1.2.1      bit_4.6.0            
     ##  [67] compiler_4.5.1        htmlTable_2.5.0       DelayedArray_0.36.1  
     ##  [70] checkmate_2.3.4       scales_1.4.0          digest_0.6.39        
@@ -1263,7 +1258,7 @@ sessionInfo()
     ##  [76] base64enc_0.1-6       fastmap_1.2.0         rlang_1.2.0          
     ##  [79] GlobalOptions_0.1.4   htmlwidgets_1.6.4     farver_2.1.2         
     ##  [82] magrittr_2.0.5        Formula_1.2-5         Rcpp_1.1.1-1.1       
-    ##  [85] viridis_0.6.5         stringi_1.8.7         MASS_7.3-65          
+    ##  [85] viridis_0.6.5         stringi_1.8.7         MASS_7.3-66          
     ##  [88] parallel_4.5.1        ggrepel_0.9.8         Biostrings_2.78.0    
     ##  [91] graphlayouts_1.2.4    splines_4.5.1         hms_1.1.4            
     ##  [94] circlize_0.4.18       locfit_1.5-9.12       ggpubr_0.6.3         
@@ -1271,8 +1266,8 @@ sessionInfo()
     ## [100] tzdb_0.5.0            foreach_1.5.2         tweenr_2.0.3         
     ## [103] polyclip_1.10-7       clue_0.3-68           ggforce_0.5.0        
     ## [106] broom_1.0.13          xtable_1.8-8          rstatix_0.7.3        
-    ## [109] viridisLite_0.4.3     class_7.3-23          ragg_1.5.2           
-    ## [112] memoise_2.0.1         cluster_2.1.8.2       timechange_0.4.0
+    ## [109] viridisLite_0.4.3     class_7.3-24          ragg_1.5.2           
+    ## [112] memoise_2.0.1         cluster_2.1.8.3       timechange_0.4.0
 
 ``` r
 detach(package:igraph, unload=TRUE)

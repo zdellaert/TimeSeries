@@ -1,7 +1,7 @@
 ImpulseDE2 Temporal Analysis
 ================
 Zoe Dellaert
-2026-10-02
+2026-11-24
 
 - [Bulk RNA-seq Time Course Trajectory Analysis and
   Clustering](#bulk-rna-seq-time-course-trajectory-analysis-and-clustering)
@@ -230,17 +230,17 @@ sessionInfo() #provides list of loaded packages and version of R
     ## [16] XVector_0.50.0       labeling_0.4.3       tzdb_0.5.0          
     ## [19] ragg_1.5.2           bit_4.6.0            xfun_0.59           
     ## [22] cachem_1.1.0         blob_1.3.0           DelayedArray_0.36.1 
-    ## [25] parallel_4.5.1       cluster_2.1.8.2      R6_2.6.1            
+    ## [25] parallel_4.5.1       cluster_2.1.8.3      R6_2.6.1            
     ## [28] stringi_1.8.7        Rcpp_1.1.1-1.1       iterators_1.0.14    
     ## [31] knitr_1.51           Matrix_1.7-5         splines_4.5.1       
     ## [34] timechange_0.4.0     tidyselect_1.2.1     rstudioapi_0.19.0   
     ## [37] abind_1.4-8          yaml_2.3.12          doParallel_1.0.17   
-    ## [40] codetools_0.2-20     lattice_0.22-9       withr_3.0.3         
+    ## [40] codetools_0.2-20     lattice_0.23-1       withr_3.0.3         
     ## [43] KEGGREST_1.50.0      S7_0.2.2             evaluate_1.0.5      
     ## [46] survival_3.8-6       proxy_0.4-29         circlize_0.4.18     
     ## [49] Biostrings_2.78.0    pillar_1.11.1        tkWidgets_1.88.0    
     ## [52] foreach_1.5.2        hms_1.1.4            scales_1.4.0        
-    ## [55] xtable_1.8-8         class_7.3-23         glue_1.8.1          
+    ## [55] xtable_1.8-8         class_7.3-24         glue_1.8.1          
     ## [58] tools_4.5.1          annotate_1.88.0      locfit_1.5-9.12     
     ## [61] XML_3.99-0.23        cowplot_1.2.0        AnnotationDbi_1.72.0
     ## [64] colorspace_2.1-2     cli_3.6.6            textshaping_1.0.5   
@@ -1521,7 +1521,7 @@ heat_clustered <- HeatStressGenes_unique %>% left_join(cluster_assignments, by =
   left_join(Mfuzz_pattern_mapping, by = "cluster") %>%
   dplyr::rename(Mfuzz_pattern = pattern) %>%
               mutate(Mfuzz_pattern=factor(Mfuzz_pattern, levels=logical_order))
-
+                     
 # plot this to show which genes are in which cluster
 heat_clustered %>% filter(!is.na(cluster)) %>% ggplot(aes(y=reorder(gene_id, cluster), x=factor(Mfuzz_pattern), fill=Mfuzz_pattern)) +
   geom_tile() +
@@ -1674,7 +1674,7 @@ sessionInfo()
     ## loaded via a namespace (and not attached):
     ##  [1] splines_4.5.1        prismatic_1.1.2      XML_3.99-0.23       
     ##  [4] lifecycle_1.0.5      rstatix_0.7.3        doParallel_1.0.17   
-    ##  [7] vroom_1.7.1          lattice_0.22-9       backports_1.5.1     
+    ##  [7] vroom_1.7.1          lattice_0.23-1       backports_1.5.1     
     ## [10] magrittr_2.0.5       yaml_2.3.12          otel_0.2.0          
     ## [13] cowplot_1.2.0        DBI_1.3.0            abind_1.4-8         
     ## [16] circlize_0.4.18      annotate_1.88.0      codetools_0.2-20    
@@ -1686,7 +1686,7 @@ sessionInfo()
     ## [34] xfun_0.59            DESeq2_1.50.2        withr_3.0.3         
     ## [37] fastmap_1.2.0        digest_0.6.39        timechange_0.4.0    
     ## [40] R6_2.6.1             textshaping_1.0.5    colorspace_2.1-2    
-    ## [43] RSQLite_3.53.2       class_7.3-23         httr_1.4.8          
+    ## [43] RSQLite_3.53.2       class_7.3-24         httr_1.4.8          
     ## [46] S4Arrays_1.10.1      pkgconfig_2.0.3      gtable_0.3.6        
     ## [49] blob_1.3.0           S7_0.2.2             XVector_0.50.0      
     ## [52] htmltools_0.5.9      carData_3.0-6        clue_0.3-68         
@@ -1696,7 +1696,7 @@ sessionInfo()
     ## [64] cachem_1.1.0         GlobalOptions_0.1.4  parallel_4.5.1      
     ## [67] AnnotationDbi_1.72.0 pillar_1.11.1        vctrs_0.7.3         
     ## [70] ggpubr_0.6.3         car_3.1-5            xtable_1.8-8        
-    ## [73] cluster_2.1.8.2      paletteer_1.7.0      evaluate_1.0.5      
+    ## [73] cluster_2.1.8.3      paletteer_1.7.0      evaluate_1.0.5      
     ## [76] cli_3.6.6            locfit_1.5-9.12      compiler_4.5.1      
     ## [79] rlang_1.2.0          crayon_1.5.3         ggsignif_0.6.4      
     ## [82] labeling_0.4.3       rematch2_2.1.2       stringi_1.8.7       
